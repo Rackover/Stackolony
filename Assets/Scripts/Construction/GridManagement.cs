@@ -109,16 +109,14 @@ public class GridManagement : MonoBehaviour {
 
         if (grid[coordinates.x, coordinates.y,coordinates.z] != null)
         {
-            for (var i = coordinates.y + 1; i < maxHeight; i++) //Fait monter d'une case les blocs au dessus du bloc ajouté
+            for (int i = coordinates.y + 1; i < maxHeight; i++) //Fait monter d'une case les blocs au dessus du bloc ajouté
             {
                 if (grid[coordinates.x, i, coordinates.z] == null)
                 {
-                    grid[coordinates.x, i + 1, coordinates.z] = null;
                     return;
                 } 
                 else
                 {
-                    
                     //Change la position du bloc dans la grille contenant chaque bloc
                     grid[coordinates.x, i + 1, coordinates.z] = grid[coordinates.x, i, coordinates.z];
 
@@ -128,7 +126,7 @@ public class GridManagement : MonoBehaviour {
                     actualGridPos.name = "Block[" + coordinates.x + ";" + (i + 1) + ";" + coordinates.z + "]";
 
                     //Met à jour les coordonnées du block dans son script "BlockLink"
-                    actualGridPos.GetComponent<BlockLink>().gridCoordinates = new Vector3Int(coordinates.x, i-1, coordinates.z);
+                    actualGridPos.GetComponent<BlockLink>().gridCoordinates = new Vector3Int(coordinates.x, i + 1, coordinates.z);
 
                     //Déplace le block vers ses nouvelles coordonnées
                     actualGridPos.GetComponent<BlockLink>().MoveToMyPosition();
