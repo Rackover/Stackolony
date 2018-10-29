@@ -27,6 +27,7 @@ public class InterfaceManager : MonoBehaviour {
 
 	IEnumerator WaitAndPrint(float delay)
     {
+		// HELLO
         // suspend execution for 5 seconds
         yield return new WaitForSeconds(delay);
 		backgroundError.gameObject.SetActive(false);
