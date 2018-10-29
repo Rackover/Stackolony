@@ -7,10 +7,12 @@ public class BlockLink : MonoBehaviour {
     public Vector3Int gridCoordinates = new Vector3Int(0, 0, 0);
     public int positionInTower; //0 = tout en bas
     public GameObject[] blocks;
+    GridManagement gridManager;
 
     public void Start()
     {
         // TEMP
+        gridManager = FindObjectOfType<GridManagement>();
         Transform newBlockMesh = Instantiate(blocks[Random.Range(0, blocks.Length)], transform.position, Quaternion.identity, transform).transform;
         newBlockMesh.rotation = Quaternion.Euler(-90f, 0f, 0f);
     }
@@ -26,7 +28,14 @@ public class BlockLink : MonoBehaviour {
         Vector3 startingPos = transform.position;
         while (elapsedTime < time)
         {
-            transform.position = Vector3.Lerp(startingPos, new Vector3(gridCoordinates.x * GridManagement.cellSizeStatic + 0.5f * GridManagement.cellSizeStatic, 0.5f + gridCoordinates.y, gridCoordinates.z * GridManagement.cellSizeStatic + 0.5f * GridManagement.cellSizeStatic), (elapsedTime / time));
+            transform.position = Vector3.Lerp(
+                startingPos, 
+                new Vector3(
+                    gridCoordinates.x * gridManager.cellSize + 0.5f * gridManager.cellSize, 
+                    0.5f + gridCoordinates.y, 
+                    gridCoordinates.z * gridManager.cellSize + 0.5f * gridManager.cellSize),
+                elapsedTime / time
+            );
             elapsedTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }

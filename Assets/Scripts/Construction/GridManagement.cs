@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class GridManagement : MonoBehaviour {
 
+    //LAST CLEAN : Suppression du raycast, suppression des variables statiques, suppression des variables de type "double"
+
+
     //------------VARIABLES PUBLIQUES------------
     [Header("=== MAP SETTINGS ===")][Space(1)]
     [Tooltip("Quelle taille font les cellules en X et Y (la hauteur sera toujours de 1")]
     public float cellSize;
     [Tooltip("Quelle hauteur max pour les tours")]
     public int maxHeight;
+    [Tooltip("Quelle taille fait un bloc en hauteur")]
+    public int cellHeight;
 
     [Header("=== PREFABS ===")][Space(1)]
     [Header("Bridge")]
@@ -27,7 +32,7 @@ public class GridManagement : MonoBehaviour {
     public List<GameObject> buildingsList = new List<GameObject>();
     [Header("Grille de blocs")]
     public Vector3[,,] bridgesGrid;
-    public static GameObject[,,] grid;
+    public GameObject[,,] grid;
 
     [Header("=== REFERENCES ===")][Space(1)]
     public InterfaceManager uiManager;
@@ -35,41 +40,8 @@ public class GridManagement : MonoBehaviour {
     //------------VARIABLES PRIVEE------------
     Terrain myTerrain; //Terrain sur lequel la grille doit être generée
     public Vector3Int gridSize; //Nombre de cases sur le terrain
-    public static float cellSizeStatic; //La taille des cellules, on la passe en statique pour y accéder rapidement, elle n'est pas supposée changer au cours de la partie
     private GameObject gridGameObject; //GameObject contenant la grille
 
-
-    private void ResizeTerrain() //Change la taille du terrain en fonction de la taille des cellules choisie pour obtenir un nombre de cases rond
-    {
-        Vector3 newSize = new Vector3(0, 0, 0);
-        double floatX = myTerrain.terrainData.size.x;
-        double floatY = myTerrain.terrainData.size.z;
-
-        double floatB = cellSize;
-
-        double xComp = floatX % floatB; //Les modulos entre deux floats posent des problèmes, donc on converti en "double" pour avoir une meilleure précision
-        double yComp = floatY % floatB;
-
-        if (xComp*xComp > 0.005f) //Un modulos entre deux float peut donner une valeur extrêmement basse, on utilise donc ce if pour éviter de modifier le terrain si cette valeur est trop basse
-        {
-            newSize.x = (float)xComp;
-        }
-        if (yComp*yComp > 0.005)
-        {
-            newSize.z = (float)yComp;
-        }
-        myTerrain.terrainData.size -= newSize; //On applique notre nouvelle taille au terrain
-
-        myTerrain.terrainData.size += new Vector3(0, maxHeight-myTerrain.terrainData.size.y, 0); //Regle la hauteur du terrain a la hauteur max définie par le joueur
-
-        //Calcule le nombre de cases du terrain en fonction de la taille de la cellule grâce à la nouvelle taille du terrain
-        gridSize.x = Mathf.RoundToInt(myTerrain.terrainData.size.x / cellSize);
-        gridSize.z = Mathf.RoundToInt(myTerrain.terrainData.size.z / cellSize);
-
-        //Initialisation de la variable grille contenant chaque bloc
-        grid = new GameObject[gridSize.x, gridSize.y, gridSize.z];
-        bridgesGrid = new Vector3[gridSize.x, gridSize.y, gridSize.z];
-}
     private void Start()
     {
         //Recuperation du terrain
@@ -79,22 +51,22 @@ public class GridManagement : MonoBehaviour {
         gridSize.x = Mathf.RoundToInt(myTerrain.terrainData.size.x / cellSize);
         gridSize.z = Mathf.RoundToInt(myTerrain.terrainData.size.z / cellSize);
         gridSize.y = maxHeight;
-        cellSizeStatic = cellSize;
-
-        //Redimension du terrain pour avoir un nombre de cellules rond
-        ResizeTerrain();
 
         GenerateGrid();
     }
 
     private void GenerateGrid() //Fonction pour générer la grille sur le terrain
     {
+        //Initialisation de la variable grille contenant chaque bloc
+        grid = new GameObject[gridSize.x, gridSize.y, gridSize.z];
+        bridgesGrid = new Vector3[gridSize.x, gridSize.y, gridSize.z];
+
         //GENERATION DU GAMEOBJECT CONTENANT CHAQUE LAYERS
         gridGameObject = new GameObject(); //Crée le gameobject qui contiendra absolument tout les blocs du jeu (pour trier)
         gridGameObject.name = "Grid";
         gridGameObject.transform.parent = this.transform;
-        gridGameObject.transform.localPosition = new Vector3(0, 0, 0);
-        Debug.Log("Generating grid");
+        gridGameObject.transform.localPosition = Vector3.zero;
+        Debug.Log("-----Generating grid-----");
     }
 
     public void DestroyBlock(Vector3Int coordinates)
@@ -131,7 +103,7 @@ public class GridManagement : MonoBehaviour {
         }
     }
 
-    public void AddBlock(GameObject newBlock, Vector3Int coordinates)
+    public void MoveBlock(GameObject newBlock, Vector3Int coordinates) //Bouge un bloc à une nouvelle coordonnée
     {
         grid[coordinates.x, coordinates.y, coordinates.z] = newBlock; 
 
@@ -146,77 +118,70 @@ public class GridManagement : MonoBehaviour {
                 } 
                 else
                 {
+                    
                     //Change la position du bloc dans la grille contenant chaque bloc
                     grid[coordinates.x, i + 1, coordinates.z] = grid[coordinates.x, i, coordinates.z];
 
+                    GameObject actualGridPos = grid[coordinates.x, i + 1, coordinates.z];
+
                     //Change le nom du bloc pour qu'il corresponde à sa nouvelle position (Ex : Block[1,2,1])
-                    grid[coordinates.x, i + 1, coordinates.z].name = "Block[" + coordinates.x + ";" + (i + 1) + ";" + coordinates.z + "]";
+                    actualGridPos.name = "Block[" + coordinates.x + ";" + (i + 1) + ";" + coordinates.z + "]";
 
                     //Met à jour les coordonnées du block dans son script "BlockLink"
-                    grid[coordinates.x, i + 1, coordinates.z].GetComponent<BlockLink>().gridCoordinates = new Vector3Int(coordinates.x, i-1, coordinates.z);
+                    actualGridPos.GetComponent<BlockLink>().gridCoordinates = new Vector3Int(coordinates.x, i-1, coordinates.z);
 
                     //Déplace le block vers ses nouvelles coordonnées
-                    grid[coordinates.x, i + 1, coordinates.z].GetComponent<BlockLink>().MoveToMyPosition();
+                    actualGridPos.GetComponent<BlockLink>().MoveToMyPosition();
                 }
             }
         }
     }
 
-    public void GenerateBlock(GameObject blockPrefab, Vector2Int coordinates)
+    public void SpawnBlock(GameObject blockPrefab, Vector2Int coordinates) //Genère un bloc à une coordonnée 2D sur la map
     {
         int cursorPosYInTerrain = FindObjectOfType<Cursor>().posInTerrain.y; //Position en Y à laquelle le joueur a cliqué
         GameObject newBlock = Instantiate(blockPrefab, gridGameObject.transform);
 
-        RaycastHit hit;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
         //Obtention de la hauteur à laquelle le bloc doit être posé
         int newBlockHeight = 0;
 
-        if (Physics.Raycast(ray, out hit))
+        if (grid[coordinates.x,cursorPosYInTerrain,coordinates.y] == null)
         {
-
-            //Si le joueur clique sur un terrain, on récupére la position ou il a cliqué, puis s'il y a déjà une tour, on récupère la hauteur de cette tour.
-            //Ensuite on génère le bloc à cette position
-            if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Terrain"))
+            //Le joueur a cliqué sur le sol
+            for (var i = cursorPosYInTerrain; i < gridSize.z - 1; i++)
             {
-                for (var i = cursorPosYInTerrain; i < gridSize.z - 1; i++)
+                if (grid[coordinates.x, i, coordinates.y] == null)
                 {
-                    if (grid[coordinates.x, i, coordinates.y] == null)
-                    {
-                        newBlockHeight = i; //On récupère la hauteur de l'endroit ou le joueur a cliqué, s'il y a déjà une tour, alors on obtient la hauteur de cette tour
-                        break;
-                    }
+                    newBlockHeight = i; //On récupère la hauteur de l'endroit ou le joueur a cliqué, s'il y a déjà une tour, alors on obtient la hauteur de cette tour
+                    break;
                 }
-                newBlock.transform.position = new Vector3(
-                    coordinates.x * cellSize + (cellSize / 2),
-                    0.5f + newBlockHeight,
-                    coordinates.y * cellSize + (cellSize / 2)
-                );
             }
-            //Si le joueur clique sur un block, on récupére la position ou il a cliqué, puis s'il y a déjà une tour, on récupère la hauteur de cette tour.
-            //Ensuite on génère le bloc à cette position
-            else if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Block"))
+            newBlock.transform.position = new Vector3(
+                coordinates.x * cellSize + (cellSize / 2),
+                0.5f + newBlockHeight,
+                coordinates.y * cellSize + (cellSize / 2)
+            );
+        } else
+        {
+            //Le joueur a cliqué sur un bloc
+            for (var i = cursorPosYInTerrain; i < gridSize.y - 1; i++)
             {
-                for (var i = cursorPosYInTerrain; i < gridSize.y - 1; i++)
+                if (grid[coordinates.x, i, coordinates.y] == null)
                 {
-                    if (grid[coordinates.x, i, coordinates.y] == null)
-                    {
-                        newBlockHeight = i;
-                        break;
-                    }
+                    newBlockHeight = i;
+                    break;
                 }
-                if (newBlockHeight == 0)
-                {
-                    uiManager.ShowError("You have reached max height");
-                    Debug.Log("Max height reached");
-                    Destroy(newBlock);
-                }
-                else
-                {
-                    newBlock.transform.position = grid[coordinates.x, newBlockHeight - 1, coordinates.y].gameObject.transform.position;
-                    newBlock.transform.position += new Vector3(0, 1, 0);
-                }
+            }
+            if (newBlockHeight == 0)
+            {
+                uiManager.ShowError("You have reached max height");
+                Debug.LogWarning("Max height reached");
+                Destroy(newBlock);
+            }
+            else
+            {
+                newBlock.transform.position = grid[coordinates.x, newBlockHeight - 1, coordinates.y].gameObject.transform.position;
+                newBlock.transform.position += new Vector3(0, 1, 0);
             }
         }
         grid[coordinates.x, newBlockHeight, coordinates.y] = newBlock;
@@ -246,27 +211,27 @@ public class GridManagement : MonoBehaviour {
 
         //Calcul de la longueur du pont et de l'orientation du pont
         int bridgeLength = 0;
-        int directionX = 0;
-        int directionZ = 0;
+
+        Vector2Int direction = Vector2Int.zero;
 
         if (blockA.gridCoordinates.x == blockB.gridCoordinates.x) {
             bridgeLength = Mathf.Abs(blockA.gridCoordinates.z - blockB.gridCoordinates.z) - 1;
-            directionX = 0;
+            direction.x = 0;
             if (blockA.gridCoordinates.z - blockB.gridCoordinates.z > 0) {
-                directionZ = -1;
+                direction.y = -1;
             }
             else {
-                directionZ = 1;
+                direction.y = 1;
             }
         }
         else {
             bridgeLength = Mathf.Abs(blockA.gridCoordinates.x - blockB.gridCoordinates.x) - 1;
-            directionZ = 0;
+            direction.y = 0;
             if (blockA.gridCoordinates.x - blockB.gridCoordinates.x > 0) {
-                directionX = -1;
+                direction.x = -1;
             }
             else {
-                directionX = 1;
+                direction.x = 1;
             }
         }
 
@@ -288,21 +253,20 @@ public class GridManagement : MonoBehaviour {
             else if (i == bridgeLength + 2) {
                 newBridgePart = Instantiate(bridgeEndPrefab, parentBridgeGameObject.transform);
                 newBridgePart.transform.localPosition = new Vector3(
-                    (((cellSize - 1) / 2) * directionX) + (cellSize * (i - 2)) * directionX + (0.5f * directionX), 
+                    (((cellSize - 1) / 2) * direction.x) + (cellSize * (i - 2)) * direction.x + (0.5f * direction.x), 
                     0, 
-                    (((cellSize - 1) / 2) * directionZ) + (cellSize * (i - 2)) * directionZ + (0.5f * directionZ)
+                    (((cellSize - 1) / 2) * direction.y) + (cellSize * (i - 2)) * direction.y + (0.5f * direction.y)
                 );
                 newBridgePart.transform.localRotation = firstBridgePart.transform.localRotation;
-                Debug.Log("Direction X = " + directionX + "Direction Z = " + directionZ);
             }
 
             //Création de la derniere partie du pont (de taille (cellsize-1)/2)
             else {
                 newBridgePart = Instantiate(bridgePrefab, parentBridgeGameObject.transform);
                 newBridgePart.transform.localPosition = new Vector3(
-                    (((cellSize - 1) / 2) * directionX) + (cellSize * (i - 2)) * directionX + (0.5f * directionX), 
+                    (((cellSize - 1) / 2) * direction.x) + (cellSize * (i - 2)) * direction.x + (0.5f * direction.x), 
                     0, 
-                    (((cellSize - 1) / 2) * directionZ) + (cellSize * (i - 2)) * directionZ + (0.5f * directionZ)
+                    (((cellSize - 1) / 2) * direction.y) + (cellSize * (i - 2)) * direction.y + (0.5f * direction.y)
                 );
                 newBridgePart.transform.localRotation = firstBridgePart.transform.localRotation;
             }

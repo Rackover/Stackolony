@@ -14,8 +14,11 @@ public class Cursor : MonoBehaviour {
     public GameObject blockDefaultPrefab;
     public GameObject stackSelectorPrefab;  //Prefab de la petite fléche qui se met au pied de la tour qu'on selectionne
     public GameObject highlighter; // Curseur permettant de surligner / mettre en valeur des blocks (exemple : lors du traçage de pont ou de la délétion)
+    public GameObject bridgeHighlighter;
     
     public cursorMode selectedMode = cursorMode.Drag; //Mode actuel du curseur
+    private GameObject[] activeHighlighters; //Pool contenant plusieurs highlighters actifs
+    private GameObject hoveredBlock;
 
     [Header("Scripts")]
     public TempDrag drag;
@@ -28,17 +31,19 @@ public class Cursor : MonoBehaviour {
     private GameObject stackSelector; //La petite fléche qui se met au pied de la tour qu'on selectionne
     private GameObject myProjector;
     Terrain terr; //Terrain principal sur lequel le joueur pourra placer des blocs
-    int hmWidth; //Heightmap du terrain
-    int hmHeight; //Heightmap du terrain
+
+    Vector2Int heightmapSize;
 
     private void Start()
     {
+        hoveredBlock = null;
         switchMode(cursorMode.Build);
+        gridManager = FindObjectOfType<GridManagement>();
 
         //Instantie un projecteur de selection qui se clamp sur les cellules de la grille
         myProjector = Instantiate(projectorPrefab);
         myProjector.name = "Projector";
-        myProjector.GetComponent<Projector>().orthographicSize = 2.5f * GridManagement.cellSizeStatic; //On adapte la taille du projecteur (qui projette la grille au sol) à la taille des cellules
+        myProjector.GetComponent<Projector>().orthographicSize = 2.5f * gridManager.cellSize; //On adapte la taille du projecteur (qui projette la grille au sol) à la taille des cellules
         myProjector.GetComponent<Projector>().enabled = false;
 
         //Instantie la fleche qui indique la tour selectionnée par le joueur
@@ -48,10 +53,8 @@ public class Cursor : MonoBehaviour {
 
         //Recupere le terrain et ses dimensions
         terr = Terrain.activeTerrain;
-        hmWidth = terr.terrainData.heightmapWidth;
-        hmHeight = terr.terrainData.heightmapHeight;
+        heightmapSize = new Vector2Int(terr.terrainData.heightmapWidth, terr.terrainData.heightmapHeight);
 
-        gridManager = FindObjectOfType<GridManagement>();
     }
     private void Update()
     {
@@ -62,6 +65,7 @@ public class Cursor : MonoBehaviour {
     {
         selectedMode = mode;
         uiManager.txtMode.text = mode.ToString();
+        ClearFeedback();
     }
 
 
@@ -74,8 +78,21 @@ public class Cursor : MonoBehaviour {
         if (Physics.Raycast(ray, out hit))
         {
             UpdatePosition(hit);
-            UpdateFeedback(hit);
             UpdateMouse(hit);
+            UpdateProjector();
+
+            if ((hit.collider.gameObject.layer == LayerMask.NameToLayer("Block")) && hoveredBlock != hit.collider.gameObject && (!Input.GetMouseButton(0) || Input.GetMouseButtonUp(0)))
+            {
+                hoveredBlock = hit.collider.gameObject;
+
+                UpdateFeedback(hit);
+            }
+
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Terrain"))
+            {
+                UpdateFeedback(hit);
+            }
+
         }
         else // If the mouse is pointing at nothing
         {
@@ -89,9 +106,9 @@ public class Cursor : MonoBehaviour {
     {
         Vector3 tempCoord = hit.point; //On adapte la position de la souris pour qu'elle corresponde à la taille des cellules
         Vector3 coord = new Vector3(
-            tempCoord.x / GridManagement.cellSizeStatic,
+            tempCoord.x / gridManager.cellSize,
             tempCoord.y, //La taille en y n'est pas dépendante de la taille des cellules, elle vaudra toujours 1
-            tempCoord.z / GridManagement.cellSizeStatic
+            tempCoord.z / gridManager.cellSize
         );
 
         //Converti la position pour savoir sur quelle case se trouve la souris
@@ -102,27 +119,40 @@ public class Cursor : MonoBehaviour {
         );
     }
 
-    void UpdateFeedback(RaycastHit hit)
+    void UpdateProjector()
     {
         //Met à jour la position du projecteur
         myProjector.GetComponent<Projector>().enabled = true;
         myProjector.transform.position = new Vector3(
-            posInTerrain.x* GridManagement.cellSizeStatic + (GridManagement.cellSizeStatic/2),
+            posInTerrain.x * gridManager.cellSize + (gridManager.cellSize / 2),
             posInTerrain.y + 10,
-            posInTerrain.z * GridManagement.cellSizeStatic + (GridManagement.cellSizeStatic / 2)
+            posInTerrain.z * gridManager.cellSize + (gridManager.cellSize / 2)
         );
+    }
 
+    void ClearFeedback()
+    {
+        HighlightBlock();
+        HighlightMultipleBlocks();
+    }
+
+    void UpdateFeedback(RaycastHit hit)
+    {
         // Highlighting block the cursor currently is on if we're in Bridge mode
         if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Block")) 
         {
-            if (selectedMode == cursorMode.Bridge ||
-                selectedMode == cursorMode.Delete) 
+            if (selectedMode == cursorMode.Delete) 
             {
                 HighlightBlock(hit.transform.gameObject);
+                HighlightMultipleBlocks();
             }
-            else 
+            else  if (selectedMode == cursorMode.Bridge)
             {
-                HighlightBlock();
+                HighlightMultipleBlocks(CheckBridgeableBlocks(posInTerrain));
+                HighlightBlock(hit.transform.gameObject);
+            } else
+            {
+                ClearFeedback();
             }
         }
 
@@ -131,7 +161,7 @@ public class Cursor : MonoBehaviour {
             int minHeight = 0;
             for (var i = posInTerrain.y-1; i > 0; i--) //Calcule du pied de la tour selectionnée
             {
-                if (GridManagement.grid
+                if (gridManager.grid
                     [
                         posInTerrain.x,
                         i,
@@ -144,9 +174,9 @@ public class Cursor : MonoBehaviour {
             }
             stackSelector.SetActive(true);
             stackSelector.transform.position = new Vector3(
-                posInTerrain.x * GridManagement.cellSizeStatic + (GridManagement.cellSizeStatic / 2), 
+                posInTerrain.x * gridManager.cellSize + (gridManager.cellSize / 2), 
                 minHeight+0.1f, 
-                posInTerrain.z * GridManagement.cellSizeStatic + (GridManagement.cellSizeStatic / 2));
+                posInTerrain.z * gridManager.cellSize + (gridManager.cellSize / 2));
         } 
         else
         {
@@ -167,11 +197,12 @@ public class Cursor : MonoBehaviour {
                 case cursorMode.Build:
                     if (!EventSystem.current.IsPointerOverGameObject()) 
                     {
-                        gridManager.GenerateBlock(blockDefaultPrefab, new Vector2Int(posInTerrain.x, posInTerrain.z));
+                        gridManager.SpawnBlock(blockDefaultPrefab, new Vector2Int(posInTerrain.x, posInTerrain.z));
                     }
                     break;
                 case cursorMode.Delete:
                     gridManager.DestroyBlock(posInTerrain);
+                    ClearFeedback();
                     break;
 
                 case cursorMode.Bridge:
@@ -243,12 +274,94 @@ public class Cursor : MonoBehaviour {
     void HighlightBlock(GameObject block = null)
     {
         if (block != null) {
+            Debug.Log("IsntNull");
             highlighter.SetActive(true);
             Vector3 bounds = block.GetComponent<BoxCollider>().bounds.size;
             highlighter.transform.position = block.transform.position;
         }
         else {
             highlighter.SetActive(false);
+        }
+    }
+
+    Vector3Int[] CheckBridgeableBlocks(Vector3Int coordinate) //Renvoi une liste des coordonnées des blocks reliables au bloc se trouvant aux coordonnées entrées
+    {
+        List<Vector3Int> coordinatesFound = new List<Vector3Int>();
+        //Check les blocs devant la face x
+        for (int i = coordinate.x+1; i < gridManager.grid.GetLength(0); i++)
+        {
+            if (gridManager.grid[i,coordinate.y,coordinate.z] != null)
+            {
+                coordinatesFound.Add(new Vector3Int(i, coordinate.y, coordinate.z));
+                break;
+            }
+        }
+
+        //Check les blocs derriere la face x
+        for (int i = coordinate.x-1; i >= 0; i--)
+        {
+            if (gridManager.grid[i, coordinate.y, coordinate.z] != null)
+            {
+                coordinatesFound.Add(new Vector3Int(i, coordinate.y, coordinate.z));
+                break;
+            }
+        }
+
+        //Check les blocs devant la face z
+        for (int i = coordinate.z+1; i < gridManager.grid.GetLength(2); i++)
+        {
+            if (gridManager.grid[coordinate.x, coordinate.y, i] != null)
+            {
+                coordinatesFound.Add(new Vector3Int(coordinate.x, coordinate.y, i));
+                break;
+            }
+        }
+
+        //Check les blocs derriere la face z
+        for (int i = coordinate.z-1; i >= 0; i--)
+        {
+            if (gridManager.grid[coordinate.x, coordinate.y, i] != null)
+            {
+                coordinatesFound.Add(new Vector3Int(coordinate.x, coordinate.y, i));
+                break;
+            }
+        }
+
+        return coordinatesFound.ToArray();
+    }
+    
+    void HighlightMultipleBlocks(Vector3Int[] blocksCoordinates = null) //Instantie un highlighter pour plusieurs blocks, si aucun argument n'est spécifié alors il clean tout
+    {
+        // Clean les highlighters
+        if (activeHighlighters != null && activeHighlighters.Length > 0)
+        {
+            foreach (GameObject activeHighlighter in activeHighlighters)
+            {
+                Destroy(activeHighlighter);
+            }
+            activeHighlighters = new GameObject[0]; //Clean de l'array contenant les highlighters
+        }
+
+        if (blocksCoordinates != null)
+        {
+            //Genere les nouveaux highlighters
+            activeHighlighters = new GameObject[blocksCoordinates.Length];
+            int i = 0;
+            foreach (Vector3Int coordinate in blocksCoordinates)
+            {
+                if (gridManager.grid[coordinate.x, coordinate.y, coordinate.z] != null)
+                {
+                    GameObject newHighlighter = Instantiate(highlighter, highlighter.transform.parent);
+                    newHighlighter.transform.localPosition = gridManager.grid[coordinate.x, coordinate.y, coordinate.z].transform.position;
+                    newHighlighter.SetActive(true);
+                    activeHighlighters[i] = newHighlighter;
+                    i++;
+                }
+                else
+                {
+                    Debug.LogWarning("Coordinate is out of grid, can't draw the highlighter");
+                }
+            }
         }
     }
 
