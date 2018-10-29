@@ -3,13 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class BlockLink : MonoBehaviour {
-    public Block linkedBlock;
-    public Vector3Int gridCoordinates = new Vector3Int(0, 0, 0);
-    public int positionInTower; //0 = tout en bas
+
+    [Header("Referencies")]
+    [Tooltip("Linked ScriptableObject")] public Block linkedBlock;
+    public BoxCollider collider;
+
+    [HideInInspector] public Vector3Int gridCoordinates = new Vector3Int(0, 0, 0);
+    [HideInInspector] public int positionInTower; //0 = tout en bas
+
+    // TEMPORARY ASSET GENERATION
     public GameObject[] blocks;
     GridManagement gridManager;
 
-    public void Start()
+    void Awake()
+    {
+        if(collider == null) collider = gameObject.GetComponent<BoxCollider>();
+    }
+
+    void Start()
     {
         // TEMP
         gridManager = FindObjectOfType<GridManagement>();

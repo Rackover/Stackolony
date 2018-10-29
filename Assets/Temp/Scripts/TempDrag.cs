@@ -9,6 +9,8 @@ public class TempDrag : MonoBehaviour  {
     {
         Debug.Log("Start dragging cube");
         sBlock = _block;
+
+        sBlock.collider.enabled = false;
         sBlock.gameObject.layer = 0;
         sPosition = sBlock.transform.position;
     }
@@ -17,7 +19,9 @@ public class TempDrag : MonoBehaviour  {
     {
         if(sBlock != null)
         {
-            sBlock.transform.position = _pos;
+            //Vector3 newPos = new Vector3(_pos.x*cellsize + cellsize/2, _pos.y + 0.5f, _pos.z*cellsize + cellsize/2);
+            Vector3 newPos = new Vector3(_pos.x*2.5f + 1.25f, _pos.y + 0.5f, _pos.z*2.5f + 1.25f);
+            sBlock.transform.position = newPos;
         }
     }
 
@@ -27,6 +31,7 @@ public class TempDrag : MonoBehaviour  {
         {
             Debug.Log("End dragging");
 
+            sBlock.collider.enabled = true;
             sBlock.gameObject.layer = 10;
             sBlock = null;
         }
