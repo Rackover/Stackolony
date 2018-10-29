@@ -260,7 +260,7 @@ public class Cursor : MonoBehaviour {
                     Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
                     break;
                 case cursorMode.Drag:
-                    drag.EndDrag(hit.point);
+                    drag.EndDrag(posInTerrain);
                     break;
             }
         }
