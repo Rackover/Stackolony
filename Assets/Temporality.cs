@@ -151,7 +151,7 @@ public class Temporality : MonoBehaviour {
     //Met à jour l'afficheur jour/nuit 
     public void UpdateDayNightDisplay(float cycleProgressionInPercent)
     {
-        dayNightDisplay.transform.rotation = Quaternion.Euler(new Vector3(0,0,270f+(cycleProgressionInPercent*3.6f)));
+        dayNightDisplay.transform.rotation = Quaternion.Euler(new Vector3(0,0,90f-(cycleProgressionInPercent*3.6f)));
     }
 
 

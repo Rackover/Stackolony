@@ -102,37 +102,70 @@ public class GridManagement : MonoBehaviour {
             }
         }
     }
-
-    public void MoveBlock(GameObject newBlock, Vector3Int coordinates) //Bouge un bloc à une nouvelle coordonnée
+    public void UpdateBlocks(Vector3Int coordinates)
     {
-        grid[coordinates.x, coordinates.y, coordinates.z] = newBlock; 
-
-        if (grid[coordinates.x, coordinates.y,coordinates.z] != null)
+        if (grid[coordinates.x, coordinates.y, coordinates.z] != null)
         {
-            for (int i = coordinates.y + 1; i < maxHeight; i++) //Fait monter d'une case les blocs au dessus du bloc ajouté
+            // Removes object from list and destroys the gameObject
+            GameObject target = grid[coordinates.x, coordinates.y, coordinates.z];
+
+            for (var i = coordinates.y + 1; i < maxHeight; i++) //Fait descendre d'une case les blocs au dessus du bloc supprimé
             {
                 if (grid[coordinates.x, i, coordinates.z] == null)
                 {
+                    grid[coordinates.x, i - 1, coordinates.z] = null;
                     return;
-                } 
+                }
                 else
                 {
                     //Change la position du bloc dans la grille contenant chaque bloc
-                    grid[coordinates.x, i + 1, coordinates.z] = grid[coordinates.x, i, coordinates.z];
-
-                    GameObject actualGridPos = grid[coordinates.x, i + 1, coordinates.z];
+                    grid[coordinates.x, i - 1, coordinates.z] = grid[coordinates.x, i, coordinates.z];
 
                     //Change le nom du bloc pour qu'il corresponde à sa nouvelle position (Ex : Block[1,2,1])
-                    actualGridPos.name = "Block[" + coordinates.x + ";" + (i + 1) + ";" + coordinates.z + "]";
+                    grid[coordinates.x, i - 1, coordinates.z].name = "Block[" + coordinates.x + ";" + (i - 1) + ";" + coordinates.z + "]";
 
                     //Met à jour les coordonnées du block dans son script "BlockLink"
-                    actualGridPos.GetComponent<BlockLink>().gridCoordinates = new Vector3Int(coordinates.x, i + 1, coordinates.z);
+                    grid[coordinates.x, i - 1, coordinates.z].GetComponent<BlockLink>().gridCoordinates = new Vector3Int(coordinates.x, i - 1, coordinates.z);
 
+                    //Déplace le block vers ses nouvelles coordonnées
+                    grid[coordinates.x, i - 1, coordinates.z].GetComponent<BlockLink>().MoveToMyPosition();
+                }
+            }
+        }
+    }
+
+
+    public void MoveBlock(GameObject newBlock, Vector3Int coordinates) //Bouge un bloc à une nouvelle coordonnée
+    {
+        // If the block come from somewhere
+        BlockLink _blocklink = newBlock.GetComponent<BlockLink>();
+        if (_blocklink != null)
+            UpdateBlocks(_blocklink.gridCoordinates);
+        grid[_blocklink.gridCoordinates.x, _blocklink.gridCoordinates.x, _blocklink.gridCoordinates.x] = null;
+
+        if (grid[coordinates.x, coordinates.y, coordinates.z] != null) // If there is a block where the block should be dropped
+        {
+            for (int i = grid.GetLength(1) - 1; i > coordinates.y - 1; i--) //Fait monter d'une case les blocs au dessus du bloc ajouté
+            {
+                if (grid[coordinates.x, i, coordinates.z] != null)
+                {
+                    grid[coordinates.x, i + 1, coordinates.z] = grid[coordinates.x, i, coordinates.z];
+                    GameObject actualGridPos = grid[coordinates.x, i + 1, coordinates.z];
+                    //Change le nom du bloc pour qu'il corresponde à sa nouvelle position (Ex : Block[1,2,1])
+                    actualGridPos.name = "Block[" + coordinates.x + ";" + (i + 1) + ";" + coordinates.z + "]";
+                    //Met à jour les coordonnées du block dans son script "BlockLink"
+                    actualGridPos.GetComponent<BlockLink>().gridCoordinates = new Vector3Int(coordinates.x, i + 1, coordinates.z);
                     //Déplace le block vers ses nouvelles coordonnées
                     actualGridPos.GetComponent<BlockLink>().MoveToMyPosition();
                 }
             }
         }
+
+        grid[coordinates.x, coordinates.y, coordinates.z] = newBlock;
+        newBlock.name = "Block[" + coordinates.x + ";" + coordinates.y + ";" + coordinates.z + "]";
+        if (_blocklink != null)
+            _blocklink.gridCoordinates = new Vector3Int(coordinates.x, coordinates.y, coordinates.z);
+
     }
 
     public void SpawnBlock(GameObject blockPrefab, Vector2Int coordinates) //Genère un bloc à une coordonnée 2D sur la map

@@ -50,6 +50,10 @@ public class BlockLink : MonoBehaviour {
             elapsedTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
+        transform.position = new Vector3(
+        gridCoordinates.x * gridManager.cellSize + 0.5f * gridManager.cellSize,
+        0.5f + gridCoordinates.y,
+        gridCoordinates.z * gridManager.cellSize + 0.5f * gridManager.cellSize);
         yield return null;
     }
 }
