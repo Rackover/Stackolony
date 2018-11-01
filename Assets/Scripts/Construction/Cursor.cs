@@ -15,10 +15,13 @@ public class Cursor : MonoBehaviour {
     public GameObject stackSelectorPrefab;  //Prefab de la petite fléche qui se met au pied de la tour qu'on selectionne
     public GameObject highlighter; // Curseur permettant de surligner / mettre en valeur des blocks (exemple : lors du traçage de pont ou de la délétion)
     public GameObject bridgeHighlighter;
+    public GameObject bridgePreview;
     
     public cursorMode selectedMode = cursorMode.Drag; //Mode actuel du curseur
-    private GameObject[] activeHighlighters; //Pool contenant plusieurs highlighters actifs
+    private GameObject[] activeHighlighters; //Liste contenant plusieurs highlighters actifs
+    public List<GameObject> activeBridgePreviews = new List<GameObject>(); //Liste contenant les preview de pont
     private GameObject hoveredBlock;
+
 
     [Header("Scripts")]
     public TempDrag drag;
@@ -134,6 +137,8 @@ public class Cursor : MonoBehaviour {
     {
         HighlightBlock();
         HighlightMultipleBlocks();
+        if (activeBridgePreviews.Count > 0)
+            DestroyBridgePreview();
     }
 
     void UpdateFeedback(RaycastHit hit)
@@ -143,13 +148,20 @@ public class Cursor : MonoBehaviour {
         {
             if (selectedMode == cursorMode.Delete) 
             {
+                ClearFeedback();
                 HighlightBlock(hit.transform.gameObject);
-                HighlightMultipleBlocks();
             }
             else  if (selectedMode == cursorMode.Bridge)
             {
-                HighlightMultipleBlocks(CheckBridgeableBlocks(posInTerrain));
+                ClearFeedback();
                 HighlightBlock(hit.transform.gameObject);
+                Vector3Int[] linkableBlocksList = CheckBridgeableBlocks(posInTerrain);
+                if (linkableBlocksList.Length > 0) {
+                    HighlightMultipleBlocks(linkableBlocksList);
+                    foreach (Vector3Int blockToBridge in linkableBlocksList) {
+                        GenerateBridgePreview(hit.transform.gameObject.GetComponent<BlockLink>().gridCoordinates, blockToBridge);
+                    }
+                }
             } else
             {
                 ClearFeedback();
@@ -283,6 +295,45 @@ public class Cursor : MonoBehaviour {
             highlighter.SetActive(false);
         }
     }
+    void DestroyBridgePreview()
+    {
+        foreach (GameObject bridgePreviewer in activeBridgePreviews)
+        {
+            Destroy(bridgePreviewer);
+        }
+        activeBridgePreviews.Clear();
+    }
+    void GenerateBridgePreview(Vector3Int firstPosition, Vector3Int secondPosition) { //Genere une preview d'un pont
+        GameObject bridgePreviewer = Instantiate(bridgePreview);
+
+        //Crée le pont et le place à equidistance entre les 2 points voulu
+        bridgePreviewer.transform.position = gridManager.grid[firstPosition.x,firstPosition.y,firstPosition.z].transform.position + (gridManager.grid[secondPosition.x, secondPosition.y, secondPosition.z].transform.position
+                                                                - gridManager.grid[firstPosition.x, firstPosition.y, firstPosition.z].transform.position)/2;
+
+        //Ensuite on cherche à donner au pont la taille qui correspond à la distance entre les deux points du pont
+        Vector3 positionDifference = gridManager.grid[secondPosition.x, secondPosition.y, secondPosition.z].transform.position - gridManager.grid[firstPosition.x, firstPosition.y, firstPosition.z].transform.position;
+
+        //La taille sera toujours positive donc on la rend positive
+        positionDifference.y = 0.2f; //Hauteur du pont
+        positionDifference.x = Mathf.Abs(positionDifference.x);
+        positionDifference.z = Mathf.Abs(positionDifference.z);
+
+        //Ensuite on soustrait la taille de la moitié de chaque extrémité du pont (donc 1) à cette valeur
+        if (positionDifference.x > 0)
+            positionDifference.x -= 1;
+        else
+            positionDifference.x = 1; //Comme on converti la distance en taille, si la distance est de 0, la taille doit quand même être de 1
+        if (positionDifference.z > 0)
+            positionDifference.z -= 1;
+        else
+            positionDifference.z = 1; //Comme on converti la distance en taille, si la distance est de 0, la taille doit quand même être de 1
+
+        //Puis on applique la valeur à la taille du pont
+        bridgePreviewer.transform.localScale = positionDifference;
+
+        bridgePreviewer.transform.localPosition -= new Vector3(0, 0.5f, 0); //On abaisse un peu le pont pour qu'il se place en bas des blocs
+        activeBridgePreviews.Add(bridgePreviewer);
+    }
 
     Vector3Int[] CheckBridgeableBlocks(Vector3Int coordinate) //Renvoi une liste des coordonnées des blocks reliables au bloc se trouvant aux coordonnées entrées
     {
@@ -351,7 +402,7 @@ public class Cursor : MonoBehaviour {
             {
                 if (gridManager.grid[coordinate.x, coordinate.y, coordinate.z] != null)
                 {
-                    GameObject newHighlighter = Instantiate(highlighter, highlighter.transform.parent);
+                    GameObject newHighlighter = Instantiate(bridgeHighlighter, highlighter.transform.parent);
                     newHighlighter.transform.localPosition = gridManager.grid[coordinate.x, coordinate.y, coordinate.z].transform.position;
                     newHighlighter.SetActive(true);
                     activeHighlighters[i] = newHighlighter;

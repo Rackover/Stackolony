@@ -20,24 +20,83 @@ public class Temporality : MonoBehaviour {
     public Text yearNumberText;
     public GameObject directionalLight;
     public Material skyboxMaterial;
+    public GameObject dayNightDisplay;
+    public GameObject timescaleButtonHolder;
 
 
     [Header("=== DEBUG VALUES ===")][Space(1)]
     private int cycleNumber; //Combien de cycles se sont ecoulés en tout
     private int yearNumber; //Combien d'années se sont ecoulées en tout
     public float cycleProgression; //Combien de secondes se sont ecoulées dans le cycle actuel
-    public static int timeScale; //Coefficient de vitesse d'écoulement du temps
-    private Coroutine timeCoroutine; //Coroutine pour gérer la progression des cycles
+    public int timeScale; //Coefficient de vitesse d'écoulement du temps
+    //private Coroutine timeCoroutine; //Coroutine pour gérer la progression des cycles, obsoléte
 
     private float timeBetweenUpdateForSkyboxCount = 0;
     private float timeBetweenUpdateForLightsCount = 0;
     private float timeBetweenUpdateForDayNightDisplayCount = 0;
 
+    private float recurence = 0; //Correspond au temps entre chaques fois ou on verifiera pour faire une mise à jour visuelle
+
+    private float counter;
+
     public void Awake()
     {
+        counter = 0;
+
         timeScale = initialTimeScale;
-        float recurence = Mathf.Min(timeBetweenUpdateForDayNightDisplay, timeBetweenUpdateForLights, timeBetweenUpdateForSkybox);
-        timeCoroutine = StartCoroutine(updateCycleProgression(recurence));
+        recurence = Mathf.Min(timeBetweenUpdateForDayNightDisplay, timeBetweenUpdateForLights, timeBetweenUpdateForSkybox);
+        //timeCoroutine = StartCoroutine(updateCycleProgression(recurence));
+
+        cycleNumber = 0;
+        yearNumber = 0;
+
+        cycleNumberText.text = "CYCLE : " + cycleNumber;
+        yearNumberText.text = "YEAR : " + yearNumber;
+    }
+
+    public void Update() {
+        counter += Time.deltaTime * timeScale;
+        if (counter >= recurence) {
+            counter = 0;
+            TimeUpdate();
+        }
+    }
+
+    //Met à jour le temps et les visuels
+    public void TimeUpdate() {
+        if (cycleProgression < cycleDuration)
+        {
+            cycleProgression+= recurence;
+        } else
+        {
+            cycleProgression = 0;
+            AddCycle();
+        }
+
+        //Update des timers pour les mises à jours de visuels
+        timeBetweenUpdateForSkyboxCount+= recurence;
+        timeBetweenUpdateForLightsCount+= recurence;
+        timeBetweenUpdateForDayNightDisplayCount+= recurence;
+
+        //Mises à jour des visuels
+        float cycleProgressionInPercent = (cycleProgression / (float)cycleDuration) * 100f;
+        if (timeBetweenUpdateForDayNightDisplayCount >= timeBetweenUpdateForDayNightDisplay)
+        {
+            UpdateDayNightDisplay(cycleProgressionInPercent);
+            timeBetweenUpdateForDayNightDisplayCount = 1;
+        }
+
+        if (timeBetweenUpdateForLightsCount > timeBetweenUpdateForLights)
+        {
+            UpdateLights(cycleProgressionInPercent);
+            timeBetweenUpdateForLightsCount = 1;
+        }
+
+        if (timeBetweenUpdateForSkyboxCount > timeBetweenUpdateForSkybox)
+        {
+            UpdateSkybox(cycleProgressionInPercent);
+            timeBetweenUpdateForSkyboxCount = 1;
+        }
     }
 
     public void ChangeTimeScale(int newTimeScaleCoef)
@@ -45,23 +104,32 @@ public class Temporality : MonoBehaviour {
         timeScale = newTimeScaleCoef;
     }
 
+    public void EnableButton(Image button)
+    {
+        foreach (Transform child in timescaleButtonHolder.transform)
+        {
+            child.GetComponent<Image>().color = new Color32(255, 255, 255, 55);
+        }
+        button.color = new Color32(255, 255, 255, 255);
+    }
+
     public void AddCycle() //Ajoute un cycle au compteur
     {
-
+        cycleNumber++;
+        cycleNumberText.text = "CYCLE : " + cycleNumber;
+        if (cycleNumber%yearDuration == 0) 
+            AddYear();
     }
 
     public void AddYear() //Ajoute un an au compteur
     {
-
+        yearNumber++;
+        yearNumberText.text = "YEAR : " + yearNumber;
     }
 
     //Met à jour les lumières en fonction de l'avancement du cycle
     public void UpdateLights(float cycleProgressionInPercent)
     {
-        Debug.Log((360f * 1 / 100));
-        Debug.Log(cycleProgressionInPercent);
-        Debug.Log(cycleProgression);
-        Debug.Log(((360f * (float)cycleProgressionInPercent) / 100f));
         directionalLight.transform.rotation = Quaternion.Euler(new Vector3(90f+((360f * (float)cycleProgressionInPercent) /100f),30,0));
     }
 
@@ -77,15 +145,17 @@ public class Temporality : MonoBehaviour {
     //Met à jour le compteur de temps heures:minutes en fonction 
     public void UpdateTimeDisplay(float cycleProgressionInPercent)
     {
-
+        
     }
 
     //Met à jour l'afficheur jour/nuit 
     public void UpdateDayNightDisplay(float cycleProgressionInPercent)
     {
-
+        dayNightDisplay.transform.rotation = Quaternion.Euler(new Vector3(0,0,270f+(cycleProgressionInPercent*3.6f)));
     }
 
+
+/* Systeme obsoléte de coroutine, il déforme un peu le temps mais est plus optimisé
     IEnumerator updateCycleProgression(float recurence)
     {
         yield return new WaitForSeconds(recurence);
@@ -95,7 +165,7 @@ public class Temporality : MonoBehaviour {
             cycleProgression+= recurence;
         } else
         {
-            cycleProgression = 1;
+            cycleProgression = 0;
             AddCycle();
         }
 
@@ -127,4 +197,5 @@ public class Temporality : MonoBehaviour {
         timeCoroutine = StartCoroutine(updateCycleProgression(recurence));
         yield return null;
     }
+    */
 }
