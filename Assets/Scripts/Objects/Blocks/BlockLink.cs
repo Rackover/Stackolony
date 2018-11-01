@@ -30,7 +30,7 @@ public class BlockLink : MonoBehaviour {
 
     public void MoveToMyPosition() //Deplace le bloc à sa position supposée
     {
-        StartCoroutine(MoveToPosition(0.3f));
+        StartCoroutine(MoveToPosition(0.1f));
     }
 
     public IEnumerator MoveToPosition(float time) //Coroutine pour déplacer le cube vers sa position
