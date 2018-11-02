@@ -4,6 +4,9 @@ using UnityEngine.UI;
 public class CameraController : MonoBehaviour {
 
     [Header("=== REFERENCIES ===")][Space(1)]
+    [Header("Scripts")][Space(1)]
+    public Interface userInterface;
+    [Header("Transforms")][Space(1)]
     public Transform camTransform;
     public Transform camCenter;                 // Center of the camera (Used for Lookat + movement)
     public Transform camPivot;                  // Pivot point of the camera (Used for rotation)
@@ -32,14 +35,17 @@ public class CameraController : MonoBehaviour {
 
     float xLook;
     float yLook;
-    Vector2 lastMousePosition;
+    Vector3 mouseDelta;
+    Vector3 lastMousePosition;
 
     void Update()
     {
         Drift();
         Rotation();
         Zoom();
-        DriftFeedback();
+        //DriftFeedback();
+
+        userInterface.cursorTransform.position = Input.mousePosition;
     }
 
     void Rotation()
@@ -62,7 +68,7 @@ public class CameraController : MonoBehaviour {
         // MOVEMENT
         if (Input.GetButtonDown("MouseMiddle"))
         {
-            lastMousePosition = Input.mousePosition;
+            lastMousePosition = (Vector3)Input.mousePosition;
             camTarget = null;
             camCenter.position = new Vector3(camCenter.position.x, 0f, camCenter.position.z);
         }
@@ -70,19 +76,23 @@ public class CameraController : MonoBehaviour {
         // NEW SOLUTION : Using 2 seperate translate forward and right take care of the camera orientation
         if(Input.GetButton("MouseMiddle"))
         {
+            mouseDelta = (Vector3)lastMousePosition - (Vector3)Input.mousePosition;
+            camCenter.position += mouseDelta.x * camTransform.right.normalized * driftSensibility;
+            camCenter.position += mouseDelta.y * new Vector3(camTransform.forward.x, 0, camTransform.forward.z).normalized * driftSensibility;
+            /*
             Vector3 directionForward = new Vector3(camTransform.forward.x, 0, camTransform.forward.z);
             xShift = lastMousePosition.x - Input.mousePosition.x;
             yShift = lastMousePosition.y - Input.mousePosition.y;
-
             xShift = Mathf.Clamp(xShift, -maxDrift, maxDrift);
             yShift = Mathf.Clamp(yShift, -maxDrift, maxDrift);
-
             camCenter.position -= xShift * camTransform.right.normalized * driftSensibility;
             camCenter.position -= yShift * directionForward.normalized * driftSensibility;
+            */
+            lastMousePosition = (Vector3)Input.mousePosition;
         }
     } // Drift the camera center horizontaly on the z and x axis with mouse movement
 
-    void DriftFeedback()
+    void DriftFeedback() 
     {
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(new Vector2(Screen.width/2, Screen.height/2));
@@ -108,7 +118,7 @@ public class CameraController : MonoBehaviour {
         }
     }
 
-    void Zoom()
+    void Zoom() 
     {
         if(Input.GetAxis("MouseWheel") > 0 && camTransform.position.y > minZoom)
             camTransform.Translate(Vector3.forward * Input.GetAxis("MouseWheel") * zoomStep);

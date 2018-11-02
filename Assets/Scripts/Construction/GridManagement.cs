@@ -35,7 +35,7 @@ public class GridManagement : MonoBehaviour {
     public GameObject[,,] grid;
 
     [Header("=== REFERENCES ===")][Space(1)]
-    public InterfaceManager uiManager;
+    public Interface uiManager;
 
     //------------VARIABLES PRIVEE------------
     Terrain myTerrain; //Terrain sur lequel la grille doit être generée

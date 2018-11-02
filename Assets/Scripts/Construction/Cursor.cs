@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class Cursor : MonoBehaviour {
 
-    public enum cursorMode { Drag, Build, Delete, Bridge }; //Chaque mode du curseur
+    public enum cursorMode { Default, Build, Delete, Bridge }; //Chaque mode du curseur
 
     [Header("=== REFERENCIES ===")][Space(1)]
     [Header("Prefabs")]
@@ -17,7 +17,7 @@ public class Cursor : MonoBehaviour {
     public GameObject bridgeHighlighter;
     public GameObject bridgePreview;
     
-    public cursorMode selectedMode = cursorMode.Drag; //Mode actuel du curseur
+    public cursorMode selectedMode = cursorMode.Default; //Mode actuel du curseur
     private GameObject[] activeHighlighters; //Liste contenant plusieurs highlighters actifs
     public List<GameObject> activeBridgePreviews = new List<GameObject>(); //Liste contenant les preview de pont
     private GameObject hoveredBlock;
@@ -26,7 +26,7 @@ public class Cursor : MonoBehaviour {
     [Header("Scripts")]
     public TempDrag drag;
     public GridManagement gridManager; // Référence au gridManagement.cs instancié
-    public InterfaceManager uiManager;
+    public Interface uiManager;
 
     [Space(5)][Header("=== DEBUG ===")][Space(1)]
     public Vector3Int posInTerrain; //Position de la souris sur le terrain
@@ -62,12 +62,18 @@ public class Cursor : MonoBehaviour {
     private void Update()
     {
         UpdateCursor();
+
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            switchMode(cursorMode.Default);
+        }
     }
 
     public void switchMode(cursorMode mode)
     {
         selectedMode = mode;
         uiManager.txtMode.text = mode.ToString();
+        uiManager.ChangeCursor(mode.ToString());
         ClearFeedback();
     }
 
@@ -204,6 +210,7 @@ public class Cursor : MonoBehaviour {
             switch (selectedMode) {
                 default:
                     Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
+                    drag.StartDrag(hit.transform.gameObject.GetComponent<BlockLink>());
                     break;
 
                 case cursorMode.Build:
@@ -212,6 +219,7 @@ public class Cursor : MonoBehaviour {
                         gridManager.SpawnBlock(blockDefaultPrefab, new Vector2Int(posInTerrain.x, posInTerrain.z));
                     }
                     break;
+
                 case cursorMode.Delete:
                     gridManager.DestroyBlock(posInTerrain);
                     ClearFeedback();
@@ -219,14 +227,6 @@ public class Cursor : MonoBehaviour {
 
                 case cursorMode.Bridge:
                     TryToMakeBridge(hit.transform.gameObject);
-                    break;
-
-                case cursorMode.Drag:
-                    BlockLink sBlock = hit.transform.gameObject.GetComponent<BlockLink>(); 
-                    if(sBlock != null)
-                    {
-                        drag.StartDrag(sBlock);
-                    }
                     break;
             }
         }
@@ -245,8 +245,6 @@ public class Cursor : MonoBehaviour {
             {
                 default:
                     Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
-                    break;
-                case cursorMode.Drag:
                     drag.DuringDrag(posInTerrain);
                     break;
             }
@@ -256,8 +254,6 @@ public class Cursor : MonoBehaviour {
             switch (selectedMode) {
                 default:
                     Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
-                    break;
-                 case cursorMode.Drag:
                     drag.CancelDrag();
                     break;
             }
@@ -270,8 +266,6 @@ public class Cursor : MonoBehaviour {
             {
                 default:
                     Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
-                    break;
-                case cursorMode.Drag:
                     drag.EndDrag(posInTerrain);
                     break;
             }
@@ -464,7 +458,7 @@ public class Cursor : MonoBehaviour {
     /// do NOT use in code
     public void switchToDragModeFromButton()
     {
-        switchMode(cursorMode.Drag);
+        switchMode(cursorMode.Default);
     }
     public void switchToBuildModeFromButton()
     {
