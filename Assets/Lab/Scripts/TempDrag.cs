@@ -64,12 +64,18 @@ public class TempDrag : MonoBehaviour  {
     {
         if(sBlock != null && draging)
         {
-            Debug.Log("End dragging");
-            gridManagement.MoveBlock(sBlock.gameObject, _pos);
-            sBlock.collider.enabled = true;
+            if (!gridManagement.checkIfSlotIsBlocked(_pos,true))
+            {
+                Debug.Log("End dragging");
+                gridManagement.MoveBlock(sBlock.gameObject, _pos);
+                sBlock.collider.enabled = true;
 
-            sBlock = null;
-            draging = false;
+                sBlock = null;
+                draging = false;
+            } else
+            {
+                CancelDrag();
+            }
         }
     }
 

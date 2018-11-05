@@ -22,6 +22,7 @@ public class Temporality : MonoBehaviour {
     public Material skyboxMaterial;
     public GameObject dayNightDisplay;
     public GameObject timescaleButtonHolder;
+    public Image pauseButton;
 
 
     [Header("=== DEBUG VALUES ===")][Space(1)]
@@ -36,6 +37,9 @@ public class Temporality : MonoBehaviour {
     private float timeBetweenUpdateForDayNightDisplayCount = 0;
 
     private float recurence = 0; //Correspond au temps entre chaques fois ou on verifiera pour faire une mise à jour visuelle
+
+    private int savedTimeScale; //Variable utilisée pour redéfinir la vitesse du jeu quand le joueur annule la pause
+    private Image savedButton; //Bouton à réactiver quand le joueur annule la pause
 
     private float counter;
 
@@ -54,8 +58,33 @@ public class Temporality : MonoBehaviour {
         yearNumberText.text = "YEAR : " + yearNumber;
     }
 
+    public void PauseGame()
+    {
+        if (timeScale == 0) {
+            timeScale = savedTimeScale;
+            EnableButton(savedButton);
+        }
+        else
+        {
+            EnableButton(pauseButton);
+            savedTimeScale = timeScale;
+            timeScale = 0;
+
+            Color32 colorOfEnabledButton = new Color32(255, 255, 255, 255);
+            foreach (GameObject child in transform)
+            {
+                Color32 colorToCompare = child.GetComponent<Image>().color;
+                if (colorOfEnabledButton.Equals(colorToCompare))
+                {
+                    savedButton = child.GetComponent<Image>();
+                }
+            }
+        }
+    }
+
     public void Update() {
-        counter += Time.deltaTime * timeScale;
+        //Debug.Log(Time.deltaTime * 1);
+        counter += Time.deltaTime;
         if (counter >= recurence) {
             counter = 0;
             TimeUpdate();
@@ -66,10 +95,10 @@ public class Temporality : MonoBehaviour {
     public void TimeUpdate() {
         if (cycleProgression < cycleDuration)
         {
-            cycleProgression+= recurence;
+            cycleProgression+= recurence * timeScale;
         } else
         {
-            cycleProgression = 0;
+            cycleProgression = recurence * timeScale; //On ne reset pas à 0 pour éviter une transition sacadée au niveau de l'aperçu du temps passé
             AddCycle();
         }
 

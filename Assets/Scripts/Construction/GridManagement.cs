@@ -38,7 +38,8 @@ public class GridManagement : MonoBehaviour {
     public Interface uiManager;
 
     //------------VARIABLES PRIVEE------------
-    Terrain myTerrain; //Terrain sur lequel la grille doit être generée
+    [System.NonSerialized]
+    public Terrain myTerrain; //Terrain sur lequel la grille doit être generée
     public Vector3Int gridSize; //Nombre de cases sur le terrain
     private GameObject gridGameObject; //GameObject contenant la grille
 
@@ -170,7 +171,12 @@ public class GridManagement : MonoBehaviour {
 
     public void SpawnBlock(GameObject blockPrefab, Vector2Int coordinates) //Genère un bloc à une coordonnée 2D sur la map
     {
-        int cursorPosYInTerrain = FindObjectOfType<Cursor>().posInTerrain.y; //Position en Y à laquelle le joueur a cliqué
+        int cursorPosYInTerrain = FindObjectOfType<CursorManagement>().posInTerrain.y; //Position en Y à laquelle le joueur a cliqué
+
+        if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x,cursorPosYInTerrain,coordinates.y),true))
+        {
+            return;
+        }
         GameObject newBlock = Instantiate(blockPrefab, gridGameObject.transform);
 
         //Obtention de la hauteur à laquelle le bloc doit être posé
@@ -221,6 +227,21 @@ public class GridManagement : MonoBehaviour {
         newBlock.name = "Block[" + coordinates.x + ";" + newBlockHeight + ";" + coordinates.y + "]";
     }
 
+    public bool checkIfSlotIsBlocked(Vector3Int coordinates, bool displayErrorMessages)
+    {
+        GameObject objectFound = grid[coordinates.x, coordinates.y, coordinates.z];
+        if (objectFound != null)
+        {
+            if (objectFound.tag == "StockingBay")
+            {
+                if (displayErrorMessages)
+                    uiManager.ShowError("You can't build over the stocking bay");
+                return true;
+            }
+        }
+        return false;
+    }
+
     /// <summary>
     /// Bridges two building and returns the parent bridge GameObject
     /// </summary>
@@ -228,6 +249,59 @@ public class GridManagement : MonoBehaviour {
     /// <param name="blockB"></param>
     public GameObject CreateBridge(BlockLink blockA, BlockLink blockB)
     {
+        //Calcul de la longueur du pont et de l'orientation du pont
+        int bridgeLength = 0;
+
+        Vector2Int direction = Vector2Int.zero;
+
+        if (blockA.gridCoordinates.x == blockB.gridCoordinates.x)
+        {
+            bridgeLength = Mathf.Abs(blockA.gridCoordinates.z - blockB.gridCoordinates.z) - 1;
+            direction.x = 0;
+            if (blockA.gridCoordinates.z - blockB.gridCoordinates.z > 0)
+            {
+                direction.y = -1;
+            }
+            else
+            {
+                direction.y = 1;
+            }
+        }
+        else
+        {
+            bridgeLength = Mathf.Abs(blockA.gridCoordinates.x - blockB.gridCoordinates.x) - 1;
+            direction.y = 0;
+            if (blockA.gridCoordinates.x - blockB.gridCoordinates.x > 0)
+            {
+                direction.x = -1;
+            }
+            else
+            {
+                direction.x = 1;
+            }
+        }
+
+        //VERIFICATION DE SI ON PEUT CREER OU NON LE PONT
+        for (int i = 1; i <= bridgeLength; i++)
+        {
+            Vector3Int _posToCheck = new Vector3Int();
+                _posToCheck.x = blockA.gridCoordinates.x + (i * direction.x);
+                _posToCheck.y = blockA.gridCoordinates.y;
+                _posToCheck.z = blockA.gridCoordinates.z + (i * direction.y);
+
+            if (checkIfSlotIsBlocked(new Vector3Int(_posToCheck.x, _posToCheck.y, _posToCheck.z), true))
+            {
+                return null;
+            }
+
+            if (grid[_posToCheck.x,_posToCheck.y,_posToCheck.z] != null)
+            {
+                return null;
+            }
+        }
+
+
+
         //Creation du gameObject contenant le pont
         GameObject parentBridgeGameObject = new GameObject();
         parentBridgeGameObject.name = "Bridge";
@@ -240,31 +314,6 @@ public class GridManagement : MonoBehaviour {
         bridgeInfo.origin = blockA.gridCoordinates;
         bridgeInfo.destination = blockB.gridCoordinates;
 
-        //Calcul de la longueur du pont et de l'orientation du pont
-        int bridgeLength = 0;
-
-        Vector2Int direction = Vector2Int.zero;
-
-        if (blockA.gridCoordinates.x == blockB.gridCoordinates.x) {
-            bridgeLength = Mathf.Abs(blockA.gridCoordinates.z - blockB.gridCoordinates.z) - 1;
-            direction.x = 0;
-            if (blockA.gridCoordinates.z - blockB.gridCoordinates.z > 0) {
-                direction.y = -1;
-            }
-            else {
-                direction.y = 1;
-            }
-        }
-        else {
-            bridgeLength = Mathf.Abs(blockA.gridCoordinates.x - blockB.gridCoordinates.x) - 1;
-            direction.y = 0;
-            if (blockA.gridCoordinates.x - blockB.gridCoordinates.x > 0) {
-                direction.x = -1;
-            }
-            else {
-                direction.x = 1;
-            }
-        }
 
         //Création de chaque parties du pont
         GameObject firstBridgePart = null;
