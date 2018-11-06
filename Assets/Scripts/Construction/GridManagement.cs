@@ -36,6 +36,7 @@ public class GridManagement : MonoBehaviour {
 
     [Header("=== REFERENCES ===")][Space(1)]
     public Interface uiManager;
+    public GridDebugger gridDebugger;
 
     //------------VARIABLES PRIVEE------------
     [System.NonSerialized]
@@ -61,6 +62,7 @@ public class GridManagement : MonoBehaviour {
         //Initialisation de la variable grille contenant chaque bloc
         grid = new GameObject[gridSize.x, gridSize.y, gridSize.z];
         bridgesGrid = new Vector3[gridSize.x, gridSize.y, gridSize.z];
+        gridDebugger.InitGrid(); //Initialise la grille pour gérer le debugger
 
         //GENERATION DU GAMEOBJECT CONTENANT CHAQUE LAYERS
         gridGameObject = new GameObject(); //Crée le gameobject qui contiendra absolument tout les blocs du jeu (pour trier)
@@ -99,6 +101,9 @@ public class GridManagement : MonoBehaviour {
 
                     //Déplace le block vers ses nouvelles coordonnées
                     grid[coordinates.x, i-1, coordinates.z].GetComponent<BlockLink>().MoveToMyPosition();
+
+                    //Update le débugguer
+                    gridDebugger.UpdateDebugGridAtHeight(i);
                 }
             }
         }
@@ -130,6 +135,9 @@ public class GridManagement : MonoBehaviour {
 
                     //Déplace le block vers ses nouvelles coordonnées
                     grid[coordinates.x, i - 1, coordinates.z].GetComponent<BlockLink>().MoveToMyPosition();
+
+                    //Update le débugguer
+                    gridDebugger.UpdateDebugGridAtHeight(i);
                 }
             }
         }
@@ -158,6 +166,8 @@ public class GridManagement : MonoBehaviour {
                     actualGridPos.GetComponent<BlockLink>().gridCoordinates = new Vector3Int(coordinates.x, i + 1, coordinates.z);
                     //Déplace le block vers ses nouvelles coordonnées
                     actualGridPos.GetComponent<BlockLink>().MoveToMyPosition();
+                    //Update le débugguer
+                    gridDebugger.UpdateDebugGridAtHeight(i);
                 }
             }
         }
@@ -203,6 +213,11 @@ public class GridManagement : MonoBehaviour {
             //Le joueur a cliqué sur un bloc
             for (var i = cursorPosYInTerrain; i < gridSize.y - 1; i++)
             {
+                if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.y), true))
+                {
+                    Destroy(newBlock);
+                    return;
+                }
                 if (grid[coordinates.x, i, coordinates.y] == null)
                 {
                     newBlockHeight = i;
@@ -222,6 +237,10 @@ public class GridManagement : MonoBehaviour {
             }
         }
         grid[coordinates.x, newBlockHeight, coordinates.y] = newBlock;
+
+        //Update le débugguer
+        gridDebugger.UpdateDebugGridAtHeight(newBlockHeight);
+
         buildingsList.Add(newBlock);
         newBlock.GetComponent<BlockLink>().gridCoordinates = new Vector3Int(coordinates.x, newBlockHeight, coordinates.y);
         newBlock.name = "Block[" + coordinates.x + ";" + newBlockHeight + ";" + coordinates.y + "]";
@@ -232,11 +251,18 @@ public class GridManagement : MonoBehaviour {
         GameObject objectFound = grid[coordinates.x, coordinates.y, coordinates.z];
         if (objectFound != null)
         {
-            if (objectFound.tag == "StockingBay")
+            switch (objectFound.tag)
             {
-                if (displayErrorMessages)
-                    uiManager.ShowError("You can't build over the stocking bay");
-                return true;
+                case "StockingBay":
+                    if (displayErrorMessages)
+                        uiManager.ShowError("You can't build over the stocking bay");
+                    return true;
+                case "Bridge":
+                    if (displayErrorMessages)
+                        uiManager.ShowError("You can't build over a bridge");
+                    return true;
+                default:
+                    break;
             }
         }
         return false;
@@ -300,14 +326,25 @@ public class GridManagement : MonoBehaviour {
             }
         }
 
-
-
         //Creation du gameObject contenant le pont
         GameObject parentBridgeGameObject = new GameObject();
         parentBridgeGameObject.name = "Bridge";
+        parentBridgeGameObject.tag = "Bridge";
         parentBridgeGameObject.transform.parent = blockA.transform;
         parentBridgeGameObject.transform.localPosition = new Vector3(0, 0, 0);
         parentBridgeGameObject.transform.localScale = new Vector3(1, 1, 1);
+
+        //Ajout de chaque partie du pont dans la grille grid[]
+        for (int i = 1; i <= bridgeLength; i++)
+        {
+            Vector3Int _posToCheck = new Vector3Int();
+                _posToCheck.x = blockA.gridCoordinates.x + (i * direction.x);
+                _posToCheck.y = blockA.gridCoordinates.y;
+                _posToCheck.z = blockA.gridCoordinates.z + (i * direction.y);
+
+            grid[_posToCheck.x, _posToCheck.y, _posToCheck.z] = parentBridgeGameObject;
+        }
+
 
         // Adding origin/destination info in the parent bridge game object
         BridgeInfo bridgeInfo = parentBridgeGameObject.AddComponent<BridgeInfo>();
@@ -359,6 +396,9 @@ public class GridManagement : MonoBehaviour {
             blockA.gridCoordinates.x,
             blockA.gridCoordinates.x
         ] = blockB.gridCoordinates;
+
+        //Update le débugguer
+        gridDebugger.UpdateDebugGridAtHeight(blockA.gridCoordinates.y);
 
         return parentBridgeGameObject;
     }
