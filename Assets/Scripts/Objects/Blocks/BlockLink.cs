@@ -30,6 +30,15 @@ public class BlockLink : MonoBehaviour {
 
     public void MoveToMyPosition() //Deplace le bloc à sa position supposée
     {
+        //Déplace aussi le pont qui lui est attaché s'il y en a un
+        if (transform.Find("Bridge") != null)
+        {
+            BridgeInfo bridgeInfo = transform.Find("Bridge").GetComponent<BridgeInfo>();
+            if (bridgeInfo != null)
+            {
+                gridManager.updateBridgePosition(bridgeInfo, gridCoordinates.y);
+            }
+        }
         StartCoroutine(MoveToPosition(0.1f));
     }
 

@@ -74,40 +74,17 @@ public class GridManagement : MonoBehaviour {
 
     public void DestroyBlock(Vector3Int coordinates)
     {
-        if (grid[coordinates.x, coordinates.y,coordinates.z] != null)
+        if (grid[coordinates.x, coordinates.y, coordinates.z] != null)
         {
             // Removes object from list and destroys the gameObject
             GameObject target = grid[coordinates.x, coordinates.y, coordinates.z];
             buildingsList.RemoveAll(o => o == target);
             Destroy(target);
-
-            for (var i = coordinates.y+1; i<maxHeight; i++) //Fait descendre d'une case les blocs au dessus du bloc supprimé
-            {
-                if (grid[coordinates.x, i, coordinates.z] == null)
-                {
-                    grid[coordinates.x, i - 1, coordinates.z] = null;
-                    return;
-                } 
-                else
-                {
-                    //Change la position du bloc dans la grille contenant chaque bloc
-                    grid[coordinates.x, i-1, coordinates.z] = grid[coordinates.x, i, coordinates.z];
-
-                    //Change le nom du bloc pour qu'il corresponde à sa nouvelle position (Ex : Block[1,2,1])
-                    grid[coordinates.x, i - 1, coordinates.z].name = "Block[" + coordinates.x + ";" + (i - 1) + ";" + coordinates.z + "]";
-
-                    //Met à jour les coordonnées du block dans son script "BlockLink"
-                    grid[coordinates.x, i-1, coordinates.z].GetComponent<BlockLink>().gridCoordinates = new Vector3Int(coordinates.x, i-1, coordinates.z);
-
-                    //Déplace le block vers ses nouvelles coordonnées
-                    grid[coordinates.x, i-1, coordinates.z].GetComponent<BlockLink>().MoveToMyPosition();
-
-                    //Update le débugguer
-                    gridDebugger.UpdateDebugGridAtHeight(i);
-                }
-            }
         }
+        UpdateBlocks(coordinates);
     }
+
+    //Update les blocs de toute la tour pour les remettre à leur bonne position
     public void UpdateBlocks(Vector3Int coordinates)
     {
         if (grid[coordinates.x, coordinates.y, coordinates.z] != null)
@@ -124,20 +101,29 @@ public class GridManagement : MonoBehaviour {
                 }
                 else
                 {
-                    //Change la position du bloc dans la grille contenant chaque bloc
-                    grid[coordinates.x, i - 1, coordinates.z] = grid[coordinates.x, i, coordinates.z];
+                    if (!checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.z),false))
+                    {
+                        //Change la position du bloc dans la grille contenant chaque bloc
+                        grid[coordinates.x, i - 1, coordinates.z] = grid[coordinates.x, i, coordinates.z];
 
-                    //Change le nom du bloc pour qu'il corresponde à sa nouvelle position (Ex : Block[1,2,1])
-                    grid[coordinates.x, i - 1, coordinates.z].name = "Block[" + coordinates.x + ";" + (i - 1) + ";" + coordinates.z + "]";
+                        //Change le nom du bloc pour qu'il corresponde à sa nouvelle position (Ex : Block[1,2,1])
+                        grid[coordinates.x, i - 1, coordinates.z].name = "Block[" + coordinates.x + ";" + (i - 1) + ";" + coordinates.z + "]";
 
-                    //Met à jour les coordonnées du block dans son script "BlockLink"
-                    grid[coordinates.x, i - 1, coordinates.z].GetComponent<BlockLink>().gridCoordinates = new Vector3Int(coordinates.x, i - 1, coordinates.z);
+                        //Met à jour les coordonnées du block dans son script "BlockLink"
+                        grid[coordinates.x, i - 1, coordinates.z].GetComponent<BlockLink>().gridCoordinates = new Vector3Int(coordinates.x, i - 1, coordinates.z);
 
-                    //Déplace le block vers ses nouvelles coordonnées
-                    grid[coordinates.x, i - 1, coordinates.z].GetComponent<BlockLink>().MoveToMyPosition();
+                        //Déplace le block vers ses nouvelles coordonnées
+                        grid[coordinates.x, i - 1, coordinates.z].GetComponent<BlockLink>().MoveToMyPosition();
 
-                    //Update le débugguer
-                    gridDebugger.UpdateDebugGridAtHeight(i);
+                        //Update le débugguer
+                        gridDebugger.UpdateDebugGridAtHeight(i);
+                    } else
+                    {
+                        grid[coordinates.x, i - 1, coordinates.z] = null;
+                        uiManager.ShowError("Error at update");
+                        Debug.Log("ERror at update");
+                        return;
+                    }
                 }
             }
         }
@@ -158,16 +144,19 @@ public class GridManagement : MonoBehaviour {
             {
                 if (grid[coordinates.x, i, coordinates.z] != null)
                 {
-                    grid[coordinates.x, i + 1, coordinates.z] = grid[coordinates.x, i, coordinates.z];
-                    GameObject actualGridPos = grid[coordinates.x, i + 1, coordinates.z];
-                    //Change le nom du bloc pour qu'il corresponde à sa nouvelle position (Ex : Block[1,2,1])
-                    actualGridPos.name = "Block[" + coordinates.x + ";" + (i + 1) + ";" + coordinates.z + "]";
-                    //Met à jour les coordonnées du block dans son script "BlockLink"
-                    actualGridPos.GetComponent<BlockLink>().gridCoordinates = new Vector3Int(coordinates.x, i + 1, coordinates.z);
-                    //Déplace le block vers ses nouvelles coordonnées
-                    actualGridPos.GetComponent<BlockLink>().MoveToMyPosition();
-                    //Update le débugguer
-                    gridDebugger.UpdateDebugGridAtHeight(i);
+                    if (!checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.z), false))
+                    {
+                        grid[coordinates.x, i + 1, coordinates.z] = grid[coordinates.x, i, coordinates.z];
+                        GameObject actualGridPos = grid[coordinates.x, i + 1, coordinates.z];
+                        //Change le nom du bloc pour qu'il corresponde à sa nouvelle position (Ex : Block[1,2,1])
+                        actualGridPos.name = "Block[" + coordinates.x + ";" + (i + 1) + ";" + coordinates.z + "]";
+                        //Met à jour les coordonnées du block dans son script "BlockLink"
+                        actualGridPos.GetComponent<BlockLink>().gridCoordinates = new Vector3Int(coordinates.x, i + 1, coordinates.z);
+                        //Déplace le block vers ses nouvelles coordonnées
+                        actualGridPos.GetComponent<BlockLink>().MoveToMyPosition();
+                        //Update le débugguer
+                        gridDebugger.UpdateDebugGridAtHeight(i);
+                    }
                 }
             }
         }
@@ -268,6 +257,49 @@ public class GridManagement : MonoBehaviour {
         return false;
     }
 
+    //Fonction a appelé pour déplacer un pont à une nouvelle position Y
+    public void updateBridgePosition(BridgeInfo bridgeInfo, int newYPosition)
+    {
+        List<Vector3Int> newBridgePositions = new List<Vector3Int>();
+        foreach (Vector3Int partPos in bridgeInfo.allBridgePositions)
+        {
+            //Pour chaque partie du pont on vérifie si leur destination est disponible
+            if (grid[partPos.x,partPos.y,partPos.z].tag == "Bridge")
+            {
+                GameObject blockToCheck = grid[partPos.x, newYPosition, partPos.z];
+
+                //S'il n' a rien sous le pont, on le fait descendre
+                if (blockToCheck == null)
+                {
+                    newBridgePositions.Add(new Vector3Int(partPos.x, newYPosition, partPos.z));
+                    grid[partPos.x, newYPosition, partPos.z] = grid[partPos.x, partPos.y, partPos.z];
+                    grid[partPos.x, partPos.y, partPos.z] = null;
+                }
+                else
+                {
+                    //Si le bloc tombe sur un autre pont, on détruit le pont du bas, puis on met à jour ses positions
+                    if (blockToCheck.tag == "Bridge")
+                    {
+                        DestroyBridge(blockToCheck);
+
+                        newBridgePositions.Add(new Vector3Int(partPos.x, newYPosition, partPos.z));
+                        grid[partPos.x, newYPosition, partPos.z] = grid[partPos.x, partPos.y, partPos.z];
+                        grid[partPos.x, partPos.y, partPos.z] = null;
+
+                    }
+                    else if (blockToCheck.GetComponent<BlockLink>() != null)
+                    //Si le pont tombe sur un bloc, on détruit le pont et on reforme 2 ponts |||||||| ATTENTION POUR L'INSTANT LE SCRIPT N'A PAS CETTE FEATURE IMPLANTéE (A la place le pont se détruit)
+                    {
+                       DestroyBridge(grid[partPos.x, partPos.y, partPos.z]);
+                        return;
+                    }
+                }
+            }
+        }
+        //S'il le pont n'a pas été détruit ou modifié, on retransmet la nouvelle liste des positions de chaque partie du pont à l'objet bridgeInfo
+        bridgeInfo.allBridgePositions = newBridgePositions.ToArray();
+    }
+
     /// <summary>
     /// Bridges two building and returns the parent bridge GameObject
     /// </summary>
@@ -334,7 +366,13 @@ public class GridManagement : MonoBehaviour {
         parentBridgeGameObject.transform.localPosition = new Vector3(0, 0, 0);
         parentBridgeGameObject.transform.localScale = new Vector3(1, 1, 1);
 
-        //Ajout de chaque partie du pont dans la grille grid[]
+        // Adding origin/destination info in the parent bridge game object
+        BridgeInfo bridgeInfo = parentBridgeGameObject.AddComponent<BridgeInfo>();
+        bridgeInfo.origin = blockA.gridCoordinates;
+        bridgeInfo.destination = blockB.gridCoordinates;
+
+        //Ajout de chaque partie du pont dans la grille grid[] et dans le component bridgeInfo
+        bridgeInfo.allBridgePositions = new Vector3Int[bridgeLength];
         for (int i = 1; i <= bridgeLength; i++)
         {
             Vector3Int _posToCheck = new Vector3Int();
@@ -343,13 +381,11 @@ public class GridManagement : MonoBehaviour {
                 _posToCheck.z = blockA.gridCoordinates.z + (i * direction.y);
 
             grid[_posToCheck.x, _posToCheck.y, _posToCheck.z] = parentBridgeGameObject;
+
+            bridgeInfo.allBridgePositions[i-1] = _posToCheck;
         }
 
 
-        // Adding origin/destination info in the parent bridge game object
-        BridgeInfo bridgeInfo = parentBridgeGameObject.AddComponent<BridgeInfo>();
-        bridgeInfo.origin = blockA.gridCoordinates;
-        bridgeInfo.destination = blockB.gridCoordinates;
 
 
         //Création de chaque parties du pont
@@ -421,6 +457,12 @@ public class GridManagement : MonoBehaviour {
         // Removes bridge from the BridgesList
         bridgesList.RemoveAll(o=>o == bridgeObject);
         bridgesGrid[bridgeInfo.origin.x, bridgeInfo.origin.y, bridgeInfo.origin.z] = new Vector3();
+
+        // Remove the bridge from the grid
+        foreach (Vector3Int subpartPos in bridgeInfo.allBridgePositions)
+        {
+            grid[subpartPos.x, subpartPos.y, subpartPos.z] = null;
+        }
 
         Destroy(bridgeObject);
     }
