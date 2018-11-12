@@ -101,7 +101,7 @@ public class GridManagement : MonoBehaviour {
                 }
                 else
                 {
-                    if (!checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.z),false))
+                    if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.z),false) == 0)
                     {
                         //Change la position du bloc dans la grille contenant chaque bloc
                         grid[coordinates.x, i - 1, coordinates.z] = grid[coordinates.x, i, coordinates.z];
@@ -144,7 +144,7 @@ public class GridManagement : MonoBehaviour {
             {
                 if (grid[coordinates.x, i, coordinates.z] != null)
                 {
-                    if (!checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.z), false))
+                    if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.z), false) ==0)
                     {
                         grid[coordinates.x, i + 1, coordinates.z] = grid[coordinates.x, i, coordinates.z];
                         GameObject actualGridPos = grid[coordinates.x, i + 1, coordinates.z];
@@ -172,7 +172,7 @@ public class GridManagement : MonoBehaviour {
     {
         int cursorPosYInTerrain = FindObjectOfType<CursorManagement>().posInTerrain.y; //Position en Y à laquelle le joueur a cliqué
 
-        if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x,cursorPosYInTerrain,coordinates.y),true))
+        if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x,cursorPosYInTerrain,coordinates.y),true) != 0)
         {
             return;
         }
@@ -202,7 +202,7 @@ public class GridManagement : MonoBehaviour {
             //Le joueur a cliqué sur un bloc
             for (var i = cursorPosYInTerrain; i < gridSize.y - 1; i++)
             {
-                if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.y), true))
+                if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.y), true) != 0)
                 {
                     Destroy(newBlock);
                     return;
@@ -235,7 +235,7 @@ public class GridManagement : MonoBehaviour {
         newBlock.name = "Block[" + coordinates.x + ";" + newBlockHeight + ";" + coordinates.y + "]";
     }
 
-    public bool checkIfSlotIsBlocked(Vector3Int coordinates, bool displayErrorMessages)
+    public int checkIfSlotIsBlocked(Vector3Int coordinates, bool displayErrorMessages)
     {
         GameObject objectFound = grid[coordinates.x, coordinates.y, coordinates.z];
         if (objectFound != null)
@@ -245,16 +245,16 @@ public class GridManagement : MonoBehaviour {
                 case "StockingBay":
                     if (displayErrorMessages)
                         uiManager.ShowError("You can't build over the stocking bay");
-                    return true;
+                    return 1;
                 case "Bridge":
                     if (displayErrorMessages)
                         uiManager.ShowError("You can't build over a bridge");
-                    return true;
+                    return 2;
                 default:
                     break;
             }
         }
-        return false;
+        return 0;
     }
 
     //Fonction a appelé pour déplacer un pont à une nouvelle position Y
@@ -347,7 +347,7 @@ public class GridManagement : MonoBehaviour {
                 _posToCheck.y = blockA.gridCoordinates.y;
                 _posToCheck.z = blockA.gridCoordinates.z + (i * direction.y);
 
-            if (checkIfSlotIsBlocked(new Vector3Int(_posToCheck.x, _posToCheck.y, _posToCheck.z), true))
+            if (checkIfSlotIsBlocked(new Vector3Int(_posToCheck.x, _posToCheck.y, _posToCheck.z), true) != 0)
             {
                 return null;
             }

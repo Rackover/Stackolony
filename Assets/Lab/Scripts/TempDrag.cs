@@ -64,8 +64,12 @@ public class TempDrag : MonoBehaviour  {
     {
         if(sBlock != null && draging)
         {
-            if (!gridManagement.checkIfSlotIsBlocked(_pos,true))
+            if (gridManagement.checkIfSlotIsBlocked(_pos,false) == 0)
             {
+                if (sBlock.gameObject.layer == LayerMask.NameToLayer("StockedBlock"))
+                {
+                    FindObjectOfType<StockingBay>().DestockBlock(sBlock.gameObject);
+                }
                 Debug.Log("End dragging");
                 gridManagement.MoveBlock(sBlock.gameObject, _pos);
                 sBlock.collider.enabled = true;
@@ -74,6 +78,11 @@ public class TempDrag : MonoBehaviour  {
                 draging = false;
             } else
             {
+                if (gridManagement.checkIfSlotIsBlocked(_pos, false) == 1)
+                {
+                    FindObjectOfType<StockingBay>().StockBlock(sBlock.gameObject);
+                    return;
+                }
                 CancelDrag();
             }
         }

@@ -3300,11 +3300,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 383f5a1cc97742b4e98605009782323d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stockSize: 3
+  stockSize: 4
   size: 2
+  maxStock: -1
+  offset: 0
   cursor: {fileID: 0}
   gridManager: {fileID: 0}
   uiManager: {fileID: 0}
+  blockPrefab: {fileID: 1706279260015752, guid: 1d60947ec2c0c8746a62177e58c6f557,
+    type: 2}
 --- !u!1 &1577973593
 GameObject:
   m_ObjectHideFlags: 0
