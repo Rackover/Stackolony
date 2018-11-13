@@ -8,7 +8,7 @@ public class BlockLink : MonoBehaviour {
     [Tooltip("Linked ScriptableObject")] public Block linkedBlock;
     public BoxCollider collider;
 
-    [HideInInspector] public Vector3Int gridCoordinates = new Vector3Int(0, 0, 0);
+    public Vector3Int gridCoordinates = new Vector3Int(0, 0, 0);
     [HideInInspector] public int positionInTower; //0 = tout en bas
 
     // TEMPORARY ASSET GENERATION
@@ -26,6 +26,11 @@ public class BlockLink : MonoBehaviour {
         gridManager = FindObjectOfType<GridManagement>();
         Transform newBlockMesh = Instantiate(blocks[Random.Range(0, blocks.Length)], transform.position, Quaternion.identity, transform).transform;
         newBlockMesh.rotation = Quaternion.Euler(-90f, 0f, 0f);
+    }
+
+    public void MoveToSpecificPosition()
+    {
+
     }
 
     public void MoveToMyPosition() //Deplace le bloc à sa position supposée

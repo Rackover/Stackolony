@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StockingBay : MonoBehaviour {
+public class StorageBay : MonoBehaviour {
 
     [Header("SETTINGS")]
     [Space(1)]
     public int stockSize; //Combien de blocs peut on mettre par colonne
     public int size; //Combien de cellules prend l'objet, on veut savoir la racine carrée (2 = 2x2, 3 = 3x3 etc...)
     public GameObject[,] slots; //Liste des slots
-    private int stockedAmount; //Le nombre de blocks stockés actuellement dans la baie de stockage
+    private int storedAmount; //Le nombre de blocks stockés actuellement dans la baie de stockage
     public int maxStock; //Combien de blocs au maximum la zone peut elle contenir (-1 = infini)
     public float offset; //A quel point les blocs sont eloignés les uns de les autres quand ils sont dans la zone de stockage
-    public GameObject[,,] stockedBlocks;
+    public float storageBayHeight; //Hauteur de la zone de stockage
+    public GameObject[,,] storedBlocks;
+    public float flexibility; //A quel point le systeme sera flexible et permettra au joueur de placer la zone de stockage sur le terrain
 
     [Header("REFERENCES")]
     [Space(1)]
@@ -25,17 +27,9 @@ public class StockingBay : MonoBehaviour {
 
     private void Start()
     {
-        //Recuperation des references non attribuées
-        if (cursor == null)
-            cursor = FindObjectOfType<CursorManagement>();
-        if (gridManager == null)
-            gridManager = FindObjectOfType<GridManagement>();
-        if (uiManager == null)
-            uiManager = FindObjectOfType<Interface>();
-
         //Initialisation des tableaux
         slots = new GameObject[stockSize, stockSize];
-        stockedBlocks = new GameObject[stockSize, 1, stockSize];
+        storedBlocks = new GameObject[stockSize, 1, stockSize];
 
         //Empêche de changer d'outil pendant qu'on est supposé placer la stocking bay
         cursor.switchMode(CursorManagement.cursorMode.Default);
@@ -52,7 +46,7 @@ public class StockingBay : MonoBehaviour {
             transform.position = new Vector3
                 (
                     (cursor.posInTerrain.x) * gridManager.cellSize,
-                    cursor.posInTerrain.y + 0.2f,
+                    cursor.posInTerrain.y + storageBayHeight,//0.2 correspond à l'épaisseur de la plaque
                     (cursor.posInTerrain.z) * gridManager.cellSize
                 );
             if (Input.GetMouseButtonDown(0))
@@ -60,12 +54,12 @@ public class StockingBay : MonoBehaviour {
                 Vector3 cursorPosition = new Vector3
                 (
                     (cursor.posInTerrain.x) * gridManager.cellSize + gridManager.cellSize * 0.5f,
-                    cursor.posInTerrain.y + 0.2f,
+                    cursor.posInTerrain.y + storageBayHeight, //0.2 correspond à l'épaisseur de la plaque
                     (cursor.posInTerrain.z) * gridManager.cellSize + gridManager.cellSize * 0.5f
                 );
-                if (canBePlaced(cursorPosition))
+                if (CanBePlaced(cursorPosition))
                 {
-                    placeBay(cursor.posInTerrain);
+                    PlaceBay(cursor.posInTerrain);
                 }
                 else
                 {
@@ -105,7 +99,7 @@ public class StockingBay : MonoBehaviour {
     }
 
     //Place la baie de stockage
-    private void placeBay(Vector3 cursorCoordinates)
+    private void PlaceBay(Vector3 cursorCoordinates)
     {
         cursor.canSwitchTools = true;
         isPlaced = true;
@@ -125,9 +119,8 @@ public class StockingBay : MonoBehaviour {
         }
     }
 
-    private bool canBePlaced(Vector3 positionToCompare) //Compare toutes les positions du bloc avec la position ou se trouve la souris pour savoir si le bloc est plaçable
+    private bool CanBePlaced(Vector3 positionToCompare) //Compare toutes les positions du bloc avec la position ou se trouve la souris pour savoir si le bloc est plaçable
     {
-        float flexibility = 0.4f; //A quel point le système sera flexible et permettra au joueur de placer un bloc sur un sol non adapté
         foreach (GameObject t in slots)
         {
             if (gridManager.myTerrain.SampleHeight(t.transform.position) < (positionToCompare.y - flexibility) || Terrain.activeTerrain.SampleHeight(t.transform.position) > (positionToCompare.y + flexibility))
@@ -142,32 +135,32 @@ public class StockingBay : MonoBehaviour {
     public void GenerateBlock()
     {
         GameObject newBlock = Instantiate(blockPrefab);
-        StockBlock(newBlock);
+        StoreBlock(newBlock);
     }
 
     //Place un block à l'intérieur de la baie de stockage
-    public void StockBlock(GameObject blockToStock)
+    public void StoreBlock(GameObject blockToStore)
     {
-        if (stockedAmount < maxStock || maxStock < 0)
+        if (storedAmount < maxStock || maxStock < 0)
         {
-            stockedAmount++;
+            storedAmount++;
 
-            for (int y = 0; y < stockedBlocks.GetLength(1)-1; y++)
+            for (int y = 0; y < storedBlocks.GetLength(1)-1; y++)
             {
                 for (int x = 0; x < stockSize; x++)
                 {
                     for (int z = 0; z < stockSize; z++)
                     {
-                        if (stockedBlocks[x, y, z] == null)
+                        if (storedBlocks[x, y, z] == null)
                         {
                             //Stockage du bloc
-                            stockedBlocks[x, y, z] = blockToStock;
-                            blockToStock.transform.position = slots[x, z].transform.position;
-                            blockToStock.transform.position += new Vector3(0, y + 0.5f, 0);
-                            blockToStock.transform.SetParent(slots[x, z].transform);
-                            blockToStock.transform.localScale = Vector3.one;
-                            blockToStock.name = "StockedBlock[" + x + "," + y + "," + z + "]";
-                            blockToStock.layer = LayerMask.NameToLayer("StockedBlock");
+                            storedBlocks[x, y, z] = blockToStore;
+                            blockToStore.transform.position = slots[x, z].transform.position;
+                            blockToStore.transform.position += new Vector3(0, y + 0.5f, 0);
+                            blockToStore.transform.SetParent(slots[x, z].transform);
+                            blockToStore.transform.localScale = Vector3.one;
+                            blockToStore.name = "StoredBlock[" + x + "," + y + "," + z + "]";
+                            blockToStore.layer = LayerMask.NameToLayer("StoredBlock");
                             return;
                         }
                     }
@@ -175,52 +168,52 @@ public class StockingBay : MonoBehaviour {
             }
             //Si on a pas réussi à stocker le block, la grille est pleine, dans ce cas on l'agrandi et on reessaye
             AddHeightToGrid();
-            StockBlock(blockToStock);
+            StoreBlock(blockToStore);
         }
     }
 
     //Agrandi la taille max de la grille de stockage de blocs
     public void AddHeightToGrid()
     {
-        GameObject[,,] newGrid = new GameObject[stockedBlocks.GetLength(0), stockedBlocks.GetLength(1)+1, stockedBlocks.GetLength(2)];
+        GameObject[,,] newGrid = new GameObject[storedBlocks.GetLength(0), storedBlocks.GetLength(1)+1, storedBlocks.GetLength(2)];
         for (int x = 0; x < stockSize; x++)
         {
             for (int z = 0; z < stockSize; z++)
             {
-                for (int y = 0; y < stockedBlocks.GetLength(1); y++)
+                for (int y = 0; y < storedBlocks.GetLength(1); y++)
                 {
-                    newGrid[x, y, z] = stockedBlocks[x, y, z];
+                    newGrid[x, y, z] = storedBlocks[x, y, z];
                 }
             }
         }
-        stockedBlocks = newGrid;
+        storedBlocks = newGrid;
     }
 
     //Retire un block de la baie de stockage
-    public void DestockBlock(GameObject block)
+    public void DeStoreBlock(GameObject block)
     {
-        if (block.layer == LayerMask.NameToLayer("StockedBlock"))
+        if (block.layer == LayerMask.NameToLayer("StoredBlock"))
         {
-            stockedAmount--;
-            string xPos = ""+block.name[13];
-            string yPos = ""+block.name[15];
-            string zPos = ""+block.name[17];
+            storedAmount--;
+            string xPos = ""+block.name[12];
+            string yPos = ""+block.name[14];
+            string zPos = ""+block.name[16];
             Vector3Int blockCoordinates = new Vector3Int(int.Parse(xPos), int.Parse(yPos), int.Parse(zPos));
-            stockedBlocks[blockCoordinates.x, blockCoordinates.y, blockCoordinates.z] = null;
+            storedBlocks[blockCoordinates.x, blockCoordinates.y, blockCoordinates.z] = null;
 
             //Fait tomber les blocs qui se trouvaient au dessus de ce bloc
-            for (int y = blockCoordinates.y+1; y < stockedBlocks.GetLength(1); y++)
+            for (int y = blockCoordinates.y+1; y < storedBlocks.GetLength(1); y++)
             {
-                GameObject foundObject = stockedBlocks[blockCoordinates.x, y, blockCoordinates.z];
+                GameObject foundObject = storedBlocks[blockCoordinates.x, y, blockCoordinates.z];
                 if (foundObject != null)
                 {
-                    stockedBlocks[blockCoordinates.x, y, blockCoordinates.z] = null;
-                    stockedBlocks[blockCoordinates.x, y - 1, blockCoordinates.z] = foundObject;
-                    foundObject = stockedBlocks[blockCoordinates.x, y - 1, blockCoordinates.z];
+                    storedBlocks[blockCoordinates.x, y, blockCoordinates.z] = null;
+                    storedBlocks[blockCoordinates.x, y - 1, blockCoordinates.z] = foundObject;
+                    foundObject = storedBlocks[blockCoordinates.x, y - 1, blockCoordinates.z];
                     foundObject.transform.position = slots[blockCoordinates.x, blockCoordinates.z].transform.position;
                     foundObject.transform.position += new Vector3(0, y - 0.5f, 0);
                     foundObject.transform.localScale = Vector3.one;
-                    foundObject.name = "StockedBlock[" + blockCoordinates.x + "," + (y-1) + "," + blockCoordinates.z + "]";
+                    foundObject.name = "StoredBlock[" + blockCoordinates.x + "," + (y-1) + "," + blockCoordinates.z + "]";
                 }
             }
             block.layer = LayerMask.NameToLayer("Block");

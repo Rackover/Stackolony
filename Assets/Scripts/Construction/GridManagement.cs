@@ -43,6 +43,10 @@ public class GridManagement : MonoBehaviour {
     public Terrain myTerrain; //Terrain sur lequel la grille doit être generée
     public Vector3Int gridSize; //Nombre de cases sur le terrain
     private GameObject gridGameObject; //GameObject contenant la grille
+    public enum blockType
+    {
+        FREE = 0, STORAGE = 1, BRIDGE = 2
+    }
 
     private void Start()
     {
@@ -92,16 +96,17 @@ public class GridManagement : MonoBehaviour {
             // Removes object from list and destroys the gameObject
             GameObject target = grid[coordinates.x, coordinates.y, coordinates.z];
 
-            for (var i = coordinates.y + 1; i < maxHeight; i++) //Fait descendre d'une case les blocs au dessus du bloc supprimé
+            for (int i = coordinates.y + 1; i < maxHeight; i++) //Fait descendre d'une case les blocs au dessus du bloc supprimé
             {
                 if (grid[coordinates.x, i, coordinates.z] == null)
                 {
                     grid[coordinates.x, i - 1, coordinates.z] = null;
+                    gridDebugger.UpdateDebugGridAtHeight(i - 1);
                     return;
                 }
                 else
                 {
-                    if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.z),false) == 0)
+                    if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.z),false) == (int)GridManagement.blockType.FREE)
                     {
                         //Change la position du bloc dans la grille contenant chaque bloc
                         grid[coordinates.x, i - 1, coordinates.z] = grid[coordinates.x, i, coordinates.z];
@@ -117,11 +122,12 @@ public class GridManagement : MonoBehaviour {
 
                         //Update le débugguer
                         gridDebugger.UpdateDebugGridAtHeight(i);
+                        gridDebugger.UpdateDebugGridAtHeight(i + 1);
+                        gridDebugger.UpdateDebugGridAtHeight(i - 1);
                     } else
                     {
                         grid[coordinates.x, i - 1, coordinates.z] = null;
                         uiManager.ShowError("Error at update");
-                        Debug.Log("ERror at update");
                         return;
                     }
                 }
@@ -136,7 +142,7 @@ public class GridManagement : MonoBehaviour {
         BlockLink _blocklink = newBlock.GetComponent<BlockLink>();
         if (_blocklink != null)
             UpdateBlocks(_blocklink.gridCoordinates);
-        grid[_blocklink.gridCoordinates.x, _blocklink.gridCoordinates.x, _blocklink.gridCoordinates.x] = null;
+      //  grid[_blocklink.gridCoordinates.x, _blocklink.gridCoordinates.y, _blocklink.gridCoordinates.z] = null;
 
         if (grid[coordinates.x, coordinates.y, coordinates.z] != null) // If there is a block where the block should be dropped
         {
@@ -144,7 +150,7 @@ public class GridManagement : MonoBehaviour {
             {
                 if (grid[coordinates.x, i, coordinates.z] != null)
                 {
-                    if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.z), false) ==0)
+                    if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.z), false) == (int)GridManagement.blockType.FREE)
                     {
                         grid[coordinates.x, i + 1, coordinates.z] = grid[coordinates.x, i, coordinates.z];
                         GameObject actualGridPos = grid[coordinates.x, i + 1, coordinates.z];
@@ -156,7 +162,11 @@ public class GridManagement : MonoBehaviour {
                         actualGridPos.GetComponent<BlockLink>().MoveToMyPosition();
                         //Update le débugguer
                         gridDebugger.UpdateDebugGridAtHeight(i);
+                        gridDebugger.UpdateDebugGridAtHeight(i+1);
                     }
+                } else
+                {
+                    gridDebugger.UpdateDebugGridAtHeight(i);
                 }
             }
         }
@@ -165,14 +175,14 @@ public class GridManagement : MonoBehaviour {
         newBlock.name = "Block[" + coordinates.x + ";" + coordinates.y + ";" + coordinates.z + "]";
         if (_blocklink != null)
             _blocklink.gridCoordinates = new Vector3Int(coordinates.x, coordinates.y, coordinates.z);
-
+        gridDebugger.UpdateDebugGridAtHeight(coordinates.y);
     }
 
     public void SpawnBlock(GameObject blockPrefab, Vector2Int coordinates) //Genère un bloc à une coordonnée 2D sur la map
     {
         int cursorPosYInTerrain = FindObjectOfType<CursorManagement>().posInTerrain.y; //Position en Y à laquelle le joueur a cliqué
 
-        if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x,cursorPosYInTerrain,coordinates.y),true) != 0)
+        if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x,cursorPosYInTerrain,coordinates.y),true) != (int)GridManagement.blockType.FREE)
         {
             return;
         }
@@ -202,7 +212,7 @@ public class GridManagement : MonoBehaviour {
             //Le joueur a cliqué sur un bloc
             for (var i = cursorPosYInTerrain; i < gridSize.y - 1; i++)
             {
-                if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.y), true) != 0)
+                if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.y), true) != (int)GridManagement.blockType.FREE)
                 {
                     Destroy(newBlock);
                     return;
@@ -242,9 +252,9 @@ public class GridManagement : MonoBehaviour {
         {
             switch (objectFound.tag)
             {
-                case "StockingBay":
+                case "StorageBay":
                     if (displayErrorMessages)
-                        uiManager.ShowError("You can't build over the stocking bay");
+                        uiManager.ShowError("You can't build over the storage bay");
                     return 1;
                 case "Bridge":
                     if (displayErrorMessages)
@@ -347,7 +357,7 @@ public class GridManagement : MonoBehaviour {
                 _posToCheck.y = blockA.gridCoordinates.y;
                 _posToCheck.z = blockA.gridCoordinates.z + (i * direction.y);
 
-            if (checkIfSlotIsBlocked(new Vector3Int(_posToCheck.x, _posToCheck.y, _posToCheck.z), true) != 0)
+            if (checkIfSlotIsBlocked(new Vector3Int(_posToCheck.x, _posToCheck.y, _posToCheck.z), true) != (int)GridManagement.blockType.FREE)
             {
                 return null;
             }
