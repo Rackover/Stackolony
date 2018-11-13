@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1706279260015752}
+  m_IsPrefabAsset: 1
+--- !u!1 &1706279260015752
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4383318596586260}
+  - component: {fileID: 65059879989870914}
+  - component: {fileID: 114310764523723058}
+  m_Layer: 10
+  m_Name: BlockPrefab
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4383318596586260
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1706279260015752}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 39.380527, y: 2.31, z: 45.032604}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &65059879989870914
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1706279260015752}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114310764523723058
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1706279260015752}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c23f6a1883815174aae1f3245f19a70d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  linkedBlock: {fileID: 11400000, guid: 650ddf707397d564f957ccd35ed4683a, type: 2}
+  collider: {fileID: 65059879989870914}
+  gridCoordinates: {x: 0, y: 0, z: 0}
+  positionInTower: 0
+  blocks:
+  - {fileID: 1982061194005416, guid: 5417d5759a2b0b94b84c640aa8edebbe, type: 2}
+  - {fileID: 1606115355712488, guid: 3162d8a3c3c8bf349a3914217addef9f, type: 2}
+  - {fileID: 1298188132653224, guid: 5651a005f4a7b6441ace25f36886270c, type: 2}
+  - {fileID: 1588968980324488, guid: 1800bfb8bc6ca904ea9ff611a46ced33, type: 2}
+  - {fileID: 1618901721615058, guid: 27a5c90e54d6f7149a0f4d14f773ca11, type: 2}
