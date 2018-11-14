@@ -21,8 +21,13 @@ public class Interface : MonoBehaviour {
 	public Text txtError;
 	public RectTransform backgroundError;
 
+    [Header("=== References ===")]
+    [Space(1)]
+    public SFXManager sfxManager;
+
 	public void ShowError(string message)
 	{
+        sfxManager.PlaySound("Error");
 		backgroundError.gameObject.SetActive(true);
 		backgroundError.sizeDelta = new Vector2(15f * message.Length, backgroundError.sizeDelta.y);
 		this.gameObject.SetActive(true);

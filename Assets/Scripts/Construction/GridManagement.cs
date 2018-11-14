@@ -37,6 +37,7 @@ public class GridManagement : MonoBehaviour {
     [Header("=== REFERENCES ===")][Space(1)]
     public Interface uiManager;
     public GridDebugger gridDebugger;
+    public SFXManager sfxManager;
 
     //------------VARIABLES PRIVEE------------
     [System.NonSerialized]
@@ -106,7 +107,7 @@ public class GridManagement : MonoBehaviour {
                 }
                 else
                 {
-                    if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.z),false) == (int)GridManagement.blockType.FREE)
+                    if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.z),false) == GridManagement.blockType.FREE)
                     {
                         //Change la position du bloc dans la grille contenant chaque bloc
                         grid[coordinates.x, i - 1, coordinates.z] = grid[coordinates.x, i, coordinates.z];
@@ -150,7 +151,7 @@ public class GridManagement : MonoBehaviour {
             {
                 if (grid[coordinates.x, i, coordinates.z] != null)
                 {
-                    if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.z), false) == (int)GridManagement.blockType.FREE)
+                    if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.z), false) == GridManagement.blockType.FREE)
                     {
                         grid[coordinates.x, i + 1, coordinates.z] = grid[coordinates.x, i, coordinates.z];
                         GameObject actualGridPos = grid[coordinates.x, i + 1, coordinates.z];
@@ -182,7 +183,7 @@ public class GridManagement : MonoBehaviour {
     {
         int cursorPosYInTerrain = FindObjectOfType<CursorManagement>().posInTerrain.y; //Position en Y à laquelle le joueur a cliqué
 
-        if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x,cursorPosYInTerrain,coordinates.y),true) != (int)GridManagement.blockType.FREE)
+        if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x,cursorPosYInTerrain,coordinates.y),true) != GridManagement.blockType.FREE)
         {
             return;
         }
@@ -212,7 +213,7 @@ public class GridManagement : MonoBehaviour {
             //Le joueur a cliqué sur un bloc
             for (var i = cursorPosYInTerrain; i < gridSize.y - 1; i++)
             {
-                if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.y), true) != (int)GridManagement.blockType.FREE)
+                if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.y), true) != GridManagement.blockType.FREE)
                 {
                     Destroy(newBlock);
                     return;
@@ -236,6 +237,7 @@ public class GridManagement : MonoBehaviour {
             }
         }
         grid[coordinates.x, newBlockHeight, coordinates.y] = newBlock;
+        sfxManager.PlaySoundLinked("BlockDrop", newBlock);
 
         //Update le débugguer
         gridDebugger.UpdateDebugGridAtHeight(newBlockHeight);
@@ -245,7 +247,7 @@ public class GridManagement : MonoBehaviour {
         newBlock.name = "Block[" + coordinates.x + ";" + newBlockHeight + ";" + coordinates.y + "]";
     }
 
-    public int checkIfSlotIsBlocked(Vector3Int coordinates, bool displayErrorMessages)
+    public blockType checkIfSlotIsBlocked(Vector3Int coordinates, bool displayErrorMessages)
     {
         GameObject objectFound = grid[coordinates.x, coordinates.y, coordinates.z];
         if (objectFound != null)
@@ -255,16 +257,16 @@ public class GridManagement : MonoBehaviour {
                 case "StorageBay":
                     if (displayErrorMessages)
                         uiManager.ShowError("You can't build over the storage bay");
-                    return 1;
+                    return blockType.STORAGE;
                 case "Bridge":
                     if (displayErrorMessages)
                         uiManager.ShowError("You can't build over a bridge");
-                    return 2;
+                    return blockType.BRIDGE;
                 default:
                     break;
             }
         }
-        return 0;
+        return blockType.FREE;
     }
 
     //Fonction a appelé pour déplacer un pont à une nouvelle position Y
@@ -357,7 +359,7 @@ public class GridManagement : MonoBehaviour {
                 _posToCheck.y = blockA.gridCoordinates.y;
                 _posToCheck.z = blockA.gridCoordinates.z + (i * direction.y);
 
-            if (checkIfSlotIsBlocked(new Vector3Int(_posToCheck.x, _posToCheck.y, _posToCheck.z), true) != (int)GridManagement.blockType.FREE)
+            if (checkIfSlotIsBlocked(new Vector3Int(_posToCheck.x, _posToCheck.y, _posToCheck.z), true) != GridManagement.blockType.FREE)
             {
                 return null;
             }

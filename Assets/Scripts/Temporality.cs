@@ -23,6 +23,7 @@ public class Temporality : MonoBehaviour {
     public GameObject dayNightDisplay;
     public GameObject timescaleButtonHolder;
     public Image pauseButton;
+    public SFXManager sfxManager;
 
 
     [Header("=== DEBUG VALUES ===")][Space(1)]
@@ -130,6 +131,13 @@ public class Temporality : MonoBehaviour {
 
     public void ChangeTimeScale(int newTimeScaleCoef)
     {
+        if (newTimeScaleCoef > timeScale)
+        {
+            sfxManager.PlaySound("IncreaseSpeed");
+        } else if (newTimeScaleCoef < timeScale)
+        {
+            sfxManager.PlaySound("DecreaseSpeed");
+        }
         timeScale = newTimeScaleCoef;
     }
 
@@ -159,14 +167,13 @@ public class Temporality : MonoBehaviour {
     //Met à jour les lumières en fonction de l'avancement du cycle
     public void UpdateLights(float cycleProgressionInPercent)
     {
-        directionalLight.transform.rotation = Quaternion.Euler(new Vector3(90f+((360f * (float)cycleProgressionInPercent) /100f),30,0));
+        directionalLight.transform.rotation = Quaternion.Euler(new Vector3(90f+((3.6f * (float)cycleProgressionInPercent)),30,0));
     }
 
     //Met à jour la skybox en fonction de l'avancement du cycle
     public void UpdateSkybox(float cycleProgressionInPercent)
     {
         skyboxMaterial.SetColor("_Tint", skyboxVariation.Evaluate(cycleProgressionInPercent/100f));
-        //skyboxMaterial.color = skyboxVariation.Evaluate(cycleProgressionInPercent);
         RenderSettings.skybox = skyboxMaterial;
         DynamicGI.UpdateEnvironment();
     }

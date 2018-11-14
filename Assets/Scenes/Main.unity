@@ -232,6 +232,7 @@ MonoBehaviour:
   buildingsList: []
   uiManager: {fileID: 1241195951}
   gridDebugger: {fileID: 104313397}
+  sfxManager: {fileID: 830368801}
   gridSize: {x: 0, y: 0, z: 0}
 --- !u!114 &104313393
 MonoBehaviour:
@@ -787,7 +788,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &239739767
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1080,6 +1081,7 @@ MonoBehaviour:
   dayNightDisplay: {fileID: 1829529040}
   timescaleButtonHolder: {fileID: 962359723}
   pauseButton: {fileID: 914343419}
+  sfxManager: {fileID: 830368801}
   cycleProgression: 0
   timeScale: 0
 --- !u!1 &347266683
@@ -1418,6 +1420,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 477911604}
+  - component: {fileID: 477911605}
   m_Layer: 0
   m_Name: Magasin
   m_TagString: Untagged
@@ -1445,6 +1448,17 @@ RectTransform:
   m_AnchoredPosition: {x: -539.9, y: -270}
   m_SizeDelta: {x: 900.2, y: 540}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &477911605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 477911603}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 193fa4a0fa89a074c8d3dc46523c646a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &489520437
 GameObject:
   m_ObjectHideFlags: 0
@@ -2578,6 +2592,66 @@ Transform:
   m_Father: {fileID: 338462256}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &830368800
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 830368802}
+  - component: {fileID: 830368801}
+  m_Layer: 0
+  m_Name: SFXManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &830368801
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 830368800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89905e8b1e291d54bb6c0f9572904bc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundList:
+  - soundName: Error
+    soundClip:
+    - {fileID: 8300000, guid: 5569fff3fc8446a4396e1f63cebc7c90, type: 3}
+  - soundName: BlockDrop
+    soundClip:
+    - {fileID: 8300000, guid: 96950cb490b8df04c8890d802a00fa1f, type: 3}
+    - {fileID: 8300000, guid: dfcd37b3d86a0684686fa5b8104ef224, type: 3}
+  - soundName: Ambiance
+    soundClip:
+    - {fileID: 8300000, guid: d7081d2f309fc9a41adbf7512e30bb0c, type: 3}
+  - soundName: IncreaseSpeed
+    soundClip:
+    - {fileID: 8300000, guid: ba159d2ba683de144b7263929e1bb13b, type: 3}
+  - soundName: DecreaseSpeed
+    soundClip:
+    - {fileID: 8300000, guid: 1566eb54826a2d1448124d40bdd76c33, type: 3}
+  - soundName: BlockDropScientific
+    soundClip:
+    - {fileID: 8300000, guid: cd258d9215aced84e870dea1f717ead5, type: 3}
+--- !u!4 &830368802
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 830368800}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 35.8, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &832077319 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4450581615882974, guid: f201b86d63556f348955a44f176abaf0,
@@ -2958,6 +3032,11 @@ Prefab:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 114727454646488208, guid: f201b86d63556f348955a44f176abaf0,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 81753932908829290, guid: f201b86d63556f348955a44f176abaf0,
         type: 2}
       propertyPath: m_Enabled
       value: 1
@@ -3687,6 +3766,7 @@ MonoBehaviour:
   txtMode: {fileID: 2050452744}
   txtError: {fileID: 1027102157}
   backgroundError: {fileID: 1501965069}
+  sfxManager: {fileID: 830368801}
 --- !u!1 &1253116634
 GameObject:
   m_ObjectHideFlags: 0
@@ -3902,6 +3982,7 @@ MonoBehaviour:
   gridManagement: {fileID: 104313392}
   sBlock: {fileID: 0}
   sPosition: {x: 0, y: 0, z: 0}
+  sfxManager: {fileID: 830368801}
 --- !u!4 &1273786207
 Transform:
   m_ObjectHideFlags: 0
@@ -4769,6 +4850,7 @@ MonoBehaviour:
   uiManager: {fileID: 1241195951}
   blockPrefab: {fileID: 1706279260015752, guid: 1d60947ec2c0c8746a62177e58c6f557,
     type: 2}
+  sfxManager: {fileID: 830368801}
 --- !u!1 &1562874426
 GameObject:
   m_ObjectHideFlags: 0

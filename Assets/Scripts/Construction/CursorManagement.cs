@@ -343,7 +343,7 @@ public class CursorManagement : MonoBehaviour {
         //Check les blocs devant la face x
         for (int i = coordinate.x+1; i < gridManager.grid.GetLength(0); i++)
         {
-            if (gridManager.checkIfSlotIsBlocked(new Vector3Int(i, coordinate.y, coordinate.z),false) != 0)
+            if (gridManager.checkIfSlotIsBlocked(new Vector3Int(i, coordinate.y, coordinate.z),false) != GridManagement.blockType.FREE)
             {
                 break;
             }
@@ -357,7 +357,7 @@ public class CursorManagement : MonoBehaviour {
         //Check les blocs derriere la face x
         for (int i = coordinate.x-1; i >= 0; i--)
         {
-            if (gridManager.checkIfSlotIsBlocked(new Vector3Int(i, coordinate.y, coordinate.z),false) != 0)
+            if (gridManager.checkIfSlotIsBlocked(new Vector3Int(i, coordinate.y, coordinate.z),false) != GridManagement.blockType.FREE)
             {
                 break;
             }
@@ -371,7 +371,7 @@ public class CursorManagement : MonoBehaviour {
         //Check les blocs devant la face z
         for (int i = coordinate.z+1; i < gridManager.grid.GetLength(2); i++)
         {
-            if (gridManager.checkIfSlotIsBlocked(new Vector3Int(coordinate.x, coordinate.y, i),false) != 0)
+            if (gridManager.checkIfSlotIsBlocked(new Vector3Int(coordinate.x, coordinate.y, i),false) != GridManagement.blockType.FREE)
             {
                 break;
             }
@@ -385,7 +385,7 @@ public class CursorManagement : MonoBehaviour {
         //Check les blocs derriere la face z
         for (int i = coordinate.z-1; i >= 0; i--)
         {
-            if (gridManager.checkIfSlotIsBlocked(new Vector3Int(coordinate.x, coordinate.y, i),false) != 0)
+            if (gridManager.checkIfSlotIsBlocked(new Vector3Int(coordinate.x, coordinate.y, i),false) != GridManagement.blockType.FREE)
             {
                 break;
             }

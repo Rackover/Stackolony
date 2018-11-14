@@ -11,6 +11,8 @@ public class TempDrag : MonoBehaviour  {
     float timer;
     bool draging;
 
+    public SFXManager sfxManager;
+
     public void StartDrag(BlockLink _block)
     {
         if(_block != null)
@@ -57,13 +59,17 @@ public class TempDrag : MonoBehaviour  {
     {
         if(sBlock != null && draging)
         {
-            if (gridManagement.checkIfSlotIsBlocked(_pos,false) == (int)GridManagement.blockType.FREE)
+            if (gridManagement.checkIfSlotIsBlocked(_pos,false) == GridManagement.blockType.FREE)
             {
                 if (sBlock.gameObject.layer == LayerMask.NameToLayer("StoredBlock"))
                 {
                     FindObjectOfType<StorageBay>().DeStoreBlock(sBlock.gameObject);
                 }
                 Debug.Log("End dragging");
+
+                //Play SFX
+                sfxManager.PlaySoundLinked("BlockDrop",sBlock.gameObject);
+
                 gridManagement.MoveBlock(sBlock.gameObject, _pos);
                 sBlock.collider.enabled = true;
 
@@ -72,7 +78,7 @@ public class TempDrag : MonoBehaviour  {
             } else
             {
                 //If the cube is dragged on the stocking bay
-                if (gridManagement.checkIfSlotIsBlocked(_pos, false) == 1)
+                if (gridManagement.checkIfSlotIsBlocked(_pos, false) == GridManagement.blockType.STORAGE)
                 {
                     //Update the grid
                     gridManagement.UpdateBlocks(sBlock.gridCoordinates);

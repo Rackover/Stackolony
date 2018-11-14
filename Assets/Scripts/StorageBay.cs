@@ -22,6 +22,7 @@ public class StorageBay : MonoBehaviour {
     public GridManagement gridManager;
     public Interface uiManager;
     public GameObject blockPrefab;
+    public SFXManager sfxManager;
 
     private bool isPlaced = false;
 
@@ -46,7 +47,7 @@ public class StorageBay : MonoBehaviour {
             transform.position = new Vector3
                 (
                     (cursor.posInTerrain.x) * gridManager.cellSize,
-                    cursor.posInTerrain.y + storageBayHeight,//0.2 correspond à l'épaisseur de la plaque
+                    cursor.posInTerrain.y + storageBayHeight,
                     (cursor.posInTerrain.z) * gridManager.cellSize
                 );
             if (Input.GetMouseButtonDown(0))
@@ -54,7 +55,7 @@ public class StorageBay : MonoBehaviour {
                 Vector3 cursorPosition = new Vector3
                 (
                     (cursor.posInTerrain.x) * gridManager.cellSize + gridManager.cellSize * 0.5f,
-                    cursor.posInTerrain.y + storageBayHeight, //0.2 correspond à l'épaisseur de la plaque
+                    cursor.posInTerrain.y + storageBayHeight,
                     (cursor.posInTerrain.z) * gridManager.cellSize + gridManager.cellSize * 0.5f
                 );
                 if (CanBePlaced(cursorPosition))
@@ -101,6 +102,7 @@ public class StorageBay : MonoBehaviour {
     //Place la baie de stockage
     private void PlaceBay(Vector3 cursorCoordinates)
     {
+        sfxManager.PlaySoundLinked("BlockDropScientific", this.gameObject,0.1f,1,false);
         cursor.canSwitchTools = true;
         isPlaced = true;
         for (int x = 0; x < size; x++)
@@ -160,7 +162,9 @@ public class StorageBay : MonoBehaviour {
                             blockToStore.transform.SetParent(slots[x, z].transform);
                             blockToStore.transform.localScale = Vector3.one;
                             blockToStore.name = "StoredBlock[" + x + "," + y + "," + z + "]";
-                            blockToStore.layer = LayerMask.NameToLayer("StoredBlock");
+                            BlockLink blockInfo = blockToStore.GetComponent<BlockLink>();
+                            blockInfo.gridCoordinates = new Vector3Int(x, y, z);
+                                            blockToStore.layer = LayerMask.NameToLayer("StoredBlock");
                             return;
                         }
                     }
@@ -195,10 +199,8 @@ public class StorageBay : MonoBehaviour {
         if (block.layer == LayerMask.NameToLayer("StoredBlock"))
         {
             storedAmount--;
-            string xPos = ""+block.name[12];
-            string yPos = ""+block.name[14];
-            string zPos = ""+block.name[16];
-            Vector3Int blockCoordinates = new Vector3Int(int.Parse(xPos), int.Parse(yPos), int.Parse(zPos));
+
+            Vector3Int blockCoordinates = block.GetComponent<BlockLink>().gridCoordinates;
             storedBlocks[blockCoordinates.x, blockCoordinates.y, blockCoordinates.z] = null;
 
             //Fait tomber les blocs qui se trouvaient au dessus de ce bloc
