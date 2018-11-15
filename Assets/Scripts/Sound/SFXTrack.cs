@@ -16,7 +16,6 @@ public class SFXTrack : MonoBehaviour {
     private void Start()
     {
         isFree = false;
-
     }
 
     public void PlaySound()

@@ -26,7 +26,8 @@ public class SFXManager : MonoBehaviour {
         trackParent.name = "TrackList";
         trackParent.transform.position = Vector3.zero;
         trackParent.transform.parent = this.transform;
-
+    
+        //Init ambiance sounds
         PlaySound("Ambiance", 1, 1, true);
     }
 
