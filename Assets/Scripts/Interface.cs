@@ -14,8 +14,14 @@ public class Interface : MonoBehaviour {
 	public Sprite buildCursor;
 	public Sprite bridgeCursor;
 
-	[Header("=== General ===")][Space(1)]
+	[Space(1)][Header("=== General ===")][Space(1)]
 	public Text txtMode;
+
+	[Space(1)][Header("=== General ===")][Space(1)]
+
+	public Slider userBorderSensibility;
+	public Slider userRotationSensibility;
+	public Slider userGrabSensitivity;
 
 	[Space(1)][Header("=== Error Message ===")][Space(1)]
 	public Text txtError;
@@ -46,7 +52,8 @@ public class Interface : MonoBehaviour {
 	public void ChangeCursor(string mode)
 	{
 		cursorIcon.enabled = true;
-		switch (mode) {
+		switch (mode) 
+		{
 		case "Default":
 			cursorIcon.sprite = null;
 			cursorIcon.enabled = false;
@@ -63,6 +70,6 @@ public class Interface : MonoBehaviour {
 		case "Bridge":
 			cursorIcon.sprite = bridgeCursor;
 			break;
-	}
+		}
 	}
 }

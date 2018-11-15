@@ -29,12 +29,14 @@ public class CameraController : MonoBehaviour {
     public float minZoom = 0f;
     public float maxZoom = 10f;
 
+    /*
     [Space(2)][Header("=== TEMP SETTINGS ===")][Space(1)]
     [Header("Movement feedback")][Space(1)]
     public Transform cursorPoint;               // White dot in the drifting feedback
     public GameObject cursor;                   // Drifting feedback object
     public float cursorSensibility = 1f;
     public float cursorMaxDistance = 10f;
+    */
 
     float xLook;
     float yLook;
@@ -43,9 +45,19 @@ public class CameraController : MonoBehaviour {
 
     void Update()
     {
-        Drift();
-        Rotation();
-        Zoom();
+        Drift(); 
+        if(camCollision.colliding)
+        {
+            yLook -= 1f;
+            yLook = Mathf.Clamp(yLook, minLookAngle, maxLookAngle);
+            camPivot.rotation = Quaternion.Euler(-yLook, xLook, 0); 
+            camCollision.colliding = false;
+        }
+        else
+        {
+            Rotation();
+            Zoom();
+        }
         //DriftFeedback();
         userInterface.cursorTransform.position = Input.mousePosition;
     }
@@ -54,22 +66,11 @@ public class CameraController : MonoBehaviour {
     {
         if(Input.GetButton("MouseRight"))
         {
-            xLook += Input.GetAxis("MouseX") * rotateSensibility;
-            yLook += Input.GetAxis("MouseY") * rotateSensibility;
+            xLook += Input.GetAxis("MouseX") * rotateSensibility * userInterface.userRotationSensibility.value;
+            yLook += Input.GetAxis("MouseY") * rotateSensibility * userInterface.userRotationSensibility.value;
             yLook = Mathf.Clamp(yLook, minLookAngle, maxLookAngle);
             camPivot.rotation = Quaternion.Euler(-yLook, xLook, 0); 
         }
-
-        if(camCollision.colliding)
-        {
-            yLook -= 0.5f;
-            yLook = Mathf.Clamp(yLook, minLookAngle, maxLookAngle);
-
-            camPivot.rotation = Quaternion.Euler(-yLook, xLook, 0); 
-
-            camCollision.colliding = false;
-        }
-
     } // Rotate the camera with the mouse wheel button around the center point
 
     float xShift;
@@ -90,8 +91,8 @@ public class CameraController : MonoBehaviour {
         if(Input.GetButton("MouseMiddle"))
         {
             mouseDelta = (Vector3)lastMousePosition - (Vector3)Input.mousePosition;
-            camCenter.position += mouseDelta.x * camTransform.right.normalized * mouseDriftSensibility;
-            camCenter.position += mouseDelta.y * new Vector3(camTransform.forward.x, 0, camTransform.forward.z).normalized * mouseDriftSensibility;
+            camCenter.position += mouseDelta.x * camTransform.right.normalized * mouseDriftSensibility * userInterface.userGrabSensitivity.value;
+            camCenter.position += mouseDelta.y * new Vector3(camTransform.forward.x, 0, camTransform.forward.z).normalized * mouseDriftSensibility * userInterface.userGrabSensitivity.value;
             /*
             Vector3 directionForward = new Vector3(camTransform.forward.x, 0, camTransform.forward.z);
             xShift = lastMousePosition.x - Input.mousePosition.x;
@@ -106,19 +107,32 @@ public class CameraController : MonoBehaviour {
         else if(!Input.GetButton("MouseRight"))
         {
             if(Input.mousePosition.x < driftBorder && Input.mousePosition.x > 0) // LEFT
-                camCenter.position -= (camTransform.right.normalized * borderDriftSensibility * (1 - (Input.mousePosition.x / driftBorder)) );
+                camCenter.position -= camTransform.right.normalized 
+                * borderDriftSensibility 
+                * userInterface.userBorderSensibility.value 
+                * (1 - (Input.mousePosition.x / driftBorder));
 
             else if(Input.mousePosition.x > Screen.width - driftBorder && Input.mousePosition.y < Screen.width) // RIGHT
-                camCenter.position += camTransform.right.normalized * borderDriftSensibility * (1 - ((Screen.width - Input.mousePosition.x) / driftBorder));
+                camCenter.position += camTransform.right.normalized 
+                * borderDriftSensibility 
+                * userInterface.userBorderSensibility.value 
+                * (1 - ((Screen.width - Input.mousePosition.x) / driftBorder));
 
             if(Input.mousePosition.y < driftBorder && Input.mousePosition.y > 0) // DOWN
-                camCenter.position -=  new Vector3(camTransform.forward.x, 0, camTransform.forward.z).normalized * borderDriftSensibility * (1 - (Input.mousePosition.y / driftBorder));
+                camCenter.position -=  new Vector3(camTransform.forward.x, 0, camTransform.forward.z).normalized 
+                * borderDriftSensibility 
+                * userInterface.userBorderSensibility.value 
+                * (1 - (Input.mousePosition.y / driftBorder));
 
             else if(Input.mousePosition.y > Screen.height - driftBorder && Input.mousePosition.y < Screen.height) // UP
-                camCenter.position +=  new Vector3(camTransform.forward.x, 0, camTransform.forward.z).normalized * borderDriftSensibility * (1 - ((Screen.height - Input.mousePosition.y) / driftBorder));
+                camCenter.position +=  new Vector3(camTransform.forward.x, 0, camTransform.forward.z).normalized 
+                * borderDriftSensibility 
+                * userInterface.userBorderSensibility.value 
+                * (1 - ((Screen.height - Input.mousePosition.y) / driftBorder));
         }
     } // Drift the camera center horizontaly on the z and x axis with mouse movement
 
+/*
     void DriftFeedback() 
     {
         RaycastHit hit;
@@ -144,6 +158,7 @@ public class CameraController : MonoBehaviour {
             cursor.SetActive(false);
         }
     }
+*/
 
     void Zoom() 
     {
