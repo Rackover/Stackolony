@@ -7,6 +7,8 @@ public class BlockLink : MonoBehaviour {
     [Header("Referencies")]
     [Tooltip("Linked ScriptableObject")] public Block linkedBlock;
     public BoxCollider collider;
+    public Container myContainer;
+    private Transform newBlockMesh;
 
     public Vector3Int gridCoordinates = new Vector3Int(0, 0, 0);
     [HideInInspector] public int positionInTower; //0 = tout en bas
@@ -15,17 +17,28 @@ public class BlockLink : MonoBehaviour {
     public GameObject[] blocks;
     GridManagement gridManager;
 
-    void Awake()
+    public void Initialize()
     {
-        if(collider == null) collider = gameObject.GetComponent<BoxCollider>();
+        if (collider == null) collider = gameObject.GetComponent<BoxCollider>();
+        newBlockMesh = Instantiate(blocks[Random.Range(0, blocks.Length)], transform.position, Quaternion.identity, transform).transform;
+        newBlockMesh.rotation = Quaternion.Euler(-90f, 0f, 0f);
+    }
+
+    public void ToggleVisuals()
+    {
+        if (newBlockMesh.gameObject.activeSelf == true) 
+        {
+            newBlockMesh.gameObject.SetActive(false);
+        } else
+        {
+            newBlockMesh.gameObject.SetActive(true);
+        }
     }
 
     void Start()
     {
         // TEMP
         gridManager = FindObjectOfType<GridManagement>();
-        Transform newBlockMesh = Instantiate(blocks[Random.Range(0, blocks.Length)], transform.position, Quaternion.identity, transform).transform;
-        newBlockMesh.rotation = Quaternion.Euler(-90f, 0f, 0f);
     }
 
     public void MoveToSpecificPosition()

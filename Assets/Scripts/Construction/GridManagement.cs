@@ -84,6 +84,7 @@ public class GridManagement : MonoBehaviour {
             // Removes object from list and destroys the gameObject
             GameObject target = grid[coordinates.x, coordinates.y, coordinates.z];
             buildingsList.RemoveAll(o => o == target);
+            sfxManager.PlaySoundLinked("DestroyBlock", target);
             Destroy(target);
         }
         UpdateBlocks(coordinates);
@@ -243,7 +244,10 @@ public class GridManagement : MonoBehaviour {
         gridDebugger.UpdateDebugGridAtHeight(newBlockHeight);
 
         buildingsList.Add(newBlock);
-        newBlock.GetComponent<BlockLink>().gridCoordinates = new Vector3Int(coordinates.x, newBlockHeight, coordinates.y);
+        BlockLink blockLink = newBlock.GetComponent<BlockLink>();
+        blockLink.Initialize();
+        blockLink.myContainer.OpenContainer();
+        blockLink.gridCoordinates = new Vector3Int(coordinates.x, newBlockHeight, coordinates.y);
         newBlock.name = "Block[" + coordinates.x + ";" + newBlockHeight + ";" + coordinates.y + "]";
     }
 
@@ -445,6 +449,9 @@ public class GridManagement : MonoBehaviour {
             blockA.gridCoordinates.x
         ] = blockB.gridCoordinates;
 
+        //Joue le son
+        sfxManager.PlaySoundLinked("CreateBridge", parentBridgeGameObject);
+
         //Update le débugguer
         gridDebugger.UpdateDebugGridAtHeight(blockA.gridCoordinates.y);
 
@@ -475,7 +482,7 @@ public class GridManagement : MonoBehaviour {
         {
             grid[subpartPos.x, subpartPos.y, subpartPos.z] = null;
         }
-
+        sfxManager.PlaySoundLinked("DestroyBlock", bridgeObject);
         Destroy(bridgeObject);
     }
 }

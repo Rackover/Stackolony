@@ -137,6 +137,7 @@ public class StorageBay : MonoBehaviour {
     public void GenerateBlock()
     {
         GameObject newBlock = Instantiate(blockPrefab);
+        newBlock.GetComponent<BlockLink>().myContainer.DropBlock();
         StoreBlock(newBlock);
     }
 
@@ -164,7 +165,12 @@ public class StorageBay : MonoBehaviour {
                             blockToStore.name = "StoredBlock[" + x + "," + y + "," + z + "]";
                             BlockLink blockInfo = blockToStore.GetComponent<BlockLink>();
                             blockInfo.gridCoordinates = new Vector3Int(x, y, z);
-                                            blockToStore.layer = LayerMask.NameToLayer("StoredBlock");
+                            blockInfo.myContainer.CloseContainer();
+                            blockToStore.layer = LayerMask.NameToLayer("StoredBlock");
+                            if (blockInfo.myContainer.isFalling == false)
+                            {
+                                sfxManager.PlaySoundLinked("BlockDrop", blockToStore);
+                            }
                             return;
                         }
                     }
@@ -200,6 +206,7 @@ public class StorageBay : MonoBehaviour {
         {
             storedAmount--;
 
+            block.GetComponent<BlockLink>().myContainer.OpenContainer();
             Vector3Int blockCoordinates = block.GetComponent<BlockLink>().gridCoordinates;
             storedBlocks[blockCoordinates.x, blockCoordinates.y, blockCoordinates.z] = null;
 
@@ -216,6 +223,8 @@ public class StorageBay : MonoBehaviour {
                     foundObject.transform.position += new Vector3(0, y - 0.5f, 0);
                     foundObject.transform.localScale = Vector3.one;
                     foundObject.name = "StoredBlock[" + blockCoordinates.x + "," + (y-1) + "," + blockCoordinates.z + "]";
+                    BlockLink blockInfo = foundObject.GetComponent<BlockLink>();
+                    blockInfo.gridCoordinates = new Vector3Int(blockCoordinates.x, y-1, blockCoordinates.z);
                 }
             }
             block.layer = LayerMask.NameToLayer("Block");

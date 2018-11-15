@@ -19,6 +19,7 @@ public class CursorManagement : MonoBehaviour {
     
     public cursorMode selectedMode = cursorMode.Default; //Mode actuel du curseur
     private GameObject[] activeHighlighters; //Liste contenant plusieurs highlighters actifs
+    private List<GameObject> permanentHighlighter = new List<GameObject>(); 
     public List<GameObject> activeBridgePreviews = new List<GameObject>(); //Liste contenant les preview de pont
     private GameObject hoveredBlock;
 
@@ -79,6 +80,8 @@ public class CursorManagement : MonoBehaviour {
             uiManager.txtMode.text = mode.ToString();
             uiManager.ChangeCursor(mode.ToString());
             ClearFeedback();
+            ClearPermanentHighlighter();
+            selectedBlock = null;
         } else
         {
             uiManager.ShowError("You can't use that tool right now");
@@ -292,6 +295,7 @@ public class CursorManagement : MonoBehaviour {
             highlighter.SetActive(true);
             Vector3 bounds = block.GetComponent<BoxCollider>().bounds.size;
             highlighter.transform.position = block.transform.position;
+            highlighter.transform.SetParent(block.transform);
         }
         else {
             highlighter.SetActive(false);
@@ -398,6 +402,24 @@ public class CursorManagement : MonoBehaviour {
 
         return coordinatesFound.ToArray();
     }
+
+    void GeneratePermanentHighlighter(Vector3Int coordinate)
+    {
+        GameObject newHighlighter = Instantiate(bridgeHighlighter, highlighter.transform.parent);
+        newHighlighter.transform.position = gridManager.grid[coordinate.x, coordinate.y, coordinate.z].transform.position;
+        newHighlighter.AddComponent<Highlighter>();
+        newHighlighter.GetComponent<Highlighter>().SetGreenHighlighter();
+        newHighlighter.SetActive(true);
+        permanentHighlighter.Add(newHighlighter);
+    }
+
+    void ClearPermanentHighlighter()
+    {
+        foreach (GameObject go in permanentHighlighter)
+        {
+            Destroy(go);
+        }
+    }
     
     void HighlightMultipleBlocks(Vector3Int[] blocksCoordinates = null) //Instantie un highlighter pour plusieurs blocks, si aucun argument n'est spécifié alors il clean tout
     {
@@ -421,7 +443,9 @@ public class CursorManagement : MonoBehaviour {
                 if (gridManager.grid[coordinate.x, coordinate.y, coordinate.z] != null)
                 {
                     GameObject newHighlighter = Instantiate(bridgeHighlighter, highlighter.transform.parent);
-                    newHighlighter.transform.localPosition = gridManager.grid[coordinate.x, coordinate.y, coordinate.z].transform.position;
+                    newHighlighter.transform.parent = gridManager.grid[coordinate.x, coordinate.y, coordinate.z].transform;
+                    newHighlighter.transform.localPosition = Vector3.zero;
+                    newHighlighter.AddComponent<Highlighter>();
                     newHighlighter.SetActive(true);
                     activeHighlighters[i] = newHighlighter;
                     i++;
@@ -447,6 +471,7 @@ public class CursorManagement : MonoBehaviour {
             if (selectedBlock == null) //Si le joueur n'a pas fait sa premiere selection, alors il la fait
             {
                 selectedBlock = hitGameObject.GetComponent<BlockLink>();
+                GeneratePermanentHighlighter(selectedBlock.gridCoordinates);
             }
             else //Si le joueur a déjà fait sa premiere selection, on vérifie que le deuxieme bloc selectionné est en face du premier, puis on trace le pont
             {
@@ -457,6 +482,7 @@ public class CursorManagement : MonoBehaviour {
                             //Les conditions sont remplies et on peut tracer le pont
                             //Call de la fonction pour tracer un pont
                             gridManager.CreateBridge(selectedBlock, destinationCandidate);
+                            ClearPermanentHighlighter();
                         }
                         else {
                             uiManager.ShowError("You can't link two blocks that aren't aligned");
@@ -473,6 +499,7 @@ public class CursorManagement : MonoBehaviour {
                     Debug.LogWarning("You can't select the same point");
                 }
                 ResetSelection();
+                ClearPermanentHighlighter();
             }
         }
     }

@@ -10,6 +10,7 @@ public class TempDrag : MonoBehaviour  {
     [HideInInspector] public Vector3 sPosition;
     float timer;
     bool draging;
+    private Vector3Int _savedPos;
 
     public SFXManager sfxManager;
 
@@ -22,9 +23,11 @@ public class TempDrag : MonoBehaviour  {
             sBlock = _block;
             sBlock.collider.enabled = false;
             sPosition = sBlock.transform.position;
+            _savedPos = sBlock.gridCoordinates;
             if (sBlock.transform.Find("Bridge") != null) {
                 gridManagement.DestroyBridge(sBlock.transform.Find("Bridge").gameObject);
             }
+            sfxManager.PlaySound("BlockDrag");
         }
     }
 
@@ -44,7 +47,11 @@ public class TempDrag : MonoBehaviour  {
             }
             else
             {
-                
+                if (_pos != _savedPos)
+                {
+                    _savedPos = _pos;
+                    sfxManager.PlaySoundWithRandomParameters("Tick", 1, 1, 0.8f, 1.2f);
+                }
                 sBlock.transform.position = new Vector3
                 (
                     _pos.x * gridManagement.cellSize + gridManagement.cellSize * 0.5f,
@@ -106,6 +113,7 @@ public class TempDrag : MonoBehaviour  {
         {
             Debug.Log("Cancel cube dragging");
             sBlock.transform.position = sPosition;
+            sBlock.collider.enabled = true;
 
             sBlock = null;
             draging = false;

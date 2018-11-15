@@ -27,7 +27,7 @@ public class Interface : MonoBehaviour {
 
 	public void ShowError(string message)
 	{
-        sfxManager.PlaySound("Error");
+        sfxManager.PlaySoundWithRandomParameters("Error",1,1,0.8f,1.2f);
 		backgroundError.gameObject.SetActive(true);
 		backgroundError.sizeDelta = new Vector2(15f * message.Length, backgroundError.sizeDelta.y);
 		this.gameObject.SetActive(true);
