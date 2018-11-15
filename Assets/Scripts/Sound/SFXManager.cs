@@ -102,7 +102,7 @@ public class SFXManager : MonoBehaviour {
                 {
                     Debug.LogWarning("ERROR : No clip found");
                 }
-                int randomClipIndex = Random.Range(0, clip.soundClip.Length - 1);
+                int randomClipIndex = Random.Range(0, clip.soundClip.Length);
                 return clip.soundClip[randomClipIndex];
             }
         }
