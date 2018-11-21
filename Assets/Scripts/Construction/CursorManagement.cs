@@ -4,9 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class CursorManagement : MonoBehaviour {
+public class CursorManagement : MonoBehaviour
+{
 
-    public enum cursorMode { Default, Build, Delete, Bridge }; //Chaque mode du curseur
+    public enum cursorMode { Default, Build, Delete, Bridge}; //Chaque mode du curseur
 
     [Header("=== REFERENCIES ===")][Space(1)]
     [Header("Prefabs")]
@@ -22,6 +23,8 @@ public class CursorManagement : MonoBehaviour {
     private List<GameObject> permanentHighlighter = new List<GameObject>(); 
     public List<GameObject> activeBridgePreviews = new List<GameObject>(); //Liste contenant les preview de pont
     private GameObject hoveredBlock;
+    [HideInInspector]
+    public bool cursorOnUI = false;
 
 
     [Header("Scripts")]
@@ -59,13 +62,20 @@ public class CursorManagement : MonoBehaviour {
         //Recupere le terrain et ses dimensions
         terr = Terrain.activeTerrain;
         heightmapSize = new Vector2Int(terr.terrainData.heightmapWidth, terr.terrainData.heightmapHeight);
+        Cursor.visible = false;
 
     }
     private void Update()
     {
+    
         UpdateCursor();
-
-        Cursor.visible = false;
+        if (EventSystem.current.IsPointerOverGameObject())
+        {
+            cursorOnUI = true;
+        } else
+        {
+            cursorOnUI = false;
+        }
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             switchMode(cursorMode.Default);
@@ -141,12 +151,18 @@ public class CursorManagement : MonoBehaviour {
 
     void UpdateProjector()
     {
+        if (cursorOnUI)
+        {
+            myProjector.GetComponent<Projector>().enabled = false;
+        } else
+        {
+            myProjector.GetComponent<Projector>().enabled = true;
+        }
         //Met à jour la position du projecteur
-        myProjector.GetComponent<Projector>().enabled = true;
         myProjector.transform.position = new Vector3(
-            posInTerrain.x * gridManager.cellSize + (gridManager.cellSize / 2),
-            posInTerrain.y + 10,
-            posInTerrain.z * gridManager.cellSize + (gridManager.cellSize / 2)
+        posInTerrain.x * gridManager.cellSize + (gridManager.cellSize / 2),
+        posInTerrain.y + 10,
+        posInTerrain.z * gridManager.cellSize + (gridManager.cellSize / 2)
         );
     }
 
