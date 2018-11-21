@@ -13,6 +13,7 @@ public class Interface : MonoBehaviour {
 	public Sprite destroyCursor;
 	public Sprite buildCursor;
 	public Sprite bridgeCursor;
+    public Sprite UICursor;
 
 	[Space(1)][Header("=== General ===")][Space(1)]
 	public Text txtMode;

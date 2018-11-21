@@ -7,6 +7,7 @@ public class CameraController : MonoBehaviour {
     [Header("Scripts")][Space(1)]
     public CameraCollision camCollision;
     public Interface userInterface;
+    public CursorManagement cursorManagement;
     [Header("Transforms")][Space(1)]
     public Transform camTransform;
     public Transform camCenter;                 // Center of the camera (Used for Lookat + movement)
@@ -45,21 +46,24 @@ public class CameraController : MonoBehaviour {
 
     void Update()
     {
-        Drift(); 
-        if(camCollision.colliding)
+        if (cursorManagement.cursorOnUI == false)
         {
-            yLook -= 1f;
-            yLook = Mathf.Clamp(yLook, minLookAngle, maxLookAngle);
-            camPivot.rotation = Quaternion.Euler(-yLook, xLook, 0); 
-            camCollision.colliding = false;
+            Drift();
+            if (camCollision.colliding)
+            {
+                yLook -= 1f;
+                yLook = Mathf.Clamp(yLook, minLookAngle, maxLookAngle);
+                camPivot.rotation = Quaternion.Euler(-yLook, xLook, 0);
+                camCollision.colliding = false;
+            }
+            else
+            {
+                Rotation();
+                Zoom();
+            }
+            //DriftFeedback();
         }
-        else
-        {
-            Rotation();
-            Zoom();
-        }
-        //DriftFeedback();
-        userInterface.cursorTransform.position = Input.mousePosition;
+            userInterface.cursorTransform.position = Input.mousePosition;
     }
 
     void Rotation()
