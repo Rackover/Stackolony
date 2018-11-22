@@ -1,12 +1,17 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public enum BlockState{ Powered, OnFire, OnRiot }
 
 [CreateAssetMenu(fileName = "newBlock", menuName = "Block/Basic")]
 public class Block : ScriptableObject
 {
+	public BlockBehaviour behaviour;
+
 	[Header("BLOCK PROPERTIES")]
-	[Header("Visuals")]
+	[Header("Datas")]
 	public string title = "Block Name";
-	public string label = "Block Label";
 	public string description = "This needs a proper description";
 	public GameObject model;
 
@@ -16,46 +21,100 @@ public class Block : ScriptableObject
 	public int price = 1;
 	public float powerRequired = 1f;
 
+	[Header("States")]
+	public List<BlockState> states = new List<BlockState>();
+	[Header("Values")]
+	public float currentPower;
+	public float currentLife;
+	public int currentUsers;
+
 	[Header("BLOCK BEHAVIOR")]
 	[Header("If your block create jobs, fill that up.")]
 	public Job[] jobs;
 	[Header("If your block generated something, fill that up.")]
 	public Production[] Productions;
 
-	[HideInInspector] public float currentPower;
-	[HideInInspector] public float currentLife;
-
-	[HideInInspector] public int currentUsers;
-
-	[HideInInspector] public bool onFire = false;
-	[HideInInspector] public bool onStrike = false;
-	[HideInInspector] public BlockBehavior manager;
-
-	virtual public void OnContruct()
+	virtual public void LoadBlock()
 	{
-		// Play sound construct
 	}
-	virtual public void OnSelected()
+	virtual public void UnloadBlock()
 	{
-		// Play sound selected
-		// Display tipbox with my datas
-	}
-	virtual public void OnDestroy()
-	{
-
 	}
 
 	virtual public void UpdateBlock()
 	{
-		if(IsPowered() && !onFire && !onStrike)
-		{
-
-		}
+		UpdatePower();
 	}
 
+	public void UpdatePower()
+	{
+		if(IsPowered())
+		{
+			if(!states.Contains(BlockState.Powered))
+			{
+				AddState(BlockState.Powered);
+			}
+		}
+		else
+		{
+			if(states.Contains(BlockState.Powered))
+			{
+				RemoveState(BlockState.Powered);
+			}
+		}
+	}
+	
+
+	// Check if the block is powered
 	virtual public bool IsPowered()
 	{
-		if(currentPower >= powerRequired){return true;}
-		return false;
+		if(currentPower >= powerRequired)
+		{
+			return true;
+		}
+		else
+			return false;
 	} 
+
+	virtual public void AddState(BlockState state)
+	{
+		if(!states.Contains(state))
+		{
+			switch(state)
+			{
+				case BlockState.Powered:
+					behaviour.powerParticule.SetActive(false);
+					break;
+
+
+
+				default:
+					Debug.Log("Unclear state");
+					break;
+			}
+			states.Add(state);
+		}
+		else
+			Debug.Log("This block already has this state.");
+	}
+
+	virtual public void RemoveState(BlockState state)
+	{
+		if(states.Contains(state))
+		{
+			switch(state)
+			{
+				case BlockState.Powered:
+					behaviour.powerParticule.SetActive(true);
+					break;
+
+				default:
+					Debug.Log("Unclear state");
+					break;
+			}
+			states.Remove(state);
+		}
+		else
+			Debug.Log("This block wasn't on this state. You are doing something wrong ?");
+	}
 }

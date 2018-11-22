@@ -11,7 +11,6 @@ public class Job
 [System.Serializable]
 public class Production 
 {
-	public string productionName;
 	public int range;
 	public float power;
 	public Library.Ressource ressource;

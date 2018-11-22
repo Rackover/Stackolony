@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43dd2ddee8361cc4292433d3eab91337, type: 3}
+  m_Name: House
+  m_EditorClassIdentifier: 
+  title: House
+  description: This needs a proper description
+  model: {fileID: 1706279260015752, guid: 3dfb3c7113238bc4e9a1a5af292ff09a, type: 2}
+  lifeSpan: 100
+  level: 1
+  price: 1
+  powerRequired: 5
+  jobs: []
+  Productions: []
+  quality: 0
+  spotCount: 5

@@ -11,19 +11,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f2d1c532410ad94bb7e332bc601eb25, type: 3}
   m_Name: PowerPlant
   m_EditorClassIdentifier: 
-  title: Power Plant
-  label: Energy generator
-  description: This needs a proper description
-  model: {fileID: 0}
-  lifeSpan: 1
-  level: 3
-  price: 8
+  title: PowerGenerator
+  description: Produce 20 power.
+  model: {fileID: 1982061194005416, guid: 5417d5759a2b0b94b84c640aa8edebbe, type: 2}
+  lifeSpan: 100
+  level: 1
+  price: 1
   powerRequired: 0
   jobs: []
-  Productions: []
-  currentPower: 0
-  currentLife: 0
-  currentUsers: 0
-  onFire: 0
-  onStrike: 0
-  manager: {fileID: 0}
+  Productions:
+  - range: 1
+    power: 20
+    ressource: 0

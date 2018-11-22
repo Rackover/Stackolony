@@ -12,6 +12,7 @@ public class Generator : Block
 
 	override public void UpdateBlock()
 	{
+		/*
 		if(base.IsPowered())
 		{
 			if(jobs.Length == 0) // This generator don't require any job to be filled
@@ -19,5 +20,6 @@ public class Generator : Block
 				//manager.blockLink.gridManager;
 			}
 		}
+		*/
 	}
 }

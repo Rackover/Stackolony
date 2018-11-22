@@ -13,30 +13,25 @@ public class BlockLink : MonoBehaviour {
     [HideInInspector] public int positionInTower; //0 = tout en bas
 
     // TEMPORARY ASSET GENERATION
-    public GameObject[] blocks;
+    public Block[] blocks;
     [HideInInspector] public GridManagement gridManager;
 
     public void Initialize()
     {
         if (collider == null) collider = gameObject.GetComponent<BoxCollider>();
-        newBlockMesh = Instantiate(blocks[Random.Range(0, blocks.Length)], transform.position, Quaternion.identity, transform).transform;
-        newBlockMesh.rotation = Quaternion.Euler(-90f, 0f, 0f);
+        gameObject.GetComponent<BlockBehaviour>().myBlock = Instantiate(blocks[Random.Range(0, blocks.Length)]);
     }
 
     public void ToggleVisuals()
     {
-        if (newBlockMesh.gameObject.activeSelf == true) 
-        {
+        if (newBlockMesh.gameObject.activeSelf == true)
             newBlockMesh.gameObject.SetActive(false);
-        } else
-        {
+        else
             newBlockMesh.gameObject.SetActive(true);
-        }
     }
 
     void Start()
     {
-        // TEMP
         gridManager = FindObjectOfType<GridManagement>();
     }
 
