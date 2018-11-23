@@ -159,7 +159,7 @@ public class StorageBay : MonoBehaviour {
                             //Stockage du bloc
                             storedBlocks[x, y, z] = blockToStore;
                             blockToStore.transform.position = slots[x, z].transform.position;
-                            blockToStore.transform.position += new Vector3(0, y + 0.55f, 0);
+                            blockToStore.transform.position += new Vector3(0, y + 0.5f, 0);
                             blockToStore.transform.SetParent(slots[x, z].transform);
                             blockToStore.transform.localScale = Vector3.one;
                             blockToStore.name = "StoredBlock[" + x + "," + y + "," + z + "]";
