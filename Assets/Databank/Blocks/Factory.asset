@@ -9,20 +9,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0f2d1c532410ad94bb7e332bc601eb25, type: 3}
-  m_Name: PowerPlant
+  m_Name: Factory
   m_EditorClassIdentifier: 
   link: {fileID: 0}
-  title: Wind Turbine
-  description: Produce more power !
-  model: {fileID: 1982061194005416, guid: 5417d5759a2b0b94b84c640aa8edebbe, type: 2}
+  title: Factory
+  description: Occupy workers.
+  model: {fileID: 1706279260015752, guid: 3dfb3c7113238bc4e9a1a5af292ff09a, type: 2}
   lifeSpan: 1
   level: 1
   price: 1
-  powerRequired: 0
+  powerRequired: 5
   occupations:
-  - spotCount: 5
-    profile: 0
-  generations:
-  - range: 3
-    power: 20
-    ressource: 0
+  - spotCount: 10
+    profile: 1
+  generations: []
