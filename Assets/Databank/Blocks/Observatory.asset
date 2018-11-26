@@ -9,17 +9,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0f2d1c532410ad94bb7e332bc601eb25, type: 3}
-  m_Name: Factory
+  m_Name: Observatory
   m_EditorClassIdentifier: 
   link: {fileID: 0}
-  title: Factory
-  description: Occupy 10 workers
-  model: {fileID: 1298188132653224, guid: 5651a005f4a7b6441ace25f36886270c, type: 2}
+  title: Block Name
+  description: Occupy 10 scientists
+  model: {fileID: 1547902619353416, guid: 8c422b2db74c1ca4288c9fcf898e47c5, type: 2}
   lifeSpan: 100
   level: 1
   price: 1
   powerRequired: 5
   occupations:
   - spotCount: 10
-    profile: 1
+    profile: 0
   generations: []
