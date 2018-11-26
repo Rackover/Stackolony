@@ -1,14 +1,44 @@
 fileFormatVersion: 2
-guid: 5d7f90550466d1f49b9d7e0828d48598
+guid: e5cd8f1d34ccad54cbdfdb0fed654c02
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
+    100000: FBX_Services_Police_Beacon
+    100002: FBX_Services_Police_Beacon_Socle
+    100004: FBX_Services_Police_Hat
+    100006: FBX_Services_Police_Hat_Socle
+    100008: FBX_Services_Police_Name
+    100010: FBX_Services_Police_Name001
+    100012: //RootNode
+    400000: FBX_Services_Police_Beacon
+    400002: FBX_Services_Police_Beacon_Socle
+    400004: FBX_Services_Police_Hat
+    400006: FBX_Services_Police_Hat_Socle
+    400008: FBX_Services_Police_Name
+    400010: FBX_Services_Police_Name001
+    400012: //RootNode
     2100000: No Name
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: Cube.002
+    2300000: FBX_Services_Police_Beacon
+    2300002: FBX_Services_Police_Beacon_Socle
+    2300004: FBX_Services_Police_Hat
+    2300006: FBX_Services_Police_Hat_Socle
+    2300008: FBX_Services_Police_Name
+    2300010: FBX_Services_Police_Name001
+    2300012: //RootNode
+    3300000: FBX_Services_Police_Beacon
+    3300002: FBX_Services_Police_Beacon_Socle
+    3300004: FBX_Services_Police_Hat
+    3300006: FBX_Services_Police_Hat_Socle
+    3300008: FBX_Services_Police_Name
+    3300010: FBX_Services_Police_Name001
+    3300012: //RootNode
+    4300000: FBX_Services_Police
+    4300002: FBX_Services_Police_Beacon
+    4300004: FBX_Services_Police_Beacon_Socle
+    4300006: FBX_Services_Police_Hat
+    4300008: FBX_Services_Police_Hat_Socle
+    4300010: FBX_Services_Police_Name
+    4300012: FBX_Services_Police_Name001
     2186277476908879412: ImportLogs
   externalObjects: {}
   materials:
@@ -41,7 +71,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 0.5
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     importVisibility: 0

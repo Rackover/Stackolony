@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f2d1c532410ad94bb7e332bc601eb25, type: 3}
+  m_Name: WindTurbine
+  m_EditorClassIdentifier: 
+  link: {fileID: 0}
+  title: Wind Turbine
+  description: Produce power
+  model: {fileID: 1547902619353416, guid: 8c422b2db74c1ca4288c9fcf898e47c5, type: 2}
+  lifeSpan: 1
+  level: 1
+  price: 1
+  powerRequired: 0
+  occupations: []
+  generations:
+  - range: 2
+    power: 10
+    ressource: 0

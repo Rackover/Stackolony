@@ -7,7 +7,6 @@ public class GameManager : MonoBehaviour {
     //REFERENCES
     private Temporality temporality;
 
-
     private void Start()
     {
         //Initialisation des references
@@ -16,8 +15,6 @@ public class GameManager : MonoBehaviour {
     void Update () {
         CheckInputs();
     }
-
-
 
     void CheckInputs()
     {
