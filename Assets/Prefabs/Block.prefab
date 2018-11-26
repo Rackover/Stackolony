@@ -938,6 +938,8 @@ MonoBehaviour:
   currentPower: 0
   currentLife: 0
   currentUsers: 0
+  refreshCooldown: 0
+  timer: 0
 --- !u!114 &114100101188002198
 MonoBehaviour:
   m_ObjectHideFlags: 1

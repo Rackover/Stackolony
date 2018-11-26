@@ -1,30 +1,51 @@
 fileFormatVersion: 2
-guid: 3ec6859d96e666443b0e78c88b3e3225
+guid: 48bfc87dbcca5404a8ff902085bcf35b
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: //RootNode
-    100002: Module
-    100004: Module.001
-    100006: Module.002
-    400000: //RootNode
-    400002: Module
-    400004: Module.001
-    400006: Module.002
-    2100000: Material.002
+    100000: Fan
+    100002: Vent_Bar_1
+    100004: Vent_Bar_2
+    100006: Vent_Bar_3
+    100008: Vent_Bar_4
+    100010: Vent_Bar_5
+    100012: Vent_Bar_6
+    100014: //RootNode
+    400000: Fan
+    400002: Vent_Bar_1
+    400004: Vent_Bar_2
+    400006: Vent_Bar_3
+    400008: Vent_Bar_4
+    400010: Vent_Bar_5
+    400012: Vent_Bar_6
+    400014: //RootNode
+    2100000: Material.001
     2100002: No Name
-    2300000: //RootNode
-    2300002: Module
-    2300004: Module.001
-    2300006: Module.002
-    3300000: //RootNode
-    3300002: Module
-    3300004: Module.001
-    3300006: Module.002
-    4300000: Generator
-    4300002: Module
-    4300004: Module.001
-    4300006: Module.002
+    2300000: Fan
+    2300002: Vent_Bar_1
+    2300004: Vent_Bar_2
+    2300006: Vent_Bar_3
+    2300008: Vent_Bar_4
+    2300010: Vent_Bar_5
+    2300012: Vent_Bar_6
+    2300014: //RootNode
+    3300000: Fan
+    3300002: Vent_Bar_1
+    3300004: Vent_Bar_2
+    3300006: Vent_Bar_3
+    3300008: Vent_Bar_4
+    3300010: Vent_Bar_5
+    3300012: Vent_Bar_6
+    3300014: //RootNode
+    4300000: Vent_Station
+    4300002: Vent_Bar_1
+    4300004: Fan
+    4300006: Vent_Bar_2
+    4300008: Vent_Bar_3
+    4300010: Vent_Bar_4
+    4300012: Vent_Bar_5
+    4300014: Vent_Bar_6
+    2186277476908879412: ImportLogs
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -56,13 +77,13 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 0.5
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
-    importVisibility: 1
+    importVisibility: 0
     importBlendShapes: 1
-    importCameras: 1
-    importLights: 1
+    importCameras: 0
+    importLights: 0
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
@@ -81,9 +102,9 @@ ModelImporter:
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
-    tangentImportMode: 3
+    tangentImportMode: 0
     normalCalculationMode: 4
-  importAnimation: 1
+  importAnimation: 0
   copyAvatar: 0
   humanDescription:
     serializedVersion: 2
@@ -97,7 +118,6 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
-    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1

@@ -1,18 +1,28 @@
 fileFormatVersion: 2
-guid: 5d7f90550466d1f49b9d7e0828d48598
+guid: d74f09b99301ec848a8efa58d38ae36e
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
+    100000: FBX_Hollow_Cube_Ground
+    100002: //RootNode
+    100004: FBX_Window_Fix
+    400000: FBX_Hollow_Cube_Ground
+    400002: //RootNode
+    400004: FBX_Window_Fix
     2100000: No Name
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: Cube.002
+    2300000: FBX_Hollow_Cube_Ground
+    2300002: //RootNode
+    2300004: FBX_Window_Fix
+    3300000: FBX_Hollow_Cube_Ground
+    3300002: //RootNode
+    3300004: FBX_Window_Fix
+    4300000: FBX_Hollow_Cube
+    4300002: FBX_Hollow_Cube_Ground
+    4300004: FBX_Window_Fix
     2186277476908879412: ImportLogs
   externalObjects: {}
   materials:
-    importMaterials: 1
+    importMaterials: 0
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -41,7 +51,7 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 0.5
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     importVisibility: 0

@@ -1,18 +1,20 @@
 fileFormatVersion: 2
-guid: bf9aa5a9be7eb504395cbcad90481d3c
+guid: a6779b606d918de41a7fddf222e686a4
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
     100000: //RootNode
+    100002: FBX_Scientist_Observatory_Telescope_Glass
     400000: //RootNode
-    2100000: Metal_Darker
-    2100002: Metal_Basic
-    2100004: Metal_Lighter
-    2100006: Light
-    2100008: No Name
+    400002: FBX_Scientist_Observatory_Telescope_Glass
+    2100000: No Name
     2300000: //RootNode
+    2300002: FBX_Scientist_Observatory_Telescope_Glass
     3300000: //RootNode
-    4300000: new
+    3300002: FBX_Scientist_Observatory_Telescope_Glass
+    4300000: FBX_Scientist_Observatory_Telescope
+    4300002: FBX_Scientist_Observatory_Telescope_Glass
+    2186277476908879412: ImportLogs
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -44,13 +46,13 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 50
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
-    importVisibility: 1
+    importVisibility: 0
     importBlendShapes: 1
-    importCameras: 1
-    importLights: 1
+    importCameras: 0
+    importLights: 0
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
@@ -69,9 +71,9 @@ ModelImporter:
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
-    tangentImportMode: 3
+    tangentImportMode: 0
     normalCalculationMode: 4
-  importAnimation: 1
+  importAnimation: 0
   copyAvatar: 0
   humanDescription:
     serializedVersion: 2
@@ -85,7 +87,6 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
-    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
