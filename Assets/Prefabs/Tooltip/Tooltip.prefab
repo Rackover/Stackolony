@@ -117,8 +117,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a39637b6cdd40214aa4d4ac502a6914f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myText: {fileID: 114538251397253258}
+  myText: {fileID: 0}
   myRectTransform: {fileID: 224309742882140224}
+  myCanvasTransform: {fileID: 224309742882140224}
+  text: AAAAAAAAAAAAA
+  maxLength: 10
   tooltipIcons: []
 --- !u!222 &222147528889040460
 CanvasRenderer:

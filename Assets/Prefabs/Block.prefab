@@ -933,7 +933,8 @@ MonoBehaviour:
   positionInTower: 0
   gridManager: {fileID: 0}
   states: 
-  generators: []
+  generators:
+  - {fileID: 0}
   occupators: []
   currentPower: 0
   currentLife: 0
