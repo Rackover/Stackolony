@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 
@@ -14,12 +15,14 @@ public class Block : ScriptableObject
 	public string title = "Block Name";
 	[TextArea] public string description = "This needs a proper description";
 	public GameObject model;
+    public Sprite icon;
 
 	[Header("Properties")]
 	public float lifeSpan = 1;
 	public int level = 1;
 	public int price = 1;
 	public float powerRequired = 1f;
+    public int complexity;
 
 	[Header("BLOCK FUNCTIONS")]
 	public Occupation[] occupations;

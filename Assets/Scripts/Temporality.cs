@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class Temporality : MonoBehaviour {
@@ -16,14 +14,11 @@ public class Temporality : MonoBehaviour {
     public Gradient skyboxVariation; //Variations de couleur de la skybox au fil du temps
 
     [Header("=== REFERENCES ===")][Space(1)]
-    public Text cycleNumberText;
-    public Text yearNumberText;
     public GameObject directionalLight;
     public Material skyboxMaterial;
-    public GameObject dayNightDisplay;
-    public GameObject timescaleButtonHolder;
-    public Image pauseButton;
     public SFXManager sfxManager;
+    public DeliveryManagement deliveryManager;
+    public TemporalityInterface temporalityInterface;
 
 
     [Header("=== DEBUG VALUES ===")][Space(1)]
@@ -55,19 +50,21 @@ public class Temporality : MonoBehaviour {
         cycleNumber = 0;
         yearNumber = 0;
 
-        cycleNumberText.text = "CYCLE : " + cycleNumber;
-        yearNumberText.text = "YEAR : " + yearNumber;
+        temporalityInterface.UpdateCycleText(cycleNumber, yearNumber);
+
+        ChangeTimeScale(1);
+        temporalityInterface.EnableButton(temporalityInterface.defaultButton);
     }
 
     public void PauseGame()
     {
         if (timeScale == 0) {
             timeScale = savedTimeScale;
-            EnableButton(savedButton);
+            temporalityInterface.EnableButton(savedButton);
         }
         else
         {
-            EnableButton(pauseButton);
+            temporalityInterface.EnableButton(temporalityInterface.defaultButton);
             savedTimeScale = timeScale;
             timeScale = 0;
 
@@ -89,6 +86,11 @@ public class Temporality : MonoBehaviour {
         if (counter >= recurence) {
             counter = 0;
             TimeUpdate();
+        }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            AddCycle();
         }
     }
 
@@ -112,7 +114,7 @@ public class Temporality : MonoBehaviour {
         float cycleProgressionInPercent = (cycleProgression / (float)cycleDuration) * 100f;
         if (timeBetweenUpdateForDayNightDisplayCount >= timeBetweenUpdateForDayNightDisplay)
         {
-            UpdateDayNightDisplay(cycleProgressionInPercent);
+            temporalityInterface.UpdateDayNightDisplay(cycleProgressionInPercent);
             timeBetweenUpdateForDayNightDisplayCount = 1;
         }
 
@@ -141,27 +143,19 @@ public class Temporality : MonoBehaviour {
         timeScale = newTimeScaleCoef;
     }
 
-    public void EnableButton(Image button)
-    {
-        foreach (Transform child in timescaleButtonHolder.transform)
-        {
-            child.GetComponent<Image>().color = new Color32(255, 255, 255, 55);
-        }
-        button.color = new Color32(255, 255, 255, 255);
-    }
-
     public void AddCycle() //Ajoute un cycle au compteur
     {
         cycleNumber++;
-        cycleNumberText.text = "CYCLE : " + cycleNumber;
+        temporalityInterface.UpdateCycleText(cycleNumber, yearNumber);
         if (cycleNumber%yearDuration == 0) 
             AddYear();
+        deliveryManager.DeliverBlocks();
     }
 
     public void AddYear() //Ajoute un an au compteur
     {
         yearNumber++;
-        yearNumberText.text = "YEAR : " + yearNumber;
+        temporalityInterface.UpdateCycleText(cycleNumber, yearNumber);
     }
 
     //Met à jour les lumières en fonction de l'avancement du cycle
@@ -177,61 +171,4 @@ public class Temporality : MonoBehaviour {
         RenderSettings.skybox = skyboxMaterial;
         DynamicGI.UpdateEnvironment();
     }
-
-    //Met à jour le compteur de temps heures:minutes en fonction 
-    public void UpdateTimeDisplay(float cycleProgressionInPercent)
-    {
-        
-    }
-
-    //Met à jour l'afficheur jour/nuit 
-    public void UpdateDayNightDisplay(float cycleProgressionInPercent)
-    {
-        dayNightDisplay.transform.rotation = Quaternion.Euler(new Vector3(0,0,90f-(cycleProgressionInPercent*3.6f)));
-    }
-
-
-/* Systeme obsoléte de coroutine, il déforme un peu le temps mais est plus optimisé
-    IEnumerator updateCycleProgression(float recurence)
-    {
-        yield return new WaitForSeconds(recurence);
-
-        if (cycleProgression < cycleDuration)
-        {
-            cycleProgression+= recurence;
-        } else
-        {
-            cycleProgression = 0;
-            AddCycle();
-        }
-
-        //Update des timers pour les mises à jours de visuels
-        timeBetweenUpdateForSkyboxCount+= recurence;
-        timeBetweenUpdateForLightsCount+= recurence;
-        timeBetweenUpdateForDayNightDisplayCount+= recurence;
-
-        //Mises à jour des visuels
-        float cycleProgressionInPercent = (cycleProgression / (float)cycleDuration) * 100f;
-        if (timeBetweenUpdateForDayNightDisplayCount >= timeBetweenUpdateForDayNightDisplay)
-        {
-            UpdateDayNightDisplay(cycleProgressionInPercent);
-            timeBetweenUpdateForDayNightDisplayCount = 1;
-        }
-
-        if (timeBetweenUpdateForLightsCount > timeBetweenUpdateForLights)
-        {
-            UpdateLights(cycleProgressionInPercent);
-            timeBetweenUpdateForLightsCount = 1;
-        }
-
-        if (timeBetweenUpdateForSkyboxCount > timeBetweenUpdateForSkybox)
-        {
-            UpdateSkybox(cycleProgressionInPercent);
-            timeBetweenUpdateForSkyboxCount = 1;
-        }
-
-        timeCoroutine = StartCoroutine(updateCycleProgression(recurence));
-        yield return null;
-    }
-    */
 }

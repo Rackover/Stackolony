@@ -15,10 +15,12 @@ MonoBehaviour:
   title: Wind Turbine
   description: Produce 2 power in a range of 2 blocks
   model: {fileID: 1606115355712488, guid: 3162d8a3c3c8bf349a3914217addef9f, type: 2}
+  icon: {fileID: 21300000, guid: d44936e76ecdfe344be255cc1dee9d66, type: 3}
   lifeSpan: 1
   level: 1
   price: 1
   powerRequired: 0
+  complexity: 1
   occupations: []
   generations:
   - range: 2

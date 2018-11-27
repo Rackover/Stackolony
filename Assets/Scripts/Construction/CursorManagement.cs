@@ -111,7 +111,7 @@ public class CursorManagement : MonoBehaviour
             UpdateMouse(hit);
             UpdateProjector();
 
-            if ((hit.collider.gameObject.layer == LayerMask.NameToLayer("Block")) && hoveredBlock != hit.collider.gameObject && (!Input.GetMouseButton(0) || Input.GetMouseButtonUp(0)))
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Block") || hit.collider.gameObject.layer == LayerMask.NameToLayer("StoredBlock") && hoveredBlock != hit.collider.gameObject && !Input.GetMouseButton(0) || Input.GetMouseButtonUp(0))
             {
                 hoveredBlock = hit.collider.gameObject;
 
@@ -236,8 +236,9 @@ public class CursorManagement : MonoBehaviour
         {
             switch (selectedMode) {
                 default:
-                    Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
+                   // Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
                     drag.StartDrag(hit.transform.gameObject.GetComponent<BlockLink>());
+                    Debug.Log(hit.transform.gameObject.name);
                     break;
 
                 case cursorMode.Build:
@@ -271,7 +272,7 @@ public class CursorManagement : MonoBehaviour
             switch (selectedMode) 
             {
                 default:
-                    Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
+                   // Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
                     drag.DuringDrag(posInTerrain);
                     break;
             }
@@ -280,7 +281,7 @@ public class CursorManagement : MonoBehaviour
         {
             switch (selectedMode) {
                 default:
-                    Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
+                  //  Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
                     drag.CancelDrag();
                     break;
             }
@@ -292,7 +293,7 @@ public class CursorManagement : MonoBehaviour
             switch (selectedMode)
             {
                 default:
-                    Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
+                 //   Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
                     drag.EndDrag(posInTerrain);
                     break;
             }

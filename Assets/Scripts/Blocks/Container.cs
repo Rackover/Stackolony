@@ -25,6 +25,7 @@ public class Container : MonoBehaviour {
     {
         sfxManager.PlaySoundAtPosition("DropContainer",this.transform.position);
         isFalling = false;
+        linkedBlock.collider.enabled = true;
     }
 
     public void ShipSound()
@@ -41,11 +42,12 @@ public class Container : MonoBehaviour {
     {
         myAnimator.SetTrigger("DropContainer");
         isFalling = true;
+        linkedBlock.collider.enabled = false;
     }
 
     public void InitializeBlock()
     {
-        linkedBlock.Initialize();
+        linkedBlock.LoadBlock();
     }
 
     public void ToggleBlockVisuals()

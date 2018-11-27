@@ -670,8 +670,22 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_GenerateMotionCurves: 0
   m_Events:
-  - time: 0.05
+  - time: 0
     functionName: FallingSound
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0
+    functionName: InitializeBlock
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0
+    functionName: ToggleBlockVisuals
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -679,20 +693,6 @@ AnimationClip:
     messageOptions: 0
   - time: 1.7333333
     functionName: DropSound
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 1.95
-    functionName: InitializeBlock
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 1.9833333
-    functionName: ToggleBlockVisuals
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

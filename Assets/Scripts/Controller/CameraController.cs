@@ -15,6 +15,7 @@ public class CameraController : MonoBehaviour {
     public Transform camCenter;                 // Center of the camera (Used for Lookat + movement)
     public Transform camPivot;                  // Pivot point of the camera (Used for rotation)
     Transform camTarget;              // Current target of the camera (Should be null at start)
+    Vector3 startPosition;
     //public Toggle control;
 
     [Space(2)] [Header("=== SETTINGS ===")] [Space(1)]
@@ -42,6 +43,8 @@ public class CameraController : MonoBehaviour {
 
     void Start()
     {
+        startPosition = transform.position;
+
         // Spawning camera
         cameraInstance = Instantiate(cameraModel);
         camTransform = cameraInstance.transform;
@@ -80,6 +83,11 @@ public class CameraController : MonoBehaviour {
 
         CatchUpCameraObjective();
         userInterface.cursorTransform.position = Input.mousePosition;
+
+        if(Input.GetKeyDown(KeyCode.V))
+        {
+            transform.position = startPosition;
+        }
     }
 
     void CatchUpCameraObjective() {

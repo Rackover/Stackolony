@@ -52,21 +52,29 @@ public class BlockLink : MonoBehaviour {
     public float refreshCooldown;
     public float timer = 0f;
 
-    public void Initialize()
+    public void Awake()
     {
         gridManager = FindObjectOfType<GridManagement>();
         if (collider == null) collider = gameObject.GetComponent<BoxCollider>();
-
-        myBlock = blocks[Random.Range(0, blocks.Length)];
-        myBlockObject = Instantiate(myBlock.model, transform.position, Quaternion.identity, transform);
-        myBlockObject.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
-
-		LoadBlock();
     }
 
     public void LoadBlock()
     {
-        if(myBlock.generations.Length > 0)
+        if(myBlock == null)
+            myBlock = blocks[Random.Range(0, blocks.Length)];
+
+        if (myBlockObject == null)
+        {
+            myBlockObject = Instantiate(myBlock.model, transform.position, Quaternion.identity, transform);
+            myBlockObject.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
+        }
+        else if(myBlockObject.activeSelf == false)
+        {
+            myBlockObject.SetActive(true);
+        }
+
+
+        if (myBlock.generations.Length > 0)
         {
             for( int i = 0; i < myBlock.generations.Length; i++ )
             {
@@ -84,6 +92,15 @@ public class BlockLink : MonoBehaviour {
                 occupators[occupators.Count - 1].link = this;
                 occupators[occupators.Count - 1].myOccupation = myBlock.occupations[i];
             }
+        }
+    }
+
+    public void UnloadBlock()
+    {
+        if(myBlockObject != null)
+        {
+            myBlockObject.SetActive(false);
+            powerParticule.SetActive(false);
         }
     }
 
@@ -108,8 +125,8 @@ public class BlockLink : MonoBehaviour {
     }
     
 	// Check if the block is powered
-	virtual public bool IsPowered()
-	{
+	public bool IsPowered()
+	{   
 		if(currentPower >= myBlock.powerRequired)
 		{
 			return true;
@@ -175,9 +192,15 @@ public class BlockLink : MonoBehaviour {
     public void ToggleVisuals()
     {
         if (myBlockObject.gameObject.activeSelf == true)
+        {
             myBlockObject.gameObject.SetActive(false);
+            powerParticule.SetActive(false);
+        }
         else
+        {
             myBlockObject.gameObject.SetActive(true);
+            powerParticule.SetActive(true);
+        }
     }
 
     public void MoveToMyPosition() //Deplace le bloc à sa position supposée

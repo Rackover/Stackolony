@@ -141,6 +141,16 @@ public class StorageBay : MonoBehaviour {
         StoreBlock(newBlock);
     }
 
+    //Livre un block à l'intérieur de la baie de stockage
+    public void DeliverBlock(Block blockInfo)
+    {
+        GameObject newBlock = Instantiate(blockPrefab);
+        BlockLink newBlockLink = newBlock.GetComponent<BlockLink>();
+        newBlockLink.myBlock = blockInfo;
+        newBlockLink.myContainer.DropBlock();
+        StoreBlock(newBlock);
+    }
+
     //Place un block à l'intérieur de la baie de stockage
     public void StoreBlock(GameObject blockToStore)
     {

@@ -929,12 +929,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 71520957214271d428ae7f6622bf754a, type: 2}
   - {fileID: 11400000, guid: c89624ea9b43f42468c295920b6d19cf, type: 2}
   - {fileID: 11400000, guid: b7fd27253a34688459ab7ada3dab8486, type: 2}
+  - {fileID: 11400000, guid: fd7ea45607a83c04fac90962b7d5c194, type: 2}
+  - {fileID: 11400000, guid: 877f64fcbe812c2449d42d43ec5c6dcf, type: 2}
   gridCoordinates: {x: 18, y: 1, z: 16}
   positionInTower: 0
   gridManager: {fileID: 0}
   states: 
-  generators:
-  - {fileID: 0}
+  generators: []
   occupators: []
   currentPower: 0
   currentLife: 0

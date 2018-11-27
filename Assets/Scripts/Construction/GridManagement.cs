@@ -245,7 +245,7 @@ public class GridManagement : MonoBehaviour {
 
         buildingsList.Add(newBlock);
         BlockLink blockLink = newBlock.GetComponent<BlockLink>();
-        blockLink.Initialize();
+        blockLink.LoadBlock();
         blockLink.myContainer.OpenContainer();
         blockLink.gridCoordinates = new Vector3Int(coordinates.x, newBlockHeight, coordinates.y);
         newBlock.name = "Block[" + coordinates.x + ";" + newBlockHeight + ";" + coordinates.y + "]";
