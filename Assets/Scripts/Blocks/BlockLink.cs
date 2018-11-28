@@ -31,6 +31,8 @@ public class BlockLink : MonoBehaviour {
 	public Block myBlock;
 	public GameObject myBlockObject;
 	public GameObject powerParticule;
+
+    public Flag[] activeFlags;
     // TEMPORARY ASSET GENERATION
     public Block[] blocks;
 
@@ -40,7 +42,6 @@ public class BlockLink : MonoBehaviour {
 
     [Header("Lists")]
 	public List<BlockState> states = new List<BlockState>();
-    public List<Occupator> occupators = new List<Occupator>();
 
     [Header("Values")]
 	public int currentPower;
@@ -55,6 +56,15 @@ public class BlockLink : MonoBehaviour {
     {
         gridManager = FindObjectOfType<GridManagement>();
         if (collider == null) collider = gameObject.GetComponent<BoxCollider>();
+    }
+
+    //Apelle une fonction à chaque script "flag" attachés
+    public void CallFlags(string function)
+    {
+        foreach (Flag myFlag in activeFlags)
+        {
+            myFlag.Invoke(function,0);
+        }
     }
 
     public void LoadBlock()
