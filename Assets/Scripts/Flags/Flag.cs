@@ -4,6 +4,21 @@ using UnityEngine;
 
 public class Flag : MonoBehaviour {
 
+    [Header("References")]
+    public CityManagement cityManager;
+    public MissionManager missionManager;
+    public BlockLink myBlockLink;
+
+
+    //Fonction appelée lors de la création du script
+    virtual public void Awake()
+    {
+        //TEMPORAIRE
+        cityManager = FindObjectOfType<CityManagement>();
+        missionManager = FindObjectOfType<MissionManager>();
+        myBlockLink = GetComponent<BlockLink>();
+    }
+
     //Alimente les blocs
     virtual public void Enable()
     {
@@ -17,12 +32,12 @@ public class Flag : MonoBehaviour {
     }
 
     //Fonction appelée juste avant de déplacer le bloc
-    virtual public void BeforeBlockMove()
+    virtual public void BeforeMovingBlock()
     {
     }
 
     //Fonction appelée juste après avoir déplacé le bloc
-    virtual public void AfterBlockMove()
+    virtual public void AfterMovingBlock()
     {
     }
 
@@ -47,11 +62,5 @@ public class Flag : MonoBehaviour {
     virtual public void OnDayStart()
     {
 
-    }
-
-    //Fonction appelée lors de la création du script
-    virtual public void Awake()
-    {
-        
     }
 }

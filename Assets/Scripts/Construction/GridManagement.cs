@@ -81,6 +81,7 @@ public class GridManagement : MonoBehaviour {
     {
         if (grid[coordinates.x, coordinates.y, coordinates.z] != null)
         {
+            grid[coordinates.x, coordinates.y, coordinates.z].GetComponent<BlockLink>().CallFlags("OnBlockDestroy");
             // Removes object from list and destroys the gameObject
             GameObject target = grid[coordinates.x, coordinates.y, coordinates.z];
             buildingsList.RemoveAll(o => o == target);
@@ -110,6 +111,9 @@ public class GridManagement : MonoBehaviour {
                 {
                     if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.z),false) == GridManagement.blockType.FREE)
                     {
+                        //Update les flags du bloc
+                        grid[coordinates.x, i - 1, coordinates.z].GetComponent<BlockLink>().CallFlags("BeforeMovingBlock");
+
                         //Change la position du bloc dans la grille contenant chaque bloc
                         grid[coordinates.x, i - 1, coordinates.z] = grid[coordinates.x, i, coordinates.z];
 
@@ -154,8 +158,11 @@ public class GridManagement : MonoBehaviour {
                 {
                     if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.z), false) == GridManagement.blockType.FREE)
                     {
+
                         grid[coordinates.x, i + 1, coordinates.z] = grid[coordinates.x, i, coordinates.z];
                         GameObject actualGridPos = grid[coordinates.x, i + 1, coordinates.z];
+
+                        actualGridPos.GetComponent<BlockLink>().CallFlags("BeforeMovingBlock");
                         //Change le nom du bloc pour qu'il corresponde à sa nouvelle position (Ex : Block[1,2,1])
                         actualGridPos.name = "Block[" + coordinates.x + ";" + (i + 1) + ";" + coordinates.z + "]";
                         //Met à jour les coordonnées du block dans son script "BlockLink"

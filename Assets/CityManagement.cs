@@ -29,13 +29,19 @@ public class CityManagement : MonoBehaviour {
         }
     }
 
-    public void EmitMood()
+    public void RemoveEnergy()
     {
-        Debug.Log("MOOD EMISSION FROM " + position + " AFFECTING " + affectedBlocks.Count + " BLOCKS");
-        for (int i = 0; i < power; i++)
+        Debug.Log("REMOVING ENERGY EMITTED FROM " + position + " AFFECTING " + affectedBlocks.Count + " BLOCKS");
+        foreach (BlockLink block in affectedBlocks)
         {
-          //  affectedBlocks[i].currentPower++;
+            for (int i = block.currentPower; i > 0; i--)
+            {
+                if (power > 0)
+                {
+                    block.currentPower--;
+                    power--;
+                }
+            }
         }
     }
-
 }

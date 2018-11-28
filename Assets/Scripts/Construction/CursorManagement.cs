@@ -238,7 +238,6 @@ public class CursorManagement : MonoBehaviour
                 default:
                    // Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
                     drag.StartDrag(hit.transform.gameObject.GetComponent<BlockLink>());
-                    Debug.Log(hit.transform.gameObject.name);
                     break;
 
                 case cursorMode.Build:
