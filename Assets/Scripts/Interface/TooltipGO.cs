@@ -49,7 +49,6 @@ public class TooltipGO : MonoBehaviour {
     public void UpdateTooltipSizeAndPosition()
     {
         //UPDATE SIZE
-        Debug.Log(new Vector2(myText.preferredWidth, myText.preferredHeight));
         if (myText.preferredWidth > myText.rectTransform.sizeDelta.x)
         {
             myRectTransform.sizeDelta = new Vector2(myText.rectTransform.sizeDelta.x*2, myText.preferredHeight);

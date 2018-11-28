@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class MissionManager : MonoBehaviour {
 
-
-    // TO DO : LE SCRIPT DE PROPAGATION NE FONCTIONNE QUE DANS UN SEUL SENS POUR LES PONTS
-
     [Header("Lists")]
     public List<List<Coroutine>> activeExplorers; //Liste de toutes les listes d'explorers actifs, il y a une liste d'explorers pour chaque mission.
     public List<bool[,,]> exploredPositions; //Tableau tridimensionel booléen pour répértorier les positions déjà visitées par un explorer, pour chaque mission
@@ -16,6 +13,7 @@ public class MissionManager : MonoBehaviour {
     [Header("References")]
     private GridManagement gridManager;
     private CursorManagement cursorManagement;
+    private CityManagement cityManager;
 
 
     private void Awake()
@@ -30,19 +28,20 @@ public class MissionManager : MonoBehaviour {
         //Recuperation du gridManager
         gridManager = FindObjectOfType<GridManagement>();
         cursorManagement = FindObjectOfType<CursorManagement>();
+        cityManager = FindObjectOfType<CityManagement>();
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.M))
         {
-            StartMission(new Vector3Int(cursorManagement.posInTerrain.x, cursorManagement.posInTerrain.y, cursorManagement.posInTerrain.z), "test", 3);
+            StartMission(new Vector3Int(cursorManagement.posInTerrain.x, cursorManagement.posInTerrain.y, cursorManagement.posInTerrain.z), "EmitEnergy", 3, 3);
         }
     }
 
 
     //Lance une nouvelle mission d'exploration, cela renverra une liste de blocks explorés et lancera la fonction callBack qui se trouve dans le CityManager.
-    public void StartMission(Vector3Int position, string callBack, int range = 1, int power = 1)
+    public void StartMission(Vector3Int position, string callBack, int range = 1, int power = 0)
     {
         //Genere une nouvelle ID de mission
         int missionID = activeExplorers.Count;
@@ -106,11 +105,32 @@ public class MissionManager : MonoBehaviour {
         activeExplorers[missionID].RemoveAt(0);
 
         //Si l'explorer a trouvé quelque chose, il forme de nouveaux explorers pour continuer d'explorer
-        if (range > 0 && AdjacentBlocks.Count > 0) {
-            for (int i = 0; i < AdjacentBlocks.Count; i++) {
-                //Forme l'explorer relai qui transportera ses informations
-                int newExplorerID = activeExplorers[missionID].Count;
-                activeExplorers[missionID].Add(StartCoroutine(SpawnExplorer(AdjacentBlocks[i].gridCoordinates, callback, missionID, range - 1, power, newExplorerID)));
+        if (AdjacentBlocks.Count > 0) {
+
+            //Si je cherche les  blocs dans une certaine range, alors je cherche le bloc suivant et je diminue la range
+            if (range > 0)
+            {
+                for (int i = 0; i < AdjacentBlocks.Count; i++)
+                {
+                    //Forme l'explorer relai qui transportera ses informations
+                    int newExplorerID = activeExplorers[missionID].Count;
+                    activeExplorers[missionID].Add(StartCoroutine(SpawnExplorer(AdjacentBlocks[i].gridCoordinates, callback, missionID, range - 1, power, newExplorerID)));
+                }
+            }
+            //Sinon, si je cherche des blocs dans une portée infinie jusqu'à ce que je n'ai plus de power à donner, alors je continue ma recherche
+            else if (range == -1 && power > 0)
+            {
+                foreach (BlockLink foundBlock in AdjacentBlocks)
+                {
+                    power -= (foundBlock.myBlock.consumption - foundBlock.currentPower);
+                }
+
+                for (int i = 0; i < AdjacentBlocks.Count; i++)
+                {
+                    //Forme l'explorer relai qui transportera ses informations
+                    int newExplorerID = activeExplorers[missionID].Count;
+                    activeExplorers[missionID].Add(StartCoroutine(SpawnExplorer(AdjacentBlocks[i].gridCoordinates, callback, missionID, range, power, newExplorerID)));
+                }
             }
         }
 
@@ -119,9 +139,16 @@ public class MissionManager : MonoBehaviour {
         if (activeExplorers[missionID].Count == 0)
         {
             Debug.Log("MISSION FINISHED");
-            foreach (BlockLink b in blocksFound[missionID])
+            cityManager.affectedBlocks = blocksFound[missionID];
+            cityManager.distancesToCenter = blocksDistanceToCenter[missionID];
+            cityManager.position = position;
+            cityManager.range = range;
+            cityManager.power = power;
+            cityManager.Invoke(callback,0);
+
+            for (int i = 0; i < blocksFound[missionID].Count; i++)
             {
-                Debug.Log(b);
+                Debug.Log("Block at " + blocksFound[missionID][i].gridCoordinates + "is at " + blocksDistanceToCenter[missionID][i] + " blocks from the center");
             }
         }
 
@@ -140,7 +167,7 @@ public class MissionManager : MonoBehaviour {
 
         //Check up
         posToCheck = new Vector3Int(position.x, position.y + 1, position.z);
-        blockFound = CheckBlock(posToCheck, missionID, false);
+        blockFound = CheckBlock(position, posToCheck, missionID, false);
         if (blockFound != null)
         {
             blocksFound.Add(blockFound);
@@ -148,7 +175,7 @@ public class MissionManager : MonoBehaviour {
 
         //Check down
         posToCheck = new Vector3Int(position.x, position.y - 1, position.z);
-        blockFound = CheckBlock(posToCheck, missionID, false);
+        blockFound = CheckBlock(position, posToCheck, missionID, false);
         if (blockFound != null)
         {
             blocksFound.Add(blockFound);
@@ -156,28 +183,28 @@ public class MissionManager : MonoBehaviour {
 
         //Check sides
         posToCheck = new Vector3Int(position.x+1, position.y, position.z);
-        blockFound = CheckBlock(posToCheck, missionID, true);
+        blockFound = CheckBlock(position, posToCheck, missionID, true);
         if (blockFound != null)
         {
             blocksFound.Add(blockFound);
         }
 
         posToCheck = new Vector3Int(position.x-1, position.y, position.z);
-        blockFound = CheckBlock(posToCheck, missionID, true);
+        blockFound = CheckBlock(position, posToCheck, missionID, true);
         if (blockFound != null)
         {
             blocksFound.Add(blockFound);
         }
 
         posToCheck = new Vector3Int(position.x, position.y, position.z+1);
-        blockFound = CheckBlock(posToCheck, missionID, true);
+        blockFound = CheckBlock(position, posToCheck, missionID, true);
         if (blockFound != null)
         {
             blocksFound.Add(blockFound);
         }
 
         posToCheck = new Vector3Int(position.x, position.y, position.z-1);
-        blockFound = CheckBlock(posToCheck, missionID, true);
+        blockFound = CheckBlock(position, posToCheck, missionID, true);
         if (blockFound != null)
         {
             blocksFound.Add(blockFound);
@@ -188,7 +215,7 @@ public class MissionManager : MonoBehaviour {
 
 
     //Renvoit un blockLink à une position donnée, si "onlyBridges" est à true, alors le systeme ne renverra que les blocs aux extrémités des ponts
-    BlockLink CheckBlock(Vector3Int position, int missionID, bool onlyBridges)
+    BlockLink CheckBlock(Vector3Int initialPos, Vector3Int position, int missionID, bool onlyBridges)
     {
         BlockLink output = null;
 
@@ -201,7 +228,15 @@ public class MissionManager : MonoBehaviour {
                 //Si l'objet trouvé est un pont, récupère le bloc à l'extrémité de ce pont
                 if (blockFound.tag == "Bridge")
                 {
-                    Vector3Int bridgeDestinationPosition = blockFound.GetComponent<BridgeInfo>().destination;
+                    Vector3Int bridgeDestinationPosition = Vector3Int.zero;
+                    if (blockFound.GetComponent<BridgeInfo>().destination == initialPos)
+                    {
+                        bridgeDestinationPosition = blockFound.GetComponent<BridgeInfo>().origin;
+                    }
+                    else
+                    {
+                        bridgeDestinationPosition = blockFound.GetComponent<BridgeInfo>().destination;
+                    }
                     output = gridManager.grid[bridgeDestinationPosition.x, bridgeDestinationPosition.y, bridgeDestinationPosition.z].GetComponent<BlockLink>();
                     exploredPositions[missionID][bridgeDestinationPosition.x, bridgeDestinationPosition.y, bridgeDestinationPosition.z] = true;
                 }

@@ -16,11 +16,8 @@ public class TempDrag : MonoBehaviour  {
 
     public void StartDrag(BlockLink _block)
     {
-        Debug.Log("DRAGING BLOCK");
-        Debug.Log(_block);
         if (_block != null)
         {
-            Debug.Log("DRAGING BLOCK");
             timer = Time.time + dragDelay;
             sBlock = _block;
             sBlock.collider.enabled = false;

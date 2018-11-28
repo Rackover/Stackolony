@@ -40,11 +40,10 @@ public class BlockLink : MonoBehaviour {
 
     [Header("Lists")]
 	public List<BlockState> states = new List<BlockState>();
-    public List<Generator> generators = new List<Generator>();
     public List<Occupator> occupators = new List<Occupator>();
 
     [Header("Values")]
-	public float currentPower;
+	public int currentPower;
 	public float currentLife;
 	public int currentUsers;
 
