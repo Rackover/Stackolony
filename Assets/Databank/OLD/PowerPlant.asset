@@ -16,15 +16,7 @@ MonoBehaviour:
   description: Produce 5 power in a range of 3, engaging 5 scientists.
   model: {fileID: 1982061194005416, guid: 5417d5759a2b0b94b84c640aa8edebbe, type: 2}
   icon: {fileID: 21300000, guid: 974656c4ea5932d4c842d379b5832819, type: 3}
-  lifeSpan: 100
   level: 1
-  price: 1
-  powerRequired: 0
   complexity: 1
-  occupations:
-  - spotCount: 5
-    profile: 0
-  generations:
-  - range: 3
-    power: 5
-    ressource: 0
+  consumption: 1
+  flags: []

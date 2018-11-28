@@ -16,12 +16,7 @@ MonoBehaviour:
   description: Occupy 10 scientists
   model: {fileID: 1547902619353416, guid: 8c422b2db74c1ca4288c9fcf898e47c5, type: 2}
   icon: {fileID: 21300000, guid: e971c1619afda2c4fabc73ddd1d52eb6, type: 3}
-  lifeSpan: 100
-  level: 1
-  price: 1
-  powerRequired: 1
-  complexity: 1
-  occupations:
-  - spotCount: 10
-    profile: 0
-  generations: []
+  level: 81
+  complexity: 62
+  consumption: -1.06
+  flags: []

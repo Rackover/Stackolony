@@ -1,0 +1,9 @@
+name;level;consumption;complexity;description;flags
+Solar Panel;1;0;1;Generate 15 Energy, only during day.;Generator_10_Energy/Sleep_true_false
+Wind turbine;2;0;2;Generate 10 Energy.;Generator(10/Energy)
+Power Plant;8;0;4;Generate 10 Energy.;Generator
+Fireman Station;7;3;3;Generate 10 Energy.;Generator
+Police Station;2;2;8;Generate 10 Energy.;Generator
+Repairer;5;2;1;Generate 10 Energy.;Generator
+Food center;3;2;2;Generate 10 Energy.;Generator
+Hospital;2;1;3;Generate 10 Energy.;Generator

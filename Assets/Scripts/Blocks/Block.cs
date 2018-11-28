@@ -12,14 +12,15 @@ public class Block : ScriptableObject
 	[Header("Datas")]
 	public string title = "Block Name";
 	[TextArea] public string description = "This needs a proper description";
+	
 	public GameObject model;
     public Sprite icon;
 
 	[Header("Properties")]
 	public int level = 1;
     public int complexity = 1;
-	public float powerRequired = 1f;
+	public int consumption = 1;
 
 	[Header("Tags")]
-	public string flags;
+	public string[] flags;
 }

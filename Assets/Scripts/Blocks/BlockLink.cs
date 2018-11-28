@@ -72,28 +72,6 @@ public class BlockLink : MonoBehaviour {
         {
             myBlockObject.SetActive(true);
         }
-
-        /*
-        if (myBlock.generations.Length > 0)
-        {
-            for( int i = 0; i < myBlock.generations.Length; i++ )
-            {
-                generators.Add(gameObject.AddComponent<Generator>());
-                generators[generators.Count - 1].link = this;
-                generators[generators.Count - 1].myGeneration = myBlock.generations[i];
-            }
-        }
-
-        if(myBlock.occupations.Length > 0)
-        {
-            for( int i = 0; i < myBlock.occupations.Length; i++ )
-            {
-                occupators.Add(gameObject.AddComponent<Occupator>());
-                occupators[occupators.Count - 1].link = this;
-                occupators[occupators.Count - 1].myOccupation = myBlock.occupations[i];
-            }
-        }
-        */
     }
 
     public void UnloadBlock()
@@ -113,22 +91,21 @@ public class BlockLink : MonoBehaviour {
         {
             timer = 0.0f;
             UpdatePower();
-            UpdateGenerators();
-        }
-    }
-
-    public void UpdateGenerators()
-    {
-        foreach(Generator g in generators)
-        {
-            g.RefreshGainers();
         }
     }
     
+    public void ReadFlags(string[] flags)
+    {
+        foreach(string flag in flags)
+        {
+            
+        }
+    }
+
 	// Check if the block is powered
 	public bool IsPowered()
 	{   
-		if(currentPower >= myBlock.powerRequired)
+		if(currentPower >= myBlock.consumption)
 		{
 			return true;
 		}

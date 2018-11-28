@@ -9,19 +9,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0f2d1c532410ad94bb7e332bc601eb25, type: 3}
-  m_Name: Factory
+  m_Name: Block_Hospital
   m_EditorClassIdentifier: 
   link: {fileID: 0}
-  title: Factory
-  description: Occupy 10 workers
-  model: {fileID: 1706279260015752, guid: 3dfb3c7113238bc4e9a1a5af292ff09a, type: 2}
-  icon: {fileID: 21300000, guid: bac1b11626b6d4448bc82a261716482c, type: 3}
-  lifeSpan: 100
-  level: 1
-  price: 1
-  powerRequired: 1
-  complexity: 1
-  occupations:
-  - spotCount: 10
-    profile: 1
-  generations: []
+  title: Hospital
+  description: Generate 10 Energy.
+  model: {fileID: 0}
+  icon: {fileID: 0}
+  level: 2
+  complexity: 3
+  consumption: 1
+  flags:
+  - Generator
