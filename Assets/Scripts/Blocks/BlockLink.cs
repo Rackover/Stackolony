@@ -73,7 +73,7 @@ public class BlockLink : MonoBehaviour {
             myBlockObject.SetActive(true);
         }
 
-
+        /*
         if (myBlock.generations.Length > 0)
         {
             for( int i = 0; i < myBlock.generations.Length; i++ )
@@ -93,6 +93,7 @@ public class BlockLink : MonoBehaviour {
                 occupators[occupators.Count - 1].myOccupation = myBlock.occupations[i];
             }
         }
+        */
     }
 
     public void UnloadBlock()

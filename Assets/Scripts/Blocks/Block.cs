@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-
-
 [CreateAssetMenu(fileName = "newBlock", menuName = "Block/Basic")]
 public class Block : ScriptableObject
 {
@@ -18,13 +16,10 @@ public class Block : ScriptableObject
     public Sprite icon;
 
 	[Header("Properties")]
-	public float lifeSpan = 1;
 	public int level = 1;
-	public int price = 1;
+    public int complexity = 1;
 	public float powerRequired = 1f;
-    public int complexity;
 
-	[Header("BLOCK FUNCTIONS")]
-	public Occupation[] occupations;
-	public Generation[] generations;
+	[Header("Tags")]
+	public string flags;
 }
