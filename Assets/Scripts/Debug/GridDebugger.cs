@@ -3,115 +3,119 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class GridDebugger : MonoBehaviour {
+
+    [System.Serializable]
+    public class DebugGrid
+    {
+        public GameObject[,,] grid;
+        public GameObject cellsParent;
+        public string gridName;
+        public int gridID;
+        public bool isActive;
+    }
+
     [Header("DebugGrid")]
     public GameObject debugCellEmpty;
     public GameObject debugCellBridge;
     public GameObject debugCellCube;
     public GameObject debugCellOther;
 
-    public GameObject[,,] debugGrid;
+    public GameObject debugCellPower;
+
+    List<DebugGrid> debugGrids = new List<DebugGrid>();
+
+    public DebugGrid selectedGrid;
 
     public GridManagement gridmanager;
-    private GameObject debugParent; //Objet parent de tout les visuels
+    private GameObject debugParentDefault; //Objet parent de tout les visuels
     private bool debugModIsActive;
     //Genere une grille 3D pour pouvoir débug la variable grid[,,] et afficher ce qu'elle contient
 
-    public void InitGrid() //Initialise la grille
+    public void InitAllGrids()
     {
-        debugGrid = new GameObject[gridmanager.grid.GetLength(0), gridmanager.grid.GetLength(1), gridmanager.grid.GetLength(2)];
-        debugParent = new GameObject();
-        debugParent.name = "DebugParent";
-        debugParent.transform.parent = this.transform;
-        debugParent.SetActive(false);
-        debugModIsActive = false;
-        GenerateDebugGrid();
+        foreach (DebugGrid debugGrid in debugGrids)
+        {
+            InitGrid(debugGrid);
+        }
+    }
+    public void InitGrid(DebugGrid debugGrid) //Initialise la grille
+    {
+        debugGrid.grid = new GameObject[gridmanager.grid.GetLength(0), gridmanager.grid.GetLength(1), gridmanager.grid.GetLength(2)];
+        debugGrid.cellsParent = new GameObject();
+        debugGrid.cellsParent.name = debugGrid.gridName;
+        debugGrid.cellsParent.transform.parent = this.transform;
+        debugGrid.cellsParent.SetActive(false);
+        debugGrid.isActive = false;
+        UpdateDebugGrid(debugGrid);
     }
 
-    //Active ou désactive le mod débug
-    public void ToggleDebugMod()
+    //Active la grille selectionnée
+    public void SelectGrid(int gridID)
     {
-        if (debugModIsActive)
+        foreach (DebugGrid checkedGrid in debugGrids)
         {
-            debugModIsActive = false;
-            debugParent.SetActive(false);
-        } else
-        {
-            debugModIsActive = true;
-            debugParent.SetActive(true);
+            if (checkedGrid.gridID == gridID)
+            {
+                selectedGrid = checkedGrid;
+                selectedGrid.cellsParent.SetActive(true);
+            } else
+            {
+                checkedGrid.cellsParent.SetActive(false);
+            }
         }
     }
 
+
     //Nettoie les visuels à toutes les hauteurs
-    public void ClearDebugGrid()
+    public void ClearDebugGrid(DebugGrid selectedGrid)
     {
-        foreach (GameObject go in debugGrid)
+        foreach (GameObject go in selectedGrid.grid)
         {
             Destroy(go);
         }
     }
 
-    //Nettoie les visuels à une hauteur définie
-    public void ClearDebugGridAtHeigh(int height)
+    //Genère les visuels à toutes les hauteurs
+    public void UpdateDebugGrid(DebugGrid selectedGrid)
     {
-        for (int x = 0; x < debugGrid.GetLength(0); x++)
+        for (int i = 0; i < gridmanager.grid.GetLength(1); i++)
         {
-            for (int z = 0; z < debugGrid.GetLength(2); z++)
+            UpdateDebugGridAtHeight(selectedGrid, i);
+        }
+    }
+
+    //Nettoie les visuels à une hauteur définie
+    public void ClearDebugGridAtHeigh(DebugGrid selectedGrid, int height)
+    {
+        for (int x = 0; x < selectedGrid.grid.GetLength(0); x++)
+        {
+            for (int z = 0; z < selectedGrid.grid.GetLength(2); z++)
             {
-                if (debugGrid[x, height, z] != null)
+                if (selectedGrid.grid[x, height, z] != null)
                 {
-                    Destroy(debugGrid[x, height, z].gameObject);
+                    Destroy(selectedGrid.grid[x, height, z].gameObject);
                 }
             }
         }
     }
 
-    //Genère les visuels à toutes les hauteurs
-    public void UpdateDebugGrid()
-    {
-        ClearDebugGrid();
-        GenerateDebugGrid();
-    }
-
     //Genère les visuels à une hauteur définie
-    public void UpdateDebugGridAtHeight(int height)
+    public void UpdateDebugGridAtHeight(DebugGrid selectedGrid, int height)
     {
         //Clean les blocs à la hauteur définie
-        ClearDebugGridAtHeigh(height);
+        ClearDebugGridAtHeigh(selectedGrid, height);
 
         //Genère les blocs à la hauteur définie
         for (int x = 0; x < gridmanager.grid.GetLength(0); x++)
         {
             for (int z = 0; z < gridmanager.grid.GetLength(2); z++)
             {
-                GameObject cubeFound = gridmanager.grid[x, height, z];
-                GameObject generatedCube = null;
-                if (cubeFound == null)
-                {
-                    generatedCube = null;
-                }
-                else
-                {
-                    switch (cubeFound.tag)
-                    {
-                        case "Bridge":
-                            generatedCube = Instantiate(debugCellBridge);
-                            break;
-                        default:
-                            if (cubeFound.layer == LayerMask.NameToLayer("Block"))
-                            {
-                                generatedCube = Instantiate(debugCellCube);
-                            }
-                            else
-                            {
-                                generatedCube = Instantiate(debugCellOther);
-                            }
-                            break;
-                    }
-                }
+                GameObject generatedCube = GenerateDebugCell(new Vector3Int(x,height,z),selectedGrid);
+             
                 if (generatedCube != null)
                 {
-                    debugGrid[x, height, z] = generatedCube;
-                    generatedCube.transform.parent = debugParent.transform;
+                    selectedGrid.grid[x, height, z] = generatedCube;
+                    generatedCube.transform.parent = selectedGrid.cellsParent.transform;
                     float cellSize = gridmanager.cellSize;
                     generatedCube.transform.position = new Vector3
                     (
@@ -124,61 +128,49 @@ public class GridDebugger : MonoBehaviour {
         }
     }
 
-    public void GenerateDebugGrid()
+    //Instantie un bloc de débug à l'endroit souhaité, si les conditions pour l'instantier sont verifiées (Conditions variables selon le mod de debug selectionné)
+    public GameObject GenerateDebugCell(Vector3Int position, DebugGrid selectedGrid)
     {
-        for (int x = 0; x < gridmanager.grid.GetLength(0); x++)
+        GameObject foundObject = gridmanager.grid[position.x, position.y, position.z];
+        BlockLink foundBlockLink = null;
+        if (foundObject != null)
         {
-            for (int z = 0; z < gridmanager.grid.GetLength(2); z++)
-            {
-                for (int y = 0; y < gridmanager.grid.GetLength(1); y++)
-                {
-                    GameObject cubeFound = gridmanager.grid[x, y, z];
-                    GameObject generatedCube = null;
-                    if (cubeFound == null)
-                    {
-                        generatedCube = null;
-                    }
-                    else
-                    {
-                        switch (cubeFound.tag)
-                        {
-                            case "Bridge":
-                                generatedCube = Instantiate(debugCellBridge);
-                                break;
-                            default:
-                                if (cubeFound.layer == LayerMask.NameToLayer("Block"))
-                                {
-                                    generatedCube = Instantiate(debugCellCube);
-                                }
-                                else
-                                {
-                                    generatedCube = Instantiate(debugCellOther);
-                                }
-                                break;
-                        }
-                    }
-                    if (generatedCube != null)
-                    {
-                        if (debugParent != null)
-                        {
-                            generatedCube.transform.parent = debugParent.transform;
-                        }
-                        else
-                        {
-                            Destroy(generatedCube);
-                            Debug.LogWarning("Error ! No debugParent found");
-                        }
-                        debugGrid[x,y,z] = generatedCube;
-                        float cellSize = gridmanager.cellSize;
-                        generatedCube.transform.position = new Vector3
-                        (
-                            x * cellSize + (cellSize / 2),
-                            y + 0.5f,
-                            z * cellSize + (cellSize / 2)
-                        );
-                    }
-                }
-            }
+            foundBlockLink = foundObject.GetComponent<BlockLink>();
         }
+
+        switch (selectedGrid.gridID)
+        {
+            //Grille par défault
+            case 0:
+                if (foundObject != null)
+                {
+                    switch (foundObject.tag)
+                    {
+                        case "Bridge":
+                            return Instantiate(debugCellBridge);
+                        default:
+                            if (foundObject.layer == LayerMask.NameToLayer("Block"))
+                            {
+                                return Instantiate(debugCellCube);
+                            }
+                            else
+                            {
+                                return Instantiate(debugCellOther);
+                            }
+                    }
+                } break;
+
+            //Grille "Power"
+            case 1: 
+                if (foundBlockLink !=null)
+                {
+                    GameObject generatedBlock = Instantiate(debugCellPower);
+                    generatedBlock.GetComponent<Renderer>().material.color = new Color32(100, 100, 100, 255);
+                    return generatedBlock;
+                }
+                break;
+            default: break;
+        }
+        return null;
     }
 }

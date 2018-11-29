@@ -67,7 +67,6 @@ public class GridManagement : MonoBehaviour {
         //Initialisation de la variable grille contenant chaque bloc
         grid = new GameObject[gridSize.x, gridSize.y, gridSize.z];
         bridgesGrid = new Vector3[gridSize.x, gridSize.y, gridSize.z];
-        gridDebugger.InitGrid(); //Initialise la grille pour gérer le debugger
 
         //GENERATION DU GAMEOBJECT CONTENANT CHAQUE LAYERS
         gridGameObject = new GameObject(); //Crée le gameobject qui contiendra absolument tout les blocs du jeu (pour trier)
@@ -104,7 +103,6 @@ public class GridManagement : MonoBehaviour {
                 if (grid[coordinates.x, i, coordinates.z] == null)
                 {
                     grid[coordinates.x, i - 1, coordinates.z] = null;
-                    gridDebugger.UpdateDebugGridAtHeight(i - 1);
                     return;
                 }
                 else
@@ -125,11 +123,6 @@ public class GridManagement : MonoBehaviour {
 
                         //Déplace le block vers ses nouvelles coordonnées
                         grid[coordinates.x, i - 1, coordinates.z].GetComponent<BlockLink>().MoveToMyPosition();
-
-                        //Update le débugguer
-                        gridDebugger.UpdateDebugGridAtHeight(i);
-                        gridDebugger.UpdateDebugGridAtHeight(i + 1);
-                        gridDebugger.UpdateDebugGridAtHeight(i - 1);
                     } else
                     {
                         grid[coordinates.x, i - 1, coordinates.z] = null;
@@ -169,13 +162,7 @@ public class GridManagement : MonoBehaviour {
                         actualGridPos.GetComponent<BlockLink>().gridCoordinates = new Vector3Int(coordinates.x, i + 1, coordinates.z);
                         //Déplace le block vers ses nouvelles coordonnées
                         actualGridPos.GetComponent<BlockLink>().MoveToMyPosition();
-                        //Update le débugguer
-                        gridDebugger.UpdateDebugGridAtHeight(i);
-                        gridDebugger.UpdateDebugGridAtHeight(i+1);
                     }
-                } else
-                {
-                    gridDebugger.UpdateDebugGridAtHeight(i);
                 }
             }
         }
@@ -184,7 +171,6 @@ public class GridManagement : MonoBehaviour {
         newBlock.name = "Block[" + coordinates.x + ";" + coordinates.y + ";" + coordinates.z + "]";
         if (_blocklink != null)
             _blocklink.gridCoordinates = new Vector3Int(coordinates.x, coordinates.y, coordinates.z);
-        gridDebugger.UpdateDebugGridAtHeight(coordinates.y);
     }
 
     public void SpawnBlock(GameObject blockPrefab, Vector2Int coordinates) //Genère un bloc à une coordonnée 2D sur la map
@@ -246,9 +232,6 @@ public class GridManagement : MonoBehaviour {
         }
         grid[coordinates.x, newBlockHeight, coordinates.y] = newBlock;
         sfxManager.PlaySoundLinked("BlockDrop", newBlock);
-
-        //Update le débugguer
-        gridDebugger.UpdateDebugGridAtHeight(newBlockHeight);
 
         buildingsList.Add(newBlock);
         BlockLink blockLink = newBlock.GetComponent<BlockLink>();
@@ -458,9 +441,6 @@ public class GridManagement : MonoBehaviour {
 
         //Joue le son
         sfxManager.PlaySoundLinked("CreateBridge", parentBridgeGameObject);
-
-        //Update le débugguer
-        gridDebugger.UpdateDebugGridAtHeight(blockA.gridCoordinates.y);
 
         return parentBridgeGameObject;
     }
