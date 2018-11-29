@@ -14,11 +14,11 @@ MonoBehaviour:
   link: {fileID: 0}
   title: Solar Panel
   description: Generate 15 Energy, only during day.
-  model: {fileID: 0}
-  icon: {fileID: 0}
+  model: {fileID: 1606115355712488, guid: 3162d8a3c3c8bf349a3914217addef9f, type: 2}
+  icon: {fileID: 21300000, guid: 974656c4ea5932d4c842d379b5832819, type: 3}
   level: 1
   complexity: 1
   consumption: 0
   flags:
   - Generator_10_Energy
-  - Sleep_true_false
+  - Generator_5_Mood
