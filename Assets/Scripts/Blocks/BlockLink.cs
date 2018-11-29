@@ -32,7 +32,6 @@ public class BlockLink : MonoBehaviour {
 	public GameObject myBlockObject;
 	public GameObject powerParticule;
 
-    public Flag[] activeFlags;
     // TEMPORARY ASSET GENERATION
     public Block[] blocks;
 
@@ -41,6 +40,7 @@ public class BlockLink : MonoBehaviour {
     [HideInInspector]   public GridManagement gridManager;
 
     [Header("Lists")]
+    public List<Flag> activeFlags = new List<Flag>();
 	public List<BlockState> states = new List<BlockState>();
 
     [Header("Values")]

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Generator : Flag {
+    
     public int power = 2;
-    public string type;
 
     public override void Enable()
     {
