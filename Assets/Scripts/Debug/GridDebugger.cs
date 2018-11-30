@@ -1,20 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GridDebugger : MonoBehaviour {
 
     [System.Serializable]
-    public class DebugGrid
+    public class OverlayMode
     {
-        public GameObject[,,] grid;
+        [System.NonSerialized]
         public GameObject cellsParent;
+        public Button linkedButton;
         public string gridName;
         public int gridID;
+        [System.NonSerialized]
         public bool isActive;
+        [System.NonSerialized]
+        public GameObject[,,] grid;
     }
 
-    [Header("DebugGrid")]
+    [Header("OverlayMode")]
     public GameObject debugCellEmpty;
     public GameObject debugCellBridge;
     public GameObject debugCellCube;
@@ -22,52 +27,71 @@ public class GridDebugger : MonoBehaviour {
 
     public GameObject debugCellPower;
 
-    List<DebugGrid> debugGrids = new List<DebugGrid>();
+    public List<OverlayMode> overlayModes = new List<OverlayMode>();
 
-    public DebugGrid selectedGrid;
+    [System.NonSerialized]
+    public OverlayMode selectedGrid;
 
     public GridManagement gridmanager;
-    private GameObject debugParentDefault; //Objet parent de tout les visuels
-    private bool debugModIsActive;
-    //Genere une grille 3D pour pouvoir débug la variable grid[,,] et afficher ce qu'elle contient
 
+    //Genere une grille 3D pour pouvoir débug la variable grid[,,] et afficher ce qu'elle contient
     public void InitAllGrids()
     {
-        foreach (DebugGrid debugGrid in debugGrids)
+        Debug.Log("INIT GRID");
+        foreach (OverlayMode overlayMode in overlayModes)
         {
-            InitGrid(debugGrid);
+            InitGrid(overlayMode);
         }
     }
-    public void InitGrid(DebugGrid debugGrid) //Initialise la grille
+
+    public void InitButtons()
     {
-        debugGrid.grid = new GameObject[gridmanager.grid.GetLength(0), gridmanager.grid.GetLength(1), gridmanager.grid.GetLength(2)];
-        debugGrid.cellsParent = new GameObject();
-        debugGrid.cellsParent.name = debugGrid.gridName;
-        debugGrid.cellsParent.transform.parent = this.transform;
-        debugGrid.cellsParent.SetActive(false);
-        debugGrid.isActive = false;
-        UpdateDebugGrid(debugGrid);
+        Debug.Log("INIT BUTTONS");
+        foreach (OverlayMode overlayMode in overlayModes)
+        {
+            overlayMode.linkedButton.onClick.AddListener(delegate { SelectGrid(overlayMode.gridID); });
+        }
+        SelectGrid(0);
+    }
+
+    public void InitGrid(OverlayMode overlayMode) //Initialise la grille
+    {
+        overlayMode.grid = new GameObject[gridmanager.grid.GetLength(0), gridmanager.grid.GetLength(1), gridmanager.grid.GetLength(2)];
+        overlayMode.cellsParent = new GameObject();
+        overlayMode.cellsParent.name = overlayMode.gridName;
+        overlayMode.cellsParent.transform.parent = this.transform;
+        overlayMode.cellsParent.SetActive(false);
+        overlayMode.isActive = false;
+        UpdateOverlayMode(overlayMode);
     }
 
     //Active la grille selectionnée
     public void SelectGrid(int gridID)
     {
-        foreach (DebugGrid checkedGrid in debugGrids)
+        foreach (OverlayMode checkedGrid in overlayModes)
         {
             if (checkedGrid.gridID == gridID)
             {
                 selectedGrid = checkedGrid;
                 selectedGrid.cellsParent.SetActive(true);
+                selectedGrid.linkedButton.GetComponent<Animator>().SetBool("isActive", true);
             } else
             {
                 checkedGrid.cellsParent.SetActive(false);
+                checkedGrid.linkedButton.GetComponent<Animator>().SetBool("isActive", false);
             }
         }
     }
 
+    //Utilisé par le bouton "Update grid"
+    public void UpdateSelectedGrid()
+    {
+        UpdateOverlayMode(selectedGrid);
+    }
+
 
     //Nettoie les visuels à toutes les hauteurs
-    public void ClearDebugGrid(DebugGrid selectedGrid)
+    public void ClearOverlayMode(OverlayMode selectedGrid)
     {
         foreach (GameObject go in selectedGrid.grid)
         {
@@ -76,16 +100,16 @@ public class GridDebugger : MonoBehaviour {
     }
 
     //Genère les visuels à toutes les hauteurs
-    public void UpdateDebugGrid(DebugGrid selectedGrid)
+    public void UpdateOverlayMode(OverlayMode selectedGrid)
     {
         for (int i = 0; i < gridmanager.grid.GetLength(1); i++)
         {
-            UpdateDebugGridAtHeight(selectedGrid, i);
+            UpdateOverlayModeAtHeight(selectedGrid, i);
         }
     }
 
     //Nettoie les visuels à une hauteur définie
-    public void ClearDebugGridAtHeigh(DebugGrid selectedGrid, int height)
+    public void ClearOverlayModeAtHeigh(OverlayMode selectedGrid, int height)
     {
         for (int x = 0; x < selectedGrid.grid.GetLength(0); x++)
         {
@@ -100,10 +124,10 @@ public class GridDebugger : MonoBehaviour {
     }
 
     //Genère les visuels à une hauteur définie
-    public void UpdateDebugGridAtHeight(DebugGrid selectedGrid, int height)
+    public void UpdateOverlayModeAtHeight(OverlayMode selectedGrid, int height)
     {
         //Clean les blocs à la hauteur définie
-        ClearDebugGridAtHeigh(selectedGrid, height);
+        ClearOverlayModeAtHeigh(selectedGrid, height);
 
         //Genère les blocs à la hauteur définie
         for (int x = 0; x < gridmanager.grid.GetLength(0); x++)
@@ -129,7 +153,7 @@ public class GridDebugger : MonoBehaviour {
     }
 
     //Instantie un bloc de débug à l'endroit souhaité, si les conditions pour l'instantier sont verifiées (Conditions variables selon le mod de debug selectionné)
-    public GameObject GenerateDebugCell(Vector3Int position, DebugGrid selectedGrid)
+    public GameObject GenerateDebugCell(Vector3Int position, OverlayMode selectedGrid)
     {
         GameObject foundObject = gridmanager.grid[position.x, position.y, position.z];
         BlockLink foundBlockLink = null;
@@ -140,8 +164,11 @@ public class GridDebugger : MonoBehaviour {
 
         switch (selectedGrid.gridID)
         {
-            //Grille par défault
+            //Grille "Default"
             case 0:
+                return null;
+            //Grille "Debug"
+            case 1:
                 if (foundObject != null)
                 {
                     switch (foundObject.tag)
@@ -161,12 +188,15 @@ public class GridDebugger : MonoBehaviour {
                 } break;
 
             //Grille "Power"
-            case 1: 
+            case 2: 
                 if (foundBlockLink !=null)
                 {
-                    GameObject generatedBlock = Instantiate(debugCellPower);
-                    generatedBlock.GetComponent<Renderer>().material.color = new Color32(100, 100, 100, 255);
-                    return generatedBlock;
+                    if (foundBlockLink.currentPower > 0)
+                    {
+                        GameObject generatedBlock = Instantiate(debugCellPower);
+                        generatedBlock.GetComponent<Renderer>().material.color = new Color32(100, 100, 100, 255);
+                        return generatedBlock;
+                    }
                 }
                 break;
             default: break;

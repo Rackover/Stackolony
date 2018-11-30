@@ -74,6 +74,10 @@ public class GridManagement : MonoBehaviour {
         gridGameObject.transform.parent = this.transform;
         gridGameObject.transform.localPosition = Vector3.zero;
         Debug.Log("-----Generating grid-----");
+
+        //GENERATION DES GRILLES DE DEBUG
+        gridDebugger.InitAllGrids();
+        gridDebugger.InitButtons();
     }
 
     public void DestroyBlock(Vector3Int coordinates)

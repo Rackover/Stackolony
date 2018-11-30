@@ -35,7 +35,7 @@ public class DeliveryManagement : MonoBehaviour {
     {
         complexity = 0;
         shopDisplays = new List<ShopDisplay>();
-        complexitySlider.value = 0;
+      //  complexitySlider.value = 0;
         InitShop();
     }
 
