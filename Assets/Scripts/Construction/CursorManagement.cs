@@ -25,6 +25,7 @@ public class CursorManagement : MonoBehaviour
     private GameObject hoveredBlock;
     [HideInInspector]
     public bool cursorOnUI = false;
+    public bool isBridging = false;
 
 
     [Header("Scripts")]
@@ -184,25 +185,35 @@ public class CursorManagement : MonoBehaviour
                 ClearFeedback();
                 HighlightBlock(hit.transform.gameObject);
             }
-            else  if (selectedMode == cursorMode.Bridge)
-            {
+            else if (selectedMode == cursorMode.Bridge) {
+
+                GameObject objective = hit.transform.gameObject;
+                Vector3Int position = posInTerrain;
+                // If the player is bridging, we stuck the preview to the block he's dragging the bridge from 
+                if (isBridging) {
+                    objective = selectedBlock.gameObject;
+                    position = selectedBlock.gridCoordinates;
+                }
                 ClearFeedback();
-                HighlightBlock(hit.transform.gameObject);
-                Vector3Int[] linkableBlocksList = CheckBridgeableBlocks(posInTerrain);
+                HighlightBlock(objective);
+                Vector3Int[] linkableBlocksList = CheckBridgeableBlocks(position);
                 if (linkableBlocksList.Length > 0) {
-                    HighlightMultipleBlocks(linkableBlocksList);
                     foreach (Vector3Int blockToBridge in linkableBlocksList) {
-                        GenerateBridgePreview(hit.transform.gameObject.GetComponent<BlockLink>().gridCoordinates, blockToBridge);
+                        if (blockToBridge.Equals(hit.transform.gameObject.GetComponent<BlockLink>().gridCoordinates)) {
+                            HighlightBlock(hit.transform.gameObject);
+                            GenerateBridgePreview(objective.GetComponent<BlockLink>().gridCoordinates, blockToBridge);
+                            break;
+                        }
                     }
                 }
-            } else
+            }
+            else
             {
                 ClearFeedback();
             }
-        }
 
-        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Block")) //Si le joueur a la souris sur un block, alors on recupere le bloc le plus bas dans la tour selectionnée
-        {
+        //Si le joueur a la souris sur un block, alors on recupere le bloc le plus bas dans la tour selectionnée
+        
             int minHeight = 0;
             for (var i = posInTerrain.y-1; i > 0; i--) //Calcule du pied de la tour selectionnée
             {
@@ -226,6 +237,7 @@ public class CursorManagement : MonoBehaviour
         else
         {
             stackSelector.SetActive(false);
+            ClearFeedback();
         }
     }
 
@@ -235,7 +247,7 @@ public class CursorManagement : MonoBehaviour
         if(Input.GetButtonDown("MouseLeft"))
         {
             switch (selectedMode) {
-                default:
+                case cursorMode.Default:
                    // Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
                     drag.StartDrag(hit.transform.gameObject.GetComponent<BlockLink>());
                     break;
@@ -251,17 +263,6 @@ public class CursorManagement : MonoBehaviour
                     gridManager.DestroyBlock(posInTerrain);
                     ClearFeedback();
                     break;
-
-                case cursorMode.Bridge:
-                    TryToMakeBridge(hit.transform.gameObject);
-                    break;
-            }
-        }
-        if(Input.GetButtonDown("MouseRight"))
-        {
-            if (selectedMode == cursorMode.Bridge)
-            {
-                ResetSelection();
             }
         }
 
@@ -270,33 +271,69 @@ public class CursorManagement : MonoBehaviour
         {
             switch (selectedMode) 
             {
-                default:
+                case cursorMode.Default:
                    // Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
                     drag.DuringDrag(posInTerrain);
                     break;
+
+                case cursorMode.Bridge:
+                    if (!isBridging && hit.transform.gameObject.layer == LayerMask.NameToLayer("Block") ){
+                        StartPlanningBridge(hit.transform.gameObject);
+                    }
+                    break;
             }
         }  
+
+        // Left Mouse up 
+        if (Input.GetButtonUp("MouseLeft")) {
+            switch (selectedMode) {
+                case cursorMode.Default:
+                    //   Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
+                    drag.EndDrag(posInTerrain);
+                    break;
+
+                case cursorMode.Bridge:
+                    if (isBridging) {
+                        isBridging = false;
+                        Debug.Log("Made bridge !");
+                        TryToMakeBridge(hit.transform.gameObject);
+                        CancelPotentialBridge();
+                    }
+                    break;
+            }
+        }
+
+        // Right mouse button
         if(Input.GetButton("MouseRight"))
         {
             switch (selectedMode) {
-                default:
-                  //  Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
+                case cursorMode.Default:
+                    //  Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
                     drag.CancelDrag();
                     break;
-            }
-        }
-    
-        // Mouse click up
-        if(Input.GetButtonUp("MouseLeft"))
-        {
-            switch (selectedMode)
-            {
-                default:
-                 //   Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
-                    drag.EndDrag(posInTerrain);
+
+                case cursorMode.Bridge:
+                    if (isBridging) {
+                        CancelPotentialBridge();
+                    }
                     break;
             }
         }
+    }
+
+    void StartPlanningBridge(GameObject startingObject)
+    {
+        selectedBlock = startingObject.GetComponent<BlockLink>();
+        GeneratePermanentHighlighter(selectedBlock.gridCoordinates);
+        isBridging = true;
+    }
+
+    void CancelPotentialBridge()
+    {
+        ResetSelection();
+        ClearFeedback();
+        ClearPermanentHighlighter();
+        isBridging = false;
     }
 
     void ResetSelection()
@@ -307,7 +344,6 @@ public class CursorManagement : MonoBehaviour
     void HighlightBlock(GameObject block = null)
     {
         if (block != null) {
-            Debug.Log("IsntNull");
             highlighter.SetActive(true);
             Vector3 bounds = block.GetComponent<BoxCollider>().bounds.size;
             highlighter.transform.position = block.transform.position;
@@ -484,40 +520,35 @@ public class CursorManagement : MonoBehaviour
     {
         if (hitGameObject.GetComponent<BlockLink>() != null) 
         {
-            if (selectedBlock == null) //Si le joueur n'a pas fait sa premiere selection, alors il la fait
-            {
-                selectedBlock = hitGameObject.GetComponent<BlockLink>();
-                GeneratePermanentHighlighter(selectedBlock.gridCoordinates);
-            }
-            else //Si le joueur a déjà fait sa premiere selection, on vérifie que le deuxieme bloc selectionné est en face du premier, puis on trace le pont
-            {
-                BlockLink destinationCandidate = hitGameObject.GetComponent<BlockLink>(); //On selectionne temporairement le second block, puis on vérifie s'il remplie les conditions pour tracer un pont
-                if (destinationCandidate.gridCoordinates != selectedBlock.gridCoordinates) {
-                    if (destinationCandidate.gridCoordinates.y == selectedBlock.gridCoordinates.y) {
-                        if (destinationCandidate.gridCoordinates.x == selectedBlock.gridCoordinates.x || destinationCandidate.gridCoordinates.z == selectedBlock.gridCoordinates.z) {
-                            //Les conditions sont remplies et on peut tracer le pont
-                            //Call de la fonction pour tracer un pont
-                            gridManager.CreateBridge(selectedBlock, destinationCandidate);
-                            ClearPermanentHighlighter();
-                        }
-                        else {
-                            uiManager.ShowError("You can't link two blocks that aren't aligned");
-                            Debug.LogWarning("You can't link two blocks that aren't aligned");
-                        }
+        //Si le joueur a déjà fait sa premiere selection, on vérifie que le deuxieme bloc selectionné est en face du premier, puis on trace le pont
+            
+            BlockLink destinationCandidate = hitGameObject.GetComponent<BlockLink>(); //On selectionne temporairement le second block, puis on vérifie s'il remplie les conditions pour tracer un pont
+            if (destinationCandidate.gridCoordinates != selectedBlock.gridCoordinates) {
+                if (destinationCandidate.gridCoordinates.y == selectedBlock.gridCoordinates.y) {
+                    if (destinationCandidate.gridCoordinates.x == selectedBlock.gridCoordinates.x || destinationCandidate.gridCoordinates.z == selectedBlock.gridCoordinates.z) {
+                        //Les conditions sont remplies et on peut tracer le pont
+                        //Call de la fonction pour tracer un pont
+                        gridManager.CreateBridge(selectedBlock, destinationCandidate);
+                        ClearPermanentHighlighter();
                     }
                     else {
-                        uiManager.ShowError("You can't link two blocks of different heights");
-                        Debug.LogWarning("You can't link two blocks of different heights");
+                        uiManager.ShowError("You can't link two blocks that aren't aligned");
+                        Debug.LogWarning("You can't link two blocks that aren't aligned");
                     }
                 }
                 else {
-                    uiManager.ShowError("You can't select the same point");
-                    Debug.LogWarning("You can't select the same point");
+                    uiManager.ShowError("You can't link two blocks of different heights");
+                    Debug.LogWarning("You can't link two blocks of different heights");
                 }
-                ResetSelection();
-                ClearPermanentHighlighter();
             }
+            else {
+                uiManager.ShowError("You can't select the same point");
+                Debug.LogWarning("You can't select the same point");
+            }
+            ResetSelection();
+            ClearPermanentHighlighter();
         }
+        
     }
 
     /// UI FUNCTIONS
