@@ -52,8 +52,9 @@ public class Temporality : MonoBehaviour {
 
         temporalityInterface.UpdateCycleText(cycleNumber, yearNumber);
 
-        ChangeTimeScale(1);
-        temporalityInterface.EnableButton(temporalityInterface.defaultButton);
+        // ChangeTimeScale(1);
+        // temporalityInterface.EnableButton(temporalityInterface.defaultButton);
+        PauseGame();
     }
 
     public void PauseGame()

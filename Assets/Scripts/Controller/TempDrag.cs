@@ -74,6 +74,8 @@ public class TempDrag : MonoBehaviour  {
                 //Play SFX
                 sfxManager.PlaySoundLinked("BlockDrop",sBlock.gameObject);
 
+                Debug.Log("CALLING BEFORE MOVING DROP IN TEMPDRAG");
+                sBlock.CallFlags("BeforeMovingBlock");
                 gridManagement.MoveBlock(sBlock.gameObject, _pos);
                 sBlock.collider.enabled = true;
 
@@ -82,7 +84,7 @@ public class TempDrag : MonoBehaviour  {
             } else
             {
                 //If the cube is dragged on the stocking bay
-                if (gridManagement.checkIfSlotIsBlocked(_pos, false) == GridManagement.blockType.STORAGE)
+                if (gridManagement.checkIfSlotIsBlocked(_pos, false) == GridManagement.blockType.STORAGE &&  sBlock.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
                 {
                     //Update the grid
                     gridManagement.UpdateBlocks(sBlock.gridCoordinates);

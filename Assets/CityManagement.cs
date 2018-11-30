@@ -15,13 +15,14 @@ public class CityManagement : MonoBehaviour {
 
     public void EmitEnergy()
     {
-        Debug.Log("ENERGY EMISSION FROM " + position + " AFFECTING " + affectedBlocks.Count + " BLOCKS");
         foreach (BlockLink block in affectedBlocks)
         {
+            Debug.Log("BLOCK " + block.name + " NEEDS " + (block.myBlock.consumption - block.currentPower) + " POWER");
             for (int i = block.myBlock.consumption - block.currentPower; i>0; i--)
             {
                 if (power > 0)
                 {
+                    Debug.Log("BLOCK " + block.name + " IS GETTING POWERED");
                     block.currentPower++;
                     power--;
                 }
@@ -31,13 +32,14 @@ public class CityManagement : MonoBehaviour {
 
     public void RemoveEnergy()
     {
-        Debug.Log("REMOVING ENERGY EMITTED FROM " + position + " AFFECTING " + affectedBlocks.Count + " BLOCKS");
         foreach (BlockLink block in affectedBlocks)
         {
+            Debug.Log("BLOCK " + block.name + " HAS " + (block.currentPower) + " POWER");
             for (int i = block.currentPower; i > 0; i--)
             {
                 if (power > 0)
                 {
+                    Debug.Log("BLOCK " + block.name + " IS GETTING UNPOWERED");
                     block.currentPower--;
                     power--;
                 }

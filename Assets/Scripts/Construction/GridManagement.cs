@@ -141,11 +141,11 @@ public class GridManagement : MonoBehaviour {
 
     public void MoveBlock(GameObject newBlock, Vector3Int coordinates) //Bouge un bloc à une nouvelle coordonnée
     {
+        Debug.Log("DROPPED BLOCK");
         // If the block come from somewhere
         BlockLink _blocklink = newBlock.GetComponent<BlockLink>();
         if (_blocklink != null)
             UpdateBlocks(_blocklink.gridCoordinates);
-      //  grid[_blocklink.gridCoordinates.x, _blocklink.gridCoordinates.y, _blocklink.gridCoordinates.z] = null;
 
         if (grid[coordinates.x, coordinates.y, coordinates.z] != null) // If there is a block where the block should be dropped
         {
@@ -165,6 +165,7 @@ public class GridManagement : MonoBehaviour {
                         //Met à jour les coordonnées du block dans son script "BlockLink"
                         actualGridPos.GetComponent<BlockLink>().gridCoordinates = new Vector3Int(coordinates.x, i + 1, coordinates.z);
                         //Déplace le block vers ses nouvelles coordonnées
+                        Debug.Log("DROPPED BLOCK 2");
                         actualGridPos.GetComponent<BlockLink>().MoveToMyPosition();
                     }
                 }
@@ -174,7 +175,10 @@ public class GridManagement : MonoBehaviour {
         grid[coordinates.x, coordinates.y, coordinates.z] = newBlock;
         newBlock.name = "Block[" + coordinates.x + ";" + coordinates.y + ";" + coordinates.z + "]";
         if (_blocklink != null)
+        {
             _blocklink.gridCoordinates = new Vector3Int(coordinates.x, coordinates.y, coordinates.z);
+            _blocklink.CallFlags("AfterMovingBlock");
+        }
     }
 
     public void SpawnBlock(GameObject blockPrefab, Vector2Int coordinates) //Genère un bloc à une coordonnée 2D sur la map

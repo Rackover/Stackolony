@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class Generator : Flag {
     
-    public int power = 2;
+    public int power;
 
+    public override void Awake()
+    {
+        base.Awake();
+        //Enable();
+    }
     public override void Enable()
     {
         base.Enable();
         missionManager.StartMission(myBlockLink.gridCoordinates, "EmitEnergy", -1, power);
-        Debug.Log("Emitting energy");
     }
 
     public override void Disable()

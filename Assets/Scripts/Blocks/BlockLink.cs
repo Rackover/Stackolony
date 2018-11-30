@@ -227,7 +227,6 @@ public class BlockLink : MonoBehaviour {
         gridCoordinates.x * gridManager.cellSize + 0.5f * gridManager.cellSize,
         0.5f + gridCoordinates.y,
         gridCoordinates.z * gridManager.cellSize + 0.5f * gridManager.cellSize);
-        Debug.Log("CALLING FLAGS");
         CallFlags("AfterMovingBlock");
         yield return null;
     }
