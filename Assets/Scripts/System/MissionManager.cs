@@ -52,7 +52,6 @@ public class MissionManager : MonoBehaviour {
         blocksDistanceToCenter.Add(new List<int>());
 
         //Genere le tableau tridimensionel booléen indiquant les coordonnées déjà explorées
-        Debug.Log(gridManager.gridSize);
         exploredPositions.Add(new bool[gridManager.gridSize.x, gridManager.gridSize.y, gridManager.gridSize.z]);
         for (int x = 0; x < gridManager.gridSize.x; x++)
         {
@@ -66,7 +65,7 @@ public class MissionManager : MonoBehaviour {
         }
 
         //Genere le premier explorer de la mission
-        Debug.Log("STARTING MISSION " + missionID);
+        Debug.Log("STARTING MISSION " + missionID + " AT POSITION " + position);
         activeExplorers[missionID].Add(StartCoroutine(SpawnExplorer(position, callBack, missionID, range, power,0)));
     }
 
@@ -138,7 +137,7 @@ public class MissionManager : MonoBehaviour {
         //S'il n'y a plus aucun explorer actif, on termine la mission
         if (activeExplorers[missionID].Count == 0)
         {
-            Debug.Log("MISSION FINISHED");
+            Debug.Log("MISSION " + missionID + " FINISHED | EXPLORERS FOUND " + blocksFound[missionID].Count + " BLOCKS");
             cityManager.affectedBlocks = blocksFound[missionID];
             cityManager.distancesToCenter = blocksDistanceToCenter[missionID];
             cityManager.position = position;
@@ -146,9 +145,10 @@ public class MissionManager : MonoBehaviour {
             cityManager.power = power;
             cityManager.Invoke(callback,0);
 
+
             for (int i = 0; i < blocksFound[missionID].Count; i++)
             {
-                Debug.Log("Block at " + blocksFound[missionID][i].gridCoordinates + "is at " + blocksDistanceToCenter[missionID][i] + " blocks from the center");
+             //   Debug.Log("Block at " + blocksFound[missionID][i].gridCoordinates + "is at " + blocksDistanceToCenter[missionID][i] + " blocks from the center");
             }
         }
 
