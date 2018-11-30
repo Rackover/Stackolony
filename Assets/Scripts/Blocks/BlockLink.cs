@@ -38,6 +38,7 @@ public class BlockLink : MonoBehaviour {
     [HideInInspector]   public Vector3Int gridCoordinates = new Vector3Int(0, 0, 0);
     [HideInInspector]   public int positionInTower; //0 = tout en bas
     [HideInInspector]   public GridManagement gridManager;
+    [HideInInspector]   public FlagReader flagReader;
 
     [Header("Lists")]
     public List<Flag> activeFlags = new List<Flag>();
@@ -45,8 +46,6 @@ public class BlockLink : MonoBehaviour {
 
     [Header("Values")]
 	public int currentPower;
-	public float currentLife;
-	public int currentUsers;
 
     [Header("System settings")]
     public float refreshCooldown;
@@ -54,6 +53,7 @@ public class BlockLink : MonoBehaviour {
 
     public void Awake()
     {
+        flagReader = FindObjectOfType<FlagReader>();
         gridManager = FindObjectOfType<GridManagement>();
         if (collider == null) collider = gameObject.GetComponent<BoxCollider>();
     }
@@ -80,6 +80,10 @@ public class BlockLink : MonoBehaviour {
         else if(myBlockObject.activeSelf == false)
         {
             myBlockObject.SetActive(true);
+        }
+        foreach (string flag in myBlock.flags)
+        {
+            flagReader.ReadFlag(this, flag);
         }
     }
 
@@ -223,6 +227,7 @@ public class BlockLink : MonoBehaviour {
         gridCoordinates.x * gridManager.cellSize + 0.5f * gridManager.cellSize,
         0.5f + gridCoordinates.y,
         gridCoordinates.z * gridManager.cellSize + 0.5f * gridManager.cellSize);
+        Debug.Log("CALLING FLAGS");
         CallFlags("AfterMovingBlock");
         yield return null;
     }
