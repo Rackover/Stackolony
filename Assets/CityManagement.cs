@@ -6,44 +6,51 @@ public class CityManagement : MonoBehaviour {
     public GridManagement gridManager;
     public MissionManager missionManager;
 
+    public GameObject prefabRemoving;
+    public GameObject prefabEmitting;
 
-    public List<BlockLink> affectedBlocks;
-    public List<int> distancesToCenter;
-    public Vector3Int position;
-    public int range;
-    public int power;
+    public int missionID;
 
-    public void EmitEnergy()
+
+    IEnumerator EmitEnergy()
     {
-        foreach (BlockLink block in affectedBlocks)
+        int checkedMissionID = missionID;
+        MissionManager.Mission myMission = missionManager.missionList[checkedMissionID];
+        foreach (BlockLink block in myMission.blocksFound)
         {
-            Debug.Log("BLOCK " + block.name + " NEEDS " + (block.myBlock.consumption - block.currentPower) + " POWER");
-            for (int i = block.myBlock.consumption - block.currentPower; i>0; i--)
+            for (int i = block.myBlock.consumption - block.currentPower; i > 0; i--)
             {
-                if (power > 0)
+                if (myMission.power > 0)
                 {
-                    Debug.Log("BLOCK " + block.name + " IS GETTING POWERED");
+                    GameObject energyFeedback = Instantiate(prefabEmitting);
+                    energyFeedback.transform.position = block.transform.position;
+                    Destroy(energyFeedback, 2);
                     block.currentPower++;
-                    power--;
+                    myMission.power--;
                 }
             }
         }
+        yield return null;
     }
 
-    public void RemoveEnergy()
+    IEnumerator RemoveEnergy()
     {
-        foreach (BlockLink block in affectedBlocks)
+        int checkedMissionID = missionID;
+        MissionManager.Mission myMission = missionManager.missionList[checkedMissionID];
+        foreach (BlockLink block in myMission.blocksFound)
         {
-            Debug.Log("BLOCK " + block.name + " HAS " + (block.currentPower) + " POWER");
             for (int i = block.currentPower; i > 0; i--)
             {
-                if (power > 0)
+                if (myMission.power > 0)
                 {
-                    Debug.Log("BLOCK " + block.name + " IS GETTING UNPOWERED");
+                    GameObject energyFeedback = Instantiate(prefabRemoving);
+                    energyFeedback.transform.position = block.transform.position;
+                    Destroy(energyFeedback, 2);
                     block.currentPower--;
-                    power--;
+                    myMission.power--;
                 }
             }
         }
+        yield return null;
     }
 }

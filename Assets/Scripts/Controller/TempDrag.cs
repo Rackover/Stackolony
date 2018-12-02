@@ -73,8 +73,7 @@ public class TempDrag : MonoBehaviour  {
 
                 //Play SFX
                 sfxManager.PlaySoundLinked("BlockDrop",sBlock.gameObject);
-
-                Debug.Log("CALLING BEFORE MOVING DROP IN TEMPDRAG");
+                
                 sBlock.CallFlags("BeforeMovingBlock");
                 gridManagement.MoveBlock(sBlock.gameObject, _pos);
                 sBlock.collider.enabled = true;

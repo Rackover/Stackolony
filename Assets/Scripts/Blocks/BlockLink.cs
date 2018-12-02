@@ -63,7 +63,14 @@ public class BlockLink : MonoBehaviour {
     {
         foreach (Flag myFlag in activeFlags)
         {
-            myFlag.Invoke(function,0);
+            if (function == "BeforeMovingBlock")
+            {
+                myFlag.BeforeMovingBlock();
+            }
+            else
+            {
+                myFlag.Invoke(function, 0);
+            }
         }
     }
 

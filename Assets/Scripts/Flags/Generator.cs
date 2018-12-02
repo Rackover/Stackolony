@@ -25,14 +25,12 @@ public class Generator : Flag {
 
     public override void BeforeMovingBlock()
     {
-        Debug.Log("BEFORE MOVING BLOCK");
         base.BeforeMovingBlock();
         Disable();
     }
 
     public override void AfterMovingBlock()
     {
-        Debug.Log("AFTER MOVING BLOCK");
         base.AfterMovingBlock();
         Enable();
     }

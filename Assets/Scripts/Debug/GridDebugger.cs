@@ -24,8 +24,9 @@ public class GridDebugger : MonoBehaviour {
     public GameObject debugCellBridge;
     public GameObject debugCellCube;
     public GameObject debugCellOther;
-
+    public GameObject debugCellUnpowered;
     public GameObject debugCellPower;
+    public GameObject debugCellGenerator;
 
     public List<OverlayMode> overlayModes = new List<OverlayMode>();
 
@@ -191,10 +192,19 @@ public class GridDebugger : MonoBehaviour {
             case 2: 
                 if (foundBlockLink !=null)
                 {
-                    if (foundBlockLink.currentPower > 0)
+                    if (foundBlockLink.gameObject.GetComponent<Generator>() != null)
+                    {
+                        GameObject generatedBlock = Instantiate(debugCellGenerator);
+                        return generatedBlock;
+                    }
+                    else if (foundBlockLink.currentPower > 0)
                     {
                         GameObject generatedBlock = Instantiate(debugCellPower);
                         generatedBlock.GetComponent<Renderer>().material.color = new Color32(100, 100, 100, 255);
+                        return generatedBlock;
+                    } else if (foundBlockLink.myBlock.consumption > 0)
+                    {
+                        GameObject generatedBlock = Instantiate(debugCellUnpowered);
                         return generatedBlock;
                     }
                 }

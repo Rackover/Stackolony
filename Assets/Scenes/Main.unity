@@ -803,7 +803,11 @@ MonoBehaviour:
     type: 2}
   debugCellOther: {fileID: 1625007679925146, guid: 7d982d2f723cc504389fef62a84b71eb,
     type: 2}
+  debugCellUnpowered: {fileID: 1895412504763200, guid: 52ccada3b1c19754b968f7cbc4ecdc86,
+    type: 2}
   debugCellPower: {fileID: 1829734420885436, guid: 9ef0a9dddede10e4b85fb79092d8a4fc,
+    type: 2}
+  debugCellGenerator: {fileID: 1455483664259520, guid: 692ba36f42496f741971ad316f06537b,
     type: 2}
   overlayModes:
   - linkedButton: {fileID: 13903531}
@@ -861,11 +865,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridManager: {fileID: 104313392}
   missionManager: {fileID: 1465901713}
-  affectedBlocks: []
-  distancesToCenter: 
-  position: {x: 0, y: 0, z: 0}
-  range: 0
-  power: 0
+  prefabRemoving: {fileID: 1330950013455556, guid: c89020d6ae7142645985d5e9a5f46e90,
+    type: 2}
+  prefabEmitting: {fileID: 1109864763100982, guid: 86fe2ef75fc279a4f8f10dff9fb03577,
+    type: 2}
+  missionID: 0
 --- !u!1 &121031638
 GameObject:
   m_ObjectHideFlags: 0
@@ -1402,7 +1406,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -127.6, y: -25.9}
+  m_AnchoredPosition: {x: -127.599976, y: -25.900024}
   m_SizeDelta: {x: 300, y: 70}
   m_Pivot: {x: 1, y: 1}
 --- !u!114 &193100909
@@ -6516,6 +6520,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2bd685a177308b4481093a9b343b1e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  explorerPrefab: {fileID: 1815882601349314, guid: 5432350a8f7b9de4987c20a7a620e21d,
+    type: 2}
 --- !u!4 &1465901714
 Transform:
   m_ObjectHideFlags: 0
@@ -7642,6 +7648,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89085d99adc8cfa4198fbf41232af2e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  exisitingProfiles:
+  - all
+  - artist
+  - worker
+  - scientist
+  - military
+  - tourist
 --- !u!1 &1822765751
 GameObject:
   m_ObjectHideFlags: 0

@@ -141,7 +141,6 @@ public class GridManagement : MonoBehaviour {
 
     public void MoveBlock(GameObject newBlock, Vector3Int coordinates) //Bouge un bloc à une nouvelle coordonnée
     {
-        Debug.Log("DROPPED BLOCK");
         // If the block come from somewhere
         BlockLink _blocklink = newBlock.GetComponent<BlockLink>();
         if (_blocklink != null)
@@ -165,7 +164,6 @@ public class GridManagement : MonoBehaviour {
                         //Met à jour les coordonnées du block dans son script "BlockLink"
                         actualGridPos.GetComponent<BlockLink>().gridCoordinates = new Vector3Int(coordinates.x, i + 1, coordinates.z);
                         //Déplace le block vers ses nouvelles coordonnées
-                        Debug.Log("DROPPED BLOCK 2");
                         actualGridPos.GetComponent<BlockLink>().MoveToMyPosition();
                     }
                 }
