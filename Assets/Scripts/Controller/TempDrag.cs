@@ -13,6 +13,7 @@ public class TempDrag : MonoBehaviour  {
     private Vector3Int _savedPos;
 
     public SFXManager sfxManager;
+    public SystemReferences systemRef;
 
     public void StartDrag(BlockLink _block)
     {
@@ -74,6 +75,20 @@ public class TempDrag : MonoBehaviour  {
                 //Play SFX
                 sfxManager.PlaySoundLinked("BlockDrop",sBlock.gameObject);
                 
+                if (systemRef == null)
+                {
+                    systemRef = FindObjectOfType<SystemReferences>();
+                }
+                if (systemRef != null)
+                {
+                    if (sBlock.GetComponent<Generator>() == null)
+                    {
+                        systemRef.UpdateSystem();
+                    }
+                }
+                //RESET SOME VALUES OF THE BLOCK THAT ARE RECALCULATED BY THE SYSTEM
+                sBlock.currentPower = 0;
+
                 sBlock.CallFlags("BeforeMovingBlock");
                 gridManagement.MoveBlock(sBlock.gameObject, _pos);
                 sBlock.collider.enabled = true;

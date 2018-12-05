@@ -39,6 +39,7 @@ public class BlockLink : MonoBehaviour {
     [HideInInspector]   public int positionInTower; //0 = tout en bas
     [HideInInspector]   public GridManagement gridManager;
     [HideInInspector]   public FlagReader flagReader;
+    [HideInInspector]   public SystemReferences systemRef;
 
     [Header("Lists")]
     public List<Flag> activeFlags = new List<Flag>();
@@ -46,6 +47,7 @@ public class BlockLink : MonoBehaviour {
 
     [Header("Values")]
 	public int currentPower;
+    public bool isConsideredUnpowered;
 
     [Header("System settings")]
     public float refreshCooldown;
@@ -53,9 +55,21 @@ public class BlockLink : MonoBehaviour {
 
     public void Awake()
     {
+        isConsideredUnpowered = true;
         flagReader = FindObjectOfType<FlagReader>();
         gridManager = FindObjectOfType<GridManagement>();
         if (collider == null) collider = gameObject.GetComponent<BoxCollider>();
+        SystemReferences foundSystemRef = FindObjectOfType<SystemReferences>();
+        if (foundSystemRef == null)
+        {
+            GameObject newSystemRefGO = new GameObject();
+            newSystemRefGO.name = "SystemReferences";
+            systemRef = newSystemRefGO.AddComponent<SystemReferences>();
+        }
+        else
+        {
+            systemRef = foundSystemRef;
+        }
     }
 
     //Apelle une fonction à chaque script "flag" attachés
@@ -69,15 +83,24 @@ public class BlockLink : MonoBehaviour {
             }
             else
             {
-                myFlag.Invoke(function, 0);
+                myFlag.Invoke(function, 1);
             }
         }
     }
 
     public void LoadBlock()
     {
-        if(myBlock == null)
+        if (myBlock == null)
+        {
             myBlock = blocks[Random.Range(0, blocks.Length)];
+        }
+        else
+        {
+            if (myBlock.consumption > 0)
+            {
+                systemRef.AllBlocksRequiringPower.Add(this);
+            }
+        }
 
         if (myBlockObject == null)
         {

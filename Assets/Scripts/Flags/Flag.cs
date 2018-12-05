@@ -8,6 +8,7 @@ public class Flag : MonoBehaviour {
     public CityManagement cityManager;
     public MissionManager missionManager;
     public BlockLink myBlockLink;
+    public SystemReferences systemRef;
 
 
     //Fonction appelée lors de la création du script
@@ -17,6 +18,7 @@ public class Flag : MonoBehaviour {
         cityManager = FindObjectOfType<CityManagement>();
         missionManager = FindObjectOfType<MissionManager>();
         myBlockLink = GetComponent<BlockLink>();
+        systemRef = FindObjectOfType<SystemReferences>();
     }
 
     //Alimente les blocs
@@ -42,7 +44,7 @@ public class Flag : MonoBehaviour {
     }
 
     //Fonction appelée avant de détruire le bloc
-    virtual public void OnBlockDestroy()
+    virtual public void OnDestroy()
     {
     }
 
@@ -60,6 +62,12 @@ public class Flag : MonoBehaviour {
 
     //Fonction appelée quand le jour commence
     virtual public void OnDayStart()
+    {
+
+    }
+
+    //Fonction appelée quand la position du bloc se met à jour
+    virtual public void OnBlockUpdate()
     {
 
     }

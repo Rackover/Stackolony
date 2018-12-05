@@ -9,13 +9,13 @@ public class CityManagement : MonoBehaviour {
     public GameObject prefabRemoving;
     public GameObject prefabEmitting;
 
-    public int missionID;
+    public MissionManager.Mission mission;
 
 
     IEnumerator EmitEnergy()
     {
-        int checkedMissionID = missionID;
-        MissionManager.Mission myMission = missionManager.missionList[checkedMissionID];
+
+        MissionManager.Mission myMission = mission;
         foreach (BlockLink block in myMission.blocksFound)
         {
             for (int i = block.myBlock.consumption - block.currentPower; i > 0; i--)
@@ -26,7 +26,9 @@ public class CityManagement : MonoBehaviour {
                     energyFeedback.transform.position = block.transform.position;
                     Destroy(energyFeedback, 2);
                     block.currentPower++;
+                    block.isConsideredUnpowered = false;
                     myMission.power--;
+                    yield return new WaitForSeconds(0.05f);
                 }
             }
         }
@@ -35,8 +37,7 @@ public class CityManagement : MonoBehaviour {
 
     IEnumerator RemoveEnergy()
     {
-        int checkedMissionID = missionID;
-        MissionManager.Mission myMission = missionManager.missionList[checkedMissionID];
+        MissionManager.Mission myMission = mission;
         foreach (BlockLink block in myMission.blocksFound)
         {
             for (int i = block.currentPower; i > 0; i--)
@@ -48,6 +49,7 @@ public class CityManagement : MonoBehaviour {
                     Destroy(energyFeedback, 2);
                     block.currentPower--;
                     myMission.power--;
+                    yield return new WaitForSeconds(0.05f);
                 }
             }
         }

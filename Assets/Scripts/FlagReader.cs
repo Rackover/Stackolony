@@ -6,6 +6,7 @@ using System;
 public class FlagReader : MonoBehaviour 
 {
 	public string[] exisitingProfiles = {"all", "artist", "worker", "scientist", "military", "tourist"};
+    SystemReferences systemRef;
 
 	public void ReadFlag(BlockLink blockLink, string flag)
 	{
@@ -17,8 +18,9 @@ public class FlagReader : MonoBehaviour
 			case "Generator":
 				if(flagElements.Length == 2)
 				{
-					Generator newGenerator = blockLink.gameObject.AddComponent<Generator>();
-					try  // TRY SETTING UP THE POWER
+                    Generator newGenerator = blockLink.gameObject.AddComponent<Generator>();
+
+                    try  // TRY SETTING UP THE POWER
 					{
 						newGenerator.power = int.Parse(flagElements[1]);
 					}
