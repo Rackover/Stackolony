@@ -383,6 +383,7 @@ public class GridManagement : MonoBehaviour {
         BridgeInfo bridgeInfo = parentBridgeGameObject.AddComponent<BridgeInfo>();
         bridgeInfo.origin = blockA.gridCoordinates;
         bridgeInfo.destination = blockB.gridCoordinates;
+        blockA.myBridge = parentBridgeGameObject;
 
         //Ajout de chaque partie du pont dans la grille grid[] et dans le component bridgeInfo
         bridgeInfo.allBridgePositions = new Vector3Int[bridgeLength];

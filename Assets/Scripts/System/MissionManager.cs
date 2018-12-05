@@ -268,7 +268,34 @@ public class MissionManager : MonoBehaviour {
                 else
                 {
                     if (onlyBridges == false)
-                    output = blockFound.GetComponent<BlockLink>();
+                    {
+                        output = blockFound.GetComponent<BlockLink>();
+                    } else
+                    {
+                        BlockLink foundBlockLink = blockFound.GetComponent<BlockLink>();
+                        if (foundBlockLink != null)
+                        {
+                            if (foundBlockLink.myBridge != null && foundBlockLink.myBridge.GetComponent<BridgeInfo>().destination == initialPos) 
+                            {
+                                output = blockFound.GetComponent<BlockLink>() ;
+                            } else
+                            {
+                                GameObject initialBlock = gridManager.grid[initialPos.x, initialPos.y, initialPos.z];
+                                if (initialBlock != null)
+                                {
+                                    BlockLink initialBlockLink = initialBlock.GetComponent<BlockLink>();
+                                    if (initialBlock.GetComponent<BlockLink>() != null)
+                                    {
+                                        if (initialBlockLink.myBridge != null)
+                                        {
+                                            Vector3Int foundBlockPosition = initialBlockLink.myBridge.GetComponent<BridgeInfo>().destination;
+                                            output = gridManager.grid[foundBlockPosition.x, foundBlockPosition.y, foundBlockPosition.z].GetComponent<BlockLink>();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
             //Ajout de la position explorée à la liste des positions explorées

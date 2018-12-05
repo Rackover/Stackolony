@@ -31,6 +31,7 @@ public class BlockLink : MonoBehaviour {
 	public Block myBlock;
 	public GameObject myBlockObject;
 	public GameObject powerParticule;
+    public GameObject myBridge;
 
     // TEMPORARY ASSET GENERATION
     public Block[] blocks;
