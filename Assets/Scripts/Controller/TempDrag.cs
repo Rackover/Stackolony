@@ -66,9 +66,6 @@ public class TempDrag : MonoBehaviour  {
                     FindObjectOfType<StorageBay>().DeStoreBlock(sBlock.gameObject);
                 }
                 //Play SFX
-<<<<<<< HEAD
-                sfxManager.PlaySoundLinked("BlockDrop",sBlock.gameObject);  
-=======
                 sfxManager.PlaySoundLinked("BlockDrop",sBlock.gameObject);
                 
                 if (systemRef == null)
@@ -85,7 +82,6 @@ public class TempDrag : MonoBehaviour  {
                 //RESET SOME VALUES OF THE BLOCK THAT ARE RECALCULATED BY THE SYSTEM
                 sBlock.currentPower = 0;
 
->>>>>>> origin/Dev
                 sBlock.CallFlags("BeforeMovingBlock");
                 gridManagement.MoveBlock(sBlock.gameObject, _pos);
             } 

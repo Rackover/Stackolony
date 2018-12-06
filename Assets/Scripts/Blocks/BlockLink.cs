@@ -7,22 +7,6 @@ public enum Profile{ Scientist, Worker, Military, Artist, Tourist }
 public enum Ressource{ Energy, Mood, Food }
 public enum Quality{ Low, Medium, High }
 
-[System.Serializable]
-public class Occupation 
-{
-	//public string jobName;
-	public int spotCount;
-	public Profile profile;
-}
-
-[System.Serializable]
-public class Generation 
-{
-	public int range;
-	public float power;
-	public Ressource ressource;
-}
-
 public class BlockLink : MonoBehaviour {
 
     [Header("Referencies")]
@@ -30,15 +14,11 @@ public class BlockLink : MonoBehaviour {
     public Container myContainer;
 	public Block myBlock;
 	public GameObject myBlockObject;
-<<<<<<< HEAD
 
     [Header("Particules")]
 	public GameObject unpoweredEffect;
     public GameObject onFireEffect;
-=======
-	public GameObject powerParticule;
     public GameObject myBridge;
->>>>>>> origin/Dev
 
     // TEMPORARY ASSET GENERATION
     public Block[] blocks;
