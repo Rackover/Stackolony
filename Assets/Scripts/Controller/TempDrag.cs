@@ -10,7 +10,7 @@ public class TempDrag : MonoBehaviour  {
     [HideInInspector] public Vector3 sPosition;
     float timer;
     bool draging;
-    private Vector3Int _savedPos;
+    private Vector3Int savedPos;
 
     public SFXManager sfxManager;
 
@@ -18,11 +18,9 @@ public class TempDrag : MonoBehaviour  {
     {
         if (_block != null)
         {
-            timer = Time.time + dragDelay;
             sBlock = _block;
-            sBlock.collider.enabled = false;
             sPosition = sBlock.transform.position;
-            _savedPos = sBlock.gridCoordinates;
+            savedPos = sBlock.gridCoordinates;
             if (sBlock.transform.Find("Bridge") != null) {
                 gridManagement.DestroyBridge(sBlock.transform.Find("Bridge").gameObject);
             }
@@ -34,29 +32,25 @@ public class TempDrag : MonoBehaviour  {
     {
         if(sBlock != null)
         {
-            if(!draging)
+            if(_pos != savedPos)
             {
-                if(Time.time > timer)
+                if(!draging) 
                 {
-                    sBlock.collider.enabled = false;
-                    sPosition = sBlock.transform.position;
                     draging = true;
+                    sBlock.collider.enabled = false;
+                }
+                else
+                {
+                    savedPos = _pos;
+                    sfxManager.PlaySoundWithRandomParameters("Tick", 1, 1, 0.8f, 1.2f);
+                    sBlock.transform.position = new Vector3
+                    (
+                        _pos.x * gridManagement.cellSize + gridManagement.cellSize * 0.5f,
+                        _pos.y + 0.5f,
+                        _pos.z * gridManagement.cellSize + gridManagement.cellSize * 0.5f
+                    );
                 }
             }
-            else
-            {
-                if (_pos != _savedPos)
-                {
-                    _savedPos = _pos;
-                    sfxManager.PlaySoundWithRandomParameters("Tick", 1, 1, 0.8f, 1.2f);
-                }
-                sBlock.transform.position = new Vector3
-                (
-                    _pos.x * gridManagement.cellSize + gridManagement.cellSize * 0.5f,
-                    _pos.y + 0.5f,
-                    _pos.z * gridManagement.cellSize + gridManagement.cellSize * 0.5f
-                );
-            }  
         }
     }
 
@@ -70,17 +64,12 @@ public class TempDrag : MonoBehaviour  {
                 {
                     FindObjectOfType<StorageBay>().DeStoreBlock(sBlock.gameObject);
                 }
-
                 //Play SFX
-                sfxManager.PlaySoundLinked("BlockDrop",sBlock.gameObject);
-                
+                sfxManager.PlaySoundLinked("BlockDrop",sBlock.gameObject);  
                 sBlock.CallFlags("BeforeMovingBlock");
                 gridManagement.MoveBlock(sBlock.gameObject, _pos);
-                sBlock.collider.enabled = true;
-
-                sBlock = null;
-                draging = false;
-            } else
+            } 
+            else
             {
                 //If the cube is dragged on the stocking bay
                 if (gridManagement.checkIfSlotIsBlocked(_pos, false) == GridManagement.blockType.STORAGE &&  sBlock.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
@@ -91,10 +80,6 @@ public class TempDrag : MonoBehaviour  {
                     //Stock the cube in the stocking bay
                     FindObjectOfType<StorageBay>().StoreBlock(sBlock.gameObject);
                     sBlock.collider.enabled = true;
-
-                    sBlock = null;
-                    draging = false;
-                    return;
                 }
                 else
                 {
@@ -102,6 +87,12 @@ public class TempDrag : MonoBehaviour  {
                 }
             }
         }
+        if(sBlock != null)
+        {            
+            sBlock.collider.enabled = true;
+            sBlock = null; 
+        }
+        draging = false;
     }
 
     public void CancelDrag()
@@ -110,7 +101,6 @@ public class TempDrag : MonoBehaviour  {
         {
             sBlock.transform.position = sPosition;
             sBlock.collider.enabled = true;
-
             sBlock = null;
             draging = false;
         }

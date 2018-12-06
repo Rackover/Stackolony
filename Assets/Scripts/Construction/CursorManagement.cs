@@ -7,7 +7,7 @@ using UnityEngine.EventSystems;
 public class CursorManagement : MonoBehaviour
 {
 
-    public enum cursorMode { Default, Build, Delete, Bridge}; //Chaque mode du curseur
+    public enum cursorMode { Default, Build, Delete, Bridge }; //Chaque mode du curseur
 
     [Header("=== REFERENCIES ===")][Space(1)]
     [Header("Prefabs")]
@@ -30,6 +30,7 @@ public class CursorManagement : MonoBehaviour
 
     [Header("Scripts")]
     public TempDrag drag;
+    public TempBlockSelector selector;
     public GridManagement gridManager; // Référence au gridManagement.cs instancié
     public Interface uiManager;
 
@@ -248,9 +249,13 @@ public class CursorManagement : MonoBehaviour
         {
             switch (selectedMode) {
                 case cursorMode.Default:
-                   // Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
-                    drag.StartDrag(hit.transform.gameObject.GetComponent<BlockLink>());
+                    BlockLink sBlock = hit.transform.gameObject.GetComponent<BlockLink>();
+                    // Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
+                    drag.StartDrag(sBlock);
+                    selector.ShowBlock(sBlock);
                     break;
+                
+
 
                 case cursorMode.Build:
                     if (!EventSystem.current.IsPointerOverGameObject()) 

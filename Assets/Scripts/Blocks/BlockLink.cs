@@ -30,7 +30,10 @@ public class BlockLink : MonoBehaviour {
     public Container myContainer;
 	public Block myBlock;
 	public GameObject myBlockObject;
-	public GameObject powerParticule;
+
+    [Header("Particules")]
+	public GameObject unpoweredEffect;
+    public GameObject onFireEffect;
 
     // TEMPORARY ASSET GENERATION
     public Block[] blocks;
@@ -99,7 +102,7 @@ public class BlockLink : MonoBehaviour {
         if(myBlockObject != null)
         {
             myBlockObject.SetActive(false);
-            powerParticule.SetActive(false);
+            unpoweredEffect.SetActive(false);
         }
     }
 
@@ -154,7 +157,11 @@ public class BlockLink : MonoBehaviour {
 			switch(state)
 			{
 				case BlockState.Powered:
-					powerParticule.SetActive(false);
+					unpoweredEffect.SetActive(false);
+					break;
+
+                case BlockState.OnFire:
+					onFireEffect.SetActive(true);
 					break;
 
 				default:
@@ -174,7 +181,10 @@ public class BlockLink : MonoBehaviour {
 			switch(state)
 			{
 				case BlockState.Powered:
-					powerParticule.SetActive(true);
+					unpoweredEffect.SetActive(true);
+					break;
+                case BlockState.OnFire:
+					onFireEffect.SetActive(false);
 					break;
 
 				default:
@@ -192,12 +202,13 @@ public class BlockLink : MonoBehaviour {
         if (myBlockObject.gameObject.activeSelf == true)
         {
             myBlockObject.gameObject.SetActive(false);
-            powerParticule.SetActive(false);
+            unpoweredEffect.SetActive(false);
+            onFireEffect.SetActive(false);
         }
         else
         {
             myBlockObject.gameObject.SetActive(true);
-            powerParticule.SetActive(true);
+            unpoweredEffect.SetActive(true);
         }
     }
 
