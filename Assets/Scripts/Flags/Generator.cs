@@ -9,7 +9,9 @@ public class Generator : Flag {
     public override void Awake()
     {
         base.Awake();
-        //Enable();
+        //Generate ou récupère l'objet "SystemReferences";
+        systemRef.AllGenerators.Add(this);
+        Enable();
     }
     public override void Enable()
     {
@@ -35,9 +37,16 @@ public class Generator : Flag {
         Enable();
     }
 
-    public override void OnBlockDestroy()
+    public override void OnBlockUpdate()
     {
-        base.OnBlockDestroy();
+        Invoke("BeforeMovingBlock", 0);
+        Invoke("AfterMovingBlock", 0.1f);
+    }
+
+    public override void OnDestroy()
+    {
+        base.OnDestroy();
+        systemRef.AllGenerators.Remove(this);
         Disable();
     }
 }

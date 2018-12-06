@@ -38,6 +38,7 @@ public class GridManagement : MonoBehaviour {
     public Interface uiManager;
     public GridDebugger gridDebugger;
     public SFXManager sfxManager;
+    private SystemReferences systemRef;
 
     //------------VARIABLES PRIVEE------------
     [System.NonSerialized]
@@ -113,11 +114,11 @@ public class GridManagement : MonoBehaviour {
                 {
                     if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.z),false) == GridManagement.blockType.FREE)
                     {
-                        //Update les flags du bloc
-                        grid[coordinates.x, i - 1, coordinates.z].GetComponent<BlockLink>().CallFlags("BeforeMovingBlock");
-
                         //Change la position du bloc dans la grille contenant chaque bloc
                         grid[coordinates.x, i - 1, coordinates.z] = grid[coordinates.x, i, coordinates.z];
+
+                        //Update les flags du bloc
+                        grid[coordinates.x, i - 1, coordinates.z].GetComponent<BlockLink>().CallFlags("BeforeMovingBlock");
 
                         //Change le nom du bloc pour qu'il corresponde à sa nouvelle position (Ex : Block[1,2,1])
                         grid[coordinates.x, i - 1, coordinates.z].name = "Block[" + coordinates.x + ";" + (i - 1) + ";" + coordinates.z + "]";
@@ -382,6 +383,7 @@ public class GridManagement : MonoBehaviour {
         BridgeInfo bridgeInfo = parentBridgeGameObject.AddComponent<BridgeInfo>();
         bridgeInfo.origin = blockA.gridCoordinates;
         bridgeInfo.destination = blockB.gridCoordinates;
+        blockA.myBridge = parentBridgeGameObject;
 
         //Ajout de chaque partie du pont dans la grille grid[] et dans le component bridgeInfo
         bridgeInfo.allBridgePositions = new Vector3Int[bridgeLength];
@@ -448,6 +450,16 @@ public class GridManagement : MonoBehaviour {
         //Joue le son
         sfxManager.PlaySoundLinked("CreateBridge", parentBridgeGameObject);
 
+        //Update the system
+        if (systemRef == null)
+        {
+            systemRef = FindObjectOfType<SystemReferences>();
+        }
+        if (systemRef != null)
+        {
+            systemRef.UpdateSystem();
+        }
+
         return parentBridgeGameObject;
     }
 
@@ -477,5 +489,14 @@ public class GridManagement : MonoBehaviour {
         }
         sfxManager.PlaySoundLinked("DestroyBlock", bridgeObject);
         Destroy(bridgeObject);
+        //Update the system
+        if (systemRef == null)
+        {
+            systemRef = FindObjectOfType<SystemReferences>();
+        }
+        if (systemRef != null)
+        {
+            systemRef.UpdateSystem();
+        }
     }
 }
