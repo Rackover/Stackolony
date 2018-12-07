@@ -957,16 +957,19 @@ MonoBehaviour:
   myBlockObject: {fileID: 0}
   unpoweredEffect: {fileID: 1077097437806386}
   onFireEffect: {fileID: 1249191511621426}
+  myBridge: {fileID: 0}
   blocks:
   - {fileID: 11400000, guid: dc8a9fcdd3381f44e9b6b2c24ef372ef, type: 2}
   gridCoordinates: {x: 18, y: 1, z: 16}
   positionInTower: 0
   gridManager: {fileID: 0}
   flagReader: {fileID: 0}
+  systemRef: {fileID: 0}
   activeFlags: []
   states: 
   currentPower: 0
-  refreshCooldown: 0
+  isConsideredUnpowered: 0
+  refreshCooldown: 1
   timer: 0
 --- !u!114 &114100101188002198
 MonoBehaviour:

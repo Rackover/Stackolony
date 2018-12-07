@@ -170,6 +170,7 @@ public class BlockLink : MonoBehaviour {
 
                 case BlockState.OnFire:
 					onFireEffect.SetActive(true);
+                    gridManager.sfxManager.PlaySound("StartingFire");
 					break;
 
 				default:
@@ -193,6 +194,7 @@ public class BlockLink : MonoBehaviour {
 					break;
                 case BlockState.OnFire:
 					onFireEffect.SetActive(false);
+                    gridManager.sfxManager.PlaySound("StoppingFire");
 					break;
 
 				default:

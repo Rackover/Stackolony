@@ -5,29 +5,44 @@ using UnityEngine.UI;
 
 public class BlockInfobox : MonoBehaviour 
 {
+	[Header("Referencies")]
+	public RectTransform self;
+	public CanvasLineRenderer line;
 	public GameObject box;
 	public Text nameText;
 	public Text descriptionText;
 	public float stateTagShift = 20f;
 	
+	[Space(1)][Header("States")]
 	public RectTransform statesHolder;
-
 	public GameObject stateTagPrefab;
 
-	List<StateTag> stateTags = new List<StateTag>(); 
+	[Space(1)][Header("SpecialBoxes")]
+	public RectTransform firemanBox;
+	public RectTransform repairerBox;
 
+	BlockLink currentSelection;
+
+	List<StateTag> stateTags = new List<StateTag>();
 
 	public void LoadBlockValues(BlockLink block)
 	{
-		foreach(StateTag st in stateTags)
-		{
-			st.Hide();
-		}
+		currentSelection = block;
 
+		// Drawing line
+		line.DrawCanvasLine(Camera.main.WorldToScreenPoint(block.transform.position), self.position, 2f, Color.black);
+
+		// Changing general box values
 		box.SetActive(true);
 		nameText.text = block.myBlock.title;
 		descriptionText.text = block.myBlock.description;
 
+
+		// Printing states tag
+		foreach(StateTag st in stateTags)
+		{
+			st.Hide();
+		}
 		float shift = 0f;
 		for( int i = 0; i < block.states.Count; i++)
 		{
@@ -43,8 +58,17 @@ public class BlockInfobox : MonoBehaviour
 				stateTags[stateTags.Count - 1].PrintTag(block.states[i]);
 				stateTags[stateTags.Count - 1].self.localPosition = new Vector3(0f, shift, 0f);
 			}
+			shift -= stateTagShift;
+		}
 
-			shift += stateTagShift;
+		// Displaying additional special boxes
+	}
+
+	void Update()
+	{
+		if(box.activeSelf && currentSelection != null)
+		{
+			line.DrawCanvasLine(Camera.main.WorldToScreenPoint(currentSelection.transform.position), self.position, 2f, Color.black);
 		}
 	}
 
@@ -62,11 +86,17 @@ public class BlockInfobox : MonoBehaviour
 
 	public void Hide()
 	{
+		currentSelection = null;
 		box.SetActive(false);
 
 		foreach(StateTag st in stateTags)
 		{
 			st.Hide();
 		}
+	}
+
+	public void UseBlock()
+	{
+
 	}
 }
