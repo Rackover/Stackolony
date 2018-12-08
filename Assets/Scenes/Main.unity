@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 87323bcb35246374883b1cc089091bda, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -986,7 +986,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridManager: {fileID: 104313392}
   missionManager: {fileID: 1465901713}
-  systemReferences: {fileID: 0}
+  systemReferences: {fileID: 2074834419}
   prefabRemoving: {fileID: 1330950013455556, guid: c89020d6ae7142645985d5e9a5f46e90,
     type: 2}
   prefabEmitting: {fileID: 1109864763100982, guid: 86fe2ef75fc279a4f8f10dff9fb03577,
@@ -8302,24 +8302,25 @@ MonoBehaviour:
   timeBetweenUpdateForSkybox: 0.01
   timeBetweenUpdateForLights: 0.01
   timeBetweenUpdateForDayNightDisplay: 0.01
+  timeBetweenUpdateForSystem: 1
   skyboxVariation:
     serializedVersion: 2
-    key0: {r: 0.6674215, g: 0.8881465, b: 0.9347915, a: 1}
-    key1: {r: 1, g: 0.74479204, b: 0.504717, a: 1}
-    key2: {r: 0.060647074, g: 0, b: 0.8490566, a: 0}
-    key3: {r: 1, g: 0.5707547, b: 0.7082891, a: 0}
-    key4: {r: 0.69012886, g: 0.91936463, b: 0.9580327, a: 0}
-    key5: {r: 0.69012886, g: 0.91936463, b: 0.9580327, a: 0}
-    key6: {r: 0, g: 0, b: 0, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
+    key0: {r: 1, g: 0.5707547, b: 0.7082891, a: 1}
+    key1: {r: 0.9100357, g: 0.6719659, b: 0.78079665, a: 1}
+    key2: {r: 0.69012886, g: 0.91936463, b: 0.9580327, a: 0}
+    key3: {r: 0.64791596, g: 0.8597175, b: 0.9193, a: 0}
+    key4: {r: 0.990566, g: 0.3687116, b: 0, a: 0}
+    key5: {r: 0.07784305, g: 0.054200795, b: 0.3962264, a: 0}
+    key6: {r: 0.14769772, g: 0.1127304, b: 0.43303967, a: 0}
+    key7: {r: 0.86952937, g: 0.7175362, b: 0.8134432, a: 0}
     ctime0: 0
-    ctime1: 16384
-    ctime2: 32768
-    ctime3: 49151
-    ctime4: 65535
-    ctime5: 65535
-    ctime6: 0
-    ctime7: 0
+    ctime1: 3084
+    ctime2: 10409
+    ctime3: 23323
+    ctime4: 32768
+    ctime5: 39321
+    ctime6: 59174
+    ctime7: 65535
     atime0: 15420
     atime1: 65535
     atime2: 0
@@ -8329,15 +8330,17 @@ MonoBehaviour:
     atime6: 0
     atime7: 0
     m_Mode: 0
-    m_NumColorKeys: 5
+    m_NumColorKeys: 8
     m_NumAlphaKeys: 2
   directionalLight: {fileID: 425809087}
-  skyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  skyboxMaterial: {fileID: 2100000, guid: 87323bcb35246374883b1cc089091bda, type: 2}
   sfxManager: {fileID: 830368801}
   deliveryManager: {fileID: 975027233}
   temporalityInterface: {fileID: 761877143}
+  systemRef: {fileID: 2074834419}
   cycleProgression: 0
   timeScale: 0
+  cycleProgressionInPercent: 0
 --- !u!1 &2022449638
 GameObject:
   m_ObjectHideFlags: 0
@@ -8502,6 +8505,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AllGenerators: []
   AllBlocksRequiringPower: []
+  AllBlockLinks: []
+  AllTimeRelatedBlocks: []
+  temporalityManager: {fileID: 1998667026}
 --- !u!4 &2074834420
 Transform:
   m_ObjectHideFlags: 0
