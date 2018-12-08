@@ -1,0 +1,169 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class BlockInfobox : MonoBehaviour 
+{
+	[Header("Referencies")]
+	public RectTransform self;
+	public RectTransform generalBox;
+	public Text nameText;
+	public Text descriptionText;
+	public CanvasLineRenderer line;
+	public GameObject stateTagPrefab;
+
+	[Space(2)][Header("Settings")]
+	public float stateTagShift = 5f;
+	public float flagPanelShift = 5f;
+
+	[Space(2)][Header("Special Panels Prefab")]
+	public GameObject generatorPanel;
+	public GameObject firemanStationPanel;
+
+	BlockLink currentSelection;
+	List<StateTag> stateTags = new List<StateTag>();
+	List<FlagPanel> flagPanels = new List<FlagPanel>();
+
+	public void LoadBlockValues(BlockLink block)
+	{
+		currentSelection = block;
+
+		// Changing general box values
+		generalBox.gameObject.SetActive(true);
+		nameText.text = block.myBlock.title;
+		descriptionText.text = block.myBlock.description;
+
+		// Changing box size
+		generalBox.sizeDelta = new Vector2(generalBox.sizeDelta.x, GetRequiredHeight(descriptionText, generalBox.sizeDelta.x));
+
+		// Hiding stateTags // Showing new stateTags
+		//foreach(StateTag st in stateTags){st.Hide();}
+		ShowStatesTags(block.states.ToArray());
+
+		//foreach(FlagPanel fp in flagPanels){Destroy(fp.gameObject);}
+		// Delete flagPanels // Showing additional panels
+		ShowFlagBoxes(block.activeFlags.ToArray());
+	}
+
+	void ShowStatesTags(BlockState[] states)
+	{
+		float stateShift = 0f;
+		for( int i = 0; i < states.Length; i++)
+		{
+			StateTag newTag = GetAvailableTag();
+			Vector2 newTagPosition = new Vector2(generalBox.sizeDelta.x/2, stateShift);
+
+			if(newTag != null)
+			{
+				newTag.PrintTag(states[i]);
+				newTag.self.localPosition = newTagPosition;
+			}
+			else 
+			{
+				newTag = Instantiate(stateTagPrefab, self.position, Quaternion.identity, generalBox).GetComponent<StateTag>();
+				stateTags.Add(newTag);
+
+				stateTags[stateTags.Count - 1].PrintTag(states[i]);
+				stateTags[stateTags.Count - 1].self.localPosition = newTagPosition;
+			}
+			stateShift -= newTag.self.sizeDelta.x + stateTagShift;
+		}
+	}
+
+	void ShowFlagBoxes(Flag[] flags)
+	{
+		float panelShift = -generalBox.sizeDelta.y/2;
+		for( int i = 0; i < flags.Length; i++)
+		{
+			Vector2 newPos = Vector2.zero;
+			switch(flags[i].GetType().Name)
+			{	
+				case "Generator":
+					GeneratorPanel gp = Instantiate(generatorPanel, self.position, Quaternion.identity, generalBox).GetComponent<GeneratorPanel>();
+
+					// Moving Panel
+					newPos = new Vector2(0, panelShift - gp.self.sizeDelta.y/2);
+					gp.self.localPosition = newPos;
+					panelShift -= gp.self.sizeDelta.y;
+
+					// Modifying values
+					gp.text.text = (flags[i] as Generator).power.ToString();
+
+					flagPanels.Add(gp);
+					break;
+
+				case "FiremanStation":	
+					FiremanStationPanel fsp = Instantiate(firemanStationPanel, self.position, Quaternion.identity, generalBox).GetComponent<FiremanStationPanel>();
+					
+					// Moving Panel
+					newPos = new Vector2(0, panelShift - fsp.self.sizeDelta.y/2);
+					fsp.self.localPosition = newPos;
+					panelShift -= fsp.self.sizeDelta.y;
+
+					// Modifying values
+
+					flagPanels.Add(fsp);
+					break;
+
+				default:
+					Debug.LogWarning("This flag dosn't need any additional boxes");
+					break;
+			}
+
+		}
+	}
+
+	float GetRequiredHeight(Text text, float width)
+	{
+		return Mathf.Ceil((text.text.Length * text.fontSize)/width) * text.fontSize;
+	}
+
+	void Update()
+	{
+		if(generalBox.gameObject.activeSelf && currentSelection != null)
+		{
+			Vector2 o = Camera.main.WorldToScreenPoint(currentSelection.transform.position);
+			Vector2 t = self.position;
+			if(o.x >= t.x)
+			{
+				Debug.Log("RIGHT");
+				t = new Vector2(self.position.x + generalBox.sizeDelta.x/2 - 5f, self.position.y);
+			}
+			else
+			{
+				Debug.Log("LEFT");
+				t = new Vector2(self.position.x - generalBox.sizeDelta.x/2 + 5f, self.position.y);
+			}
+			line.DrawCanvasLine(o, t, 2f, Color.grey);
+		}
+	}
+
+	StateTag GetAvailableTag()
+	{
+		for( int i = 0; i < stateTags.Count; i++)
+		{
+			if(stateTags[i].available)
+			{
+				return stateTags[i];
+			}
+		}
+		return null;
+	}
+
+	public void Hide()
+	{
+		currentSelection = null;
+		generalBox.gameObject.SetActive(false);
+
+		foreach(StateTag st in stateTags){st.Hide();}
+		foreach(FlagPanel fp in flagPanels){Destroy(fp.gameObject);}
+		flagPanels.Clear();
+
+	}
+
+	public void UseBlock()
+	{
+
+	}
+}

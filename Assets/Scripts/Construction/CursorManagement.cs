@@ -252,7 +252,8 @@ public class CursorManagement : MonoBehaviour
                     BlockLink sBlock = hit.transform.gameObject.GetComponent<BlockLink>();
                     // Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
                     drag.StartDrag(sBlock);
-                    selector.ShowBlock(sBlock);
+                    if(!cursorOnUI)
+                        selector.ShowBlock(sBlock);
                     break;
                 
 
