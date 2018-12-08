@@ -32,13 +32,13 @@ public class CityManagement : MonoBehaviour {
                     Destroy(energyFeedback, 2);
                     block.ChangePower(1);
                     myMission.power--;
-                    yield return new WaitForSeconds(0.01f);
+                  //  yield return new WaitForSeconds(0.01f);
                     Debug.Log("EMITTING ENERGY");
                 }
             }
             count++;
         }
-        yield return new WaitForSeconds(0.7f);
+       //yield return new WaitForSeconds(0.7f);
         activeCoroutineRelatedToPower--;
         if (activeCoroutineRelatedToPower == 0) {
             if (systemReferences != null) {

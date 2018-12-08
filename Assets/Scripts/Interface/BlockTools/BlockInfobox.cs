@@ -27,7 +27,18 @@ public class BlockInfobox : MonoBehaviour
 
 	public void LoadBlockValues(BlockLink block)
 	{
+		Hide();
 		currentSelection = block;
+
+		Vector2 blockCanvasPosition = Camera.main.WorldToScreenPoint(block.transform.position);
+		Vector2 newPos = Vector2.zero;
+
+		if(blockCanvasPosition.x >= Screen.width/2)
+			newPos = new Vector2(blockCanvasPosition.x - 200f, blockCanvasPosition.y);
+		else
+			newPos = new Vector2(blockCanvasPosition.x + 200f, blockCanvasPosition.y);
+		
+		self.position = newPos;
 
 		// Changing general box values
 		generalBox.gameObject.SetActive(true);
@@ -36,13 +47,8 @@ public class BlockInfobox : MonoBehaviour
 
 		// Changing box size
 		generalBox.sizeDelta = new Vector2(generalBox.sizeDelta.x, GetRequiredHeight(descriptionText, generalBox.sizeDelta.x));
-
-		// Hiding stateTags // Showing new stateTags
-		//foreach(StateTag st in stateTags){st.Hide();}
+		
 		ShowStatesTags(block.states.ToArray());
-
-		//foreach(FlagPanel fp in flagPanels){Destroy(fp.gameObject);}
-		// Delete flagPanels // Showing additional panels
 		ShowFlagBoxes(block.activeFlags.ToArray());
 	}
 
@@ -126,15 +132,9 @@ public class BlockInfobox : MonoBehaviour
 			Vector2 o = Camera.main.WorldToScreenPoint(currentSelection.transform.position);
 			Vector2 t = self.position;
 			if(o.x >= t.x)
-			{
-				Debug.Log("RIGHT");
 				t = new Vector2(self.position.x + generalBox.sizeDelta.x/2 - 5f, self.position.y);
-			}
 			else
-			{
-				Debug.Log("LEFT");
 				t = new Vector2(self.position.x - generalBox.sizeDelta.x/2 + 5f, self.position.y);
-			}
 			line.DrawCanvasLine(o, t, 2f, Color.grey);
 		}
 	}
