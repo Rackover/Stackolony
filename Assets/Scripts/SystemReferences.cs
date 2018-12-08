@@ -15,6 +15,7 @@ public class SystemReferences : MonoBehaviour {
     //Met a jour le system de jeu
     public void UpdateSystem()
     {
+        Debug.Log("UPDATING SYSTEM");
         StartCoroutine(RecalculatePropagation());
         StartCoroutine(ResetBlocksPower());
     }
@@ -27,6 +28,7 @@ public class SystemReferences : MonoBehaviour {
             if (block.isConsideredUnpowered == true)
             {
                 block.currentPower = 0;
+                block.ChangePower(0);
             }
         }
     }

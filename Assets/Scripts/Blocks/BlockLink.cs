@@ -76,6 +76,14 @@ public class BlockLink : MonoBehaviour {
         }
     }
 
+    public void ChangePower(int number) {
+        currentPower += number;
+        UpdatePower();
+        if (number > 0) {
+            isConsideredUnpowered = false;
+        }
+    }
+
     public void LoadBlock()
     {
         if (myBlock == null)
@@ -111,17 +119,6 @@ public class BlockLink : MonoBehaviour {
         {
             myBlockObject.SetActive(false);
             unpoweredEffect.SetActive(false);
-        }
-    }
-
-    public void Update()
-    {
-        timer += Time.deltaTime;
- 
-        if (timer >= refreshCooldown) 
-        {
-            timer = 0.0f;
-            UpdatePower();
         }
     }
     

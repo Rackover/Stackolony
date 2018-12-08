@@ -77,7 +77,7 @@ public class CameraController : MonoBehaviour {
                 Rotation();
             }
 
-            Drift();
+            //Drift();
             Zoom();
         }
 

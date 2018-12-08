@@ -7,7 +7,8 @@ public class MissionManager : MonoBehaviour {
     public class Mission
     {
         public List<Coroutine> activeExplorers; //Liste de toutes les listes d'explorers actifs, il y a une liste d'explorers pour chaque mission.
-        public bool[,,] exploredPositions;      //Tableau tridimensionel booléen pour répértorier les positions déjà visitées par un explorer, pour chaque mission
+        //public bool[,,] exploredPositions;      //Tableau tridimensionel booléen pour répértorier les positions déjà visitées par un explorer, pour chaque mission
+        public List<Vector3Int> exploredPositions;
         public List<BlockLink> blocksFound;      //Tableau de chaque block trouvé par les explorers, il y en a un pour chaque mission.
         public List<int> blockDistanceToCenter; //Tableau paralléle au tableau blocksFound, indiquant la distance de chaque bloc par rapport au point de départ de la mission
         public int power;
@@ -47,6 +48,7 @@ public class MissionManager : MonoBehaviour {
         newMission.activeExplorers = new List<Coroutine>();
         newMission.blocksFound = new List<BlockLink>();
         newMission.blockDistanceToCenter = new List<int>();
+        newMission.exploredPositions = new List<Vector3Int>();
         missionList.Add(newMission);
     }
 
@@ -71,7 +73,7 @@ public class MissionManager : MonoBehaviour {
 
 
         //Genere le tableau tridimensionel booléen indiquant les coordonnées déjà explorées
-        activeMission.exploredPositions = (new bool[gridManager.gridSize.x, gridManager.gridSize.y, gridManager.gridSize.z]);
+       /* activeMission.exploredPositions = (new bool[gridManager.gridSize.x, gridManager.gridSize.y, gridManager.gridSize.z]);
         for (int x = 0; x < gridManager.gridSize.x; x++)
         {
             for (int y = 0; y < gridManager.gridSize.y; y++)
@@ -82,7 +84,7 @@ public class MissionManager : MonoBehaviour {
                 }
             }
         }
-
+ */
         //Genere le premier explorer de la mission
         activeMission.activeExplorers.Add(StartCoroutine(SpawnExplorer(position, callBack, activeMission, range, power, 0)));
     }
@@ -92,11 +94,6 @@ public class MissionManager : MonoBehaviour {
     public void EndMission(Mission myMission)
     {
         missionList.Remove(myMission);
-        if (missionList.Count <= 0)
-        {
-            //Si on a terminé toutes les missions, on met à jour les blocs qui doivent être désalimentés
-            systemRef.UpdateBlocksRequiringPower();
-        }
     }
 
     //Genere un explorer qui va vérifier les 6 directions possible, et envoyer un autre explorer pour explorer chaque chemin trouvé.
@@ -118,7 +115,8 @@ public class MissionManager : MonoBehaviour {
             {
                 myMission.blocksFound.Add(gridManager.grid[position.x, position.y, position.z].GetComponent<BlockLink>());
                 myMission.blockDistanceToCenter.Add(range);
-                myMission.exploredPositions[position.x, position.y, position.z] = true;
+                myMission.exploredPositions.Add(position);
+                //myMission.exploredPositions[position.x, position.y, position.z] = true;
             }
             else
             {
@@ -244,7 +242,7 @@ public class MissionManager : MonoBehaviour {
         BlockLink output = null;
 
         //Verifie que la position n'a jamais été explorée auparavant
-        if (myMission.exploredPositions[position.x, position.y, position.z] != true)
+        if (!myMission.exploredPositions.Contains(position))
         {
             GameObject blockFound = gridManager.grid[position.x, position.y, position.z];
             if (blockFound != null)
@@ -262,7 +260,7 @@ public class MissionManager : MonoBehaviour {
                         bridgeDestinationPosition = blockFound.GetComponent<BridgeInfo>().destination;
                     }
                     output = gridManager.grid[bridgeDestinationPosition.x, bridgeDestinationPosition.y, bridgeDestinationPosition.z].GetComponent<BlockLink>();
-                    myMission.exploredPositions[bridgeDestinationPosition.x, bridgeDestinationPosition.y, bridgeDestinationPosition.z] = true;
+                    myMission.exploredPositions.Add(bridgeDestinationPosition);
                 }
                 //Sinon, récupère simplement le bloc trouvé
                 else
@@ -299,20 +297,9 @@ public class MissionManager : MonoBehaviour {
                 }
             }
             //Ajout de la position explorée à la liste des positions explorées
-            myMission.exploredPositions[position.x, position.y, position.z] = true;
+            myMission.exploredPositions.Add(position);
         }
 
         return output;
-    }
-
-    int GenerateMissionID()
-    {
-        int newID = 0;
-        while (IDList.Contains(newID) == true)
-        {
-            newID = Random.Range(0, 2048);
-        }
-        IDList.Add(newID);
-        return newID;
     }
 }

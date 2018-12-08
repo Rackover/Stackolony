@@ -22,13 +22,11 @@ public class Generator : Flag {
     public override void Disable()
     {
         base.Disable();
-        missionManager.StartMission(myBlockLink.gridCoordinates, "RemoveEnergy", -1, power);
     }
 
     public override void BeforeMovingBlock()
     {
         base.BeforeMovingBlock();
-        Disable();
     }
 
     public override void AfterMovingBlock()
@@ -39,14 +37,12 @@ public class Generator : Flag {
 
     public override void OnBlockUpdate()
     {
-        Invoke("BeforeMovingBlock", 0);
         Invoke("AfterMovingBlock", 0.1f);
     }
 
     public override void OnDestroy()
     {
-        base.OnDestroy();
         systemRef.AllGenerators.Remove(this);
-        Disable();
+        base.OnDestroy();
     }
 }

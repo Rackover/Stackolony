@@ -74,10 +74,7 @@ public class TempDrag : MonoBehaviour  {
                 }
                 if (systemRef != null)
                 {
-                    if (sBlock.GetComponent<Generator>() == null)
-                    {
-                        systemRef.UpdateSystem();
-                    }
+                    systemRef.UpdateSystem();
                 }
                 //RESET SOME VALUES OF THE BLOCK THAT ARE RECALCULATED BY THE SYSTEM
                 sBlock.currentPower = 0;

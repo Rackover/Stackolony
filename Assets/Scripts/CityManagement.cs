@@ -5,16 +5,20 @@ using UnityEngine;
 public class CityManagement : MonoBehaviour {
     public GridManagement gridManager;
     public MissionManager missionManager;
+    public SystemReferences systemReferences;
 
     public GameObject prefabRemoving;
     public GameObject prefabEmitting;
 
     public MissionManager.Mission mission;
 
+    public int activeCoroutineRelatedToPower;
 
     IEnumerator EmitEnergy()
     {
-
+        activeCoroutineRelatedToPower++;
+        yield return new WaitForSeconds(0.05f);
+        Debug.Log("EMITTING POWER");
         MissionManager.Mission myMission = mission;
         foreach (BlockLink block in myMission.blocksFound)
         {
@@ -25,32 +29,18 @@ public class CityManagement : MonoBehaviour {
                     GameObject energyFeedback = Instantiate(prefabEmitting);
                     energyFeedback.transform.position = block.transform.position;
                     Destroy(energyFeedback, 2);
-                    block.currentPower++;
-                    block.isConsideredUnpowered = false;
+                    block.ChangePower(1);
                     myMission.power--;
-                    yield return new WaitForSeconds(0.05f);
+                    yield return new WaitForSeconds(0.01f);
                 }
             }
         }
-        yield return null;
-    }
-
-    IEnumerator RemoveEnergy()
-    {
-        MissionManager.Mission myMission = mission;
-        foreach (BlockLink block in myMission.blocksFound)
-        {
-            for (int i = block.currentPower; i > 0; i--)
-            {
-                if (myMission.power > 0)
-                {
-                    GameObject energyFeedback = Instantiate(prefabRemoving);
-                    energyFeedback.transform.position = block.transform.position;
-                    Destroy(energyFeedback, 2);
-                    block.currentPower--;
-                    myMission.power--;
-                    yield return new WaitForSeconds(0.05f);
-                }
+        activeCoroutineRelatedToPower--;
+        if (activeCoroutineRelatedToPower == 0) {
+            if (systemReferences != null) {
+                systemReferences.UpdateBlocksRequiringPower();
+            } else {
+                Debug.LogWarning("No reference to system found");
             }
         }
         yield return null;
