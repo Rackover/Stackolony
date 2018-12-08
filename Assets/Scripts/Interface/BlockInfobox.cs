@@ -7,23 +7,24 @@ public class BlockInfobox : MonoBehaviour
 {
 	[Header("Referencies")]
 	public RectTransform self;
-	public CanvasLineRenderer line;
-	public GameObject box;
+	public RectTransform generalBox;
 	public Text nameText;
 	public Text descriptionText;
 	public float stateTagShift = 20f;
+	public CanvasLineRenderer line;
+
 	
 	[Space(1)][Header("States")]
 	public RectTransform statesHolder;
 	public GameObject stateTagPrefab;
 
-	[Space(1)][Header("SpecialBoxes")]
-	public RectTransform firemanBox;
-	public RectTransform repairerBox;
+	[Space(1)][Header("Additional Panel")]
+	public AdditionalPanel additionalPanel;
 
 	BlockLink currentSelection;
 
 	List<StateTag> stateTags = new List<StateTag>();
+	List<AdditionalPanel> additionalPanels = new List<AdditionalPanel>();
 
 	public void LoadBlockValues(BlockLink block)
 	{
@@ -33,40 +34,72 @@ public class BlockInfobox : MonoBehaviour
 		line.DrawCanvasLine(Camera.main.WorldToScreenPoint(block.transform.position), self.position, 2f, Color.black);
 
 		// Changing general box values
-		box.SetActive(true);
+		generalBox.gameObject.SetActive(true);
 		nameText.text = block.myBlock.title;
 		descriptionText.text = block.myBlock.description;
 
+		// Changing box size
+		generalBox.sizeDelta = new Vector2(generalBox.sizeDelta.x, GetRequiredHeight(descriptionText, generalBox.sizeDelta.x));
 
-		// Printing states tag
-		foreach(StateTag st in stateTags)
-		{
-			st.Hide();
-		}
-		float shift = 0f;
-		for( int i = 0; i < block.states.Count; i++)
+		// Hiding stateTags
+		foreach(StateTag st in stateTags){st.Hide();}
+		// Showing new stateTags
+		ShowStatesTags(block.states.ToArray());
+		// Showing additional panels
+		ShowFlagBoxes(block.activeFlags.ToArray());
+	}
+
+	void ShowStatesTags(BlockState[] states)
+	{
+		float stateShift = 0f;
+		for( int i = 0; i < states.Length; i++)
 		{
 			StateTag newTag = GetAvailableTag();
 			if(newTag != null)
 			{
-				newTag.PrintTag(block.states[i]);
-				newTag.self.localPosition = new Vector3(0f, shift, 0f);
+				newTag.PrintTag(states[i]);
+				newTag.self.localPosition = new Vector3(0f, stateShift, 0f);
 			}
 			else 
 			{
 				stateTags.Add(Instantiate(stateTagPrefab, statesHolder.position, Quaternion.identity, statesHolder).GetComponent<StateTag>());
-				stateTags[stateTags.Count - 1].PrintTag(block.states[i]);
-				stateTags[stateTags.Count - 1].self.localPosition = new Vector3(0f, shift, 0f);
+				stateTags[stateTags.Count - 1].PrintTag(states[i]);
+				stateTags[stateTags.Count - 1].self.localPosition = new Vector3(0f, stateShift, 0f);
 			}
-			shift -= stateTagShift;
+			stateShift -= stateTagShift;
 		}
+	}
 
-		// Displaying additional special boxes
+	void ShowFlagBoxes(Flag[] flags)
+	{
+		float boxShift = 0f;
+		for( int i = 0; i < flags.Length; i++)
+		{
+			Debug.Log(flags[i].GetType().Name);
+			switch(flags[i].GetType().Name)
+			{	
+				case "FiremanStation":
+
+				break;
+
+
+
+				default:
+				Debug.LogWarning("This flag dosn't need any additional boxes");
+				break;
+			}
+			boxShift -= stateTagShift;
+		}
+	}
+
+	float GetRequiredHeight(Text text, float width)
+	{
+		return Mathf.Ceil((text.text.Length * text.fontSize)/width) * text.fontSize;
 	}
 
 	void Update()
 	{
-		if(box.activeSelf && currentSelection != null)
+		if(generalBox.gameObject.activeSelf && currentSelection != null)
 		{
 			line.DrawCanvasLine(Camera.main.WorldToScreenPoint(currentSelection.transform.position), self.position, 2f, Color.black);
 		}
@@ -87,7 +120,7 @@ public class BlockInfobox : MonoBehaviour
 	public void Hide()
 	{
 		currentSelection = null;
-		box.SetActive(false);
+		generalBox.gameObject.SetActive(false);
 
 		foreach(StateTag st in stateTags)
 		{
