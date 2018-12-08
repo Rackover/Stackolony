@@ -10,6 +10,8 @@ public class Flag : MonoBehaviour {
     public BlockLink myBlockLink;
     public SystemReferences systemRef;
 
+    public bool isEnabled = true;
+
 
     //Fonction appelée lors de la création du script
     virtual public void Awake()
@@ -24,13 +26,13 @@ public class Flag : MonoBehaviour {
     //Alimente les blocs
     virtual public void Enable()
     {
-
+        isEnabled = true;
     }
 
     //Desalimente les blocs
     virtual public void Disable()
     {
-
+        isEnabled = false;
     }
 
     //Fonction appelée juste avant de déplacer le bloc

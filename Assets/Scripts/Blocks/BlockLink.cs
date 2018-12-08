@@ -60,6 +60,10 @@ public class BlockLink : MonoBehaviour {
         }
     }
 
+    public void NewCycle() {
+
+    }
+
     //Apelle une fonction à chaque script "flag" attachés
     public void CallFlags(string function)
     {
@@ -92,6 +96,7 @@ public class BlockLink : MonoBehaviour {
         }
         else
         {
+            systemRef.AllBlockLinks.Add(this);
             if (myBlock.consumption > 0)
             {
                 systemRef.AllBlocksRequiringPower.Add(this);

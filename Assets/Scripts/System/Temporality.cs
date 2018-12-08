@@ -10,6 +10,7 @@ public class Temporality : MonoBehaviour {
     public float timeBetweenUpdateForSkybox; //Combien de secondes entre chaque mise à jour visuelle de la skybox
     public float timeBetweenUpdateForLights; //Combien de secondes entre chaque mise à jour visuelle des lumières
     public float timeBetweenUpdateForDayNightDisplay; //Combien de secondes entre chaque mise à jour visuelle de l'afficheur "jour / nuit"
+    public float timeBetweenUpdateForSystem; //Combien de secondes entre chaque mise à jour du systeme (Utilisé par les flags "WorkingHour"
 
     public Gradient skyboxVariation; //Variations de couleur de la skybox au fil du temps
 
@@ -19,6 +20,7 @@ public class Temporality : MonoBehaviour {
     public SFXManager sfxManager;
     public DeliveryManagement deliveryManager;
     public TemporalityInterface temporalityInterface;
+    public SystemReferences systemRef;
 
 
     [Header("=== DEBUG VALUES ===")][Space(1)]
@@ -31,11 +33,13 @@ public class Temporality : MonoBehaviour {
     private float timeBetweenUpdateForSkyboxCount = 0;
     private float timeBetweenUpdateForLightsCount = 0;
     private float timeBetweenUpdateForDayNightDisplayCount = 0;
+    private float timeBetweenUpdateForSystemCount = 0;
 
     private float recurence = 0; //Correspond au temps entre chaques fois ou on verifiera pour faire une mise à jour visuelle
 
     private int savedTimeScale; //Variable utilisée pour redéfinir la vitesse du jeu quand le joueur annule la pause
     private Image savedButton; //Bouton à réactiver quand le joueur annule la pause
+    public float cycleProgressionInPercent;
 
     private float counter;
 
@@ -44,7 +48,7 @@ public class Temporality : MonoBehaviour {
         counter = 0;
 
         timeScale = initialTimeScale;
-        recurence = Mathf.Min(timeBetweenUpdateForDayNightDisplay, timeBetweenUpdateForLights, timeBetweenUpdateForSkybox);
+        recurence = Mathf.Min(timeBetweenUpdateForDayNightDisplay, timeBetweenUpdateForLights, timeBetweenUpdateForSkybox, timeBetweenUpdateForSystem);
         //timeCoroutine = StartCoroutine(updateCycleProgression(recurence));
 
         cycleNumber = 0;
@@ -53,7 +57,8 @@ public class Temporality : MonoBehaviour {
         temporalityInterface.UpdateCycleText(cycleNumber, yearNumber);
 
         // ChangeTimeScale(1);
-        // temporalityInterface.EnableButton(temporalityInterface.defaultButton);
+         
+        temporalityInterface.EnableButton(temporalityInterface.defaultButton);
         PauseGame();
     }
 
@@ -110,9 +115,10 @@ public class Temporality : MonoBehaviour {
         timeBetweenUpdateForSkyboxCount+= recurence;
         timeBetweenUpdateForLightsCount+= recurence;
         timeBetweenUpdateForDayNightDisplayCount+= recurence;
+        timeBetweenUpdateForSystemCount+= recurence;
 
         //Mises à jour des visuels
-        float cycleProgressionInPercent = (cycleProgression / (float)cycleDuration) * 100f;
+        cycleProgressionInPercent = (cycleProgression / (float)cycleDuration) * 100f;
         if (timeBetweenUpdateForDayNightDisplayCount >= timeBetweenUpdateForDayNightDisplay)
         {
             temporalityInterface.UpdateDayNightDisplay(cycleProgressionInPercent);
@@ -129,6 +135,10 @@ public class Temporality : MonoBehaviour {
         {
             UpdateSkybox(cycleProgressionInPercent);
             timeBetweenUpdateForSkyboxCount = 1;
+        }
+
+        if (timeBetweenUpdateForSystemCount > timeBetweenUpdateForSystem) {
+             UpdateSystem();
         }
     }
 
@@ -151,6 +161,7 @@ public class Temporality : MonoBehaviour {
         if (cycleNumber%yearDuration == 0) 
             AddYear();
         deliveryManager.DeliverBlocks();
+        systemRef.UpdateCycle();
     }
 
     public void AddYear() //Ajoute un an au compteur
@@ -162,7 +173,7 @@ public class Temporality : MonoBehaviour {
     //Met à jour les lumières en fonction de l'avancement du cycle
     public void UpdateLights(float cycleProgressionInPercent)
     {
-        directionalLight.transform.rotation = Quaternion.Euler(new Vector3(90f+((3.6f * (float)cycleProgressionInPercent)),30,0));
+        directionalLight.transform.rotation = Quaternion.Euler(new Vector3((3.6f * (float)cycleProgressionInPercent),30,0));
     }
 
     //Met à jour la skybox en fonction de l'avancement du cycle
@@ -171,5 +182,9 @@ public class Temporality : MonoBehaviour {
         skyboxMaterial.SetColor("_Tint", skyboxVariation.Evaluate(cycleProgressionInPercent/100f));
         RenderSettings.skybox = skyboxMaterial;
         DynamicGI.UpdateEnvironment();
+    }
+
+    public void UpdateSystem() {
+        systemRef.CheckWorkingHours();
     }
 }

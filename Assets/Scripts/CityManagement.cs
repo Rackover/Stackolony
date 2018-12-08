@@ -17,9 +17,10 @@ public class CityManagement : MonoBehaviour {
     IEnumerator EmitEnergy()
     {
         activeCoroutineRelatedToPower++;
-        yield return new WaitForSeconds(0.05f);
-        Debug.Log("EMITTING POWER");
+        Debug.Log("STARTING ENERGY EMISSION");
+        Debug.Log(activeCoroutineRelatedToPower);
         MissionManager.Mission myMission = mission;
+        int count = 0;
         foreach (BlockLink block in myMission.blocksFound)
         {
             for (int i = block.myBlock.consumption - block.currentPower; i > 0; i--)
@@ -32,13 +33,17 @@ public class CityManagement : MonoBehaviour {
                     block.ChangePower(1);
                     myMission.power--;
                     yield return new WaitForSeconds(0.01f);
+                    Debug.Log("EMITTING ENERGY");
                 }
             }
+            count++;
         }
+        yield return new WaitForSeconds(0.3f);
         activeCoroutineRelatedToPower--;
         if (activeCoroutineRelatedToPower == 0) {
             if (systemReferences != null) {
                 systemReferences.UpdateBlocksRequiringPower();
+                Debug.Log("Calculs finished");
             } else {
                 Debug.LogWarning("No reference to system found");
             }

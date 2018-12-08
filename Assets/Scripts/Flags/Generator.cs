@@ -11,17 +11,18 @@ public class Generator : Flag {
         base.Awake();
         //Generate ou récupère l'objet "SystemReferences";
         systemRef.AllGenerators.Add(this);
-        Enable();
+        missionManager.StartMission(myBlockLink.gridCoordinates, "EmitEnergy", -1, power);
     }
     public override void Enable()
     {
         base.Enable();
-        missionManager.StartMission(myBlockLink.gridCoordinates, "EmitEnergy", -1, power);
+        systemRef.UpdateSystem();
     }
 
     public override void Disable()
     {
         base.Disable();
+        systemRef.UpdateSystem();
     }
 
     public override void BeforeMovingBlock()
@@ -32,11 +33,13 @@ public class Generator : Flag {
     public override void AfterMovingBlock()
     {
         base.AfterMovingBlock();
-        Enable();
+        if (isEnabled)
+        missionManager.StartMission(myBlockLink.gridCoordinates, "EmitEnergy", -1, power);
     }
 
     public override void OnBlockUpdate()
     {
+        if (isEnabled)
         Invoke("AfterMovingBlock", 0.1f);
     }
 

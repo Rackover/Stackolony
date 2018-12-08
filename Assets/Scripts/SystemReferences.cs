@@ -5,6 +5,10 @@ using UnityEngine;
 public class SystemReferences : MonoBehaviour {
     public List<Generator> AllGenerators;
     public List<BlockLink> AllBlocksRequiringPower;
+    public List<BlockLink> AllBlockLinks;
+    public List<WorkingHours> AllTimeRelatedBlocks;
+
+    public Temporality temporalityManager;
 
     private void Awake()
     {
@@ -18,6 +22,22 @@ public class SystemReferences : MonoBehaviour {
         Debug.Log("UPDATING SYSTEM");
         StartCoroutine(RecalculatePropagation());
         StartCoroutine(ResetBlocksPower());
+    }
+
+    public void UpdateCycle() {
+        foreach (BlockLink block in AllBlockLinks) {
+            block.NewCycle();
+        }
+    }
+
+    public void CheckWorkingHours() {
+        foreach (WorkingHours workingHour in AllTimeRelatedBlocks) {
+            if (temporalityManager.cycleProgressionInPercent > workingHour.startHour && workingHour.hasStarted == false) {
+                workingHour.StartWork();
+            } else if (temporalityManager.cycleProgressionInPercent > workingHour.endHour && workingHour.hasStarted == true) {
+                workingHour.EndWork();
+            }
+        }
     }
 
     //Si un block qui requiert du courant n'a pas croisé d'explorer, alors on l'eteint. Sinon on l'allume
