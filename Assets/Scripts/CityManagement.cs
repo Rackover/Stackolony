@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CityManagement : MonoBehaviour {
+
+    public string cityName = "Cityville";
+
     public GridManagement gridManager;
     public MissionManager missionManager;
     public SystemReferences systemReferences;
@@ -29,6 +32,7 @@ public class CityManagement : MonoBehaviour {
                     Destroy(energyFeedback, 2);
                     blocklink.ChangePower(1);
                     myMission.power--;
+
                     yield return new WaitForSeconds(0.01f);
                 }
             }
