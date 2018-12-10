@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CityManagement : MonoBehaviour {
+
+    public string cityName = "Cityville";
+
     public GridManagement gridManager;
     public MissionManager missionManager;
     public SystemReferences systemReferences;
@@ -17,8 +20,6 @@ public class CityManagement : MonoBehaviour {
     IEnumerator EmitEnergy()
     {
         activeCoroutineRelatedToPower++;
-        Debug.Log("STARTING ENERGY EMISSION");
-        Debug.Log(activeCoroutineRelatedToPower);
         MissionManager.Mission myMission = mission;
         int count = 0;
         foreach (BlockLink block in myMission.blocksFound)
@@ -33,7 +34,6 @@ public class CityManagement : MonoBehaviour {
                     block.ChangePower(1);
                     myMission.power--;
                   //  yield return new WaitForSeconds(0.01f);
-                    Debug.Log("EMITTING ENERGY");
                 }
             }
             count++;
@@ -43,7 +43,6 @@ public class CityManagement : MonoBehaviour {
         if (activeCoroutineRelatedToPower == 0) {
             if (systemReferences != null) {
                 systemReferences.UpdateBlocksRequiringPower();
-                Debug.Log("Calculs finished");
             } else {
                 Debug.LogWarning("No reference to system found");
             }
