@@ -83,7 +83,7 @@ public class BlockLink : MonoBehaviour {
     public void ChangePower(int number) {
         currentPower += number;
         UpdatePower();
-        if (number > 0) {
+        if (currentPower > 0) {
             isConsideredUnpowered = false;
         }
     }

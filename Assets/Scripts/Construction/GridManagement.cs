@@ -176,7 +176,7 @@ public class GridManagement : MonoBehaviour {
         if (_blocklink != null)
         {
             _blocklink.gridCoordinates = new Vector3Int(coordinates.x, coordinates.y, coordinates.z);
-            _blocklink.CallFlags("AfterMovingBlock");
+        //  _blocklink.CallFlags("AfterMovingBlock");
         }
     }
 

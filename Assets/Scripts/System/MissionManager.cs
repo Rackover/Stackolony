@@ -69,7 +69,6 @@ public class MissionManager : MonoBehaviour {
         Mission activeMission = missionList[missionList.Count - 1];
         activeMission.power = power;
         activeMission.range = range;
-        Debug.Log("Starting mission number " + (missionList.Count - 1));
 
 
         //Genere le tableau tridimensionel booléen indiquant les coordonnées déjà explorées
@@ -275,7 +274,8 @@ public class MissionManager : MonoBehaviour {
                         {
                             if (foundBlockLink.myBridge != null && foundBlockLink.myBridge.GetComponent<BridgeInfo>().destination == initialPos) 
                             {
-                                output = blockFound.GetComponent<BlockLink>() ;
+                                output = blockFound.GetComponent<BlockLink>();
+                                myMission.exploredPositions.Add(output.gridCoordinates);
                             } else
                             {
                                 GameObject initialBlock = gridManager.grid[initialPos.x, initialPos.y, initialPos.z];
@@ -288,6 +288,7 @@ public class MissionManager : MonoBehaviour {
                                         {
                                             Vector3Int foundBlockPosition = initialBlockLink.myBridge.GetComponent<BridgeInfo>().destination;
                                             output = gridManager.grid[foundBlockPosition.x, foundBlockPosition.y, foundBlockPosition.z].GetComponent<BlockLink>();
+                                            myMission.exploredPositions.Add(foundBlockPosition);
                                         }
                                     }
                                 }

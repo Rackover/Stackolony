@@ -19,9 +19,8 @@ public class SystemReferences : MonoBehaviour {
     //Met a jour le system de jeu
     public void UpdateSystem()
     {
-        Debug.Log("UPDATING SYSTEM");
-        StartCoroutine(RecalculatePropagation());
         StartCoroutine(ResetBlocksPower());
+        StartCoroutine(RecalculatePropagation());
     }
 
     public void UpdateCycle() {
@@ -57,7 +56,7 @@ public class SystemReferences : MonoBehaviour {
     {
         foreach (Generator generator in AllGenerators)
         {
-            generator.Invoke("OnBlockUpdate",0);
+            generator.Invoke("AfterMovingBlock", 0f);
             yield return new WaitForEndOfFrame();
         }
         yield return null;
@@ -68,6 +67,7 @@ public class SystemReferences : MonoBehaviour {
         foreach (BlockLink block in AllBlocksRequiringPower)
         {
             block.isConsideredUnpowered = true;
+            block.currentPower = 0;
         }
         yield return null;
     }

@@ -34,13 +34,15 @@ public class Generator : Flag {
     {
         base.AfterMovingBlock();
         if (isEnabled)
-        missionManager.StartMission(myBlockLink.gridCoordinates, "EmitEnergy", -1, power);
+        {
+            missionManager.StartMission(myBlockLink.gridCoordinates, "EmitEnergy", -1, power);
+        }
     }
 
     public override void OnBlockUpdate()
     {
         if (isEnabled)
-        Invoke("AfterMovingBlock", 0.1f);
+        Invoke("AfterMovingBlock", 0f);
     }
 
     public override void OnDestroy()
