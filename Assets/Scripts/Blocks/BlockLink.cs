@@ -11,14 +11,14 @@ public class BlockLink : MonoBehaviour {
 
     [Header("Referencies")]
     public BoxCollider collider;
-    public Container myContainer;
-	public Block myBlock;
-	public GameObject myBlockObject;
+    public Container container;
+	public Block block;
+	public GameObject blockObject;
 
     [Header("Particules")]
 	public GameObject unpoweredEffect;
     public GameObject onFireEffect;
-    public GameObject myBridge;
+    public GameObject bridge;
 
     // TEMPORARY ASSET GENERATION
     public Block[] blocks;
@@ -90,29 +90,29 @@ public class BlockLink : MonoBehaviour {
 
     public void LoadBlock()
     {
-        if (myBlock == null)
+        if (block == null)
         {
-            myBlock = blocks[Random.Range(0, blocks.Length)];
+            block = blocks[Random.Range(0, blocks.Length)];
         }
         else
         {
             systemRef.AllBlockLinks.Add(this);
-            if (myBlock.consumption > 0)
+            if (block.consumption > 0)
             {
                 systemRef.AllBlocksRequiringPower.Add(this);
             }
         }
 
-        if (myBlockObject == null)
+        if (blockObject == null)
         {
-            myBlockObject = Instantiate(myBlock.model, transform.position, Quaternion.identity, transform);
-            myBlockObject.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
+            blockObject = Instantiate(block.model, transform.position, Quaternion.identity, transform);
+            blockObject.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
         }
-        else if(myBlockObject.activeSelf == false)
+        else if(blockObject.activeSelf == false)
         {
-            myBlockObject.SetActive(true);
+            blockObject.SetActive(true);
         }
-        foreach (string flag in myBlock.flags)
+        foreach (string flag in block.flags)
         {
             flagReader.ReadFlag(this, flag);
         }
@@ -120,9 +120,9 @@ public class BlockLink : MonoBehaviour {
 
     public void UnloadBlock()
     {
-        if(myBlockObject != null)
+        if(blockObject != null)
         {
-            myBlockObject.SetActive(false);
+            blockObject.SetActive(false);
             unpoweredEffect.SetActive(false);
         }
     }
@@ -138,7 +138,7 @@ public class BlockLink : MonoBehaviour {
 	// Check if the block is powered
 	public bool IsPowered()
 	{   
-		if(currentPower >= myBlock.consumption)
+		if(currentPower >= block.consumption)
 		{
 			return true;
 		}
@@ -211,15 +211,15 @@ public class BlockLink : MonoBehaviour {
 
     public void ToggleVisuals()
     {
-        if (myBlockObject.gameObject.activeSelf == true)
+        if (blockObject.gameObject.activeSelf == true)
         {
-            myBlockObject.gameObject.SetActive(false);
+            blockObject.gameObject.SetActive(false);
             unpoweredEffect.SetActive(false);
             onFireEffect.SetActive(false);
         }
         else
         {
-            myBlockObject.gameObject.SetActive(true);
+            blockObject.gameObject.SetActive(true);
             unpoweredEffect.SetActive(true);
         }
     }

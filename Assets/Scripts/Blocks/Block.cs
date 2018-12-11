@@ -15,6 +15,7 @@ public class Block : ScriptableObject
 	
 	public GameObject model;
     public Sprite icon;
+    public int ID;
 
 	[Header("Properties")]
 	public int level = 1;

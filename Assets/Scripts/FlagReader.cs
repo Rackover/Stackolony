@@ -26,14 +26,14 @@ public class FlagReader : MonoBehaviour
 					catch(FormatException fe)
 					{
 						Destroy(newGenerator);
-						Debug.Log("WARNING - " + blockLink.myBlock.name + " - Generator : Unvalid Power entry for as the first parameter. Please enter an int value.");
+						Debug.Log("WARNING - " + blockLink.block.name + " - Generator : Unvalid Power entry for as the first parameter. Please enter an int value.");
 						break;
 					}
 					
 					if(newGenerator.power < 0)
 					{
 						Destroy(newGenerator);
-						Debug.Log("WARNING - " + blockLink.myBlock.name + " - Generator : Power value should be higher than 0");
+						Debug.Log("WARNING - " + blockLink.block.name + " - Generator : Power value should be higher than 0");
 						break;
 					}
 
@@ -41,7 +41,7 @@ public class FlagReader : MonoBehaviour
 				}
 				else
 				{
-					Debug.Log("WARNING - " + blockLink.myBlock.name + " - Generator : flag wrongly setup for. Should be something like this : 'Generator_3'");
+					Debug.Log("WARNING - " + blockLink.block.name + " - Generator : flag wrongly setup for. Should be something like this : 'Generator_3'");
 				}
 				break;
 
@@ -60,7 +60,7 @@ public class FlagReader : MonoBehaviour
 					catch(FormatException fe)
 					{
 						Destroy(newMoodModifier);
-						Debug.Log("WARNING - " + blockLink.myBlock.name + " - MoodModifier : Unvalid range entry as the first parameter. Please enter an int value.");
+						Debug.Log("WARNING - " + blockLink.block.name + " - MoodModifier : Unvalid range entry as the first parameter. Please enter an int value.");
 						break;
 					}
 
@@ -71,7 +71,7 @@ public class FlagReader : MonoBehaviour
 					catch(FormatException fe)
 					{
 						Destroy(newMoodModifier);
-						Debug.Log("WARNING - " + blockLink.myBlock.name + " - MoodModifier : Unvalid amount entry as the second parameter. Please enter an int value.");
+						Debug.Log("WARNING - " + blockLink.block.name + " - MoodModifier : Unvalid amount entry as the second parameter. Please enter an int value.");
 						break;
 					}
 
@@ -82,7 +82,7 @@ public class FlagReader : MonoBehaviour
 					if(result != "")
 					{
 						Destroy(newMoodModifier);
-						Debug.Log("WARNING - " + blockLink.myBlock.name + " - MoodModifier : " + result);
+						Debug.Log("WARNING - " + blockLink.block.name + " - MoodModifier : " + result);
 						break;
 					}
 
@@ -90,7 +90,7 @@ public class FlagReader : MonoBehaviour
 				}
 				else
 				{
-					Debug.Log("WARNING - " + blockLink.myBlock.name + " - MoodModifier : flag wrongly setup for '" + blockLink.myBlock.name + "'. Should be something like this : 'MoodModifier_3_5_worker'");
+					Debug.Log("WARNING - " + blockLink.block.name + " - MoodModifier : flag wrongly setup for '" + blockLink.block.name + "'. Should be something like this : 'MoodModifier_3_5_worker'");
 				}
 				break;
 	#endregion
@@ -108,14 +108,14 @@ public class FlagReader : MonoBehaviour
 					catch(FormatException fe)
 					{
 						Destroy(newOccupator);
-						Debug.Log("WARNING - " + blockLink.myBlock.name + " - Occupator : Unvalid slotAmount entry for as the first parameter. Please enter an int value.");
+						Debug.Log("WARNING - " + blockLink.block.name + " - Occupator : Unvalid slotAmount entry for as the first parameter. Please enter an int value.");
 						break;
 					}
 
 					if(newOccupator.slotAmount < 0)
 					{
 						Destroy(newOccupator);
-						Debug.Log("WARNING - " + blockLink.myBlock.name + " - Occupator : Power value has to be higher than 0.");
+						Debug.Log("WARNING - " + blockLink.block.name + " - Occupator : Power value has to be higher than 0.");
 						break;
 					}
 					
@@ -127,7 +127,7 @@ public class FlagReader : MonoBehaviour
 					if(result != "")
 					{
 						Destroy(newOccupator);
-						Debug.Log("WARNING - " + blockLink.myBlock.name + " - Occupator : " + result);
+						Debug.Log("WARNING - " + blockLink.block.name + " - Occupator : " + result);
 						break;
 					}
 
@@ -135,7 +135,7 @@ public class FlagReader : MonoBehaviour
 				}
 				else
 				{
-					Debug.Log("WARNING - " + blockLink.myBlock.name + " - Occupator : flag wrongly setup. Should be something like this : 'Occupator_10_scientist,worker'");
+					Debug.Log("WARNING - " + blockLink.block.name + " - Occupator : flag wrongly setup. Should be something like this : 'Occupator_10_scientist,worker'");
 				}
 				break;
 	#endregion

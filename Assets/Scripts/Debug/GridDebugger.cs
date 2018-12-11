@@ -202,7 +202,7 @@ public class GridDebugger : MonoBehaviour {
                         GameObject generatedBlock = Instantiate(debugCellPower);
                         generatedBlock.GetComponent<Renderer>().material.color = new Color32(100, 100, 100, 255);
                         return generatedBlock;
-                    } else if (foundBlockLink.myBlock.consumption > 0)
+                    } else if (foundBlockLink.block.consumption > 0)
                     {
                         GameObject generatedBlock = Instantiate(debugCellUnpowered);
                         return generatedBlock;

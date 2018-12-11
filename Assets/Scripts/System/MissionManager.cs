@@ -152,7 +152,7 @@ public class MissionManager : MonoBehaviour {
             {
                 foreach (BlockLink foundBlock in AdjacentBlocks)
                 {
-                    power -= (foundBlock.myBlock.consumption - foundBlock.currentPower);
+                    power -= (foundBlock.block.consumption - foundBlock.currentPower);
                 }
 
                 for (int i = 0; i < AdjacentBlocks.Count; i++)
@@ -272,7 +272,7 @@ public class MissionManager : MonoBehaviour {
                         BlockLink foundBlockLink = blockFound.GetComponent<BlockLink>();
                         if (foundBlockLink != null)
                         {
-                            if (foundBlockLink.myBridge != null && foundBlockLink.myBridge.GetComponent<BridgeInfo>().destination == initialPos) 
+                            if (foundBlockLink.bridge != null && foundBlockLink.bridge.GetComponent<BridgeInfo>().destination == initialPos) 
                             {
                                 output = blockFound.GetComponent<BlockLink>();
                                 myMission.exploredPositions.Add(output.gridCoordinates);
@@ -284,9 +284,9 @@ public class MissionManager : MonoBehaviour {
                                     BlockLink initialBlockLink = initialBlock.GetComponent<BlockLink>();
                                     if (initialBlock.GetComponent<BlockLink>() != null)
                                     {
-                                        if (initialBlockLink.myBridge != null)
+                                        if (initialBlockLink.bridge != null)
                                         {
-                                            Vector3Int foundBlockPosition = initialBlockLink.myBridge.GetComponent<BridgeInfo>().destination;
+                                            Vector3Int foundBlockPosition = initialBlockLink.bridge.GetComponent<BridgeInfo>().destination;
                                             output = gridManager.grid[foundBlockPosition.x, foundBlockPosition.y, foundBlockPosition.z].GetComponent<BlockLink>();
                                             myMission.exploredPositions.Add(foundBlockPosition);
                                         }

@@ -18,16 +18,16 @@ public class CityManagement : MonoBehaviour {
     {
         activeCoroutineRelatedToPower++;
         MissionManager.Mission myMission = mission;
-        foreach (BlockLink block in myMission.blocksFound)
+        foreach (BlockLink blocklink in myMission.blocksFound)
         {
-            for (int i = block.myBlock.consumption - block.currentPower; i > 0; i--)
+            for (int i = blocklink.block.consumption - blocklink.currentPower; i > 0; i--)
             {
                 if (myMission.power > 0)
                 {
                     GameObject energyFeedback = Instantiate(prefabEmitting);
-                    energyFeedback.transform.position = block.transform.position;
+                    energyFeedback.transform.position = blocklink.transform.position;
                     Destroy(energyFeedback, 2);
-                    block.ChangePower(1);
+                    blocklink.ChangePower(1);
                     myMission.power--;
                     yield return new WaitForSeconds(0.01f);
                 }

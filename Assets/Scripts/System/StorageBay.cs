@@ -137,7 +137,7 @@ public class StorageBay : MonoBehaviour {
     public void GenerateBlock()
     {
         GameObject newBlock = Instantiate(blockPrefab);
-        newBlock.GetComponent<BlockLink>().myContainer.DropBlock();
+        newBlock.GetComponent<BlockLink>().container.DropBlock();
         StoreBlock(newBlock);
     }
 
@@ -146,8 +146,8 @@ public class StorageBay : MonoBehaviour {
     {
         GameObject newBlock = Instantiate(blockPrefab);
         BlockLink newBlockLink = newBlock.GetComponent<BlockLink>();
-        newBlockLink.myBlock = blockInfo;
-        newBlockLink.myContainer.DropBlock();
+        newBlockLink.block = blockInfo;
+        newBlockLink.container.DropBlock();
         StoreBlock(newBlock);
     }
 
@@ -175,9 +175,9 @@ public class StorageBay : MonoBehaviour {
                             blockToStore.name = "StoredBlock[" + x + "," + y + "," + z + "]";
                             BlockLink blockInfo = blockToStore.GetComponent<BlockLink>();
                             blockInfo.gridCoordinates = new Vector3Int(x, y, z);
-                            blockInfo.myContainer.CloseContainer();
+                            blockInfo.container.CloseContainer();
                             blockToStore.layer = LayerMask.NameToLayer("StoredBlock");
-                            if (blockInfo.myContainer.isFalling == false)
+                            if (blockInfo.container.isFalling == false)
                             {
                                 sfxManager.PlaySoundLinked("BlockDrop", blockToStore);
                             }
@@ -216,7 +216,7 @@ public class StorageBay : MonoBehaviour {
         {
             storedAmount--;
 
-            block.GetComponent<BlockLink>().myContainer.OpenContainer();
+            block.GetComponent<BlockLink>().container.OpenContainer();
             Vector3Int blockCoordinates = block.GetComponent<BlockLink>().gridCoordinates;
             storedBlocks[blockCoordinates.x, blockCoordinates.y, blockCoordinates.z] = null;
 

@@ -244,7 +244,7 @@ public class GridManagement : MonoBehaviour {
         buildingsList.Add(newBlock);
         BlockLink blockLink = newBlock.GetComponent<BlockLink>();
         blockLink.LoadBlock();
-        blockLink.myContainer.OpenContainer();
+        blockLink.container.OpenContainer();
         blockLink.gridCoordinates = new Vector3Int(coordinates.x, newBlockHeight, coordinates.y);
         newBlock.name = "Block[" + coordinates.x + ";" + newBlockHeight + ";" + coordinates.y + "]";
     }
@@ -384,7 +384,7 @@ public class GridManagement : MonoBehaviour {
         BridgeInfo bridgeInfo = parentBridgeGameObject.AddComponent<BridgeInfo>();
         bridgeInfo.origin = blockA.gridCoordinates;
         bridgeInfo.destination = blockB.gridCoordinates;
-        blockA.myBridge = parentBridgeGameObject;
+        blockA.bridge = parentBridgeGameObject;
 
         //Ajout de chaque partie du pont dans la grille grid[] et dans le component bridgeInfo
         bridgeInfo.allBridgePositions = new Vector3Int[bridgeLength];
