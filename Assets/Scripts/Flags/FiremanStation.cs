@@ -1,18 +1,55 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class FiremanStation : Flag 
 {
+	[Header("Policeman")]
 	public int range;
-	public BlockLink target;
+	public bool selecting;
+	public List<BlockLink> targets = new List<BlockLink>();
+	public List<Extinctor> extinctors = new List<Extinctor>();
 
-	public void OnBlockUse(BlockLink newTarget)
+	override public void Use()
 	{
-		target = newTarget;
+		selecting = true;
 	}
 
-	//Fonction appelée à chaque début de cycle
-    override public void OnNewCycle()
-    {
-		target.RemoveState(BlockState.OnFire);
-    }
+	override public void OnNewCycle()
+	{
+		foreach(BlockLink target in targets)
+		{
+			target.RemoveState(BlockState.OnFire);
+		}
+		foreach(Extinctor extinctor in extinctors)
+		{
+			Destroy(extinctor.gameObject);
+		}
+	}
+
+	override public void UpdateFlag()
+	{
+		if(selecting)
+		{
+			if (Input.GetButtonDown("MouseLeft")) 
+			{
+				RaycastHit hit;
+				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+				if (Physics.Raycast(ray, out hit))
+				{
+					Debug.Log(hit.transform.gameObject.name);
+					BlockLink sBlock = hit.transform.gameObject.GetComponent<BlockLink>();
+					if(sBlock != null)
+					{
+						selecting = false;
+
+						targets.Add(sBlock);
+						extinctors.Add(Instantiate(myBlockLink.lib.extinctorPrefab, transform.position, Quaternion.identity).GetComponent<Extinctor>());
+						
+						extinctors[extinctors.Count-1].target = targets[targets.Count-1].transform;
+					}
+				}
+			}
+		}
+	}
 }

@@ -9,14 +9,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0f2d1c532410ad94bb7e332bc601eb25, type: 3}
-  m_Name: Factory
+  m_Name: FiremanStation
   m_EditorClassIdentifier: 
   link: {fileID: 0}
-  title: Factory
+  title: Fireman Station
   description: Occupy 10 workers
-  model: {fileID: 1706279260015752, guid: 3dfb3c7113238bc4e9a1a5af292ff09a, type: 2}
-  icon: {fileID: 21300000, guid: bac1b11626b6d4448bc82a261716482c, type: 3}
+  model: {fileID: 1547902619353416, guid: 8c422b2db74c1ca4288c9fcf898e47c5, type: 2}
+  icon: {fileID: 21300000, guid: c7c8605700d7ec04e841c209564ce407, type: 3}
+  ID: 0
   level: 1
   complexity: 1
   consumption: 1
-  flags: []
+  flags:
+  - FiremanStation_5

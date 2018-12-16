@@ -75,7 +75,13 @@ public class Flag : MonoBehaviour {
     }
 
     //Fonction appelée quand la position du bloc se met à jour
-    virtual public void OnBlockUse()
+    virtual public void UpdateFlag()
+    {
+
+    }
+
+    //Fonction appelée quand la position du bloc se met à jour
+    virtual public void Use()
     {
 
     }
