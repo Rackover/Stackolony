@@ -146,9 +146,9 @@ public class BlockInfobox : MonoBehaviour
 				if(currentSelection.activeFlags[i] is FiremanStation)
 				{
 					FiremanStation firemanStation = (FiremanStation)currentSelection.activeFlags[i];
-					for(int j = 0; j < firemanStation.targets.Count; i++)
+					for(int j = 0; j < firemanStation.targets.Count; j++)
 					{
-						line.DrawCanvasLine(Camera.main.WorldToScreenPoint(currentSelection.transform.position), firemanStation.targets[j].transform.position, 1f, Color.red);
+						line.DrawCanvasLine(Camera.main.WorldToScreenPoint(currentSelection.transform.position), Camera.main.WorldToScreenPoint(firemanStation.targets[j].transform.position), 1f, Color.blue);
 					}
 				}
 			}

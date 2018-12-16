@@ -25,6 +25,9 @@ public class FiremanStation : Flag
 		{
 			Destroy(extinctor.gameObject);
 		}
+
+		targets.Clear();
+		extinctors.Clear();
 	}
 
 	override public void UpdateFlag()
@@ -37,15 +40,12 @@ public class FiremanStation : Flag
 				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 				if (Physics.Raycast(ray, out hit))
 				{
-					Debug.Log(hit.transform.gameObject.name);
 					BlockLink sBlock = hit.transform.gameObject.GetComponent<BlockLink>();
 					if(sBlock != null)
 					{
 						selecting = false;
-
 						targets.Add(sBlock);
 						extinctors.Add(Instantiate(myBlockLink.lib.extinctorPrefab, transform.position, Quaternion.identity).GetComponent<Extinctor>());
-						
 						extinctors[extinctors.Count-1].target = targets[targets.Count-1].transform;
 					}
 				}
