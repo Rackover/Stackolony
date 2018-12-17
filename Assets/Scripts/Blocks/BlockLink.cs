@@ -29,6 +29,7 @@ public class BlockLink : MonoBehaviour {
     [HideInInspector]   public FlagReader flagReader;
     [HideInInspector]   public SystemReferences systemRef;
     [HideInInspector]   public Library lib;
+    public GameManager gameManager;
 
     [Header("Lists")]
     public List<Flag> activeFlags = new List<Flag>();
@@ -185,7 +186,7 @@ public class BlockLink : MonoBehaviour {
 
                 case BlockState.OnFire:
 					onFireEffect.SetActive(true);
-                    gridManager.sfxManager.PlaySound("StartingFire");
+                    gameManager.sfxManager.PlaySound("StartingFire");
 					break;
 
 				default:
@@ -209,7 +210,7 @@ public class BlockLink : MonoBehaviour {
 					break;
                 case BlockState.OnFire:
 					onFireEffect.SetActive(false);
-                    gridManager.sfxManager.PlaySound("StoppingFire");
+                    gameManager.sfxManager.PlaySound("StoppingFire");
 					break;
 
 				default:

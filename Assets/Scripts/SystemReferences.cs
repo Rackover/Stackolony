@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SystemReferences : MonoBehaviour {
+
+    GameManager gameManager;
+
     public List<Generator> AllGenerators;
     public List<BlockLink> AllBlocksRequiringPower;
     public List<BlockLink> AllBlockLinks;
     public List<WorkingHours> AllTimeRelatedBlocks;
 
-    public Temporality temporalityManager;
 
     private void Awake()
     {
+        gameManager = FindObjectOfType<GameManager>();
         AllGenerators = new List<Generator>();
         AllBlocksRequiringPower = new List<BlockLink>();
     }
@@ -31,9 +34,9 @@ public class SystemReferences : MonoBehaviour {
 
     public void CheckWorkingHours() {
         foreach (WorkingHours workingHour in AllTimeRelatedBlocks) {
-            if (temporalityManager.cycleProgressionInPercent > workingHour.startHour && workingHour.hasStarted == false) {
+            if (gameManager.temporality.cycleProgressionInPercent > workingHour.startHour && workingHour.hasStarted == false) {
                 workingHour.StartWork();
-            } else if (temporalityManager.cycleProgressionInPercent > workingHour.endHour && workingHour.hasStarted == true) {
+            } else if (gameManager.temporality.cycleProgressionInPercent > workingHour.endHour && workingHour.hasStarted == true) {
                 workingHour.EndWork();
             }
         }

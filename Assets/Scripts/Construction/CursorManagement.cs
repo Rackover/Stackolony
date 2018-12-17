@@ -6,7 +6,6 @@ using UnityEngine.EventSystems;
 
 public class CursorManagement : MonoBehaviour
 {
-
     public enum cursorMode { Default, Build, Delete, Bridge }; //Chaque mode du curseur
 
     [Header("=== REFERENCIES ===")][Space(1)]
@@ -31,8 +30,7 @@ public class CursorManagement : MonoBehaviour
     [Header("Scripts")]
     public TempDrag drag;
     public TempBlockSelector selector;
-    public GridManagement gridManager; // Référence au gridManagement.cs instancié
-    public Interface uiManager;
+    public GameManager gameManager;
 
     [Space(5)][Header("=== DEBUG ===")][Space(1)]
     public Vector3Int posInTerrain; //Position de la souris sur le terrain
@@ -48,12 +46,10 @@ public class CursorManagement : MonoBehaviour
     private void Start()
     {
         hoveredBlock = null;
-        gridManager = FindObjectOfType<GridManagement>();
-
         //Instantie un projecteur de selection qui se clamp sur les cellules de la grille
         myProjector = Instantiate(projectorPrefab);
         myProjector.name = "Projector";
-        myProjector.GetComponent<Projector>().orthographicSize = 2.5f * gridManager.cellSize; //On adapte la taille du projecteur (qui projette la grille au sol) à la taille des cellules
+        myProjector.GetComponent<Projector>().orthographicSize = 2.5f * gameManager.gridManagement.cellSize; //On adapte la taille du projecteur (qui projette la grille au sol) à la taille des cellules
         myProjector.GetComponent<Projector>().enabled = false;
 
         //Instantie la fleche qui indique la tour selectionnée par le joueur
@@ -89,14 +85,14 @@ public class CursorManagement : MonoBehaviour
         if (canSwitchTools)
         {
             selectedMode = mode;
-            uiManager.txtMode.text = mode.ToString();
-            uiManager.ChangeCursor(mode.ToString());
+            //uiManager.txtMode.text = mode.ToString();
+            gameManager.generalInterface.ChangeCursor(mode.ToString());
             ClearFeedback();
             ClearPermanentHighlighter();
             selectedBlock = null;
         } else
         {
-            uiManager.ShowError("You can't use that tool right now");
+            gameManager.generalInterface.ShowError("You can't use that tool right now");
         }
     }
 
@@ -138,9 +134,9 @@ public class CursorManagement : MonoBehaviour
     {
         Vector3 tempCoord = hit.point; //On adapte la position de la souris pour qu'elle corresponde à la taille des cellules
         Vector3 coord = new Vector3(
-            tempCoord.x / gridManager.cellSize,
+            tempCoord.x / gameManager.gridManagement.cellSize,
             tempCoord.y, //La taille en y n'est pas dépendante de la taille des cellules, elle vaudra toujours 1
-            tempCoord.z / gridManager.cellSize
+            tempCoord.z / gameManager.gridManagement.cellSize
         );
 
         //Converti la position pour savoir sur quelle case se trouve la souris
@@ -162,9 +158,9 @@ public class CursorManagement : MonoBehaviour
         }
         //Met à jour la position du projecteur
         myProjector.transform.position = new Vector3(
-        posInTerrain.x * gridManager.cellSize + (gridManager.cellSize / 2),
+        posInTerrain.x * gameManager.gridManagement.cellSize + (gameManager.gridManagement.cellSize / 2),
         posInTerrain.y + 10,
-        posInTerrain.z * gridManager.cellSize + (gridManager.cellSize / 2)
+        posInTerrain.z * gameManager.gridManagement.cellSize + (gameManager.gridManagement.cellSize / 2)
         );
     }
 
@@ -218,7 +214,7 @@ public class CursorManagement : MonoBehaviour
             int minHeight = 0;
             for (var i = posInTerrain.y-1; i > 0; i--) //Calcule du pied de la tour selectionnée
             {
-                if (gridManager.grid
+                if (gameManager.gridManagement.grid
                     [
                         posInTerrain.x,
                         i,
@@ -231,9 +227,9 @@ public class CursorManagement : MonoBehaviour
             }
             stackSelector.SetActive(true);
             stackSelector.transform.position = new Vector3(
-                posInTerrain.x * gridManager.cellSize + (gridManager.cellSize / 2), 
+                posInTerrain.x * gameManager.gridManagement.cellSize + (gameManager.gridManagement.cellSize / 2), 
                 minHeight+0.1f, 
-                posInTerrain.z * gridManager.cellSize + (gridManager.cellSize / 2));
+                posInTerrain.z * gameManager.gridManagement.cellSize + (gameManager.gridManagement.cellSize / 2));
         } 
         else
         {
@@ -261,12 +257,12 @@ public class CursorManagement : MonoBehaviour
                 case cursorMode.Build:
                     if (!EventSystem.current.IsPointerOverGameObject()) 
                     {
-                        gridManager.SpawnBlock(blockDefaultPrefab, new Vector2Int(posInTerrain.x, posInTerrain.z));
+                        gameManager.gridManagement.SpawnBlock(blockDefaultPrefab, new Vector2Int(posInTerrain.x, posInTerrain.z));
                     }
                     break;
 
                 case cursorMode.Delete:
-                    gridManager.DestroyBlock(posInTerrain);
+                    gameManager.gridManagement.DestroyBlock(posInTerrain);
                     ClearFeedback();
                     break;
             }
@@ -371,11 +367,11 @@ public class CursorManagement : MonoBehaviour
         GameObject bridgePreviewer = Instantiate(bridgePreview);
 
         //Crée le pont et le place à equidistance entre les 2 points voulu
-        bridgePreviewer.transform.position = gridManager.grid[firstPosition.x,firstPosition.y,firstPosition.z].transform.position + (gridManager.grid[secondPosition.x, secondPosition.y, secondPosition.z].transform.position
-                                                                - gridManager.grid[firstPosition.x, firstPosition.y, firstPosition.z].transform.position)/2;
+        bridgePreviewer.transform.position = gameManager.gridManagement.grid[firstPosition.x,firstPosition.y,firstPosition.z].transform.position + (gameManager.gridManagement.grid[secondPosition.x, secondPosition.y, secondPosition.z].transform.position
+                                                                - gameManager.gridManagement.grid[firstPosition.x, firstPosition.y, firstPosition.z].transform.position)/2;
 
         //Ensuite on cherche à donner au pont la taille qui correspond à la distance entre les deux points du pont
-        Vector3 positionDifference = gridManager.grid[secondPosition.x, secondPosition.y, secondPosition.z].transform.position - gridManager.grid[firstPosition.x, firstPosition.y, firstPosition.z].transform.position;
+        Vector3 positionDifference = gameManager.gridManagement.grid[secondPosition.x, secondPosition.y, secondPosition.z].transform.position - gameManager.gridManagement.grid[firstPosition.x, firstPosition.y, firstPosition.z].transform.position;
 
         //La taille sera toujours positive donc on la rend positive
         positionDifference.y = 0.2f; //Hauteur du pont
@@ -403,13 +399,13 @@ public class CursorManagement : MonoBehaviour
     {
         List<Vector3Int> coordinatesFound = new List<Vector3Int>();
         //Check les blocs devant la face x
-        for (int i = coordinate.x+1; i < gridManager.grid.GetLength(0); i++)
+        for (int i = coordinate.x+1; i < gameManager.gridManagement.grid.GetLength(0); i++)
         {
-            if (gridManager.checkIfSlotIsBlocked(new Vector3Int(i, coordinate.y, coordinate.z),false) != GridManagement.blockType.FREE)
+            if (gameManager.gridManagement.checkIfSlotIsBlocked(new Vector3Int(i, coordinate.y, coordinate.z),false) != GridManagement.blockType.FREE)
             {
                 break;
             }
-            if (gridManager.grid[i,coordinate.y,coordinate.z] != null)
+            if (gameManager.gridManagement.grid[i,coordinate.y,coordinate.z] != null)
             {
                 coordinatesFound.Add(new Vector3Int(i, coordinate.y, coordinate.z));
                 break;
@@ -419,11 +415,11 @@ public class CursorManagement : MonoBehaviour
         //Check les blocs derriere la face x
         for (int i = coordinate.x-1; i >= 0; i--)
         {
-            if (gridManager.checkIfSlotIsBlocked(new Vector3Int(i, coordinate.y, coordinate.z),false) != GridManagement.blockType.FREE)
+            if (gameManager.gridManagement.checkIfSlotIsBlocked(new Vector3Int(i, coordinate.y, coordinate.z),false) != GridManagement.blockType.FREE)
             {
                 break;
             }
-            if (gridManager.grid[i, coordinate.y, coordinate.z] != null)
+            if (gameManager.gridManagement.grid[i, coordinate.y, coordinate.z] != null)
             {
                 coordinatesFound.Add(new Vector3Int(i, coordinate.y, coordinate.z));
                 break;
@@ -431,13 +427,13 @@ public class CursorManagement : MonoBehaviour
         }
 
         //Check les blocs devant la face z
-        for (int i = coordinate.z+1; i < gridManager.grid.GetLength(2); i++)
+        for (int i = coordinate.z+1; i < gameManager.gridManagement.grid.GetLength(2); i++)
         {
-            if (gridManager.checkIfSlotIsBlocked(new Vector3Int(coordinate.x, coordinate.y, i),false) != GridManagement.blockType.FREE)
+            if (gameManager.gridManagement.checkIfSlotIsBlocked(new Vector3Int(coordinate.x, coordinate.y, i),false) != GridManagement.blockType.FREE)
             {
                 break;
             }
-            if (gridManager.grid[coordinate.x, coordinate.y, i] != null)
+            if (gameManager.gridManagement.grid[coordinate.x, coordinate.y, i] != null)
             {
                 coordinatesFound.Add(new Vector3Int(coordinate.x, coordinate.y, i));
                 break;
@@ -447,11 +443,11 @@ public class CursorManagement : MonoBehaviour
         //Check les blocs derriere la face z
         for (int i = coordinate.z-1; i >= 0; i--)
         {
-            if (gridManager.checkIfSlotIsBlocked(new Vector3Int(coordinate.x, coordinate.y, i),false) != GridManagement.blockType.FREE)
+            if (gameManager.gridManagement.checkIfSlotIsBlocked(new Vector3Int(coordinate.x, coordinate.y, i),false) != GridManagement.blockType.FREE)
             {
                 break;
             }
-            if (gridManager.grid[coordinate.x, coordinate.y, i] != null)
+            if (gameManager.gridManagement.grid[coordinate.x, coordinate.y, i] != null)
             {
                 coordinatesFound.Add(new Vector3Int(coordinate.x, coordinate.y, i));
                 break;
@@ -464,7 +460,7 @@ public class CursorManagement : MonoBehaviour
     void GeneratePermanentHighlighter(Vector3Int coordinate)
     {
         GameObject newHighlighter = Instantiate(bridgeHighlighter, highlighter.transform.parent);
-        newHighlighter.transform.position = gridManager.grid[coordinate.x, coordinate.y, coordinate.z].transform.position;
+        newHighlighter.transform.position = gameManager.gridManagement.grid[coordinate.x, coordinate.y, coordinate.z].transform.position;
         newHighlighter.AddComponent<Highlighter>();
         newHighlighter.GetComponent<Highlighter>().SetGreenHighlighter();
         newHighlighter.SetActive(true);
@@ -498,10 +494,10 @@ public class CursorManagement : MonoBehaviour
             int i = 0;
             foreach (Vector3Int coordinate in blocksCoordinates)
             {
-                if (gridManager.grid[coordinate.x, coordinate.y, coordinate.z] != null)
+                if (gameManager.gridManagement.grid[coordinate.x, coordinate.y, coordinate.z] != null)
                 {
                     GameObject newHighlighter = Instantiate(bridgeHighlighter, highlighter.transform.parent);
-                    newHighlighter.transform.parent = gridManager.grid[coordinate.x, coordinate.y, coordinate.z].transform;
+                    newHighlighter.transform.parent = gameManager.gridManagement.grid[coordinate.x, coordinate.y, coordinate.z].transform;
                     newHighlighter.transform.localPosition = Vector3.zero;
                     newHighlighter.AddComponent<Highlighter>();
                     newHighlighter.SetActive(true);
@@ -534,21 +530,21 @@ public class CursorManagement : MonoBehaviour
                     if (destinationCandidate.gridCoordinates.x == selectedBlock.gridCoordinates.x || destinationCandidate.gridCoordinates.z == selectedBlock.gridCoordinates.z) {
                         //Les conditions sont remplies et on peut tracer le pont
                         //Call de la fonction pour tracer un pont
-                        gridManager.CreateBridge(selectedBlock, destinationCandidate);
+                        gameManager.gridManagement.CreateBridge(selectedBlock, destinationCandidate);
                         ClearPermanentHighlighter();
                     }
                     else {
-                        uiManager.ShowError("You can't link two blocks that aren't aligned");
+                        gameManager.generalInterface.ShowError("You can't link two blocks that aren't aligned");
                         Debug.LogWarning("You can't link two blocks that aren't aligned");
                     }
                 }
                 else {
-                    uiManager.ShowError("You can't link two blocks of different heights");
+                    gameManager.generalInterface.ShowError("You can't link two blocks of different heights");
                     Debug.LogWarning("You can't link two blocks of different heights");
                 }
             }
             else {
-                uiManager.ShowError("You can't select the same point");
+                gameManager.generalInterface.ShowError("You can't select the same point");
                 Debug.LogWarning("You can't select the same point");
             }
             ResetSelection();

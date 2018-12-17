@@ -10,18 +10,20 @@ public class BlockInfobox : MonoBehaviour
 	public RectTransform generalBox;
 	public Text nameText;
 	public Text descriptionText;
-	public CanvasLineRenderer line;
-	public GameObject stateTagPrefab;
 
-	[Space(2)][Header("Settings")]
+	[Space(1)][Header("Settings")]
 	public float stateTagShift = 5f;
 	public float flagPanelShift = 5f;
 
-	[Space(2)][Header("Special Panels Prefab")]
+	[Space(1)][Header("Prefabs")]
+	public GameObject stateTagPrefab;
 	public GameObject generatorPanel;
 	public GameObject firemanStationPanel;
 
-	public BlockLink currentSelection;
+	[Space(1)][Header("Scripts")]
+	public CanvasLineRenderer line;
+	BlockLink currentSelection;
+
 	List<StateTag> stateTags = new List<StateTag>();
 	List<FlagPanel> flagPanels = new List<FlagPanel>();
 

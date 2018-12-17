@@ -2,29 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridManagement : MonoBehaviour {
-
-    //LAST CLEAN : Suppression du raycast, suppression des variables statiques, suppression des variables de type "double"
-
+public class GridManagement : MonoBehaviour 
+{
+    public GameManager gameManager;
 
     //------------VARIABLES PUBLIQUES------------
     [Header("=== MAP SETTINGS ===")][Space(1)]
-    [Tooltip("Quelle taille font les cellules en X et Y (la hauteur sera toujours de 1")]
-    public float cellSize;
-    [Tooltip("Quelle hauteur max pour les tours")]
-    public int maxHeight;
-    [Tooltip("Quelle taille fait un bloc en hauteur")]
-    public int cellHeight;
-
+    [Tooltip("Quelle taille font les cellules en X et Y (la hauteur sera toujours de 1")] public float cellSize;
+    [Tooltip("Quelle hauteur max pour les tours")] public int maxHeight;
+    [Tooltip("Quelle taille fait un bloc en hauteur")] public int cellHeight;
     [Header("=== PREFABS ===")][Space(1)]
     [Header("Bridge")]
-    [Tooltip("Prefab du pont, de la taille (cellSize)")]
-    public GameObject bridgePrefab;
-    [Tooltip("Prefab de la fin du pont, de la taille (cellSize-1)/2")]
-    public GameObject bridgeEndPrefab;
-    [Tooltip("Prefab du départ du pont, de la taille (cellSize-1)/2")]
-    public GameObject bridgeStartPrefab;
-
+    [Tooltip("Prefab du pont, de la taille (cellSize)")] public GameObject bridgePrefab;
+    [Tooltip("Prefab de la fin du pont, de la taille (cellSize-1)/2")] public GameObject bridgeEndPrefab;
+    [Tooltip("Prefab du départ du pont, de la taille (cellSize-1)/2")] public GameObject bridgeStartPrefab;
     [Header("=== LISTS ===")][Space(1)]
     [Header("Liste de ponts")]
     public List<GameObject> bridgesList = new List<GameObject>();
@@ -34,27 +25,17 @@ public class GridManagement : MonoBehaviour {
     public Vector3[,,] bridgesGrid;
     public GameObject[,,] grid;
 
-    [Header("=== REFERENCES ===")][Space(1)]
-    public Interface uiManager;
-    public GridDebugger gridDebugger;
-    public SFXManager sfxManager;
-    private SystemReferences systemRef;
-
-    //------------VARIABLES PRIVEE------------
-    [System.NonSerialized]
-    public Terrain myTerrain; //Terrain sur lequel la grille doit être generée
+    [System.NonSerialized] public Terrain myTerrain; //Terrain sur lequel la grille doit être generée
     public Vector3Int gridSize; //Nombre de cases sur le terrain
     private GameObject gridGameObject; //GameObject contenant la grille
-    public enum blockType
-    {
-        FREE = 0, STORAGE = 1, BRIDGE = 2
-    }
+    
+    public enum blockType{ FREE = 0, STORAGE = 1, BRIDGE = 2}
 
     private void Start()
     {
+        gameManager = FindObjectOfType<GameManager>();
         //Recuperation du terrain
         myTerrain = Terrain.activeTerrain;
-
         //Initialisation des variables statiques
         gridSize.x = Mathf.RoundToInt(myTerrain.terrainData.size.x / cellSize);
         gridSize.z = Mathf.RoundToInt(myTerrain.terrainData.size.z / cellSize);
@@ -77,8 +58,8 @@ public class GridManagement : MonoBehaviour {
         Debug.Log("-----Generating grid-----");
 
         //GENERATION DES GRILLES DE DEBUG
-        gridDebugger.InitAllGrids();
-        gridDebugger.InitButtons();
+        gameManager.gridDebugger.InitAllGrids();
+        gameManager.gridDebugger.InitButtons();
     }
 
     private void LoadGrid() //Fonction pour charger une grille depuis un fichier de sauvegarde
@@ -94,7 +75,7 @@ public class GridManagement : MonoBehaviour {
             // Removes object from list and destroys the gameObject
             GameObject target = grid[coordinates.x, coordinates.y, coordinates.z];
             buildingsList.RemoveAll(o => o == target);
-            sfxManager.PlaySoundLinked("DestroyBlock", target);
+            gameManager.sfxManager.PlaySoundLinked("DestroyBlock", target);
             Destroy(target);
         }
         UpdateBlocks(coordinates);
@@ -136,7 +117,7 @@ public class GridManagement : MonoBehaviour {
                     } else
                     {
                         grid[coordinates.x, i - 1, coordinates.z] = null;
-                        uiManager.ShowError("Error at update");
+                        gameManager.generalInterface.ShowError("Error at update");
                         return;
                     }
                 }
@@ -233,7 +214,7 @@ public class GridManagement : MonoBehaviour {
             }
             if (newBlockHeight == 0)
             {
-                uiManager.ShowError("You have reached max height");
+                gameManager.generalInterface.ShowError("You have reached max height");
                 Debug.LogWarning("Max height reached");
                 Destroy(newBlock);
             }
@@ -244,7 +225,7 @@ public class GridManagement : MonoBehaviour {
             }
         }
         grid[coordinates.x, newBlockHeight, coordinates.y] = newBlock;
-        sfxManager.PlaySoundLinked("BlockDrop", newBlock);
+        gameManager.sfxManager.PlaySoundLinked("BlockDrop", newBlock);
 
         buildingsList.Add(newBlock);
         BlockLink blockLink = newBlock.GetComponent<BlockLink>();
@@ -263,11 +244,11 @@ public class GridManagement : MonoBehaviour {
             {
                 case "StorageBay":
                     if (displayErrorMessages)
-                        uiManager.ShowError("You can't build over the storage bay");
+                        gameManager.generalInterface.ShowError("You can't build over the storage bay");
                     return blockType.STORAGE;
                 case "Bridge":
                     if (displayErrorMessages)
-                        uiManager.ShowError("You can't build over a bridge");
+                        gameManager.generalInterface.ShowError("You can't build over a bridge");
                     return blockType.BRIDGE;
                 default:
                     break;
@@ -456,16 +437,16 @@ public class GridManagement : MonoBehaviour {
         ] = blockB.gridCoordinates;
 
         //Joue le son
-        sfxManager.PlaySoundLinked("CreateBridge", parentBridgeGameObject);
+        gameManager.sfxManager.PlaySoundLinked("CreateBridge", parentBridgeGameObject);
 
         //Update the system
-        if (systemRef == null)
+        if (gameManager.systemReferences == null)
         {
-            systemRef = FindObjectOfType<SystemReferences>();
+            gameManager.systemReferences = FindObjectOfType<SystemReferences>();
         }
-        if (systemRef != null)
+        if (gameManager.systemReferences != null)
         {
-            systemRef.UpdateSystem();
+            gameManager.systemReferences.UpdateSystem();
         }
 
         return parentBridgeGameObject;
@@ -495,16 +476,16 @@ public class GridManagement : MonoBehaviour {
         {
             grid[subpartPos.x, subpartPos.y, subpartPos.z] = null;
         }
-        sfxManager.PlaySoundLinked("DestroyBlock", bridgeObject);
+        gameManager.sfxManager.PlaySoundLinked("DestroyBlock", bridgeObject);
         Destroy(bridgeObject);
         //Update the system
-        if (systemRef == null)
+        if (gameManager.systemReferences == null)
         {
-            systemRef = FindObjectOfType<SystemReferences>();
+            gameManager.systemReferences = FindObjectOfType<SystemReferences>();
         }
-        if (systemRef != null)
+        if (gameManager.systemReferences != null)
         {
-            systemRef.UpdateSystem();
+            gameManager.systemReferences.UpdateSystem();
         }
     }
 }

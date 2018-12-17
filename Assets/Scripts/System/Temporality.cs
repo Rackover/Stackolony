@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class Temporality : MonoBehaviour {
 
+
     [Header("=== SETTINGS ===")][Space(1)]
     public int cycleDuration; //Durée d'un cycle en secondes
     public int yearDuration; //Durée d'une année en cycle
@@ -17,10 +18,14 @@ public class Temporality : MonoBehaviour {
     [Header("=== REFERENCES ===")][Space(1)]
     public GameObject directionalLight;
     public Material skyboxMaterial;
+    GameManager gameManager;
+
+    /*
     public SFXManager sfxManager;
     public DeliveryManagement deliveryManager;
     public TemporalityInterface temporalityInterface;
     public SystemReferences systemRef;
+    */
 
 
     [Header("=== DEBUG VALUES ===")][Space(1)]
@@ -45,20 +50,19 @@ public class Temporality : MonoBehaviour {
 
     public void Awake()
     {
-        counter = 0;
+        gameManager = FindObjectOfType<GameManager>();
 
+        counter = 0;
         timeScale = initialTimeScale;
         recurence = Mathf.Min(timeBetweenUpdateForDayNightDisplay, timeBetweenUpdateForLights, timeBetweenUpdateForSkybox, timeBetweenUpdateForSystem);
-        //timeCoroutine = StartCoroutine(updateCycleProgression(recurence));
-
         cycleNumber = 0;
         yearNumber = 0;
-
-        temporalityInterface.UpdateCycleText(cycleNumber, yearNumber);
-
-        // ChangeTimeScale(1);
-         
-        temporalityInterface.EnableButton(temporalityInterface.defaultButton);
+        gameManager.temporalityInterface.UpdateCycleText(cycleNumber, yearNumber);
+        gameManager.temporalityInterface.EnableButton(gameManager.temporalityInterface.defaultButton);
+        
+        //timeCoroutine = StartCoroutine(updateCycleProgression(recurence));
+        // ChangeTimeScale(1);    
+        
         PauseGame();
     }
 
@@ -66,11 +70,11 @@ public class Temporality : MonoBehaviour {
     {
         if (timeScale == 0) {
             timeScale = savedTimeScale;
-            temporalityInterface.EnableButton(savedButton);
+            gameManager.temporalityInterface.EnableButton(savedButton);
         }
         else
         {
-            temporalityInterface.EnableButton(temporalityInterface.defaultButton);
+            gameManager.temporalityInterface.EnableButton(gameManager.temporalityInterface.defaultButton);
             savedTimeScale = timeScale;
             timeScale = 0;
 
@@ -121,7 +125,7 @@ public class Temporality : MonoBehaviour {
         cycleProgressionInPercent = (cycleProgression / (float)cycleDuration) * 100f;
         if (timeBetweenUpdateForDayNightDisplayCount >= timeBetweenUpdateForDayNightDisplay)
         {
-            temporalityInterface.UpdateDayNightDisplay(cycleProgressionInPercent);
+            gameManager.temporalityInterface.UpdateDayNightDisplay(cycleProgressionInPercent);
             timeBetweenUpdateForDayNightDisplayCount = 1;
         }
 
@@ -146,10 +150,10 @@ public class Temporality : MonoBehaviour {
     {
         if (newTimeScaleCoef > timeScale)
         {
-            sfxManager.PlaySound("IncreaseSpeed");
+            gameManager.sfxManager.PlaySound("IncreaseSpeed");
         } else if (newTimeScaleCoef < timeScale)
         {
-            sfxManager.PlaySound("DecreaseSpeed");
+            gameManager.sfxManager.PlaySound("DecreaseSpeed");
         }
         timeScale = newTimeScaleCoef;
     }
@@ -157,17 +161,17 @@ public class Temporality : MonoBehaviour {
     public void AddCycle() //Ajoute un cycle au compteur
     {
         cycleNumber++;
-        temporalityInterface.UpdateCycleText(cycleNumber, yearNumber);
+        gameManager.temporalityInterface.UpdateCycleText(cycleNumber, yearNumber);
         if (cycleNumber%yearDuration == 0) 
             AddYear();
-        deliveryManager.DeliverBlocks();
-        systemRef.UpdateCycle();
+        gameManager.deliveryManagement.DeliverBlocks();
+        gameManager.systemReferences.UpdateCycle();
     }
 
     public void AddYear() //Ajoute un an au compteur
     {
         yearNumber++;
-        temporalityInterface.UpdateCycleText(cycleNumber, yearNumber);
+        gameManager.temporalityInterface.UpdateCycleText(cycleNumber, yearNumber);
     }
 
     //Met à jour les lumières en fonction de l'avancement du cycle
@@ -185,6 +189,6 @@ public class Temporality : MonoBehaviour {
     }
 
     public void UpdateSystem() {
-        systemRef.CheckWorkingHours();
+        gameManager.systemReferences.CheckWorkingHours();
     }
 }

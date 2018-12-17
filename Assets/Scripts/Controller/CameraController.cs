@@ -9,7 +9,7 @@ public class CameraController : MonoBehaviour {
     public GameObject cameraModel;
     GameObject cameraInstance;
     [Header("Scripts")] [Space(1)]
-    //public Interface userInterface;
+    public Interface userInterface;
     public CursorManagement cursorManagement;
     [Header("Transforms")] [Space(1)]
     public Transform camCenter;                 // Center of the camera (Used for Lookat + movement)
@@ -84,8 +84,7 @@ public class CameraController : MonoBehaviour {
         }
 
         CatchUpCameraObjective();
-        //userInterface.cursorTransform.position = Input.mousePosition;
-
+        userInterface.cursorTransform.position = Input.mousePosition;
         if(Input.GetKeyDown(KeyCode.V))
         {
             transform.position = startPosition;
@@ -94,9 +93,8 @@ public class CameraController : MonoBehaviour {
 
     void CatchUpCameraObjective() {
         // Storing previous position in case of collision
-
-        if (!Physics.Raycast(camTransform.position, cameraTransformObjective.position - camTransform.position, Vector3.Distance(camTransform.position, cameraTransformObjective.position))) {
-
+        if (!Physics.Raycast(camTransform.position, cameraTransformObjective.position - camTransform.position, Vector3.Distance(camTransform.position, cameraTransformObjective.position)))
+        {
             camTransform.position = Vector3.Lerp(camTransform.position, cameraTransformObjective.position, cameraCatchUpSpeed * Time.deltaTime);
             camTransform.rotation = Quaternion.Lerp(camTransform.rotation, cameraTransformObjective.rotation, cameraCatchUpSpeed * Time.deltaTime);
         }
@@ -109,7 +107,6 @@ public class CameraController : MonoBehaviour {
             camTarget = null;
             camCenter.position = new Vector3(camCenter.position.x, 0f, camCenter.position.z);
         }
-        
         mouseDelta = (Vector3)lastMousePosition - (Vector3)Input.mousePosition;
         camCenter.position += mouseDelta.x * cameraTransformObjective.right.normalized * mouseDriftSensibility * userGrabSensitivity;
         camCenter.position += mouseDelta.y * new Vector3(cameraTransformObjective.forward.x, 0, cameraTransformObjective.forward.z).normalized * mouseDriftSensibility * userGrabSensitivity;
@@ -121,8 +118,7 @@ public class CameraController : MonoBehaviour {
         Vector2 lookDirection = new Vector2(
             Input.GetAxis("MouseX") * rotateSensibility * userRotationSensibility,
             Input.GetAxis("MouseY") * rotateSensibility * userRotationSensibility
-        );
-        
+        );  
         camPivot.rotation = Quaternion.Euler(new Vector3(
             Mathf.Clamp(camPivot.eulerAngles.x - lookDirection.y, minLookAngle, maxLookAngle), 
             camPivot.eulerAngles.y+ lookDirection.x, 
@@ -132,7 +128,6 @@ public class CameraController : MonoBehaviour {
 
     void Drift()
     {
-
         Vector2 drift = new Vector2(
             -Mathf.Clamp(driftBorder.x -Input.mousePosition.x, 0, 1) + Mathf.Clamp(Input.mousePosition.x - Screen.width + driftBorder.x, 0, 1),
             -Mathf.Clamp(driftBorder.y - Input.mousePosition.y, 0, 1) + Mathf.Clamp(Input.mousePosition.y - Screen.height + driftBorder.y, 0, 1)

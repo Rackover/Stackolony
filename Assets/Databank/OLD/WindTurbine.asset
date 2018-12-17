@@ -13,10 +13,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   link: {fileID: 0}
   title: Wind Turbine
-  description: Produce 2 power in a range of 2 blocks
-  model: {fileID: 1606115355712488, guid: 3162d8a3c3c8bf349a3914217addef9f, type: 2}
-  icon: {fileID: 21300000, guid: d44936e76ecdfe344be255cc1dee9d66, type: 3}
+  description: Produce 2 power.
+  model: {fileID: 1407221856296756, guid: 5366664e0e7ea0c4899de73537d9ba40, type: 2}
+  icon: {fileID: 21300000, guid: f764dd315192490438ebea3ab7dc1446, type: 3}
+  ID: 4
   level: 1
   complexity: 1
-  consumption: 1
-  flags: []
+  consumption: 0
+  flags:
+  - Generator_2

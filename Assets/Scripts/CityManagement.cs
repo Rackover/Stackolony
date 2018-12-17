@@ -2,17 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CityManagement : MonoBehaviour {
-    public GridManagement gridManager;
-    public MissionManager missionManager;
-    public SystemReferences systemReferences;
+public class CityManagement : MonoBehaviour 
+{
+    GameManager gameManager;
 
     public GameObject prefabRemoving;
     public GameObject prefabEmitting;
-
     public MissionManager.Mission mission;
-
     public int activeCoroutineRelatedToPower;
+
+    void Awake() 
+    {
+        gameManager = FindObjectOfType<GameManager>();
+    }
 
     IEnumerator EmitEnergy()
     {
@@ -36,8 +38,8 @@ public class CityManagement : MonoBehaviour {
         yield return new WaitForSeconds(0f);
         activeCoroutineRelatedToPower--;
         if (activeCoroutineRelatedToPower == 0) {
-            if (systemReferences != null) {
-                systemReferences.UpdateBlocksRequiringPower();
+            if (gameManager.systemReferences != null) {
+                gameManager.systemReferences.UpdateBlocksRequiringPower();
             } else {
                 Debug.LogWarning("No reference to system found");
             }

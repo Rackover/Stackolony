@@ -5,37 +5,32 @@ using UnityEngine.UI;
 
 public class DeliveryManagement : MonoBehaviour {
 
-    //SETTINGS
     [Header("=== SETTINGS ===")]
-    [Space(1)]
-    public Block[] blocksInShop;
     public int complexityMax = 10;
 
-    public GameObject blockDisplayPrefab;
-
-    
-
-    //REFERENCES
-    [Header("=== REFERENCES ===")]
-    [Space(1)]
+    [Space(2)][Header("=== REFERENCES ===")]
     public Transform shopPanelRegular; //Le panel qui contient les blocs de type normal
     public Transform shopPanelSpecial; //Le panel qui contient les blocs de type spécial
-    public StorageBay storageBay;
     public Slider complexitySlider;
+    public GameObject blockDisplayPrefab;
     public GameObject mainPanel;
 
-    //SETTINGS
-    [System.NonSerialized]
-    public int complexity;
+    [Space(1)][Header("Script")]
+    public StorageBay storageBay;
 
-    [System.NonSerialized]
-    public List<ShopDisplay> shopDisplays;
+
+    [System.NonSerialized] public int complexity;
+    [System.NonSerialized] public List<ShopDisplay> shopDisplays;
+
+    Library lib;
 
     public void Awake()
     {
+        lib =  FindObjectOfType<Library>();
+
         complexity = 0;
         shopDisplays = new List<ShopDisplay>();
-      //  complexitySlider.value = 0;
+        //complexitySlider.value = 0;
         InitShop();
     }
 
@@ -63,7 +58,7 @@ public class DeliveryManagement : MonoBehaviour {
     //Genere les blocs achetable
     public void InitShop()
     {
-        foreach (Block block in blocksInShop)
+        foreach (Block block in lib.blocks)
         {
             GameObject newBlockDisplay = Instantiate(blockDisplayPrefab, shopPanelRegular);
             newBlockDisplay.name = "Display " + block.title;

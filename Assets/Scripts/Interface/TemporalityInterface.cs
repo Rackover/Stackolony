@@ -5,8 +5,7 @@ public class TemporalityInterface : MonoBehaviour {
 
     [Header("=== REFERENCES ===")]
     [Space(1)]
-    public Text cycleNumberText;
-    public Text yearNumberText;
+    public Text timeText;
     public GameObject dayNightDisplay;
     public GameObject timescaleButtonHolder;
     public Image pauseButton;
@@ -14,8 +13,7 @@ public class TemporalityInterface : MonoBehaviour {
 
     public void UpdateCycleText(int cycleNumber, int yearNumber)
     {
-        cycleNumberText.text = "Cycle : " + cycleNumber;
-        yearNumberText.text = "Year : " + yearNumber;
+        timeText.text = "Cycle : " + cycleNumber + " - Year : " + yearNumber;
     }
 
     public void EnableButton(Image button)

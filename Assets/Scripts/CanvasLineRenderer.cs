@@ -13,7 +13,7 @@ public class Line
 
 public class CanvasLineRenderer : MonoBehaviour 
 {
-	public List<Line> lines = new List<Line>();
+	List<Line> lines = new List<Line>();
 
 	public void DrawCanvasLine(Vector3 origin, Vector3 target, float _width, Color _color)
 	{
