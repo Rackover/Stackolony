@@ -57,7 +57,7 @@ public class SystemReferences : MonoBehaviour {
         foreach (Generator generator in AllGenerators)
         {
             generator.Invoke("AfterMovingBlock", 0f);
-            yield return new WaitForSeconds(1);
+            yield return new WaitForEndOfFrame();
         }
         yield return null;
     }
