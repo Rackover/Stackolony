@@ -952,12 +952,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   collider: {fileID: 65222403905997784}
-  myContainer: {fileID: 114100101188002198}
-  myBlock: {fileID: 0}
-  myBlockObject: {fileID: 0}
+  container: {fileID: 114100101188002198}
+  block: {fileID: 0}
+  blockObject: {fileID: 0}
   unpoweredEffect: {fileID: 1077097437806386}
   onFireEffect: {fileID: 1249191511621426}
-  myBridge: {fileID: 0}
+  bridge: {fileID: 0}
   blocks:
   - {fileID: 11400000, guid: dc8a9fcdd3381f44e9b6b2c24ef372ef, type: 2}
   gridCoordinates: {x: 18, y: 1, z: 16}
@@ -965,6 +965,7 @@ MonoBehaviour:
   gridManager: {fileID: 0}
   flagReader: {fileID: 0}
   systemRef: {fileID: 0}
+  lib: {fileID: 0}
   activeFlags: []
   states: 
   currentPower: 0

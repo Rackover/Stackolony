@@ -21,7 +21,7 @@ public class BlockInfobox : MonoBehaviour
 	public GameObject generatorPanel;
 	public GameObject firemanStationPanel;
 
-	BlockLink currentSelection;
+	public BlockLink currentSelection;
 	List<StateTag> stateTags = new List<StateTag>();
 	List<FlagPanel> flagPanels = new List<FlagPanel>();
 
@@ -54,14 +54,14 @@ public class BlockInfobox : MonoBehaviour
 
 	void ShowStatesTags(BlockState[] states)
 	{
-		float stateShift = 0f;
+		float stateShift = -stateTagShift;
 		for( int i = 0; i < states.Length; i++)
 		{
 			StateTag newTag = GetAvailableTag();
-			Vector2 newTagPosition = new Vector2(generalBox.sizeDelta.x/2, stateShift);
 
 			if(newTag != null)
 			{
+				Vector2 newTagPosition = new Vector2(generalBox.sizeDelta.x/2, generalBox.sizeDelta.y/2 - newTag.self.sizeDelta.y/2 + stateShift);
 				newTag.PrintTag(states[i]);
 				newTag.self.localPosition = newTagPosition;
 			}
@@ -70,10 +70,13 @@ public class BlockInfobox : MonoBehaviour
 				newTag = Instantiate(stateTagPrefab, self.position, Quaternion.identity, generalBox).GetComponent<StateTag>();
 				stateTags.Add(newTag);
 
+				Vector2 newTagPosition = new Vector2(generalBox.sizeDelta.x/2, generalBox.sizeDelta.y/2 - newTag.self.sizeDelta.y/2 + stateShift);
+
 				stateTags[stateTags.Count - 1].PrintTag(states[i]);
 				stateTags[stateTags.Count - 1].self.localPosition = newTagPosition;
 			}
-			stateShift -= newTag.self.sizeDelta.x + stateTagShift;
+
+			stateShift -= newTag.self.sizeDelta.y + stateTagShift;
 		}
 	}
 
@@ -105,6 +108,7 @@ public class BlockInfobox : MonoBehaviour
 					// Moving Panel
 					newPos = new Vector2(0, panelShift - fsp.self.sizeDelta.y/2);
 					fsp.self.localPosition = newPos;
+					fsp.button.onClick.AddListener(currentSelection.UseFlags);
 					panelShift -= fsp.self.sizeDelta.y;
 
 					// Modifying values
@@ -116,7 +120,6 @@ public class BlockInfobox : MonoBehaviour
 					Debug.LogWarning("This flag dosn't need any additional boxes");
 					break;
 			}
-
 		}
 	}
 
@@ -136,6 +139,19 @@ public class BlockInfobox : MonoBehaviour
 			else
 				t = new Vector2(self.position.x - generalBox.sizeDelta.x/2 + 5f, self.position.y);
 			line.DrawCanvasLine(o, t, 2f, Color.grey);
+
+
+			for(int i = 0; i < currentSelection.activeFlags.Count; i++)
+			{
+				if(currentSelection.activeFlags[i] is FiremanStation)
+				{
+					FiremanStation firemanStation = (FiremanStation)currentSelection.activeFlags[i];
+					for(int j = 0; j < firemanStation.targets.Count; j++)
+					{
+						line.DrawCanvasLine(Camera.main.WorldToScreenPoint(currentSelection.transform.position), Camera.main.WorldToScreenPoint(firemanStation.targets[j].transform.position), 1f, Color.blue);
+					}
+				}
+			}
 		}
 	}
 

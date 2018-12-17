@@ -28,6 +28,7 @@ public class BlockLink : MonoBehaviour {
     [HideInInspector]   public GridManagement gridManager;
     [HideInInspector]   public FlagReader flagReader;
     [HideInInspector]   public SystemReferences systemRef;
+    [HideInInspector]   public Library lib;
 
     [Header("Lists")]
     public List<Flag> activeFlags = new List<Flag>();
@@ -47,7 +48,10 @@ public class BlockLink : MonoBehaviour {
         flagReader = FindObjectOfType<FlagReader>();
         gridManager = FindObjectOfType<GridManagement>();
         if (collider == null) collider = gameObject.GetComponent<BoxCollider>();
+
         SystemReferences foundSystemRef = FindObjectOfType<SystemReferences>();
+        lib = FindObjectOfType<Library>();
+
         if (foundSystemRef == null)
         {
             GameObject newSystemRefGO = new GameObject();
@@ -60,8 +64,17 @@ public class BlockLink : MonoBehaviour {
         }
     }
 
-    public void NewCycle() {
+    public void Update()
+    {
+        UpdateFlags();
+    }
 
+    public void NewCycle() 
+    {
+        foreach (Flag flag in activeFlags)
+        {
+            flag.OnNewCycle();
+        }
     }
 
     //Apelle une fonction à chaque script "flag" attachés
@@ -259,5 +272,28 @@ public class BlockLink : MonoBehaviour {
         gridCoordinates.z * gridManager.cellSize + 0.5f * gridManager.cellSize);
         CallFlags("AfterMovingBlock");
         yield return null;
+    }
+
+    public void UpdateFlags()
+    {
+        if(states.Contains(BlockState.Powered))
+        {
+            foreach (Flag flag in activeFlags)
+            {
+                flag.UpdateFlag();
+            }
+        }
+    }
+
+    public void UseFlags()
+    {
+        if(states.Contains(BlockState.Powered))
+        {
+            foreach (Flag flag in activeFlags)
+            {
+                flag.Use();
+            }
+        }
+
     }
 }

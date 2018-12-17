@@ -1932,7 +1932,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 90, y: 30.000002, z: 0}
 --- !u!1 &475558755
 GameObject:
@@ -4520,6 +4520,11 @@ Prefab:
       propertyPath: line
       value: 
       objectReference: {fileID: 1200968465}
+    - target: {fileID: 114444709983471744, guid: d256f0a69421ac949a50e2af397daf91,
+        type: 2}
+      propertyPath: stateTagShift
+      value: 2.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d256f0a69421ac949a50e2af397daf91, type: 2}
   m_IsPrefabAsset: 0
@@ -4903,7 +4908,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1200968464}
   - component: {fileID: 1200968467}
-  - component: {fileID: 1200968466}
   - component: {fileID: 1200968465}
   m_Layer: 5
   m_Name: CanvasLineRenderer
@@ -4941,33 +4945,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ab3113f18192d5418ca805be36b997a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1200968466
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1200968463}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
+  lines: []
 --- !u!222 &1200968467
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5135,7 +5113,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4629755494450392, guid: 4fa0b1c4374fd124fb9cb79111623440, type: 2}
       propertyPath: m_RootOrder
-      value: 8
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 114170134095594544, guid: 4fa0b1c4374fd124fb9cb79111623440,
         type: 2}
@@ -7580,7 +7558,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4982905814520774, guid: 89486d34013cc5043af11002d4d1533d, type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 114933722351790540, guid: 89486d34013cc5043af11002d4d1533d,
         type: 2}
@@ -7655,7 +7633,7 @@ Transform:
   - {fileID: 1465901714}
   - {fileID: 830368802}
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1807655992
 MonoBehaviour:
@@ -7668,6 +7646,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae5c664832a26a049a2b054acc6542ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  extinctorPrefab: {fileID: 1040333837174470, guid: 933606df50154f542a5892a642414fe3,
+    type: 2}
 --- !u!114 &1807655993
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8381,7 +8361,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b49fe3e99ed4834eaed097f1f858b98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AllGenerators: []
+  AllGenerators:
+  - {fileID: 0}
   AllBlocksRequiringPower: []
   AllBlockLinks: []
   AllTimeRelatedBlocks: []
