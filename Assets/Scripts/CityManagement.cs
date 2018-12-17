@@ -29,7 +29,7 @@ public class CityManagement : MonoBehaviour {
                     Destroy(energyFeedback, 2);
                     blocklink.ChangePower(1);
                     myMission.power--;
-                    yield return new WaitForSeconds(0.01f);
+                    yield return new WaitForEndOfFrame();
                 }
             }
         }

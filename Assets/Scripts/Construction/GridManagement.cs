@@ -81,6 +81,11 @@ public class GridManagement : MonoBehaviour {
         gridDebugger.InitButtons();
     }
 
+    private void LoadGrid() //Fonction pour charger une grille depuis un fichier de sauvegarde
+    {
+
+    }
+
     public void DestroyBlock(Vector3Int coordinates)
     {
         if (grid[coordinates.x, coordinates.y, coordinates.z] != null)
@@ -312,6 +317,8 @@ public class GridManagement : MonoBehaviour {
         }
         //S'il le pont n'a pas été détruit ou modifié, on retransmet la nouvelle liste des positions de chaque partie du pont à l'objet bridgeInfo
         bridgeInfo.allBridgePositions = newBridgePositions.ToArray();
+        bridgeInfo.destination.y = newYPosition;
+        bridgeInfo.origin.y = newYPosition;
     }
 
     /// <summary>

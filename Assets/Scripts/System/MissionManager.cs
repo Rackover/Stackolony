@@ -258,8 +258,11 @@ public class MissionManager : MonoBehaviour {
                     {
                         bridgeDestinationPosition = blockFound.GetComponent<BridgeInfo>().destination;
                     }
-                    output = gridManager.grid[bridgeDestinationPosition.x, bridgeDestinationPosition.y, bridgeDestinationPosition.z].GetComponent<BlockLink>();
-                    myMission.exploredPositions.Add(bridgeDestinationPosition);
+                    if (gridManager.grid[bridgeDestinationPosition.x, bridgeDestinationPosition.y, bridgeDestinationPosition.z] != null)
+                    {
+                        output = gridManager.grid[bridgeDestinationPosition.x, bridgeDestinationPosition.y, bridgeDestinationPosition.z].GetComponent<BlockLink>();
+                        myMission.exploredPositions.Add(bridgeDestinationPosition);
+                    }
                 }
                 //Sinon, récupère simplement le bloc trouvé
                 else
