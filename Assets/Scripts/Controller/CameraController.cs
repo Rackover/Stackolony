@@ -7,9 +7,9 @@ public class CameraController : MonoBehaviour {
     [Header("=== REFERENCIES ===")] [Space(1)]
     [Header("Camera")] [Space(1)]
     public GameObject cameraModel;
-    public GameObject cameraInstance;
+    GameObject cameraInstance;
     [Header("Scripts")] [Space(1)]
-    public Interface userInterface;
+    //public Interface userInterface;
     public CursorManagement cursorManagement;
     [Header("Transforms")] [Space(1)]
     public Transform camCenter;                 // Center of the camera (Used for Lookat + movement)
@@ -18,12 +18,11 @@ public class CameraController : MonoBehaviour {
     Vector3 startPosition;
     //public Toggle control;
 
-    [Space(2)] [Header("=== SETTINGS ===")] [Space(1)]
+    [Space(2)][Header("=== SETTINGS ===")][Space(1)]
     [Header("Drifting")]
     public float mouseDriftSensibility = 0.1f;     // Set the sensibility of the drift of the camera center
     public Vector2 driftBorder = new Vector2(25f, 25f);
     public float cameraCatchUpSpeed = 5f;       // Speed at which the camera will catch up to its supposed location. Increasing this value decreases the camera lag
-    //public float maxDrift = 100f;               // Set the maximum drift speed of the camera center
     [Header("Rotating")]
     public float rotateSensibility = 1f;
     public float minLookAngle = 10f;
@@ -33,13 +32,16 @@ public class CameraController : MonoBehaviour {
     public float minZoom = 0f;
     public float maxZoom = 10f;
 
-    Transform camTransform;              // Transform of the main camera
-    Transform cameraTransformObjective;  // The camera will try to have the same transform as this
+    [HideInInspector] public float userBorderSensibility = 0.5f;
+	[HideInInspector] public float userRotationSensibility = 0.5f;
+	[HideInInspector] public float userGrabSensitivity = 0.5f;
+
 
     bool driftEnabled = true;
+    Transform camTransform;              // Transform of the main camera
+    Transform cameraTransformObjective;  // The camera will try to have the same transform as this
     Vector3 mouseDelta;
     Vector3 lastMousePosition;
-
 
     void Start()
     {
@@ -82,7 +84,7 @@ public class CameraController : MonoBehaviour {
         }
 
         CatchUpCameraObjective();
-        userInterface.cursorTransform.position = Input.mousePosition;
+        //userInterface.cursorTransform.position = Input.mousePosition;
 
         if(Input.GetKeyDown(KeyCode.V))
         {
@@ -109,16 +111,16 @@ public class CameraController : MonoBehaviour {
         }
         
         mouseDelta = (Vector3)lastMousePosition - (Vector3)Input.mousePosition;
-        camCenter.position += mouseDelta.x * cameraTransformObjective.right.normalized * mouseDriftSensibility * userInterface.userGrabSensitivity.value;
-        camCenter.position += mouseDelta.y * new Vector3(cameraTransformObjective.forward.x, 0, cameraTransformObjective.forward.z).normalized * mouseDriftSensibility * userInterface.userGrabSensitivity.value;
+        camCenter.position += mouseDelta.x * cameraTransformObjective.right.normalized * mouseDriftSensibility * userGrabSensitivity;
+        camCenter.position += mouseDelta.y * new Vector3(cameraTransformObjective.forward.x, 0, cameraTransformObjective.forward.z).normalized * mouseDriftSensibility * userGrabSensitivity;
         lastMousePosition = (Vector3)Input.mousePosition;
     }
 
     void Rotation()
     {
         Vector2 lookDirection = new Vector2(
-            Input.GetAxis("MouseX") * rotateSensibility * userInterface.userRotationSensibility.value,
-            Input.GetAxis("MouseY") * rotateSensibility * userInterface.userRotationSensibility.value
+            Input.GetAxis("MouseX") * rotateSensibility * userRotationSensibility,
+            Input.GetAxis("MouseY") * rotateSensibility * userRotationSensibility
         );
         
         camPivot.rotation = Quaternion.Euler(new Vector3(
@@ -139,8 +141,8 @@ public class CameraController : MonoBehaviour {
         if (drift.magnitude > 0) {
             if (driftEnabled) {
                 float oldY = camCenter.position.y;
-                camCenter.position += (drift.x * userInterface.userBorderSensibility.value) * cameraTransformObjective.right.normalized * Time.deltaTime
-                    + (drift.y * userInterface.userBorderSensibility.value) * cameraTransformObjective.forward.normalized * Time.deltaTime;
+                camCenter.position += (drift.x * userBorderSensibility) * cameraTransformObjective.right.normalized * Time.deltaTime
+                    + (drift.y * userBorderSensibility) * cameraTransformObjective.forward.normalized * Time.deltaTime;
                 camCenter.position = new Vector3(camCenter.position.x, oldY, camCenter.position.z);
             }
         }
