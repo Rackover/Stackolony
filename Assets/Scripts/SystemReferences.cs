@@ -9,7 +9,6 @@ public class SystemReferences : MonoBehaviour {
     public List<BlockLink> AllBlockLinks;
     public List<WorkingHours> AllTimeRelatedBlocks;
 
-
     private void Awake()
     {
         AllGenerators = new List<Generator>();

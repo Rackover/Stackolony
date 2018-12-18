@@ -35,7 +35,7 @@ public class GridManagement : MonoBehaviour
     {
         gameManager = FindObjectOfType<GameManager>();
         //Recuperation du terrain
-        myTerrain = Terrain.activeTerrain;
+        myTerrain = GetComponent<Terrain>();
         //Initialisation des variables statiques
         gridSize.x = Mathf.RoundToInt(myTerrain.terrainData.size.x / cellSize);
         gridSize.z = Mathf.RoundToInt(myTerrain.terrainData.size.z / cellSize);
@@ -169,7 +169,6 @@ public class GridManagement : MonoBehaviour
     public void SpawnBlock(GameObject blockPrefab, Vector2Int coordinates) //Genère un bloc à une coordonnée 2D sur la map
     {
         int cursorPosYInTerrain = FindObjectOfType<CursorManagement>().posInTerrain.y; //Position en Y à laquelle le joueur a cliqué
-        cursorPosYInTerrain = 10;
 
         if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x,cursorPosYInTerrain,coordinates.y),true) != GridManagement.blockType.FREE)
         {
