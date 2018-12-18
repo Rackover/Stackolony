@@ -60,7 +60,7 @@ public class StorageBay : MonoBehaviour {
                 }
                 else
                 {
-                    gameManager.generalInterface.ShowError("You can't place it here");
+                    gameManager.errorDisplay.ShowError("You can't place it here");
                 }
             }
         } else
@@ -237,7 +237,7 @@ public class StorageBay : MonoBehaviour {
             block.transform.SetParent(FindObjectOfType<GridManagement>().transform.Find("Grid"));
         } else
         {
-            gameManager.generalInterface.ShowError("Block can't be destocked");
+            gameManager.errorDisplay.ShowError("Block can't be destocked");
         }
     }
 }

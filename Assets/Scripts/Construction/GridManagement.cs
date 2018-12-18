@@ -117,7 +117,7 @@ public class GridManagement : MonoBehaviour
                     } else
                     {
                         grid[coordinates.x, i - 1, coordinates.z] = null;
-                        gameManager.generalInterface.ShowError("Error at update");
+                        gameManager.errorDisplay.ShowError("Error at update");
                         return;
                     }
                 }
@@ -214,7 +214,7 @@ public class GridManagement : MonoBehaviour
             }
             if (newBlockHeight == 0)
             {
-                gameManager.generalInterface.ShowError("You have reached max height");
+                gameManager.errorDisplay.ShowError("You have reached max height");
                 Debug.LogWarning("Max height reached");
                 Destroy(newBlock);
             }
@@ -244,11 +244,11 @@ public class GridManagement : MonoBehaviour
             {
                 case "StorageBay":
                     if (displayErrorMessages)
-                        gameManager.generalInterface.ShowError("You can't build over the storage bay");
+                        gameManager.errorDisplay.ShowError("You can't build over the storage bay");
                     return blockType.STORAGE;
                 case "Bridge":
                     if (displayErrorMessages)
-                        gameManager.generalInterface.ShowError("You can't build over a bridge");
+                        gameManager.errorDisplay.ShowError("You can't build over a bridge");
                     return blockType.BRIDGE;
                 default:
                     break;
