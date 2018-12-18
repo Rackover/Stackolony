@@ -252,6 +252,8 @@ public class BlockLink : MonoBehaviour {
 
     public IEnumerator MoveToPosition(float time) //Coroutine pour déplacer le cube vers sa position
     {
+        Debug.Log("Moving block");
+        systemRef.UpdateSystem();
         float elapsedTime = 0;
         Vector3 startingPos = transform.position;
         while (elapsedTime < time)
@@ -271,7 +273,6 @@ public class BlockLink : MonoBehaviour {
         gridCoordinates.x * gridManager.cellSize + 0.5f * gridManager.cellSize,
         0.5f + gridCoordinates.y,
         gridCoordinates.z * gridManager.cellSize + 0.5f * gridManager.cellSize);
-        CallFlags("AfterMovingBlock");
         yield return null;
     }
 

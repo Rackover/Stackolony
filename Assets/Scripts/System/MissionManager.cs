@@ -2,18 +2,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// FONCTIONNEMENT DU SYSTEME :
+/// A chaque interaction avec un bloc lié à l'energie, le jeu recalcule entierement les transmissions de courant :
+/// Cela signifie que les blocs ayant besoin de courant se désalimentent tous et que les blocs generateurs vont lancer leurs missions pour
+/// emettre leurs explorateurs les uns après les autres.
+/// Deux missions ne peuvent donc jamais avoir lieu en même temps.
+/// Une fois qu'une mission est terminée, elle lance une fonction callback. Si cette fonction callback est liée à des coroutines, alors elle s'effectue, et seulement après
+/// la mission sera marquée comme terminée.
+/// 
+/// PROBLEMES ACTUELS :
+/// Lors de la chute d'un generateur, il generere 2 fois du courant
+/// 
+/// </summary>
+
+
 public class MissionManager : MonoBehaviour {
 
+    public bool ShowExplorers; //Affiche les explorers en leur créant un gameObject pour les visualiser plus facilement
+    [System.Serializable]
     public class Mission
     {
         public List<Coroutine> activeExplorers; //Liste de toutes les listes d'explorers actifs, il y a une liste d'explorers pour chaque mission.
-        //public bool[,,] exploredPositions;      //Tableau tridimensionel booléen pour répértorier les positions déjà visitées par un explorer, pour chaque mission
         public List<Vector3Int> exploredPositions;
         public List<BlockLink> blocksFound;      //Tableau de chaque block trouvé par les explorers, il y en a un pour chaque mission.
         public List<int> blockDistanceToCenter; //Tableau paralléle au tableau blocksFound, indiquant la distance de chaque bloc par rapport au point de départ de la mission
         public int power;
         public int range;
         public string callBack;
+        public Vector3Int position;
+        public int explorerCount;
     }
 
     [Header("Lists")]
@@ -42,7 +60,7 @@ public class MissionManager : MonoBehaviour {
         systemRef = FindObjectOfType<SystemReferences>();
     }
 
-    public void PrepareNewMission()
+    public Mission PrepareNewMission()
     {
         Mission newMission = new Mission();
         newMission.activeExplorers = new List<Coroutine>();
@@ -50,42 +68,31 @@ public class MissionManager : MonoBehaviour {
         newMission.blockDistanceToCenter = new List<int>();
         newMission.exploredPositions = new List<Vector3Int>();
         missionList.Add(newMission);
+        return newMission;
     }
 
 
     //Lance une nouvelle mission d'exploration, cela renverra une liste de blocks explorés et lancera la fonction callBack qui se trouve dans le CityManager.
     public void StartMission(Vector3Int position, string callBack, int range = 1, int power = 0)
     {
-        StartCoroutine(StartMissionCoroutine(position, callBack, range, power));
+        Mission newMission = PrepareNewMission();
+        newMission.position = position;
+        newMission.callBack = callBack;
+        newMission.range = range;
+        newMission.power = power;
+
+        //Si la mission est la premiere dans la liste, elle se lance, sinon elle attend son tour
+        if (missionList.Count == 1)
+        {
+            StartCoroutine(StartMissionCoroutine(newMission));
+        }
     }
 
-    public IEnumerator StartMissionCoroutine(Vector3Int position, string callBack, int range, int power)
+    public IEnumerator StartMissionCoroutine(Mission mission)
     {
-        //Ajoute un délai pour éviter que 2 missions se lancent en même temps
-        yield return new WaitForSeconds(0.1f);
-        PrepareNewMission();
-
-        //Genere une nouvelle ID de mission
-        Mission activeMission = missionList[missionList.Count - 1];
-        activeMission.power = power;
-        activeMission.range = range;
-
-
-        //Genere le tableau tridimensionel booléen indiquant les coordonnées déjà explorées
-       /* activeMission.exploredPositions = (new bool[gridManager.gridSize.x, gridManager.gridSize.y, gridManager.gridSize.z]);
-        for (int x = 0; x < gridManager.gridSize.x; x++)
-        {
-            for (int y = 0; y < gridManager.gridSize.y; y++)
-            {
-                for (int z = 0; z < gridManager.gridSize.z; z++)
-                {
-                    activeMission.exploredPositions[x, y, z] = false;
-                }
-            }
-        }
- */
         //Genere le premier explorer de la mission
-        activeMission.activeExplorers.Add(StartCoroutine(SpawnExplorer(position, callBack, activeMission, range, power, 0)));
+        mission.activeExplorers.Add(StartCoroutine(SpawnExplorer(mission.position, mission.callBack, mission, mission.range, mission.power, 0)));
+        yield return null;
     }
 
 
@@ -93,29 +100,34 @@ public class MissionManager : MonoBehaviour {
     public void EndMission(Mission myMission)
     {
         missionList.Remove(myMission);
+        if (missionList.Count > 0)
+        {
+            StartCoroutine(StartMissionCoroutine(missionList[0]));
+        }
     }
 
     //Genere un explorer qui va vérifier les 6 directions possible, et envoyer un autre explorer pour explorer chaque chemin trouvé.
     IEnumerator SpawnExplorer(Vector3Int position, string callback, Mission myMission, int range, int power, int explorerID)
     {
         //Delai (à augmenter pour réduire le lag mais augmenter le temps de calcul)
-        yield return new WaitForSeconds(0.01f);
-
+        yield return new WaitForEndOfFrame();
 
         GameObject explorerVisuals = null;
 
         //L'explorer récupère les informations
         if (gridManager.grid[position.x, position.y, position.z] != null)
         {
-            explorerVisuals = Instantiate(explorerPrefab);
-            explorerVisuals.transform.position = gridManager.grid[position.x, position.y, position.z].transform.position;
+            if (ShowExplorers)
+            {
+                explorerVisuals = Instantiate(explorerPrefab);
+                explorerVisuals.transform.position = gridManager.grid[position.x, position.y, position.z].transform.position;
+            }
 
             if (gridManager.grid[position.x, position.y, position.z].GetComponent<BlockLink>() != null)
             {
                 myMission.blocksFound.Add(gridManager.grid[position.x, position.y, position.z].GetComponent<BlockLink>());
                 myMission.blockDistanceToCenter.Add(range);
                 myMission.exploredPositions.Add(position);
-                //myMission.exploredPositions[position.x, position.y, position.z] = true;
             }
             else
             {
@@ -164,17 +176,20 @@ public class MissionManager : MonoBehaviour {
             }
         }
 
-
         //S'il n'y a plus aucun explorer actif, on termine la mission
+        myMission.explorerCount = myMission.activeExplorers.Count;
         if (myMission.activeExplorers.Count == 0)
         {
-            cityManager.mission = myMission;
-            cityManager.StartCoroutine(callback);
-            EndMission(myMission);
+            if (myMission.blocksFound.Count > 0)
+            {
+                cityManager.mission = myMission;
+                cityManager.StartCoroutine(callback);
+            }
+            else
+            {
+                EndMission(myMission);
+            }
         }
-
-
-
         yield return null;
     }
 
@@ -249,6 +264,10 @@ public class MissionManager : MonoBehaviour {
                 //Si l'objet trouvé est un pont, récupère le bloc à l'extrémité de ce pont
                 if (blockFound.tag == "Bridge")
                 {
+                    foreach (Vector3Int pos in blockFound.GetComponent<BridgeInfo>().allBridgePositions)
+                    {
+                        myMission.exploredPositions.Add(pos);
+                    }
                     Vector3Int bridgeDestinationPosition = Vector3Int.zero;
                     if (blockFound.GetComponent<BridgeInfo>().destination == initialPos)
                     {
@@ -279,6 +298,10 @@ public class MissionManager : MonoBehaviour {
                             {
                                 output = blockFound.GetComponent<BlockLink>();
                                 myMission.exploredPositions.Add(output.gridCoordinates);
+                                foreach (Vector3Int pos in foundBlockLink.bridge.GetComponent<BridgeInfo>().allBridgePositions)
+                                {
+                                    myMission.exploredPositions.Add(pos);
+                                }
                             } else
                             {
                                 GameObject initialBlock = gridManager.grid[initialPos.x, initialPos.y, initialPos.z];
@@ -291,7 +314,10 @@ public class MissionManager : MonoBehaviour {
                                         {
                                             Vector3Int foundBlockPosition = initialBlockLink.bridge.GetComponent<BridgeInfo>().destination;
                                             output = gridManager.grid[foundBlockPosition.x, foundBlockPosition.y, foundBlockPosition.z].GetComponent<BlockLink>();
-                                            myMission.exploredPositions.Add(foundBlockPosition);
+                                            foreach (Vector3Int pos in initialBlockLink.bridge.GetComponent<BridgeInfo>().allBridgePositions)
+                                            {
+                                                myMission.exploredPositions.Add(pos);
+                                            }
                                         }
                                     }
                                 }
@@ -300,10 +326,13 @@ public class MissionManager : MonoBehaviour {
                     }
                 }
             }
-            //Ajout de la position explorée à la liste des positions explorées
-            myMission.exploredPositions.Add(position);
-        }
 
+            //Ajout de la position explorée à la liste des positions explorées
+            if (onlyBridges == false)
+            {
+                myMission.exploredPositions.Add(position);
+            }
+        }
         return output;
     }
 }

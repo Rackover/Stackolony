@@ -35,7 +35,8 @@ public class CityManagement : MonoBehaviour
                 }
             }
         }
-        yield return new WaitForSeconds(0f);
+        missionManager.EndMission(myMission);
+
         activeCoroutineRelatedToPower--;
         if (activeCoroutineRelatedToPower == 0) {
             if (gameManager.systemReferences != null) {
