@@ -24,6 +24,8 @@ GameObject:
   - component: {fileID: 114694822442598470}
   - component: {fileID: 114692505850303094}
   - component: {fileID: 54173972052886234}
+  - component: {fileID: 114965274077879770}
+  - component: {fileID: 114853268940141986}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -180,3 +182,31 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles: []
+--- !u!114 &114853268940141986
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1979716195221794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee4ab9821096c489f84e50f35b7b9644, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _startDistance: 150
+  _useRadialDistance: 1
+  _fadeToSkybox: 0
+  _shader: {fileID: 4800000, guid: 3514cc2676a6c4db294c28459f22c359, type: 3}
+--- !u!114 &114965274077879770
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1979716195221794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1eed1d9cbe64423499f1fefc0ce50417, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Resolution: 1
+  DefaultSpotCookie: {fileID: 2800000, guid: 5157bf6d690b6df458f6c0ce0c06d329, type: 3}
