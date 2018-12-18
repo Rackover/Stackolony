@@ -64,7 +64,8 @@ public class GridManagement : MonoBehaviour
 
     private void LoadGrid() //Fonction pour charger une grille depuis un fichier de sauvegarde
     {
-
+        // spawner de bas en haut
+        //SpawnBlock(GameObject blockPrefab, Vector2Int coordinates)
     }
 
     public void DestroyBlock(Vector3Int coordinates)

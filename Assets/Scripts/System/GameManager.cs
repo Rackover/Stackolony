@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour 
 {
-    
     [Header("SYSTEM")]
     public Temporality temporality;
     public FlagReader flagReader;
