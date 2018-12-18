@@ -16,11 +16,8 @@ MonoBehaviour:
   description: This needs a proper description
   model: {fileID: 1982061194005416, guid: 5417d5759a2b0b94b84c640aa8edebbe, type: 2}
   icon: {fileID: 21300000, guid: c7c8605700d7ec04e841c209564ce407, type: 3}
+  ID: 0
   level: 1
   complexity: 1
   consumption: 1
-  flags:
-  - MoodModifier_1_1_worker,scientist
-  - Generator_20
-  - Generator_3
-  - MoodModifier_1_-5_all
+  flags: []

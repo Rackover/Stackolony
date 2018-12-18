@@ -12,11 +12,7 @@ using UnityEngine;
 /// la mission sera marquée comme terminée.
 /// 
 /// PROBLEMES ACTUELS :
-/// Lorsqu'il y a trop de generateurs, les calculs ont tendance à s'empiler et à générer une longue liste de missions
-/// Cependant l'action de "Reset la puissance de chaque blocs" n'est pas inscrite dans la file d'attente, elle s'effectue systèmatiquement lorsque le joueur effectue un changement dans le systeme electrique
-/// Cela peut entraîner un probleme si les blocs se reset alors que le systeme n'avait pas fini son calcul precedant
-/// Il faudrait donc INTERROMPRE les calculs lorsque le joueur interagit avec un element, puis RESET la puissance des blocs, puis REDEMARRER de nouveaux calculs
-/// 
+/// Lors de la chute d'un generateur, il generere 2 fois du courant
 /// 
 /// </summary>
 

@@ -8,7 +8,9 @@ public class SystemReferences : MonoBehaviour {
     public List<BlockLink> AllBlockLinks;
     public List<WorkingHours> AllTimeRelatedBlocks;
 
+    public MissionManager missionManager;
     public Temporality temporalityManager;
+    public CityManagement cityManager;
 
     private void Awake()
     {
@@ -19,8 +21,8 @@ public class SystemReferences : MonoBehaviour {
     //Met a jour le system de jeu
     public void UpdateSystem()
     {
-        StartCoroutine(ResetBlocksPower());
-        StartCoroutine(RecalculatePropagation());
+        StopAllCoroutines();
+        StartCoroutine(ResetAndRecalculatePower());
     }
 
     public void UpdateCycle() {
@@ -52,6 +54,12 @@ public class SystemReferences : MonoBehaviour {
         }
     }
 
+    IEnumerator ResetAndRecalculatePower()
+    {
+        yield return ResetBlocksPower();
+        yield return RecalculatePropagation();
+    }
+
     IEnumerator RecalculatePropagation()
     {
         foreach (Generator generator in AllGenerators)
@@ -64,6 +72,13 @@ public class SystemReferences : MonoBehaviour {
 
     IEnumerator ResetBlocksPower()
     {
+        //Stop les calculs liés aux missions
+        missionManager.StopAllCoroutines();
+        cityManager.StopAllCoroutines();
+        foreach (MissionManager.Mission mission in missionManager.missionList)
+        {
+            missionManager.EndMission(mission);
+        }
         foreach (BlockLink block in AllBlocksRequiringPower)
         {
             block.isConsideredUnpowered = true;
