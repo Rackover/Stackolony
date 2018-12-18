@@ -5,22 +5,13 @@ using UnityEngine;
 public class Flag : MonoBehaviour {
 
     [Header("References")]
-    public CityManagement cityManager;
-    public MissionManager missionManager;
     public BlockLink myBlockLink;
-    public SystemReferences systemRef;
-
     public bool isEnabled = true;
-
 
     //Fonction appelée lors de la création du script
     virtual public void Awake()
     {
-        //TEMPORAIRE
-        cityManager = FindObjectOfType<CityManagement>();
-        missionManager = FindObjectOfType<MissionManager>();
         myBlockLink = GetComponent<BlockLink>();
-        systemRef = FindObjectOfType<SystemReferences>();
     }
 
     //Alimente les blocs

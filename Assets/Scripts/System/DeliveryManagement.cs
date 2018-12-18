@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class DeliveryManagement : MonoBehaviour {
 
+    public GameManager gameManager;
+
     [Header("=== SETTINGS ===")]
     public int complexityMax = 10;
 
@@ -15,19 +17,12 @@ public class DeliveryManagement : MonoBehaviour {
     public GameObject blockDisplayPrefab;
     public GameObject mainPanel;
 
-    [Space(1)][Header("Script")]
-    public StorageBay storageBay;
-
-
     [System.NonSerialized] public int complexity;
     [System.NonSerialized] public List<ShopDisplay> shopDisplays;
 
-    Library lib;
-
     public void Awake()
     {
-        lib =  FindObjectOfType<Library>();
-
+        gameManager = FindObjectOfType<GameManager>();
         complexity = 0;
         shopDisplays = new List<ShopDisplay>();
         //complexitySlider.value = 0;
@@ -58,10 +53,11 @@ public class DeliveryManagement : MonoBehaviour {
     //Genere les blocs achetable
     public void InitShop()
     {
-        foreach (Block block in lib.blocks)
+        foreach (Block block in gameManager.library.blocks)
         {
             GameObject newBlockDisplay = Instantiate(blockDisplayPrefab, shopPanelRegular);
             newBlockDisplay.name = "Display " + block.title;
+
             ShopDisplay newBlockSettings = newBlockDisplay.GetComponent<ShopDisplay>();
             shopDisplays.Add(newBlockSettings);
             newBlockSettings.deliveryManager = this;
@@ -80,7 +76,7 @@ public class DeliveryManagement : MonoBehaviour {
             if (quantityAsked > 0) {
                 for (int i = 0; i < quantityAsked; i++)
                 {
-                    storageBay.DeliverBlock(blocks.myBlock);
+                    gameManager.storageBay.DeliverBlock(blocks.myBlock);
                     blocks.DecreaseQuantity();
                 }
             }

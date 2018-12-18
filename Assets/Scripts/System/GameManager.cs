@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour {
     public GridDebugger gridDebugger;
     public CursorManagement cursorManagement;
     public GridManagement gridManagement;
+    public StorageBay storageBay;
 
     [Space(1)][Header("INTERFACE")]
     public Interface generalInterface;
@@ -23,7 +24,9 @@ public class GameManager : MonoBehaviour {
     public TooltipGO tooltipGO;
     public BlockInfobox blockInfobox;
 
-    private void Start()
+    public static GameManager instance;
+
+    void Awake()
     {
         temporality = GetComponentInChildren<Temporality>();
         flagReader = GetComponentInChildren<FlagReader>();
@@ -35,6 +38,9 @@ public class GameManager : MonoBehaviour {
         cursorManagement = FindObjectOfType<CursorManagement>();
         gridManagement = FindObjectOfType<GridManagement>();
         gridDebugger = FindObjectOfType<GridDebugger>();
+        storageBay = FindObjectOfType<StorageBay>();
+
+        instance = this;
     }
 
     void Update()

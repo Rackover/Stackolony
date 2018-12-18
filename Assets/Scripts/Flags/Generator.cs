@@ -9,20 +9,22 @@ public class Generator : Flag {
     public override void Awake()
     {
         base.Awake();
+
         //Generate ou récupère l'objet "SystemReferences";
-        systemRef.AllGenerators.Add(this);
-        missionManager.StartMission(myBlockLink.gridCoordinates, "EmitEnergy", -1, power);
+        //missionManager.StartMission(myBlockLink.gridCoordinates, "EmitEnergy", -1, power);
+
+        GameManager.instance.systemReferences.AllGenerators.Add(this);
     }
     public override void Enable()
     {
         base.Enable();
-        systemRef.UpdateSystem();
+        GameManager.instance.systemReferences.UpdateSystem();
     }
 
     public override void Disable()
     {
         base.Disable();
-        systemRef.UpdateSystem();
+        GameManager.instance.systemReferences.UpdateSystem();
     }
 
     public override void BeforeMovingBlock()
@@ -35,7 +37,7 @@ public class Generator : Flag {
         base.AfterMovingBlock();
         if (isEnabled)
         {
-            missionManager.StartMission(myBlockLink.gridCoordinates, "EmitEnergy", -1, power);
+            GameManager.instance.missionManager.StartMission(myBlockLink.gridCoordinates, "EmitEnergy", -1, power);
         }
     }
 
@@ -47,7 +49,7 @@ public class Generator : Flag {
 
     public override void OnDestroy()
     {
-        systemRef.AllGenerators.Remove(this);
+        GameManager.instance.systemReferences.AllGenerators.Remove(this);
         base.OnDestroy();
     }
 }
