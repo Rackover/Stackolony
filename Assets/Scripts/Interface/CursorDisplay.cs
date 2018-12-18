@@ -1,18 +1,10 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
-using System.Collections.Generic;
 
-public class Interface : MonoBehaviour {
+public class CursorDisplay : MonoBehaviour {
 
-	[Header("Cursor")][Space(1)]
 	public RectTransform cursorTransform;
 	public Image cursorImage;
-
-	[Space(1)][Header("Option")]
-	public Slider userBorderSensibility;
-	public Slider userRotationSensibility;
-	public Slider userGrabSensitivity;
 
 	public void ChangeCursor(string mode)	
 	{

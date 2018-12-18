@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour {
-
+public class GameManager : MonoBehaviour 
+{
     [Header("SYSTEM")]
     public Temporality temporality;
     public FlagReader flagReader;
@@ -18,29 +18,41 @@ public class GameManager : MonoBehaviour {
     public StorageBay storageBay;
 
     [Space(1)][Header("INTERFACE")]
-    public Interface generalInterface;
     public DeliveryManagement deliveryManagement;
     public TemporalityInterface temporalityInterface;
     public TooltipGO tooltipGO;
     public BlockInfobox blockInfobox;
 
+    public ErrorDisplay errorDisplay;
+    public OptionsDisplay  optionsDisplay;
+    public CursorDisplay cursorDisplay;
+
     public static GameManager instance;
 
     void Awake()
     {
-        temporality = GetComponentInChildren<Temporality>();
-        flagReader = GetComponentInChildren<FlagReader>();
-        library = GetComponentInChildren<Library>();
-        sfxManager = GetComponentInChildren<SFXManager>();
-        systemReferences = GetComponentInChildren<SystemReferences>();
-        cityManagement = GetComponentInChildren<CityManagement>();
-        missionManager = GetComponentInChildren<MissionManager>();
-        cursorManagement = FindObjectOfType<CursorManagement>();
-        gridManagement = FindObjectOfType<GridManagement>();
-        gridDebugger = FindObjectOfType<GridDebugger>();
-        storageBay = FindObjectOfType<StorageBay>();
-
         instance = this;
+        // SYSTEM
+        if(temporality == null) temporality = GetComponentInChildren<Temporality>();
+        if(flagReader == null) flagReader = GetComponentInChildren<FlagReader>();
+        if(library == null) library = GetComponentInChildren<Library>();
+        if(sfxManager == null) sfxManager = GetComponentInChildren<SFXManager>();
+        if(systemReferences == null) systemReferences = GetComponentInChildren<SystemReferences>();
+        if(cityManagement == null) cityManagement = GetComponentInChildren<CityManagement>();
+        if(missionManager == null) missionManager = GetComponentInChildren<MissionManager>();
+        if(cursorManagement == null) cursorManagement = FindObjectOfType<CursorManagement>();
+        if(gridManagement == null) gridManagement = FindObjectOfType<GridManagement>();
+        if(gridDebugger == null) gridDebugger = FindObjectOfType<GridDebugger>();
+        if(storageBay == null) storageBay = FindObjectOfType<StorageBay>();
+
+        // INTERFACE
+        if(deliveryManagement == null) deliveryManagement = FindObjectOfType<DeliveryManagement>();
+        if(temporalityInterface == null) temporalityInterface = FindObjectOfType<TemporalityInterface>();
+        if(tooltipGO == null) tooltipGO = FindObjectOfType<TooltipGO>();
+        if(blockInfobox == null) blockInfobox = FindObjectOfType<BlockInfobox>();
+        if(errorDisplay == null) errorDisplay = FindObjectOfType<ErrorDisplay>();
+        if(optionsDisplay == null) optionsDisplay = FindObjectOfType<OptionsDisplay>();
+        if(cursorDisplay == null) cursorDisplay = FindObjectOfType<CursorDisplay>();
     }
 
     void Update()

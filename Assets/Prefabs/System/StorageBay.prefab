@@ -95,15 +95,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 383f5a1cc97742b4e98605009782323d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
   stockSize: 4
   size: 2
   maxStock: -1
   offset: 0
   storageBayHeight: 0.2
   flexibility: 0.4
-  cursor: {fileID: 0}
-  gridManager: {fileID: 0}
-  uiManager: {fileID: 0}
-  blockPrefab: {fileID: 1047592790041198, guid: 10acb4a691cc05347b0b3c186c84acc4,
-    type: 2}
-  sfxManager: {fileID: 0}

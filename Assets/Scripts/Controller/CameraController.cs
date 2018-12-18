@@ -8,9 +8,6 @@ public class CameraController : MonoBehaviour {
     [Header("Camera")] [Space(1)]
     public GameObject cameraModel;
     GameObject cameraInstance;
-    [Header("Scripts")] [Space(1)]
-    public Interface userInterface;
-    public CursorManagement cursorManagement;
     [Header("Transforms")] [Space(1)]
     public Transform camCenter;                 // Center of the camera (Used for Lookat + movement)
     public Transform camPivot;                  // Pivot point of the camera (Used for rotation)
@@ -67,7 +64,7 @@ public class CameraController : MonoBehaviour {
 
     void Update()
     {
-        if (cursorManagement.cursorOnUI == false) {
+        if (GameManager.instance.cursorManagement.cursorOnUI == false) {
             cameraTransformObjective.LookAt(camCenter.position);
 
             if (Input.GetButton("MouseMiddle")) {
@@ -84,7 +81,7 @@ public class CameraController : MonoBehaviour {
         }
 
         CatchUpCameraObjective();
-        userInterface.cursorTransform.position = Input.mousePosition;
+        GameManager.instance.cursorDisplay.cursorTransform.position = Input.mousePosition;
         if(Input.GetKeyDown(KeyCode.V))
         {
             transform.position = startPosition;

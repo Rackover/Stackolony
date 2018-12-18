@@ -20,8 +20,8 @@ public class Temporality : MonoBehaviour {
     public Material skyboxMaterial;
 
     [Header("=== DEBUG VALUES ===")][Space(1)]
-    private int cycleNumber; //Combien de cycles se sont ecoulés en tout
-    private int yearNumber; //Combien d'années se sont ecoulées en tout
+    [HideInInspector] public int cycleNumber; //Combien de cycles se sont ecoulés en tout
+    [HideInInspector] public int yearNumber; //Combien d'années se sont ecoulées en tout
     public float cycleProgression; //Combien de secondes se sont ecoulées dans le cycle actuel
     public int timeScale; //Coefficient de vitesse d'écoulement du temps
     //private Coroutine timeCoroutine; //Coroutine pour gérer la progression des cycles, obsoléte
