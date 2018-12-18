@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class SystemReferences : MonoBehaviour {
 
-    GameManager gameManager;
-
     public List<Generator> AllGenerators;
     public List<BlockLink> AllBlocksRequiringPower;
     public List<BlockLink> AllBlockLinks;
@@ -14,7 +12,6 @@ public class SystemReferences : MonoBehaviour {
 
     private void Awake()
     {
-        gameManager = FindObjectOfType<GameManager>();
         AllGenerators = new List<Generator>();
         AllBlocksRequiringPower = new List<BlockLink>();
     }
@@ -34,9 +31,9 @@ public class SystemReferences : MonoBehaviour {
 
     public void CheckWorkingHours() {
         foreach (WorkingHours workingHour in AllTimeRelatedBlocks) {
-            if (gameManager.temporality.cycleProgressionInPercent > workingHour.startHour && workingHour.hasStarted == false) {
+            if (GameManager.instance.temporality.cycleProgressionInPercent > workingHour.startHour && workingHour.hasStarted == false) {
                 workingHour.StartWork();
-            } else if (gameManager.temporality.cycleProgressionInPercent > workingHour.endHour && workingHour.hasStarted == true) {
+            } else if (GameManager.instance.temporality.cycleProgressionInPercent > workingHour.endHour && workingHour.hasStarted == true) {
                 workingHour.EndWork();
             }
         }
@@ -60,7 +57,7 @@ public class SystemReferences : MonoBehaviour {
         foreach (Generator generator in AllGenerators)
         {
             generator.Invoke("AfterMovingBlock", 0f);
-            yield return new WaitForSeconds(1);
+            yield return new WaitForEndOfFrame();
         }
         yield return null;
     }

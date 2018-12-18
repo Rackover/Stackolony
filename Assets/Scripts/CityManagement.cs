@@ -4,17 +4,10 @@ using UnityEngine;
 
 public class CityManagement : MonoBehaviour 
 {
-    GameManager gameManager;
-
     public GameObject prefabRemoving;
     public GameObject prefabEmitting;
     public MissionManager.Mission mission;
     public int activeCoroutineRelatedToPower;
-
-    void Awake() 
-    {
-        gameManager = FindObjectOfType<GameManager>();
-    }
 
     IEnumerator EmitEnergy()
     {
@@ -35,12 +28,12 @@ public class CityManagement : MonoBehaviour
                 }
             }
         }
-        missionManager.EndMission(myMission);
+        GameManager.instance.missionManager.EndMission(myMission);
 
         activeCoroutineRelatedToPower--;
         if (activeCoroutineRelatedToPower == 0) {
-            if (gameManager.systemReferences != null) {
-                gameManager.systemReferences.UpdateBlocksRequiringPower();
+            if (GameManager.instance.systemReferences != null) {
+                GameManager.instance.systemReferences.UpdateBlocksRequiringPower();
             } else {
                 Debug.LogWarning("No reference to system found");
             }
