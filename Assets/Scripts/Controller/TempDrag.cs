@@ -92,6 +92,7 @@ public class TempDrag : MonoBehaviour  {
                     sBlock.gridCoordinates = new Vector3Int(0, 0, 0);
                     //Stock the cube in the stocking bay
                     FindObjectOfType<StorageBay>().StoreBlock(sBlock.gameObject);
+                    GameManager.instance.systemReferences.UpdateSystem();
                     sBlock.collider.enabled = true;
                 }
                 else

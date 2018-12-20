@@ -21,7 +21,6 @@ public class BlockLink : MonoBehaviour {
     public GameObject bridge;
 
     // TEMPORARY ASSET GENERATION
-    public Block[] blocks;
 
     [HideInInspector]   public Vector3Int gridCoordinates = new Vector3Int(0, 0, 0);
     [HideInInspector]   public int positionInTower; //0 = tout en bas
@@ -39,13 +38,9 @@ public class BlockLink : MonoBehaviour {
 	public int currentPower;
     public bool isConsideredUnpowered;
 
-    [Header("System settings")]
-    public float refreshCooldown;
-    public float timer = 0f;
-
-    public void Awake()
+    public void Start()
     {
-        isConsideredUnpowered = true;
+        isConsideredUnpowered = false;
         flagReader = FindObjectOfType<FlagReader>();
         gridManager = FindObjectOfType<GridManagement>();
         if (collider == null) collider = gameObject.GetComponent<BoxCollider>();
@@ -104,17 +99,10 @@ public class BlockLink : MonoBehaviour {
 
     public void LoadBlock()
     {
-        if (block == null)
+        systemRef.AllBlockLinks.Add(this);
+        if (block.consumption > 0)
         {
-            block = blocks[Random.Range(0, blocks.Length)];
-        }
-        else
-        {
-            systemRef.AllBlockLinks.Add(this);
-            if (block.consumption > 0)
-            {
-                systemRef.AllBlocksRequiringPower.Add(this);
-            }
+            systemRef.AllBlocksRequiringPower.Add(this);
         }
 
         if (blockObject == null)
@@ -166,12 +154,14 @@ public class BlockLink : MonoBehaviour {
 		{
 			if(!states.Contains(BlockState.Powered))
 				AddState(BlockState.Powered);
+            Debug.Log("Adding state powered");
 		}
 		else
 		{
 			if(states.Contains(BlockState.Powered))
 				RemoveState(BlockState.Powered);
-		}
+            Debug.Log("Removing state powered");
+        }
 	}
 
     public void AddState(BlockState state)
@@ -182,7 +172,8 @@ public class BlockLink : MonoBehaviour {
 			{
 				case BlockState.Powered:
 					unpoweredEffect.SetActive(false);
-					break;
+                    Debug.Log("Removing powered particles");
+                    break;
 
                 case BlockState.OnFire:
 					onFireEffect.SetActive(true);
@@ -207,7 +198,8 @@ public class BlockLink : MonoBehaviour {
 			{
 				case BlockState.Powered:
 					unpoweredEffect.SetActive(true);
-					break;
+                    Debug.Log("adding powered particles");
+                    break;
                 case BlockState.OnFire:
 					onFireEffect.SetActive(false);
                     gameManager.sfxManager.PlaySound("StoppingFire");
@@ -228,13 +220,20 @@ public class BlockLink : MonoBehaviour {
         if (blockObject.gameObject.activeSelf == true)
         {
             blockObject.gameObject.SetActive(false);
+            if (block.consumption != 0)
+            {
+                unpoweredEffect.SetActive(true);
+            }
             unpoweredEffect.SetActive(false);
             onFireEffect.SetActive(false);
         }
         else
         {
             blockObject.gameObject.SetActive(true);
-            unpoweredEffect.SetActive(true);
+            if (block.consumption != 0)
+            {
+                unpoweredEffect.SetActive(true);
+            }
         }
     }
 
@@ -296,6 +295,5 @@ public class BlockLink : MonoBehaviour {
                 flag.Use();
             }
         }
-
     }
 }

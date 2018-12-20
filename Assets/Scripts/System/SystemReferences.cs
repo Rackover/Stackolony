@@ -55,8 +55,11 @@ public class SystemReferences : MonoBehaviour {
     {
         foreach (Generator generator in AllGenerators)
         {
-            generator.Invoke("AfterMovingBlock", 0f);
-            yield return new WaitForEndOfFrame();
+            if (generator.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
+            {
+                generator.Invoke("AfterMovingBlock", 0f);
+                yield return new WaitForEndOfFrame();
+            }
         }
         yield return null;
     }

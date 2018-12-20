@@ -5,8 +5,8 @@ using UnityEditor;
 using System;
 using System.IO;
 
-public class BlockReader : EditorWindow {
-
+public class BlockReader : MonoBehaviour {
+/*
 	Vector2 scroll;
 	TextAsset csvFile;
 	bool preview;
@@ -94,4 +94,5 @@ public class BlockReader : EditorWindow {
 		AssetDatabase.SaveAssets();
 		AssetDatabase.Refresh();
 	}
+    */
 }

@@ -20,7 +20,7 @@ public class DeliveryManagement : MonoBehaviour {
     [System.NonSerialized] public int complexity;
     [System.NonSerialized] public List<ShopDisplay> shopDisplays;
 
-    public void Awake()
+    public void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
         complexity = 0;
@@ -53,6 +53,7 @@ public class DeliveryManagement : MonoBehaviour {
     //Genere les blocs achetable
     public void InitShop()
     {
+        Debug.Log(gameManager.library);
         foreach (Block block in gameManager.library.blocks)
         {
             GameObject newBlockDisplay = Instantiate(blockDisplayPrefab, shopPanelRegular);
