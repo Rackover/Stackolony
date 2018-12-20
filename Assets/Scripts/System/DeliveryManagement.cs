@@ -53,7 +53,6 @@ public class DeliveryManagement : MonoBehaviour {
     //Genere les blocs achetable
     public void InitShop()
     {
-        Debug.Log(gameManager.library);
         foreach (Block block in gameManager.library.blocks)
         {
             GameObject newBlockDisplay = Instantiate(blockDisplayPrefab, shopPanelRegular);

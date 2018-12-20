@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     public CursorManagement cursorManagement;
     public GridManagement gridManagement;
     public StorageBay storageBay;
+    public PopulationManager populationManager;
 
     [Space(1)][Header("INTERFACE")]
     public DeliveryManagement deliveryManagement;
@@ -44,6 +45,7 @@ public class GameManager : MonoBehaviour
         if(gridManagement == null) gridManagement = FindObjectOfType<GridManagement>();
         if(gridDebugger == null) gridDebugger = FindObjectOfType<GridDebugger>();
         if(storageBay == null) storageBay = FindObjectOfType<StorageBay>();
+        if (populationManager == null) populationManager = FindObjectOfType<PopulationManager>();
 
         // INTERFACE
         if(deliveryManagement == null) deliveryManagement = FindObjectOfType<DeliveryManagement>();

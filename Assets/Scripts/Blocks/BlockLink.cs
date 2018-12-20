@@ -252,7 +252,6 @@ public class BlockLink : MonoBehaviour {
     public IEnumerator MoveToPosition(float time) //Coroutine pour déplacer le cube vers sa position
     {
         Debug.Log("Moving block");
-        systemRef.UpdateSystem();
         float elapsedTime = 0;
         Vector3 startingPos = transform.position;
         while (elapsedTime < time)

@@ -38,7 +38,6 @@ public class GridDebugger : MonoBehaviour {
     //Genere une grille 3D pour pouvoir débug la variable grid[,,] et afficher ce qu'elle contient
     public void InitAllGrids()
     {
-        //Debug.Log("INIT GRID");
         foreach (OverlayMode overlayMode in overlayModes)
         {
             InitGrid(overlayMode);
@@ -47,7 +46,6 @@ public class GridDebugger : MonoBehaviour {
 
     public void InitButtons()
     {
-        //Debug.Log("INIT BUTTONS");
         foreach (OverlayMode overlayMode in overlayModes)
         {
             overlayMode.linkedButton.onClick.AddListener(delegate { SelectGrid(overlayMode.gridID); });

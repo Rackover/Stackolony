@@ -5,9 +5,19 @@ using System;
 
 public class FlagReader : MonoBehaviour 
 {
-	public string[] exisitingProfiles = {"all", "artist", "worker", "scientist", "military", "tourist"};
+    public List<string> existingProfiles;
 
-	public void ReadFlag(BlockLink blockLink, string flag)
+    void Start()
+    {
+        // FIND ALL EXISTING PROFILES
+        int profileCount = GameManager.instance.populationManager.populationList.Length;
+        existingProfiles = new List<string>();
+        for (var i = 0; i < profileCount; i++)
+        {
+            existingProfiles.Add(GameManager.instance.populationManager.populationList[i].codeName);
+        }
+    }
+    public void ReadFlag(BlockLink blockLink, string flag)
 	{
 		string[] flagElements = flag.Split(new char[]{'_'}, System.StringSplitOptions.RemoveEmptyEntries);
 
@@ -115,12 +125,30 @@ public class FlagReader : MonoBehaviour
 					if(newOccupator.slotAmount < 0)
 					{
 						Destroy(newOccupator);
-						Debug.Log("WARNING - " + blockLink.block.name + " - Occupator : Power value has to be higher than 0.");
+						Debug.Log("WARNING - " + blockLink.block.name + " - Occupator : slot value has to be higher than 0.");
 						break;
 					}
-					
-					
-					newOccupator.profiles = SplitParametorInArray(flagElements[2]);
+
+                    try  // TRY SETTING UP THE RANGE
+                    {
+                        newOccupator.range = int.Parse(flagElements[2]);
+                    }
+                    catch (FormatException fe)
+                    {
+                        Destroy(newOccupator);
+                        Debug.Log("WARNING - " + blockLink.block.name + " - Occupator : Unvalid range entry for as the first parameter. Please enter an int value.");
+                        break;
+                    }
+
+                    if (newOccupator.range < 0)
+                    {
+                        Destroy(newOccupator);
+                        Debug.Log("WARNING - " + blockLink.block.name + " - Occupator : range value has to be higher than 0.");
+                        break;
+                    }
+
+
+                    newOccupator.profiles = SplitParametorInArray(flagElements[3]);
 
 					string result = IsProfileArrayIsValid(newOccupator.profiles);
 
@@ -135,7 +163,7 @@ public class FlagReader : MonoBehaviour
 				}
 				else
 				{
-					Debug.Log("WARNING - " + blockLink.block.name + " - Occupator : flag wrongly setup. Should be something like this : 'Occupator_10_scientist,worker'");
+					Debug.Log("WARNING - " + blockLink.block.name + " - Occupator : flag wrongly setup. Should be something like this : 'Occupator_10_5_scientist,worker'");
 				}
 				break;
 	#endregion
@@ -203,10 +231,10 @@ public class FlagReader : MonoBehaviour
 			{
 				return profile + " contains a space and it sucks.";
 			}
-			else if(Array.IndexOf(exisitingProfiles, profile) < -1)
-			{
-				return profile + " is not a existing profile name, check online sheets to find the right ones.";
-			}
+            else if (!existingProfiles.Contains(profile))
+            {
+                return profile + "is not an existing profile, check online sheets to find the right ones";
+            }
 
 		}
 		return "";
