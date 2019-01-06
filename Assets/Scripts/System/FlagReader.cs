@@ -10,11 +10,11 @@ public class FlagReader : MonoBehaviour
     void Start()
     {
         // FIND ALL EXISTING PROFILES
-        int profileCount = GameManager.instance.populationManager.populationList.Length;
+        int profileCount = GameManager.instance.populationManager.populationTypeList.Length;
         existingProfiles = new List<string>();
         for (var i = 0; i < profileCount; i++)
         {
-            existingProfiles.Add(GameManager.instance.populationManager.populationList[i].codeName);
+            existingProfiles.Add(GameManager.instance.populationManager.populationTypeList[i].codeName);
         }
     }
     public void ReadFlag(BlockLink blockLink, string flag)
@@ -110,10 +110,10 @@ public class FlagReader : MonoBehaviour
 				if(flagElements.Length == 4)
 				{
 					Occupator newOccupator = blockLink.gameObject.AddComponent<Occupator>();
-
+                    int slotAmount = 0;
 					try  // TRY SETTING UP THE SLOTAMOUNT
 					{
-						newOccupator.slotAmount = int.Parse(flagElements[1]);
+						slotAmount = int.Parse(flagElements[1]);
 					}
 					catch(FormatException fe)
 					{
@@ -122,7 +122,7 @@ public class FlagReader : MonoBehaviour
 						break;
 					}
 
-					if(newOccupator.slotAmount < 0)
+					if(slotAmount < 0)
 					{
 						Destroy(newOccupator);
 						Debug.Log("WARNING - " + blockLink.block.name + " - Occupator : slot value has to be higher than 0.");
@@ -148,9 +148,9 @@ public class FlagReader : MonoBehaviour
                     }
 
 
-                    newOccupator.profiles = SplitParametorInArray(flagElements[3]);
+                    string[] profiles = SplitParametorInArray(flagElements[3]);
 
-					string result = IsProfileArrayIsValid(newOccupator.profiles);
+					string result = IsProfileArrayIsValid(profiles);
 
 					if(result != "")
 					{
@@ -159,8 +159,31 @@ public class FlagReader : MonoBehaviour
 						break;
 					}
 
-					blockLink.activeFlags.Add(newOccupator);
-				}
+                    newOccupator.occupatorSlots = new Occupator.OccupatorSlot[slotAmount];
+                    Population[] acceptedPop = new Population[profiles.Length];
+
+                    for (int i = 0; i < profiles.Length; i++)
+                    {
+                        foreach (Population pop in GameManager.instance.populationManager.populationTypeList)
+                        {
+                            if (profiles[i] == pop.codeName)
+                            {
+                                acceptedPop[i] = pop;
+                            }
+                        }
+                    }
+
+                    for (int i = 0; i < slotAmount; i++)
+                    {
+                        Occupator.OccupatorSlot newSlot = new Occupator.OccupatorSlot();
+                        newOccupator.occupatorSlots[i] = newSlot;
+                    }
+
+                    newOccupator.acceptedPopulation = acceptedPop;
+
+
+                    blockLink.activeFlags.Add(newOccupator);
+                }
 				else
 				{
 					Debug.Log("WARNING - " + blockLink.block.name + " - Occupator : flag wrongly setup. Should be something like this : 'Occupator_10_5_scientist,worker'");

@@ -2078,7 +2078,7 @@ MonoBehaviour:
   flagReader: {fileID: 0}
   library: {fileID: 0}
   sfxManager: {fileID: 0}
-  systemReferences: {fileID: 0}
+  systemManager: {fileID: 0}
   cityManagement: {fileID: 0}
   missionManager: {fileID: 0}
   gridDebugger: {fileID: 0}
@@ -2920,6 +2920,11 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 1190673699}
     m_Modifications:
+    - target: {fileID: 114326278034193112, guid: 2bfd0f17142853e4e9ebd77b32ebc3e0,
+        type: 2}
+      propertyPath: populationTypeList.Array.size
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 4998710519784690, guid: 2bfd0f17142853e4e9ebd77b32ebc3e0, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -2952,6 +2957,18 @@ Prefab:
       propertyPath: m_RootOrder
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 114326278034193112, guid: 2bfd0f17142853e4e9ebd77b32ebc3e0,
+        type: 2}
+      propertyPath: populationTypeList.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 6dd7b2a9848a9ef49ac3d0f0f912bd90,
+        type: 2}
+    - target: {fileID: 114326278034193112, guid: 2bfd0f17142853e4e9ebd77b32ebc3e0,
+        type: 2}
+      propertyPath: populationTypeList.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: efb40861fc2eccd438b0b5e2e903caac,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2bfd0f17142853e4e9ebd77b32ebc3e0, type: 2}
   m_IsPrefabAsset: 0

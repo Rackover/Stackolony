@@ -26,7 +26,7 @@ public class BlockLink : MonoBehaviour {
     [HideInInspector]   public int positionInTower; //0 = tout en bas
     [HideInInspector]   public GridManagement gridManager;
     [HideInInspector]   public FlagReader flagReader;
-    [HideInInspector]   public SystemReferences systemRef;
+    [HideInInspector]   public SystemManager systemRef;
     [HideInInspector]   public Library lib;
     public GameManager gameManager;
 
@@ -45,14 +45,14 @@ public class BlockLink : MonoBehaviour {
         gridManager = FindObjectOfType<GridManagement>();
         if (collider == null) collider = gameObject.GetComponent<BoxCollider>();
 
-        SystemReferences foundSystemRef = FindObjectOfType<SystemReferences>();
+        SystemManager foundSystemRef = FindObjectOfType<SystemManager>();
         lib = FindObjectOfType<Library>();
 
         if (foundSystemRef == null)
         {
             GameObject newSystemRefGO = new GameObject();
             newSystemRefGO.name = "SystemReferences";
-            systemRef = newSystemRefGO.AddComponent<SystemReferences>();
+            systemRef = newSystemRefGO.AddComponent<SystemManager>();
         }
         else
         {

@@ -10,8 +10,8 @@ public class WorkingHours : Flag
 
 	public override void Awake() {
 		base.Awake();
-		GameManager.instance.systemReferences.AllTimeRelatedBlocks.Add(this);
-		GameManager.instance.systemReferences.CheckWorkingHours();
+		GameManager.instance.systemManager.AllTimeRelatedBlocks.Add(this);
+		GameManager.instance.systemManager.CheckWorkingHours();
 	}
 	public void StartWork() {
         foreach (Flag flags in gameObject.GetComponents<Flag>()) {

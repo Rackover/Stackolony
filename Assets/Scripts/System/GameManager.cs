@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     public FlagReader flagReader;
     public Library library;
     public SFXManager sfxManager;
-    public SystemReferences systemReferences;
+    public SystemManager systemManager;
     public CityManagement cityManagement;
     public MissionManager missionManager;
     public GridDebugger gridDebugger;
@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
         if(flagReader == null) flagReader = GetComponentInChildren<FlagReader>();
         if(library == null) library = GetComponentInChildren<Library>();
         if(sfxManager == null) sfxManager = GetComponentInChildren<SFXManager>();
-        if(systemReferences == null) systemReferences = GetComponentInChildren<SystemReferences>();
+        if(systemManager == null) systemManager = GetComponentInChildren<SystemManager>();
         if(cityManagement == null) cityManagement = GetComponentInChildren<CityManagement>();
         if(missionManager == null) missionManager = GetComponentInChildren<MissionManager>();
         if(cursorManagement == null) cursorManagement = FindObjectOfType<CursorManagement>();

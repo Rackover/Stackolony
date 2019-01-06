@@ -440,14 +440,7 @@ public class GridManagement : MonoBehaviour
         gameManager.sfxManager.PlaySoundLinked("CreateBridge", parentBridgeGameObject);
 
         //Update the system
-        if (gameManager.systemReferences == null)
-        {
-            gameManager.systemReferences = FindObjectOfType<SystemReferences>();
-        }
-        if (gameManager.systemReferences != null)
-        {
-            gameManager.systemReferences.UpdateSystem();
-        }
+        gameManager.systemManager.UpdateSystem();
 
         return parentBridgeGameObject;
     }
@@ -479,13 +472,6 @@ public class GridManagement : MonoBehaviour
         gameManager.sfxManager.PlaySoundLinked("DestroyBlock", bridgeObject);
         Destroy(bridgeObject);
         //Update the system
-        if (gameManager.systemReferences == null)
-        {
-            gameManager.systemReferences = FindObjectOfType<SystemReferences>();
-        }
-        if (gameManager.systemReferences != null)
-        {
-            gameManager.systemReferences.UpdateSystem();
-        }
+        gameManager.systemManager.UpdateSystem();
     }
 }

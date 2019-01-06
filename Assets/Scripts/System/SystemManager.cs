@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SystemReferences : MonoBehaviour {
+public class SystemManager : MonoBehaviour {
 
     public List<Generator> AllGenerators;
     public List<BlockLink> AllBlocksRequiringPower;
     public List<BlockLink> AllBlockLinks;
     public List<WorkingHours> AllTimeRelatedBlocks;
+    public List<Occupator> AllOccupators;
+    public List<House> AllHouses;
 
     private void Awake()
     {
@@ -19,7 +21,9 @@ public class SystemReferences : MonoBehaviour {
     public void UpdateSystem()
     {
         StartCoroutine(ResetBlocksPower());
+        StartCoroutine(ResetOccupators());
         StartCoroutine(RecalculatePropagation());
+        StartCoroutine(RecalculateOccupators());
     }
 
     public void UpdateCycle() {
@@ -36,6 +40,20 @@ public class SystemReferences : MonoBehaviour {
                 workingHour.EndWork();
             }
         }
+    }
+
+    //Recalcule les blocs affectés par les occupateurs
+    IEnumerator RecalculateOccupators()
+    {
+        foreach (Occupator occupator in AllOccupators)
+        {
+            if (occupator.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
+            {
+                occupator.Invoke("OnBlockUpdate", 0f);
+                yield return new WaitForEndOfFrame();
+            }
+        }
+        yield return null;
     }
 
     //Si un block qui requiert du courant n'a pas croisé d'explorer, alors on l'eteint. Sinon on l'allume
@@ -57,7 +75,7 @@ public class SystemReferences : MonoBehaviour {
         {
             if (generator.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
             {
-                generator.Invoke("AfterMovingBlock", 0f);
+                generator.Invoke("OnBlockUpdate", 0f);
                 yield return new WaitForEndOfFrame();
             }
         }
@@ -70,6 +88,15 @@ public class SystemReferences : MonoBehaviour {
         {
             block.isConsideredUnpowered = true;
             block.currentPower = 0;
+        }
+        yield return null;
+    }
+
+    IEnumerator ResetOccupators()
+    {
+        foreach (House house in AllHouses)
+        {
+            house.occupatorsInRange.Clear();
         }
         yield return null;
     }

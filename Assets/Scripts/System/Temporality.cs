@@ -154,7 +154,7 @@ public class Temporality : MonoBehaviour {
         if (cycleNumber%yearDuration == 0) 
             AddYear();
         GameManager.instance.deliveryManagement.DeliverBlocks();
-        GameManager.instance.systemReferences.UpdateCycle();
+        GameManager.instance.systemManager.UpdateCycle();
     }
 
     public void AddYear() //Ajoute un an au compteur
@@ -178,6 +178,6 @@ public class Temporality : MonoBehaviour {
     }
 
     public void UpdateSystem() {
-        GameManager.instance.systemReferences.CheckWorkingHours();
+        GameManager.instance.systemManager.CheckWorkingHours();
     }
 }

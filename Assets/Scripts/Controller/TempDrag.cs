@@ -13,7 +13,7 @@ public class TempDrag : MonoBehaviour  {
     private Vector3Int savedPos;
 
     public SFXManager sfxManager;
-    public SystemReferences systemRef;
+    public SystemManager systemRef;
 
     public void StartDrag(BlockLink _block)
     {
@@ -70,7 +70,7 @@ public class TempDrag : MonoBehaviour  {
                 
                 if (systemRef == null)
                 {
-                    systemRef = FindObjectOfType<SystemReferences>();
+                    systemRef = FindObjectOfType<SystemManager>();
                 }
                 if (systemRef != null)
                 {
@@ -92,7 +92,7 @@ public class TempDrag : MonoBehaviour  {
                     sBlock.gridCoordinates = new Vector3Int(0, 0, 0);
                     //Stock the cube in the stocking bay
                     FindObjectOfType<StorageBay>().StoreBlock(sBlock.gameObject);
-                    GameManager.instance.systemReferences.UpdateSystem();
+                    GameManager.instance.systemManager.UpdateSystem();
                     sBlock.collider.enabled = true;
                 }
                 else

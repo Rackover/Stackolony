@@ -32,6 +32,7 @@ public class MissionManager : MonoBehaviour {
         public string callBack;
         public Vector3Int position;
         public int explorerCount;
+        public System.Type flagToFind;
     }
     [Header("Lists")]
     public List<Mission> missionList;
@@ -58,13 +59,14 @@ public class MissionManager : MonoBehaviour {
 
 
     //Lance une nouvelle mission d'exploration, cela renverra une liste de blocks explorés et lancera la fonction callBack qui se trouve dans le CityManager.
-    public void StartMission(Vector3Int position, string callBack, int range = 1, int power = 0)
+    public void StartMission(Vector3Int position, string callBack, int range = 1, int power = 0, System.Type flagToFind = null)
     {
         Mission newMission = PrepareNewMission();
         newMission.position = position;
         newMission.callBack = callBack;
         newMission.range = range;
         newMission.power = power;
+        newMission.flagToFind = flagToFind;
 
         //Si la mission est la premiere dans la liste, elle se lance, sinon elle attend son tour
         if (missionList.Count == 1)
@@ -94,6 +96,7 @@ public class MissionManager : MonoBehaviour {
     //Genere un explorer qui va vérifier les 6 directions possible, et envoyer un autre explorer pour explorer chaque chemin trouvé.
     IEnumerator SpawnExplorer(Vector3Int position, string callback, Mission myMission, int range, int power, int explorerID)
     {
+        Debug.Log("New explorer with " + range + " range at position " + position);
         //Delai (à augmenter pour réduire le lag mais augmenter le temps de calcul)
         yield return new WaitForEndOfFrame();
 
@@ -108,16 +111,31 @@ public class MissionManager : MonoBehaviour {
                 explorerVisuals.transform.position = GameManager.instance.gridManagement.grid[position.x, position.y, position.z].transform.position;
             }
 
-            if (GameManager.instance.gridManagement.grid[position.x, position.y, position.z].GetComponent<BlockLink>() != null)
+            if (myMission.flagToFind == null)
             {
-                myMission.blocksFound.Add(GameManager.instance.gridManagement.grid[position.x, position.y, position.z].GetComponent<BlockLink>());
-                myMission.blockDistanceToCenter.Add(range);
-                myMission.exploredPositions.Add(position);
-            }
-            else
+                if (GameManager.instance.gridManagement.grid[position.x, position.y, position.z].GetComponent<BlockLink>() != null)
+                {
+                    myMission.blocksFound.Add(GameManager.instance.gridManagement.grid[position.x, position.y, position.z].GetComponent<BlockLink>());
+                    myMission.blockDistanceToCenter.Add(range);
+                    myMission.exploredPositions.Add(position);
+                }
+                else
+                {
+                    Debug.LogWarning("Explorer found a block with no informations");
+                    yield return null;
+                }
+            } else
             {
-                Debug.LogWarning("Explorer found a block with no informations");
-                yield return null;
+                BlockLink foundBlock = GameManager.instance.gridManagement.grid[position.x, position.y, position.z].GetComponent<BlockLink>();
+                if (foundBlock != null) {
+                    myMission.exploredPositions.Add(position);
+                    foreach (Flag activeFlag in foundBlock.activeFlags) {
+                        if (activeFlag.GetType() == myMission.flagToFind) {
+                                myMission.blocksFound.Add(GameManager.instance.gridManagement.grid[position.x, position.y, position.z].GetComponent<BlockLink>());
+                                myMission.blockDistanceToCenter.Add(myMission.range - range);
+                        }
+                    }
+                }
             }
         }
 
@@ -135,36 +153,60 @@ public class MissionManager : MonoBehaviour {
         if (AdjacentBlocks.Count > 0) {
 
             //Si je cherche les  blocs dans une certaine range, alors je cherche le bloc suivant et je diminue la range
-            if (range > 0)
+            Debug.Log("MissionRange " + myMission.range);
+            if (myMission.range >= 0)
             {
                 for (int i = 0; i < AdjacentBlocks.Count; i++)
                 {
                     //Forme l'explorer relai qui transportera ses informations
                     int newExplorerID = myMission.activeExplorers.Count;
-                    myMission.activeExplorers.Add(StartCoroutine(SpawnExplorer(AdjacentBlocks[i].gridCoordinates, callback, myMission, range - 1, power, newExplorerID)));
+                    Debug.Log(range);
+                    myMission.activeExplorers.Add(StartCoroutine(SpawnExplorer(AdjacentBlocks[i].gridCoordinates, callback, myMission, range-1, power, newExplorerID)));
                 }
             }
             //Sinon, si je cherche des blocs dans une portée infinie jusqu'à ce que je n'ai plus de power à donner, alors je continue ma recherche
-            else if (range == -1 && power > 0)
+            else if (myMission.range <= -1)
             {
-                foreach (BlockLink foundBlock in AdjacentBlocks)
+                if (power > 0)
                 {
-                    power -= (foundBlock.block.consumption - foundBlock.currentPower);
-                }
+                    foreach (BlockLink foundBlock in AdjacentBlocks)
+                    {
+                        power -= (foundBlock.block.consumption - foundBlock.currentPower);
+                    }
 
-                for (int i = 0; i < AdjacentBlocks.Count; i++)
+                    for (int i = 0; i < AdjacentBlocks.Count; i++)
+                    {
+                        //Forme l'explorer relai qui transportera ses informations
+                        int newExplorerID = myMission.activeExplorers.Count;
+                        myMission.activeExplorers.Add(StartCoroutine(SpawnExplorer(AdjacentBlocks[i].gridCoordinates, callback, myMission, range, power, newExplorerID)));
+                    }
+                } else if (myMission.flagToFind != null)
                 {
-                    //Forme l'explorer relai qui transportera ses informations
-                    int newExplorerID = myMission.activeExplorers.Count;
-                    myMission.activeExplorers.Add(StartCoroutine(SpawnExplorer(AdjacentBlocks[i].gridCoordinates, callback, myMission, range, power, newExplorerID)));
+                    foreach (BlockLink foundBlock in AdjacentBlocks)
+                    {
+                        foreach (Flag flag in foundBlock.activeFlags)
+                        {
+                            if (flag.GetType() == myMission.flagToFind)
+                            {
+                                //Forme l'explorer relai qui transportera ses informations
+                                int newExplorerID = myMission.activeExplorers.Count;
+                                myMission.activeExplorers.Add(StartCoroutine(SpawnExplorer(foundBlock.gridCoordinates, callback, myMission, range-1, power, newExplorerID)));
+                            }
+                        }
+                    }
                 }
             }
         }
 
         //S'il n'y a plus aucun explorer actif, on termine la mission
         myMission.explorerCount = myMission.activeExplorers.Count;
-        if (myMission.activeExplorers.Count == 0)
+        if (myMission.activeExplorers.Count == 0 || range <= 0)
         {
+            Debug.Log("ENDING MISSION");
+            foreach (Coroutine c in myMission.activeExplorers)
+            {
+                StopCoroutine(c);
+            }
             if (myMission.blocksFound.Count > 0)
             {
                 GameManager.instance.cityManagement.mission = myMission;

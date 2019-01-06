@@ -13,18 +13,18 @@ public class Generator : Flag {
         //Generate ou récupère l'objet "SystemReferences";
         //missionManager.StartMission(myBlockLink.gridCoordinates, "EmitEnergy", -1, power);
 
-        GameManager.instance.systemReferences.AllGenerators.Add(this);
+        GameManager.instance.systemManager.AllGenerators.Add(this);
     }
     public override void Enable()
     {
         base.Enable();
-        GameManager.instance.systemReferences.UpdateSystem();
+        GameManager.instance.systemManager.UpdateSystem();
     }
 
     public override void Disable()
     {
         base.Disable();
-        GameManager.instance.systemReferences.UpdateSystem();
+        GameManager.instance.systemManager.UpdateSystem();
     }
 
     public override void BeforeMovingBlock()
@@ -35,21 +35,21 @@ public class Generator : Flag {
     public override void AfterMovingBlock()
     {
         base.AfterMovingBlock();
+        Invoke("OnBlockUpdate", 0f);
+    }
+
+    public override void OnBlockUpdate()
+    {
+        base.OnBlockUpdate();
         if (isEnabled)
         {
             GameManager.instance.missionManager.StartMission(myBlockLink.gridCoordinates, "EmitEnergy", -1, power);
         }
     }
 
-    public override void OnBlockUpdate()
-    {
-        if (isEnabled)
-        Invoke("AfterMovingBlock", 0f);
-    }
-
     public override void OnDestroy()
     {
-        GameManager.instance.systemReferences.AllGenerators.Remove(this);
+        GameManager.instance.systemManager.AllGenerators.Remove(this);
         base.OnDestroy();
     }
 }
