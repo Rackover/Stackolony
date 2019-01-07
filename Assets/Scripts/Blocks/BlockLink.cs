@@ -154,13 +154,11 @@ public class BlockLink : MonoBehaviour {
 		{
 			if(!states.Contains(BlockState.Powered))
 				AddState(BlockState.Powered);
-            Debug.Log("Adding state powered");
 		}
 		else
 		{
 			if(states.Contains(BlockState.Powered))
 				RemoveState(BlockState.Powered);
-            Debug.Log("Removing state powered");
         }
 	}
 

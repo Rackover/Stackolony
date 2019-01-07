@@ -159,7 +159,7 @@ public class FlagReader : MonoBehaviour
 						break;
 					}
 
-                    newOccupator.occupatorSlots = new Occupator.OccupatorSlot[slotAmount];
+                    newOccupator.slots = slotAmount;
                     Population[] acceptedPop = new Population[profiles.Length];
 
                     for (int i = 0; i < profiles.Length; i++)
@@ -171,12 +171,6 @@ public class FlagReader : MonoBehaviour
                                 acceptedPop[i] = pop;
                             }
                         }
-                    }
-
-                    for (int i = 0; i < slotAmount; i++)
-                    {
-                        Occupator.OccupatorSlot newSlot = new Occupator.OccupatorSlot();
-                        newOccupator.occupatorSlots[i] = newSlot;
                     }
 
                     newOccupator.acceptedPopulation = acceptedPop;
@@ -195,13 +189,43 @@ public class FlagReader : MonoBehaviour
 			case "House":
 				House newHome = blockLink.gameObject.AddComponent<House>();
 				newHome.slotAmount = int.Parse(flagElements[1]);
-				newHome.profiles = SplitParametorInArray(flagElements[2]);
+                newHome.foodConsumptionPerHabitant = int.Parse(flagElements[2]);
+                newHome.standingLevel = int.Parse(flagElements[3]);
+				string[] profilesList = SplitParametorInArray(flagElements[4]);
+                Population[] acceptedPopList = new Population[profilesList.Length];
+                for (int i = 0; i < profilesList.Length; i++)
+                {
+                    foreach (Population pop in GameManager.instance.populationManager.populationTypeList)
+                    {
+                        if (profilesList[i] == pop.codeName)
+                        {
+                            acceptedPopList[i] = pop;
+                        }
+                    }
+                }
+                newHome.acceptedPop = acceptedPopList;
+
+                newHome.InitCitizensSlots();
+
+                //For debug
+               // newHome.FillWithCitizens();
+
 				blockLink.activeFlags.Add(newHome);
 				break;
-#endregion
+            #endregion
 
-	#region WorkingHours 
-			case "WorkingHours":
+    #region FoodProvider
+            case "FoodProvider":
+                FoodProvider newFoodProvider = blockLink.gameObject.AddComponent<FoodProvider>();
+                newFoodProvider.range = int.Parse(flagElements[1]);
+                newFoodProvider.foodTotal = int.Parse(flagElements[2]);
+                newFoodProvider.foodLeft = newFoodProvider.foodTotal;
+                blockLink.activeFlags.Add(newFoodProvider);
+                break;
+            #endregion
+
+    #region WorkingHours 
+            case "WorkingHours":
 				WorkingHours newHours = blockLink.gameObject.AddComponent<WorkingHours>();
 				newHours.startHour = float.Parse(flagElements[1]);
 				newHours.endHour = float.Parse(flagElements[2]);

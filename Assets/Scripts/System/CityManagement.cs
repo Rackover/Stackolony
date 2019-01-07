@@ -9,13 +9,40 @@ public class CityManagement : MonoBehaviour
     public MissionManager.Mission mission;
     public int activeCoroutineRelatedToPower;
 
-    IEnumerator EmitOccupators()
+    IEnumerator DistributeFood()
     {
+        Debug.Log("Distributing food");
         MissionManager.Mission myMission = mission;
+        FoodProvider foodProvider = GameManager.instance.gridManagement.grid[myMission.position.x, myMission.position.y, myMission.position.z].GetComponent<FoodProvider>();
+        float foodLeft = foodProvider.foodTotal;
         foreach (BlockLink blocklink in myMission.blocksFound)
         {
             House house = blocklink.GetComponent<House>();
-            Occupator linkedOccupator = GameManager.instance.gridManagement.grid[myMission.position.x, myMission.position.y, myMission.position.z].GetComponent<Occupator>();
+            house.foodProvidersInRange.Add(foodProvider);
+            if (foodLeft > 0)
+            {
+                if (foodLeft > house.foodConsumption)
+                {
+                    house.foodReceived = house.foodConsumption;
+                    foodLeft -= house.foodConsumption;
+                } else
+                {
+                    house.foodReceived = foodLeft;
+                    foodLeft = 0;
+                }
+            }
+        }
+        foodProvider.foodLeft = foodLeft;
+        GameManager.instance.missionManager.EndMission(myMission);
+        yield return null;
+    }
+    IEnumerator EmitOccupators()
+    {
+        MissionManager.Mission myMission = mission;
+        Occupator linkedOccupator = GameManager.instance.gridManagement.grid[myMission.position.x, myMission.position.y, myMission.position.z].GetComponent<Occupator>();
+        foreach (BlockLink blocklink in myMission.blocksFound)
+        {
+            House house = blocklink.GetComponent<House>();
             house.occupatorsInRange.Add(linkedOccupator);
         }
         GameManager.instance.missionManager.EndMission(myMission);

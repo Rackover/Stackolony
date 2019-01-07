@@ -10,6 +10,7 @@ public class SystemManager : MonoBehaviour {
     public List<WorkingHours> AllTimeRelatedBlocks;
     public List<Occupator> AllOccupators;
     public List<House> AllHouses;
+    public List<FoodProvider> AllFoodProviders;
 
     private void Awake()
     {
@@ -17,13 +18,40 @@ public class SystemManager : MonoBehaviour {
         AllBlocksRequiringPower = new List<BlockLink>();
     }
 
-    //Met a jour le system de jeu
     public void UpdateSystem()
     {
-        StartCoroutine(ResetBlocksPower());
+        StartCoroutine(RecalculateSystem());
+    }
+
+    public void UpdateHousesInformations()
+    {
+        foreach (House house in AllHouses)
+        {
+            if (house.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
+            {
+                house.UpdateHouseInformations();
+            }
+        }
+        UpdateFoodProviders();
+        UpdateOccupators();
+    }
+
+    public void UpdateJobsDistribution()
+    {
+        StartCoroutine(ResetJobs());
+        StartCoroutine(RecalculateJobs());
+    }
+
+    public void UpdateOccupators()
+    {
         StartCoroutine(ResetOccupators());
-        StartCoroutine(RecalculatePropagation());
         StartCoroutine(RecalculateOccupators());
+    }
+
+    public void UpdateFoodProviders()
+    {
+        StartCoroutine(ResetFoodConsumption());
+        StartCoroutine(RecalculateFoodConsumption());
     }
 
     public void UpdateCycle() {
@@ -42,17 +70,26 @@ public class SystemManager : MonoBehaviour {
         }
     }
 
-    //Recalcule les blocs affectés par les occupateurs
-    IEnumerator RecalculateOccupators()
+    IEnumerator RecalculateSystem()
     {
-        foreach (Occupator occupator in AllOccupators)
-        {
-            if (occupator.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
-            {
-                occupator.Invoke("OnBlockUpdate", 0f);
-                yield return new WaitForEndOfFrame();
-            }
-        }
+        StartCoroutine(ResetBlocksPower());
+        yield return StartCoroutine(RecalculateSystem2());
+    }
+    IEnumerator RecalculateSystem2()
+    {
+        StartCoroutine(RecalculatePropagation());
+        yield return StartCoroutine(RecalculateSystem3());
+    }
+    IEnumerator RecalculateSystem3()
+    {
+        yield return new WaitForSeconds(0.5f);
+        UpdateHousesInformations();
+        yield return StartCoroutine(RecalculateSystem4());
+    }
+    IEnumerator RecalculateSystem4()
+    {
+        yield return new WaitForSeconds(0.5f);
+        UpdateJobsDistribution();
         yield return null;
     }
 
@@ -69,6 +106,63 @@ public class SystemManager : MonoBehaviour {
         }
     }
 
+
+
+    IEnumerator RecalculateJobs()
+    {
+        foreach (House house in AllHouses)
+        {
+            for (int i = 0; i < house.citizenCount; i++)
+            {
+                if (house.affectedCitizen[i].jobless == true)
+                {
+                    foreach (Occupator occupator in house.occupatorsInRange)
+                    {
+                        if (occupator.affectedCitizen.Count < occupator.slots && !occupator.affectedCitizen.Contains(house.affectedCitizen[i]))
+                        {
+                            foreach (Population acceptedPop in occupator.acceptedPopulation)
+                            {
+                                if (house.affectedCitizen[i].type == acceptedPop)
+                                {
+                                    occupator.affectedCitizen.Add(house.affectedCitizen[i]);
+                                    house.affectedCitizen[i].jobless = false;
+                                    yield return null;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        yield return null;
+    }
+
+    IEnumerator RecalculateOccupators()
+    {
+        foreach (Occupator occupator in AllOccupators)
+        {
+            if (occupator.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
+            {
+                occupator.Invoke("OnBlockUpdate", 0f);
+                yield return new WaitForEndOfFrame();
+            }
+        }
+        yield return null;
+    }
+
+    IEnumerator RecalculateFoodConsumption()
+    {
+        foreach (FoodProvider foodProvider in AllFoodProviders)
+        {
+            if (foodProvider.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
+            {
+                foodProvider.Invoke("OnBlockUpdate", 0f);
+                yield return new WaitForEndOfFrame();
+            }
+            yield return new WaitForEndOfFrame();
+        }
+    }
+
     IEnumerator RecalculatePropagation()
     {
         foreach (Generator generator in AllGenerators)
@@ -82,6 +176,8 @@ public class SystemManager : MonoBehaviour {
         yield return null;
     }
 
+
+
     IEnumerator ResetBlocksPower()
     {
         foreach (BlockLink block in AllBlocksRequiringPower)
@@ -92,11 +188,35 @@ public class SystemManager : MonoBehaviour {
         yield return null;
     }
 
+    IEnumerator ResetJobs()
+    {
+        foreach (Occupator occupator in AllOccupators)
+        {
+            occupator.affectedCitizen.Clear();
+        }
+
+        foreach (PopulationManager.Citizen citizen in GameManager.instance.populationManager.citizenList)
+        {
+            citizen.jobless = true;
+        }
+        yield return null;
+    }
+
     IEnumerator ResetOccupators()
     {
         foreach (House house in AllHouses)
         {
             house.occupatorsInRange.Clear();
+        }
+        yield return null;
+    }
+
+    IEnumerator ResetFoodConsumption()
+    {
+        foreach (House house in AllHouses)
+        {
+            house.foodReceived = 0;
+            house.foodProvidersInRange.Clear();
         }
         yield return null;
     }

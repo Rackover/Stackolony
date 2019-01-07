@@ -82,6 +82,12 @@ public class GridManagement : MonoBehaviour
         UpdateBlocks(coordinates);
     }
 
+    public float GetDistanceFromGround(Vector3Int coordinates)
+    {
+        float distanceFromGround = grid[coordinates.x, coordinates.y, coordinates.z].transform.position.y - myTerrain.SampleHeight(grid[coordinates.x, coordinates.y, coordinates.z].transform.position);
+        return distanceFromGround;
+    }
+
     //Update les blocs de toute la tour pour les remettre à leur bonne position
     public void UpdateBlocks(Vector3Int coordinates)
     {

@@ -96,7 +96,6 @@ public class MissionManager : MonoBehaviour {
     //Genere un explorer qui va vérifier les 6 directions possible, et envoyer un autre explorer pour explorer chaque chemin trouvé.
     IEnumerator SpawnExplorer(Vector3Int position, string callback, Mission myMission, int range, int power, int explorerID)
     {
-        Debug.Log("New explorer with " + range + " range at position " + position);
         //Delai (à augmenter pour réduire le lag mais augmenter le temps de calcul)
         yield return new WaitForEndOfFrame();
 
@@ -153,14 +152,12 @@ public class MissionManager : MonoBehaviour {
         if (AdjacentBlocks.Count > 0) {
 
             //Si je cherche les  blocs dans une certaine range, alors je cherche le bloc suivant et je diminue la range
-            Debug.Log("MissionRange " + myMission.range);
             if (myMission.range >= 0)
             {
                 for (int i = 0; i < AdjacentBlocks.Count; i++)
                 {
                     //Forme l'explorer relai qui transportera ses informations
                     int newExplorerID = myMission.activeExplorers.Count;
-                    Debug.Log(range);
                     myMission.activeExplorers.Add(StartCoroutine(SpawnExplorer(AdjacentBlocks[i].gridCoordinates, callback, myMission, range-1, power, newExplorerID)));
                 }
             }
@@ -200,9 +197,8 @@ public class MissionManager : MonoBehaviour {
 
         //S'il n'y a plus aucun explorer actif, on termine la mission
         myMission.explorerCount = myMission.activeExplorers.Count;
-        if (myMission.activeExplorers.Count == 0 || range <= 0)
+        if (myMission.activeExplorers.Count == 0 || range == 0)
         {
-            Debug.Log("ENDING MISSION");
             foreach (Coroutine c in myMission.activeExplorers)
             {
                 StopCoroutine(c);
