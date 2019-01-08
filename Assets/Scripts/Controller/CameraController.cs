@@ -39,10 +39,12 @@ public class CameraController : MonoBehaviour {
     Transform cameraTransformObjective;  // The camera will try to have the same transform as this
     Vector3 mouseDelta;
     Vector3 lastMousePosition;
+    CursorManagement cursorMan;
 
     void Start()
     {
         startPosition = transform.position;
+        cursorMan = GameManager.instance.cursorManagement;
 
         // Spawning camera
         cameraInstance = Instantiate(cameraModel);
@@ -67,16 +69,16 @@ public class CameraController : MonoBehaviour {
         if (GameManager.instance.cursorManagement.cursorOnUI == false) {
             cameraTransformObjective.LookAt(camCenter.position);
 
-            if (Input.GetButton("MouseMiddle")) {
+            if (Input.GetButton("MoveCamera")) {
                 driftEnabled = false;
                 Move();
             }
-            if (Input.GetButton("MouseRight")) { 
+            if (Input.GetButton("RotateCamera")) { 
                 driftEnabled = false;
                 Rotation();
             }
 
-            //Drift();
+            Drift();
             Zoom();
         }
 
@@ -99,7 +101,7 @@ public class CameraController : MonoBehaviour {
 
     private void Move()
     {
-        if (Input.GetButtonDown("MouseMiddle")) {
+        if (Input.GetButtonDown("MoveCamera")) {
             lastMousePosition = (Vector3)Input.mousePosition;
             camTarget = null;
             camCenter.position = new Vector3(camCenter.position.x, 0f, camCenter.position.z);
@@ -113,8 +115,8 @@ public class CameraController : MonoBehaviour {
     void Rotation()
     {
         Vector2 lookDirection = new Vector2(
-            Input.GetAxis("MouseX") * rotateSensibility * userRotationSensibility,
-            Input.GetAxis("MouseY") * rotateSensibility * userRotationSensibility
+            Input.GetAxis("CursorX") * rotateSensibility * userRotationSensibility,
+            Input.GetAxis("CursorY") * rotateSensibility * userRotationSensibility
         );  
         camPivot.rotation = Quaternion.Euler(new Vector3(
             Mathf.Clamp(camPivot.eulerAngles.x - lookDirection.y, minLookAngle, maxLookAngle), 
@@ -133,7 +135,8 @@ public class CameraController : MonoBehaviour {
         if (drift.magnitude > 0) {
             if (driftEnabled) {
                 float oldY = camCenter.position.y;
-                camCenter.position += (drift.x * userBorderSensibility) * cameraTransformObjective.right.normalized * Time.deltaTime
+                camCenter.position += 
+                    (drift.x * userBorderSensibility) * cameraTransformObjective.right.normalized * Time.deltaTime
                     + (drift.y * userBorderSensibility) * cameraTransformObjective.forward.normalized * Time.deltaTime;
                 camCenter.position = new Vector3(camCenter.position.x, oldY, camCenter.position.z);
             }
@@ -145,9 +148,11 @@ public class CameraController : MonoBehaviour {
 
     void Zoom() 
     {
-        if(Input.GetAxis("MouseWheel") > 0 && cameraTransformObjective.position.y > minZoom)
-            cameraTransformObjective.Translate(Vector3.forward * Input.GetAxis("MouseWheel") * zoomStep);
-        else if(Input.GetAxis("MouseWheel") < 0 && cameraTransformObjective.position.y < maxZoom)
-            cameraTransformObjective.Translate(Vector3.forward * Input.GetAxis("MouseWheel") * zoomStep);   
+        if (Input.GetAxis("ZoomCamera") > 0 && cameraTransformObjective.position.y > minZoom ||
+            Input.GetAxis("ZoomCamera") < 0 && cameraTransformObjective.position.y < maxZoom) {
+
+            // Zoom in
+            cameraTransformObjective.transform.position += cameraTransformObjective.transform.forward * Input.GetAxis("ZoomCamera") * zoomStep;
+        }
     }
 }

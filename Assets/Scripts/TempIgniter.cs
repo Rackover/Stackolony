@@ -6,7 +6,7 @@ public class TempIgniter : MonoBehaviour {
 
 	void Update () 
 	{
-		if (Input.GetButtonDown("MouseLeft") && Input.GetKey(KeyCode.F)) 
+		if (Input.GetButtonDown("Select") && Input.GetKey(KeyCode.F)) 
 		{ 
 			RaycastHit hit;
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);

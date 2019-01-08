@@ -33,6 +33,7 @@ public class CursorManagement : MonoBehaviour
 
     [Space(5)][Header("=== DEBUG ===")][Space(1)]
     public Vector3Int posInTerrain; //Position de la souris sur le terrain
+    public Vector3 posInWorld;
     public BlockLink selectedBlock; //Le block selectionné par le joueur
     private GameObject stackSelector; //La petite fléche qui se met au pied de la tour qu'on selectionne
     private GameObject myProjector;
@@ -145,6 +146,8 @@ public class CursorManagement : MonoBehaviour
             Mathf.FloorToInt(coord.y + 0.01f),
             Mathf.FloorToInt(coord.z)
         );
+
+        posInWorld = coord * GameManager.instance.gridManagement.cellSize;
     }
 
     void UpdateProjector()
@@ -241,7 +244,7 @@ public class CursorManagement : MonoBehaviour
     void UpdateMouse(RaycastHit hit)
     {
         // Mouse click down
-        if(Input.GetButtonDown("MouseLeft"))
+        if(Input.GetButtonDown("Select"))
         {
             switch (selectedMode) {
                 case cursorMode.Default:
@@ -269,7 +272,7 @@ public class CursorManagement : MonoBehaviour
         }
 
         // Mouse click hold
-        if(Input.GetButton("MouseLeft"))
+        if(Input.GetButton("Select"))
         {
             switch (selectedMode) 
             {
@@ -287,7 +290,7 @@ public class CursorManagement : MonoBehaviour
         }  
 
         // Left Mouse up 
-        if (Input.GetButtonUp("MouseLeft")) {
+        if (Input.GetButtonUp("Select")) {
             switch (selectedMode) {
                 case cursorMode.Default:
                     //   Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
@@ -306,7 +309,7 @@ public class CursorManagement : MonoBehaviour
         }
 
         // Right mouse button
-        if(Input.GetButton("MouseRight"))
+        if(Input.GetButton("RotateCamera"))
         {
             switch (selectedMode) {
                 case cursorMode.Default:

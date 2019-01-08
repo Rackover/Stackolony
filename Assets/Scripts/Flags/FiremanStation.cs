@@ -34,7 +34,7 @@ public class FiremanStation : Flag
 	{
 		if(selecting)
 		{
-			if (Input.GetButtonDown("MouseLeft")) 
+			if (Input.GetButtonDown("Select")) 
 			{
 				RaycastHit hit;
 				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
