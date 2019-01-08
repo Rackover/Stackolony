@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4030008844788768}
   - component: {fileID: 114837313920874214}
   m_Layer: 0
-  m_Name: SystemReferences
+  m_Name: SystemManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -56,3 +56,6 @@ MonoBehaviour:
   AllBlocksRequiringPower: []
   AllBlockLinks: []
   AllTimeRelatedBlocks: []
+  AllOccupators: []
+  AllHouses: []
+  AllFoodProviders: []
