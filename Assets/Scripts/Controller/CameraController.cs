@@ -130,6 +130,11 @@ public class CameraController : MonoBehaviour {
         Vector2 drift = new Vector2(
             -Mathf.Clamp(driftBorder.x -Input.mousePosition.x, 0, 1) + Mathf.Clamp(Input.mousePosition.x - Screen.width + driftBorder.x, 0, 1),
             -Mathf.Clamp(driftBorder.y - Input.mousePosition.y, 0, 1) + Mathf.Clamp(Input.mousePosition.y - Screen.height + driftBorder.y, 0, 1)
+        )
+        +
+        new Vector2(
+            Input.GetAxis("DriftCameraX"), 
+            Input.GetAxis("DriftCameraY")
         );
 
         if (drift.magnitude > 0) {
