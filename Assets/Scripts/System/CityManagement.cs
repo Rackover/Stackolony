@@ -8,7 +8,7 @@ public class CityManagement : MonoBehaviour
     public GameObject prefabEmitting;
     public MissionManager.Mission mission;
     public int activeCoroutineRelatedToPower;
-
+    
     IEnumerator DistributeFood()
     {
         Debug.Log("Distributing food");

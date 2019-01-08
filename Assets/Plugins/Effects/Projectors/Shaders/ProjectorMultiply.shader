@@ -60,10 +60,10 @@ Shader "Projector/AlphaBlend" {
 	{
 		fixed4 texS = tex2Dproj(_ShadowTex, UNITY_PROJ_COORD(i.uvShadow));
 	//fixed4 texF = tex2Dproj(_FalloffTex, UNITY_PROJ_COORD(i.uvFalloff));
-	fixed4 res = texS * ceil(abs(i.uvFalloff.a));
-	//fixed4 res = texS;
+	//fixed4 res = texS * ceil(abs(i.uvFalloff.a));
+	fixed4 res = texS;
 //	res.a *= texF.a;
-//	res.a *= _Color.a;
+	//res.a *= a;
 	return res;
 	}
 		ENDCG
