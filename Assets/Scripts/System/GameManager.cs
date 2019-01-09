@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     public CursorDisplay cursorDisplay;
     [Space(1)]
     [Header("SYSTEM SETTINGS")]
-    public bool DEBUG_MODE = Debug.isDebugBuild;
+    public bool DEBUG_MODE = true;
     public bool ENABLE_LOGS = true;
 
     public static GameManager instance;
