@@ -241,6 +241,16 @@ public class GridManagement : MonoBehaviour
         newBlock.name = "Block[" + coordinates.x + ";" + newBlockHeight + ";" + coordinates.y + "]";
     }
 
+    public void PutBlockInstance(GameObject blockInstance, Vector3Int coordinates) // Puts a block instance at a specific XYZ place
+    {
+        grid[coordinates.x, coordinates.y, coordinates.z] = blockInstance;
+        buildingsList.Add(blockInstance);
+        BlockLink blockLink = blockInstance.GetComponent<BlockLink>();
+        blockLink.LoadBlock();
+        blockLink.gridCoordinates = new Vector3Int(coordinates.x, coordinates.y, coordinates.z);
+        blockInstance.name = "Block[" + coordinates.x + ";" + coordinates.y + ";" + coordinates.z + "]";
+    }
+
     public blockType checkIfSlotIsBlocked(Vector3Int coordinates, bool displayErrorMessages)
     {
         GameObject objectFound = grid[coordinates.x, coordinates.y, coordinates.z];

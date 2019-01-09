@@ -8,7 +8,7 @@ public class SaveManager : MonoBehaviour {
 
     public int saveVersion = 1;
     public string saveName = "city.bin";
-    SaveData loadedData;
+    public SaveData loadedData;
 
     ///////////////////////////////
     /// 
@@ -23,7 +23,10 @@ public class SaveManager : MonoBehaviour {
 
         // Step 0 - Initialize writer
         Writer writer = new Writer();
-        writer.OpenSave(saveName);
+
+        if(!writer.OpenSave(saveName))
+            yield break;
+        
         Debug.Log("Saving...");
 
         // Step 1 - Miscellaneous data
@@ -78,20 +81,23 @@ public class SaveManager : MonoBehaviour {
         yield return true;
     }
 
-    public IEnumerator ReadSaveData()
+
+    public IEnumerator ReadSaveData(System.Action callback = null)
     {
         double timeStart = Time.time;
         yield return null;
 
         // Step 0 - Initialize reader
         Reader reader = new Reader();
-        reader.OpenSave(saveName);
+        
+        if(!reader.OpenSave(saveName)) {yield break;}
+        
         Debug.Log("Reading...");
         SaveData diskSaveData = new SaveData();
 
         // Step 1 - Miscellaneous data
         Debug.Log("Reading headers...");
-        int version = reader.ReadUInt16();
+        int version = reader.ReadUInt8();
         if (version != saveVersion) {
             Debug.LogWarning("Expected version "+saveVersion.ToString()+", got version "+version.ToString());
         }
@@ -110,6 +116,7 @@ public class SaveManager : MonoBehaviour {
             BlockSaveData blockData = new BlockSaveData();
             Vector3Int position = reader.ReadVector3UInt8();
             blockData.id = reader.ReadUInt8();
+            Debug.Log("Reading block id : " + blockData.id);
             int statesCount = reader.ReadUInt8();
             blockData.states = new List<int>();
             for (int j = 0; j < statesCount; j++) {
@@ -117,7 +124,7 @@ public class SaveManager : MonoBehaviour {
             }
             yield return null;
         }
-        
+
         // Step 3 - Storage bay grid
         Debug.Log("Reading storage bay...");
         Vector3Int storageGridSize = reader.ReadVector3UInt8();
@@ -152,31 +159,40 @@ public class SaveManager : MonoBehaviour {
         Debug.Log("Done in "+(Time.time-timeStart).ToString("n2")+" seconds");
 
         loadedData = diskSaveData;
+        if(callback != null) callback();
+
         yield return true;
     }
 
     public void LoadSaveData(SaveData saveData)
     {
-
         // Loading shopping List
         List<ShopDisplay> shoppingList = new List<ShopDisplay>();
         foreach (KeyValuePair<int, int> element in saveData.command) {
             ShopDisplay item = new ShopDisplay();
-            item.myBlock = new Block(); // INSERT ID => BLOCK HERE
+            item.myBlock = GameManager.instance.library.GetBlockByID(element.Key);
+            if(item.myBlock  == null){Debug.LogWarning("Block index not found - index : " + element.Key.ToString()); return;}
             item.quantityPicked = element.Value;
             shoppingList.Add(item);
         }
-        // Shop.shoppingList = shoppingList;
+        GameManager.instance.deliveryManagement.LoadShop(shoppingList);
 
         // Loading grid
-        GameObject[,,] grid = new GameObject[saveData.gridSize.x, saveData.gridSize.y, saveData.gridSize.z];
+        Debug.Log("Loading grid");
+        Debug.Log(saveData.blockGrid.Count);
         foreach (KeyValuePair<Vector3Int, BlockSaveData> blockData in saveData.blockGrid) {
+
             Vector3Int coords = blockData.Key;
-            Block block = new Block(); // INSERT ID,STATES => BLOCK
-            GameObject building = new GameObject(); // INSERT BLOCK => GAME OBJECT
-            grid[coords.x, coords.y, coords.z] = building;
+            Block block = GameManager.instance.library.GetBlockByID(blockData.Value.id);
+            if(block  == null){Debug.LogWarning("Block index not found - index : " + blockData.Value.id.ToString()); return;}
+
+            Debug.Log("Spawning block : " + block.name);
+            GameObject newBlock = Instantiate(GameManager.instance.library.blockPrefab);
+            BlockLink newBlockLink = newBlock.GetComponent<BlockLink>();
+            newBlockLink.block = block;
+
+            GameManager.instance.gridManagement.PutBlockInstance(newBlock, coords);
         }
-        // gridManager.grid = grid;
 
         // Converting bridges list
         foreach (KeyValuePair<Vector3Int, Vector3Int> bridge in saveData.bridges) {
@@ -188,13 +204,14 @@ public class SaveManager : MonoBehaviour {
             Vector3Int coords = stored.Key;
             Block block = new Block(); // INSERT ID => BLOCK
             GameObject storedBuilding = new GameObject(); // INSERT BLOCK => GAMEOBJECT
+
             storedBlocks[coords.x, coords.y, coords.z] = storedBuilding;
         }
-
-        // player.playerName = saveData.playerName;
-        // cityManager.cityName = saveData.cityName;
-        // temporality.cycleNumber = saveData.timeOfday;
-        // temporality.cycleProgression = saveData.cyclesPassed;
+        
+        GameManager.instance.player.playerName = saveData.playerName;
+        GameManager.instance.cityManagement.cityName = saveData.cityName;
+        GameManager.instance.temporality.cycleNumber = saveData.cyclesPassed;
+        GameManager.instance.temporality.cycleProgression = saveData.timeOfDay;
 
     }
 
@@ -225,6 +242,7 @@ public class SaveManager : MonoBehaviour {
             float _cycleProgression
         )
         {
+            Debug.Log(_grid);
             shoppingList = _shoppingList;
             grid = _grid;
             bridgesList = _bridgesList;
@@ -255,9 +273,7 @@ public class SaveManager : MonoBehaviour {
         public SaveData() { }
             
         // New saveData from game values
-        public SaveData(
-            GameData gameData
-        )
+        public SaveData(GameData gameData)
         {
             // Storing command
             command = ConvertCommand(gameData.shoppingList);
@@ -328,18 +344,23 @@ public class SaveManager : MonoBehaviour {
 
             foreach (GameObject building in _grid) {
                 BlockSaveData blockData = new BlockSaveData();
-                if (building != null) {
+                if (building != null)
+                {
                     BlockLink blockLink = building.GetComponent<BlockLink>();
-                    Vector3Int coords = blockLink.gridCoordinates;
-                    blockData.id = blockLink.block.ID;
-                    blockData.states = new List<int>();
-                    foreach (BlockState state in blockLink.states) {
-                        blockData.states.Add((int)state);
+                    if(blockLink != null)
+                    {
+                        Vector3Int coords = blockLink.gridCoordinates;
+                        blockData.id = blockLink.block.ID;
+                        blockData.states = new List<int>();
+
+                        foreach (BlockState state in blockLink.states) 
+                        {
+                            blockData.states.Add((int)state);
+                        }
+                        blockGrid[coords] = blockData;
                     }
-                    blockGrid[coords] = blockData;
                 }
             }
-
             return blockGrid;
         }
 
@@ -385,8 +406,13 @@ public class SaveManager : MonoBehaviour {
         {
             string fullPath = Application.persistentDataPath + "/" + saveName;
             try {
-                br = new BinaryReader(new FileStream(fullPath, FileMode.Open));
-                return true;
+                if(File.Exists(fullPath))
+                {
+                    br = new BinaryReader(new FileStream(fullPath, FileMode.Open));
+                    return true;
+                }
+               return false;
+                
             }
             catch (IOException e) {
                 Debug.LogWarning(e.Message + "\n Cannot read file "+ fullPath);
@@ -414,12 +440,21 @@ public class SaveManager : MonoBehaviour {
         public bool OpenSave(string saveName = "city.bin")
         {
             string fullPath = Application.persistentDataPath + "/" + saveName;
-            try {
-                File.Copy(fullPath, fullPath + ".backup");
+            try 
+            {
+                
+                if(File.Exists(fullPath)){
+                    if(File.Exists(fullPath + ".backup")){
+                        File.Delete(fullPath + ".backup");
+                    }
+                    File.Copy(fullPath, fullPath + ".backup");
+                }
+
                 bw = new BinaryWriter(new FileStream(fullPath, FileMode.Create));
                 return true;
             }
-            catch (IOException e) {
+            catch (IOException e) 
+            {
                 Debug.LogWarning(e.Message + "\n Cannot create file "+ fullPath);
                 return false;
             }
@@ -496,9 +531,19 @@ public class SaveManager : MonoBehaviour {
         }
     }
 
-
+    /*
+        List<ShopDisplay> _shoppingList,
+        GameObject[,,] _grid,
+        List<GameObject> _bridgesList,
+        GameObject[,,] _storedBlocks,
+        string _playerName,
+        string _cityName,
+        int _cycleNumber,
+        float _cycleProgression
+    */
 
     // Debug
+    
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.M)){
@@ -506,14 +551,25 @@ public class SaveManager : MonoBehaviour {
                 new SaveData(
                     new GameData(
                         // (Fake savegame for now)
-                        new List<ShopDisplay>(), new GameObject[255, 255, 255], new List<GameObject>(), new GameObject[255, 255, 255], "Joueur", "CityVille", 3, 0.2f
+                        //new List<ShopDisplay>(), new GameObject[255, 255, 255], new List<GameObject>(), new GameObject[255, 255, 255], "Joueur", "CityVille", 3, 0.2f
+
+                        GameManager.instance.deliveryManagement.shopDisplays,   // SHOP DISPLAY
+                        GameManager.instance.gridManagement.grid,           // STORED BLOCKS
+                        GameManager.instance.gridManagement.bridgesList,
+                        GameManager.instance.storageBay.storedBlocks,                     
+                        "Joueur",
+                        "CityVille",
+                        GameManager.instance.temporality.cycleNumber,
+                        GameManager.instance.temporality.cycleProgression
                     )
                 )
             ));
         }
+        /*
         if (Input.GetKeyDown(KeyCode.R)) {
             StartCoroutine("ReadSaveData");
         }
+        
         if (loadedData != null) {
             Debug.Log("Data is read, loading.");
             if (Input.GetKeyDown(KeyCode.L)) {
@@ -521,7 +577,9 @@ public class SaveManager : MonoBehaviour {
                 loadedData = null;
             }
         }
+        */
     }
+    
 }   
 
 

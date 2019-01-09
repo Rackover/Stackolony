@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class CityManagement : MonoBehaviour 
 {
+    public string cityName = "Valenciennes";
     public GameObject prefabRemoving;
     public GameObject prefabEmitting;
     public MissionManager.Mission mission;
