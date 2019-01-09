@@ -7,8 +7,7 @@ using UnityEngine.UI;
 public class Population : ScriptableObject {
 
     public int ID;
-    public Image visuals;
-    public string displayName; //Nom affiché au joueur
-    public string codeName; //Nom utilisé dans le code
-    public string description;
+    public string codeName; //Nom utilisé dans les CSV
+    public Sprite humorSprite;
+    public Color color;
 }
