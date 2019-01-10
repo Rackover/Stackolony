@@ -246,7 +246,14 @@ public class GridManagement : MonoBehaviour
         grid[coordinates.x, coordinates.y, coordinates.z] = blockInstance;
         buildingsList.Add(blockInstance);
         BlockLink blockLink = blockInstance.GetComponent<BlockLink>();
+        Logger.Debug("Putting block instance "+blockInstance.GetInstanceID().ToString()+" at coordinates " + coordinates.ToString());
+        blockInstance.transform.position = new Vector3(
+            coordinates.x * cellSize + (cellSize / 2),
+            coordinates.y + 0.5f,
+            coordinates.z * cellSize + (cellSize / 2)
+        );
         blockLink.LoadBlock();
+        blockLink.container.OpenContainer();
         blockLink.gridCoordinates = new Vector3Int(coordinates.x, coordinates.y, coordinates.z);
         blockInstance.name = "Block[" + coordinates.x + ";" + coordinates.y + ";" + coordinates.z + "]";
     }
