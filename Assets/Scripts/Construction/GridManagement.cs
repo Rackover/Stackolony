@@ -58,8 +58,10 @@ public class GridManagement : MonoBehaviour
         Debug.Log("-----Generating grid-----");
 
         //GENERATION DES GRILLES DE DEBUG
-        gameManager.gridDebugger.InitAllGrids();
-        gameManager.gridDebugger.InitButtons();
+        if (GameManager.instance.DEBUG_MODE) {
+            gameManager.gridDebugger.InitAllGrids();
+            gameManager.gridDebugger.InitButtons();
+        }
     }
 
     private void LoadGrid() //Fonction pour charger une grille depuis un fichier de sauvegarde

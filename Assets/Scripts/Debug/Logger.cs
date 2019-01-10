@@ -41,6 +41,10 @@ public class Logger : MonoBehaviour
 
     private static void LogMessage(type type, params string[] msgs)
     {
+        if (!GameManager.instance.ENABLE_LOGS) {
+            return;
+        }
+
         // Get informations from stackframe
         Logger loggerInstance = FindObjectOfType<Logger>();
         StackFrame sf = new StackFrame(2, true);
