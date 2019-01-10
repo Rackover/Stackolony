@@ -94,6 +94,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1601844212261264
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4928578448861902}
+  - component: {fileID: 114064246800414494}
+  m_Layer: 0
+  m_Name: Logger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1638283458723260
 GameObject:
   m_ObjectHideFlags: 0
@@ -391,6 +407,7 @@ Transform:
   - {fileID: 4903490542995232}
   - {fileID: 4651908095836702}
   - {fileID: 4045516178215052}
+  - {fileID: 4928578448861902}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -421,6 +438,19 @@ Transform:
   - {fileID: 4304128331427038}
   m_Father: {fileID: 4805539053113026}
   m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4928578448861902
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1601844212261264}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4805539053113026}
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4960340927997784
 Transform:
@@ -519,6 +549,23 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1944363005231262}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &114064246800414494
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1601844212261264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4cc054d340ef134bb957113e7345acc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  logFile: stackolony.log
+  locale: fr-FR
+  callerLength: 24
+  methodLength: 18
+  flushEverySecond: 1
+  flushToUnityConsole: 0
 --- !u!114 &114107103928404398
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -878,6 +925,7 @@ MonoBehaviour:
   storageBay: {fileID: 0}
   populationManager: {fileID: 114945228266214062}
   player: {fileID: 114831770002849496}
+  logger: {fileID: 0}
   deliveryManagement: {fileID: 0}
   temporalityInterface: {fileID: 0}
   tooltipGO: {fileID: 0}
