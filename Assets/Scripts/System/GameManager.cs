@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public GridManagement gridManagement;
     public StorageBay storageBay;
     public PopulationManager populationManager;
+    public Logger logger;
 
     [Space(1)][Header("INTERFACE")]
     public DeliveryManagement deliveryManagement;
@@ -46,9 +47,10 @@ public class GameManager : MonoBehaviour
         if(gridDebugger == null) gridDebugger = FindObjectOfType<GridDebugger>();
         if(storageBay == null) storageBay = FindObjectOfType<StorageBay>();
         if (populationManager == null) populationManager = FindObjectOfType<PopulationManager>();
+        if (logger == null) logger = GetComponentInChildren<Logger>();
 
         // INTERFACE
-        if(deliveryManagement == null) deliveryManagement = FindObjectOfType<DeliveryManagement>();
+        if (deliveryManagement == null) deliveryManagement = FindObjectOfType<DeliveryManagement>();
         if(temporalityInterface == null) temporalityInterface = FindObjectOfType<TemporalityInterface>();
         if(tooltipGO == null) tooltipGO = FindObjectOfType<TooltipGO>();
         if(blockInfobox == null) blockInfobox = FindObjectOfType<BlockInfobox>();
