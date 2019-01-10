@@ -7,6 +7,7 @@ public class PopulationManager : MonoBehaviour {
 
     public Population[] populationTypeList; //Liste de chaques type de population
     public List<Citizen> citizenList = new List<Citizen>(); //Liste de chaque citoyen de la colonie
+    public Dictionary<Population, float> averageMoods = new Dictionary<Population, float>();  // average moods between 0 and 1
 
     [System.Serializable]
     public class Citizen
@@ -23,6 +24,14 @@ public class PopulationManager : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.B))
         {
             AutoHouseCitizen(SpawnCitizen(populationTypeList[0]));
+        }
+    }
+
+    void Start()
+    {
+        foreach(Population pop in populationTypeList) {
+            //Temporary - Later should be initialized at 1f;
+            averageMoods[pop] = Random.value;
         }
     }
 

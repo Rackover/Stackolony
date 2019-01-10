@@ -30,6 +30,10 @@ public class GameManager : MonoBehaviour
     public ErrorDisplay errorDisplay;
     public OptionsDisplay  optionsDisplay;
     public CursorDisplay cursorDisplay;
+    [Space(1)]
+    [Header("SYSTEM SETTINGS")]
+    public bool DEBUG_MODE = true;
+    public bool ENABLE_LOGS = true;
 
 
     public static GameManager instance;
