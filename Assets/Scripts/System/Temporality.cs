@@ -49,6 +49,21 @@ public class Temporality : MonoBehaviour {
         GameManager.instance.temporalityInterface.UpdateCycleText(cycleNumber, yearNumber);
         GameManager.instance.temporalityInterface.EnableButton(GameManager.instance.temporalityInterface.defaultButton);
         
+        if (directionalLight == null) {
+            Light[] lights = FindObjectsOfType<Light>();
+            bool found = false;
+            foreach(Light light in lights) {
+                if (light.type == LightType.Directional) {
+                    directionalLight = light.gameObject;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                Logger.Throw("Could not find a directional light for the temporality. Aborting.");
+            }
+
+        }
         //timeCoroutine = StartCoroutine(updateCycleProgression(recurence));
         // ChangeTimeScale(1);    
         
