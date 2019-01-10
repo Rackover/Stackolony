@@ -15,8 +15,7 @@ public class ShopDisplay : MonoBehaviour {
     public Image icon;
     public Image cantBePickedIcon;
 
-    [System.NonSerialized]
-    public DeliveryManagement deliveryManager;
+    public DeliveryManagement dm;
 
     public void InitShopDisplay()
     {
@@ -25,12 +24,21 @@ public class ShopDisplay : MonoBehaviour {
         quantityPickedDisplay.text = "" + quantityPicked;
     }
 
+    public void SetQuantity(int quant)
+    {
+        if (canBePicked) {
+            quantityPicked = quant;
+            quantityPickedDisplay.text = "" + quantityPicked;
+            dm.UpdateComplexity(myBlock.complexity);
+        }
+    }
+
     public void IncreaseQuantity()
     {
         if (canBePicked) {
             quantityPicked++;
             quantityPickedDisplay.text = "" + quantityPicked;
-            deliveryManager.UpdateComplexity(myBlock.complexity);
+            dm.UpdateComplexity(myBlock.complexity);
         }
     }
 
@@ -40,13 +48,13 @@ public class ShopDisplay : MonoBehaviour {
         {
             quantityPicked--;
             quantityPickedDisplay.text = "" + quantityPicked;
-            deliveryManager.UpdateComplexity(-myBlock.complexity);
+            dm.UpdateComplexity(-myBlock.complexity);
         }
     }
 
     public bool IsPickable()
     {
-        if (deliveryManager.complexity + myBlock.complexity > deliveryManager.complexityMax)
+        if (dm.complexity + myBlock.complexity > dm.complexityMax)
         {
             return false;
         } else

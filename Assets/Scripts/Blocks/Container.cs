@@ -15,9 +15,10 @@ public class Container : MonoBehaviour {
     {
         sfxManager = FindObjectOfType<SFXManager>();
         isFalling = false;
-        isOpened = false;
         myAnimator = GetComponent<Animator>();
-        myAnimator.SetBool("ContainerOpened", isOpened);
+
+        // The container usually starts closed
+        CloseContainer();
         linkedBlock = transform.parent.GetComponent<BlockLink>();
     }
 

@@ -162,21 +162,7 @@ public class StorageBay : MonoBehaviour {
                     {
                         if (storedBlocks[x, y, z] == null)
                         {
-                            //Stockage du bloc
-                            storedBlocks[x, y, z] = blockToStore;
-                            blockToStore.transform.position = slots[x, z].transform.position;
-                            blockToStore.transform.position += new Vector3(0, y + 0.5f, 0);
-                            blockToStore.transform.SetParent(slots[x, z].transform);
-                            blockToStore.transform.localScale = Vector3.one;
-                            blockToStore.name = "StoredBlock[" + x + "," + y + "," + z + "]";
-                            BlockLink blockInfo = blockToStore.GetComponent<BlockLink>();
-                            blockInfo.gridCoordinates = new Vector3Int(x, y, z);
-                            blockInfo.container.CloseContainer();
-                            blockToStore.layer = LayerMask.NameToLayer("StoredBlock");
-                            if (blockInfo.container.isFalling == false)
-                            {
-                                gameManager.sfxManager.PlaySoundLinked("BlockDrop", blockToStore);
-                            }
+                            StoreAtPosition(blockToStore, new Vector3Int(x, y, z));
                             return;
                         }
                     }
@@ -185,6 +171,24 @@ public class StorageBay : MonoBehaviour {
             //Si on a pas réussi à stocker le block, la grille est pleine, dans ce cas on l'agrandi et on reessaye
             AddHeightToGrid();
             StoreBlock(blockToStore);
+        }
+    }
+
+    public void StoreAtPosition(GameObject blockToStore, Vector3Int position)
+    {
+        //Stockage du bloc
+        storedBlocks[position.x, position.y, position.z] = blockToStore;
+        blockToStore.transform.position = slots[position.x, position.z].transform.position;
+        blockToStore.transform.position += new Vector3(0, position.y + 0.5f, 0);
+        blockToStore.transform.SetParent(slots[position.x, position.z].transform);
+        blockToStore.transform.localScale = Vector3.one;
+        blockToStore.name = "StoredBlock[" + position + "]";
+        BlockLink blockInfo = blockToStore.GetComponent<BlockLink>();
+        blockInfo.gridCoordinates = position;
+        blockInfo.container.CloseContainer();
+        blockToStore.layer = LayerMask.NameToLayer("StoredBlock");
+        if (blockInfo.container.isFalling == false) {
+            gameManager.sfxManager.PlaySoundLinked("BlockDrop", blockToStore);
         }
     }
 
@@ -223,6 +227,9 @@ public class StorageBay : MonoBehaviour {
                 if (foundObject != null)
                 {
                     storedBlocks[blockCoordinates.x, y, blockCoordinates.z] = null;
+
+
+
                     storedBlocks[blockCoordinates.x, y - 1, blockCoordinates.z] = foundObject;
                     foundObject = storedBlocks[blockCoordinates.x, y - 1, blockCoordinates.z];
                     foundObject.transform.position = slots[blockCoordinates.x, blockCoordinates.z].transform.position;

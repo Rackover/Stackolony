@@ -20,6 +20,8 @@ public class DeliveryManagement : MonoBehaviour {
     [System.NonSerialized] public int complexity;
     [System.NonSerialized] public List<ShopDisplay> shopDisplays;
 
+
+
     public void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
@@ -50,6 +52,20 @@ public class DeliveryManagement : MonoBehaviour {
         }
     }
 
+    public void LoadShop(List<ShopDisplay> shops)
+    {
+        foreach (ShopDisplay item in shops)
+        {
+            foreach(ShopDisplay sd in shopDisplays)
+            {
+                if(item.myBlock.ID == sd.myBlock.ID)
+                {
+                    sd.SetQuantity(item.quantityPicked);
+                }
+            }
+        }
+    }
+
     //Genere les blocs achetable
     public void InitShop()
     {
@@ -60,7 +76,7 @@ public class DeliveryManagement : MonoBehaviour {
 
             ShopDisplay newBlockSettings = newBlockDisplay.GetComponent<ShopDisplay>();
             shopDisplays.Add(newBlockSettings);
-            newBlockSettings.deliveryManager = this;
+            newBlockSettings.dm = GameManager.instance.deliveryManagement;
             newBlockSettings.myBlock = block;
             newBlockSettings.InitShopDisplay();
             newBlockSettings.icon.sprite = block.icon;

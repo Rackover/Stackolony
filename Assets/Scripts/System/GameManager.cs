@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour
     public GridManagement gridManagement;
     public StorageBay storageBay;
     public PopulationManager populationManager;
+
+    public Player player;
     public Logger logger;
 
     [Space(1)][Header("INTERFACE")]
@@ -28,6 +30,7 @@ public class GameManager : MonoBehaviour
     public ErrorDisplay errorDisplay;
     public OptionsDisplay  optionsDisplay;
     public CursorDisplay cursorDisplay;
+
 
     public static GameManager instance;
 
