@@ -38,7 +38,7 @@ public class BlockLink : MonoBehaviour {
 	public int currentPower;
     public bool isConsideredUnpowered;
 
-    public void Start()
+    public void Awake()
     {
         isConsideredUnpowered = false;
         flagReader = FindObjectOfType<FlagReader>();

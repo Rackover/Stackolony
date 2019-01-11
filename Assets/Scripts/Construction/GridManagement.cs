@@ -35,7 +35,10 @@ public class GridManagement : MonoBehaviour
     {
         gameManager = FindObjectOfType<GameManager>();
         //Recuperation du terrain
-        myTerrain = GetComponent<Terrain>();
+        if (myTerrain == null) {
+            myTerrain = GetComponentInChildren<Terrain>();
+        }
+
         //Initialisation des variables statiques
         gridSize.x = Mathf.RoundToInt(myTerrain.terrainData.size.x / cellSize);
         gridSize.z = Mathf.RoundToInt(myTerrain.terrainData.size.z / cellSize);
@@ -58,8 +61,10 @@ public class GridManagement : MonoBehaviour
         Debug.Log("-----Generating grid-----");
 
         //GENERATION DES GRILLES DE DEBUG
-        gameManager.gridDebugger.InitAllGrids();
-        gameManager.gridDebugger.InitButtons();
+        if (GameManager.instance.DEBUG_MODE) {
+            gameManager.gridDebugger.InitAllGrids();
+            gameManager.gridDebugger.InitButtons();
+        }
     }
 
     private void LoadGrid() //Fonction pour charger une grille depuis un fichier de sauvegarde
@@ -239,6 +244,23 @@ public class GridManagement : MonoBehaviour
         blockLink.container.OpenContainer();
         blockLink.gridCoordinates = new Vector3Int(coordinates.x, newBlockHeight, coordinates.y);
         newBlock.name = "Block[" + coordinates.x + ";" + newBlockHeight + ";" + coordinates.y + "]";
+    }
+
+    public void PutBlockInstance(GameObject blockInstance, Vector3Int coordinates) // Puts a block instance at a specific XYZ place
+    {
+        grid[coordinates.x, coordinates.y, coordinates.z] = blockInstance;
+        buildingsList.Add(blockInstance);
+        BlockLink blockLink = blockInstance.GetComponent<BlockLink>();
+        Logger.Debug("Putting block instance "+blockInstance.GetInstanceID().ToString()+" at coordinates " + coordinates.ToString());
+        blockInstance.transform.position = new Vector3(
+            coordinates.x * cellSize + (cellSize / 2),
+            coordinates.y + 0.5f,
+            coordinates.z * cellSize + (cellSize / 2)
+        );
+        blockLink.LoadBlock();
+        blockLink.container.OpenContainer();
+        blockLink.gridCoordinates = new Vector3Int(coordinates.x, coordinates.y, coordinates.z);
+        blockInstance.name = "Block[" + coordinates.x + ";" + coordinates.y + ";" + coordinates.z + "]";
     }
 
     public blockType checkIfSlotIsBlocked(Vector3Int coordinates, bool displayErrorMessages)
