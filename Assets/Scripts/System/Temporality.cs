@@ -20,8 +20,7 @@ public class Temporality : MonoBehaviour {
     public Material skyboxMaterial;
 
     [Header("=== DEBUG VALUES ===")][Space(1)]
-    [HideInInspector] public int cycleNumber; //Combien de cycles se sont ecoulés en tout
-    [HideInInspector] public int yearNumber; //Combien d'années se sont ecoulées en tout
+    [HideInInspector] public int cycleNumber = 0; //Combien de cycles se sont ecoulés en tout
     public float cycleProgression; //Combien de secondes se sont ecoulées dans le cycle actuel
     public int timeScale; //Coefficient de vitesse d'écoulement du temps
     //private Coroutine timeCoroutine; //Coroutine pour gérer la progression des cycles, obsoléte
@@ -44,10 +43,6 @@ public class Temporality : MonoBehaviour {
         counter = 0;
         timeScale = initialTimeScale;
         recurence = Mathf.Min(timeBetweenUpdateForDayNightDisplay, timeBetweenUpdateForLights, timeBetweenUpdateForSkybox, timeBetweenUpdateForSystem);
-        cycleNumber = 0;
-        yearNumber = 0;
-        GameManager.instance.temporalityInterface.UpdateCycleText(cycleNumber, yearNumber);
-        GameManager.instance.temporalityInterface.EnableButton(GameManager.instance.temporalityInterface.defaultButton);
         
         if (directionalLight == null) {
             Light[] lights = FindObjectsOfType<Light>();
@@ -74,11 +69,9 @@ public class Temporality : MonoBehaviour {
     {
         if (timeScale == 0) {
             timeScale = savedTimeScale;
-            GameManager.instance.temporalityInterface.EnableButton(savedButton);
         }
         else
         {
-            GameManager.instance.temporalityInterface.EnableButton(GameManager.instance.temporalityInterface.defaultButton);
             savedTimeScale = timeScale;
             timeScale = 0;
 
@@ -129,7 +122,6 @@ public class Temporality : MonoBehaviour {
         cycleProgressionInPercent = (cycleProgression / (float)cycleDuration) * 100f;
         if (timeBetweenUpdateForDayNightDisplayCount >= timeBetweenUpdateForDayNightDisplay)
         {
-            GameManager.instance.temporalityInterface.UpdateDayNightDisplay(cycleProgressionInPercent);
             timeBetweenUpdateForDayNightDisplayCount = 1;
         }
 
@@ -165,17 +157,20 @@ public class Temporality : MonoBehaviour {
     public void AddCycle() //Ajoute un cycle au compteur
     {
         cycleNumber++;
-        GameManager.instance.temporalityInterface.UpdateCycleText(cycleNumber, yearNumber);
-        if (cycleNumber%yearDuration == 0) 
-            AddYear();
         GameManager.instance.deliveryManagement.DeliverBlocks();
         GameManager.instance.systemManager.UpdateCycle();
     }
 
-    public void AddYear() //Ajoute un an au compteur
+    // Returns current cycle of the current year
+    public int GetCycle()
     {
-        yearNumber++;
-        GameManager.instance.temporalityInterface.UpdateCycleText(cycleNumber, yearNumber);
+        return (cycleNumber % yearDuration)+1;
+    }
+
+    // Returns current year
+    public int GetYear()
+    {
+        return (int)Mathf.Ceil(cycleNumber / yearDuration);
     }
 
     //Met à jour les lumières en fonction de l'avancement du cycle

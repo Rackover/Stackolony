@@ -83,7 +83,6 @@ public class CameraController : MonoBehaviour {
         }
 
         CatchUpCameraObjective();
-        GameManager.instance.cursorDisplay.cursorTransform.position = Input.mousePosition;
         if(Input.GetKeyDown(KeyCode.V))
         {
             transform.position = startPosition;

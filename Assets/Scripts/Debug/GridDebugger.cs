@@ -33,17 +33,13 @@ public class GridDebugger : MonoBehaviour {
     [System.NonSerialized]
     public OverlayMode selectedGrid;
 
-    GridManagement gridManager;
-
-    private void Start()
-    {
-        gridManager = GameManager.instance.gridManagement;
-    }
+    public GridManagement gridManager;
 
     //Genere une grille 3D pour pouvoir débug la variable grid[,,] et afficher ce qu'elle contient
     public void InitAllGrids()
     {
         foreach (OverlayMode overlayMode in overlayModes) {
+            Logger.Debug("Initializing debug grid [" + overlayMode.ToString() + "]");
             InitGrid(overlayMode);
         }
     }

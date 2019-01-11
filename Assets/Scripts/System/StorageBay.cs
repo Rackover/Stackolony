@@ -37,6 +37,10 @@ public class StorageBay : MonoBehaviour {
 
     private void Update()
     {
+        if (!gameManager.IsInGame()) {
+            return;
+        }
+
         if (!isPlaced)
         {
             // cursor.posInTerrain += new Vector3Int(1, 0, 1);

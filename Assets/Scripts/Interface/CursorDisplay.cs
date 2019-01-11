@@ -6,7 +6,18 @@ public class CursorDisplay : MonoBehaviour {
 	public RectTransform cursorTransform;
 	public Image cursorImage;
 
-	public void ChangeCursor(string mode)	
+    private void Awake()
+    {
+        Cursor.visible = false;
+    }
+
+    private void Update()
+    {
+        cursorTransform.position = Input.mousePosition;
+        ChangeCursor(GameManager.instance.cursorManagement.ToString());
+    }
+
+    public void ChangeCursor(string mode)	
 	{
 		cursorImage.enabled = true;
 		switch (mode) 

@@ -5,16 +5,14 @@ using System.Collections.Generic;
 
 public class Interface : MonoBehaviour {
 
+    [Header("Settings")][Space(1)]
+    public float refreshRate;
+
 	[Header("Cursor")][Space(1)]
 	public RectTransform cursorTransform;
 	public Image cursorImage;
-
-	[Space(1)][Header("Option")]
-	public Slider userBorderSensibility;
-	public Slider userRotationSensibility;
-	public Slider userGrabSensitivity;
-
-	public void ChangeCursor(string mode)	
+    
+    public void ChangeCursor(string mode)	
 	{
 		cursorImage.enabled = true;
 		switch (mode) 

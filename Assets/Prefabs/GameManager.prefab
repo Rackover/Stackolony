@@ -471,7 +471,7 @@ MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1805530614771216}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -720,8 +720,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   projectorPrefab: {fileID: 1020628632974844, guid: 85700c23bc0a17747a101504eaa8abc2,
     type: 2}
-  blockDefaultPrefab: {fileID: 1047592790041198, guid: 10acb4a691cc05347b0b3c186c84acc4,
-    type: 2}
   stackSelectorPrefab: {fileID: 1413566985506526, guid: bd1108a1112442047ae58344b272d96a,
     type: 2}
   highlighter: {fileID: 1944363005231262}
@@ -787,7 +785,6 @@ MonoBehaviour:
   directionalLight: {fileID: 0}
   skyboxMaterial: {fileID: 2100000, guid: 87323bcb35246374883b1cc089091bda, type: 2}
   cycleNumber: 0
-  yearNumber: 0
   cycleProgression: 0
   timeScale: 0
   cycleProgressionInPercent: 0
@@ -885,6 +882,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerName: Maurice
+  borderSensitivity: 0
+  rotationSensitivity: 0
+  grabSensitivity: 0
+  driftSensitivity: 0
 --- !u!114 &114945228266214062
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -914,6 +915,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f24f8d9162098bf4384d535396448edb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  menuScene: {fileID: 102900000, guid: ecbb49a739148a94cb28921e3452a2f6, type: 3}
   temporality: {fileID: 0}
   flagReader: {fileID: 0}
   library: {fileID: 0}
@@ -921,19 +923,19 @@ MonoBehaviour:
   systemManager: {fileID: 0}
   cityManagement: {fileID: 0}
   missionManager: {fileID: 0}
-  gridDebugger: {fileID: 0}
   cursorManagement: {fileID: 114459021843446374}
   gridManagement: {fileID: 0}
   storageBay: {fileID: 0}
   populationManager: {fileID: 114945228266214062}
   player: {fileID: 114831770002849496}
-  logger: {fileID: 0}
+  cursorDisplay: {fileID: 0}
   deliveryManagement: {fileID: 0}
   temporalityInterface: {fileID: 0}
   tooltipGO: {fileID: 0}
   blockInfobox: {fileID: 0}
   errorDisplay: {fileID: 0}
   optionsDisplay: {fileID: 0}
-  cursorDisplay: {fileID: 0}
+  logger: {fileID: 0}
+  gridDebugger: {fileID: 0}
   DEBUG_MODE: 1
   ENABLE_LOGS: 1

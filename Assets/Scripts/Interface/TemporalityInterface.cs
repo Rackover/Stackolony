@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class TemporalityInterface : MonoBehaviour {
 
@@ -11,9 +12,9 @@ public class TemporalityInterface : MonoBehaviour {
     public Image pauseButton;
     public Image defaultButton;
 
-    public void UpdateCycleText(int cycleNumber, int yearNumber)
+    public void UpdateCycleText(int currentCycle, int currentYear)
     {
-        timeText.text = "Cycle : " + cycleNumber + " - Year : " + yearNumber;
+        timeText.text = "Cycle : " + currentCycle + " - Year : " + currentYear;
     }
 
     public void EnableButton(Image button)
@@ -29,5 +30,15 @@ public class TemporalityInterface : MonoBehaviour {
     public void UpdateDayNightDisplay(float cycleProgressionInPercent)
     {
         dayNightDisplay.transform.rotation = Quaternion.Euler(new Vector3(0, 0,90 -(cycleProgressionInPercent * 3.6f)));
+    }
+
+
+    public IEnumerator UpdateInterface()
+    {
+        Temporality temporality = GameManager.instance.temporality;
+        UpdateCycleText(temporality.GetCycle(), temporality.GetYear());
+        UpdateDayNightDisplay(temporality.cycleProgression);
+        yield return new WaitForSeconds(FindObjectOfType<Interface>().refreshRate);
+        yield return StartCoroutine(UpdateInterface());
     }
 }

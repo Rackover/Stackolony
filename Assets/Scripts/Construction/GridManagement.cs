@@ -62,6 +62,7 @@ public class GridManagement : MonoBehaviour
 
         //GENERATION DES GRILLES DE DEBUG
         if (GameManager.instance.DEBUG_MODE) {
+            gameManager.gridDebugger.gridManager = this;
             gameManager.gridDebugger.InitAllGrids();
             gameManager.gridDebugger.InitButtons();
         }

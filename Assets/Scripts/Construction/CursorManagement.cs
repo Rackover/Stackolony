@@ -42,7 +42,7 @@ public class CursorManagement : MonoBehaviour
 
     Vector2Int heightmapSize;
 
-    private void Start()
+    public void InitializeGameCursor()
     {
         hoveredBlock = null;
         //Instantie un projecteur de selection qui se clamp sur les cellules de la grille
@@ -59,12 +59,19 @@ public class CursorManagement : MonoBehaviour
         //Recupere le terrain et ses dimensions
         terr = Terrain.activeTerrain;
         heightmapSize = new Vector2Int(terr.terrainData.heightmapWidth, terr.terrainData.heightmapHeight);
-        Cursor.visible = false;
-
     }
+    public void KillGameCursor()
+    {
+        Destroy(stackSelector);
+        Destroy(myProjector);
+    }
+
     private void Update()
     {
-    
+        if (!GameManager.instance.IsInGame()) {
+            return;
+        }
+
         UpdateCursor();
         if (EventSystem.current.IsPointerOverGameObject())
         {
@@ -85,7 +92,6 @@ public class CursorManagement : MonoBehaviour
         {
             selectedMode = mode;
             //uiManager.txtMode.text = mode.ToString();
-            GameManager.instance.cursorDisplay.ChangeCursor(mode.ToString());
             ClearFeedback();
             ClearPermanentHighlighter();
             selectedBlock = null;

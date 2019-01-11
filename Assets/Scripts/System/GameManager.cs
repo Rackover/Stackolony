@@ -1,9 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour 
+public class GameManager : MonoBehaviour
 {
+    // Don't make the "inGame" variable public under any circumstance
+    bool inGame = false;
+
+    public Object menuScene;
+
     [Header("SYSTEM")]
     public Temporality temporality;
     public FlagReader flagReader;
@@ -12,29 +18,30 @@ public class GameManager : MonoBehaviour
     public SystemManager systemManager;
     public CityManagement cityManagement;
     public MissionManager missionManager;
-    public GridDebugger gridDebugger;
     public CursorManagement cursorManagement;
     public GridManagement gridManagement;
     public StorageBay storageBay;
     public PopulationManager populationManager;
-
     public Player player;
-    public Logger logger;
 
-    [Space(1)][Header("INTERFACE")]
+    [Space(1)]
+    [Header("INTERFACE")]
+    public CursorDisplay cursorDisplay;
+
+    [Space(1)][Header("INTERFACE INGAME")]
     public DeliveryManagement deliveryManagement;
     public TemporalityInterface temporalityInterface;
     public TooltipGO tooltipGO;
     public BlockInfobox blockInfobox;
-
     public ErrorDisplay errorDisplay;
     public OptionsDisplay  optionsDisplay;
-    public CursorDisplay cursorDisplay;
+
     [Space(1)]
-    [Header("SYSTEM SETTINGS")]
+    [Header("DEBUG SETTINGS")]
+    public Logger logger;
+    public GridDebugger gridDebugger;
     public bool DEBUG_MODE = false;
     public bool ENABLE_LOGS = true;
-
 
     public static GameManager instance;
 
@@ -51,19 +58,30 @@ public class GameManager : MonoBehaviour
         if(missionManager == null) missionManager = GetComponentInChildren<MissionManager>();
         if(cursorManagement == null) cursorManagement = FindObjectOfType<CursorManagement>();
         if(gridManagement == null) gridManagement = FindObjectOfType<GridManagement>();
-        if(gridDebugger == null) gridDebugger = FindObjectOfType<GridDebugger>();
         if(storageBay == null) storageBay = FindObjectOfType<StorageBay>();
         if (populationManager == null) populationManager = FindObjectOfType<PopulationManager>();
-        if (logger == null) logger = GetComponentInChildren<Logger>();
 
         // INTERFACE
+        if (cursorDisplay == null) cursorDisplay = FindObjectOfType<CursorDisplay>();
+
+        // INTERFACE - INGAME
         if (deliveryManagement == null) deliveryManagement = FindObjectOfType<DeliveryManagement>();
         if(temporalityInterface == null) temporalityInterface = FindObjectOfType<TemporalityInterface>();
         if(tooltipGO == null) tooltipGO = FindObjectOfType<TooltipGO>();
         if(blockInfobox == null) blockInfobox = FindObjectOfType<BlockInfobox>();
         if(errorDisplay == null) errorDisplay = FindObjectOfType<ErrorDisplay>();
         if(optionsDisplay == null) optionsDisplay = FindObjectOfType<OptionsDisplay>();
-        if(cursorDisplay == null) cursorDisplay = FindObjectOfType<CursorDisplay>();
+
+        // DEBUG
+        if (logger == null) logger = GetComponentInChildren<Logger>();
+        if (gridDebugger == null) gridDebugger = FindObjectOfType<GridDebugger>();
+    }
+
+    private void Start()
+    {
+        if (menuScene.name != SceneManager.GetActiveScene().name) {
+            StartGame();
+        }
     }
 
     void Update()
@@ -77,5 +95,34 @@ public class GameManager : MonoBehaviour
         {
             temporality.PauseGame();
         }
+    }
+
+    public bool IsInGame()
+    {
+        return inGame;
+    }
+
+    public void StartGame()
+    {
+        // Initialize game interfaces
+        storageBay.gameObject.GetComponent<MeshRenderer>().enabled = true;
+        FindObjectOfType<GameInterfaces>().gameObject.SetActive(true);
+        FindObjectOfType<GameInterfaces>().StartGameInterfaces();
+        cursorManagement.InitializeGameCursor();
+
+
+        inGame = true;
+    }
+
+    public void EndGame()
+    {
+        // Shut down game interfaces
+        storageBay.gameObject.GetComponent<MeshRenderer>().enabled = false;
+        FindObjectOfType<GameInterfaces>().StopGameInterfaces();
+        FindObjectOfType<GameInterfaces>().gameObject.SetActive(false);
+        cursorManagement.KillGameCursor();
+
+
+        inGame = false;
     }
 }
