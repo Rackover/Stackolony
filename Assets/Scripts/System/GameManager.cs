@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviour
     [Space(1)]
     [Header("INTERFACE")]
     public CursorDisplay cursorDisplay;
+    public Localization localization;
 
     [Space(1)][Header("INTERFACE INGAME")]
     public DeliveryManagement deliveryManagement;
@@ -63,6 +64,7 @@ public class GameManager : MonoBehaviour
 
         // INTERFACE
         if (cursorDisplay == null) cursorDisplay = FindObjectOfType<CursorDisplay>();
+        if (localization == null) localization = FindObjectOfType<Localization>();
 
         // INTERFACE - INGAME
         if (deliveryManagement == null) deliveryManagement = FindObjectOfType<DeliveryManagement>();
