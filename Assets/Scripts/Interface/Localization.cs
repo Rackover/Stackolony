@@ -12,24 +12,11 @@ public class Localization : MonoBehaviour {
     string currentLang;
     string currentCategory;
     Dictionary<KeyValuePair<string, int>, string> locs = new Dictionary<KeyValuePair<string, int>, string>();
-
-    int test = 0;
-
+    
     private void Start()
     {
         LoadLocalization(0);
         Logger.Info("Loaded localization file succesfully");
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A)) {
-            test++;
-            if (test >= languages.Count) {
-                test = 0;
-            }
-            LoadLocalization(test);
-        }
     }
 
     public void LoadLocalization(int index)
