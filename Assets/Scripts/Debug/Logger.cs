@@ -35,7 +35,7 @@ public class Logger : MonoBehaviour
     public static void Throw(params string[] msgs) {
         LogMessage(type.ERROR, new string[1] { "================== FATAL ==================" });
         LogMessage(type.ERROR, msgs);
-        UnityEngine.Debug.LogError(msgs.ToString());
+        UnityEngine.Debug.LogError(string.Join(" ", msgs).ToString());
         Crash();
     }
 
