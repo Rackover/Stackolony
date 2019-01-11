@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: map_rock_01
-  m_Shader: {fileID: 4800000, guid: 0028366432aa15145818e57304494b4e, type: 3}
+  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
   m_ShaderKeywords: _DETAIL_MULX2 _EMISSION _NORMALMAP _SNOWMODE_ON
   m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
@@ -47,7 +47,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: b0b317d128cdf854fa0ad95ded5f0f00, type: 3}
+        m_Texture: {fileID: 2800000, guid: 06c8b88b345267d4ea619a8bc37c3cb9, type: 3}
         m_Scale: {x: 20, y: 20}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -95,7 +95,7 @@ Material:
     - _YOffset: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0.972549, g: 0.5176471, b: 0.36078432, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _IntersectionColor: {r: 1, g: 1, b: 1, a: 0.4392157}
     - _TargetNormal: {r: 0, g: 1, b: 0, a: 1}

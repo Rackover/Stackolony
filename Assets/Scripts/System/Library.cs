@@ -16,4 +16,16 @@ public class Library : MonoBehaviour
 	public Sprite destroyIcon;
 	public Sprite buildIcon;
 	public Sprite bridgeIcon;
+
+	public Block GetBlockByID(int id)
+	{	
+		foreach(Block b in blocks)
+		{
+			if(b.ID == id)
+			{
+				return b;
+			}
+		}
+		return null;
+	}
 }

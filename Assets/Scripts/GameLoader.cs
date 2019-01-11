@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameLoader : MonoBehaviour {
+public class GameLoader : MonoBehaviour 
+{
+	public SaveManager saveManager;
 
-	// Use this for initialization
-	void Start () {
-		
+	void Awake()
+	{
+		Load();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+	public void Load()
+	{
+		saveManager.StartCoroutine(saveManager.ReadSaveData(() => saveManager.LoadSaveData(saveManager.loadedData)));
 	}
 }

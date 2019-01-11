@@ -8,12 +8,12 @@ public class SaveManager : MonoBehaviour {
 
     public int saveVersion = 1;
     public string saveName = "city.bin";
-    SaveData loadedData;
+    public SaveData loadedData;
 
     ///////////////////////////////
     /// 
     ///     Main function to write savegame
-    /// 
+    ///     This is the one you call publicly
     ///
 
     public IEnumerator WriteSaveData(SaveData saveData)
@@ -23,8 +23,11 @@ public class SaveManager : MonoBehaviour {
 
         // Step 0 - Initialize writer
         Writer writer = new Writer();
-        writer.OpenSave(saveName);
-        Debug.Log("Saving...");
+
+        if(!writer.OpenSave(saveName))
+            yield break;
+        
+        Logger.Info("Saving...");
 
         // Step 1 - Miscellaneous data
         writer.WriteUInt8(saveVersion);
@@ -41,6 +44,7 @@ public class SaveManager : MonoBehaviour {
             writer.WriteVector3UInt8(data.Key);
             writer.WriteUInt8(blockData.id);
             writer.WriteUInt8(blockData.states.Count);
+            Logger.Debug("Saved blockData ID#" + blockData.id + " at position " + data.Key.ToString());
             foreach (int state in blockData.states) {
                 writer.WriteUInt8(state);
             }
@@ -74,26 +78,29 @@ public class SaveManager : MonoBehaviour {
 
         // Last step - Close handler;
         writer.Close();
-        Debug.Log("Done in "+(Time.time-timeStart).ToString("n2")+" seconds");
+        Logger.Info("Done in "+(Time.time-timeStart).ToString("n2")+" seconds");
         yield return true;
     }
 
-    public IEnumerator ReadSaveData()
+
+    public IEnumerator ReadSaveData(System.Action callback = null)
     {
         double timeStart = Time.time;
         yield return null;
 
         // Step 0 - Initialize reader
         Reader reader = new Reader();
-        reader.OpenSave(saveName);
-        Debug.Log("Reading...");
+        
+        if(!reader.OpenSave(saveName)) {yield break;}
+        
+        Logger.Info("Reading...");
         SaveData diskSaveData = new SaveData();
 
         // Step 1 - Miscellaneous data
-        Debug.Log("Reading headers...");
-        int version = reader.ReadUInt16();
+        Logger.Debug("Reading headers...");
+        int version = reader.ReadUInt8();
         if (version != saveVersion) {
-            Debug.LogWarning("Expected version "+saveVersion.ToString()+", got version "+version.ToString());
+            Logger.Warn("Expected version "+saveVersion.ToString()+", got version "+version.ToString());
         }
 
         diskSaveData.cityName = reader.ReadString();
@@ -102,7 +109,7 @@ public class SaveManager : MonoBehaviour {
         diskSaveData.cyclesPassed = reader.ReadUInt16();
 
         // Step 2 - Main grid
-        Debug.Log("Reading grid...");
+        Logger.Debug("Reading grid...");
         Vector3Int gridSize = reader.ReadVector3UInt8();
         diskSaveData.blockGrid = new Dictionary<Vector3Int, BlockSaveData>();
         int count = reader.ReadUInt16();
@@ -115,11 +122,13 @@ public class SaveManager : MonoBehaviour {
             for (int j = 0; j < statesCount; j++) {
                 blockData.states.Add(reader.ReadUInt8());
             }
+            Logger.Debug("Reading block id : " + blockData.id + ":"+blockData.states.Count.ToString()+" at position " + position.ToString());
+            diskSaveData.blockGrid[position] = blockData;
             yield return null;
         }
-        
+
         // Step 3 - Storage bay grid
-        Debug.Log("Reading storage bay...");
+        Logger.Debug("Reading storage bay...");
         Vector3Int storageGridSize = reader.ReadVector3UInt8();
         diskSaveData.storageGrid = new Dictionary<Vector3Int, int>();
         int storedCount = reader.ReadUInt16();
@@ -129,7 +138,7 @@ public class SaveManager : MonoBehaviour {
         }
 
         // Step 4 - Bridges
-        Debug.Log("Reading bridges...");
+        Logger.Debug("Reading bridges...");
         int bridgesCount = reader.ReadUInt8();
         diskSaveData.bridges = new List<KeyValuePair<Vector3Int, Vector3Int>>();
         for (int i = 0; i < bridgesCount; i++) {
@@ -138,7 +147,7 @@ public class SaveManager : MonoBehaviour {
         }
 
         // Step 5 - Command
-        Debug.Log("Writing command...");
+        Logger.Debug("Writing command...");
         diskSaveData.command = new Dictionary<int, int>();
         int commandCount = reader.ReadUInt8();
         for(int i=0; i < commandCount; i++) {
@@ -147,54 +156,69 @@ public class SaveManager : MonoBehaviour {
         }
 
         // Last step - Close handler;
-        Debug.Log("Closing handler...");
+        Logger.Debug("Closing handler...");
         reader.Close();
-        Debug.Log("Done in "+(Time.time-timeStart).ToString("n2")+" seconds");
+        Logger.Info("Done in "+(Time.time-timeStart).ToString("n2")+" seconds");
 
         loadedData = diskSaveData;
+        if(callback != null) callback();
+
         yield return true;
     }
 
+
+    ///////////////////////////////
+    /// 
+    ///     Main function to load savegame
+    ///     This is the one you call publicly
+    ///
     public void LoadSaveData(SaveData saveData)
     {
+
+        GridManagement gridMan = GameManager.instance.gridManagement;
 
         // Loading shopping List
         List<ShopDisplay> shoppingList = new List<ShopDisplay>();
         foreach (KeyValuePair<int, int> element in saveData.command) {
             ShopDisplay item = new ShopDisplay();
-            item.myBlock = new Block(); // INSERT ID => BLOCK HERE
+            item.myBlock = GameManager.instance.library.GetBlockByID(element.Key);
+            if(item.myBlock  == null){ Logger.Warn("Block index not found - index : " + element.Key.ToString()); return;}
             item.quantityPicked = element.Value;
             shoppingList.Add(item);
         }
-        // Shop.shoppingList = shoppingList;
+        GameManager.instance.deliveryManagement.LoadShop(shoppingList);
 
         // Loading grid
-        GameObject[,,] grid = new GameObject[saveData.gridSize.x, saveData.gridSize.y, saveData.gridSize.z];
+        Logger.Debug("Loading "+ saveData.blockGrid.Count +" objects into the grid");
         foreach (KeyValuePair<Vector3Int, BlockSaveData> blockData in saveData.blockGrid) {
+            // Todo : Load states aswell
             Vector3Int coords = blockData.Key;
-            Block block = new Block(); // INSERT ID,STATES => BLOCK
-            GameObject building = new GameObject(); // INSERT BLOCK => GAME OBJECT
-            grid[coords.x, coords.y, coords.z] = building;
+            gridMan.SpawnBlock(blockData.Value.id, blockData.Key);
         }
-        // gridManager.grid = grid;
 
         // Converting bridges list
         foreach (KeyValuePair<Vector3Int, Vector3Int> bridge in saveData.bridges) {
-            //MakeBridge(bridge.Key, bridge.Value);
+            BlockLink origin = gridMan.grid[bridge.Key.x, bridge.Key.y, bridge.Key.z].GetComponent<BlockLink>();
+            BlockLink destination = gridMan.grid[bridge.Value.x, bridge.Value.y, bridge.Value.z].GetComponent<BlockLink>();
+            if (gridMan.CreateBridge(origin, destination) == null){ Logger.Warn("Could not replicate bridge from " + origin + ":(" + bridge.Key + ") to " + destination + ":(" + bridge.Value + ")");  };
         }
 
-        GameObject[,,] storedBlocks = new GameObject[saveData.storageGridSize.x, saveData.storageGridSize.y, saveData.storageGridSize.z];
         foreach (KeyValuePair<Vector3Int, int> stored in saveData.storageGrid) {
             Vector3Int coords = stored.Key;
-            Block block = new Block(); // INSERT ID => BLOCK
-            GameObject storedBuilding = new GameObject(); // INSERT BLOCK => GAMEOBJECT
-            storedBlocks[coords.x, coords.y, coords.z] = storedBuilding;
-        }
+            Block block = GameManager.instance.library.GetBlockByID(stored.Value);
+            if (block == null) { Logger.Warn("Block index not found - index : " + stored.Value.ToString()); return; }
+            
+            GameObject storedBuilding = Instantiate(GameManager.instance.library.blockPrefab);
+            BlockLink newBlockLink = storedBuilding.GetComponent<BlockLink>();
+            newBlockLink.block = block;
 
-        // player.playerName = saveData.playerName;
-        // cityManager.cityName = saveData.cityName;
-        // temporality.cycleNumber = saveData.timeOfday;
-        // temporality.cycleProgression = saveData.cyclesPassed;
+            GameManager.instance.storageBay.StoreAtPosition(storedBuilding, coords);
+        }
+        
+        GameManager.instance.player.playerName = saveData.playerName;
+        GameManager.instance.cityManagement.cityName = saveData.cityName;
+        GameManager.instance.temporality.cycleNumber = saveData.cyclesPassed;
+        GameManager.instance.temporality.cycleProgression = saveData.timeOfDay;
 
     }
 
@@ -255,9 +279,7 @@ public class SaveManager : MonoBehaviour {
         public SaveData() { }
             
         // New saveData from game values
-        public SaveData(
-            GameData gameData
-        )
+        public SaveData(GameData gameData)
         {
             // Storing command
             command = ConvertCommand(gameData.shoppingList);
@@ -328,18 +350,23 @@ public class SaveManager : MonoBehaviour {
 
             foreach (GameObject building in _grid) {
                 BlockSaveData blockData = new BlockSaveData();
-                if (building != null) {
+                if (building != null)
+                {
                     BlockLink blockLink = building.GetComponent<BlockLink>();
-                    Vector3Int coords = blockLink.gridCoordinates;
-                    blockData.id = blockLink.block.ID;
-                    blockData.states = new List<int>();
-                    foreach (BlockState state in blockLink.states) {
-                        blockData.states.Add((int)state);
+                    if(blockLink != null)
+                    {
+                        Vector3Int coords = blockLink.gridCoordinates;
+                        blockData.id = blockLink.block.ID;
+                        blockData.states = new List<int>();
+
+                        foreach (BlockState state in blockLink.states) 
+                        {
+                            blockData.states.Add((int)state);
+                        }
+                        blockGrid[coords] = blockData;
                     }
-                    blockGrid[coords] = blockData;
                 }
             }
-
             return blockGrid;
         }
 
@@ -385,21 +412,26 @@ public class SaveManager : MonoBehaviour {
         {
             string fullPath = Application.persistentDataPath + "/" + saveName;
             try {
-                br = new BinaryReader(new FileStream(fullPath, FileMode.Open));
-                return true;
+                if(File.Exists(fullPath))
+                {
+                    br = new BinaryReader(new FileStream(fullPath, FileMode.Open));
+                    return true;
+                }
+               return false;
+                
             }
             catch (IOException e) {
-                Debug.LogWarning(e.Message + "\n Cannot read file "+ fullPath);
+                Logger.Error(e.Message + "\n Cannot read file "+ fullPath);
                 return false;
             }
         }
 
-        public int ReadUInt16() { try { return br.ReadUInt16(); } catch (IOException e) { Debug.LogWarning(e.Message + "\n Cannot read integer from file."); return 0;  } }
-        public int ReadUInt8() { try { return br.ReadByte(); } catch (IOException e) { Debug.LogWarning(e.Message + "\n Cannot read uint8 from file."); return 0; } }
-        public string ReadString() { try { return br.ReadString(); } catch (IOException e) { Debug.LogWarning(e.Message + "\n Cannot read string from file."); return null; } }
-        public bool ReadBool() { try { return br.ReadBoolean(); } catch (IOException e) { Debug.LogWarning(e.Message + "\n Cannot read bool from file."); return false; } }
-        public float ReadFloat() { try { return (float)br.ReadDouble(); } catch (IOException e) { Debug.LogWarning(e.Message + "\n Cannot read float from file."); return 0f; } }
-        public Vector3Int ReadVector3UInt8() { try { return new Vector3Int(br.ReadByte(), br.ReadByte(), br.ReadByte()); } catch (IOException e) { Debug.LogWarning(e.Message + "\n Cannot read v3uint8 from file."); return new Vector3Int(); } }
+        public int ReadUInt16() { try { return br.ReadUInt16(); } catch (IOException e) { Logger.Error(e.Message + "\n Cannot read integer from file."); return 0;  } }
+        public int ReadUInt8() { try { return br.ReadByte(); } catch (IOException e) { Logger.Error(e.Message + "\n Cannot read uint8 from file."); return 0; } }
+        public string ReadString() { try { return br.ReadString(); } catch (IOException e) { Logger.Error(e.Message + "\n Cannot read string from file."); return null; } }
+        public bool ReadBool() { try { return br.ReadBoolean(); } catch (IOException e) { Logger.Error(e.Message + "\n Cannot read bool from file."); return false; } }
+        public float ReadFloat() { try { return (float)br.ReadDouble(); } catch (IOException e) { Logger.Error(e.Message + "\n Cannot read float from file."); return 0f; } }
+        public Vector3Int ReadVector3UInt8() { try { return new Vector3Int(br.ReadByte(), br.ReadByte(), br.ReadByte()); } catch (IOException e) { Logger.Error(e.Message + "\n Cannot read v3uint8 from file."); return new Vector3Int(); } }
 
         public void Close()
         {
@@ -414,13 +446,22 @@ public class SaveManager : MonoBehaviour {
         public bool OpenSave(string saveName = "city.bin")
         {
             string fullPath = Application.persistentDataPath + "/" + saveName;
-            try {
-                File.Copy(fullPath, fullPath + ".backup");
+            try 
+            {
+                
+                if(File.Exists(fullPath)){
+                    if(File.Exists(fullPath + ".backup")){
+                        File.Delete(fullPath + ".backup");
+                    }
+                    File.Copy(fullPath, fullPath + ".backup");
+                }
+
                 bw = new BinaryWriter(new FileStream(fullPath, FileMode.Create));
                 return true;
             }
-            catch (IOException e) {
-                Debug.LogWarning(e.Message + "\n Cannot create file "+ fullPath);
+            catch (IOException e) 
+            {
+                Logger.Error(e.Message + "\n Cannot create file "+ fullPath);
                 return false;
             }
         }
@@ -432,7 +473,7 @@ public class SaveManager : MonoBehaviour {
                 return true;
             }
             catch (IOException e) {
-                Debug.LogWarning(e.Message + "\n Cannot write " + val.ToString() + " to file.");
+                Logger.Error(e.Message + "\n Cannot write " + val.ToString() + " to file.");
                 return false;
             }
         }
@@ -444,7 +485,7 @@ public class SaveManager : MonoBehaviour {
                 return true;
             }
             catch (IOException e) {
-                Debug.LogWarning(e.Message + "\n Cannot write " + val.ToString() + " to file.");
+                Logger.Error(e.Message + "\n Cannot write " + val.ToString() + " to file.");
                 return false;
             }
         }
@@ -456,7 +497,7 @@ public class SaveManager : MonoBehaviour {
                 return true;
             }
             catch (IOException e) {
-                Debug.LogWarning(e.Message + "\n Cannot write " + val.ToString() + " to file.");
+                Logger.Error(e.Message + "\n Cannot write " + val.ToString() + " to file.");
                 return false;
             }
         }
@@ -468,7 +509,7 @@ public class SaveManager : MonoBehaviour {
                 return true;
             }
             catch (IOException e) {
-                Debug.LogWarning(e.Message + "\n Cannot write " + val.ToString() + " to file.");
+                Logger.Error(e.Message + "\n Cannot write " + val.ToString() + " to file.");
                 return false;
             }
         }
@@ -480,7 +521,7 @@ public class SaveManager : MonoBehaviour {
                 return true;
             }
             catch (IOException e) {
-                Debug.LogWarning(e.Message + "\n Cannot write " + val.ToString() + " to file.");
+                Logger.Error(e.Message + "\n Cannot write " + val.ToString() + " to file.");
                 return false;
             }
         }
@@ -496,9 +537,19 @@ public class SaveManager : MonoBehaviour {
         }
     }
 
-
+    /*
+        List<ShopDisplay> _shoppingList,
+        GameObject[,,] _grid,
+        List<GameObject> _bridgesList,
+        GameObject[,,] _storedBlocks,
+        string _playerName,
+        string _cityName,
+        int _cycleNumber,
+        float _cycleProgression
+    */
 
     // Debug
+    
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.M)){
@@ -506,22 +557,35 @@ public class SaveManager : MonoBehaviour {
                 new SaveData(
                     new GameData(
                         // (Fake savegame for now)
-                        new List<ShopDisplay>(), new GameObject[255, 255, 255], new List<GameObject>(), new GameObject[255, 255, 255], "Joueur", "CityVille", 3, 0.2f
+                        //new List<ShopDisplay>(), new GameObject[255, 255, 255], new List<GameObject>(), new GameObject[255, 255, 255], "Joueur", "CityVille", 3, 0.2f
+
+                        GameManager.instance.deliveryManagement.shopDisplays,   // SHOP DISPLAY
+                        GameManager.instance.gridManagement.grid,           // STORED BLOCKS
+                        GameManager.instance.gridManagement.bridgesList,
+                        GameManager.instance.storageBay.storedBlocks,                     
+                        "Joueur",
+                        "CityVille",
+                        GameManager.instance.temporality.cycleNumber,
+                        GameManager.instance.temporality.cycleProgression
                     )
                 )
             ));
         }
+        /*
         if (Input.GetKeyDown(KeyCode.R)) {
             StartCoroutine("ReadSaveData");
         }
+        
         if (loadedData != null) {
-            Debug.Log("Data is read, loading.");
+            Logger.Debug("Data is read, loading.");
             if (Input.GetKeyDown(KeyCode.L)) {
                 LoadSaveData(loadedData);
                 loadedData = null;
             }
         }
+        */
     }
+    
 }   
 
 

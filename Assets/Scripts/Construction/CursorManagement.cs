@@ -11,7 +11,6 @@ public class CursorManagement : MonoBehaviour
     [Header("=== REFERENCIES ===")][Space(1)]
     [Header("Prefabs")]
     public GameObject projectorPrefab;
-    public GameObject blockDefaultPrefab;
     public GameObject stackSelectorPrefab;  //Prefab de la petite fléche qui se met au pied de la tour qu'on selectionne
     public GameObject highlighter; // Curseur permettant de surligner / mettre en valeur des blocks (exemple : lors du traçage de pont ou de la délétion)
     public GameObject bridgeHighlighter;
@@ -256,13 +255,14 @@ public class CursorManagement : MonoBehaviour
                     break;
                 
 
-
+                /*
                 case cursorMode.Build:
                     if (!EventSystem.current.IsPointerOverGameObject()) 
                     {
                         GameManager.instance.gridManagement.SpawnBlock(blockDefaultPrefab, new Vector2Int(posInTerrain.x, posInTerrain.z));
                     }
                     break;
+                    */
 
                 case cursorMode.Delete:
                     GameManager.instance.gridManagement.DestroyBlock(posInTerrain);
@@ -404,7 +404,7 @@ public class CursorManagement : MonoBehaviour
         //Check les blocs devant la face x
         for (int i = coordinate.x+1; i < GameManager.instance.gridManagement.grid.GetLength(0); i++)
         {
-            if (GameManager.instance.gridManagement.checkIfSlotIsBlocked(new Vector3Int(i, coordinate.y, coordinate.z),false) != GridManagement.blockType.FREE)
+            if (GameManager.instance.gridManagement.GetSlotType(new Vector3Int(i, coordinate.y, coordinate.z),false) != GridManagement.blockType.FREE)
             {
                 break;
             }
@@ -418,7 +418,7 @@ public class CursorManagement : MonoBehaviour
         //Check les blocs derriere la face x
         for (int i = coordinate.x-1; i >= 0; i--)
         {
-            if (GameManager.instance.gridManagement.checkIfSlotIsBlocked(new Vector3Int(i, coordinate.y, coordinate.z),false) != GridManagement.blockType.FREE)
+            if (GameManager.instance.gridManagement.GetSlotType(new Vector3Int(i, coordinate.y, coordinate.z),false) != GridManagement.blockType.FREE)
             {
                 break;
             }
@@ -432,7 +432,7 @@ public class CursorManagement : MonoBehaviour
         //Check les blocs devant la face z
         for (int i = coordinate.z+1; i < GameManager.instance.gridManagement.grid.GetLength(2); i++)
         {
-            if (GameManager.instance.gridManagement.checkIfSlotIsBlocked(new Vector3Int(coordinate.x, coordinate.y, i),false) != GridManagement.blockType.FREE)
+            if (GameManager.instance.gridManagement.GetSlotType(new Vector3Int(coordinate.x, coordinate.y, i),false) != GridManagement.blockType.FREE)
             {
                 break;
             }
@@ -446,7 +446,7 @@ public class CursorManagement : MonoBehaviour
         //Check les blocs derriere la face z
         for (int i = coordinate.z-1; i >= 0; i--)
         {
-            if (GameManager.instance.gridManagement.checkIfSlotIsBlocked(new Vector3Int(coordinate.x, coordinate.y, i),false) != GridManagement.blockType.FREE)
+            if (GameManager.instance.gridManagement.GetSlotType(new Vector3Int(coordinate.x, coordinate.y, i),false) != GridManagement.blockType.FREE)
             {
                 break;
             }

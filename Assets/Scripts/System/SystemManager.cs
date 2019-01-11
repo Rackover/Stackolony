@@ -4,19 +4,13 @@ using UnityEngine;
 
 public class SystemManager : MonoBehaviour {
 
-    public List<Generator> AllGenerators;
-    public List<BlockLink> AllBlocksRequiringPower;
-    public List<BlockLink> AllBlockLinks;
-    public List<WorkingHours> AllTimeRelatedBlocks;
-    public List<Occupator> AllOccupators;
-    public List<House> AllHouses;
-    public List<FoodProvider> AllFoodProviders;
-
-    private void Awake()
-    {
-        AllGenerators = new List<Generator>();
-        AllBlocksRequiringPower = new List<BlockLink>();
-    }
+    public List<Generator> AllGenerators = new List<Generator>();
+    public List<BlockLink> AllBlocksRequiringPower = new List<BlockLink>();
+    public List<BlockLink> AllBlockLinks = new List<BlockLink>();
+    public List<WorkingHours> AllTimeRelatedBlocks = new List<WorkingHours>();
+    public List<Occupator> AllOccupators = new List<Occupator>();
+    public List<House> AllHouses = new List<House>();
+    public List<FoodProvider> AllFoodProviders = new List<FoodProvider>();
 
     public void UpdateSystem()
     {

@@ -35,7 +35,10 @@ public class GridManagement : MonoBehaviour
     {
         gameManager = FindObjectOfType<GameManager>();
         //Recuperation du terrain
-        myTerrain = GetComponent<Terrain>();
+        if (myTerrain == null) {
+            myTerrain = GetComponentInChildren<Terrain>();
+        }
+
         //Initialisation des variables statiques
         gridSize.x = Mathf.RoundToInt(myTerrain.terrainData.size.x / cellSize);
         gridSize.z = Mathf.RoundToInt(myTerrain.terrainData.size.z / cellSize);
@@ -55,17 +58,13 @@ public class GridManagement : MonoBehaviour
         gridGameObject.name = "Grid";
         gridGameObject.transform.parent = this.transform;
         gridGameObject.transform.localPosition = Vector3.zero;
-        Debug.Log("-----Generating grid-----");
+        Logger.Debug("Generated grid of size "+gridSize.ToString());
 
         //GENERATION DES GRILLES DE DEBUG
-        gameManager.gridDebugger.InitAllGrids();
-        gameManager.gridDebugger.InitButtons();
-    }
-
-    private void LoadGrid() //Fonction pour charger une grille depuis un fichier de sauvegarde
-    {
-        // spawner de bas en haut
-        //SpawnBlock(GameObject blockPrefab, Vector2Int coordinates)
+        if (GameManager.instance.DEBUG_MODE) {
+            gameManager.gridDebugger.InitAllGrids();
+            gameManager.gridDebugger.InitButtons();
+        }
     }
 
     public void DestroyBlock(Vector3Int coordinates)
@@ -105,22 +104,10 @@ public class GridManagement : MonoBehaviour
                 }
                 else
                 {
-                    if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.z),false) == GridManagement.blockType.FREE)
+                    if (GetSlotType(new Vector3Int(coordinates.x, i, coordinates.z),false) == GridManagement.blockType.FREE)
                     {
-                        //Change la position du bloc dans la grille contenant chaque bloc
+                        MoveBlock(grid[coordinates.x, i, coordinates.z], new Vector3Int(coordinates.x, i - 1, coordinates.z));
                         grid[coordinates.x, i - 1, coordinates.z] = grid[coordinates.x, i, coordinates.z];
-
-                        //Update les flags du bloc
-                        grid[coordinates.x, i - 1, coordinates.z].GetComponent<BlockLink>().CallFlags("BeforeMovingBlock");
-
-                        //Change le nom du bloc pour qu'il corresponde à sa nouvelle position (Ex : Block[1,2,1])
-                        grid[coordinates.x, i - 1, coordinates.z].name = "Block[" + coordinates.x + ";" + (i - 1) + ";" + coordinates.z + "]";
-
-                        //Met à jour les coordonnées du block dans son script "BlockLink"
-                        grid[coordinates.x, i - 1, coordinates.z].GetComponent<BlockLink>().gridCoordinates = new Vector3Int(coordinates.x, i - 1, coordinates.z);
-
-                        //Déplace le block vers ses nouvelles coordonnées
-                        grid[coordinates.x, i - 1, coordinates.z].GetComponent<BlockLink>().MoveToMyPosition();
                     } else
                     {
                         grid[coordinates.x, i - 1, coordinates.z] = null;
@@ -132,116 +119,110 @@ public class GridManagement : MonoBehaviour
         }
     }
 
-
-    public void MoveBlock(GameObject newBlock, Vector3Int coordinates) //Bouge un bloc à une nouvelle coordonnée
+    /// <summary>
+    /// Safe function to move a block around.
+    /// </summary>
+    /// <param name="block"></param>
+    /// <param name="coordinates"></param>
+    public void MoveBlock(GameObject block, Vector3Int coordinates)
     {
-        // If the block come from somewhere
-        BlockLink _blocklink = newBlock.GetComponent<BlockLink>();
-        if (_blocklink != null)
-            UpdateBlocks(_blocklink.gridCoordinates);
-
-        if (grid[coordinates.x, coordinates.y, coordinates.z] != null) // If there is a block where the block should be dropped
-        {
-            for (int i = grid.GetLength(1) - 1; i > coordinates.y - 1; i--) //Fait monter d'une case les blocs au dessus du bloc ajouté
-            {
-                if (grid[coordinates.x, i, coordinates.z] != null)
-                {
-                    if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.z), false) == GridManagement.blockType.FREE)
-                    {
-
-                        grid[coordinates.x, i + 1, coordinates.z] = grid[coordinates.x, i, coordinates.z];
-                        GameObject actualGridPos = grid[coordinates.x, i + 1, coordinates.z];
-
-                        actualGridPos.GetComponent<BlockLink>().CallFlags("BeforeMovingBlock");
-                        //Change le nom du bloc pour qu'il corresponde à sa nouvelle position (Ex : Block[1,2,1])
-                        actualGridPos.name = "Block[" + coordinates.x + ";" + (i + 1) + ";" + coordinates.z + "]";
-                        //Met à jour les coordonnées du block dans son script "BlockLink"
-                        actualGridPos.GetComponent<BlockLink>().gridCoordinates = new Vector3Int(coordinates.x, i + 1, coordinates.z);
-                        //Déplace le block vers ses nouvelles coordonnées
-                        actualGridPos.GetComponent<BlockLink>().MoveToMyPosition();
-                    }
-                }
-            }
-        }
-
-        grid[coordinates.x, coordinates.y, coordinates.z] = newBlock;
-        newBlock.name = "Block[" + coordinates.x + ";" + coordinates.y + ";" + coordinates.z + "]";
-        if (_blocklink != null)
-        {
-            _blocklink.gridCoordinates = new Vector3Int(coordinates.x, coordinates.y, coordinates.z);
-        //  _blocklink.CallFlags("AfterMovingBlock");
-        }
+        BlockLink link = block.GetComponent<BlockLink>();
+        link.CallFlags("BeforeMovingBlock");
+        grid[coordinates.x, coordinates.y, coordinates.z] = block;
+        link.MoveTo(coordinates);
+    }
+    
+    public Vector3 IndexToWorldPosition(Vector3Int index)
+    {
+        return new Vector3(
+                index.x * cellSize + (cellSize / 2),
+                index.y * cellSize + (cellSize / 2),
+                index.z * cellSize + (cellSize / 2)
+        ) + myTerrain.transform.position;
     }
 
-    public void SpawnBlock(GameObject blockPrefab, Vector2Int coordinates) //Genère un bloc à une coordonnée 2D sur la map
+    public Vector3Int WorldPositionToIndex(Vector3 position)
     {
-        int cursorPosYInTerrain = FindObjectOfType<CursorManagement>().posInTerrain.y; //Position en Y à laquelle le joueur a cliqué
+        position -= myTerrain.transform.position;
+        return new Vector3Int(
+                (int)Mathf.Round((position.x  - cellSize / 2) / cellSize),
+                (int)Mathf.Round((position.y - cellSize / 2) / cellSize),
+                (int)Mathf.Round((position.z - cellSize / 2)/cellSize)
+        );
+    }
 
-        if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x,cursorPosYInTerrain,coordinates.y),true) != GridManagement.blockType.FREE)
+    /// <summary>
+    /// Lays a block at X Y coordinates on the grid at the highest possible point 
+    /// (ontop of a building or on the ground)
+    /// </summary>
+    /// <param name="blockId"></param>
+    /// <param name="coordinates"></param>
+    public void LayBlock(int blockId, Vector2Int coordinates)
+    {
+        //Position en Y des coordonnées au sol données
+        float worldY =
+            myTerrain.SampleHeight(
+                IndexToWorldPosition(
+                    new Vector3Int(coordinates.x, 0, coordinates.y)
+                )
+            );
+    
+        // Index de Y
+        int y = WorldPositionToIndex(new Vector3(worldY, 0)).x;
+
+        // Candidate coordinates
+        Vector3Int coordinates3 = new Vector3Int(coordinates.x, y, coordinates.y);
+
+        if (GetSlotType(coordinates3, true) != GridManagement.blockType.FREE)
         {
             return;
         }
-        GameObject newBlock = Instantiate(blockPrefab, gridGameObject.transform);
+        
 
-        //Obtention de la hauteur à laquelle le bloc doit être posé
-        int newBlockHeight = 0;
-
-        if (grid[coordinates.x,cursorPosYInTerrain,coordinates.y] == null)
+        if (grid[coordinates3.x, coordinates3.y, coordinates3.z] != null)
         {
-            //Le joueur a cliqué sur le sol
-            for (var i = cursorPosYInTerrain; i < gridSize.z - 1; i++)
+            // The slot is occupied - let's see if we can lay our block ontop
+            for (int i = coordinates3.y; i < gridSize.y - 1; i++)
             {
-                if (grid[coordinates.x, i, coordinates.y] == null)
+                if (GetSlotType(new Vector3Int(coordinates3.x, i, coordinates3.z), true) != GridManagement.blockType.FREE)
                 {
-                    newBlockHeight = i; //On récupère la hauteur de l'endroit ou le joueur a cliqué, s'il y a déjà une tour, alors on obtient la hauteur de cette tour
+                    continue;
+                }
+                else if (grid[coordinates3.x, i, coordinates3.z] == null)
+                {
+                    coordinates3.y = i;
                     break;
                 }
-            }
-            newBlock.transform.position = new Vector3(
-                coordinates.x * cellSize + (cellSize / 2),
-                0.5f + newBlockHeight,
-                coordinates.y * cellSize + (cellSize / 2)
-            );
-        } else
-        {
-            //Le joueur a cliqué sur un bloc
-            for (var i = cursorPosYInTerrain; i < gridSize.y - 1; i++)
-            {
-                if (checkIfSlotIsBlocked(new Vector3Int(coordinates.x, i, coordinates.y), true) != GridManagement.blockType.FREE)
-                {
-                    Destroy(newBlock);
-                    return;
-                }
-                if (grid[coordinates.x, i, coordinates.y] == null)
-                {
-                    newBlockHeight = i;
-                    break;
-                }
-            }
-            if (newBlockHeight == 0)
-            {
-                gameManager.errorDisplay.ShowError("You have reached max height");
-                Debug.LogWarning("Max height reached");
-                Destroy(newBlock);
-            }
-            else
-            {
-                newBlock.transform.position = grid[coordinates.x, newBlockHeight - 1, coordinates.y].gameObject.transform.position;
-                newBlock.transform.position += new Vector3(0, 1, 0);
             }
         }
-        grid[coordinates.x, newBlockHeight, coordinates.y] = newBlock;
-        gameManager.sfxManager.PlaySoundLinked("BlockDrop", newBlock);
 
-        buildingsList.Add(newBlock);
-        BlockLink blockLink = newBlock.GetComponent<BlockLink>();
-        blockLink.LoadBlock();
-        blockLink.container.OpenContainer();
-        blockLink.gridCoordinates = new Vector3Int(coordinates.x, newBlockHeight, coordinates.y);
-        newBlock.name = "Block[" + coordinates.x + ";" + newBlockHeight + ";" + coordinates.y + "]";
+        SpawnBlock(blockId, coordinates3);
     }
 
-    public blockType checkIfSlotIsBlocked(Vector3Int coordinates, bool displayErrorMessages)
+    public void SpawnBlock(int blockId, Vector3Int coordinates)
+    {
+        GameObject newBlock = CreateBlockFromId(blockId);
+        MoveBlock(newBlock, coordinates);
+        Logger.Debug("Spawned block : " + newBlock.GetComponent<BlockLink>().block.name + " with prefab " + GameManager.instance.library.blockPrefab.name + " at position "+coordinates.ToString());
+
+    }
+
+    public GameObject CreateBlockFromId(int blockId)
+    {
+
+        Block block = GameManager.instance.library.GetBlockByID(blockId);
+        if (block == null) { Logger.Warn("Block index not found - index : " + blockId); return null; }
+
+        GameObject newBlock = Instantiate(GameManager.instance.library.blockPrefab);
+        BlockLink newBlockLink = newBlock.GetComponent<BlockLink>();
+        newBlockLink.block = block;
+        newBlockLink.LoadBlock();
+        newBlockLink.container.OpenContainer();
+
+        return newBlock;
+    }
+
+    public blockType GetSlotType(Vector3Int coordinates, bool displayErrorMessages)
     {
         GameObject objectFound = grid[coordinates.x, coordinates.y, coordinates.z];
         if (objectFound != null)
@@ -264,7 +245,7 @@ public class GridManagement : MonoBehaviour
     }
 
     //Fonction a appelé pour déplacer un pont à une nouvelle position Y
-    public void updateBridgePosition(BridgeInfo bridgeInfo, int newYPosition)
+    public void UpdateBridgePosition(BridgeInfo bridgeInfo, int newYPosition)
     {
         List<Vector3Int> newBridgePositions = new List<Vector3Int>();
         foreach (Vector3Int partPos in bridgeInfo.allBridgePositions)
@@ -355,7 +336,7 @@ public class GridManagement : MonoBehaviour
                 _posToCheck.y = blockA.gridCoordinates.y;
                 _posToCheck.z = blockA.gridCoordinates.z + (i * direction.y);
 
-            if (checkIfSlotIsBlocked(new Vector3Int(_posToCheck.x, _posToCheck.y, _posToCheck.z), true) != GridManagement.blockType.FREE)
+            if (GetSlotType(new Vector3Int(_posToCheck.x, _posToCheck.y, _posToCheck.z), true) != GridManagement.blockType.FREE)
             {
                 return null;
             }
