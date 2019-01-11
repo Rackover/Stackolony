@@ -35,7 +35,10 @@ public class GridManagement : MonoBehaviour
     {
         gameManager = FindObjectOfType<GameManager>();
         //Recuperation du terrain
-        myTerrain = GetComponent<Terrain>();
+        if (myTerrain == null) {
+            myTerrain = GetComponentInChildren<Terrain>();
+        }
+
         //Initialisation des variables statiques
         gridSize.x = Mathf.RoundToInt(myTerrain.terrainData.size.x / cellSize);
         gridSize.z = Mathf.RoundToInt(myTerrain.terrainData.size.z / cellSize);

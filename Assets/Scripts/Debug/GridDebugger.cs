@@ -33,13 +33,17 @@ public class GridDebugger : MonoBehaviour {
     [System.NonSerialized]
     public OverlayMode selectedGrid;
 
-    public GridManagement gridmanager;
+    GridManagement gridManager;
+
+    private void Start()
+    {
+        gridManager = GameManager.instance.gridManagement;
+    }
 
     //Genere une grille 3D pour pouvoir débug la variable grid[,,] et afficher ce qu'elle contient
     public void InitAllGrids()
     {
-        foreach (OverlayMode overlayMode in overlayModes)
-        {
+        foreach (OverlayMode overlayMode in overlayModes) {
             InitGrid(overlayMode);
         }
     }
@@ -55,7 +59,7 @@ public class GridDebugger : MonoBehaviour {
 
     public void InitGrid(OverlayMode overlayMode) //Initialise la grille
     {
-        overlayMode.grid = new GameObject[gridmanager.grid.GetLength(0), gridmanager.grid.GetLength(1), gridmanager.grid.GetLength(2)];
+        overlayMode.grid = new GameObject[gridManager.grid.GetLength(0), gridManager.grid.GetLength(1), gridManager.grid.GetLength(2)];
         overlayMode.cellsParent = new GameObject();
         overlayMode.cellsParent.name = overlayMode.gridName;
         overlayMode.cellsParent.transform.parent = this.transform;
@@ -101,7 +105,7 @@ public class GridDebugger : MonoBehaviour {
     //Genère les visuels à toutes les hauteurs
     public void UpdateOverlayMode(OverlayMode selectedGrid)
     {
-        for (int i = 0; i < gridmanager.grid.GetLength(1); i++)
+        for (int i = 0; i < gridManager.grid.GetLength(1); i++)
         {
             UpdateOverlayModeAtHeight(selectedGrid, i);
         }
@@ -129,9 +133,9 @@ public class GridDebugger : MonoBehaviour {
         ClearOverlayModeAtHeigh(selectedGrid, height);
 
         //Genère les blocs à la hauteur définie
-        for (int x = 0; x < gridmanager.grid.GetLength(0); x++)
+        for (int x = 0; x < gridManager.grid.GetLength(0); x++)
         {
-            for (int z = 0; z < gridmanager.grid.GetLength(2); z++)
+            for (int z = 0; z < gridManager.grid.GetLength(2); z++)
             {
                 GameObject generatedCube = GenerateDebugCell(new Vector3Int(x,height,z),selectedGrid);
              
@@ -139,7 +143,7 @@ public class GridDebugger : MonoBehaviour {
                 {
                     selectedGrid.grid[x, height, z] = generatedCube;
                     generatedCube.transform.parent = selectedGrid.cellsParent.transform;
-                    float cellSize = gridmanager.cellSize;
+                    float cellSize = gridManager.cellSize;
                     generatedCube.transform.position = new Vector3
                     (
                         x * cellSize + (cellSize / 2),
@@ -154,7 +158,7 @@ public class GridDebugger : MonoBehaviour {
     //Instantie un bloc de débug à l'endroit souhaité, si les conditions pour l'instantier sont verifiées (Conditions variables selon le mod de debug selectionné)
     public GameObject GenerateDebugCell(Vector3Int position, OverlayMode selectedGrid)
     {
-        GameObject foundObject = gridmanager.grid[position.x, position.y, position.z];
+        GameObject foundObject = gridManager.grid[position.x, position.y, position.z];
         BlockLink foundBlockLink = null;
         if (foundObject != null)
         {
