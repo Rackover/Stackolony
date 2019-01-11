@@ -242,14 +242,13 @@ public class BlockLink : MonoBehaviour {
         {
             BridgeInfo bridgeInfo = transform.Find("Bridge").GetComponent<BridgeInfo>();
             if (bridgeInfo != null)
-                gridManager.updateBridgePosition(bridgeInfo, gridCoordinates.y);
+                gridManager.UpdateBridgePosition(bridgeInfo, gridCoordinates.y);
         }
         StartCoroutine(MoveToPosition(0.1f));
     }
 
     public IEnumerator MoveToPosition(float time) //Coroutine pour déplacer le cube vers sa position
     {
-        Debug.Log("Moving block");
         float elapsedTime = 0;
         Vector3 startingPos = transform.position;
         while (elapsedTime < time)
@@ -292,5 +291,21 @@ public class BlockLink : MonoBehaviour {
                 flag.Use();
             }
         }
+    }
+
+    public void UpdateName()
+    {
+        gameObject.name = "Block[" + gridCoordinates.x + ";" + gridCoordinates.y + ";" + gridCoordinates.z + "]";
+    }
+
+    /// <summary>
+    /// Unsafe function ; only call if the grid has already been updated with the correct coordinates.
+    /// </summary>
+    /// <param name="coordinates"></param>
+    public void MoveTo(Vector3Int coordinates)
+    {
+        gridCoordinates = coordinates;
+        UpdateName();
+        MoveToMyPosition();
     }
 }

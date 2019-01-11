@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class TempStressTest : MonoBehaviour {
 
-public GameObject generatorPrefab;
-public GameObject blockPrefab;
+public List<int> blockIds = new List<int>();
 public GridManagement gridManagement;
 public int range;
 public int height;
@@ -24,13 +23,11 @@ public KeyCode launchTestKey;
 			for (int x = 20; x <20+range ; x++) {
 				for (int y = 0; y <height ; y++) {
 					yield return new WaitForEndOfFrame();
-					count++;
-					if (count >= 10) {
-						gridManagement.SpawnBlock(generatorPrefab, new Vector2Int(x,z));
-						count = 0;
-					} else {
-						gridManagement.SpawnBlock(blockPrefab, new Vector2Int(x,z));
-					}
+                    count++;
+                    if (count >= blockIds.Count) {
+                        count = 0;
+                    }
+                    gridManagement.LayBlock(blockIds[count], new Vector2Int(x, z));
 				}
 			}
 		}

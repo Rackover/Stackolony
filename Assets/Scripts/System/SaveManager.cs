@@ -191,16 +191,9 @@ public class SaveManager : MonoBehaviour {
         // Loading grid
         Logger.Debug("Loading "+ saveData.blockGrid.Count +" objects into the grid");
         foreach (KeyValuePair<Vector3Int, BlockSaveData> blockData in saveData.blockGrid) {
-
+            // Todo : Load states aswell
             Vector3Int coords = blockData.Key;
-            Block block = GameManager.instance.library.GetBlockByID(blockData.Value.id);
-            if(block  == null){Logger.Warn("Block index not found - index : " + blockData.Value.id.ToString()); return;}
-
-            Logger.Debug("Spawning block : " + block.name + " with prefab "+ GameManager.instance.library.blockPrefab.name);
-            GameObject newBlock = Instantiate(GameManager.instance.library.blockPrefab);
-            BlockLink newBlockLink = newBlock.GetComponent<BlockLink>();
-            newBlockLink.block = block;
-            gridMan.PutBlockInstance(newBlock, coords);
+            gridMan.SpawnBlock(blockData.Value.id, blockData.Key);
         }
 
         // Converting bridges list

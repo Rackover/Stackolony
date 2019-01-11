@@ -55,7 +55,7 @@ public class TempDrag : MonoBehaviour  {
     {
         if(sBlock != null && draging)
         {
-            if (GameManager.instance.gridManagement.checkIfSlotIsBlocked(_pos,false) == GridManagement.blockType.FREE)
+            if (GameManager.instance.gridManagement.GetSlotType(_pos,false) == GridManagement.blockType.FREE)
             {
                 if (sBlock.gameObject.layer == LayerMask.NameToLayer("StoredBlock"))
                 {
@@ -81,7 +81,7 @@ public class TempDrag : MonoBehaviour  {
             else
             {
                 //If the cube is dragged on the stocking bay
-                if (GameManager.instance.gridManagement.checkIfSlotIsBlocked(_pos, false) == GridManagement.blockType.STORAGE &&  sBlock.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
+                if (GameManager.instance.gridManagement.GetSlotType(_pos, false) == GridManagement.blockType.STORAGE &&  sBlock.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
                 {
                     //Update the grid
                     GameManager.instance.gridManagement.UpdateBlocks(sBlock.gridCoordinates);
