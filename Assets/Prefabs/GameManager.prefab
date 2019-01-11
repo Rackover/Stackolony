@@ -866,8 +866,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b49fe3e99ed4834eaed097f1f858b98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AllGenerators:
-  - {fileID: 0}
+  AllGenerators: []
   AllBlocksRequiringPower: []
   AllBlockLinks: []
   AllTimeRelatedBlocks: []
@@ -900,6 +899,9 @@ MonoBehaviour:
   populationTypeList:
   - {fileID: 11400000, guid: 6dd7b2a9848a9ef49ac3d0f0f912bd90, type: 2}
   - {fileID: 11400000, guid: efb40861fc2eccd438b0b5e2e903caac, type: 2}
+  - {fileID: 11400000, guid: 5ecfb8e3bb734624fafd60664d9e4b2b, type: 2}
+  - {fileID: 11400000, guid: 62e1baca1586b5e4f85c1cdc5c918ec1, type: 2}
+  - {fileID: 11400000, guid: 6f409f9644df9a4459be6032c98ab4dd, type: 2}
   citizenList: []
 --- !u!114 &114966021634454084
 MonoBehaviour:
@@ -933,3 +935,5 @@ MonoBehaviour:
   errorDisplay: {fileID: 0}
   optionsDisplay: {fileID: 0}
   cursorDisplay: {fileID: 0}
+  DEBUG_MODE: 1
+  ENABLE_LOGS: 1
