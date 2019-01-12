@@ -120,6 +120,7 @@ public class GridManagement : MonoBehaviour
         }
     }
 
+
     /// <summary>
     /// Safe function to move a block around.
     /// </summary>
@@ -150,6 +151,21 @@ public class GridManagement : MonoBehaviour
                 (int)Mathf.Round((position.y - cellSize / 2) / cellSize),
                 (int)Mathf.Round((position.z - cellSize / 2)/cellSize)
         );
+    }
+
+    //Update a block so he touch the ground or the first block encountered (Like if gravity was applied to it)
+    public void LayBlock(BlockLink block)
+    {
+        //Position en Y des coordonnées au sol données
+       // float worldY =
+           // myTerrain.SampleHeight(
+               // IndexToWorldPosition(
+                    //new Vector3Int(blo, 0, coordinates.y)
+               // )
+           // );
+
+        // Index de Y
+      //  int y = WorldPositionToIndex(new Vector3(worldY, 0)).x;
     }
 
     /// <summary>

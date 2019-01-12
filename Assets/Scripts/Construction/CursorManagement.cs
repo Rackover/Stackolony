@@ -621,13 +621,17 @@ public class CursorManagement : MonoBehaviour
                 {
                     FindObjectOfType<StorageBay>().DeStoreBlock(selectedBlock.gameObject);
                 }
+
+                if (GameManager.instance.gridManagement.grid[_pos.x, _pos.y, _pos.z] != null)
+                {
+                    Debug.Log("DRAGGING OBJECT ON ANOTHER");
+                }
+
                 //Play SFX
                 GameManager.instance.sfxManager.PlaySoundLinked("BlockDrop",selectedBlock.gameObject);
 
-                //RESET SOME VALUES OF THE BLOCK THAT ARE RECALCULATED BY THE SYSTEM
-                selectedBlock.currentPower = 0;
-                selectedBlock.CallFlags("BeforeMovingBlock");
                 GameManager.instance.gridManagement.MoveBlock(selectedBlock.gameObject, _pos);
+              //  GameManager.instance.gridManagement.LayBlock(selectedBlock, new Vector2Int(_pos.x,_pos.z));
 
                 // Update the all city
                 GameManager.instance.systemManager.UpdateSystem();
