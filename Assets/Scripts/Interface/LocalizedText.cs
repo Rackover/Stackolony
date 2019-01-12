@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class LocalizedText : MonoBehaviour {
 
-    public int id;
+    public string id;
     public string category;
     [HideInInspector] public Localization.Lang lang;
 

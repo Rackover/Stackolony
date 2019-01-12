@@ -10,7 +10,7 @@ public class Localization : MonoBehaviour {
     List<Lang> languages = new List<Lang>();
     Lang currentLang;
     string currentCategory;
-    Dictionary<KeyValuePair<string, int>, string> locs = new Dictionary<KeyValuePair<string, int>, string>();
+    Dictionary<KeyValuePair<string, string>, string> locs = new Dictionary<KeyValuePair<string, string>, string>();
 
     public string localizationPath = "LocFiles";
 
@@ -78,18 +78,9 @@ public class Localization : MonoBehaviour {
         foreach (XmlNode node in nodeList) {
             string cat = node.Name;
             foreach (XmlNode subNode in node.ChildNodes) {
-                if (subNode.Attributes == null) {
-                    Logger.Debug("Skipping node " + subNode.Name + " (no attributes)");
-                    continue;
-                }
-                XmlAttribute attrId = subNode.Attributes["id"];
-                if (attrId == null) {
-                    Logger.Debug("Skipping node " + subNode.Name + " (no ID attribute)");
-                    continue;
-                }
-                int id = Int16.Parse(attrId.InnerText);
-                Logger.Debug("Added line [" + cat + ":" + id.ToString()+"]");
-                locs[new KeyValuePair<string, int>(cat, id)] = subNode.InnerText;
+                string id = subNode.Name;
+                Logger.Debug("Added line [" + cat + ":" + subNode+ "]");
+                locs[new KeyValuePair<string, string>(cat, id)] = subNode.InnerText;
             }
         }
 
@@ -111,10 +102,10 @@ public class Localization : MonoBehaviour {
         currentCategory = category;
     }
 
-    public string GetLine(int id)
+    public string GetLine(string id)
     {
         try { 
-            string line = locs[new KeyValuePair<string, int>(currentCategory, id)];
+            string line = locs[new KeyValuePair<string, string>(currentCategory, id)];
             return line;
         }
         catch(KeyNotFoundException e) {
