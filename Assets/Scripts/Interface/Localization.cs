@@ -2,26 +2,61 @@
 using System.Collections.Generic;
 using System;
 using System.Xml;
+using System.IO;
 using UnityEngine;
 
 public class Localization : MonoBehaviour {
 
-    XmlDocument locFile = new XmlDocument();
-    public List<string> languages = new List<string>();
-
-    string currentLang;
+    List<Lang> languages = new List<Lang>();
+    Lang currentLang;
     string currentCategory;
     Dictionary<KeyValuePair<string, int>, string> locs = new Dictionary<KeyValuePair<string, int>, string>();
-    
+
+    public string localizationPath = "LocFiles";
+
+    public class Lang {
+
+        public Sprite logo { get; }
+        public string locFilePath { get; }
+        public string name { get; }
+
+        public Lang(string path)
+        {
+            name = Path.GetFileName(path);
+            locFilePath = path + "/lang.xml";
+            logo = Resources.Load<Sprite>(path + "/flag.png");
+        }
+
+        public override string ToString()
+        {
+            return name + "=>" + locFilePath;
+        }
+    }
+
+    private void Awake()
+    {
+        LoadLocalizationFiles(Application.streamingAssetsPath + "/" + localizationPath);
+    }
+
     private void Start()
     {
         LoadLocalization(0);
         Logger.Info("Loaded localization file succesfully");
     }
 
+    void LoadLocalizationFiles(string path)
+    {
+        string[] dirs = Directory.GetDirectories(path);
+        foreach(string dir in dirs) {
+            Lang lang = new Lang(dir);
+            languages.Add(lang);
+        }
+    }
+
     public void LoadLocalization(int index)
     {
-        string lang;
+        XmlDocument locFile = new XmlDocument();
+        Lang lang;
         try {
             lang = languages[index];
         }
@@ -30,14 +65,15 @@ public class Localization : MonoBehaviour {
             return;
         }
 
-        string path = Application.streamingAssetsPath + "/LocFiles/" + lang + ".xml";
+        string path = lang.locFilePath;
         try {
             locFile.Load(path);
         }
-        catch(System.IO.FileNotFoundException e) {
+        catch(FileNotFoundException e) {
             Logger.Throw("Could not access localization file at path "+ path+". Error : "+e.ToString());
             return;
         }
+
         XmlNodeList nodeList = locFile.SelectNodes("lines")[0].ChildNodes;
         foreach (XmlNode node in nodeList) {
             string cat = node.Name;
@@ -65,7 +101,7 @@ public class Localization : MonoBehaviour {
     {
         foreach(LocalizedText text in FindObjectsOfType<LocalizedText>()) {
             if (text.lang != currentLang) {
-                text.UpdateText(currentLang);
+                text.UpdateText(currentLang, this);
             }
         }
     }

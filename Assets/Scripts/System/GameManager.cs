@@ -84,6 +84,9 @@ public class GameManager : MonoBehaviour
         if (menuScene.name != SceneManager.GetActiveScene().name) {
             StartGame();
         }
+        else {
+            EndGame();
+        }
     }
 
     void Update()
@@ -108,10 +111,13 @@ public class GameManager : MonoBehaviour
     {
         // Initialize game interfaces
         storageBay.gameObject.GetComponent<MeshRenderer>().enabled = true;
-        FindObjectOfType<GameInterfaces>().gameObject.SetActive(true);
-        FindObjectOfType<GameInterfaces>().StartGameInterfaces();
+        GameInterfaces gi = FindObjectOfType<GameInterfaces>();
+        if (gi != null) {
+            gi.gameObject.SetActive(true);
+            gi.StartGameInterfaces();
+        }
         cursorManagement.InitializeGameCursor();
-
+        temporality.timeScale = 0;
 
         inGame = true;
     }
@@ -120,10 +126,13 @@ public class GameManager : MonoBehaviour
     {
         // Shut down game interfaces
         storageBay.gameObject.GetComponent<MeshRenderer>().enabled = false;
-        FindObjectOfType<GameInterfaces>().StopGameInterfaces();
-        FindObjectOfType<GameInterfaces>().gameObject.SetActive(false);
+        GameInterfaces gi = FindObjectOfType<GameInterfaces>();
+        if (gi != null) {
+            gi.StopGameInterfaces();
+            gi.gameObject.SetActive(false);
+        }
         cursorManagement.KillGameCursor();
-
+        temporality.timeScale = 2;
 
         inGame = false;
     }
