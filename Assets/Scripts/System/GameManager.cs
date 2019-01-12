@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
         if (cityManagement == null) cityManagement = GetComponentInChildren<CityManagement>();
         if (missionManager == null) missionManager = GetComponentInChildren<MissionManager>();
         if (cursorManagement == null) cursorManagement = FindObjectOfType<CursorManagement>();
-        if (gridManagement == null) gridManagement = FindObjectOfType<GridManagement>();
+        if (gridManagement == null) gridManagement = GetComponentInChildren<GridManagement>();
         if (storageBay == null) storageBay = FindObjectOfType<StorageBay>();
         if (populationManager == null) populationManager = FindObjectOfType<PopulationManager>();
         if (saveManager == null) saveManager = GetComponentInChildren<SaveManager>();

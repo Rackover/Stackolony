@@ -34,9 +34,13 @@ public class GridManagement : MonoBehaviour
     private void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
+
+        if (!gameManager.IsInGame()) {
+            return;
+        }
         //Recuperation du terrain
         if (myTerrain == null) {
-            myTerrain = GetComponentInChildren<Terrain>();
+            myTerrain = FindObjectOfType<Terrain>();
         }
 
         //Initialisation des variables statiques
@@ -91,6 +95,7 @@ public class GridManagement : MonoBehaviour
     //Update les blocs de toute la tour pour les remettre à leur bonne position
     public void UpdateBlocks(Vector3Int coordinates)
     {
+        Debug.Log("UPDATEBLOCK CALLED");
         if (grid[coordinates.x, coordinates.y, coordinates.z] != null)
         {
             // Removes object from list and destroys the gameObject
