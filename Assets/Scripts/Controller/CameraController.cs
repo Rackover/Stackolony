@@ -83,10 +83,11 @@ public class CameraController : MonoBehaviour {
         }
 
         CatchUpCameraObjective();
-        if(Input.GetKeyDown(KeyCode.V))
-        {
-            transform.position = startPosition;
-        }
+    }
+
+    public void ResetPosition()
+    {
+        transform.position = startPosition;
     }
 
     void CatchUpCameraObjective() {

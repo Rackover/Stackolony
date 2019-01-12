@@ -534,26 +534,6 @@ public class SaveManager : MonoBehaviour {
         }
     }
     
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.M)){
-            StartCoroutine(WriteSaveData(
-                new SaveData(
-                    new GameData(
-                        GameManager.instance.deliveryManagement.shopDisplays, 
-                        GameManager.instance.gridManagement.grid,        
-                        GameManager.instance.gridManagement.bridgesList,
-                        GameManager.instance.storageBay.storedBlocks,
-                        GameManager.instance.player.name,
-                        GameManager.instance.cityManagement.cityName,
-                        GameManager.instance.temporality.cycleNumber,
-                        GameManager.instance.temporality.cycleProgression
-                    )
-                )
-            ));
-        }
-    }
-    
 }   
 
 

@@ -67,11 +67,6 @@ public class StorageBay : MonoBehaviour {
                     gameManager.errorDisplay.ShowError("You can't place it here");
                 }
             }
-        } else
-        {
-            if (Input.GetKeyDown(KeyCode.U)) {
-                GenerateBlock();
-            }
         }
     }
 

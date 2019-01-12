@@ -64,11 +64,6 @@ public class Temporality : MonoBehaviour {
             counter = 0;
             TimeUpdate();
         }
-
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            AddCycle();
-        }
     }
 
     //Met à jour le temps et les visuels

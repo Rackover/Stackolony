@@ -98,9 +98,65 @@ public class GameManager : MonoBehaviour
 
     void CheckInputs()
     {
+
         if (Input.GetKeyDown(KeyCode.P)) {
             temporality.PauseGame();
         }
+        
+        // Reset cursor mode
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            cursorManagement.switchMode(CursorManagement.cursorMode.Default);
+        }
+
+        // Reset camera
+        if (Input.GetKeyDown(KeyCode.V)) {
+            Camera.main.GetComponent<CameraController>().ResetPosition();
+        }
+
+        // Spawns and inhabits citizen
+        if (Input.GetKeyDown(KeyCode.B)) {
+            populationManager.AutoHouseCitizen(populationManager.SpawnCitizen(populationManager.populationTypeList[0]));
+        }
+
+        if (Input.GetButtonDown("Select") && Input.GetKey(KeyCode.F)) {
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            if (Physics.Raycast(ray, out hit)) {
+                Block block = hit.collider.gameObject.GetComponent<Block>();
+                if (block != null) {
+                    if (!block.states.Contains(BlockState.OnFire))
+                        block.AddState(BlockState.OnFire);
+                    else
+                        block.RemoveState(BlockState.OnFire);
+                }
+            }
+        }
+
+        // Saves the game
+        if (Input.GetKeyDown(KeyCode.M)) {
+            StartCoroutine(saveManager.WriteSaveData(
+                new SaveManager.SaveData(
+                    new SaveManager.GameData(
+                        deliveryManagement.shopDisplays,
+                        gridManagement.grid,
+                        gridManagement.bridgesList,
+                        storageBay.storedBlocks,
+                        player.name,
+                        cityManagement.cityName,
+                        temporality.cycleNumber,
+                        temporality.cycleProgression
+                    )
+                )
+            ));
+        }
+        
+        // Goes forward in time by 1 cycle
+        if (Input.GetKeyDown(KeyCode.C)) {
+            temporality.AddCycle();
+        }
+
+
     }
 
     public bool IsInGame()

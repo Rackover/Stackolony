@@ -526,9 +526,34 @@ Prefab:
       propertyPath: m_Color.a
       value: 0.29411766
       objectReference: {fileID: 0}
+    - target: {fileID: 114815743358393984, guid: 45326cec6306571469a2167a50d513df,
+        type: 2}
+      propertyPath: timeText
+      value: 
+      objectReference: {fileID: 190292986}
+    - target: {fileID: 224355235820633580, guid: 45326cec6306571469a2167a50d513df,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 600
+      objectReference: {fileID: 0}
+    - target: {fileID: 1879093420240780, guid: 45326cec6306571469a2167a50d513df, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114650746186527536, guid: 45326cec6306571469a2167a50d513df,
+        type: 2}
+      propertyPath: m_FontData.m_HorizontalOverflow
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45326cec6306571469a2167a50d513df, type: 2}
   m_IsPrefabAsset: 0
+--- !u!114 &190292986 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114650746186527536, guid: 45326cec6306571469a2167a50d513df,
+    type: 2}
+  m_PrefabInternal: {fileID: 190292985}
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1001 &201324239
 Prefab:
   m_ObjectHideFlags: 0

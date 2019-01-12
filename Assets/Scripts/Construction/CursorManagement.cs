@@ -76,8 +76,6 @@ public class CursorManagement : MonoBehaviour
         if(EventSystem.current.IsPointerOverGameObject()){cursorOnUI = true;}
 
         else{cursorOnUI = false;}
-
-        if(Input.GetKeyDown(KeyCode.Escape)){ switchMode(cursorMode.Default); }
     }
 
     public void switchMode(cursorMode mode)
