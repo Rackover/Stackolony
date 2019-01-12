@@ -7,7 +7,6 @@ public class Temporality : MonoBehaviour {
     [Header("=== SETTINGS ===")][Space(1)]
     public int cycleDuration; //Durée d'un cycle en secondes
     public int yearDuration; //Durée d'une année en cycle
-    public int initialTimeScale; //Coefficient de vitesse d'écoulement du temps
     public float timeBetweenUpdateForSkybox; //Combien de secondes entre chaque mise à jour visuelle de la skybox
     public float timeBetweenUpdateForLights; //Combien de secondes entre chaque mise à jour visuelle des lumières
     public float timeBetweenUpdateForDayNightDisplay; //Combien de secondes entre chaque mise à jour visuelle de l'afficheur "jour / nuit"
@@ -23,7 +22,6 @@ public class Temporality : MonoBehaviour {
     [HideInInspector] public int cycleNumber = 0; //Combien de cycles se sont ecoulés en tout
     public float cycleProgression; //Combien de secondes se sont ecoulées dans le cycle actuel
     public int timeScale; //Coefficient de vitesse d'écoulement du temps
-    //private Coroutine timeCoroutine; //Coroutine pour gérer la progression des cycles, obsoléte
 
     private float timeBetweenUpdateForSkyboxCount = 0;
     private float timeBetweenUpdateForLightsCount = 0;
@@ -41,7 +39,6 @@ public class Temporality : MonoBehaviour {
     public void Start()
     {
         counter = 0;
-        timeScale = initialTimeScale;
         recurence = Mathf.Min(timeBetweenUpdateForDayNightDisplay, timeBetweenUpdateForLights, timeBetweenUpdateForSkybox, timeBetweenUpdateForSystem);
         
         if (directionalLight == null) {
@@ -59,10 +56,6 @@ public class Temporality : MonoBehaviour {
             }
 
         }
-        //timeCoroutine = StartCoroutine(updateCycleProgression(recurence));
-        // ChangeTimeScale(1);    
-        
-        PauseGame();
     }
 
     public void PauseGame()
@@ -156,7 +149,8 @@ public class Temporality : MonoBehaviour {
 
     public void AddCycle() //Ajoute un cycle au compteur
     {
-        cycleNumber++;
+        if (!GameManager.instance.IsInGame()) { return; };
+
         GameManager.instance.deliveryManagement.DeliverBlocks();
         GameManager.instance.systemManager.UpdateCycle();
     }
@@ -187,7 +181,9 @@ public class Temporality : MonoBehaviour {
         DynamicGI.UpdateEnvironment();
     }
 
-    public void UpdateSystem() {
+    public void UpdateSystem()
+    {
+        if (!GameManager.instance.IsInGame()) { return; };
         GameManager.instance.systemManager.CheckWorkingHours();
     }
 }
