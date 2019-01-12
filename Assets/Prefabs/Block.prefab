@@ -935,6 +935,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6d07935250dafd4e9e5bfc8c6422be6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  visual: {fileID: 1511375857494168}
   myAnimator: {fileID: 95028166768919548}
   meshRenderers:
   - {fileID: 23790596223928588}
@@ -948,9 +949,9 @@ MonoBehaviour:
   - {fileID: 23677434974150362}
   closed: 0
   isFalling: 0
-  containerMat: {fileID: 0}
-  iconMat: {fileID: 0}
   linkedBlock: {fileID: 0}
+  oColor: {r: 0, g: 0, b: 0, a: 0}
+  cColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!114 &114079967865632792
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -959,7 +960,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1047592790041198}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c23f6a1883815174aae1f3245f19a70d, type: 3}
+  m_Script: {fileID: 11500000, guid: 0252c668615400f47925e40f91aa4710, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   collider: {fileID: 65222403905997784}
@@ -969,7 +970,7 @@ MonoBehaviour:
   unpoweredEffect: {fileID: 1077097437806386}
   onFireEffect: {fileID: 1249191511621426}
   bridge: {fileID: 0}
-  gridCoordinates: {x: 18, y: 1, z: 16}
+  gridCoordinates: {x: 0, y: 0, z: 0}
   positionInTower: 0
   gridManager: {fileID: 0}
   flagReader: {fileID: 0}

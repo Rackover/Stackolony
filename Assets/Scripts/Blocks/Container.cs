@@ -5,6 +5,7 @@ using UnityEngine;
 public class Container : MonoBehaviour 
 {
     [Header("Referencies")]
+    public GameObject visual;
     public Animator myAnimator;
     public MeshRenderer[] meshRenderers;
     public MeshRenderer[] iconRenderers;
@@ -12,36 +13,38 @@ public class Container : MonoBehaviour
     public bool closed;
     public bool isFalling;
 
-    public Material containerMat;
-    public Material iconMat;
+
 
     public Block linkedBlock;
+
+    Material containerMat;
+    Material iconMat;
+    public Color oColor; // Original color;
+    public Color cColor; // Current color;
 
     void Awake()
     {
         if(linkedBlock == null) linkedBlock = transform.parent.GetComponent<Block>();
         if(myAnimator == null) myAnimator = GetComponent<Animator>();
+
+
+
     }
 
     void Start()
     {
+        // BOX
         containerMat = Instantiate(meshRenderers[0].material);
-        foreach(MeshRenderer mr in meshRenderers){ mr.material = containerMat; }
+        containerMat.color = GameManager.instance.library.blockContainerColors[linkedBlock.block.ID];
+        foreach(MeshRenderer mr in meshRenderers)
+        { 
+            mr.material = containerMat;
+        }
+        oColor = containerMat.color;
 
+        // ICON MESH PLANE
         iconMat = Instantiate(iconRenderers[0].material);
         foreach(MeshRenderer ic in iconRenderers){ ic.material = iconMat; }
-
-        isFalling = false;
-        CloseContainer();
-        LoadContainerVisual();
-    }
-
-    void LoadContainerVisual()
-    {
-        containerMat.color = GameManager.instance.library.blockContainerColors[linkedBlock.block.ID];
-        //foreach(MeshRenderer mr in meshRenderers){ mr.material = containerMat; }
-
-
         Sprite sprite = linkedBlock.block.icon;
         Texture2D croppedTexture = new Texture2D( (int)sprite.rect.width, (int)sprite.rect.height );
         
@@ -55,16 +58,34 @@ public class Container : MonoBehaviour
 
         croppedTexture.SetPixels( pixels );
         croppedTexture.Apply();
-
         iconMat.mainTexture = croppedTexture;
+        
+        isFalling = false;
 
+        CloseContainer();
+    }
+
+    void Update()
+    {
+        if(!closed)
+        {
+            if (cColor.a <= 0 && visual.activeSelf) 
+            {
+                cColor.a = 0f;
+                visual.SetActive(false);
+            }
+            else
+            {
+                cColor.a -= 0.05f;
+                containerMat.color = cColor;
+            }
+        } 
     }
 
     public void DropSound()
     {
         GameManager.instance.sfxManager.PlaySoundAtPosition("DropContainer",this.transform.position);
-        isFalling = false;
-        //linkedBlock.collider.enabled = true;
+        //isFalling = false;
     }
 
     public void ShipSound()
@@ -72,20 +93,13 @@ public class Container : MonoBehaviour
         GameManager.instance.sfxManager.PlaySoundAtPosition("Ship", this.transform.position + new Vector3(0, 10, 0)); //Joue le son un peu plus haut pour comprendre que le vaisseau se trouve au dessus
     }
 
-    public void FallingSound()
-    {
-    }
-
     public void DropBlock()
     {
-        isFalling = true;
-        //linkedBlock.collider.enabled = false;
-
+        //isFalling = true;
         GameManager.instance.sfxManager.PlaySoundWithRandomParameters("FallingContainer",1,1,0.8f,1.2f);
         linkedBlock.ToggleVisuals(false);
-
         myAnimator.SetTrigger("Drop");
-
+        Debug.Log("Drop");
     }
 
     public void InitializeBlock()
@@ -97,19 +111,27 @@ public class Container : MonoBehaviour
     {
         linkedBlock.ToggleVisuals(true);
         GameManager.instance.sfxManager.PlaySoundLinked("OpenContainer",this.gameObject);
-
-        myAnimator.SetBool("Closed", false);
-
+        closed = false;
+        myAnimator.SetBool("Closed", closed);
     }
 
     public void CloseContainer()
     {
-        linkedBlock.ToggleVisuals(false);
-        myAnimator.SetBool("Closed", true);
+        closed = true;
+        cColor = oColor;
 
+        if(containerMat != null) containerMat.color = cColor;
+
+        visual.SetActive(true);
+
+        linkedBlock.ToggleVisuals(false);
+        myAnimator.SetBool("Closed", closed);
+
+/*
         if (!isFalling)
         {
             GameManager.instance.sfxManager.PlaySoundLinked("CloseContainer", this.gameObject);
         }
+*/
     }
 }

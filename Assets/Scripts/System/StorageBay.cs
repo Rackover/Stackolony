@@ -244,7 +244,7 @@ public class StorageBay : MonoBehaviour {
                     blockInfo.gridCoordinates = new Vector3Int(blockCoordinates.x, y-1, blockCoordinates.z);
                 }
             }
-            block.layer = LayerMask.NameToLayer("BlockScheme");
+            block.layer = LayerMask.NameToLayer("Block");
             block.transform.SetParent(FindObjectOfType<GridManagement>().transform.Find("Grid"));
         } else
         {
