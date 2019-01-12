@@ -7,7 +7,7 @@ public class LocalizedText : MonoBehaviour {
 
     public int id;
     public string category;
-    [HideInInspector] public string lang = "";
+    [HideInInspector] public Localization.Lang lang;
 
     Localization localizer;
 
@@ -16,9 +16,12 @@ public class LocalizedText : MonoBehaviour {
         UpdateText(lang);
 	}
 	
-    public void UpdateText(string newLang)
+    public void UpdateText(Localization.Lang newLang, Localization localizationScript=null)
     {
-        localizer.SetCategory(category);
+        if (localizationScript == null) {
+            localizationScript = localizer;
+        }
+        localizationScript.SetCategory(category);
         GetComponent<Text>().text = GameManager.instance.localization.GetLine(id);
         lang = newLang;
     }
