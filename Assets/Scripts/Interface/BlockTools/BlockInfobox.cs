@@ -17,6 +17,7 @@ public class BlockInfobox : MonoBehaviour
 
 	[Space(1)][Header("Prefabs")]
 	public GameObject stateTagPrefab;
+	public GameObject housePanel;
 	public GameObject generatorPanel;
 	public GameObject firemanStationPanel;
 
@@ -94,8 +95,7 @@ public class BlockInfobox : MonoBehaviour
 					GeneratorPanel gp = Instantiate(generatorPanel, self.position, Quaternion.identity, generalBox).GetComponent<GeneratorPanel>();
 
 					// Moving Panel
-					newPos = new Vector2(0, panelShift - gp.self.sizeDelta.y/2);
-					gp.self.localPosition = newPos;
+					gp.self.localPosition = new Vector2(0, panelShift - gp.self.sizeDelta.y/2);
 					panelShift -= gp.self.sizeDelta.y;
 
 					// Modifying values
@@ -108,8 +108,7 @@ public class BlockInfobox : MonoBehaviour
 					FiremanStationPanel fsp = Instantiate(firemanStationPanel, self.position, Quaternion.identity, generalBox).GetComponent<FiremanStationPanel>();
 					
 					// Moving Panel
-					newPos = new Vector2(0, panelShift - fsp.self.sizeDelta.y/2);
-					fsp.self.localPosition = newPos;
+					fsp.self.localPosition = new Vector2(0, panelShift - fsp.self.sizeDelta.y/2);
 					fsp.button.onClick.AddListener(currentSelection.UseFlags);
 					panelShift -= fsp.self.sizeDelta.y;
 
@@ -117,6 +116,15 @@ public class BlockInfobox : MonoBehaviour
 
 					flagPanels.Add(fsp);
 					break;
+
+				case "House":
+					HousePanel hp = Instantiate(housePanel, self.position, Quaternion.identity, generalBox).GetComponent<HousePanel>();
+					hp.ShowFlag((flags[i] as House));
+
+					hp.self.localPosition = new Vector2(0, panelShift - hp.self.sizeDelta.y/2);
+
+					flagPanels.Add(hp);
+					break; 
 
 				default:
 					Debug.LogWarning("This flag dosn't need any additional boxes");
