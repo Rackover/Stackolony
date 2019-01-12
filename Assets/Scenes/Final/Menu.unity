@@ -8689,7 +8689,11 @@ Prefab:
     - target: {fileID: 224910163579522488, guid: 45326cec6306571469a2167a50d513df,
         type: 2}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1816468082503108, guid: 45326cec6306571469a2167a50d513df, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45326cec6306571469a2167a50d513df, type: 2}

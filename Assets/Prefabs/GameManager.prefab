@@ -913,7 +913,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   saveVersion: 1
-  saveName: city.bin
 --- !u!114 &114654850517342536
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -925,7 +924,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1cc7545ab7d1474a83f9ec243c69aaf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  localizationPath: LocFiles
 --- !u!114 &114688723635336602
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1048,10 +1046,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerName: Maurice
-  borderSensitivity: 0
-  rotationSensitivity: 0
-  grabSensitivity: 0
-  driftSensitivity: 0
 --- !u!114 &114945228266214062
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1102,7 +1096,6 @@ MonoBehaviour:
   tooltipGO: {fileID: 0}
   blockInfobox: {fileID: 0}
   errorDisplay: {fileID: 0}
-  optionsDisplay: {fileID: 0}
   logger: {fileID: 0}
   gridDebugger: {fileID: 0}
   DEBUG_MODE: 1
