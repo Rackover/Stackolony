@@ -100,8 +100,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4304128331427038}
   - component: {fileID: 114459021843446374}
-  - component: {fileID: 114425216087702912}
-  - component: {fileID: 114695365841638836}
   - component: {fileID: 114688723635336602}
   m_Layer: 0
   m_Name: Cursor
@@ -796,20 +794,6 @@ MonoBehaviour:
     m_Mode: 0
     m_NumColorKeys: 8
     m_NumAlphaKeys: 2
---- !u!114 &114425216087702912
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1504911371305692}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d4adb8375f5e8d6489d1821eb6a2a1ba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dragDelay: 0.1
-  sBlock: {fileID: 0}
-  sPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &114459021843446374
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -831,13 +815,12 @@ MonoBehaviour:
     type: 2}
   selectedMode: 0
   activeBridgePreviews: []
-  cursorOnUI: 0
   isBridging: 0
-  drag: {fileID: 114425216087702912}
-  selector: {fileID: 114695365841638836}
+  selectedBlock: {fileID: 0}
   posInTerrain: {x: 0, y: 0, z: 0}
   posInWorld: {x: 0, y: 0, z: 0}
-  selectedBlock: {fileID: 0}
+  cursorOnUI: 0
+  sPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &114618521140319092
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -879,17 +862,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 992351ac009527541b66c05b233b8f35, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &114695365841638836
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1504911371305692}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2c1c7cd65bbdac46843fb0afa2972f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &114734179215815194
