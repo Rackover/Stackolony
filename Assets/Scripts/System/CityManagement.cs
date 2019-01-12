@@ -16,7 +16,7 @@ public class CityManagement : MonoBehaviour
         MissionManager.Mission myMission = mission;
         FoodProvider foodProvider = GameManager.instance.gridManagement.grid[myMission.position.x, myMission.position.y, myMission.position.z].GetComponent<FoodProvider>();
         float foodLeft = foodProvider.foodTotal;
-        foreach (BlockLink blocklink in myMission.blocksFound)
+        foreach (Block blocklink in myMission.blocksFound)
         {
             House house = blocklink.GetComponent<House>();
             house.foodProvidersInRange.Add(foodProvider);
@@ -41,7 +41,7 @@ public class CityManagement : MonoBehaviour
     {
         MissionManager.Mission myMission = mission;
         Occupator linkedOccupator = GameManager.instance.gridManagement.grid[myMission.position.x, myMission.position.y, myMission.position.z].GetComponent<Occupator>();
-        foreach (BlockLink blocklink in myMission.blocksFound)
+        foreach (Block blocklink in myMission.blocksFound)
         {
             House house = blocklink.GetComponent<House>();
             house.occupatorsInRange.Add(linkedOccupator);
@@ -54,7 +54,7 @@ public class CityManagement : MonoBehaviour
     {
         activeCoroutineRelatedToPower++;
         MissionManager.Mission myMission = mission;
-        foreach (BlockLink blocklink in myMission.blocksFound)
+        foreach (Block blocklink in myMission.blocksFound)
         {
             for (int i = blocklink.block.consumption - blocklink.currentPower; i > 0; i--)
             {

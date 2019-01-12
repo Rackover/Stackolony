@@ -6,7 +6,7 @@ public class FlagReaderDebugger : MonoBehaviour
 {
 	/*
 	public FlagReader reader;
-	public Block myBlock;
+	public BlockScheme myBlock;
 
 	public List<Flag> activeFlags = new List<Flag>();
 

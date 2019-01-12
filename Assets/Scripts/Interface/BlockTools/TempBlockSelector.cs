@@ -2,7 +2,7 @@
 
 public class TempBlockSelector : MonoBehaviour
 {
-	public void ShowBlock(BlockLink _block) 
+	public void ShowBlock(Block _block) 
 	{
         if (_block != null)
         {

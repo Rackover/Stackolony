@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class ShopDisplay : MonoBehaviour {
 
     [Header("Settings")]
-    public Block myBlock;
+    public BlockScheme myBlock;
     public bool canBePicked;
     public int quantityPicked;
 

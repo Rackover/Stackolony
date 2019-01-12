@@ -5,13 +5,13 @@ using UnityEngine;
 public class Flag : MonoBehaviour {
 
     [Header("References")]
-    public BlockLink myBlockLink;
+    public Block myBlockLink;
     public bool isEnabled = true;
 
     //Fonction appelée lors de la création du script
     virtual public void Awake()
     {
-        myBlockLink = GetComponent<BlockLink>();
+        myBlockLink = GetComponent<Block>();
     }
 
     //Alimente les blocs

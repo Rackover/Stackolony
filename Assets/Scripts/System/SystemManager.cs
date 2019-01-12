@@ -5,8 +5,8 @@ using UnityEngine;
 public class SystemManager : MonoBehaviour {
 
     public List<Generator> AllGenerators = new List<Generator>();
-    public List<BlockLink> AllBlocksRequiringPower = new List<BlockLink>();
-    public List<BlockLink> AllBlockLinks = new List<BlockLink>();
+    public List<Block> AllBlocksRequiringPower = new List<Block>();
+    public List<Block> AllBlockLinks = new List<Block>();
     public List<WorkingHours> AllTimeRelatedBlocks = new List<WorkingHours>();
     public List<Occupator> AllOccupators = new List<Occupator>();
     public List<House> AllHouses = new List<House>();
@@ -49,7 +49,7 @@ public class SystemManager : MonoBehaviour {
     }
 
     public void UpdateCycle() {
-        foreach (BlockLink block in AllBlockLinks) {
+        foreach (Block block in AllBlockLinks) {
             block.NewCycle();
         }
     }
@@ -90,7 +90,7 @@ public class SystemManager : MonoBehaviour {
     //Si un block qui requiert du courant n'a pas croisé d'explorer, alors on l'eteint. Sinon on l'allume
     public void UpdateBlocksRequiringPower()
     {
-        foreach (BlockLink block in AllBlocksRequiringPower)
+        foreach (Block block in AllBlocksRequiringPower)
         {
             if (block.isConsideredUnpowered == true)
             {
@@ -174,7 +174,7 @@ public class SystemManager : MonoBehaviour {
 
     IEnumerator ResetBlocksPower()
     {
-        foreach (BlockLink block in AllBlocksRequiringPower)
+        foreach (Block block in AllBlocksRequiringPower)
         {
             block.isConsideredUnpowered = true;
             block.currentPower = 0;

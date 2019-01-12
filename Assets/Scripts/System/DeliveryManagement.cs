@@ -69,7 +69,7 @@ public class DeliveryManagement : MonoBehaviour {
     //Genere les blocs achetable
     public void InitShop()
     {
-        foreach (Block block in gameManager.library.blocks)
+        foreach (BlockScheme block in gameManager.library.blocks)
         {
             GameObject newBlockDisplay = Instantiate(blockDisplayPrefab, shopPanelRegular);
             newBlockDisplay.name = "Display " + block.title;

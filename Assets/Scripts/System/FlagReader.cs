@@ -17,7 +17,7 @@ public class FlagReader : MonoBehaviour
             existingProfiles.Add(GameManager.instance.populationManager.populationTypeList[i].codeName);
         }
     }
-    public void ReadFlag(BlockLink blockLink, string flag)
+    public void ReadFlag(Block blockLink, string flag)
 	{
 		string[] flagElements = flag.Split(new char[]{'_'}, System.StringSplitOptions.RemoveEmptyEntries);
 

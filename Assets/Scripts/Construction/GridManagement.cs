@@ -76,7 +76,7 @@ public class GridManagement : MonoBehaviour
     {
         if (grid[coordinates.x, coordinates.y, coordinates.z] != null)
         {
-            grid[coordinates.x, coordinates.y, coordinates.z].GetComponent<BlockLink>().CallFlags("OnBlockDestroy");
+            grid[coordinates.x, coordinates.y, coordinates.z].GetComponent<Block>().CallFlags("OnBlockDestroy");
             // Removes object from list and destroys the gameObject
             GameObject target = grid[coordinates.x, coordinates.y, coordinates.z];
             buildingsList.RemoveAll(o => o == target);
@@ -133,7 +133,7 @@ public class GridManagement : MonoBehaviour
     /// <param name="coordinates"></param>
     public void MoveBlock(GameObject block, Vector3Int coordinates)
     {
-        BlockLink link = block.GetComponent<BlockLink>();
+        Block link = block.GetComponent<Block>();
         link.CallFlags("BeforeMovingBlock");
         grid[coordinates.x, coordinates.y, coordinates.z] = block;
         link.MoveTo(coordinates);
@@ -159,7 +159,7 @@ public class GridManagement : MonoBehaviour
     }
 
     //Update a block so he touch the ground or the first block encountered (Like if gravity was applied to it)
-    public void LayBlock(BlockLink block)
+    public void LayBlock(Block block)
     {
         //Position en Y des coordonnées au sol données
        // float worldY =
@@ -225,18 +225,18 @@ public class GridManagement : MonoBehaviour
     {
         GameObject newBlock = CreateBlockFromId(blockId);
         MoveBlock(newBlock, coordinates);
-        Logger.Debug("Spawned block : " + newBlock.GetComponent<BlockLink>().block.name + " with prefab " + GameManager.instance.library.blockPrefab.name + " at position "+coordinates.ToString());
+        Logger.Debug("Spawned block : " + newBlock.GetComponent<Block>().block.name + " with prefab " + GameManager.instance.library.blockPrefab.name + " at position "+coordinates.ToString());
 
     }
 
     public GameObject CreateBlockFromId(int blockId)
     {
 
-        Block block = GameManager.instance.library.GetBlockByID(blockId);
-        if (block == null) { Logger.Warn("Block index not found - index : " + blockId); return null; }
+        BlockScheme block = GameManager.instance.library.GetBlockByID(blockId);
+        if (block == null) { Logger.Warn("BlockScheme index not found - index : " + blockId); return null; }
 
         GameObject newBlock = Instantiate(GameManager.instance.library.blockPrefab);
-        BlockLink newBlockLink = newBlock.GetComponent<BlockLink>();
+        Block newBlockLink = newBlock.GetComponent<Block>();
         newBlockLink.block = block;
         newBlockLink.LoadBlock();
         newBlockLink.container.OpenContainer();
@@ -296,7 +296,7 @@ public class GridManagement : MonoBehaviour
                         grid[partPos.x, partPos.y, partPos.z] = null;
 
                     }
-                    else if (blockToCheck.GetComponent<BlockLink>() != null)
+                    else if (blockToCheck.GetComponent<Block>() != null)
                     //Si le pont tombe sur un bloc, on détruit le pont et on reforme 2 ponts |||||||| ATTENTION POUR L'INSTANT LE SCRIPT N'A PAS CETTE FEATURE IMPLANTéE (A la place le pont se détruit)
                     {
                        DestroyBridge(grid[partPos.x, partPos.y, partPos.z]);
@@ -316,7 +316,7 @@ public class GridManagement : MonoBehaviour
     /// </summary>
     /// <param name="blockA"></param>
     /// <param name="blockB"></param>
-    public GameObject CreateBridge(BlockLink blockA, BlockLink blockB)
+    public GameObject CreateBridge(Block blockA, Block blockB)
     {
         //Calcul de la longueur du pont et de l'orientation du pont
         int bridgeLength = 0;

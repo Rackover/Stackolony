@@ -79,7 +79,7 @@ public class BlockReader : MonoBehaviour {
 
 	void SaveBlock(string[] dataLine)
 	{
-		Block block = ScriptableObject.CreateInstance<Block>();
+		BlockScheme block = ScriptableObject.CreateInstance<BlockScheme>();
 		
 		block.title = dataLine[0];
 		block.level = int.Parse(dataLine[1]);

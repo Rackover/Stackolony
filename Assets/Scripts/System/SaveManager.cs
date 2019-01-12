@@ -182,7 +182,7 @@ public class SaveManager : MonoBehaviour {
         foreach (KeyValuePair<int, int> element in saveData.command) {
             ShopDisplay item = new ShopDisplay();
             item.myBlock = GameManager.instance.library.GetBlockByID(element.Key);
-            if(item.myBlock  == null){ Logger.Warn("Block index not found - index : " + element.Key.ToString()); return;}
+            if(item.myBlock  == null){ Logger.Warn("BlockScheme index not found - index : " + element.Key.ToString()); return;}
             item.quantityPicked = element.Value;
             shoppingList.Add(item);
         }
@@ -198,18 +198,18 @@ public class SaveManager : MonoBehaviour {
 
         // Converting bridges list
         foreach (KeyValuePair<Vector3Int, Vector3Int> bridge in saveData.bridges) {
-            BlockLink origin = gridMan.grid[bridge.Key.x, bridge.Key.y, bridge.Key.z].GetComponent<BlockLink>();
-            BlockLink destination = gridMan.grid[bridge.Value.x, bridge.Value.y, bridge.Value.z].GetComponent<BlockLink>();
+            Block origin = gridMan.grid[bridge.Key.x, bridge.Key.y, bridge.Key.z].GetComponent<Block>();
+            Block destination = gridMan.grid[bridge.Value.x, bridge.Value.y, bridge.Value.z].GetComponent<Block>();
             if (gridMan.CreateBridge(origin, destination) == null){ Logger.Warn("Could not replicate bridge from " + origin + ":(" + bridge.Key + ") to " + destination + ":(" + bridge.Value + ")");  };
         }
 
         foreach (KeyValuePair<Vector3Int, int> stored in saveData.storageGrid) {
             Vector3Int coords = stored.Key;
-            Block block = GameManager.instance.library.GetBlockByID(stored.Value);
-            if (block == null) { Logger.Warn("Block index not found - index : " + stored.Value.ToString()); return; }
+            BlockScheme block = GameManager.instance.library.GetBlockByID(stored.Value);
+            if (block == null) { Logger.Warn("BlockScheme index not found - index : " + stored.Value.ToString()); return; }
             
             GameObject storedBuilding = Instantiate(GameManager.instance.library.blockPrefab);
-            BlockLink newBlockLink = storedBuilding.GetComponent<BlockLink>();
+            Block newBlockLink = storedBuilding.GetComponent<Block>();
             newBlockLink.block = block;
 
             GameManager.instance.storageBay.StoreAtPosition(storedBuilding, coords);
@@ -334,7 +334,7 @@ public class SaveManager : MonoBehaviour {
             Dictionary<Vector3Int, int> storageGrid = new Dictionary<Vector3Int, int>();
             foreach (GameObject building in _storedBlocks) {
                 if (building != null) {
-                    BlockLink blockLink = building.GetComponent<BlockLink>();
+                    Block blockLink = building.GetComponent<Block>();
                     Vector3Int coords = blockLink.gridCoordinates;
                     int id = blockLink.block.ID;
                     storageGrid[coords] = id;
@@ -352,7 +352,7 @@ public class SaveManager : MonoBehaviour {
                 BlockSaveData blockData = new BlockSaveData();
                 if (building != null)
                 {
-                    BlockLink blockLink = building.GetComponent<BlockLink>();
+                    Block blockLink = building.GetComponent<Block>();
                     if(blockLink != null)
                     {
                         Vector3Int coords = blockLink.gridCoordinates;

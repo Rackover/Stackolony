@@ -155,10 +155,10 @@ public class GridDebugger : MonoBehaviour {
     public GameObject GenerateDebugCell(Vector3Int position, OverlayMode selectedGrid)
     {
         GameObject foundObject = gridManager.grid[position.x, position.y, position.z];
-        BlockLink foundBlockLink = null;
+        Block foundBlockLink = null;
         if (foundObject != null)
         {
-            foundBlockLink = foundObject.GetComponent<BlockLink>();
+            foundBlockLink = foundObject.GetComponent<Block>();
         }
 
         switch (selectedGrid.gridID)
@@ -175,7 +175,7 @@ public class GridDebugger : MonoBehaviour {
                         case "Bridge":
                             return Instantiate(debugCellBridge);
                         default:
-                            if (foundObject.layer == LayerMask.NameToLayer("Block"))
+                            if (foundObject.layer == LayerMask.NameToLayer("BlockScheme"))
                             {
                                 return Instantiate(debugCellCube);
                             }

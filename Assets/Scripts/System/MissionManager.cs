@@ -25,7 +25,7 @@ public class MissionManager : MonoBehaviour {
     {
         public List<Coroutine> activeExplorers; //Liste de toutes les listes d'explorers actifs, il y a une liste d'explorers pour chaque mission.
         public List<Vector3Int> exploredPositions;
-        public List<BlockLink> blocksFound;      //Tableau de chaque block trouvé par les explorers, il y en a un pour chaque mission.
+        public List<Block> blocksFound;      //Tableau de chaque block trouvé par les explorers, il y en a un pour chaque mission.
         public List<int> blockDistanceToCenter; //Tableau paralléle au tableau blocksFound, indiquant la distance de chaque bloc par rapport au point de départ de la mission
         public int power;
         public int range;
@@ -50,7 +50,7 @@ public class MissionManager : MonoBehaviour {
     {
         Mission newMission = new Mission();
         newMission.activeExplorers = new List<Coroutine>();
-        newMission.blocksFound = new List<BlockLink>();
+        newMission.blocksFound = new List<Block>();
         newMission.blockDistanceToCenter = new List<int>();
         newMission.exploredPositions = new List<Vector3Int>();
         missionList.Add(newMission);
@@ -112,9 +112,9 @@ public class MissionManager : MonoBehaviour {
 
             if (myMission.flagToFind == null)
             {
-                if (GameManager.instance.gridManagement.grid[position.x, position.y, position.z].GetComponent<BlockLink>() != null)
+                if (GameManager.instance.gridManagement.grid[position.x, position.y, position.z].GetComponent<Block>() != null)
                 {
-                    myMission.blocksFound.Add(GameManager.instance.gridManagement.grid[position.x, position.y, position.z].GetComponent<BlockLink>());
+                    myMission.blocksFound.Add(GameManager.instance.gridManagement.grid[position.x, position.y, position.z].GetComponent<Block>());
                     myMission.blockDistanceToCenter.Add(range);
                     myMission.exploredPositions.Add(position);
                 }
@@ -125,12 +125,12 @@ public class MissionManager : MonoBehaviour {
                 }
             } else
             {
-                BlockLink foundBlock = GameManager.instance.gridManagement.grid[position.x, position.y, position.z].GetComponent<BlockLink>();
+                Block foundBlock = GameManager.instance.gridManagement.grid[position.x, position.y, position.z].GetComponent<Block>();
                 if (foundBlock != null) {
                     myMission.exploredPositions.Add(position);
                     foreach (Flag activeFlag in foundBlock.activeFlags) {
                         if (activeFlag.GetType() == myMission.flagToFind) {
-                                myMission.blocksFound.Add(GameManager.instance.gridManagement.grid[position.x, position.y, position.z].GetComponent<BlockLink>());
+                                myMission.blocksFound.Add(GameManager.instance.gridManagement.grid[position.x, position.y, position.z].GetComponent<Block>());
                                 myMission.blockDistanceToCenter.Add(myMission.range - range);
                         }
                     }
@@ -139,7 +139,7 @@ public class MissionManager : MonoBehaviour {
         }
 
         //L'explorer analyse les 6 trajectoires possible pour essayer de créer un chemin
-        List<BlockLink> AdjacentBlocks = CheckAdjacentBlocks(position, myMission);
+        List<Block> AdjacentBlocks = CheckAdjacentBlocks(position, myMission);
 
         //L'explorer prend sa retraite
         myMission.activeExplorers.RemoveAt(0);
@@ -166,7 +166,7 @@ public class MissionManager : MonoBehaviour {
             {
                 if (power > 0)
                 {
-                    foreach (BlockLink foundBlock in AdjacentBlocks)
+                    foreach (Block foundBlock in AdjacentBlocks)
                     {
                         power -= (foundBlock.block.consumption - foundBlock.currentPower);
                     }
@@ -179,7 +179,7 @@ public class MissionManager : MonoBehaviour {
                     }
                 } else if (myMission.flagToFind != null)
                 {
-                    foreach (BlockLink foundBlock in AdjacentBlocks)
+                    foreach (Block foundBlock in AdjacentBlocks)
                     {
                         foreach (Flag flag in foundBlock.activeFlags)
                         {
@@ -217,12 +217,12 @@ public class MissionManager : MonoBehaviour {
     }
 
     //Renvoit une liste des blockLink adjacents à une position
-    List<BlockLink> CheckAdjacentBlocks(Vector3Int position, Mission myMission)
+    List<Block> CheckAdjacentBlocks(Vector3Int position, Mission myMission)
     {
-        List<BlockLink> blocksFound = new List<BlockLink>();
+        List<Block> blocksFound = new List<Block>();
 
         Vector3Int posToCheck = Vector3Int.zero;
-        BlockLink blockFound = null;
+        Block blockFound = null;
 
         //Check up
         posToCheck = new Vector3Int(position.x, position.y + 1, position.z);
@@ -274,9 +274,9 @@ public class MissionManager : MonoBehaviour {
 
 
     //Renvoit un blockLink à une position donnée, si "onlyBridges" est à true, alors le systeme ne renverra que les blocs aux extrémités des ponts
-    BlockLink CheckBlock(Vector3Int initialPos, Vector3Int position, Mission myMission, bool onlyBridges)
+    Block CheckBlock(Vector3Int initialPos, Vector3Int position, Mission myMission, bool onlyBridges)
     {
-        BlockLink output = null;
+        Block output = null;
 
         //Verifie que la position n'a jamais été explorée auparavant
         if (!myMission.exploredPositions.Contains(position))
@@ -302,7 +302,7 @@ public class MissionManager : MonoBehaviour {
                     }
                     if (GameManager.instance.gridManagement.grid[bridgeDestinationPosition.x, bridgeDestinationPosition.y, bridgeDestinationPosition.z] != null)
                     {
-                        output = GameManager.instance.gridManagement.grid[bridgeDestinationPosition.x, bridgeDestinationPosition.y, bridgeDestinationPosition.z].GetComponent<BlockLink>();
+                        output = GameManager.instance.gridManagement.grid[bridgeDestinationPosition.x, bridgeDestinationPosition.y, bridgeDestinationPosition.z].GetComponent<Block>();
                         myMission.exploredPositions.Add(bridgeDestinationPosition);
                     }
                 }
@@ -311,15 +311,15 @@ public class MissionManager : MonoBehaviour {
                 {
                     if (onlyBridges == false)
                     {
-                        output = blockFound.GetComponent<BlockLink>();
+                        output = blockFound.GetComponent<Block>();
                     } else
                     {
-                        BlockLink foundBlockLink = blockFound.GetComponent<BlockLink>();
+                        Block foundBlockLink = blockFound.GetComponent<Block>();
                         if (foundBlockLink != null)
                         {
                             if (foundBlockLink.bridge != null && foundBlockLink.bridge.GetComponent<BridgeInfo>().destination == initialPos) 
                             {
-                                output = blockFound.GetComponent<BlockLink>();
+                                output = blockFound.GetComponent<Block>();
                                 myMission.exploredPositions.Add(output.gridCoordinates);
                                 foreach (Vector3Int pos in foundBlockLink.bridge.GetComponent<BridgeInfo>().allBridgePositions)
                                 {
@@ -330,13 +330,13 @@ public class MissionManager : MonoBehaviour {
                                 GameObject initialBlock = GameManager.instance.gridManagement.grid[initialPos.x, initialPos.y, initialPos.z];
                                 if (initialBlock != null)
                                 {
-                                    BlockLink initialBlockLink = initialBlock.GetComponent<BlockLink>();
-                                    if (initialBlock.GetComponent<BlockLink>() != null)
+                                    Block initialBlockLink = initialBlock.GetComponent<Block>();
+                                    if (initialBlock.GetComponent<Block>() != null)
                                     {
                                         if (initialBlockLink.bridge != null)
                                         {
                                             Vector3Int foundBlockPosition = initialBlockLink.bridge.GetComponent<BridgeInfo>().destination;
-                                            output = GameManager.instance.gridManagement.grid[foundBlockPosition.x, foundBlockPosition.y, foundBlockPosition.z].GetComponent<BlockLink>();
+                                            output = GameManager.instance.gridManagement.grid[foundBlockPosition.x, foundBlockPosition.y, foundBlockPosition.z].GetComponent<Block>();
                                             foreach (Vector3Int pos in initialBlockLink.bridge.GetComponent<BridgeInfo>().allBridgePositions)
                                             {
                                                 myMission.exploredPositions.Add(pos);

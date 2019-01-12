@@ -21,7 +21,7 @@ public class CursorManagement : MonoBehaviour
     public cursorMode selectedMode = cursorMode.Default; //Mode actuel du curseur
     public List<GameObject> activeBridgePreviews = new List<GameObject>(); //Liste contenant les preview de pont
     public bool isBridging = false;
-    public BlockLink selectedBlock; //Le block selectionné par le joueur
+    public Block selectedBlock; //Le block selectionné par le joueur
     [Space(5)]
     
     [Header("=== DEBUG ===")]
@@ -104,7 +104,7 @@ public class CursorManagement : MonoBehaviour
             UpdateMouse(hit);
             UpdateProjector();
 
-            if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Block") || hit.collider.gameObject.layer == LayerMask.NameToLayer("StoredBlock") && hoveredBlock != hit.collider.gameObject && !Input.GetMouseButton(0) || Input.GetMouseButtonUp(0))
+            if(hit.collider.gameObject.layer == LayerMask.NameToLayer("BlockScheme") || hit.collider.gameObject.layer == LayerMask.NameToLayer("StoredBlock") && hoveredBlock != hit.collider.gameObject && !Input.GetMouseButton(0) || Input.GetMouseButtonUp(0))
             {
                 hoveredBlock = hit.collider.gameObject;
                 UpdateFeedback(hit);
@@ -166,7 +166,7 @@ public class CursorManagement : MonoBehaviour
     void UpdateFeedback(RaycastHit hit)
     {
         // Highlighting block the cursor currently is on if we're in Bridge mode
-        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Block")) 
+        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("BlockScheme")) 
         {
             if (selectedMode == cursorMode.Delete) 
             {
@@ -187,9 +187,9 @@ public class CursorManagement : MonoBehaviour
                 Vector3Int[] linkableBlocksList = CheckBridgeableBlocks(position);
                 if (linkableBlocksList.Length > 0) {
                     foreach (Vector3Int blockToBridge in linkableBlocksList) {
-                        if (blockToBridge.Equals(hit.transform.gameObject.GetComponent<BlockLink>().gridCoordinates)) {
+                        if (blockToBridge.Equals(hit.transform.gameObject.GetComponent<Block>().gridCoordinates)) {
                             HighlightBlock(hit.transform.gameObject);
-                            GenerateBridgePreview(objective.GetComponent<BlockLink>().gridCoordinates, blockToBridge);
+                            GenerateBridgePreview(objective.GetComponent<Block>().gridCoordinates, blockToBridge);
                             break;
                         }
                     }
@@ -236,7 +236,7 @@ public class CursorManagement : MonoBehaviour
         {
             switch (selectedMode) {
                 case cursorMode.Default:
-                    BlockLink selectedBlock = hit.transform.gameObject.GetComponent<BlockLink>();
+                    Block selectedBlock = hit.transform.gameObject.GetComponent<Block>();
                     // Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
                     StartDrag(selectedBlock);
                     /*
@@ -274,7 +274,7 @@ public class CursorManagement : MonoBehaviour
                     break;
 
                 case cursorMode.Bridge:
-                    if (!isBridging && hit.transform.gameObject.layer == LayerMask.NameToLayer("Block") ){
+                    if (!isBridging && hit.transform.gameObject.layer == LayerMask.NameToLayer("BlockScheme") ){
                         StartPlanningBridge(hit.transform.gameObject);
                     }
                     break;
@@ -320,7 +320,7 @@ public class CursorManagement : MonoBehaviour
 
     void StartPlanningBridge(GameObject startingObject)
     {
-        selectedBlock = startingObject.GetComponent<BlockLink>();
+        selectedBlock = startingObject.GetComponent<Block>();
         GeneratePermanentHighlighter(selectedBlock.gridCoordinates);
         isBridging = true;
     }
@@ -515,11 +515,11 @@ public class CursorManagement : MonoBehaviour
 
     void TryToMakeBridge(GameObject hitGameObject)
     {
-        if (hitGameObject.GetComponent<BlockLink>() != null) 
+        if (hitGameObject.GetComponent<Block>() != null) 
         {
         //Si le joueur a déjà fait sa premiere selection, on vérifie que le deuxieme bloc selectionné est en face du premier, puis on trace le pont
             
-            BlockLink destinationCandidate = hitGameObject.GetComponent<BlockLink>(); //On selectionne temporairement le second block, puis on vérifie s'il remplie les conditions pour tracer un pont
+            Block destinationCandidate = hitGameObject.GetComponent<Block>(); //On selectionne temporairement le second block, puis on vérifie s'il remplie les conditions pour tracer un pont
             if (destinationCandidate.gridCoordinates != selectedBlock.gridCoordinates) {
                 if (destinationCandidate.gridCoordinates.y == selectedBlock.gridCoordinates.y) {
                     if (destinationCandidate.gridCoordinates.x == selectedBlock.gridCoordinates.x || destinationCandidate.gridCoordinates.z == selectedBlock.gridCoordinates.z) {
@@ -571,7 +571,7 @@ public class CursorManagement : MonoBehaviour
 
 #region DragAndDrop
 
-    public void StartDrag(BlockLink _block)
+    public void StartDrag(Block _block)
     {
         if (_block != null)
         {

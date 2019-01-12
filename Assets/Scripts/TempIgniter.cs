@@ -13,7 +13,7 @@ public class TempIgniter : MonoBehaviour {
 
 			if (Physics.Raycast(ray, out hit))
 			{
-				BlockLink block = hit.collider.gameObject.GetComponent<BlockLink>();
+				Block block = hit.collider.gameObject.GetComponent<Block>();
 				if(block != null)
 				{
 					if(!block.states.Contains(BlockState.OnFire))

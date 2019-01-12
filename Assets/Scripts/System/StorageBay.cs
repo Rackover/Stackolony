@@ -137,15 +137,15 @@ public class StorageBay : MonoBehaviour {
     public void GenerateBlock()
     {
         GameObject newBlock = Instantiate(gameManager.library.blockPrefab);
-        newBlock.GetComponent<BlockLink>().container.DropBlock();
+        newBlock.GetComponent<Block>().container.DropBlock();
         StoreBlock(newBlock);
     }
 
     //Livre un block à l'intérieur de la baie de stockage
-    public void DeliverBlock(Block blockInfo)
+    public void DeliverBlock(BlockScheme blockInfo)
     {
         GameObject newBlock = Instantiate(gameManager.library.blockPrefab);
-        BlockLink newBlockLink = newBlock.GetComponent<BlockLink>();
+        Block newBlockLink = newBlock.GetComponent<Block>();
         newBlockLink.block = blockInfo;
         newBlockLink.container.DropBlock();
         StoreBlock(newBlock);
@@ -187,7 +187,7 @@ public class StorageBay : MonoBehaviour {
         blockToStore.transform.SetParent(slots[position.x, position.z].transform);
         blockToStore.transform.localScale = Vector3.one;
         blockToStore.name = "StoredBlock[" + position + "]";
-        BlockLink blockInfo = blockToStore.GetComponent<BlockLink>();
+        Block blockInfo = blockToStore.GetComponent<Block>();
         blockInfo.gridCoordinates = position;
         blockInfo.container.CloseContainer();
         blockToStore.layer = LayerMask.NameToLayer("StoredBlock");
@@ -220,8 +220,8 @@ public class StorageBay : MonoBehaviour {
         {
             storedAmount--;
 
-            block.GetComponent<BlockLink>().container.OpenContainer();
-            Vector3Int blockCoordinates = block.GetComponent<BlockLink>().gridCoordinates;
+            block.GetComponent<Block>().container.OpenContainer();
+            Vector3Int blockCoordinates = block.GetComponent<Block>().gridCoordinates;
             storedBlocks[blockCoordinates.x, blockCoordinates.y, blockCoordinates.z] = null;
 
             //Fait tomber les blocs qui se trouvaient au dessus de ce bloc
@@ -240,15 +240,15 @@ public class StorageBay : MonoBehaviour {
                     foundObject.transform.position += new Vector3(0, y - 0.5f, 0);
                     foundObject.transform.localScale = Vector3.one;
                     foundObject.name = "StoredBlock[" + blockCoordinates.x + "," + (y-1) + "," + blockCoordinates.z + "]";
-                    BlockLink blockInfo = foundObject.GetComponent<BlockLink>();
+                    Block blockInfo = foundObject.GetComponent<Block>();
                     blockInfo.gridCoordinates = new Vector3Int(blockCoordinates.x, y-1, blockCoordinates.z);
                 }
             }
-            block.layer = LayerMask.NameToLayer("Block");
+            block.layer = LayerMask.NameToLayer("BlockScheme");
             block.transform.SetParent(FindObjectOfType<GridManagement>().transform.Find("Grid"));
         } else
         {
-            gameManager.errorDisplay.ShowError("Block can't be destocked");
+            gameManager.errorDisplay.ShowError("BlockScheme can't be destocked");
         }
     }
 }

@@ -23,12 +23,12 @@ public class BlockInfobox : MonoBehaviour
 
 	[Space(1)][Header("Scripts")]
 	public CanvasLineRenderer line;
-	BlockLink currentSelection;
+	Block currentSelection;
 
 	List<StateTag> stateTags = new List<StateTag>();
 	List<FlagPanel> flagPanels = new List<FlagPanel>();
 
-	public void LoadBlockValues(BlockLink block)
+	public void LoadBlockValues(Block block)
 	{
 		Hide();
 		currentSelection = block;

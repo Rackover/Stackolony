@@ -41,7 +41,7 @@ public KeyCode launchTestKey;
 				for (int z = 10; z < 20; z++) {
 					count++;
 					if (count >= 10) {
-						gridManagement.CreateBridge(gridManagement.grid[x,y,z].GetComponent<BlockLink>(),gridManagement.grid[x,y,z+1].GetComponent<BlockLink>());
+						gridManagement.CreateBridge(gridManagement.grid[x,y,z].GetComponent<Block>(),gridManagement.grid[x,y,z+1].GetComponent<Block>());
 						count = 0;
 					}
 				}

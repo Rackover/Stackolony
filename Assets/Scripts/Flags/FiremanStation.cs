@@ -7,7 +7,7 @@ public class FiremanStation : Flag
 	[Header("Policeman")]
 	public int range;
 	public bool selecting;
-	public List<BlockLink> targets = new List<BlockLink>();
+	public List<Block> targets = new List<Block>();
 	public List<Extinctor> extinctors = new List<Extinctor>();
 
 	override public void Use()
@@ -17,7 +17,7 @@ public class FiremanStation : Flag
 
 	override public void OnNewCycle()
 	{
-		foreach(BlockLink target in targets)
+		foreach(Block target in targets)
 		{
 			target.RemoveState(BlockState.OnFire);
 		}
@@ -40,7 +40,7 @@ public class FiremanStation : Flag
 				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 				if (Physics.Raycast(ray, out hit))
 				{
-					BlockLink sBlock = hit.transform.gameObject.GetComponent<BlockLink>();
+					Block sBlock = hit.transform.gameObject.GetComponent<Block>();
 					if(sBlock != null)
 					{
 						selecting = false;

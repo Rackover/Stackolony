@@ -15,11 +15,11 @@ public class Container : MonoBehaviour
     public Material containerMat;
     public Material iconMat;
 
-    public BlockLink linkedBlock;
+    public Block linkedBlock;
 
     void Awake()
     {
-        if(linkedBlock == null) linkedBlock = transform.parent.GetComponent<BlockLink>();
+        if(linkedBlock == null) linkedBlock = transform.parent.GetComponent<Block>();
         if(myAnimator == null) myAnimator = GetComponent<Animator>();
     }
 
