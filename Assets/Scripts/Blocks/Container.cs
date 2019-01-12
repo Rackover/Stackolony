@@ -38,7 +38,6 @@ public class Container : MonoBehaviour
 
     void LoadContainerVisual()
     {
-        Debug.Log("LUL");
         containerMat.color = GameManager.instance.library.blockContainerColors[linkedBlock.block.ID];
         //foreach(MeshRenderer mr in meshRenderers){ mr.material = containerMat; }
 
