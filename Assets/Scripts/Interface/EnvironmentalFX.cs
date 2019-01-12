@@ -64,6 +64,7 @@ public class EnvironmentalFX : MonoBehaviour {
     {
         Temporality temp = GameManager.instance.temporality;
         UpdateLights(temp.GetCurrentcycleProgression());
+        UpdateFog(temp.GetCurrentcycleProgression());
         UpdateSkybox(temp.GetCurrentcycleProgression());
         yield return new WaitForSeconds(refreshRate);
         yield return UpdateEnvironmentalFX();

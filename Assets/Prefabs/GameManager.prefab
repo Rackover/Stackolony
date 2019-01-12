@@ -11,6 +11,22 @@ Prefab:
   m_SourcePrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1638283458723260}
   m_IsPrefabAsset: 1
+--- !u!1 &1286739775222780
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4507556794296642}
+  - component: {fileID: 114635777907619166}
+  m_Layer: 0
+  m_Name: SaveManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1296715040860684
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,6 +380,19 @@ Transform:
   m_Father: {fileID: 4903490542995232}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4507556794296642
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1286739775222780}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4805539053113026}
+  m_RootOrder: 14
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4644635841613104
 Transform:
   m_ObjectHideFlags: 1
@@ -453,6 +482,7 @@ Transform:
   - {fileID: 4928578448861902}
   - {fileID: 4644635841613104}
   - {fileID: 4901883935714976}
+  - {fileID: 4507556794296642}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -764,7 +794,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   refreshRate: 0.1
   directionalLight: {fileID: 0}
-  skyboxMaterial: {fileID: 2100000, guid: 65e5c642bb192da4ba95c4d7fcb1a418, type: 2}
+  skyboxMaterial: {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
   skyboxVariation:
     serializedVersion: 2
     key0: {r: 1, g: 0.5707547, b: 0.7082891, a: 1}
@@ -841,6 +871,19 @@ MonoBehaviour:
   cycleNumber: 0
   cycleProgression: 0
   timeScale: 0
+--- !u!114 &114635777907619166
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1286739775222780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22310f324eb157f478d4a9f8f392f575, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  saveVersion: 1
+  saveName: city.bin
 --- !u!114 &114654850517342536
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -982,6 +1025,7 @@ MonoBehaviour:
   storageBay: {fileID: 0}
   populationManager: {fileID: 114945228266214062}
   player: {fileID: 114831770002849496}
+  saveManager: {fileID: 0}
   cursorDisplay: {fileID: 0}
   localization: {fileID: 0}
   deliveryManagement: {fileID: 0}

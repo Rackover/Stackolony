@@ -23,19 +23,20 @@ public class GameManager : MonoBehaviour
     public StorageBay storageBay;
     public PopulationManager populationManager;
     public Player player;
+    public SaveManager saveManager;
 
     [Space(1)]
     [Header("INTERFACE")]
     public CursorDisplay cursorDisplay;
     public Localization localization;
 
-    [Space(1)][Header("INTERFACE INGAME")]
+    [Space(1)] [Header("INTERFACE INGAME")]
     public DeliveryManagement deliveryManagement;
     public TemporalityInterface temporalityInterface;
     public TooltipGO tooltipGO;
     public BlockInfobox blockInfobox;
     public ErrorDisplay errorDisplay;
-    public OptionsDisplay  optionsDisplay;
+    public OptionsDisplay optionsDisplay;
 
     [Space(1)]
     [Header("DEBUG SETTINGS")]
@@ -50,17 +51,18 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
         // SYSTEM
-        if(temporality == null) temporality = GetComponentInChildren<Temporality>();
-        if(flagReader == null) flagReader = GetComponentInChildren<FlagReader>();
-        if(library == null) library = GetComponentInChildren<Library>();
-        if(sfxManager == null) sfxManager = GetComponentInChildren<SFXManager>();
-        if(systemManager == null) systemManager = GetComponentInChildren<SystemManager>();
-        if(cityManagement == null) cityManagement = GetComponentInChildren<CityManagement>();
-        if(missionManager == null) missionManager = GetComponentInChildren<MissionManager>();
-        if(cursorManagement == null) cursorManagement = FindObjectOfType<CursorManagement>();
-        if(gridManagement == null) gridManagement = FindObjectOfType<GridManagement>();
-        if(storageBay == null) storageBay = FindObjectOfType<StorageBay>();
+        if (temporality == null) temporality = GetComponentInChildren<Temporality>();
+        if (flagReader == null) flagReader = GetComponentInChildren<FlagReader>();
+        if (library == null) library = GetComponentInChildren<Library>();
+        if (sfxManager == null) sfxManager = GetComponentInChildren<SFXManager>();
+        if (systemManager == null) systemManager = GetComponentInChildren<SystemManager>();
+        if (cityManagement == null) cityManagement = GetComponentInChildren<CityManagement>();
+        if (missionManager == null) missionManager = GetComponentInChildren<MissionManager>();
+        if (cursorManagement == null) cursorManagement = FindObjectOfType<CursorManagement>();
+        if (gridManagement == null) gridManagement = FindObjectOfType<GridManagement>();
+        if (storageBay == null) storageBay = FindObjectOfType<StorageBay>();
         if (populationManager == null) populationManager = FindObjectOfType<PopulationManager>();
+        if (saveManager == null) saveManager = GetComponentInChildren<SaveManager>();
 
         // INTERFACE
         if (cursorDisplay == null) cursorDisplay = FindObjectOfType<CursorDisplay>();
@@ -68,11 +70,11 @@ public class GameManager : MonoBehaviour
 
         // INTERFACE - INGAME
         if (deliveryManagement == null) deliveryManagement = FindObjectOfType<DeliveryManagement>();
-        if(temporalityInterface == null) temporalityInterface = FindObjectOfType<TemporalityInterface>();
-        if(tooltipGO == null) tooltipGO = FindObjectOfType<TooltipGO>();
-        if(blockInfobox == null) blockInfobox = FindObjectOfType<BlockInfobox>();
-        if(errorDisplay == null) errorDisplay = FindObjectOfType<ErrorDisplay>();
-        if(optionsDisplay == null) optionsDisplay = FindObjectOfType<OptionsDisplay>();
+        if (temporalityInterface == null) temporalityInterface = FindObjectOfType<TemporalityInterface>();
+        if (tooltipGO == null) tooltipGO = FindObjectOfType<TooltipGO>();
+        if (blockInfobox == null) blockInfobox = FindObjectOfType<BlockInfobox>();
+        if (errorDisplay == null) errorDisplay = FindObjectOfType<ErrorDisplay>();
+        if (optionsDisplay == null) optionsDisplay = FindObjectOfType<OptionsDisplay>();
 
         // DEBUG
         if (logger == null) logger = GetComponentInChildren<Logger>();
@@ -96,8 +98,7 @@ public class GameManager : MonoBehaviour
 
     void CheckInputs()
     {
-        if (Input.GetKeyDown(KeyCode.P))
-        {
+        if (Input.GetKeyDown(KeyCode.P)) {
             temporality.PauseGame();
         }
     }
@@ -135,5 +136,21 @@ public class GameManager : MonoBehaviour
         temporality.timeScale = 2;
 
         inGame = false;
+    }
+
+
+    public void NewGame(){
+        SceneManager.LoadScene("Game");
+    }
+
+    public void Load()
+    {
+        SceneManager.LoadScene("Game");
+        saveManager.StartCoroutine(saveManager.ReadSaveData(() => saveManager.LoadSaveData(saveManager.loadedData)));
+    }
+
+    public void Exit()
+    {
+        Application.Quit();
     }
 }

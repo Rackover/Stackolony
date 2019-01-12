@@ -11,7 +11,12 @@ public class Interface : MonoBehaviour {
 	[Header("Cursor")][Space(1)]
 	public RectTransform cursorTransform;
 	public Image cursorImage;
-    
+
+    [Header("Windows")]
+    [Space(1)]
+    public GameObject optionsWindow;
+    public GameObject creditsWindow;
+
     public void ChangeCursor(string mode)	
 	{
 		cursorImage.enabled = true;
@@ -35,4 +40,14 @@ public class Interface : MonoBehaviour {
 				break;
 		}
 	}
+
+    public void SpawnOptionsWindow()
+    {
+        Instantiate(optionsWindow, this.transform);
+    }
+
+    public void SpawnCreditsWindow()
+    {
+        Instantiate(creditsWindow, this.transform);
+    }
 }
