@@ -25,7 +25,7 @@ public class HousePanel : FlagPanel
 		for(int i = 0; i < h.acceptedPop.Length; i++)
 		{
 			citizenIcons[i].self.SetActive(true);
-			citizenIcons[i].image.sprite = h.acceptedPop[i].visuals;
+//			citizenIcons[i].image.sprite = h.acceptedPop[i].visuals;
 		}
 	}
 }
