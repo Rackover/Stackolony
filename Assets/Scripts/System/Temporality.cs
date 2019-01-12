@@ -12,12 +12,6 @@ public class Temporality : MonoBehaviour {
     public float timeBetweenUpdateForDayNightDisplay; //Combien de secondes entre chaque mise à jour visuelle de l'afficheur "jour / nuit"
     public float timeBetweenUpdateForSystem; //Combien de secondes entre chaque mise à jour du systeme (Utilisé par les flags "WorkingHour"
 
-    public Gradient skyboxVariation; //Variations de couleur de la skybox au fil du temps
-
-    [Header("=== REFERENCES ===")][Space(1)]
-    public GameObject directionalLight;
-    public Material skyboxMaterial;
-
     [Header("=== DEBUG VALUES ===")][Space(1)]
     [HideInInspector] public int cycleNumber = 0; //Combien de cycles se sont ecoulés en tout
     public float cycleProgression; //Combien de secondes se sont ecoulées dans le cycle actuel
@@ -32,7 +26,6 @@ public class Temporality : MonoBehaviour {
 
     private int savedTimeScale; //Variable utilisée pour redéfinir la vitesse du jeu quand le joueur annule la pause
     private Image savedButton; //Bouton à réactiver quand le joueur annule la pause
-    public float cycleProgressionInPercent;
 
     private float counter;
 
@@ -40,22 +33,6 @@ public class Temporality : MonoBehaviour {
     {
         counter = 0;
         recurence = Mathf.Min(timeBetweenUpdateForDayNightDisplay, timeBetweenUpdateForLights, timeBetweenUpdateForSkybox, timeBetweenUpdateForSystem);
-        
-        if (directionalLight == null) {
-            Light[] lights = FindObjectsOfType<Light>();
-            bool found = false;
-            foreach(Light light in lights) {
-                if (light.type == LightType.Directional) {
-                    directionalLight = light.gameObject;
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                Logger.Throw("Could not find a directional light for the temporality. Aborting.");
-            }
-
-        }
     }
 
     public void PauseGame()
@@ -112,7 +89,6 @@ public class Temporality : MonoBehaviour {
         timeBetweenUpdateForSystemCount+= recurence;
 
         //Mises à jour des visuels
-        cycleProgressionInPercent = (cycleProgression / (float)cycleDuration) * 100f;
         if (timeBetweenUpdateForDayNightDisplayCount >= timeBetweenUpdateForDayNightDisplay)
         {
             timeBetweenUpdateForDayNightDisplayCount = 1;
@@ -120,19 +96,22 @@ public class Temporality : MonoBehaviour {
 
         if (timeBetweenUpdateForLightsCount > timeBetweenUpdateForLights)
         {
-            UpdateLights(cycleProgressionInPercent);
             timeBetweenUpdateForLightsCount = 1;
         }
 
         if (timeBetweenUpdateForSkyboxCount > timeBetweenUpdateForSkybox)
         {
-            UpdateSkybox(cycleProgressionInPercent);
             timeBetweenUpdateForSkyboxCount = 1;
         }
 
         if (timeBetweenUpdateForSystemCount > timeBetweenUpdateForSystem) {
              UpdateSystem();
         }
+    }
+
+    public float GetCurrentcycleProgression()
+    {
+        return (cycleProgression / (float)cycleDuration) * 100f;
     }
 
     public void ChangeTimeScale(int newTimeScaleCoef)
@@ -165,20 +144,6 @@ public class Temporality : MonoBehaviour {
     public int GetYear()
     {
         return (int)Mathf.Ceil(cycleNumber / yearDuration);
-    }
-
-    //Met à jour les lumières en fonction de l'avancement du cycle
-    public void UpdateLights(float cycleProgressionInPercent)
-    {
-        directionalLight.transform.rotation = Quaternion.Euler(new Vector3((3.6f * (float)cycleProgressionInPercent),30,0));
-    }
-
-    //Met à jour la skybox en fonction de l'avancement du cycle
-    public void UpdateSkybox(float cycleProgressionInPercent)
-    {
-        skyboxMaterial.SetColor("_Tint", skyboxVariation.Evaluate(cycleProgressionInPercent/100f));
-        RenderSettings.skybox = skyboxMaterial;
-        DynamicGI.UpdateEnvironment();
     }
 
     public void UpdateSystem()
