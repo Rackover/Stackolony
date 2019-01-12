@@ -17,6 +17,8 @@ public class EnvironmentalFX : MonoBehaviour {
 
     private void Awake()
     {
+        RenderSettings.skybox = skyboxMaterial;
+
         if (directionalLight == null) {
             Light[] lights = FindObjectsOfType<Light>();
             bool found = false;
@@ -33,6 +35,11 @@ public class EnvironmentalFX : MonoBehaviour {
         }
     }
 
+    private void Start()
+    {
+        StartCoroutine(UpdateEnvironmentalFX());
+    }
+
     //Met à jour les lumières en fonction de l'avancement du cycle
     public void UpdateLights(float cycleProgressionInPercent)
     {
@@ -43,8 +50,14 @@ public class EnvironmentalFX : MonoBehaviour {
     public void UpdateSkybox(float cycleProgressionInPercent)
     {
         skyboxMaterial.SetColor("_Tint", skyboxVariation.Evaluate(cycleProgressionInPercent / 100f));
-        RenderSettings.skybox = skyboxMaterial;
         DynamicGI.UpdateEnvironment();
+    }
+
+    //Met à jour la fog selon la couleur du ciel
+    public void UpdateFog(float cycleProgressionInPercent)
+    {
+        RenderSettings.fogColor = skyboxVariation.Evaluate(cycleProgressionInPercent / 100f);
+        skyboxVariation.Evaluate(cycleProgressionInPercent / 100f);
     }
 
     IEnumerator UpdateEnvironmentalFX()
