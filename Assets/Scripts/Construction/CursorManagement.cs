@@ -8,39 +8,40 @@ public class CursorManagement : MonoBehaviour
 {
     public enum cursorMode { Default, Build, Delete, Bridge }; //Chaque mode du curseur
 
-    [Header("=== REFERENCIES ===")][Space(1)]
+    [Header("=== REFERENCIES ===")]
     [Header("Prefabs")]
     public GameObject projectorPrefab;
     public GameObject stackSelectorPrefab;  //Prefab de la petite fléche qui se met au pied de la tour qu'on selectionne
     public GameObject highlighter; // Curseur permettant de surligner / mettre en valeur des blocks (exemple : lors du traçage de pont ou de la délétion)
     public GameObject bridgeHighlighter;
     public GameObject bridgePreview;
-    
+
+    [Space(5)]
+    [Header("=== SYSTEM ===")]
     public cursorMode selectedMode = cursorMode.Default; //Mode actuel du curseur
-    private GameObject[] activeHighlighters; //Liste contenant plusieurs highlighters actifs
-    private List<GameObject> permanentHighlighter = new List<GameObject>(); 
     public List<GameObject> activeBridgePreviews = new List<GameObject>(); //Liste contenant les preview de pont
-    private GameObject hoveredBlock;
-    [HideInInspector]
-    public bool cursorOnUI = false;
     public bool isBridging = false;
-
-
-    [Header("Scripts")]
-    public TempDrag drag;
-    public TempBlockSelector selector;
-
-    [Space(5)][Header("=== DEBUG ===")][Space(1)]
+    public BlockLink selectedBlock; //Le block selectionné par le joueur
+    [Space(5)]
+    
+    [Header("=== DEBUG ===")]
     public Vector3Int posInTerrain; //Position de la souris sur le terrain
     public Vector3 posInWorld;
-    public BlockLink selectedBlock; //Le block selectionné par le joueur
+    
+    [HideInInspector] public bool cursorOnUI = false;
+    [HideInInspector] public Vector3 sPosition;float dragDelay = 1f;
+    float timer;
+    bool draging;
+    private Vector3Int savedPos;
+
+    private GameObject[] activeHighlighters; //Liste contenant plusieurs highlighters actifs
+    private List<GameObject> permanentHighlighter = new List<GameObject>(); 
+    private GameObject hoveredBlock;
     private GameObject stackSelector; //La petite fléche qui se met au pied de la tour qu'on selectionne
     private GameObject myProjector;
     Terrain terr; //Terrain principal sur lequel le joueur pourra placer des blocs
-    [System.NonSerialized]
-    public bool canSwitchTools = true;
-
     Vector2Int heightmapSize;
+    [System.NonSerialized] public bool canSwitchTools = true;
 
     public void InitializeGameCursor()
     {
@@ -68,22 +69,15 @@ public class CursorManagement : MonoBehaviour
 
     private void Update()
     {
-        if (!GameManager.instance.IsInGame()) {
-            return;
-        }
+        if (!GameManager.instance.IsInGame()){return;}
 
         UpdateCursor();
-        if (EventSystem.current.IsPointerOverGameObject())
-        {
-            cursorOnUI = true;
-        } else
-        {
-            cursorOnUI = false;
-        }
-        if(Input.GetKeyDown(KeyCode.Escape))
-        {
-            switchMode(cursorMode.Default);
-        }
+
+        if(EventSystem.current.IsPointerOverGameObject()){cursorOnUI = true;}
+
+        else{cursorOnUI = false;}
+
+        if(Input.GetKeyDown(KeyCode.Escape)){ switchMode(cursorMode.Default); }
     }
 
     public void switchMode(cursorMode mode)
@@ -91,17 +85,12 @@ public class CursorManagement : MonoBehaviour
         if (canSwitchTools)
         {
             selectedMode = mode;
-            //uiManager.txtMode.text = mode.ToString();
             ClearFeedback();
             ClearPermanentHighlighter();
             selectedBlock = null;
         } 
-        else
-        {
-            GameManager.instance.errorDisplay.ShowError("You can't use that tool right now");
-        }
+        else{GameManager.instance.errorDisplay.ShowError("You can't use that tool right now");}
     }
-
 
     //Place le curseur correctement sur la grille et sur le terrain
     private void UpdateCursor()
@@ -115,18 +104,12 @@ public class CursorManagement : MonoBehaviour
             UpdateMouse(hit);
             UpdateProjector();
 
-            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Block") || hit.collider.gameObject.layer == LayerMask.NameToLayer("StoredBlock") && hoveredBlock != hit.collider.gameObject && !Input.GetMouseButton(0) || Input.GetMouseButtonUp(0))
+            if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Block") || hit.collider.gameObject.layer == LayerMask.NameToLayer("StoredBlock") && hoveredBlock != hit.collider.gameObject && !Input.GetMouseButton(0) || Input.GetMouseButtonUp(0))
             {
                 hoveredBlock = hit.collider.gameObject;
-
                 UpdateFeedback(hit);
             }
-
-            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Terrain"))
-            {
-                UpdateFeedback(hit);
-            }
-
+            if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Terrain")) { UpdateFeedback(hit); }
         }
         else // If the mouse is pointing at nothing
         {
@@ -253,11 +236,14 @@ public class CursorManagement : MonoBehaviour
         {
             switch (selectedMode) {
                 case cursorMode.Default:
-                    BlockLink sBlock = hit.transform.gameObject.GetComponent<BlockLink>();
+                    BlockLink selectedBlock = hit.transform.gameObject.GetComponent<BlockLink>();
                     // Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
-                    drag.StartDrag(sBlock);
+                    StartDrag(selectedBlock);
+                    /*
                     if(!cursorOnUI)
-                        selector.ShowBlock(sBlock);
+                        selector.ShowBlock(selectedBlock);
+                    */
+
                     break;
                 
 
@@ -284,7 +270,7 @@ public class CursorManagement : MonoBehaviour
             {
                 case cursorMode.Default:
                    // Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
-                    drag.DuringDrag(posInTerrain);
+                    DuringDrag(posInTerrain);
                     break;
 
                 case cursorMode.Bridge:
@@ -300,7 +286,7 @@ public class CursorManagement : MonoBehaviour
             switch (selectedMode) {
                 case cursorMode.Default:
                     //   Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
-                    drag.EndDrag(posInTerrain);
+                    EndDrag(posInTerrain);
                     break;
 
                 case cursorMode.Bridge:
@@ -320,7 +306,7 @@ public class CursorManagement : MonoBehaviour
             switch (selectedMode) {
                 case cursorMode.Default:
                     //  Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
-                    drag.CancelDrag();
+                    CancelDrag();
                     break;
 
                 case cursorMode.Bridge:
@@ -581,6 +567,109 @@ public class CursorManagement : MonoBehaviour
     {
         switchMode(cursorMode.Bridge);
     }
+
+
+#region DragAndDrop
+
+    public void StartDrag(BlockLink _block)
+    {
+        if (_block != null)
+        {
+            selectedBlock = _block;
+            sPosition = selectedBlock.transform.position;
+            savedPos = selectedBlock.gridCoordinates;
+            if (selectedBlock.transform.Find("Bridge") != null) {
+                GameManager.instance.gridManagement.DestroyBridge(selectedBlock.transform.Find("Bridge").gameObject);
+            }
+            GameManager.instance.sfxManager.PlaySound("BlockDrag");
+        }
+    }
+
+    public void DuringDrag(Vector3Int _pos)
+    {
+        if(selectedBlock != null)
+        {
+            if(_pos != savedPos)
+            {
+                if(!draging) 
+                {
+                    draging = true;
+                    selectedBlock.collider.enabled = false;
+                }
+                else
+                {
+                    savedPos = _pos;
+                    GameManager.instance.sfxManager.PlaySoundWithRandomParameters("Tick", 1, 1, 0.8f, 1.2f);
+                    selectedBlock.transform.position = new Vector3
+                    (
+                        _pos.x * GameManager.instance.gridManagement.cellSize + GameManager.instance.gridManagement.cellSize * 0.5f,
+                        _pos.y + 0.5f,
+                        _pos.z * GameManager.instance.gridManagement.cellSize + GameManager.instance.gridManagement.cellSize * 0.5f
+                    );
+                }
+            }
+        }
+    }
+
+    public void EndDrag(Vector3Int _pos)
+    {
+        if(selectedBlock != null && draging)
+        {
+            if (GameManager.instance.gridManagement.GetSlotType(_pos,false) == GridManagement.blockType.FREE)
+            {
+                if (selectedBlock.gameObject.layer == LayerMask.NameToLayer("StoredBlock"))
+                {
+                    FindObjectOfType<StorageBay>().DeStoreBlock(selectedBlock.gameObject);
+                }
+                //Play SFX
+                GameManager.instance.sfxManager.PlaySoundLinked("BlockDrop",selectedBlock.gameObject);
+
+                //RESET SOME VALUES OF THE BLOCK THAT ARE RECALCULATED BY THE SYSTEM
+                selectedBlock.currentPower = 0;
+                selectedBlock.CallFlags("BeforeMovingBlock");
+                GameManager.instance.gridManagement.MoveBlock(selectedBlock.gameObject, _pos);
+
+                // Update the all city
+                GameManager.instance.systemManager.UpdateSystem();
+            } 
+            else
+            {
+                //If the cube is dragged on the stocking bay
+                if(GameManager.instance.gridManagement.GetSlotType(_pos, false) == GridManagement.blockType.STORAGE &&  selectedBlock.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
+                {
+                    //Update the grid
+                    GameManager.instance.gridManagement.UpdateBlocks(selectedBlock.gridCoordinates);
+                    selectedBlock.gridCoordinates = new Vector3Int(0, 0, 0);
+                    //Stock the cube in the stocking bay
+                    FindObjectOfType<StorageBay>().StoreBlock(selectedBlock.gameObject);
+                    GameManager.instance.systemManager.UpdateSystem();
+                    selectedBlock.collider.enabled = true;
+                }
+                else
+                {
+                    CancelDrag();
+                }
+            }
+        }
+        if(selectedBlock != null)
+        {            
+            selectedBlock.collider.enabled = true;
+            selectedBlock = null; 
+        }
+        draging = false;
+    }
+
+    public void CancelDrag()
+    {
+        if(selectedBlock != null && draging)
+        {
+            selectedBlock.transform.position = sPosition;
+            selectedBlock.collider.enabled = true;
+            selectedBlock = null;
+            draging = false;
+        }
+    }
+    #endregion
 }
 
 
