@@ -58,6 +58,12 @@ public class BlockLink : MonoBehaviour {
         {
             systemRef = foundSystemRef;
         }
+
+    }
+
+    public void Start()
+    {
+        LoadBlock();
     }
 
     public void Update()
@@ -213,24 +219,27 @@ public class BlockLink : MonoBehaviour {
 			Debug.Log("This block wasn't on this state. You are doing something wrong ?");
 	}
 
-    public void ToggleVisuals()
+    public void ToggleVisuals(bool on)
     {
-        if (blockObject.gameObject.activeSelf == true)
+        if(blockObject != null)
         {
-            blockObject.gameObject.SetActive(false);
-            if (block.consumption != 0)
+            if (!on)
             {
-                unpoweredEffect.SetActive(true);
+                blockObject.gameObject.SetActive(false);
+                if (block.consumption != 0)
+                {
+                    unpoweredEffect.SetActive(true);
+                }
+                unpoweredEffect.SetActive(false);
+                onFireEffect.SetActive(false);
             }
-            unpoweredEffect.SetActive(false);
-            onFireEffect.SetActive(false);
-        }
-        else
-        {
-            blockObject.gameObject.SetActive(true);
-            if (block.consumption != 0)
+            else
             {
-                unpoweredEffect.SetActive(true);
+                blockObject.gameObject.SetActive(true);
+                if (block.consumption != 0)
+                {
+                    unpoweredEffect.SetActive(true);
+                }
             }
         }
     }

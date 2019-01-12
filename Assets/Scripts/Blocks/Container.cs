@@ -2,48 +2,91 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Container : MonoBehaviour {
-    [System.NonSerialized]
-    public BlockLink linkedBlock;
-    public bool isOpened;
-    private Animator myAnimator;
+public class Container : MonoBehaviour 
+{
+    [Header("Referencies")]
+    public Animator myAnimator;
+    public MeshRenderer[] meshRenderers;
+    public MeshRenderer[] iconRenderers;
+    [Header("States")]
+    public bool closed;
     public bool isFalling;
-    private SFXManager sfxManager;
 
+    public Material containerMat;
+    public Material iconMat;
 
-    private void Awake()
+    public BlockLink linkedBlock;
+
+    void Awake()
     {
-        sfxManager = FindObjectOfType<SFXManager>();
-        isFalling = false;
-        myAnimator = GetComponent<Animator>();
+        if(linkedBlock == null) linkedBlock = transform.parent.GetComponent<BlockLink>();
+        if(myAnimator == null) myAnimator = GetComponent<Animator>();
+    }
 
-        // The container usually starts closed
+    void Start()
+    {
+        containerMat = Instantiate(meshRenderers[0].material);
+        foreach(MeshRenderer mr in meshRenderers){ mr.material = containerMat; }
+
+        iconMat = Instantiate(iconRenderers[0].material);
+        foreach(MeshRenderer ic in iconRenderers){ ic.material = iconMat; }
+
+        isFalling = false;
         CloseContainer();
-        linkedBlock = transform.parent.GetComponent<BlockLink>();
+        LoadContainerVisual();
+    }
+
+    void LoadContainerVisual()
+    {
+        Debug.Log("LUL");
+        containerMat.color = GameManager.instance.library.blockContainerColors[linkedBlock.block.ID];
+        //foreach(MeshRenderer mr in meshRenderers){ mr.material = containerMat; }
+
+
+        Sprite sprite = linkedBlock.block.icon;
+        Texture2D croppedTexture = new Texture2D( (int)sprite.rect.width, (int)sprite.rect.height );
+        
+        Color[] pixels = sprite.texture.GetPixels
+        (  
+            (int)sprite.rect.x, 
+            (int)sprite.rect.y, 
+            (int)sprite.rect.width, 
+            (int)sprite.rect.height 
+        );
+
+        croppedTexture.SetPixels( pixels );
+        croppedTexture.Apply();
+
+        iconMat.mainTexture = croppedTexture;
+
     }
 
     public void DropSound()
     {
-        sfxManager.PlaySoundAtPosition("DropContainer",this.transform.position);
+        GameManager.instance.sfxManager.PlaySoundAtPosition("DropContainer",this.transform.position);
         isFalling = false;
-        linkedBlock.collider.enabled = true;
+        //linkedBlock.collider.enabled = true;
     }
 
     public void ShipSound()
     {
-        sfxManager.PlaySoundAtPosition("Ship", this.transform.position + new Vector3(0, 10, 0)); //Joue le son un peu plus haut pour comprendre que le vaisseau se trouve au dessus
+        GameManager.instance.sfxManager.PlaySoundAtPosition("Ship", this.transform.position + new Vector3(0, 10, 0)); //Joue le son un peu plus haut pour comprendre que le vaisseau se trouve au dessus
     }
 
     public void FallingSound()
     {
-        sfxManager.PlaySoundWithRandomParameters("FallingContainer",1,1,0.8f,1.2f);
     }
 
     public void DropBlock()
     {
-        myAnimator.SetTrigger("DropContainer");
         isFalling = true;
-        linkedBlock.collider.enabled = false;
+        //linkedBlock.collider.enabled = false;
+
+        GameManager.instance.sfxManager.PlaySoundWithRandomParameters("FallingContainer",1,1,0.8f,1.2f);
+        linkedBlock.ToggleVisuals(false);
+
+        myAnimator.SetTrigger("Drop");
+
     }
 
     public void InitializeBlock()
@@ -51,25 +94,23 @@ public class Container : MonoBehaviour {
         linkedBlock.LoadBlock();
     }
 
-    public void ToggleBlockVisuals()
-    {
-        linkedBlock.ToggleVisuals();
-    }
-
     public void OpenContainer()
     {
-        isOpened = true;
-        myAnimator.SetBool("ContainerOpened", isOpened);
-        sfxManager.PlaySoundLinked("OpenContainer",this.gameObject);
+        linkedBlock.ToggleVisuals(true);
+        GameManager.instance.sfxManager.PlaySoundLinked("OpenContainer",this.gameObject);
+
+        myAnimator.SetBool("Closed", false);
+
     }
 
     public void CloseContainer()
     {
-        isOpened = false;
-        myAnimator.SetBool("ContainerOpened", isOpened);
+        linkedBlock.ToggleVisuals(false);
+        myAnimator.SetBool("Closed", true);
+
         if (!isFalling)
         {
-            sfxManager.PlaySoundLinked("CloseContainer", this.gameObject);
+            GameManager.instance.sfxManager.PlaySoundLinked("CloseContainer", this.gameObject);
         }
     }
 }
