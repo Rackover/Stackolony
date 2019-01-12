@@ -780,6 +780,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
+        type: 2}
+      propertyPath: skyboxMaterial
+      value: 
+      objectReference: {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea01be967b53135488a2ea289dc47db1, type: 2}
   m_IsPrefabAsset: 0
@@ -2254,7 +2259,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65f9985cb809aa849a1825a5758b6651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 4
+  id: credits
   category: menu
 --- !u!1 &882313645
 GameObject:
@@ -3146,7 +3151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65f9985cb809aa849a1825a5758b6651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 2
+  id: loadGame
   category: menu
 --- !u!1 &1395514374
 GameObject:
@@ -8151,7 +8156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65f9985cb809aa849a1825a5758b6651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 1
+  id: newGame
   category: menu
 --- !u!1 &1582122615
 GameObject:
@@ -8424,7 +8429,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65f9985cb809aa849a1825a5758b6651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 5
+  id: quit
   category: menu
 --- !u!1 &1769562616
 GameObject:
@@ -9573,5 +9578,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65f9985cb809aa849a1825a5758b6651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 3
+  id: options
   category: menu
