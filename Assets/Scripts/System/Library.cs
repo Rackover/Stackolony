@@ -10,6 +10,7 @@ public class Library : MonoBehaviour
 
 	[Space(1)][Header("Blocks")]
 	public Block[] blocks;
+	public Color[] blockContainerColors;
 
 	[Space(1)][Header("Sprites")]
 	public Sprite cursorSprite;
