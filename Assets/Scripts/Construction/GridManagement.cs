@@ -91,6 +91,7 @@ public class GridManagement : MonoBehaviour
     //Update les blocs de toute la tour pour les remettre à leur bonne position
     public void UpdateBlocks(Vector3Int coordinates)
     {
+        Debug.Log("UPDATEBLOCK CALLED");
         if (grid[coordinates.x, coordinates.y, coordinates.z] != null)
         {
             // Removes object from list and destroys the gameObject
@@ -119,6 +120,7 @@ public class GridManagement : MonoBehaviour
             }
         }
     }
+
 
     /// <summary>
     /// Safe function to move a block around.
@@ -150,6 +152,21 @@ public class GridManagement : MonoBehaviour
                 (int)Mathf.Round((position.y - cellSize / 2) / cellSize),
                 (int)Mathf.Round((position.z - cellSize / 2)/cellSize)
         );
+    }
+
+    //Update a block so he touch the ground or the first block encountered (Like if gravity was applied to it)
+    public void LayBlock(BlockLink block)
+    {
+        //Position en Y des coordonnées au sol données
+        float worldY =
+            myTerrain.SampleHeight(
+                IndexToWorldPosition(
+                    //new Vector3Int(blo, 0, coordinates.y)
+                )
+            );
+
+        // Index de Y
+        int y = WorldPositionToIndex(new Vector3(worldY, 0)).x;
     }
 
     /// <summary>
