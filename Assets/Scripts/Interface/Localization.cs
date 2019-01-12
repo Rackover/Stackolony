@@ -12,8 +12,6 @@ public class Localization : MonoBehaviour {
     string currentCategory;
     Dictionary<KeyValuePair<string, string>, string> locs = new Dictionary<KeyValuePair<string, string>, string>();
 
-    public string localizationPath = "LocFiles";
-
     public class Lang {
 
         public Sprite logo { get; }
@@ -35,7 +33,7 @@ public class Localization : MonoBehaviour {
 
     private void Awake()
     {
-        LoadLocalizationFiles(Application.streamingAssetsPath + "/" + localizationPath);
+        LoadLocalizationFiles(Paths.GetLocFolder());
     }
 
     private void Start()

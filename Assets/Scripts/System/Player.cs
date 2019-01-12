@@ -1,15 +1,15 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
 
     public string playerName = "Player";
+    public Options options = new Options();
 
-    public float borderSensitivity;
-    public float rotationSensitivity;
-    public float grabSensitivity;
-    public float driftSensitivity;
-
-
+    private void Awake()
+    {
+        options.LoadFromDisk(Paths.GetOptionsFile());
+    }
 }

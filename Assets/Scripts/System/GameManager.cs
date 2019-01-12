@@ -36,7 +36,6 @@ public class GameManager : MonoBehaviour
     public TooltipGO tooltipGO;
     public BlockInfobox blockInfobox;
     public ErrorDisplay errorDisplay;
-    public OptionsDisplay optionsDisplay;
 
     [Space(1)]
     [Header("DEBUG SETTINGS")]
@@ -74,11 +73,12 @@ public class GameManager : MonoBehaviour
         if (tooltipGO == null) tooltipGO = FindObjectOfType<TooltipGO>();
         if (blockInfobox == null) blockInfobox = FindObjectOfType<BlockInfobox>();
         if (errorDisplay == null) errorDisplay = FindObjectOfType<ErrorDisplay>();
-        if (optionsDisplay == null) optionsDisplay = FindObjectOfType<OptionsDisplay>();
 
         // DEBUG
         if (logger == null) logger = GetComponentInChildren<Logger>();
         if (gridDebugger == null) gridDebugger = FindObjectOfType<GridDebugger>();
+
+        // PATHS
     }
 
     private void Start()
@@ -146,7 +146,7 @@ public class GameManager : MonoBehaviour
     public void Load()
     {
         SceneManager.LoadScene("Game");
-        saveManager.StartCoroutine(saveManager.ReadSaveData(() => saveManager.LoadSaveData(saveManager.loadedData)));
+        //saveManager.StartCoroutine("city", saveManager.ReadSaveData(() => saveManager.LoadSaveData(saveManager.loadedData)));
     }
 
     public void Exit()

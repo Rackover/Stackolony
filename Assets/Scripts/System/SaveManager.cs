@@ -7,7 +7,6 @@ using System.IO;
 public class SaveManager : MonoBehaviour {
 
     public int saveVersion = 1;
-    public string saveName = "city.bin";
     public SaveData loadedData;
 
     ///////////////////////////////
@@ -24,7 +23,7 @@ public class SaveManager : MonoBehaviour {
         // Step 0 - Initialize writer
         Writer writer = new Writer();
 
-        if(!writer.OpenSave(saveName))
+        if(!writer.OpenSave(Paths.GetSaveFile(GameManager.instance.cityManagement.cityName)))
             yield break;
         
         Logger.Info("Saving...");
@@ -83,7 +82,7 @@ public class SaveManager : MonoBehaviour {
     }
 
 
-    public IEnumerator ReadSaveData(System.Action callback = null)
+    public IEnumerator ReadSaveData(string cityName, System.Action callback = null)
     {
         double timeStart = Time.time;
         yield return null;
@@ -91,7 +90,7 @@ public class SaveManager : MonoBehaviour {
         // Step 0 - Initialize reader
         Reader reader = new Reader();
         
-        if(!reader.OpenSave(saveName)) {yield break;}
+        if(!reader.OpenSave(Paths.GetSaveFile(cityName))) {yield break;}
         
         Logger.Info("Reading...");
         SaveData diskSaveData = new SaveData();
@@ -408,20 +407,19 @@ public class SaveManager : MonoBehaviour {
     {
         private BinaryReader br;
 
-        public bool OpenSave(string saveName = "city.bin")
+        public bool OpenSave(string path)
         {
-            string fullPath = Application.persistentDataPath + "/" + saveName;
             try {
-                if(File.Exists(fullPath))
+                if(File.Exists(path))
                 {
-                    br = new BinaryReader(new FileStream(fullPath, FileMode.Open));
+                    br = new BinaryReader(new FileStream(path, FileMode.Open));
                     return true;
                 }
                return false;
                 
             }
             catch (IOException e) {
-                Logger.Error(e.Message + "\n Cannot read file "+ fullPath);
+                Logger.Error(e.Message + "\n Cannot read file "+ path);
                 return false;
             }
         }
@@ -443,25 +441,24 @@ public class SaveManager : MonoBehaviour {
     {
         BinaryWriter bw;
 
-        public bool OpenSave(string saveName = "city.bin")
+        public bool OpenSave(string path)
         {
-            string fullPath = Application.persistentDataPath + "/" + saveName;
             try 
             {
                 
-                if(File.Exists(fullPath)){
-                    if(File.Exists(fullPath + ".backup")){
-                        File.Delete(fullPath + ".backup");
+                if(File.Exists(path)){
+                    if(File.Exists(path + ".backup")){
+                        File.Delete(path + ".backup");
                     }
-                    File.Copy(fullPath, fullPath + ".backup");
+                    File.Copy(path, path + ".backup");
                 }
 
-                bw = new BinaryWriter(new FileStream(fullPath, FileMode.Create));
+                bw = new BinaryWriter(new FileStream(path, FileMode.Create));
                 return true;
             }
             catch (IOException e) 
             {
-                Logger.Error(e.Message + "\n Cannot create file "+ fullPath);
+                Logger.Error(e.Message + "\n Cannot create file "+ path);
                 return false;
             }
         }
@@ -536,19 +533,6 @@ public class SaveManager : MonoBehaviour {
             bw.Close();
         }
     }
-
-    /*
-        List<ShopDisplay> _shoppingList,
-        GameObject[,,] _grid,
-        List<GameObject> _bridgesList,
-        GameObject[,,] _storedBlocks,
-        string _playerName,
-        string _cityName,
-        int _cycleNumber,
-        float _cycleProgression
-    */
-
-    // Debug
     
     void Update()
     {
@@ -556,34 +540,18 @@ public class SaveManager : MonoBehaviour {
             StartCoroutine(WriteSaveData(
                 new SaveData(
                     new GameData(
-                        // (Fake savegame for now)
-                        //new List<ShopDisplay>(), new GameObject[255, 255, 255], new List<GameObject>(), new GameObject[255, 255, 255], "Joueur", "CityVille", 3, 0.2f
-
-                        GameManager.instance.deliveryManagement.shopDisplays,   // SHOP DISPLAY
-                        GameManager.instance.gridManagement.grid,           // STORED BLOCKS
+                        GameManager.instance.deliveryManagement.shopDisplays, 
+                        GameManager.instance.gridManagement.grid,        
                         GameManager.instance.gridManagement.bridgesList,
-                        GameManager.instance.storageBay.storedBlocks,                     
-                        "Joueur",
-                        "CityVille",
+                        GameManager.instance.storageBay.storedBlocks,
+                        GameManager.instance.player.name,
+                        GameManager.instance.cityManagement.cityName,
                         GameManager.instance.temporality.cycleNumber,
                         GameManager.instance.temporality.cycleProgression
                     )
                 )
             ));
         }
-        /*
-        if (Input.GetKeyDown(KeyCode.R)) {
-            StartCoroutine("ReadSaveData");
-        }
-        
-        if (loadedData != null) {
-            Logger.Debug("Data is read, loading.");
-            if (Input.GetKeyDown(KeyCode.L)) {
-                LoadSaveData(loadedData);
-                loadedData = null;
-            }
-        }
-        */
     }
     
 }   

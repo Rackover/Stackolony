@@ -15,6 +15,7 @@ public class CursorDisplay : MonoBehaviour {
     {
         cursorTransform.position = Input.mousePosition;
         ChangeCursor(GameManager.instance.cursorManagement.ToString());
+        transform.SetSiblingIndex(transform.parent.childCount);
     }
 
     public void ChangeCursor(string mode)	

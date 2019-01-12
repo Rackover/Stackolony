@@ -780,11 +780,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-      propertyPath: skyboxMaterial
-      value: 
-      objectReference: {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea01be967b53135488a2ea289dc47db1, type: 2}
   m_IsPrefabAsset: 0
@@ -3272,10 +3267,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalAxis: DriftCameraX
   m_VerticalAxis: DriftCameraY
-  m_SubmitButton: Select
+  m_SubmitButton: Trash
   m_CancelButton: Trash
   m_InputActionsPerSecond: 10
-  m_RepeatDelay: 0.5
+  m_RepeatDelay: 0
   m_ForceModuleActive: 0
 --- !u!114 &1434303543
 MonoBehaviour:
@@ -8684,8 +8679,18 @@ Prefab:
         type: 2}
       propertyPath: optionsWindow
       value: 
-      objectReference: {fileID: 1962522521135758, guid: 21f926c5792f5b147b50800c6a2c9cab,
+      objectReference: {fileID: 1726631559882114, guid: b3f27fb5ad5d3194c8a179a769807f12,
         type: 2}
+    - target: {fileID: 224910163579522488, guid: 45326cec6306571469a2167a50d513df,
+        type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224910163579522488, guid: 45326cec6306571469a2167a50d513df,
+        type: 2}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45326cec6306571469a2167a50d513df, type: 2}
   m_IsPrefabAsset: 0
