@@ -158,15 +158,15 @@ public class GridManagement : MonoBehaviour
     public void LayBlock(BlockLink block)
     {
         //Position en Y des coordonnées au sol données
-        float worldY =
-            myTerrain.SampleHeight(
-                IndexToWorldPosition(
+       // float worldY =
+           // myTerrain.SampleHeight(
+               // IndexToWorldPosition(
                     //new Vector3Int(blo, 0, coordinates.y)
-                )
-            );
+               // )
+           // );
 
         // Index de Y
-        int y = WorldPositionToIndex(new Vector3(worldY, 0)).x;
+      //  int y = WorldPositionToIndex(new Vector3(worldY, 0)).x;
     }
 
     /// <summary>
