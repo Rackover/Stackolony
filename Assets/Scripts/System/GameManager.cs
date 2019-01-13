@@ -105,7 +105,7 @@ public class GameManager : MonoBehaviour
         
         // Reset cursor mode
         if (Input.GetKeyDown(KeyCode.Escape)) {
-            cursorManagement.switchMode(CursorManagement.cursorMode.Default);
+            cursorManagement.SwitchMode(CursorManagement.cursorMode.Default);
         }
 
         // Reset camera

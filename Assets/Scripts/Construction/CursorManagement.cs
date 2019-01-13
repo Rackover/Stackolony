@@ -78,7 +78,7 @@ public class CursorManagement : MonoBehaviour
         else{cursorOnUI = false;}
     }
 
-    public void switchMode(cursorMode mode)
+    public void SwitchMode(cursorMode mode)
     {
         if (canSwitchTools)
         {
@@ -544,26 +544,6 @@ public class CursorManagement : MonoBehaviour
             ClearPermanentHighlighter();
         }
         
-    }
-
-    /// UI FUNCTIONS
-    /// To be fired ONLY from interface buttons
-    /// do NOT use in code
-    public void switchToDragModeFromButton()
-    {
-        switchMode(cursorMode.Default);
-    }
-    public void switchToBuildModeFromButton()
-    {
-        switchMode(cursorMode.Build);
-    }
-    public void switchToDeleteModeFromButton()
-    {
-        switchMode(cursorMode.Delete);
-    }
-    public void switchToBridgeModeFromButton()
-    {
-        switchMode(cursorMode.Bridge);
     }
 
 
