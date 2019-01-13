@@ -53,7 +53,7 @@ public class TemporalityInterface : MonoBehaviour {
     //Met à jour l'afficheur jour/nuit 
     public void UpdateDayNightDisplay(float cycleProgressionInPercent)
     {
-        dayNightDisplay.transform.rotation = Quaternion.Euler(new Vector3(0, 0,90 -(cycleProgressionInPercent * 3.6f)));
+        dayNightDisplay.GetComponent<RectTransform>().rotation = Quaternion.Euler(new Vector3(0, 0, (90 - (cycleProgressionInPercent * 3.6f))%360));
     }
 
 
@@ -61,7 +61,7 @@ public class TemporalityInterface : MonoBehaviour {
     {
         Temporality temporality = GameManager.instance.temporality;
         UpdateCycleText(temporality.GetCycle(), temporality.GetYear());
-        UpdateDayNightDisplay(temporality.cycleProgression);
+        UpdateDayNightDisplay(temporality.GetCurrentCycleProgression());
         yield return new WaitForSeconds(FindObjectOfType<Interface>().refreshRate);
         yield return StartCoroutine(UpdateInterface());
     }

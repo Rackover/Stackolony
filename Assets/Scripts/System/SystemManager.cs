@@ -56,9 +56,9 @@ public class SystemManager : MonoBehaviour {
 
     public void CheckWorkingHours() {
         foreach (WorkingHours workingHour in AllTimeRelatedBlocks) {
-            if (GameManager.instance.temporality.GetCurrentcycleProgression() > workingHour.startHour && workingHour.hasStarted == false) {
+            if (GameManager.instance.temporality.GetCurrentCycleProgression() > workingHour.startHour && workingHour.hasStarted == false) {
                 workingHour.StartWork();
-            } else if (GameManager.instance.temporality.GetCurrentcycleProgression() > workingHour.endHour && workingHour.hasStarted == true) {
+            } else if (GameManager.instance.temporality.GetCurrentCycleProgression() > workingHour.endHour && workingHour.hasStarted == true) {
                 workingHour.EndWork();
             }
         }
