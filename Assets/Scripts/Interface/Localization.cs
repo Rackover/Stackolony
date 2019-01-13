@@ -77,7 +77,7 @@ public class Localization : MonoBehaviour {
             string cat = node.Name;
             foreach (XmlNode subNode in node.ChildNodes) {
                 string id = subNode.Name;
-                Logger.Debug("Added line [" + cat + ":" + subNode+ "]");
+                Logger.Debug("Added line [" + cat + ":" + subNode.Name+ "]");
                 locs[new KeyValuePair<string, string>(cat, id)] = subNode.InnerText;
             }
         }
