@@ -22,6 +22,7 @@ public class CursorManagement : MonoBehaviour
     public List<GameObject> activeBridgePreviews = new List<GameObject>(); //Liste contenant les preview de pont
     public bool isBridging = false;
     public Block selectedBlock; //Le block selectionné par le joueur
+    public int projectorHeight = 10;
     [Space(5)]
     
     [Header("=== DEBUG ===")]
@@ -122,7 +123,7 @@ public class CursorManagement : MonoBehaviour
 
     void UpdatePosition(RaycastHit hit)
     {
-        Vector3 tempCoord = hit.point; //On adapte la position de la souris pour qu'elle corresponde à la taille des cellules
+        Vector3 tempCoord = hit.point + new Vector3(0,GameManager.instance.gridManagement.cellSize.y/2); //On adapte la position de la souris pour qu'elle corresponde à la taille des cellules
 
         //Converti la position pour savoir sur quelle case se trouve la souris
         posInTerrain = GameManager.instance.gridManagement.WorldPositionToIndex(tempCoord);
@@ -138,11 +139,7 @@ public class CursorManagement : MonoBehaviour
             myProjector.GetComponent<Projector>().enabled = true;
         }
         //Met à jour la position du projecteur
-        myProjector.transform.position = new Vector3(
-        posInTerrain.x * GameManager.instance.gridManagement.cellSize.x + (GameManager.instance.gridManagement.cellSize.x / 2),
-        posInTerrain.y + 10,
-        posInTerrain.z * GameManager.instance.gridManagement.cellSize.z + (GameManager.instance.gridManagement.cellSize.z / 2)
-        );
+        myProjector.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(posInTerrain) + new Vector3(0, projectorHeight, 0);
     }
 
     void ClearFeedback()
@@ -207,10 +204,9 @@ public class CursorManagement : MonoBehaviour
                 }
             }
             stackSelector.SetActive(true);
-            stackSelector.transform.position = new Vector3(
-                posInTerrain.x * GameManager.instance.gridManagement.cellSize.x + (GameManager.instance.gridManagement.cellSize.x / 2), 
-                minHeight+0.1f, 
-                posInTerrain.z * GameManager.instance.gridManagement.cellSize.z + (GameManager.instance.gridManagement.cellSize.z / 2));
+            Vector3 stackPosition = GameManager.instance.gridManagement.IndexToWorldPosition(posInTerrain);
+            stackPosition.y = minHeight;
+            stackSelector.transform.position = stackPosition;
         } 
         else
         {
@@ -592,7 +588,6 @@ public class CursorManagement : MonoBehaviour
                     savedPos = _pos;
                     GameManager.instance.sfxManager.PlaySoundWithRandomParameters("Tick", 1, 1, 0.8f, 1.2f);
                     selectedBlock.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(_pos);
-                    Debug.Log(GameManager.instance.gridManagement.IndexToWorldPosition(_pos));
                 }
             }
         }

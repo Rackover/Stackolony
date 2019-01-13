@@ -147,11 +147,12 @@ public class GridManagement : MonoBehaviour
     public Vector3Int WorldPositionToIndex(Vector3 position)
     {
         position -= myTerrain.transform.position;
-        return new Vector3Int(
-                (int)Mathf.Round((position.x  - cellSize.x / 2) / cellSize.x),
-                (int)Mathf.Round(0.01f + (position.y - cellSize.y / 2) / cellSize.y),
-                (int)Mathf.Round((position.z - cellSize.z / 2)/cellSize.z)
+        Vector3Int output = new Vector3Int(
+                (int)Mathf.Round((position.x - cellSize.x / 2) / cellSize.x),
+                (int)Mathf.Round((position.y - cellSize.y / 2) / cellSize.y),
+                (int)Mathf.Round((position.z - cellSize.z / 2) / cellSize.z)
         );
+        return output;
     }
 
     //Update a block so he touch the ground or the first block encountered (Like if gravity was applied to it)
@@ -165,7 +166,7 @@ public class GridManagement : MonoBehaviour
                 )
             );
         // Index de Y
-        int y = WorldPositionToIndex(new Vector3(coordinates.x, worldY, coordinates.y)).y;
+        int y = WorldPositionToIndex(new Vector3(coordinates.x, worldY + cellSize.y/2, coordinates.y)).y;
 
         // Candidate coordinates
         Vector3Int coordinates3 = new Vector3Int(coordinates.x, y, coordinates.y);
