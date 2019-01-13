@@ -12,10 +12,15 @@ public class Paths {
         string file = "options.txt";
         return path + "/" + file;
     }
-    static public string GetSaveFile(string cityName)
+    static public string GetSaveFolder()
     {
         string path = Application.persistentDataPath + "/savegame";
         CreateDirectoryIfNotExists(path);
+        return path;
+    }
+    static public string GetSaveFile(string cityName)
+    {
+        string path = GetSaveFolder();
         string file = cityName + ".bin";
         return path + "/" + file;
     }

@@ -9,6 +9,18 @@ public class SaveManager : MonoBehaviour {
     public int saveVersion = 1;
     public SaveData loadedData;
 
+
+    public bool SaveExists(string cityName = null)
+    {
+        // Returns true if any save exists
+        if (cityName == null) {
+            return Directory.GetFiles(Paths.GetSaveFolder()).Length > 0;
+        }
+
+        // returns true if the specific save exists
+        return File.Exists(Paths.GetSaveFile(cityName));
+    }
+        
     ///////////////////////////////
     /// 
     ///     Main function to write savegame
@@ -80,7 +92,11 @@ public class SaveManager : MonoBehaviour {
         Logger.Info("Done in "+(Time.time-timeStart).ToString("n2")+" seconds");
         yield return true;
     }
-
+    
+    ///
+    ///
+    //////////////////////////////
+    
 
     public IEnumerator ReadSaveData(string cityName, System.Action callback = null)
     {
@@ -173,7 +189,7 @@ public class SaveManager : MonoBehaviour {
     ///
     public void LoadSaveData(SaveData saveData)
     {
-
+        Logger.Debug("Loading save data");
         GridManagement gridMan = GameManager.instance.gridManagement;
 
         // Loading shopping List
@@ -192,6 +208,7 @@ public class SaveManager : MonoBehaviour {
         foreach (KeyValuePair<Vector3Int, BlockSaveData> blockData in saveData.blockGrid) {
             // Todo : Load states aswell
             Vector3Int coords = blockData.Key;
+            Logger.Debug("Spawning block #"+blockData.Value.id+" at position "+blockData.Key.ToString());
             gridMan.SpawnBlock(blockData.Value.id, blockData.Key);
         }
 

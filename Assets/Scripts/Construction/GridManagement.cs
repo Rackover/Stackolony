@@ -38,6 +38,12 @@ public class GridManagement : MonoBehaviour
         if (!gameManager.IsInGame()) {
             return;
         }
+
+        InitializeGridManager();
+    }
+
+    public void InitializeGridManager()
+    {
         //Recuperation du terrain
         if (myTerrain == null) {
             myTerrain = FindObjectOfType<Terrain>();

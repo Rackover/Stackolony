@@ -5,8 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    // Don't make the "inGame" variable public under any circumstance
+    // Don't make any of those variables public under any circumstance
     bool inGame = false;
+    bool isLoading = false;
 
     public Object menuScene;
 
@@ -48,7 +49,52 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
-        instance = this;
+        if (instance == null) {
+            DontDestroyOnLoad(this);
+            instance = this;
+        }
+        else {
+            Destroy(this.gameObject);
+            return;
+        }
+
+        SceneManager.sceneLoaded += delegate { FindAllReferences(); };
+        FindAllReferences();
+    }
+
+    private void Start()
+    {
+        if (menuScene.name != SceneManager.GetActiveScene().name) {
+            StartGame();
+        }
+        else {
+            EndGame();
+        }
+    }
+
+    void Update()
+    {
+        CheckInputs();
+    }
+
+
+    IEnumerator LoadGameScene(System.Action then)
+    {
+        isLoading = true;
+        AsyncOperation load = SceneManager.LoadSceneAsync("Game");
+        while (!load.isDone) {
+            yield return null;
+        }
+        then.Invoke();
+        isLoading = false;
+        yield return true;
+    }
+
+
+    void FindAllReferences()
+    {
+        Debug.Log("Finding all references in scene " + SceneManager.GetActiveScene().name);
+
         // SYSTEM
         if (temporality == null) temporality = GetComponentInChildren<Temporality>();
         if (flagReader == null) flagReader = GetComponentInChildren<FlagReader>();
@@ -57,10 +103,10 @@ public class GameManager : MonoBehaviour
         if (systemManager == null) systemManager = GetComponentInChildren<SystemManager>();
         if (cityManagement == null) cityManagement = GetComponentInChildren<CityManagement>();
         if (missionManager == null) missionManager = GetComponentInChildren<MissionManager>();
-        if (cursorManagement == null) cursorManagement = FindObjectOfType<CursorManagement>();
+        if (cursorManagement == null) cursorManagement = GetComponentInChildren<CursorManagement>();
         if (gridManagement == null) gridManagement = GetComponentInChildren<GridManagement>();
-        if (storageBay == null) storageBay = FindObjectOfType<StorageBay>();
-        if (populationManager == null) populationManager = FindObjectOfType<PopulationManager>();
+        if (storageBay == null) storageBay = GetComponentInChildren<StorageBay>();
+        if (populationManager == null) populationManager = GetComponentInChildren<PopulationManager>();
         if (saveManager == null) saveManager = GetComponentInChildren<SaveManager>();
 
         // INTERFACE
@@ -77,23 +123,6 @@ public class GameManager : MonoBehaviour
         // DEBUG
         if (logger == null) logger = GetComponentInChildren<Logger>();
         if (gridDebugger == null) gridDebugger = FindObjectOfType<GridDebugger>();
-
-        // PATHS
-    }
-
-    private void Start()
-    {
-        if (menuScene.name != SceneManager.GetActiveScene().name) {
-            StartGame();
-        }
-        else {
-            EndGame();
-        }
-    }
-
-    void Update()
-    {
-        CheckInputs();
     }
 
     void CheckInputs()
@@ -159,14 +188,21 @@ public class GameManager : MonoBehaviour
 
     }
 
+
     public bool IsInGame()
     {
         return inGame;
     }
 
+    public bool IsLoading()
+    {
+        return isLoading;
+    }
+
+    // Interface functions
     public void StartGame()
     {
-        // Initialize game interfaces
+        // Initialize and shut down
         storageBay.gameObject.GetComponent<MeshRenderer>().enabled = true;
         GameInterfaces gi = FindObjectOfType<GameInterfaces>();
         if (gi != null) {
@@ -176,12 +212,16 @@ public class GameManager : MonoBehaviour
         cursorManagement.InitializeGameCursor();
         temporality.timeScale = 0;
 
+        // Initialize only
+        gridManagement.InitializeGridManager();
+
+        // Ingame switch
         inGame = true;
     }
 
     public void EndGame()
     {
-        // Shut down game interfaces
+        // Initialize and shut down
         storageBay.gameObject.GetComponent<MeshRenderer>().enabled = false;
         GameInterfaces gi = FindObjectOfType<GameInterfaces>();
         if (gi != null) {
@@ -191,20 +231,31 @@ public class GameManager : MonoBehaviour
         cursorManagement.KillGameCursor();
         temporality.timeScale = 2;
 
+        // Ingame switch
         inGame = false;
     }
 
 
-    public void NewGame(){
-        SceneManager.LoadScene("Game");
+    public void NewGame()
+    {
+        StartCoroutine(LoadGameScene(delegate { StartGame(); }));
     }
 
     public void Load()
     {
-        SceneManager.LoadScene("Game");
-        //saveManager.StartCoroutine("city", saveManager.ReadSaveData(() => saveManager.LoadSaveData(saveManager.loadedData)));
+        StartCoroutine(
+            LoadGameScene(delegate {
+                StartGame();
+                saveManager.StartCoroutine(
+                    saveManager.ReadSaveData(
+                        cityManagement.cityName,
+                        () => saveManager.LoadSaveData(saveManager.loadedData)
+                    )
+                );
+            })
+        );
+        
     }
-
     public void Exit()
     {
         Application.Quit();
