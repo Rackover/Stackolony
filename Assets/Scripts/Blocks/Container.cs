@@ -13,22 +13,17 @@ public class Container : MonoBehaviour
     public bool closed;
     public bool isFalling;
 
-
-
     public Block linkedBlock;
 
     Material containerMat;
     Material iconMat;
-    public Color oColor; // Original color;
-    public Color cColor; // Current color;
+    Color oColor; // Original color;
+    Color cColor; // Current color;
 
     void Awake()
     {
         if(linkedBlock == null) linkedBlock = transform.parent.GetComponent<Block>();
         if(myAnimator == null) myAnimator = GetComponent<Animator>();
-
-
-
     }
 
     void Start()
