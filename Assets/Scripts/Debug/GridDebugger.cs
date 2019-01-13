@@ -198,7 +198,7 @@ public class GridDebugger : MonoBehaviour {
                         case "Bridge":
                             return Instantiate(debugCellBridge);
                         default:
-                            if (foundObject.layer == LayerMask.NameToLayer("BlockScheme"))
+                            if (foundObject.layer == LayerMask.NameToLayer("Block"))
                             {
                                 return Instantiate(debugCellCube);
                             }

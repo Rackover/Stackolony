@@ -99,7 +99,6 @@ public class Container : MonoBehaviour
         GameManager.instance.sfxManager.PlaySoundWithRandomParameters("FallingContainer",1,1,0.8f,1.2f);
         linkedBlock.ToggleVisuals(false);
         myAnimator.SetTrigger("Drop");
-        Debug.Log("Drop");
     }
 
     public void InitializeBlock()

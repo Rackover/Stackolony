@@ -104,7 +104,7 @@ public class CursorManagement : MonoBehaviour
             UpdateMouse(hit);
             UpdateProjector();
 
-            if(hit.collider.gameObject.layer == LayerMask.NameToLayer("BlockScheme") || hit.collider.gameObject.layer == LayerMask.NameToLayer("StoredBlock") && hoveredBlock != hit.collider.gameObject && !Input.GetMouseButton(0) || Input.GetMouseButtonUp(0))
+            if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Block") || hit.collider.gameObject.layer == LayerMask.NameToLayer("StoredBlock") && hoveredBlock != hit.collider.gameObject && !Input.GetMouseButton(0) || Input.GetMouseButtonUp(0))
             {
                 hoveredBlock = hit.collider.gameObject;
                 UpdateFeedback(hit);
@@ -151,7 +151,7 @@ public class CursorManagement : MonoBehaviour
     void UpdateFeedback(RaycastHit hit)
     {
         // Highlighting block the cursor currently is on if we're in Bridge mode
-        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("BlockScheme")) 
+        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Block")) 
         {
             if (selectedMode == cursorMode.Delete) 
             {
@@ -248,8 +248,7 @@ public class CursorManagement : MonoBehaviour
         }
 
         // Mouse click hold
-        if(Input.GetButton("Select"))
-        {
+        if(Input.GetButton("Select")) {
             switch (selectedMode) 
             {
                 case cursorMode.Default:
@@ -258,7 +257,7 @@ public class CursorManagement : MonoBehaviour
                     break;
 
                 case cursorMode.Bridge:
-                    if (!isBridging && hit.transform.gameObject.layer == LayerMask.NameToLayer("BlockScheme") ){
+                    if (!isBridging && hit.transform.gameObject.layer == LayerMask.NameToLayer("Block") ) {
                         StartPlanningBridge(hit.transform.gameObject);
                     }
                     break;
@@ -276,7 +275,6 @@ public class CursorManagement : MonoBehaviour
                 case cursorMode.Bridge:
                     if (isBridging) {
                         isBridging = false;
-                        Debug.Log("Made bridge !");
                         TryToMakeBridge(hit.transform.gameObject);
                         CancelPotentialBridge();
                     }
@@ -330,7 +328,7 @@ public class CursorManagement : MonoBehaviour
             highlighter.transform.position = block.transform.position;
             highlighter.transform.SetParent(block.transform);
         }
-        else {
+        else if (highlighter){
             highlighter.SetActive(false);
         }
     }
