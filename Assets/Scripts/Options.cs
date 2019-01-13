@@ -28,6 +28,7 @@ public class Options
             defaultValue = def;
             minValue = min;
             maxValue = max;
+            value = defaultValue;
         }
 
         public void Set(float val)
@@ -62,6 +63,7 @@ public class Options
         public CheckboxOption(bool def)
         {
             defaultValue = def;
+            value = defaultValue;
         }
 
         public void Set(bool val)
@@ -90,6 +92,8 @@ public class Options
         options["borderSensivity"] = new SliderOption(6f, 15f, 50f);
         options["rotationSensitivity"] = new SliderOption(0.2f, 1f, 5f);
         options["grabSensitivity"] = new SliderOption(0.1f, 0.8f, 2f);
+        options["musicVolume"] = new SliderOption(0f, 1f, 1f);
+        options["bgsVolume"] = new SliderOption(0f, 0.2f, 1f);
 
         options["enableDrifting"] = new CheckboxOption(true);
     }
