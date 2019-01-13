@@ -109,7 +109,7 @@ public class StorageBay : MonoBehaviour {
 
     private bool CanBePlaced(Vector3 positionToCompare) //Compare toutes les positions du bloc avec la position ou se trouve la souris pour savoir si le bloc est plaçable
     {
-        positionToCompare -= new Vector3(0,GameManager.instance.gridManagement.cellSize.y/2,0);
+        positionToCompare -= new Vector3(0,GameManager.instance.gridManagement.cellSize.y/2,0); //Le système place les blocs à une demi case de hauteur, donc on retire cette demi case pour pouvoir se placer au sol
         foreach (GameObject t in slots)
         {
             if(gameManager.gridManagement.myTerrain.SampleHeight(t.transform.position) < (positionToCompare.y - flexibility) || Terrain.activeTerrain.SampleHeight(t.transform.position) > (positionToCompare.y + flexibility))

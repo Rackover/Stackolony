@@ -36,7 +36,7 @@ public class GridManagement : MonoBehaviour
         gameManager = FindObjectOfType<GameManager>();
 
         if (!gameManager.IsInGame()) {
-           // return;
+            return;
         }
         //Recuperation du terrain
         if (myTerrain == null) {
