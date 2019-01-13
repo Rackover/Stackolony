@@ -21,7 +21,8 @@ public class EnvironmentalFX : MonoBehaviour {
 
         if (directionalLight == null) {
             bool found = FindDirectionalLight();
-            
+            RenderSettings.sun = directionalLight.GetComponent<Light>();
+
             if (!found) {
                 Logger.Throw("Could not find a directional light for the temporality. Aborting.");
             }
@@ -49,13 +50,13 @@ public class EnvironmentalFX : MonoBehaviour {
     public void UpdateLights(float cycleProgressionInPercent)
     {
         directionalLight.transform.rotation = Quaternion.Euler(new Vector3((3.6f * (float)cycleProgressionInPercent), 30, 0));
+        directionalLight.GetComponent<Light>().color = skyboxVariation.Evaluate(cycleProgressionInPercent / 100f);
     }
 
     //Met à jour la skybox en fonction de l'avancement du cycle
     public void UpdateSkybox(float cycleProgressionInPercent)
     {
         skyboxMaterial.SetColor("_Tint", skyboxVariation.Evaluate(cycleProgressionInPercent / 100f));
-        DynamicGI.UpdateEnvironment();
     }
 
     //Met à jour la fog selon la couleur du ciel
@@ -77,6 +78,7 @@ public class EnvironmentalFX : MonoBehaviour {
         UpdateLights(temp.GetCurrentCycleProgression());
         UpdateFog(temp.GetCurrentCycleProgression());
         UpdateSkybox(temp.GetCurrentCycleProgression());
+        DynamicGI.UpdateEnvironment();
         yield return new WaitForSeconds(refreshRate);
         yield return UpdateEnvironmentalFX();
     }

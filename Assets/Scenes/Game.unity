@@ -23,10 +23,10 @@ RenderSettings:
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
-  m_AmbientIntensity: 1
+  m_AmbientIntensity: 0.52
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: 966766f4829d6ad419eaaf7cf0712f85, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 65e5c642bb192da4ba95c4d7fcb1a418, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -37,8 +37,8 @@ RenderSettings:
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
-  m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4487278, g: 0.0074856086, b: 0.001029015, a: 1}
+  m_Sun: {fileID: 83595989}
+  m_IndirectSpecularColor: {r: 0.047210716, g: 0.018066445, b: 0.5581066, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -509,12 +509,12 @@ Prefab:
     - target: {fileID: 114803675710027766, guid: 45326cec6306571469a2167a50d513df,
         type: 2}
       propertyPath: m_havePropertiesChanged
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114803675710027766, guid: 45326cec6306571469a2167a50d513df,
         type: 2}
       propertyPath: m_isInputParsingRequired
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1348657757237122, guid: 45326cec6306571469a2167a50d513df, type: 2}
       propertyPath: m_IsActive
@@ -531,6 +531,31 @@ Prefab:
       value: 
       objectReference: {fileID: 1726631559882114, guid: b3f27fb5ad5d3194c8a179a769807f12,
         type: 2}
+    - target: {fileID: 224318771267256384, guid: 45326cec6306571469a2167a50d513df,
+        type: 2}
+      propertyPath: m_AnchorMin.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224318771267256384, guid: 45326cec6306571469a2167a50d513df,
+        type: 2}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224318771267256384, guid: 45326cec6306571469a2167a50d513df,
+        type: 2}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.000061035156
+      objectReference: {fileID: 0}
+    - target: {fileID: 224318771267256384, guid: 45326cec6306571469a2167a50d513df,
+        type: 2}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224318771267256384, guid: 45326cec6306571469a2167a50d513df,
+        type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 600
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45326cec6306571469a2167a50d513df, type: 2}
   m_IsPrefabAsset: 0
@@ -822,6 +847,11 @@ Prefab:
       propertyPath: DEBUG_MODE
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
+        type: 2}
+      propertyPath: skyboxMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 87323bcb35246374883b1cc089091bda, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea01be967b53135488a2ea289dc47db1, type: 2}
   m_IsPrefabAsset: 0
@@ -1535,6 +1565,74 @@ Prefab:
     - target: {fileID: 4383970065660344, guid: 325b8ca7721be9b4aa95e403b60952f0, type: 2}
       propertyPath: m_LocalScale.z
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 1930715674976774, guid: 325b8ca7721be9b4aa95e403b60952f0, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1414155279074538, guid: 325b8ca7721be9b4aa95e403b60952f0, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1919721813199914, guid: 325b8ca7721be9b4aa95e403b60952f0, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1685336813903034, guid: 325b8ca7721be9b4aa95e403b60952f0, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1531596609127736, guid: 325b8ca7721be9b4aa95e403b60952f0, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1523899621699674, guid: 325b8ca7721be9b4aa95e403b60952f0, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1175151544133208, guid: 325b8ca7721be9b4aa95e403b60952f0, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 108728762170762160, guid: 325b8ca7721be9b4aa95e403b60952f0,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 108098773676041220, guid: 325b8ca7721be9b4aa95e403b60952f0,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 108232512171753614, guid: 325b8ca7721be9b4aa95e403b60952f0,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 108102294476007436, guid: 325b8ca7721be9b4aa95e403b60952f0,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 108220632626244458, guid: 325b8ca7721be9b4aa95e403b60952f0,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 108612627597867494, guid: 325b8ca7721be9b4aa95e403b60952f0,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 108309816502180220, guid: 325b8ca7721be9b4aa95e403b60952f0,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 23733073231106606, guid: 325b8ca7721be9b4aa95e403b60952f0,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 325b8ca7721be9b4aa95e403b60952f0, type: 2}
