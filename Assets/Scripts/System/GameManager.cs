@@ -111,7 +111,7 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         // Initialize game interfaces
-        storageBay.gameObject.GetComponent<MeshRenderer>().enabled = true;
+        storageBay.transform.Find("Visuals").GetComponent<MeshRenderer>().enabled = true;
         GameInterfaces gi = FindObjectOfType<GameInterfaces>();
         if (gi != null) {
             gi.gameObject.SetActive(true);
