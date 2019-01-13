@@ -78,11 +78,9 @@ public class CursorManagement : MonoBehaviour
         if(EventSystem.current.IsPointerOverGameObject()){cursorOnUI = true;}
 
         else{cursorOnUI = false;}
-
-        if(Input.GetKeyDown(KeyCode.Escape)){ switchMode(cursorMode.Default); }
     }
 
-    public void switchMode(cursorMode mode)
+    public void SwitchMode(cursorMode mode)
     {
         if (canSwitchTools)
         {
@@ -532,26 +530,6 @@ public class CursorManagement : MonoBehaviour
             ClearPermanentHighlighter();
         }
         
-    }
-
-    /// UI FUNCTIONS
-    /// To be fired ONLY from interface buttons
-    /// do NOT use in code
-    public void switchToDragModeFromButton()
-    {
-        switchMode(cursorMode.Default);
-    }
-    public void switchToBuildModeFromButton()
-    {
-        switchMode(cursorMode.Build);
-    }
-    public void switchToDeleteModeFromButton()
-    {
-        switchMode(cursorMode.Delete);
-    }
-    public void switchToBridgeModeFromButton()
-    {
-        switchMode(cursorMode.Bridge);
     }
 
 

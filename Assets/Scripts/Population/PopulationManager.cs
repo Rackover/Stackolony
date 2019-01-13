@@ -17,16 +17,7 @@ public class PopulationManager : MonoBehaviour {
         public House habitation;
         public bool jobless = true;
     }
-
-    //USED FOR DEBUG ONLY
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            AutoHouseCitizen(SpawnCitizen(populationTypeList[0]));
-        }
-    }
-
+    
     void Start()
     {
         foreach(Population pop in populationTypeList) {

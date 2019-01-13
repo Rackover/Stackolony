@@ -20,15 +20,8 @@ public class EnvironmentalFX : MonoBehaviour {
         RenderSettings.skybox = skyboxMaterial;
 
         if (directionalLight == null) {
-            Light[] lights = FindObjectsOfType<Light>();
-            bool found = false;
-            foreach (Light light in lights) {
-                if (light.type == LightType.Directional) {
-                    directionalLight = light.gameObject;
-                    found = true;
-                    break;
-                }
-            }
+            bool found = FindDirectionalLight();
+            
             if (!found) {
                 Logger.Throw("Could not find a directional light for the temporality. Aborting.");
             }
@@ -38,6 +31,18 @@ public class EnvironmentalFX : MonoBehaviour {
     private void Start()
     {
         StartCoroutine(UpdateEnvironmentalFX());
+    }
+
+    bool FindDirectionalLight()
+    {
+        Light[] lights = FindObjectsOfType<Light>();
+        foreach (Light light in lights) {
+            if (light.type == LightType.Directional) {
+                directionalLight = light.gameObject;
+                return true;
+            }
+        }
+        return false;
     }
 
     //Met à jour les lumières en fonction de l'avancement du cycle
@@ -62,10 +67,16 @@ public class EnvironmentalFX : MonoBehaviour {
 
     IEnumerator UpdateEnvironmentalFX()
     {
+        if (directionalLight == null) {
+            if (!FindDirectionalLight()) {
+                yield return false;
+            }
+        }
+
         Temporality temp = GameManager.instance.temporality;
-        UpdateLights(temp.GetCurrentcycleProgression());
-        UpdateFog(temp.GetCurrentcycleProgression());
-        UpdateSkybox(temp.GetCurrentcycleProgression());
+        UpdateLights(temp.GetCurrentCycleProgression());
+        UpdateFog(temp.GetCurrentCycleProgression());
+        UpdateSkybox(temp.GetCurrentCycleProgression());
         yield return new WaitForSeconds(refreshRate);
         yield return UpdateEnvironmentalFX();
     }

@@ -4,9 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class DeliveryManagement : MonoBehaviour {
-
-    public GameManager gameManager;
-
+    
     [Header("=== SETTINGS ===")]
     public int complexityMax = 10;
 
@@ -24,7 +22,6 @@ public class DeliveryManagement : MonoBehaviour {
 
     public void Start()
     {
-        gameManager = FindObjectOfType<GameManager>();
         complexity = 0;
         shopDisplays = new List<ShopDisplay>();
         //complexitySlider.value = 0;
@@ -69,10 +66,16 @@ public class DeliveryManagement : MonoBehaviour {
     //Genere les blocs achetable
     public void InitShop()
     {
-        foreach (BlockScheme block in gameManager.library.blocks)
+        foreach (BlockScheme block in GameManager.instance.library.blocks)
         {
             GameObject newBlockDisplay = Instantiate(blockDisplayPrefab, shopPanelRegular);
-            newBlockDisplay.name = "Display " + block.title;
+            try {
+                newBlockDisplay.name = "Display " + block.title;
+            }
+            catch(System.NullReferenceException e) {
+                Debug.LogError("An error occured while initializing the shop. Check that the GAME MANAGER LIBRARY is loaded correctly.");
+                UnityEditor.EditorApplication.isPlaying = false;
+            }
 
             ShopDisplay newBlockSettings = newBlockDisplay.GetComponent<ShopDisplay>();
             shopDisplays.Add(newBlockSettings);
@@ -92,7 +95,7 @@ public class DeliveryManagement : MonoBehaviour {
             if (quantityAsked > 0) {
                 for (int i = 0; i < quantityAsked; i++)
                 {
-                    gameManager.storageBay.DeliverBlock(blocks.myBlock);
+                    GameManager.instance.storageBay.DeliverBlock(blocks.myBlock);
                     blocks.DecreaseQuantity();
                 }
             }

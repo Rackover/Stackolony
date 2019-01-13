@@ -23,7 +23,7 @@ public class Options
         public float maxValue { get; }
         public float value;
 
-        public SliderOption(float def, float min, float max)
+        public SliderOption(float min, float def, float max)
         {
             defaultValue = def;
             minValue = min;
@@ -87,10 +87,9 @@ public class Options
 
     public Options()
     {
-        options["borderSensivity"] = new SliderOption(1f, 10f, 15f);
-        options["rotationSensitivity"] = new SliderOption(1f, 2f, 5f);
-        options["grabSensitivity"] = new SliderOption(1f, 20f, 100f);
-        options["driftSensitivity"] = new SliderOption(1f, 3f, 5f);
+        options["borderSensivity"] = new SliderOption(6f, 15f, 50f);
+        options["rotationSensitivity"] = new SliderOption(0.2f, 1f, 5f);
+        options["grabSensitivity"] = new SliderOption(0.1f, 0.8f, 2f);
 
         options["enableDrifting"] = new CheckboxOption(true);
     }
@@ -108,7 +107,22 @@ public class Options
     {
         return options;
     }
-    
+
+    public IOption Get(string key)
+    {
+        return options[key];
+    }
+
+    public float GetFloat(string key)
+    {
+        return ((SliderOption)options[key]).value;
+    }
+
+    public bool GetBool(string key)
+    {
+        return ((CheckboxOption)options[key]).value;
+    }
+
     void LoadFromString(string data)
     {
         string[] lines = data.Split('\n');
@@ -117,7 +131,12 @@ public class Options
             if (option.Length < 2) {
                 continue;
             }
-            options[option[0]].SetFromString(option[1]);
+            try {
+                options[option[0]].SetFromString(option[1]);
+            }
+            catch(KeyNotFoundException e) {
+                // garbage option, skipping
+            }
         }
     }
 
@@ -127,7 +146,7 @@ public class Options
             File.Delete(path);
         }
         File.WriteAllText(path, ToString());
-        Logger.Debug("Successfully wrote options file to [" + path + "]");
+        Logger.Info("Successfully wrote options file to [" + path + "]");
     }
 
     public void LoadFromDisk(string path)

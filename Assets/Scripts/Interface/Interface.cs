@@ -16,6 +16,7 @@ public class Interface : MonoBehaviour {
     [Space(1)]
     public GameObject optionsWindow;
     public GameObject creditsWindow;
+    public GameObject pauseWindow;
 
     public void ChangeCursor(string mode)	
 	{
@@ -49,5 +50,10 @@ public class Interface : MonoBehaviour {
     public void SpawnCreditsWindow()
     {
         Instantiate(creditsWindow, this.transform);
+    }
+
+    public void SpawnPauseWindow()
+    {
+        Instantiate(pauseWindow, this.transform);
     }
 }
