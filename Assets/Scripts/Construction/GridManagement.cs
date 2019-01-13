@@ -10,7 +10,7 @@ public class GridManagement : MonoBehaviour
     [Header("=== MAP SETTINGS ===")][Space(1)]
     [Tooltip("Quelle taille font les cellules en X Y et Z")] public Vector3 cellSize;
     [Tooltip("Quelle hauteur max pour les tours")] public int maxHeight;
-    [Tooltip("Hauteur de la lave")] public GameObject lavaPlane;
+    [Tooltip("Hauteur minimale pour construire")] public int minHeight;
     [Header("=== PREFABS ===")][Space(1)]
     [Header("Bridge")]
     [Tooltip("Prefab du pont, de la taille (cellSize)")] public GameObject bridgePrefab;
@@ -28,9 +28,6 @@ public class GridManagement : MonoBehaviour
     public Terrain myTerrain; //Terrain sur lequel la grille doit être generée
     public Vector3Int gridSize; //Nombre de cases sur le terrain
     private GameObject gridGameObject; //GameObject contenant la grille
-
-    [HideInInspector]
-    public int lavaHeight; //Hauteur de la lave
     
     public enum blockType{ FREE = 0, STORAGE = 1, BRIDGE = 2}
 
@@ -52,13 +49,6 @@ public class GridManagement : MonoBehaviour
         gridSize.y = maxHeight;
 
         GenerateGrid();
-
-        CalculateLavaHeight();
-    }
-
-    private void CalculateLavaHeight()
-    {
-        lavaHeight = WorldPositionToIndex(lavaPlane.transform.position).y;
     }
 
     private void GenerateGrid() //Fonction pour générer la grille sur le terrain
@@ -159,7 +149,7 @@ public class GridManagement : MonoBehaviour
         position -= myTerrain.transform.position;
         return new Vector3Int(
                 (int)Mathf.Round((position.x  - cellSize.x / 2) / cellSize.x),
-                (int)Mathf.Round(position.y / cellSize.y),
+                (int)Mathf.Round(0.01f + (position.y - cellSize.y / 2) / cellSize.y),
                 (int)Mathf.Round((position.z - cellSize.z / 2)/cellSize.z)
         );
     }

@@ -263,20 +263,14 @@ public class Block : MonoBehaviour {
         while (elapsedTime < time)
         {
             transform.position = Vector3.Lerp(
-                startingPos, 
-                new Vector3(
-                    gridCoordinates.x * gridManager.cellSize.x + 0.5f * gridManager.cellSize.x, 
-                    0.5f + gridCoordinates.y, 
-                    gridCoordinates.z * gridManager.cellSize.z + 0.5f * gridManager.cellSize.z),
+                startingPos,
+                gridManager.IndexToWorldPosition(gridCoordinates),
                 elapsedTime / time
             );
             elapsedTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
-        transform.position = new Vector3(
-        gridCoordinates.x * gridManager.cellSize.x + 0.5f * gridManager.cellSize.x,
-        0.5f + gridCoordinates.y,
-        gridCoordinates.z * gridManager.cellSize.z + 0.5f * gridManager.cellSize.z);
+        transform.position = gridManager.IndexToWorldPosition(gridCoordinates);
         yield return null;
     }
 

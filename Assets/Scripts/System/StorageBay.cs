@@ -43,21 +43,12 @@ public class StorageBay : MonoBehaviour {
 
         if (!isPlaced)
         {
-            // cursor.posInTerrain += new Vector3Int(1, 0, 1);
-            transform.position = new Vector3
-                (
-                    (gameManager.cursorManagement.posInTerrain.x) * gameManager.gridManagement.cellSize.x,
-                    gameManager.cursorManagement.posInTerrain.y + storageBayHeight,
-                    (gameManager.cursorManagement.posInTerrain.z) * gameManager.gridManagement.cellSize.z
-                );
+            transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(gameManager.cursorManagement.posInTerrain);
             if (Input.GetMouseButtonDown(0))
             {
-                Vector3 cursorPosition = new Vector3
-                (
-                    (gameManager.cursorManagement.posInTerrain.x) * gameManager.gridManagement.cellSize.x + gameManager.gridManagement.cellSize.x * 0.5f,
-                    (gameManager.cursorManagement.posInTerrain.y) * gameManager.gridManagement.cellSize.y + storageBayHeight,
-                    (gameManager.cursorManagement.posInTerrain.z) * gameManager.gridManagement.cellSize.z + gameManager.gridManagement.cellSize.z * 0.5f
-                );
+                Vector3 cursorPosition = GameManager.instance.gridManagement.IndexToWorldPosition(gameManager.cursorManagement.posInTerrain);
+              //  cursorPosition += new Vector3(0, storageBayHeight, 0);
+
                 if (CanBePlaced(cursorPosition))
                 {
                     PlaceBay(gameManager.cursorManagement.posInTerrain);
@@ -66,11 +57,6 @@ public class StorageBay : MonoBehaviour {
                 {
                     gameManager.errorDisplay.ShowError("You can't place it here");
                 }
-            }
-        } else
-        {
-            if (Input.GetKeyDown(KeyCode.U)) {
-                GenerateBlock();
             }
         }
     }
@@ -123,6 +109,7 @@ public class StorageBay : MonoBehaviour {
 
     private bool CanBePlaced(Vector3 positionToCompare) //Compare toutes les positions du bloc avec la position ou se trouve la souris pour savoir si le bloc est plaçable
     {
+        positionToCompare -= new Vector3(0,GameManager.instance.gridManagement.cellSize.y/2,0);
         foreach (GameObject t in slots)
         {
             if(gameManager.gridManagement.myTerrain.SampleHeight(t.transform.position) < (positionToCompare.y - flexibility) || Terrain.activeTerrain.SampleHeight(t.transform.position) > (positionToCompare.y + flexibility))

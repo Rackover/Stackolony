@@ -49,7 +49,8 @@ public class CursorManagement : MonoBehaviour
         //Instantie un projecteur de selection qui se clamp sur les cellules de la grille
         myProjector = Instantiate(projectorPrefab);
         myProjector.name = "Projector";
-        myProjector.GetComponent<Projector>().orthographicSize = 2.5f * GameManager.instance.gridManagement.cellSize.x; //On adapte la taille du projecteur (qui projette la grille au sol) à la taille des cellules
+        float cellMedianSize = (GameManager.instance.gridManagement.cellSize.x + GameManager.instance.gridManagement.cellSize.z) / 2;
+        myProjector.GetComponent<Projector>().orthographicSize = 2.5f * cellMedianSize; //On adapte la taille du projecteur (qui projette la grille au sol) à la taille des cellules
         myProjector.GetComponent<Projector>().enabled = false;
 
         //Instantie la fleche qui indique la tour selectionnée par le joueur
@@ -122,20 +123,9 @@ public class CursorManagement : MonoBehaviour
     void UpdatePosition(RaycastHit hit)
     {
         Vector3 tempCoord = hit.point; //On adapte la position de la souris pour qu'elle corresponde à la taille des cellules
-        Vector3 coord = new Vector3(
-            tempCoord.x / GameManager.instance.gridManagement.cellSize.x,
-            tempCoord.y, //La taille en y n'est pas dépendante de la taille des cellules, elle vaudra toujours 1
-            tempCoord.z / GameManager.instance.gridManagement.cellSize.z
-        );
 
         //Converti la position pour savoir sur quelle case se trouve la souris
-        posInTerrain = new Vector3Int(
-            Mathf.FloorToInt(coord.x),
-            Mathf.FloorToInt(coord.y + 0.01f),
-            Mathf.FloorToInt(coord.z)
-        );
-
-        posInWorld = coord * GameManager.instance.gridManagement.cellSize.x;
+        posInTerrain = GameManager.instance.gridManagement.WorldPositionToIndex(tempCoord);
     }
 
     void UpdateProjector()
@@ -601,12 +591,8 @@ public class CursorManagement : MonoBehaviour
                 {
                     savedPos = _pos;
                     GameManager.instance.sfxManager.PlaySoundWithRandomParameters("Tick", 1, 1, 0.8f, 1.2f);
-                    selectedBlock.transform.position = new Vector3
-                    (
-                        _pos.x * GameManager.instance.gridManagement.cellSize.x + GameManager.instance.gridManagement.cellSize.x * 0.5f,
-                        _pos.y + 0.5f,
-                        _pos.z * GameManager.instance.gridManagement.cellSize.z + GameManager.instance.gridManagement.cellSize.z * 0.5f
-                    );
+                    selectedBlock.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(_pos);
+                    Debug.Log(GameManager.instance.gridManagement.IndexToWorldPosition(_pos));
                 }
             }
         }
@@ -616,7 +602,7 @@ public class CursorManagement : MonoBehaviour
     {
         if(selectedBlock != null && draging)
         {
-            if (_pos.y <= GameManager.instance.gridManagement.lavaHeight)
+            if (_pos.y <= GameManager.instance.gridManagement.minHeight)
             {
                 CancelDrag();
                 return;
