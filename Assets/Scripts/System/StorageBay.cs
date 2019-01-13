@@ -46,17 +46,17 @@ public class StorageBay : MonoBehaviour {
             // cursor.posInTerrain += new Vector3Int(1, 0, 1);
             transform.position = new Vector3
                 (
-                    (gameManager.cursorManagement.posInTerrain.x) * gameManager.gridManagement.cellSize,
+                    (gameManager.cursorManagement.posInTerrain.x) * gameManager.gridManagement.cellSize.x,
                     gameManager.cursorManagement.posInTerrain.y + storageBayHeight,
-                    (gameManager.cursorManagement.posInTerrain.z) * gameManager.gridManagement.cellSize
+                    (gameManager.cursorManagement.posInTerrain.z) * gameManager.gridManagement.cellSize.z
                 );
             if (Input.GetMouseButtonDown(0))
             {
                 Vector3 cursorPosition = new Vector3
                 (
-                    (gameManager.cursorManagement.posInTerrain.x) * gameManager.gridManagement.cellSize + gameManager.gridManagement.cellSize * 0.5f,
-                    gameManager.cursorManagement.posInTerrain.y + storageBayHeight,
-                    (gameManager.cursorManagement.posInTerrain.z) * gameManager.gridManagement.cellSize + gameManager.gridManagement.cellSize * 0.5f
+                    (gameManager.cursorManagement.posInTerrain.x) * gameManager.gridManagement.cellSize.x + gameManager.gridManagement.cellSize.x * 0.5f,
+                    (gameManager.cursorManagement.posInTerrain.y) * gameManager.gridManagement.cellSize.y + storageBayHeight,
+                    (gameManager.cursorManagement.posInTerrain.z) * gameManager.gridManagement.cellSize.z + gameManager.gridManagement.cellSize.z * 0.5f
                 );
                 if (CanBePlaced(cursorPosition))
                 {

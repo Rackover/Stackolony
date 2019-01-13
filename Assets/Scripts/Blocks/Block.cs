@@ -253,10 +253,10 @@ public class Block : MonoBehaviour {
             if (bridgeInfo != null)
                 gridManager.UpdateBridgePosition(bridgeInfo, gridCoordinates.y);
         }
-        StartCoroutine(MoveToPosition(0.1f));
+        StartCoroutine(MoveToPosition());
     }
 
-    public IEnumerator MoveToPosition(float time) //Coroutine pour déplacer le cube vers sa position
+    private IEnumerator MoveToPosition(float time = 0) //Coroutine pour déplacer le cube vers sa position
     {
         float elapsedTime = 0;
         Vector3 startingPos = transform.position;
@@ -265,18 +265,18 @@ public class Block : MonoBehaviour {
             transform.position = Vector3.Lerp(
                 startingPos, 
                 new Vector3(
-                    gridCoordinates.x * gridManager.cellSize + 0.5f * gridManager.cellSize, 
+                    gridCoordinates.x * gridManager.cellSize.x + 0.5f * gridManager.cellSize.x, 
                     0.5f + gridCoordinates.y, 
-                    gridCoordinates.z * gridManager.cellSize + 0.5f * gridManager.cellSize),
+                    gridCoordinates.z * gridManager.cellSize.z + 0.5f * gridManager.cellSize.z),
                 elapsedTime / time
             );
             elapsedTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
         transform.position = new Vector3(
-        gridCoordinates.x * gridManager.cellSize + 0.5f * gridManager.cellSize,
+        gridCoordinates.x * gridManager.cellSize.x + 0.5f * gridManager.cellSize.x,
         0.5f + gridCoordinates.y,
-        gridCoordinates.z * gridManager.cellSize + 0.5f * gridManager.cellSize);
+        gridCoordinates.z * gridManager.cellSize.z + 0.5f * gridManager.cellSize.z);
         yield return null;
     }
 

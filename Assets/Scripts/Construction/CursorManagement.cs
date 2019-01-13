@@ -49,7 +49,7 @@ public class CursorManagement : MonoBehaviour
         //Instantie un projecteur de selection qui se clamp sur les cellules de la grille
         myProjector = Instantiate(projectorPrefab);
         myProjector.name = "Projector";
-        myProjector.GetComponent<Projector>().orthographicSize = 2.5f * GameManager.instance.gridManagement.cellSize; //On adapte la taille du projecteur (qui projette la grille au sol) à la taille des cellules
+        myProjector.GetComponent<Projector>().orthographicSize = 2.5f * GameManager.instance.gridManagement.cellSize.x; //On adapte la taille du projecteur (qui projette la grille au sol) à la taille des cellules
         myProjector.GetComponent<Projector>().enabled = false;
 
         //Instantie la fleche qui indique la tour selectionnée par le joueur
@@ -123,9 +123,9 @@ public class CursorManagement : MonoBehaviour
     {
         Vector3 tempCoord = hit.point; //On adapte la position de la souris pour qu'elle corresponde à la taille des cellules
         Vector3 coord = new Vector3(
-            tempCoord.x / GameManager.instance.gridManagement.cellSize,
+            tempCoord.x / GameManager.instance.gridManagement.cellSize.x,
             tempCoord.y, //La taille en y n'est pas dépendante de la taille des cellules, elle vaudra toujours 1
-            tempCoord.z / GameManager.instance.gridManagement.cellSize
+            tempCoord.z / GameManager.instance.gridManagement.cellSize.z
         );
 
         //Converti la position pour savoir sur quelle case se trouve la souris
@@ -135,7 +135,7 @@ public class CursorManagement : MonoBehaviour
             Mathf.FloorToInt(coord.z)
         );
 
-        posInWorld = coord * GameManager.instance.gridManagement.cellSize;
+        posInWorld = coord * GameManager.instance.gridManagement.cellSize.x;
     }
 
     void UpdateProjector()
@@ -149,9 +149,9 @@ public class CursorManagement : MonoBehaviour
         }
         //Met à jour la position du projecteur
         myProjector.transform.position = new Vector3(
-        posInTerrain.x * GameManager.instance.gridManagement.cellSize + (GameManager.instance.gridManagement.cellSize / 2),
+        posInTerrain.x * GameManager.instance.gridManagement.cellSize.x + (GameManager.instance.gridManagement.cellSize.x / 2),
         posInTerrain.y + 10,
-        posInTerrain.z * GameManager.instance.gridManagement.cellSize + (GameManager.instance.gridManagement.cellSize / 2)
+        posInTerrain.z * GameManager.instance.gridManagement.cellSize.z + (GameManager.instance.gridManagement.cellSize.z / 2)
         );
     }
 
@@ -218,9 +218,9 @@ public class CursorManagement : MonoBehaviour
             }
             stackSelector.SetActive(true);
             stackSelector.transform.position = new Vector3(
-                posInTerrain.x * GameManager.instance.gridManagement.cellSize + (GameManager.instance.gridManagement.cellSize / 2), 
+                posInTerrain.x * GameManager.instance.gridManagement.cellSize.x + (GameManager.instance.gridManagement.cellSize.x / 2), 
                 minHeight+0.1f, 
-                posInTerrain.z * GameManager.instance.gridManagement.cellSize + (GameManager.instance.gridManagement.cellSize / 2));
+                posInTerrain.z * GameManager.instance.gridManagement.cellSize.z + (GameManager.instance.gridManagement.cellSize.z / 2));
         } 
         else
         {
@@ -576,6 +576,7 @@ public class CursorManagement : MonoBehaviour
         if (_block != null)
         {
             selectedBlock = _block;
+            selectedBlock.StopAllCoroutines();
             sPosition = selectedBlock.transform.position;
             savedPos = selectedBlock.gridCoordinates;
             if (selectedBlock.transform.Find("Bridge") != null) {
@@ -602,9 +603,9 @@ public class CursorManagement : MonoBehaviour
                     GameManager.instance.sfxManager.PlaySoundWithRandomParameters("Tick", 1, 1, 0.8f, 1.2f);
                     selectedBlock.transform.position = new Vector3
                     (
-                        _pos.x * GameManager.instance.gridManagement.cellSize + GameManager.instance.gridManagement.cellSize * 0.5f,
+                        _pos.x * GameManager.instance.gridManagement.cellSize.x + GameManager.instance.gridManagement.cellSize.x * 0.5f,
                         _pos.y + 0.5f,
-                        _pos.z * GameManager.instance.gridManagement.cellSize + GameManager.instance.gridManagement.cellSize * 0.5f
+                        _pos.z * GameManager.instance.gridManagement.cellSize.z + GameManager.instance.gridManagement.cellSize.z * 0.5f
                     );
                 }
             }
@@ -615,6 +616,11 @@ public class CursorManagement : MonoBehaviour
     {
         if(selectedBlock != null && draging)
         {
+            if (_pos.y <= GameManager.instance.gridManagement.lavaHeight)
+            {
+                CancelDrag();
+                return;
+            }
             if (GameManager.instance.gridManagement.GetSlotType(_pos,false) == GridManagement.blockType.FREE)
             {
                 if (selectedBlock.gameObject.layer == LayerMask.NameToLayer("StoredBlock"))
@@ -622,16 +628,14 @@ public class CursorManagement : MonoBehaviour
                     FindObjectOfType<StorageBay>().DeStoreBlock(selectedBlock.gameObject);
                 }
 
-                if (GameManager.instance.gridManagement.grid[_pos.x, _pos.y, _pos.z] != null)
-                {
-                    Debug.Log("DRAGGING OBJECT ON ANOTHER");
-                }
-
                 //Play SFX
                 GameManager.instance.sfxManager.PlaySoundLinked("BlockDrop",selectedBlock.gameObject);
 
-                GameManager.instance.gridManagement.MoveBlock(selectedBlock.gameObject, _pos);
-              //  GameManager.instance.gridManagement.LayBlock(selectedBlock, new Vector2Int(_pos.x,_pos.z));
+                // Fait tomber les blocs au dessus de la position initiale du bloc qui vient d'être déplacé
+                GameManager.instance.gridManagement.UpdateBlocks(selectedBlock.gridCoordinates);
+
+                // Fait tomber le bloc au sol
+                GameManager.instance.gridManagement.LayBlock(selectedBlock, new Vector2Int(_pos.x,_pos.z));
 
                 // Update the all city
                 GameManager.instance.systemManager.UpdateSystem();
@@ -652,6 +656,7 @@ public class CursorManagement : MonoBehaviour
                 else
                 {
                     CancelDrag();
+                    return;
                 }
             }
         }
