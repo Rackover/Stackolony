@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-    IEnumerator LoadGameScene(System.Action then)
+    IEnumerator LoadGameScene(System.Action then, bool keepLoading=false)
     {
         isLoading = true;
         AsyncOperation load = SceneManager.LoadSceneAsync("Game");
@@ -86,15 +86,13 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
         then.Invoke();
-        isLoading = false;
+        isLoading = !keepLoading;
         yield return true;
     }
 
 
     void FindAllReferences()
     {
-        Debug.Log("Finding all references in scene " + SceneManager.GetActiveScene().name);
-
         // SYSTEM
         if (temporality == null) temporality = GetComponentInChildren<Temporality>();
         if (flagReader == null) flagReader = GetComponentInChildren<FlagReader>();
@@ -244,15 +242,20 @@ public class GameManager : MonoBehaviour
     public void Load()
     {
         StartCoroutine(
-            LoadGameScene(delegate {
-                StartGame();
-                saveManager.StartCoroutine(
-                    saveManager.ReadSaveData(
-                        cityManagement.cityName,
-                        () => saveManager.LoadSaveData(saveManager.loadedData)
-                    )
-                );
-            })
+            LoadGameScene(
+                delegate {
+                    StartGame();
+                    saveManager.StartCoroutine(
+                        saveManager.ReadSaveData(
+                            cityManagement.cityName,
+                            delegate {
+                                saveManager.LoadSaveData(saveManager.loadedData);
+                                isLoading = false;
+                            }
+                        )
+                    );
+                }
+            )
         );
         
     }
