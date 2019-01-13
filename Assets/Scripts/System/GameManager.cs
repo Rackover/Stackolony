@@ -130,9 +130,9 @@ public class GameManager : MonoBehaviour
             temporality.PauseGame();
         }
         
-        // Reset cursor mode
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            cursorManagement.SwitchMode(CursorManagement.cursorMode.Default);
+        // Pause
+        if (Input.GetKeyDown(KeyCode.Escape) && IsInGame() && FindObjectsOfType<PauseWindow>().Length <= 0) {
+            FindObjectOfType<Interface>().SpawnPauseWindow();
         }
 
         // Reset camera

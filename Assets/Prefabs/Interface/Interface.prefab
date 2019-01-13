@@ -576,7 +576,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1358183416126860
 GameObject:
   m_ObjectHideFlags: 1
@@ -2733,8 +2733,11 @@ MonoBehaviour:
   refreshRate: 0.1
   cursorTransform: {fileID: 224824914707928218}
   cursorImage: {fileID: 114948996577457388}
-  optionsWindow: {fileID: 0}
+  optionsWindow: {fileID: 1726631559882114, guid: b3f27fb5ad5d3194c8a179a769807f12,
+    type: 2}
   creditsWindow: {fileID: 0}
+  pauseWindow: {fileID: 1110876297404572, guid: f2dc3bcc9619af04eb3c8a4e07e3c69e,
+    type: 2}
 --- !u!114 &114513866266663836
 MonoBehaviour:
   m_ObjectHideFlags: 1
