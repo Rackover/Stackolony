@@ -253,30 +253,24 @@ public class Block : MonoBehaviour {
             if (bridgeInfo != null)
                 gridManager.UpdateBridgePosition(bridgeInfo, gridCoordinates.y);
         }
-        StartCoroutine(MoveToPosition(0.1f));
+        StartCoroutine(MoveToPosition());
     }
 
-    public IEnumerator MoveToPosition(float time) //Coroutine pour déplacer le cube vers sa position
+    private IEnumerator MoveToPosition(float time = 0) //Coroutine pour déplacer le cube vers sa position
     {
         float elapsedTime = 0;
         Vector3 startingPos = transform.position;
         while (elapsedTime < time)
         {
             transform.position = Vector3.Lerp(
-                startingPos, 
-                new Vector3(
-                    gridCoordinates.x * gridManager.cellSize + 0.5f * gridManager.cellSize, 
-                    0.5f + gridCoordinates.y, 
-                    gridCoordinates.z * gridManager.cellSize + 0.5f * gridManager.cellSize),
+                startingPos,
+                gridManager.IndexToWorldPosition(gridCoordinates),
                 elapsedTime / time
             );
             elapsedTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
-        transform.position = new Vector3(
-        gridCoordinates.x * gridManager.cellSize + 0.5f * gridManager.cellSize,
-        0.5f + gridCoordinates.y,
-        gridCoordinates.z * gridManager.cellSize + 0.5f * gridManager.cellSize);
+        transform.position = gridManager.IndexToWorldPosition(gridCoordinates);
         yield return null;
     }
 

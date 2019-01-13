@@ -202,7 +202,8 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         // Initialize and shut down
-        storageBay.gameObject.GetComponent<MeshRenderer>().enabled = true;
+        storageBay.transform.Find("Visuals").GetComponent<MeshRenderer>().enabled = true;
+        
         GameInterfaces gi = FindObjectOfType<GameInterfaces>();
         if (gi != null) {
             gi.gameObject.SetActive(true);
@@ -221,7 +222,7 @@ public class GameManager : MonoBehaviour
     public void EndGame()
     {
         // Initialize and shut down
-        storageBay.gameObject.GetComponent<MeshRenderer>().enabled = false;
+        storageBay.transform.Find("Visuals").GetComponent<MeshRenderer>().enabled = false;
         GameInterfaces gi = FindObjectOfType<GameInterfaces>();
         if (gi != null) {
             gi.StopGameInterfaces();

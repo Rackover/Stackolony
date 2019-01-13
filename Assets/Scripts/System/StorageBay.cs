@@ -43,21 +43,12 @@ public class StorageBay : MonoBehaviour {
 
         if (!isPlaced)
         {
-            // cursor.posInTerrain += new Vector3Int(1, 0, 1);
-            transform.position = new Vector3
-                (
-                    (gameManager.cursorManagement.posInTerrain.x) * gameManager.gridManagement.cellSize,
-                    gameManager.cursorManagement.posInTerrain.y + storageBayHeight,
-                    (gameManager.cursorManagement.posInTerrain.z) * gameManager.gridManagement.cellSize
-                );
+            transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(gameManager.cursorManagement.posInTerrain);
             if (Input.GetMouseButtonDown(0))
             {
-                Vector3 cursorPosition = new Vector3
-                (
-                    (gameManager.cursorManagement.posInTerrain.x) * gameManager.gridManagement.cellSize + gameManager.gridManagement.cellSize * 0.5f,
-                    gameManager.cursorManagement.posInTerrain.y + storageBayHeight,
-                    (gameManager.cursorManagement.posInTerrain.z) * gameManager.gridManagement.cellSize + gameManager.gridManagement.cellSize * 0.5f
-                );
+                Vector3 cursorPosition = GameManager.instance.gridManagement.IndexToWorldPosition(gameManager.cursorManagement.posInTerrain);
+              //  cursorPosition += new Vector3(0, storageBayHeight, 0);
+
                 if (CanBePlaced(cursorPosition))
                 {
                     PlaceBay(gameManager.cursorManagement.posInTerrain);
@@ -118,6 +109,7 @@ public class StorageBay : MonoBehaviour {
 
     private bool CanBePlaced(Vector3 positionToCompare) //Compare toutes les positions du bloc avec la position ou se trouve la souris pour savoir si le bloc est plaçable
     {
+        positionToCompare -= new Vector3(0,GameManager.instance.gridManagement.cellSize.y/2,0); //Le système place les blocs à une demi case de hauteur, donc on retire cette demi case pour pouvoir se placer au sol
         foreach (GameObject t in slots)
         {
             if(gameManager.gridManagement.myTerrain.SampleHeight(t.transform.position) < (positionToCompare.y - flexibility) || Terrain.activeTerrain.SampleHeight(t.transform.position) > (positionToCompare.y + flexibility))

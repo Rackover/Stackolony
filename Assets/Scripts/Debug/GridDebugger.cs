@@ -35,6 +35,29 @@ public class GridDebugger : MonoBehaviour {
 
     public GridManagement gridManager;
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            SelectGrid(0);
+            UpdateSelectedGrid();
+        } else if (Input.GetKeyDown(KeyCode.F2))
+        {
+            SelectGrid(1);
+            UpdateSelectedGrid();
+        }
+        else if (Input.GetKeyDown(KeyCode.F3))
+        {
+            SelectGrid(2);
+            UpdateSelectedGrid();
+        }
+        else if (Input.GetKeyDown(KeyCode.F4))
+        {
+            SelectGrid(3);
+            UpdateSelectedGrid();
+        }
+    }
+
     //Genere une grille 3D pour pouvoir débug la variable grid[,,] et afficher ce qu'elle contient
     public void InitAllGrids()
     {
@@ -42,6 +65,7 @@ public class GridDebugger : MonoBehaviour {
             Logger.Debug("Initializing debug grid [" + overlayMode.ToString() + "]");
             InitGrid(overlayMode);
         }
+        SelectGrid(0);
     }
 
     public void InitButtons()
@@ -50,7 +74,6 @@ public class GridDebugger : MonoBehaviour {
         {
             overlayMode.linkedButton.onClick.AddListener(delegate { SelectGrid(overlayMode.gridID); });
         }
-        SelectGrid(0);
     }
 
     public void InitGrid(OverlayMode overlayMode) //Initialise la grille
@@ -139,12 +162,12 @@ public class GridDebugger : MonoBehaviour {
                 {
                     selectedGrid.grid[x, height, z] = generatedCube;
                     generatedCube.transform.parent = selectedGrid.cellsParent.transform;
-                    float cellSize = gridManager.cellSize;
+                    Vector3 cellSize = gridManager.cellSize;
                     generatedCube.transform.position = new Vector3
                     (
-                        x * cellSize + (cellSize / 2),
+                        x * cellSize.x + (cellSize.x / 2),
                         height + 0.5f,
-                        z * cellSize + (cellSize / 2)
+                        z * cellSize.z + (cellSize.z / 2)
                     );
                 }
             }

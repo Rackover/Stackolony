@@ -8,9 +8,9 @@ public class GridManagement : MonoBehaviour
 
     //------------VARIABLES PUBLIQUES------------
     [Header("=== MAP SETTINGS ===")][Space(1)]
-    [Tooltip("Quelle taille font les cellules en X et Y (la hauteur sera toujours de 1")] public float cellSize;
+    [Tooltip("Quelle taille font les cellules en X Y et Z")] public Vector3 cellSize;
     [Tooltip("Quelle hauteur max pour les tours")] public int maxHeight;
-    [Tooltip("Quelle taille fait un bloc en hauteur")] public int cellHeight;
+    [Tooltip("Hauteur minimale pour construire")] public int minHeight;
     [Header("=== PREFABS ===")][Space(1)]
     [Header("Bridge")]
     [Tooltip("Prefab du pont, de la taille (cellSize)")] public GameObject bridgePrefab;
@@ -50,8 +50,8 @@ public class GridManagement : MonoBehaviour
         }
 
         //Initialisation des variables statiques
-        gridSize.x = Mathf.RoundToInt(myTerrain.terrainData.size.x / cellSize);
-        gridSize.z = Mathf.RoundToInt(myTerrain.terrainData.size.z / cellSize);
+        gridSize.x = Mathf.RoundToInt(myTerrain.terrainData.size.x / cellSize.x);
+        gridSize.z = Mathf.RoundToInt(myTerrain.terrainData.size.z / cellSize.z);
         gridSize.y = maxHeight;
 
         GenerateGrid();
@@ -98,16 +98,14 @@ public class GridManagement : MonoBehaviour
         return distanceFromGround;
     }
 
-    //Update les blocs de toute la tour pour les remettre à leur bonne position
+    //Fait baisser d'un bloc tout les blocs au dessus de la coordonnée actuelle
     public void UpdateBlocks(Vector3Int coordinates)
     {
-        Debug.Log("UPDATEBLOCK CALLED");
         if (grid[coordinates.x, coordinates.y, coordinates.z] != null)
         {
-            // Removes object from list and destroys the gameObject
             GameObject target = grid[coordinates.x, coordinates.y, coordinates.z];
 
-            for (int i = coordinates.y + 1; i < maxHeight; i++) //Fait descendre d'une case les blocs au dessus du bloc supprimé
+            for (int i = coordinates.y + 1; i < maxHeight; i++) //Fait descendre d'une case les blocs
             {
                 if (grid[coordinates.x, i, coordinates.z] == null)
                 {
@@ -119,7 +117,6 @@ public class GridManagement : MonoBehaviour
                     if (GetSlotType(new Vector3Int(coordinates.x, i, coordinates.z),false) == GridManagement.blockType.FREE)
                     {
                         MoveBlock(grid[coordinates.x, i, coordinates.z], new Vector3Int(coordinates.x, i - 1, coordinates.z));
-                        grid[coordinates.x, i - 1, coordinates.z] = grid[coordinates.x, i, coordinates.z];
                     } else
                     {
                         grid[coordinates.x, i - 1, coordinates.z] = null;
@@ -140,7 +137,6 @@ public class GridManagement : MonoBehaviour
     public void MoveBlock(GameObject block, Vector3Int coordinates)
     {
         Block link = block.GetComponent<Block>();
-        link.CallFlags("BeforeMovingBlock");
         grid[coordinates.x, coordinates.y, coordinates.z] = block;
         link.MoveTo(coordinates);
     }
@@ -148,44 +144,25 @@ public class GridManagement : MonoBehaviour
     public Vector3 IndexToWorldPosition(Vector3Int index)
     {
         return new Vector3(
-                index.x * cellSize + (cellSize / 2),
-                index.y * cellSize + (cellSize / 2),
-                index.z * cellSize + (cellSize / 2)
+                index.x * cellSize.x + (cellSize.x / 2),
+                index.y * cellSize.y + (cellSize.y / 2),
+                index.z * cellSize.z + (cellSize.z / 2)
         ) + myTerrain.transform.position;
     }
 
     public Vector3Int WorldPositionToIndex(Vector3 position)
     {
         position -= myTerrain.transform.position;
-        return new Vector3Int(
-                (int)Mathf.Round((position.x  - cellSize / 2) / cellSize),
-                (int)Mathf.Round((position.y - cellSize / 2) / cellSize),
-                (int)Mathf.Round((position.z - cellSize / 2)/cellSize)
+        Vector3Int output = new Vector3Int(
+                (int)Mathf.Round((position.x - cellSize.x / 2) / cellSize.x),
+                (int)Mathf.Round((position.y - cellSize.y / 2) / cellSize.y),
+                (int)Mathf.Round((position.z - cellSize.z / 2) / cellSize.z)
         );
+        return output;
     }
 
     //Update a block so he touch the ground or the first block encountered (Like if gravity was applied to it)
-    public void LayBlock(Block block)
-    {
-        //Position en Y des coordonnées au sol données
-       // float worldY =
-           // myTerrain.SampleHeight(
-               // IndexToWorldPosition(
-                    //new Vector3Int(blo, 0, coordinates.y)
-               // )
-           // );
-
-        // Index de Y
-      //  int y = WorldPositionToIndex(new Vector3(worldY, 0)).x;
-    }
-
-    /// <summary>
-    /// Lays a block at X Y coordinates on the grid at the highest possible point 
-    /// (ontop of a building or on the ground)
-    /// </summary>
-    /// <param name="blockId"></param>
-    /// <param name="coordinates"></param>
-    public void LayBlock(int blockId, Vector2Int coordinates)
+    public void LayBlock(Block block, Vector2Int coordinates)
     {
         //Position en Y des coordonnées au sol données
         float worldY =
@@ -194,9 +171,8 @@ public class GridManagement : MonoBehaviour
                     new Vector3Int(coordinates.x, 0, coordinates.y)
                 )
             );
-    
         // Index de Y
-        int y = WorldPositionToIndex(new Vector3(worldY, 0)).x;
+        int y = WorldPositionToIndex(new Vector3(coordinates.x, worldY + cellSize.y/2, coordinates.y)).y;
 
         // Candidate coordinates
         Vector3Int coordinates3 = new Vector3Int(coordinates.x, y, coordinates.y);
@@ -205,7 +181,7 @@ public class GridManagement : MonoBehaviour
         {
             return;
         }
-        
+
 
         if (grid[coordinates3.x, coordinates3.y, coordinates3.z] != null)
         {
@@ -223,21 +199,31 @@ public class GridManagement : MonoBehaviour
                 }
             }
         }
-
-        SpawnBlock(blockId, coordinates3);
+        MoveBlock(block.gameObject, coordinates3);
     }
 
-    public void SpawnBlock(int blockId, Vector3Int coordinates)
+    /// <summary>
+    /// Lays a block at X Y coordinates on the grid at the highest possible point 
+    /// (ontop of a building or on the ground)
+    /// </summary>
+    /// <param name="blockId"></param>
+    /// <param name="coordinates"></param>
+    public void LayBlock(int blockId, Vector2Int coordinates)
+    {
+        GameObject newBlock = SpawnBlock(blockId, new Vector3Int(coordinates.x,0,coordinates.y));
+        LayBlock(newBlock.GetComponent<Block>(), coordinates);
+    }
+
+    public GameObject SpawnBlock(int blockId, Vector3Int coordinates)
     {
         GameObject newBlock = CreateBlockFromId(blockId);
         MoveBlock(newBlock, coordinates);
         Logger.Debug("Spawned block : " + newBlock.GetComponent<Block>().block.name + " with prefab " + GameManager.instance.library.blockPrefab.name + " at position "+coordinates.ToString());
-
+        return newBlock;
     }
 
     public GameObject CreateBlockFromId(int blockId)
     {
-
         BlockScheme block = GameManager.instance.library.GetBlockByID(blockId);
         if (block == null) { Logger.Warn("BlockScheme index not found - index : " + blockId); return null; }
 
@@ -424,9 +410,9 @@ public class GridManagement : MonoBehaviour
             else if (i == bridgeLength + 2) {
                 newBridgePart = Instantiate(bridgeEndPrefab, parentBridgeGameObject.transform);
                 newBridgePart.transform.localPosition = new Vector3(
-                    (((cellSize - 1) / 2) * direction.x) + (cellSize * (i - 2)) * direction.x + (0.5f * direction.x), 
+                    (((cellSize.x - 1) / 2) * direction.x) + (cellSize.x * (i - 2)) * direction.x + (0.5f * direction.x), 
                     0, 
-                    (((cellSize - 1) / 2) * direction.y) + (cellSize * (i - 2)) * direction.y + (0.5f * direction.y)
+                    (((cellSize.z - 1) / 2) * direction.y) + (cellSize.z * (i - 2)) * direction.y + (0.5f * direction.y)
                 );
                 newBridgePart.transform.localRotation = firstBridgePart.transform.localRotation;
             }
@@ -435,9 +421,9 @@ public class GridManagement : MonoBehaviour
             else {
                 newBridgePart = Instantiate(bridgePrefab, parentBridgeGameObject.transform);
                 newBridgePart.transform.localPosition = new Vector3(
-                    (((cellSize - 1) / 2) * direction.x) + (cellSize * (i - 2)) * direction.x + (0.5f * direction.x), 
+                    (((cellSize.x - 1) / 2) * direction.x) + (cellSize.x * (i - 2)) * direction.x + (0.5f * direction.x), 
                     0, 
-                    (((cellSize - 1) / 2) * direction.y) + (cellSize * (i - 2)) * direction.y + (0.5f * direction.y)
+                    (((cellSize.z - 1) / 2) * direction.y) + (cellSize.z * (i - 2)) * direction.y + (0.5f * direction.y)
                 );
                 newBridgePart.transform.localRotation = firstBridgePart.transform.localRotation;
             }
