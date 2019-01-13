@@ -6,7 +6,7 @@ using System.IO;
 
 public class SaveManager : MonoBehaviour {
 
-    public int saveVersion = 1;
+    public int saveVersion = 2;
     public SaveData loadedData;
 
 
@@ -20,7 +20,21 @@ public class SaveManager : MonoBehaviour {
         // returns true if the specific save exists
         return File.Exists(Paths.GetSaveFile(cityName));
     }
-        
+
+    public void DestroySave(string cityName = null)
+    {
+        // Deletes all the saves
+        if (cityName == null) {
+            foreach (string file in Directory.GetFiles(Paths.GetSaveFolder())) {
+                File.Delete(file);
+            }
+            return;
+        }
+
+        // Deletes specified save
+        File.Delete(Paths.GetSaveFile(cityName));
+    }
+
     ///////////////////////////////
     /// 
     ///     Main function to write savegame
@@ -63,6 +77,7 @@ public class SaveManager : MonoBehaviour {
         }
 
         // Step 3 - Storage bay grid
+        writer.WriteVector3UInt8(saveData.storagePosition);
         writer.WriteVector3UInt8(saveData.storageGridSize);
         writer.WriteUInt16(saveData.storageGrid.Count);
         foreach (KeyValuePair <Vector3Int, int> data in saveData.storageGrid) {
@@ -190,51 +205,61 @@ public class SaveManager : MonoBehaviour {
     public void LoadSaveData(SaveData saveData)
     {
         Logger.Debug("Loading save data");
-        GridManagement gridMan = GameManager.instance.gridManagement;
 
-        // Loading shopping List
-        List<ShopDisplay> shoppingList = new List<ShopDisplay>();
-        foreach (KeyValuePair<int, int> element in saveData.command) {
-            ShopDisplay item = new ShopDisplay();
-            item.myBlock = GameManager.instance.library.GetBlockByID(element.Key);
-            if(item.myBlock  == null){ Logger.Warn("BlockScheme index not found - index : " + element.Key.ToString()); return;}
-            item.quantityPicked = element.Value;
-            shoppingList.Add(item);
+        try {
+            GridManagement gridMan = GameManager.instance.gridManagement;
+
+            // Loading shopping List
+            List<ShopDisplay> shoppingList = new List<ShopDisplay>();
+            foreach (KeyValuePair<int, int> element in saveData.command) {
+                ShopDisplay item = new ShopDisplay();
+                item.myBlock = GameManager.instance.library.GetBlockByID(element.Key);
+                if (item.myBlock == null) { Logger.Warn("BlockScheme index not found - index : " + element.Key.ToString()); return; }
+                item.quantityPicked = element.Value;
+                shoppingList.Add(item);
+            }
+            GameManager.instance.deliveryManagement.LoadShop(shoppingList);
+
+            // Loading grid
+            Logger.Debug("Loading " + saveData.blockGrid.Count + " objects into the grid");
+            foreach (KeyValuePair<Vector3Int, BlockSaveData> blockData in saveData.blockGrid) {
+                // Todo : Load states aswell
+                Vector3Int coords = blockData.Key;
+                Logger.Debug("Spawning block #" + blockData.Value.id + " at position " + blockData.Key.ToString());
+                gridMan.SpawnBlock(blockData.Value.id, blockData.Key);
+            }
+
+            // Converting bridges list
+            foreach (KeyValuePair<Vector3Int, Vector3Int> bridge in saveData.bridges) {
+                Block origin = gridMan.grid[bridge.Key.x, bridge.Key.y, bridge.Key.z].GetComponent<Block>();
+                Block destination = gridMan.grid[bridge.Value.x, bridge.Value.y, bridge.Value.z].GetComponent<Block>();
+                if (gridMan.CreateBridge(origin, destination) == null) { Logger.Warn("Could not replicate bridge from " + origin + ":(" + bridge.Key + ") to " + destination + ":(" + bridge.Value + ")"); };
+            }
+
+            foreach (KeyValuePair<Vector3Int, int> stored in saveData.storageGrid) {
+                Vector3Int coords = stored.Key;
+                BlockScheme block = GameManager.instance.library.GetBlockByID(stored.Value);
+                if (block == null) { Logger.Warn("BlockScheme index not found - index : " + stored.Value.ToString()); return; }
+
+                GameObject storedBuilding = Instantiate(GameManager.instance.library.blockPrefab);
+                Block newBlockLink = storedBuilding.GetComponent<Block>();
+                newBlockLink.block = block;
+
+                GameManager.instance.storageBay.StoreAtPosition(storedBuilding, coords);
+                GameManager.instance.storageBay.PlaceBayIfPossible(saveData.storagePosition);
+            }
+
+            GameManager.instance.player.playerName = saveData.playerName;
+            GameManager.instance.cityManagement.cityName = saveData.cityName;
+            GameManager.instance.temporality.cycleNumber = saveData.cyclesPassed;
+            GameManager.instance.temporality.cycleProgression = saveData.timeOfDay;
         }
-        GameManager.instance.deliveryManagement.LoadShop(shoppingList);
 
-        // Loading grid
-        Logger.Debug("Loading "+ saveData.blockGrid.Count +" objects into the grid");
-        foreach (KeyValuePair<Vector3Int, BlockSaveData> blockData in saveData.blockGrid) {
-            // Todo : Load states aswell
-            Vector3Int coords = blockData.Key;
-            Logger.Debug("Spawning block #"+blockData.Value.id+" at position "+blockData.Key.ToString());
-            gridMan.SpawnBlock(blockData.Value.id, blockData.Key);
+        catch(Exception e) {
+            Logger.Error("Could not load the savegame : " + e.Message+". Going back to the main menu instead.");
+            DestroySave();
+            GameManager.instance.ExitToMenu();
         }
-
-        // Converting bridges list
-        foreach (KeyValuePair<Vector3Int, Vector3Int> bridge in saveData.bridges) {
-            Block origin = gridMan.grid[bridge.Key.x, bridge.Key.y, bridge.Key.z].GetComponent<Block>();
-            Block destination = gridMan.grid[bridge.Value.x, bridge.Value.y, bridge.Value.z].GetComponent<Block>();
-            if (gridMan.CreateBridge(origin, destination) == null){ Logger.Warn("Could not replicate bridge from " + origin + ":(" + bridge.Key + ") to " + destination + ":(" + bridge.Value + ")");  };
-        }
-
-        foreach (KeyValuePair<Vector3Int, int> stored in saveData.storageGrid) {
-            Vector3Int coords = stored.Key;
-            BlockScheme block = GameManager.instance.library.GetBlockByID(stored.Value);
-            if (block == null) { Logger.Warn("BlockScheme index not found - index : " + stored.Value.ToString()); return; }
-            
-            GameObject storedBuilding = Instantiate(GameManager.instance.library.blockPrefab);
-            Block newBlockLink = storedBuilding.GetComponent<Block>();
-            newBlockLink.block = block;
-
-            GameManager.instance.storageBay.StoreAtPosition(storedBuilding, coords);
-        }
-        
-        GameManager.instance.player.playerName = saveData.playerName;
-        GameManager.instance.cityManagement.cityName = saveData.cityName;
-        GameManager.instance.temporality.cycleNumber = saveData.cyclesPassed;
-        GameManager.instance.temporality.cycleProgression = saveData.timeOfDay;
 
     }
 
@@ -248,6 +273,7 @@ public class SaveManager : MonoBehaviour {
         public List<ShopDisplay> shoppingList;
         public GameObject[,,] grid;
         public List<GameObject> bridgesList;
+        public Vector3Int storagePosition;
         public GameObject[,,] storedBlocks;
         public string playerName;
         public string cityName;
@@ -258,6 +284,7 @@ public class SaveManager : MonoBehaviour {
             List<ShopDisplay> _shoppingList,
             GameObject[,,] _grid,
             List<GameObject> _bridgesList,
+            Vector3Int _storagePosition,
             GameObject[,,] _storedBlocks,
             string _playerName,
             string _cityName,
@@ -268,6 +295,7 @@ public class SaveManager : MonoBehaviour {
             shoppingList = _shoppingList;
             grid = _grid;
             bridgesList = _bridgesList;
+            storagePosition = _storagePosition;
             storedBlocks = _storedBlocks;
             playerName = _playerName;
             cityName = _cityName;
@@ -280,6 +308,7 @@ public class SaveManager : MonoBehaviour {
     {
         public Vector3Int gridSize;
         public Vector3Int storageGridSize;
+        public Vector3Int storagePosition;
         public Dictionary<Vector3Int, int> storageGrid;
         public Dictionary<Vector3Int, BlockSaveData> blockGrid;
         public List<KeyValuePair<Vector3Int,Vector3Int>> bridges;
@@ -310,6 +339,7 @@ public class SaveManager : MonoBehaviour {
             // Storing storage zone
             storageGridSize = new Vector3Int(gameData.storedBlocks.GetLength(0), gameData.storedBlocks.GetLength(1), gameData.storedBlocks.GetLength(2));
             storageGrid = ConvertStorageGrid(gameData.storedBlocks, storageGridSize);
+            storagePosition = gameData.storagePosition;
 
             // Other data
             playerName = gameData.playerName;
@@ -323,6 +353,7 @@ public class SaveManager : MonoBehaviour {
             Vector3Int _gridSize,
             Vector3Int _storageGridSize,
             Dictionary<Vector3Int, int> _storageGrid,
+            Vector3Int _storagePosition,
             Dictionary<Vector3Int, BlockSaveData> _blockGrid,
             List<KeyValuePair<Vector3Int, Vector3Int>> _bridges,
             Dictionary<int, int> _command,
@@ -335,6 +366,7 @@ public class SaveManager : MonoBehaviour {
             _gridSize = gridSize;
             _storageGridSize = storageGridSize;
             _storageGrid = storageGrid;
+            _storagePosition = storagePosition;
             _blockGrid = blockGrid;
             _bridges = bridges;
             _command = command;

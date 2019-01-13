@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour
     }
 
 
-    IEnumerator LoadGameScene(System.Action then, bool keepLoading=false)
+    IEnumerator LoadGameScene(System.Action then, bool signalEnd=true)
     {
         isLoading = true;
         AsyncOperation load = SceneManager.LoadSceneAsync("Game");
@@ -86,7 +86,7 @@ public class GameManager : MonoBehaviour
             yield return null;
         }
         then.Invoke();
-        isLoading = !keepLoading;
+        isLoading = !signalEnd;
         yield return true;
     }
 
@@ -168,6 +168,7 @@ public class GameManager : MonoBehaviour
                         deliveryManagement.shopDisplays,
                         gridManagement.grid,
                         gridManagement.bridgesList,
+                        storageBay.gridPosition,
                         storageBay.storedBlocks,
                         player.name,
                         cityManagement.cityName,
@@ -254,11 +255,20 @@ public class GameManager : MonoBehaviour
                             }
                         )
                     );
-                }
+                },
+                false
             )
         );
-        
+
     }
+
+    public void ExitToMenu()
+    {
+        EndGame();
+        SceneManager.LoadScene(menuScene.name);
+    }
+
+
     public void Exit()
     {
         Application.Quit();

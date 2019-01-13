@@ -835,6 +835,11 @@ Prefab:
       propertyPath: blockContainerColors.Array.data[10].a
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114635777907619166, guid: ea01be967b53135488a2ea289dc47db1,
+        type: 2}
+      propertyPath: saveVersion
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea01be967b53135488a2ea289dc47db1, type: 2}
   m_IsPrefabAsset: 0
