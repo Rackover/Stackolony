@@ -12,7 +12,6 @@ public class CityManagement : MonoBehaviour
     
     IEnumerator DistributeFood()
     {
-        Debug.Log("Distributing food");
         MissionManager.Mission myMission = mission;
         FoodProvider foodProvider = GameManager.instance.gridManagement.grid[myMission.position.x, myMission.position.y, myMission.position.z].GetComponent<FoodProvider>();
         float foodLeft = foodProvider.foodTotal;
@@ -61,6 +60,12 @@ public class CityManagement : MonoBehaviour
                 if (myMission.power > 0)
                 {
                     GameObject energyFeedback = Instantiate(prefabEmitting);
+                    if (!GameManager.instance.DEBUG_MODE) {
+                        prefabEmitting.GetComponent<MeshRenderer>().enabled = false;
+                        foreach(MeshRenderer mesh in prefabEmitting.GetComponentsInChildren<MeshRenderer>()) {
+                            mesh.enabled = false;
+                        }
+                    }
                     energyFeedback.transform.position = blocklink.transform.position;
                     Destroy(energyFeedback, 2);
                     blocklink.ChangePower(1);

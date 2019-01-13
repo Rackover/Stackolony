@@ -32,7 +32,7 @@ public class MoodsDisplay : MonoBehaviour {
 
             moods[raceO] = race;
 
-            offset += raceO.GetComponent<RectTransform>().rect.width + xSpacing;
+            offset += raceO.GetComponent<RectTransform>().rect.width/2 + xSpacing;
         }
 
         Destroy(example);

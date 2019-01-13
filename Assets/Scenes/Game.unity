@@ -556,6 +556,11 @@ Prefab:
       propertyPath: m_SizeDelta.x
       value: 600
       objectReference: {fileID: 0}
+    - target: {fileID: 114400631440665668, guid: 45326cec6306571469a2167a50d513df,
+        type: 2}
+      propertyPath: xSpacing
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45326cec6306571469a2167a50d513df, type: 2}
   m_IsPrefabAsset: 0
@@ -852,6 +857,66 @@ Prefab:
       propertyPath: skyboxMaterial
       value: 
       objectReference: {fileID: 2100000, guid: 87323bcb35246374883b1cc089091bda, type: 2}
+    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
+        type: 2}
+      propertyPath: skyboxVariation.key5.r
+      value: 0.47834766
+      objectReference: {fileID: 0}
+    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
+        type: 2}
+      propertyPath: skyboxVariation.key5.g
+      value: 0.45668605
+      objectReference: {fileID: 0}
+    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
+        type: 2}
+      propertyPath: skyboxVariation.key5.b
+      value: 0.77800006
+      objectReference: {fileID: 0}
+    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
+        type: 2}
+      propertyPath: skyboxVariation.key6.r
+      value: 0.4784314
+      objectReference: {fileID: 0}
+    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
+        type: 2}
+      propertyPath: skyboxVariation.key6.g
+      value: 0.454902
+      objectReference: {fileID: 0}
+    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
+        type: 2}
+      propertyPath: skyboxVariation.key6.b
+      value: 0.77647066
+      objectReference: {fileID: 0}
+    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
+        type: 2}
+      propertyPath: skyboxVariation.key2.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
+        type: 2}
+      propertyPath: skyboxVariation.key2.g
+      value: 0.92337763
+      objectReference: {fileID: 0}
+    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
+        type: 2}
+      propertyPath: skyboxVariation.key2.b
+      value: 0.7122642
+      objectReference: {fileID: 0}
+    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
+        type: 2}
+      propertyPath: skyboxVariation.key3.r
+      value: 0.87322
+      objectReference: {fileID: 0}
+    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
+        type: 2}
+      propertyPath: skyboxVariation.key3.g
+      value: 0.8764588
+      objectReference: {fileID: 0}
+    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
+        type: 2}
+      propertyPath: skyboxVariation.key3.b
+      value: 0.8773585
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea01be967b53135488a2ea289dc47db1, type: 2}
   m_IsPrefabAsset: 0
