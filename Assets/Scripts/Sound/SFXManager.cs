@@ -12,12 +12,16 @@ public class SFXManager : MonoBehaviour {
     {
         public string soundName;
         public AudioClip[] soundClip;
+        
+
     }
     public Sound[] soundList;
 
     [System.NonSerialized]
     public List<SFXTrack> trackList = new List<SFXTrack>();
     private GameObject trackParent;
+    public float musicVolume;
+    public float ambianceSoundVolume;
 
     private void Start()
     {
@@ -28,7 +32,9 @@ public class SFXManager : MonoBehaviour {
         trackParent.transform.parent = this.transform;
     
         //Init ambiance sounds
-        PlaySound("Ambiance", 1, 1, true);
+        PlaySound("Music", musicVolume, 1, true);
+        PlaySound("AmbianceSound", ambianceSoundVolume, 1, true);
+
     }
 
     //Recupere une track libre et lui ajoute un son

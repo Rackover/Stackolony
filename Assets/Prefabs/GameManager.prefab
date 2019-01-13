@@ -757,9 +757,9 @@ MonoBehaviour:
   - soundName: BlockDrop
     soundClip:
     - {fileID: 8300000, guid: 96b451bc10fabf645a1b4f5a91bacfea, type: 3}
-  - soundName: Ambiance
+  - soundName: Music
     soundClip:
-    - {fileID: 8300000, guid: 4ea4de8fd3b646c42b572602e7ab4e9b, type: 3}
+    - {fileID: 8300000, guid: 59d725638fc69e74fadca7c5b3140659, type: 3}
   - soundName: IncreaseSpeed
     soundClip:
     - {fileID: 8300000, guid: bd12c141a632e2141a290527822fa459, type: 3}
@@ -805,6 +805,11 @@ MonoBehaviour:
   - soundName: StoppingFire
     soundClip:
     - {fileID: 8300000, guid: 718e29fd43f92f045be7d6d5938e4cb5, type: 3}
+  - soundName: AmbianceSound
+    soundClip:
+    - {fileID: 8300000, guid: 4ea4de8fd3b646c42b572602e7ab4e9b, type: 3}
+  musicVolume: 1
+  ambianceSoundVolume: 0.2
 --- !u!114 &114225242450079362
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -853,7 +858,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   refreshRate: 0.1
   directionalLight: {fileID: 0}
-  skyboxMaterial: {fileID: 10302, guid: 0000000000000000f000000000000000, type: 0}
+  skyboxMaterial: {fileID: 2100000, guid: 87323bcb35246374883b1cc089091bda, type: 2}
   skyboxVariation:
     serializedVersion: 2
     key0: {r: 1, g: 0.5707547, b: 0.7082891, a: 1}
