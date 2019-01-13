@@ -906,6 +906,7 @@ MonoBehaviour:
   activeBridgePreviews: []
   isBridging: 0
   selectedBlock: {fileID: 0}
+  projectorHeight: 10
   posInTerrain: {x: 0, y: 0, z: 0}
   posInWorld: {x: 0, y: 0, z: 0}
   cursorOnUI: 0
@@ -923,10 +924,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cycleDuration: 50
   yearDuration: 5
-  timeBetweenUpdateForSkybox: 0.01
-  timeBetweenUpdateForLights: 0.01
-  timeBetweenUpdateForDayNightDisplay: 0.01
-  timeBetweenUpdateForSystem: 1
   cycleNumber: 0
   cycleProgression: 0
   timeScale: 0
@@ -941,7 +938,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22310f324eb157f478d4a9f8f392f575, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  saveVersion: 1
+  saveVersion: 2
 --- !u!114 &114654850517342536
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -980,19 +977,26 @@ MonoBehaviour:
   extinctorPrefab: {fileID: 1040333837174470, guid: 933606df50154f542a5892a642414fe3,
     type: 2}
   blocks:
+  - {fileID: 11400000, guid: b7fd27253a34688459ab7ada3dab8486, type: 2}
   - {fileID: 11400000, guid: 296389d451a99b4459868887eb39ba98, type: 2}
+  - {fileID: 11400000, guid: e682240a92e0c9848af62459a7c632d4, type: 2}
+  - {fileID: 11400000, guid: 71520957214271d428ae7f6622bf754a, type: 2}
+  - {fileID: 11400000, guid: 877f64fcbe812c2449d42d43ec5c6dcf, type: 2}
+  - {fileID: 11400000, guid: fd7ea45607a83c04fac90962b7d5c194, type: 2}
+  - {fileID: 11400000, guid: c11e97e7f91c99741b1129353b9b8aa9, type: 2}
+  - {fileID: 11400000, guid: c89624ea9b43f42468c295920b6d19cf, type: 2}
   blockContainerColors:
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 0.42352945, g: 0.6156863, b: 0.9686275, a: 1}
   - {r: 1, g: 0.77647066, b: 0, a: 1}
   - {r: 0.6392157, g: 0.8705883, b: 0.882353, a: 1}
-  - {r: 0.4156863, g: 0.4901961, b: 0.6039216, a: 0}
-  - {r: 1, g: 1, b: 0.07058824, a: 0}
-  - {r: 0.5372549, g: 0.78823537, b: 0.043137256, a: 0}
-  - {r: 0, g: 0.15294118, b: 0.5137255, a: 0}
-  - {r: 0.909804, g: 0.92549026, b: 0.9294118, a: 0}
-  - {r: 0.5411765, g: 1, b: 0.015686275, a: 0}
-  - {r: 0.9294118, g: 0.49803925, b: 0.40784317, a: 0}
+  - {r: 0.4156863, g: 0.4901961, b: 0.6039216, a: 1}
+  - {r: 1, g: 1, b: 0.07058824, a: 1}
+  - {r: 0.5372549, g: 0.78823537, b: 0.043137256, a: 1}
+  - {r: 0, g: 0.15294118, b: 0.5137255, a: 1}
+  - {r: 0.909804, g: 0.92549026, b: 0.9294118, a: 1}
+  - {r: 0.5411765, g: 1, b: 0.015686275, a: 1}
+  - {r: 0.9294118, g: 0.49803925, b: 0.40784317, a: 1}
   cursorSprite: {fileID: 21300000, guid: 7a377ecb85ef8bd4faad716cc2945544, type: 3}
   destroyIcon: {fileID: 21300000, guid: 7e428129950162542a0330dc8f89d509, type: 3}
   buildIcon: {fileID: 21300000, guid: 00aad6060067afb45bb1250f424b0965, type: 3}
@@ -1120,5 +1124,5 @@ MonoBehaviour:
   errorDisplay: {fileID: 0}
   logger: {fileID: 0}
   gridDebugger: {fileID: 0}
-  DEBUG_MODE: 1
+  DEBUG_MODE: 0
   ENABLE_LOGS: 1
