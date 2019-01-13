@@ -37,6 +37,9 @@ public class GridDebugger : MonoBehaviour {
 
     private void Update()
     {
+        if (!GameManager.instance.DEBUG_MODE) {
+            return;
+        }
         if (Input.GetKeyDown(KeyCode.F1))
         {
             SelectGrid(0);
