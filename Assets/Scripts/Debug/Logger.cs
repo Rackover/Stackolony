@@ -28,6 +28,7 @@ public class Logger : MonoBehaviour
         StartCoroutine(Flush());
     }
 
+
     public static void Debug(params string[] msgs) { LogMessage(type.DEBUG, msgs); }
     public static void Info(params string[] msgs) { LogMessage(type.INFO, msgs); }
     public static void Warn(params string[] msgs) { LogMessage(type.WARNING, msgs); }

@@ -29,9 +29,9 @@ public class CameraController : MonoBehaviour {
     public float minZoom = 0f;
     public float maxZoom = 10f;
 
-    [HideInInspector] public float userBorderSensibility = 0.5f;
-	[HideInInspector] public float userRotationSensibility = 0.5f;
-	[HideInInspector] public float userGrabSensitivity = 0.5f;
+    private float borderSensibility = 0.5f;
+    private float rotationSensibility = 0.5f;
+    private float grabSensitivity = 0.5f;
 
 
     bool driftEnabled = true;
@@ -66,6 +66,12 @@ public class CameraController : MonoBehaviour {
 
     void Update()
     {
+
+        // Fetch settings from the options
+        borderSensibility = GameManager.instance.player.options.GetFloat("borderSensivity");
+        rotationSensibility = GameManager.instance.player.options.GetFloat("rotationSensitivity");
+        grabSensitivity = GameManager.instance.player.options.GetFloat("grabSensitivity");
+
         if (GameManager.instance.cursorManagement.cursorOnUI == false) {
             cameraTransformObjective.LookAt(camCenter.position);
 
@@ -77,8 +83,10 @@ public class CameraController : MonoBehaviour {
                 driftEnabled = false;
                 Rotation();
             }
-
-            Drift();
+            
+            if (GameManager.instance.player.options.GetBool("enableDrifting")) {
+                Drift();
+            }
             Zoom();
         }
 
@@ -107,16 +115,16 @@ public class CameraController : MonoBehaviour {
             camCenter.position = new Vector3(camCenter.position.x, 0f, camCenter.position.z);
         }
         mouseDelta = (Vector3)lastMousePosition - (Vector3)Input.mousePosition;
-        camCenter.position += mouseDelta.x * cameraTransformObjective.right.normalized * mouseDriftSensibility * userGrabSensitivity;
-        camCenter.position += mouseDelta.y * new Vector3(cameraTransformObjective.forward.x, 0, cameraTransformObjective.forward.z).normalized * mouseDriftSensibility * userGrabSensitivity;
+        camCenter.position += mouseDelta.x * cameraTransformObjective.right.normalized * mouseDriftSensibility * grabSensitivity;
+        camCenter.position += mouseDelta.y * new Vector3(cameraTransformObjective.forward.x, 0, cameraTransformObjective.forward.z).normalized * mouseDriftSensibility * grabSensitivity;
         lastMousePosition = (Vector3)Input.mousePosition;
     }
 
     void Rotation()
     {
         Vector2 lookDirection = new Vector2(
-            Input.GetAxis("CursorX") * rotateSensibility * userRotationSensibility,
-            Input.GetAxis("CursorY") * rotateSensibility * userRotationSensibility
+            Input.GetAxis("CursorX") * rotateSensibility * rotationSensibility,
+            Input.GetAxis("CursorY") * rotateSensibility * rotationSensibility
         );  
         camPivot.rotation = Quaternion.Euler(new Vector3(
             Mathf.Clamp(camPivot.eulerAngles.x - lookDirection.y, minLookAngle, maxLookAngle), 
@@ -141,8 +149,8 @@ public class CameraController : MonoBehaviour {
             if (driftEnabled) {
                 float oldY = camCenter.position.y;
                 camCenter.position += 
-                    (drift.x * userBorderSensibility) * cameraTransformObjective.right.normalized * Time.deltaTime
-                    + (drift.y * userBorderSensibility) * cameraTransformObjective.forward.normalized * Time.deltaTime;
+                    (drift.x * borderSensibility) * cameraTransformObjective.right.normalized * Time.deltaTime
+                    + (drift.y * borderSensibility) * cameraTransformObjective.forward.normalized * Time.deltaTime;
                 camCenter.position = new Vector3(camCenter.position.x, oldY, camCenter.position.z);
             }
         }
