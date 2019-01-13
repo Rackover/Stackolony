@@ -159,6 +159,7 @@ public class SaveManager : MonoBehaviour {
 
         // Step 3 - Storage bay grid
         Logger.Debug("Reading storage bay...");
+        Vector3Int storageGridPosition = reader.ReadVector3UInt8();
         Vector3Int storageGridSize = reader.ReadVector3UInt8();
         diskSaveData.storageGrid = new Dictionary<Vector3Int, int>();
         int storedCount = reader.ReadUInt16();
@@ -246,7 +247,7 @@ public class SaveManager : MonoBehaviour {
                 newBlockLink.block = block;
 
                 GameManager.instance.storageBay.StoreAtPosition(storedBuilding, coords);
-                GameManager.instance.storageBay.PlaceBayIfPossible(saveData.storagePosition);
+                //GameManager.instance.storageBay.PlaceBayIfPossible(saveData.storagePosition);
             }
 
             GameManager.instance.player.playerName = saveData.playerName;

@@ -29,7 +29,7 @@ public class StorageBay : MonoBehaviour {
         storedBlocks = new GameObject[stockSize, 1, stockSize];
 
         //Empêche de changer d'outil pendant qu'on est supposé placer la stocking bay
-        gameManager.cursorManagement.switchMode(CursorManagement.cursorMode.Default);
+        gameManager.cursorManagement.SwitchMode(CursorManagement.cursorMode.Default);
         gameManager.cursorManagement.canSwitchTools = false;
 
         GenerateSlots();

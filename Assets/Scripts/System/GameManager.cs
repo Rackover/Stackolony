@@ -168,7 +168,7 @@ public class GameManager : MonoBehaviour
                         deliveryManagement.shopDisplays,
                         gridManagement.grid,
                         gridManagement.bridgesList,
-                        storageBay.gridPosition,
+                        new Vector3Int(), //storageBay.gridPosition,
                         storageBay.storedBlocks,
                         player.name,
                         cityManagement.cityName,
