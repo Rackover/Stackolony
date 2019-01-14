@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class House : Flag {
-
+public class House : Flag
+{
     //House Datas
     public int slotAmount;
     public Population[] acceptedPop;
@@ -20,6 +20,9 @@ public class House : Flag {
     public float distanceToGround;
     public float foodConsumption;
     public int citizenCount;
+
+    ParticleSystem citizenIn;
+    ParticleSystem citizenOut;
 
     public void UpdateHouseInformations()
     {
@@ -53,6 +56,7 @@ public class House : Flag {
     {
         if (affectedCitizen.Count < slotAmount)
         {
+            CitizenInFX();
             affectedCitizen.Add(citizen);
             citizenCount++;
             //Fourni un travail au nouveau citoyen, s'il y en a un de disponible
@@ -72,4 +76,31 @@ public class House : Flag {
         GameManager.instance.systemManager.AllHouses.Remove(this);
         base.OnDestroy();
     }
+
+    void CitizenInFX()
+    {
+        if(citizenIn == null)
+        {
+            citizenIn = Instantiate(GameManager.instance.library.citizenInParticule, transform.position, Quaternion.identity, transform).GetComponent<ParticleSystem>();
+            citizenIn.maxParticles = 1;
+        }
+        citizenIn.Play();
+    }
+
+    void CitizenOutFX()
+    {
+        if(citizenOut == null)
+        {
+            citizenOut = Instantiate(GameManager.instance.library.citizenOutParticule, transform.position, Quaternion.identity, transform).GetComponent<ParticleSystem>();
+            citizenOut.maxParticles = 1;
+        }
+        citizenOut.Play();  
+    }
+
+    /*
+    ParticleSystem NewParticuleSystem()
+    {   
+        //GameObject ps = 
+    }
+    */
 }

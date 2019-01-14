@@ -106,6 +106,9 @@ public class CameraController : MonoBehaviour {
 
     float GetHeightObjective()
     {
+        if (GameManager.instance.gridManagement.myTerrain == null) {
+            return baseHeight;
+        }
         float ho = GameManager.instance.gridManagement.myTerrain.SampleHeight(transform.position) + baseHeight;
         return ho; 
     }

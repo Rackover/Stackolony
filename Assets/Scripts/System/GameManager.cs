@@ -203,8 +203,9 @@ public class GameManager : MonoBehaviour
     }
 
     // Interface functions
-    public void StartGame()
+    public void StartGame(bool newGame = true)
     {
+        
         // Initialize and shut down
         storageBay.transform.Find("Visuals").GetComponent<MeshRenderer>().enabled = true;
         GameInterfaces gi = FindObjectOfType<GameInterfaces>();
@@ -219,7 +220,13 @@ public class GameManager : MonoBehaviour
         gridManagement.InitializeGridManager();
         deliveryManagement.UpdateComplexity();
         cinematicManager.GetReferences();
-        Instantiate(library.spatioportSpawnerPrefab);
+
+        // NEW GAME ONLY
+        if(newGame)
+        {
+            // CINEMATIC
+            Instantiate(library.spatioportSpawnerPrefab);
+        }
 
         // Ingame switch
         inGame = true;
@@ -252,7 +259,7 @@ public class GameManager : MonoBehaviour
         StartCoroutine(
             LoadGameScene(
                 delegate {
-                    StartGame();
+                    StartGame(false);
                     saveManager.StartCoroutine(
                         saveManager.ReadSaveData(
                             cityManager.cityName,

@@ -14,7 +14,7 @@ public class CursorDisplay : MonoBehaviour {
     private void Update()
     {
         cursorTransform.position = Input.mousePosition;
-        ChangeCursor(GameManager.instance.cursorManagement.ToString());
+        ChangeCursor(GameManager.instance.cursorManagement.selectedMode.ToString());
         transform.SetSiblingIndex(transform.parent.childCount);
     }
 
@@ -23,21 +23,29 @@ public class CursorDisplay : MonoBehaviour {
 		cursorImage.enabled = true;
 		switch (mode) 
 		{
-			case "Default":
+            default:
 				cursorImage.sprite = null;
 				cursorImage.enabled = false;
 				break;
 
-			case "Build":
-				cursorImage.sprite = GameManager.instance.library.buildIcon;
+			case "Default":
+                cursorImage.enabled = true;
+                cursorImage.sprite = GameManager.instance.library.dragIcon;
 				break;
 
-			case "Delete":
-				cursorImage.sprite = GameManager.instance.library.destroyIcon;
+            case "Drag":
+                cursorImage.enabled = true;
+                cursorImage.sprite = GameManager.instance.library.bridgeIcon;
+                break;
+
+            case "Delete":
+                cursorImage.enabled = true;
+                cursorImage.sprite = GameManager.instance.library.destroyIcon;
 				break;
 
 			case "Bridge":
-				cursorImage.sprite = GameManager.instance.library.bridgeIcon;
+                cursorImage.enabled = true;
+                cursorImage.sprite = GameManager.instance.library.bridgeIcon;
 				break;
 		}
 	}

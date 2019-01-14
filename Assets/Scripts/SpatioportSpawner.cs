@@ -6,8 +6,6 @@ public class SpatioportSpawner : MonoBehaviour {
 
     Vector3Int coordinates;
     CameraShake cameraShake;
-    GameObject interfaceObj;
-    GameObject storageBayObj;
 
     public float cameraShakePower = 0.3f;
     public float cameraShakeDuration = 4.5f;
@@ -27,8 +25,6 @@ public class SpatioportSpawner : MonoBehaviour {
         animCam.tag = "Untagged";
         animCam.targetDisplay = 0;
         gameCam = Camera.main;
-        interfaceObj = FindObjectOfType<Interface>().gameObject;
-        storageBayObj = GameManager.instance.storageBay.gameObject;
         SwitchToCinematicCamera();
     }
 

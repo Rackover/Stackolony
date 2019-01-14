@@ -18,7 +18,12 @@ public class Library : MonoBehaviour
 	public Sprite cursorSprite;
 	public Sprite destroyIcon;
 	public Sprite buildIcon;
-	public Sprite bridgeIcon;
+    public Sprite dragIcon;
+    public Sprite bridgeIcon;
+
+	[Header("Particules")]
+	public GameObject citizenInParticule;
+	public GameObject citizenOutParticule;
 
 	public BlockScheme GetBlockByID(int id)
 	{	
