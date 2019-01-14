@@ -2,15 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spatioport : MonoBehaviour {
+public class Spatioport : Flag {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public override void AfterMovingBlock()
+    {
+        base.AfterMovingBlock();
+        Invoke("OnBlockUpdate", 0f);
+    }
+
+    public override void OnBlockUpdate()
+    {
+        base.OnBlockUpdate();
+        if (isEnabled)
+        {
+            GameManager.instance.missionManager.StartMission(myBlockLink.gridCoordinates, "EmitSpatioportInfluence", -1, -1);
+        }
+    }
 }

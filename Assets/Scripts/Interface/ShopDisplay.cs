@@ -16,6 +16,13 @@ public class ShopDisplay : MonoBehaviour {
     public Image cantBePickedIcon;
 
     public DeliveryManagement dm;
+    public RectTransform self;
+
+    void Awake()
+    {
+        if(self == null) self = GetComponent<RectTransform>();
+    }
+
 
     public void InitShopDisplay()
     {

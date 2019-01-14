@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CityManagement : MonoBehaviour 
+public class MissionCallbackManager : MonoBehaviour 
 {
-    public string cityName = "Valenciennes";
     public GameObject prefabRemoving;
     public GameObject prefabEmitting;
     public MissionManager.Mission mission;
@@ -48,7 +47,6 @@ public class CityManagement : MonoBehaviour
         GameManager.instance.missionManager.EndMission(myMission);
         yield return null;
     }
-
     IEnumerator EmitEnergy()
     {
         activeCoroutineRelatedToPower++;
@@ -86,4 +84,6 @@ public class CityManagement : MonoBehaviour
         }
         yield return null;
     }
+
+
 }

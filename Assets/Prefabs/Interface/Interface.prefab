@@ -891,6 +891,7 @@ GameObject:
   - component: {fileID: 224370415987366710}
   - component: {fileID: 222503864574643100}
   - component: {fileID: 114703708755369308}
+  - component: {fileID: 114403637700808516}
   m_Layer: 5
   m_Name: Txt
   m_TagString: Untagged
@@ -1541,7 +1542,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -2280,6 +2281,7 @@ MonoBehaviour:
   icon: {fileID: 114565813160196862}
   cantBePickedIcon: {fileID: 114463345561746492}
   dm: {fileID: 114101771718614216}
+  self: {fileID: 0}
 --- !u!114 &114350789401514790
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2490,6 +2492,19 @@ MonoBehaviour:
   example: {fileID: 1099861388636502}
   xSpacing: 40
   colorBlendAmount: 0.5
+--- !u!114 &114403637700808516
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1591390363081746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65f9985cb809aa849a1825a5758b6651, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 
+  category: 
 --- !u!114 &114412113127479260
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3232,7 +3247,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.6509434, g: 0.44533867, b: 0.095185116, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []

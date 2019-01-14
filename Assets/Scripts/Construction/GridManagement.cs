@@ -232,7 +232,6 @@ public class GridManagement : MonoBehaviour
 
         GameObject newBlockGO = Instantiate(GameManager.instance.library.blockPrefab);
         Block newBlock = newBlockGO.GetComponent<Block>();
-        print(newBlock.container.closed);
         newBlock.block = scheme;
         newBlock.LoadBlock();
 
