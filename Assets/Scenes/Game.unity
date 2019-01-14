@@ -1259,6 +1259,37 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1607488262 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1406496392558834, guid: ea01be967b53135488a2ea289dc47db1,
+    type: 2}
+  m_PrefabInternal: {fileID: 1520698624}
+--- !u!114 &1607488265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1607488262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0c329f2536211b4baae7ba3aa5cc924, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabRemoving: {fileID: 1330950013455556, guid: c89020d6ae7142645985d5e9a5f46e90,
+    type: 2}
+  prefabEmitting: {fileID: 1109864763100982, guid: 86fe2ef75fc279a4f8f10dff9fb03577,
+    type: 2}
+  mission:
+    exploredPositions: []
+    blocksFound: []
+    blockDistanceToCenter: 
+    power: 0
+    range: 0
+    callBack: 
+    position: {x: 0, y: 0, z: 0}
+    explorerCount: 0
+  activeCoroutinesRelatedToPower: 0
+  activeCoroutinesRelatedToSpatioport: 0
 --- !u!1 &1624200580 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1678395450674780, guid: 2a78a7691a6b50a42b7f6421b66dca4d,
