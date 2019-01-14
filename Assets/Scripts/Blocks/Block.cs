@@ -181,7 +181,7 @@ public class Block : MonoBehaviour {
 
                 case BlockState.OnFire:
 					onFireEffect.SetActive(true);
-                    gameManager.sfxManager.PlaySound("StartingFire");
+                    GameManager.instance.sfxManager.PlaySound("StartingFire");
 					break;
 
 				default:
@@ -206,7 +206,7 @@ public class Block : MonoBehaviour {
                     break;
                 case BlockState.OnFire:
 					onFireEffect.SetActive(false);
-                    gameManager.sfxManager.PlaySound("StoppingFire");
+                    GameManager.instance.sfxManager.PlaySound("StoppingFire");
 					break;
 
 				default:

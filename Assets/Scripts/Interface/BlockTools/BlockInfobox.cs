@@ -30,7 +30,7 @@ public class BlockInfobox : MonoBehaviour
 
 	void Update()
 	{
-		if(currentSelection != GameManager.instance.cursorManagement.selectedBlock)
+		if(currentSelection != GameManager.instance.cursorManagement.selectedBlock && GameManager.instance.cursorManagement.selectedBlock != null)
 		{
 			currentSelection = GameManager.instance.cursorManagement.selectedBlock;
 			if(currentSelection != null) LoadBlockValues(currentSelection);
