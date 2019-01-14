@@ -15,7 +15,7 @@ public class HousePanel : FlagPanel
 
 	public void ShowFlag(House h)
 	{
-		slotText.text = "0 / " + h.slotAmount.ToString();
+		slotText.text = h.affectedCitizen.Count.ToString() + " / " + h.slotAmount.ToString();
 		
 		for(int i = 0; i < citizenIcons.Length; i++)
 		{
@@ -25,7 +25,7 @@ public class HousePanel : FlagPanel
 		for(int i = 0; i < h.acceptedPop.Length; i++)
 		{
 			citizenIcons[i].self.SetActive(true);
-//			citizenIcons[i].image.sprite = h.acceptedPop[i].visuals;
+			citizenIcons[i].image.sprite = h.acceptedPop[i].humorSprite;
 		}
 	}
 }
