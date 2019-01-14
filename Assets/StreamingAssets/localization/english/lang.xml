@@ -11,20 +11,19 @@
 		<resume>Resume</resume>
 	</menu>
   
-  <menu>
-    <newGame>New game</newGame>
-    <loadGame>Load game</loadGame>
-    <options>Options</options>
-    <credits>Credits</credits>
-    <quit>Quit</quit>
-    <loading>Loading...</loading>
-    <resume>Resume</resume>
-  </menu>
-  
-	<hud>
-		<delivery>Delivery</delivery>
-	</hud>
-  
+	<options>
+		<borderSensivity>Border scrolling speed</borderSensivity>
+		<rotationSensitivity>Camera rotation speed</rotationSensitivity>
+		<grabSensitivity>Camera movement speed</grabSensitivity>
+		<enableDrifting>Enable border scrolling</enableDrifting>
+		<musicVolume>Music volume</musicVolume>
+		<bgsVolume>Background sound volume</bgsVolume>
+	</options>
+
+  <hud>
+    <delivery>Delivery</delivery>
+  </hud>
+
   <blocknames>
     <block0>StatioPort</block0>
     <block1>Fireman Station</block1>
@@ -36,7 +35,7 @@
     <block7>House</block7>
     <block8>Food Distributor</block8>
   </blocknames>
-  
+
   <blockdescriptions>
     <block0>Center of the city, all block should be connected to it.</block0>
     <block1>Extinguish the selected onfire block.</block1>

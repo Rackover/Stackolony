@@ -21,6 +21,9 @@ public class House : Flag {
     public float foodConsumption;
     public int citizenCount;
 
+    ParticleSystem citizenIn;
+    ParticleSystem citizenOut;
+
     public void UpdateHouseInformations()
     {
         citizenCount = 0;
@@ -53,6 +56,7 @@ public class House : Flag {
     {
         if (affectedCitizen.Count < slotAmount)
         {
+            CitizenInFX();
             affectedCitizen.Add(citizen);
             citizenCount++;
             //Fourni un travail au nouveau citoyen, s'il y en a un de disponible
@@ -71,5 +75,31 @@ public class House : Flag {
     {
         GameManager.instance.systemManager.AllHouses.Remove(this);
         base.OnDestroy();
+    }
+
+    void CitizenInFX()
+    {
+        if(citizenIn == null)
+        {
+            Instantiate(GameManager.instance.library.citizenInParticule, transform.position, Quaternion.identity, transform);
+        }
+
+        citizenIn.maxParticles = 1;
+        citizenIn.Play();
+    }
+
+    void CitizenOutFX()
+    {
+        if(citizenOut == null)
+        {
+            Instantiate(GameManager.instance.library.citizenOutParticule, transform.position, Quaternion.identity, transform);
+        }
+        citizenOut.maxParticles = 1;
+        citizenOut.Play();  
+    }
+
+    ParticleSystem NewParticuleSystem()
+    {   
+        GameObject ps = 
     }
 }
