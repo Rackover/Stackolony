@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StorageBay : MonoBehaviour {
-
-    public GameManager gameManager;
+public class StorageBay : MonoBehaviour 
+{
     [Header("SETTINGS")]
+    [Space(1)]
+    public bool autoSpawn;
+    public Vector3Int spawnPoint;
     [Space(1)]
     public int stockSize; //Combien de blocs peut on mettre par colonne
     public int size; //Combien de cellules prend l'objet, on veut savoir la racine carrée (2 = 2x2, 3 = 3x3 etc...)
@@ -22,40 +24,41 @@ public class StorageBay : MonoBehaviour {
 
     private void Start()
     {
-        gameManager = FindObjectOfType<GameManager>();
-
         //Initialisation des tableaux
         slots = new GameObject[stockSize, stockSize];
         storedBlocks = new GameObject[stockSize, 1, stockSize];
-
         //Empêche de changer d'outil pendant qu'on est supposé placer la stocking bay
-        gameManager.cursorManagement.SwitchMode(CursorManagement.cursorMode.Default);
-        gameManager.cursorManagement.canSwitchTools = false;
-
+        GameManager.instance.cursorManagement.SwitchMode(CursorManagement.cursorMode.Default);
+        GameManager.instance.cursorManagement.canSwitchTools = false;
         GenerateSlots();
+    }
+
+    public void Initialize()
+    {
+        if(!autoSpawn) PlaceBay(spawnPoint);
     }
 
     private void Update()
     {
-        if (!gameManager.IsInGame()) {
+        if (!GameManager.instance.IsInGame()) {
             return;
         }
 
         if (!isPlaced)
         {
-            transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(gameManager.cursorManagement.posInGrid);
+            transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(GameManager.instance.cursorManagement.posInGrid);
             if (Input.GetMouseButtonDown(0))
             {
-                Vector3 cursorPosition = GameManager.instance.gridManagement.IndexToWorldPosition(gameManager.cursorManagement.posInGrid);
+                Vector3 cursorPosition = GameManager.instance.gridManagement.IndexToWorldPosition(GameManager.instance.cursorManagement.posInGrid);
               //  cursorPosition += new Vector3(0, storageBayHeight, 0);
 
                 if (CanBePlaced(cursorPosition))
                 {
-                    PlaceBay(gameManager.cursorManagement.posInGrid);
+                    PlaceBay(GameManager.instance.cursorManagement.posInGrid);
                 }
                 else
                 {
-                    gameManager.errorDisplay.ShowError("You can't place it here");
+                    GameManager.instance.errorDisplay.ShowError("You can't place it here");
                 }
             }
         }
@@ -88,20 +91,20 @@ public class StorageBay : MonoBehaviour {
     //Place la baie de stockage
     private void PlaceBay(Vector3 cursorCoordinates)
     {
-        gameManager.sfxManager.PlaySoundLinked("BlockDropScientific", this.gameObject,0.1f,1,false);
-        gameManager.cursorManagement.canSwitchTools = true;
+        GameManager.instance.sfxManager.PlaySoundLinked("BlockDropScientific", this.gameObject,0.1f,1,false);
+        GameManager.instance.cursorManagement.canSwitchTools = true;
         isPlaced = true;
         for (int x = 0; x < size; x++)
         {
             for (int z = 0; z < size; z++)
             {
-                for (int y = 0; y < gameManager.gridManagement.maxHeight; y++)
+                for (int y = 0; y < GameManager.instance.gridManagement.maxHeight; y++)
                 {
                     Vector3Int _pos = new Vector3Int();
                     _pos.x = Mathf.RoundToInt(cursorCoordinates.x - x);
                     _pos.y = y;
                     _pos.z = Mathf.RoundToInt(cursorCoordinates.z - z);
-                    gameManager.gridManagement.grid[_pos.x, _pos.y, _pos.z] = this.gameObject;
+                    GameManager.instance.gridManagement.grid[_pos.x, _pos.y, _pos.z] = this.gameObject;
                 }
             }
         }
@@ -109,10 +112,10 @@ public class StorageBay : MonoBehaviour {
 
     private bool CanBePlaced(Vector3 positionToCompare) //Compare toutes les positions du bloc avec la position ou se trouve la souris pour savoir si le bloc est plaçable
     {
-        positionToCompare -= new Vector3(0,GameManager.instance.gridManagement.cellSize.y/2,0); //Le système place les blocs à une demi case de hauteur, donc on retire cette demi case pour pouvoir se placer au sol
+        positionToCompare -= new Vector3(0, GameManager.instance.gridManagement.cellSize.y/2,0); //Le système place les blocs à une demi case de hauteur, donc on retire cette demi case pour pouvoir se placer au sol
         foreach (GameObject t in slots)
         {
-            if(gameManager.gridManagement.myTerrain.SampleHeight(t.transform.position) < (positionToCompare.y - flexibility) || Terrain.activeTerrain.SampleHeight(t.transform.position) > (positionToCompare.y + flexibility))
+            if(GameManager.instance.gridManagement.myTerrain.SampleHeight(t.transform.position) < (positionToCompare.y - flexibility) || Terrain.activeTerrain.SampleHeight(t.transform.position) > (positionToCompare.y + flexibility))
             {
                 return false;
             }
@@ -123,7 +126,7 @@ public class StorageBay : MonoBehaviour {
     //Genere un block à l'intérieur de la baie de stockage
     public void GenerateBlock()
     {
-        GameObject newBlock = Instantiate(gameManager.library.blockPrefab);
+        GameObject newBlock = Instantiate(GameManager.instance.library.blockPrefab);
         newBlock.GetComponent<Block>().container.DropBlock();
         StoreBlock(newBlock);
     }
@@ -131,7 +134,7 @@ public class StorageBay : MonoBehaviour {
     //Livre un block à l'intérieur de la baie de stockage
     public void DeliverBlock(BlockScheme blockInfo)
     {
-        GameObject newBlock = Instantiate(gameManager.library.blockPrefab);
+        GameObject newBlock = Instantiate(GameManager.instance.library.blockPrefab);
         Block newBlockLink = newBlock.GetComponent<Block>();
         newBlockLink.block = blockInfo;
         newBlockLink.LoadBlock();
@@ -216,9 +219,6 @@ public class StorageBay : MonoBehaviour {
                 if (foundObject != null)
                 {
                     storedBlocks[blockCoordinates.x, y, blockCoordinates.z] = null;
-
-
-
                     storedBlocks[blockCoordinates.x, y - 1, blockCoordinates.z] = foundObject;
                     foundObject = storedBlocks[blockCoordinates.x, y - 1, blockCoordinates.z];
                     foundObject.transform.position = slots[blockCoordinates.x, blockCoordinates.z].transform.position;
@@ -233,7 +233,7 @@ public class StorageBay : MonoBehaviour {
             block.transform.SetParent(FindObjectOfType<GridManagement>().transform.Find("Grid"));
         } else
         {
-            gameManager.errorDisplay.ShowError("BlockScheme can't be destocked");
+            GameManager.instance.errorDisplay.ShowError("BlockScheme can't be destocked");
         }
     }
 }

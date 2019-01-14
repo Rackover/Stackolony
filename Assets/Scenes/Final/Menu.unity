@@ -2208,6 +2208,21 @@ Prefab:
       propertyPath: m_RootOrder
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 114337926563922024, guid: ea01be967b53135488a2ea289dc47db1,
+        type: 2}
+      propertyPath: spawnPoint.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114337926563922024, guid: ea01be967b53135488a2ea289dc47db1,
+        type: 2}
+      propertyPath: spawnPoint.x
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 114337926563922024, guid: ea01be967b53135488a2ea289dc47db1,
+        type: 2}
+      propertyPath: spawnPoint.z
+      value: 58
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea01be967b53135488a2ea289dc47db1, type: 2}
   m_IsPrefabAsset: 0
