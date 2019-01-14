@@ -52,7 +52,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4303447014606416}
   - component: {fileID: 114238040978110878}
-  - component: {fileID: 114916114771944458}
   m_Layer: 0
   m_Name: CameraRig
   m_TagString: Untagged
@@ -66,14 +65,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1363291426385972}
-  m_LocalRotation: {x: 0.38268343, y: 0, z: 0, w: 0.92387956}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.27006066, y: 0.7115665, z: -0.3532246, w: 0.54403377}
+  m_LocalPosition: {x: 9.8, y: -13.3, z: -2.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4922406006206270}
   m_Father: {fileID: 4303447014606416}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 45, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 52.8, y: 105.2, z: 0}
 --- !u!4 &4303447014606416
 Transform:
   m_ObjectHideFlags: 1
@@ -81,7 +80,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1663902439150980}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 100, y: 0, z: 100}
+  m_LocalPosition: {x: 87, y: 13.54, z: 82.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4047054834549798}
@@ -110,7 +109,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.4745098, g: 0.19215688, b: 0.40459073, a: 0}
+  m_BackGroundColor: {r: 0.10693307, g: 0.16309094, b: 0.254717, a: 0}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
@@ -123,10 +122,10 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 40
   orthographic: 0
   orthographic size: 5
-  m_Depth: 0
+  m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -137,7 +136,7 @@ Camera:
   m_HDR: 1
   m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
-  m_ForceIntoRT: 0
+  m_ForceIntoRT: 1
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
@@ -161,42 +160,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraModel: {fileID: 1979716195221794, guid: f5ea0ff54e611c445abaee12fd430b20,
     type: 2}
-  cameraInstance: {fileID: 0}
-  userInterface: {fileID: 114916114771944458}
-  cursorManagement: {fileID: 0}
   camCenter: {fileID: 4303447014606416}
   camPivot: {fileID: 4047054834549798}
   mouseDriftSensibility: 0.05
   driftBorder: {x: 25, y: 25}
   cameraCatchUpSpeed: 5
+  baseHeight: 4
   rotateSensibility: 2
-  minLookAngle: 5
+  minLookAngle: 30
   maxLookAngle: 80
   zoomStep: 20
-  minZoom: 10
+  minZoom: 5
   maxZoom: 50
---- !u!114 &114916114771944458
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1663902439150980}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15ee7bf4fec2e884bbe0caef22eaf57d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cursorTransform: {fileID: 0}
-  cursorIcon: {fileID: 0}
-  defaultCursor: {fileID: 21300000, guid: 7a377ecb85ef8bd4faad716cc2945544, type: 3}
-  destroyCursor: {fileID: 21300000, guid: 478b645160ae4ab46927a2457c525a72, type: 3}
-  buildCursor: {fileID: 21300000, guid: d6002df209257994cb3ea05ca09d228a, type: 3}
-  bridgeCursor: {fileID: 21300000, guid: 1193afb6464c21742bbec51f33cd0181, type: 3}
-  UICursor: {fileID: 0}
-  txtMode: {fileID: 0}
-  userBorderSensibility: {fileID: 0}
-  userRotationSensibility: {fileID: 0}
-  userGrabSensitivity: {fileID: 0}
-  txtError: {fileID: 0}
-  backgroundError: {fileID: 0}
-  sfxManager: {fileID: 0}
+  collideWith:
+    serializedVersion: 2
+    m_Bits: 512
+  size: 3
