@@ -23,5 +23,6 @@ public class CinematicManager : MonoBehaviour {
         cursorObj.SetActive(!state);
         cursor.enabled = !state;
         storageBayObj.SetActive(!state);
+        cursor.myProjector.GetComponent<Projector>().enabled = !state;
     }
 }

@@ -17,7 +17,7 @@ public class SpatioportSpawner : MonoBehaviour {
     public GameObject smokeParticle;
 
 
-    private void Awake()
+    private void Start()
     {
         GetCoordinates();
         cameraShake = GetComponent<CameraShake>();
@@ -25,9 +25,23 @@ public class SpatioportSpawner : MonoBehaviour {
         shipGameObject = transform.Find("Ship").gameObject;
         animCam = transform.Find("AnimatorCameraPivot").transform.Find("Camera").GetComponent<Camera>();
         animCam.tag = "Untagged";
+        animCam.targetDisplay = 0;
         gameCam = Camera.main;
         interfaceObj = FindObjectOfType<Interface>().gameObject;
         storageBayObj = GameManager.instance.storageBay.gameObject;
+        SwitchToCinematicCamera();
+    }
+
+    void SwitchToCinematicCamera()
+    {
+        Camera.main.targetDisplay = 1;
+        animCam.targetDisplay = 0;
+    }
+
+    void SwitchToGameCamera()
+    {
+        Camera.main.targetDisplay = 0;
+        animCam.targetDisplay = 1;
     }
 
     private void GetCoordinates()
@@ -55,7 +69,6 @@ public class SpatioportSpawner : MonoBehaviour {
         Destroy(shipGameObject);
 
         //Spawn du block
-        Debug.Log("Spawning spatioport");
         GameManager.instance.gridManagement.SpawnBlock(0, coordinates);
     }
 
@@ -74,6 +87,7 @@ public class SpatioportSpawner : MonoBehaviour {
     private void SpawnFinished()
     {
         GameManager.instance.cinematicManager.SetCinematicMode(false);
+        SwitchToGameCamera();
         Destroy(this.gameObject);
     }
 

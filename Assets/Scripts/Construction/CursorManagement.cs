@@ -23,6 +23,7 @@ public class CursorManagement : MonoBehaviour
     public bool isBridging = false;
     public Block selectedBlock; //Le block selectionné par le joueur
     public int projectorHeight = 10;
+    public GameObject myProjector;
     [Space(5)]
     
     [Header("=== DEBUG ===")]
@@ -39,7 +40,6 @@ public class CursorManagement : MonoBehaviour
     private List<GameObject> permanentHighlighter = new List<GameObject>(); 
     private GameObject hoveredBlock;
     private GameObject stackSelector; //La petite fléche qui se met au pied de la tour qu'on selectionne
-    private GameObject myProjector;
     Terrain terr; //Terrain principal sur lequel le joueur pourra placer des blocs
     Vector2Int heightmapSize;
     [System.NonSerialized] public bool canSwitchTools = true;

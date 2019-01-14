@@ -25,9 +25,12 @@ public class GridManagement : MonoBehaviour
     public Vector3[,,] bridgesGrid;
     public GameObject[,,] grid;
 
+
+    public Vector2Int spatioportSpawnPoint;
     public Terrain myTerrain; //Terrain sur lequel la grille doit être generée
     public Vector3Int gridSize; //Nombre de cases sur le terrain
     private GameObject gridGameObject; //GameObject contenant la grille
+
     
     public enum blockType{ FREE = 0, STORAGE = 1, BRIDGE = 2}
 

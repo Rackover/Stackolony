@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     public PopulationManager populationManager;
     public Player player;
     public SaveManager saveManager;
+    public CinematicManager cinematicManager;
 
     [Space(1)]
     [Header("INTERFACE")]
@@ -106,6 +107,7 @@ public class GameManager : MonoBehaviour
         if (storageBay == null) storageBay = GetComponentInChildren<StorageBay>();
         if (populationManager == null) populationManager = GetComponentInChildren<PopulationManager>();
         if (saveManager == null) saveManager = GetComponentInChildren<SaveManager>();
+        if (cinematicManager == null) cinematicManager = GetComponentInChildren<CinematicManager>();
 
         // INTERFACE
         if (cursorDisplay == null) cursorDisplay = FindObjectOfType<CursorDisplay>();
@@ -214,6 +216,8 @@ public class GameManager : MonoBehaviour
         // Initialize only
         gridManagement.InitializeGridManager();
         deliveryManagement.UpdateComplexity();
+        cinematicManager.GetReferences();
+        Instantiate(library.spatioportSpawnerPrefab);
 
         // Ingame switch
         inGame = true;
