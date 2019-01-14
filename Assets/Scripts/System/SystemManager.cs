@@ -13,10 +13,23 @@ public class SystemManager : MonoBehaviour {
     public List<FoodProvider> AllFoodProviders = new List<FoodProvider>();
     public List<Spatioport> AllSpatioports = new List<Spatioport>();
 
+
     //Met à jour tout le système
     public void UpdateSystem()
     {
         StartCoroutine(RecalculateSystem());
+    }
+
+    public void UpdateElectricitySystem()
+    {
+        StartCoroutine(RecalculatePropagation());
+    }
+
+    //Actualise l'influence du spatioport
+    public void UpdateSpatioportInfluence()
+    {
+        StartCoroutine(ResetSpatioportInfluence());
+        StartCoroutine(RecalculateSpatioportInfluence());
     }
 
     //Actualise les données de chaque maisons
@@ -72,18 +85,13 @@ public class SystemManager : MonoBehaviour {
         }
     }
 
-    //Lancé automatiquement quand les explorers ont tous terminés leurs calculs
-    public void OnCalculEnd()
-    {
-        UpdateBlocksRequiringPower();
-        UpdateBlocksDisabled();
-    }
 
     #region SystemCoroutines
     //Système de coroutine qui permet de mettre à jour tout le système
     IEnumerator RecalculateSystem()
     {
         StartCoroutine(ResetBlocksPower());
+        UpdateSpatioportInfluence();
         yield return StartCoroutine(RecalculateSystem2());
     }
     IEnumerator RecalculateSystem2()
@@ -105,7 +113,7 @@ public class SystemManager : MonoBehaviour {
     }
     #endregion
 
-    //Si un block qui requiert du courant n'a pas croisé d'explorer, alors on l'eteint. Sinon on l'allume
+    //Si un block qui requiert du courant n'a pas croisé d'explorer, alors on l'eteint. Sinon on l'allume || Lancé automatiquement à la fin des calculs liés au power
     public void UpdateBlocksRequiringPower()
     {
         foreach (Block block in AllBlocksRequiringPower)
@@ -118,12 +126,12 @@ public class SystemManager : MonoBehaviour {
         }
     }
 
-    //Si un bloc consideré disabled n'a pas reçu d'explorer provenant du spatioport, il s'eteint.
+    //Si un bloc consideré disabled n'a pas reçu d'explorer provenant du spatioport, il s'eteint. || Lancé automatiquement à la fin des calculs liés au spatioport
     public void UpdateBlocksDisabled()
     {
         foreach (Block block in AllBlockLinks)
         {
-            if (block.isConsideredDisabled)
+            if (block.isConsideredDisabled && block.GetComponent<Spatioport>() == null)
             {
                 block.Disable();
             }

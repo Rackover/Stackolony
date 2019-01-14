@@ -18,13 +18,13 @@ public class Generator : Flag {
     public override void Enable()
     {
         base.Enable();
-        GameManager.instance.systemManager.UpdateSystem();
+        GameManager.instance.systemManager.UpdateElectricitySystem();
     }
 
     public override void Disable()
     {
         base.Disable();
-        GameManager.instance.systemManager.UpdateSystem();
+        GameManager.instance.systemManager.UpdateElectricitySystem();
     }
 
     public override void BeforeMovingBlock()

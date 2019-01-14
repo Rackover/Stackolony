@@ -138,6 +138,7 @@ public class Block : MonoBehaviour {
 
     public void LoadBlock()
     {
+        Debug.Log("Loading block");
         systemRef.AllBlockLinks.Add(this);
         if (block.consumption > 0)
         {

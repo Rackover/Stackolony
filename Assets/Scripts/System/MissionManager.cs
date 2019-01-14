@@ -185,6 +185,14 @@ public class MissionManager : MonoBehaviour {
                             }
                         }
                     }
+                } else if (power <= -1)
+                {
+                    for (int i = 0; i < AdjacentBlocks.Count; i++)
+                    {
+                        //Forme l'explorer relai qui transportera ses informations
+                        int newExplorerID = myMission.activeExplorers.Count;
+                        myMission.activeExplorers.Add(StartCoroutine(SpawnExplorer(AdjacentBlocks[i].gridCoordinates, callback, myMission, range, power, newExplorerID)));
+                    }
                 }
             }
         }

@@ -137,7 +137,6 @@ public class StorageBay : MonoBehaviour
         GameObject newBlock = Instantiate(GameManager.instance.library.blockPrefab);
         Block newBlockLink = newBlock.GetComponent<Block>();
         newBlockLink.block = blockInfo;
-        newBlockLink.LoadBlock();
         newBlockLink.container.DropBlock();
         StoreBlock(newBlock);
     }
