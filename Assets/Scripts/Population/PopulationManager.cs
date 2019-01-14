@@ -22,7 +22,8 @@ public class PopulationManager : MonoBehaviour {
     {
         foreach(Population pop in populationTypeList) {
             //Temporary - Later should be initialized at 1f;
-            averageMoods[pop] = Random.value;
+            //averageMoods[pop] = Random.value;
+            averageMoods[pop] = 1f;
         }
     }
 

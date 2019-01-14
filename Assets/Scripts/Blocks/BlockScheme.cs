@@ -8,7 +8,10 @@ public class BlockScheme : ScriptableObject
 {
 	[HideInInspector] public Block link;
 
-	[Header("BLOCK PROPERTIES")]
+    [Header("BLOCK PROPERTIES")]
+    public bool movable = true;
+    public bool destrucible = true;
+
 	[Header("Datas")]
 	public string title = "BlockScheme Name";
 	[TextArea] public string description = "This needs a proper description";
