@@ -27,7 +27,7 @@ public class CursorManagement : MonoBehaviour
     [Space(5)]
     
     [Header("=== DEBUG ===")]
-    public Vector3Int posInTerrain; //Position de la souris sur le terrain
+    public Vector3Int posInGrid; //Position de la souris sur le terrain
     public Vector3 posInWorld;
     
     [HideInInspector] public bool cursorOnUI = false;
@@ -121,10 +121,17 @@ public class CursorManagement : MonoBehaviour
 
     void UpdatePosition(RaycastHit hit)
     {
-        Vector3 tempCoord = hit.point + new Vector3(0,GameManager.instance.gridManagement.cellSize.y/2); //On adapte la position de la souris pour qu'elle corresponde à la taille des cellules
+        Vector3 tempCoord = hit.point;
+        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Terrain") ||
+            cursorMode.Default == selectedMode) {
+            //On adapte la position de la souris pour qu'elle corresponde à la taille des cellules
+            tempCoord += new Vector3(0,
+                GameManager.instance.gridManagement.cellSize.y / 2
+            ); 
+        }
 
         //Converti la position pour savoir sur quelle case se trouve la souris
-        posInTerrain = GameManager.instance.gridManagement.WorldPositionToIndex(tempCoord);
+        posInGrid = GameManager.instance.gridManagement.WorldPositionToIndex(tempCoord);
     }
 
     void UpdateProjector()
@@ -137,7 +144,7 @@ public class CursorManagement : MonoBehaviour
             myProjector.GetComponent<Projector>().enabled = true;
         }
         //Met à jour la position du projecteur
-        myProjector.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(posInTerrain) + new Vector3(0, projectorHeight, 0);
+        myProjector.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(posInGrid) + new Vector3(0, projectorHeight, 0);
     }
 
     void ClearFeedback()
@@ -161,7 +168,7 @@ public class CursorManagement : MonoBehaviour
             else if (selectedMode == cursorMode.Bridge) {
 
                 GameObject objective = hit.transform.gameObject;
-                Vector3Int position = posInTerrain;
+                Vector3Int position = posInGrid;
                 // If the player is bridging, we stuck the preview to the block he's dragging the bridge from 
                 if (isBridging) {
                     objective = selectedBlock.gameObject;
@@ -188,13 +195,13 @@ public class CursorManagement : MonoBehaviour
         //Si le joueur a la souris sur un block, alors on recupere le bloc le plus bas dans la tour selectionnée
         
             int minHeight = 0;
-            for (var i = posInTerrain.y-1; i > 0; i--) //Calcule du pied de la tour selectionnée
+            for (var i = posInGrid.y-1; i > 0; i--) //Calcule du pied de la tour selectionnée
             {
                 if (GameManager.instance.gridManagement.grid
                     [
-                        posInTerrain.x,
+                        posInGrid.x,
                         i,
-                        posInTerrain.z
+                        posInGrid.z
                     ] == null)
                 {
                     minHeight = i+1;
@@ -202,7 +209,7 @@ public class CursorManagement : MonoBehaviour
                 }
             }
             stackSelector.SetActive(true);
-            Vector3 stackPosition = GameManager.instance.gridManagement.IndexToWorldPosition(posInTerrain);
+            Vector3 stackPosition = GameManager.instance.gridManagement.IndexToWorldPosition(posInGrid);
             stackPosition.y = minHeight;
             stackSelector.transform.position = stackPosition;
         } 
@@ -235,13 +242,13 @@ public class CursorManagement : MonoBehaviour
                 case cursorMode.Build:
                     if (!EventSystem.current.IsPointerOverGameObject()) 
                     {
-                        GameManager.instance.gridManagement.SpawnBlock(blockDefaultPrefab, new Vector2Int(posInTerrain.x, posInTerrain.z));
+                        GameManager.instance.gridManagement.SpawnBlock(blockDefaultPrefab, new Vector2Int(posInGrid.x, posInGrid.z));
                     }
                     break;
                     */
 
                 case cursorMode.Delete:
-                    GameManager.instance.gridManagement.DestroyBlock(posInTerrain);
+                    GameManager.instance.gridManagement.DestroyBlock(posInGrid);
                     ClearFeedback();
                     break;
             }
@@ -253,7 +260,7 @@ public class CursorManagement : MonoBehaviour
             {
                 case cursorMode.Default:
                    // Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
-                    DuringDrag(posInTerrain);
+                    DuringDrag(posInGrid);
                     break;
 
                 case cursorMode.Bridge:
@@ -269,7 +276,7 @@ public class CursorManagement : MonoBehaviour
             switch (selectedMode) {
                 case cursorMode.Default:
                     //   Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
-                    EndDrag(posInTerrain);
+                    EndDrag(posInGrid);
                     break;
 
                 case cursorMode.Bridge:
