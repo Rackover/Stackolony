@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Name: PowerPlant
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  movable: 1
+  destrucible: 1
   title: PowerPlant
   description: Produce 5 power.
   model: {fileID: 1982061194005416, guid: 5417d5759a2b0b94b84c640aa8edebbe, type: 2}
@@ -22,3 +24,4 @@ MonoBehaviour:
   consumption: 0
   flags:
   - Generator_5
+  - Occupator_2_3_Scientist

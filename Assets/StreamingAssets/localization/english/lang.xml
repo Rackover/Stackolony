@@ -10,12 +10,43 @@
 		<loading>Loading...</loading>
 		<resume>Resume</resume>
 	</menu>
-	<options>
-		<borderSensivity>Border scrolling speed</borderSensivity>
-		<rotationSensitivity>Camera rotation speed</rotationSensitivity>
-		<grabSensitivity>Camera movement speed</grabSensitivity>
-		<enableDrifting>Enable border scrolling</enableDrifting>
-		<musicVolume>Music volume</musicVolume>
-		<bgsVolume>Background sound volume</bgsVolume>
-	</options>
+  
+  <menu>
+    <newGame>New game</newGame>
+    <loadGame>Load game</loadGame>
+    <options>Options</options>
+    <credits>Credits</credits>
+    <quit>Quit</quit>
+    <loading>Loading...</loading>
+    <resume>Resume</resume>
+  </menu>
+  
+	<hud>
+		<delivery>Delivery</delivery>
+	</hud>
+  
+  <blocknames>
+    <block0>StatioPort</block0>
+    <block1>Fireman Station</block1>
+    <block2>Observatory</block2>
+    <block3>Power Plant</block3>
+    <block4>Wind Turbine</block4>
+    <block5>Police Station</block5>
+    <block6>Casino</block6>
+    <block7>House</block7>
+    <block8>Food Distributor</block8>
+  </blocknames>
+  
+  <blockdescriptions>
+    <block0>Center of the city, all block should be connected to it.</block0>
+    <block1>Extinguish the selected onfire block.</block1>
+    <block2>Occupy 5 scientists.</block2>
+    <block3>Produce 5 power.</block3>
+    <block4>Produce 2 power.</block4>
+    <block5>Stops any riot in a range of 5.</block5>
+    <block6>Increase the mood of the nearby houseblocks by 10 in a range of 3 blocks.</block6>
+    <block7>A simple house.</block7>
+    <block8>Gives 6 food to houses in range.</block8>
+  </blockdescriptions>
+  
 </lines>

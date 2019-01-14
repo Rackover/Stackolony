@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Name: Distributor
   m_EditorClassIdentifier: 
   link: {fileID: 0}
+  movable: 1
+  destrucible: 1
   title: Distributor
   description: Gives 6 food to houses in range
   model: {fileID: 1831451232183382, guid: 8375b7ecc00027344951012639f005fd, type: 2}
   icon: {fileID: 21300000, guid: bac1b11626b6d4448bc82a261716482c, type: 3}
-  ID: 10
+  ID: 8
   level: 1
   complexity: 1
   consumption: 1

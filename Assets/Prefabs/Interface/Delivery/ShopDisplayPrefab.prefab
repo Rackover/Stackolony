@@ -143,6 +143,7 @@ GameObject:
   - component: {fileID: 222189166600947422}
   - component: {fileID: 114695720323441410}
   - component: {fileID: 114159365536912100}
+  - component: {fileID: 114950000912197816}
   m_Layer: 5
   m_Name: ShopDisplayPrefab
   m_TagString: Untagged
@@ -233,6 +234,8 @@ MonoBehaviour:
   quantityPickedDisplay: {fileID: 114049395580323072}
   icon: {fileID: 114169906812149384}
   cantBePickedIcon: {fileID: 114874540348330682}
+  dm: {fileID: 0}
+  self: {fileID: 0}
 --- !u!114 &114169906812149384
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -478,6 +481,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114950000912197816
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1709231274664860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa5b072f671756d4d9cf8a1c2422c34c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shopDisplay: {fileID: 114159365536912100}
 --- !u!114 &114989056193902870
 MonoBehaviour:
   m_ObjectHideFlags: 1

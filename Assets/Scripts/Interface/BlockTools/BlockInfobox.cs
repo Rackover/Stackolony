@@ -194,6 +194,22 @@ public class BlockInfobox : MonoBehaviour
 
 	}
 
+	public void ShowBlockSheme(BlockScheme blockScheme, Vector2 where)
+	{	
+		Hide();
+		self.position = new Vector2(where.x, where.y);
+
+
+		GameManager.instance.localization.SetCategory("blocknames");
+		nameText.text = GameManager.instance.localization.GetLine("block" + blockScheme.ID);
+
+		GameManager.instance.localization.SetCategory("blockdescriptions");
+		descriptionText.text = GameManager.instance.localization.GetLine("block" + blockScheme.ID);
+
+		generalBox.sizeDelta = new Vector2(generalBox.sizeDelta.x, GetRequiredHeight(descriptionText, generalBox.sizeDelta.x));
+		generalBox.gameObject.SetActive(true);
+	}
+
 	public void UseBlock()
 	{
 
