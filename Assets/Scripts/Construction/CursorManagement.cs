@@ -533,7 +533,7 @@ public class CursorManagement : MonoBehaviour
 
     public void StartDrag(Block _block)
     {
-        if (_block != null && _block.block.movable == true)
+        if (_block != null && _block.block.isMovable == true)
         {
             selectedBlock = _block;
             selectedBlock.StopAllCoroutines();
@@ -598,7 +598,7 @@ public class CursorManagement : MonoBehaviour
             else
             {
                 //If the cube is dragged on the stocking bay
-                if(GameManager.instance.gridManagement.GetSlotType(_pos, false) == GridManagement.blockType.STORAGE &&  selectedBlock.gameObject.layer != LayerMask.NameToLayer("StoredBlock") && selectedBlock.block.storable == true)
+                if(GameManager.instance.gridManagement.GetSlotType(_pos, false) == GridManagement.blockType.STORAGE &&  selectedBlock.gameObject.layer != LayerMask.NameToLayer("StoredBlock") && selectedBlock.block.isStorable == true)
                 {
                     //Update the grid
                     GameManager.instance.gridManagement.UpdateBlocks(selectedBlock.gridCoordinates);
