@@ -203,7 +203,6 @@ public class GameManager : MonoBehaviour
     {
         // Initialize and shut down
         storageBay.transform.Find("Visuals").GetComponent<MeshRenderer>().enabled = true;
-        
         GameInterfaces gi = FindObjectOfType<GameInterfaces>();
         if (gi != null) {
             gi.gameObject.SetActive(true);
@@ -214,6 +213,7 @@ public class GameManager : MonoBehaviour
 
         // Initialize only
         gridManagement.InitializeGridManager();
+        deliveryManagement.UpdateComplexity();
 
         // Ingame switch
         inGame = true;
