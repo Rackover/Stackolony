@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     bool inGame = false;
     bool isLoading = false;
 
-    public Object menuScene;
+    public string menuSceneName="Menu";
 
     [Header("SYSTEM")]
     public Temporality temporality;
@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        if (menuScene.name != SceneManager.GetActiveScene().name) {
+        if (menuSceneName != SceneManager.GetActiveScene().name) {
             StartGame();
         }
         else {
@@ -266,7 +266,7 @@ public class GameManager : MonoBehaviour
     public void ExitToMenu()
     {
         EndGame();
-        SceneManager.LoadScene(menuScene.name);
+        SceneManager.LoadScene(menuSceneName);
     }
 
 

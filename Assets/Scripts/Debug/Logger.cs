@@ -93,14 +93,14 @@ public class Logger : MonoBehaviour
         }
 
         // Kills the app if exit is set to true - useful to write logs before quitting
+        
         if (exit) {
 #if UNITY_EDITOR
             EditorApplication.isPlaying = false;
-#else
-            Application.Quit();
 #endif
+            Application.Quit();
         }
-
+        
         // Resets the string builder
         builder = new StringBuilder();
         yield return new WaitForSeconds(flushEverySecond);

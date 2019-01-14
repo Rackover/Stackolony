@@ -35,17 +35,11 @@ public class MissionManager : MonoBehaviour {
         public System.Type flagToFind;
     }
     [Header("Lists")]
-    public List<Mission> missionList;
+    public List<Mission> missionList = new List<Mission>();
     public List<int> IDList;
     [Header("Debug")]
     public GameObject explorerPrefab;
-
-
-    private void Awake()
-    {
-        missionList = new List<Mission>();
-    }
-
+    
     public Mission PrepareNewMission()
     {
         Mission newMission = new Mission();
