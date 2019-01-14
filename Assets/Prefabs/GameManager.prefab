@@ -942,6 +942,7 @@ MonoBehaviour:
   isBridging: 0
   selectedBlock: {fileID: 0}
   projectorHeight: 10
+  myProjector: {fileID: 0}
   posInTerrain: {x: 0, y: 0, z: 0}
   posInWorld: {x: 0, y: 0, z: 0}
   cursorOnUI: 0
@@ -1024,6 +1025,7 @@ MonoBehaviour:
     type: 2}
   spatioportSpawnerPrefab: {fileID: 1863592346692030, guid: 05e73553118545e4e99b71ce4b0f2534,
     type: 2}
+  disabledBlockPrefab: {fileID: 0}
   blocks:
   - {fileID: 11400000, guid: b7fd27253a34688459ab7ada3dab8486, type: 2}
   - {fileID: 11400000, guid: 296389d451a99b4459868887eb39ba98, type: 2}
@@ -1050,6 +1052,7 @@ MonoBehaviour:
   cursorSprite: {fileID: 21300000, guid: 7a377ecb85ef8bd4faad716cc2945544, type: 3}
   destroyIcon: {fileID: 21300000, guid: 7e428129950162542a0330dc8f89d509, type: 3}
   buildIcon: {fileID: 21300000, guid: 00aad6060067afb45bb1250f424b0965, type: 3}
+  dragIcon: {fileID: 21300000, guid: 571f3cd4240e80247bb75fa1ed409adf, type: 3}
   bridgeIcon: {fileID: 21300000, guid: 1e685fff11248c04c993b132e24958be, type: 3}
 --- !u!114 &114742037031297190
 MonoBehaviour:
@@ -1085,6 +1088,7 @@ MonoBehaviour:
   AllOccupators: []
   AllHouses: []
   AllFoodProviders: []
+  AllSpatioports: []
 --- !u!114 &114783273027405890
 MonoBehaviour:
   m_ObjectHideFlags: 1
