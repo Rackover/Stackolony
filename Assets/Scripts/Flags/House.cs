@@ -98,8 +98,10 @@ public class House : Flag {
         citizenOut.Play();  
     }
 
+    /*
     ParticleSystem NewParticuleSystem()
     {   
-        GameObject ps = 
+        //GameObject ps = 
     }
+    */
 }
