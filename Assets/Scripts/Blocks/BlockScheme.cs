@@ -9,9 +9,11 @@ public class BlockScheme : ScriptableObject
 	[HideInInspector] public Block link;
 
     [Header("BLOCK PROPERTIES")]
-    public bool movable = true;
-    public bool destroyable = true;
-    public bool storable = true;
+    public bool isMovable = true;
+    public bool isDestroyable = true;
+    public bool isStorable = true;
+    public bool isBuyable = true;
+
 
 	[Header("Datas")]
 	public string title = "BlockScheme Name";

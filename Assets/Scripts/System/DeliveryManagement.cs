@@ -70,6 +70,8 @@ public class DeliveryManagement : MonoBehaviour {
     {
         foreach (BlockScheme block in GameManager.instance.library.blocks)
         {
+            if (!block.isBuyable)
+                return;
             GameObject newBlockDisplay = Instantiate(blockDisplayPrefab, shopPanelRegular);
             try {
                 newBlockDisplay.name = "Display " + block.title;
