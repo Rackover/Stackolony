@@ -20,6 +20,8 @@ public class CameraController : MonoBehaviour {
     public float mouseDriftSensibility = 0.1f;     // Set the sensibility of the drift of the camera center
     public Vector2 driftBorder = new Vector2(25f, 25f);
     public float cameraCatchUpSpeed = 5f;       // Speed at which the camera will catch up to its supposed location. Increasing this value decreases the camera lag
+    public float baseHeight;
+
     [Header("Rotating")]
     public float rotateSensibility = 1f;
     public float minLookAngle = 10f;
@@ -32,7 +34,6 @@ public class CameraController : MonoBehaviour {
     private float borderSensibility = 0.5f;
     private float rotationSensibility = 0.5f;
     private float grabSensitivity = 0.5f;
-
 
     bool driftEnabled = true;
     Transform camTransform;              // Transform of the main camera
@@ -72,6 +73,8 @@ public class CameraController : MonoBehaviour {
         rotationSensibility = GameManager.instance.player.options.GetFloat("rotationSensitivity");
         grabSensitivity = GameManager.instance.player.options.GetFloat("grabSensitivity");
 
+        UpdateCameraCenterHeight();
+
         if (GameManager.instance.cursorManagement.cursorOnUI == false) {
             cameraTransformObjective.LookAt(camCenter.position);
 
@@ -93,18 +96,34 @@ public class CameraController : MonoBehaviour {
         CatchUpCameraObjective();
     }
 
+    void UpdateCameraCenterHeight()
+    {
+        transform.position = new Vector3(transform.position.x, GetHeightObjective(), transform.position.z);
+    }
+
+    float GetHeightObjective()
+    {
+        return GameManager.instance.gridManagement.myTerrain.SampleHeight(transform.position) + baseHeight; 
+    }
+
     public void ResetPosition()
     {
         transform.position = startPosition;
     }
 
     void CatchUpCameraObjective() {
-        // Storing previous position in case of collision
-        if (!Physics.Raycast(camTransform.position, cameraTransformObjective.position - camTransform.position, Vector3.Distance(camTransform.position, cameraTransformObjective.position)))
-        {
-            camTransform.position = Vector3.Lerp(camTransform.position, cameraTransformObjective.position, cameraCatchUpSpeed * Time.deltaTime);
-            camTransform.rotation = Quaternion.Lerp(camTransform.rotation, cameraTransformObjective.rotation, cameraCatchUpSpeed * Time.deltaTime);
+
+        RaycastHit hit;
+        Vector3 catchUpPosition = cameraTransformObjective.position;
+        Debug.DrawLine(camCenter.position, cameraTransformObjective.position);
+        if (Physics.Raycast(camCenter.position, cameraTransformObjective.position, out hit, Vector3.Distance(cameraTransformObjective.position, camCenter.position), LayerMask.GetMask("Terrain"))) {
+            catchUpPosition = hit.point;
+            Debug.Log("Taking hit");
         }
+
+        camTransform.position = Vector3.Lerp(camTransform.position, catchUpPosition, cameraCatchUpSpeed * Time.deltaTime);
+        camTransform.rotation = Quaternion.Lerp(camTransform.rotation, cameraTransformObjective.rotation, cameraCatchUpSpeed * Time.deltaTime);
+
     }
 
     private void Move()
@@ -112,7 +131,6 @@ public class CameraController : MonoBehaviour {
         if (Input.GetButtonDown("MoveCamera")) {
             lastMousePosition = (Vector3)Input.mousePosition;
             camTarget = null;
-            camCenter.position = new Vector3(camCenter.position.x, 0f, camCenter.position.z);
         }
         mouseDelta = (Vector3)lastMousePosition - (Vector3)Input.mousePosition;
         camCenter.position += mouseDelta.x * cameraTransformObjective.right.normalized * mouseDriftSensibility * grabSensitivity;
@@ -125,7 +143,8 @@ public class CameraController : MonoBehaviour {
         Vector2 lookDirection = new Vector2(
             Input.GetAxis("CursorX") * rotateSensibility * rotationSensibility,
             Input.GetAxis("CursorY") * rotateSensibility * rotationSensibility
-        );  
+        );
+        print(Mathf.Clamp(camPivot.eulerAngles.x - lookDirection.y, minLookAngle, maxLookAngle));
         camPivot.rotation = Quaternion.Euler(new Vector3(
             Mathf.Clamp(camPivot.eulerAngles.x - lookDirection.y, minLookAngle, maxLookAngle), 
             camPivot.eulerAngles.y+ lookDirection.x, 
@@ -161,8 +180,10 @@ public class CameraController : MonoBehaviour {
 
     void Zoom() 
     {
-        if (Input.GetAxis("ZoomCamera") > 0 && cameraTransformObjective.position.y > minZoom ||
-            Input.GetAxis("ZoomCamera") < 0 && cameraTransformObjective.position.y < maxZoom) {
+        float o = GetHeightObjective();
+
+        if (Input.GetAxis("ZoomCamera") > 0 && cameraTransformObjective.position.y > minZoom + o ||
+            Input.GetAxis("ZoomCamera") < 0 && cameraTransformObjective.position.y < maxZoom + o) {
 
             // Zoom in
             cameraTransformObjective.transform.position += cameraTransformObjective.transform.forward * Input.GetAxis("ZoomCamera") * zoomStep;

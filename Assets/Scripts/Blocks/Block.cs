@@ -223,7 +223,6 @@ public class Block : MonoBehaviour {
     {
         if(blockObject != null) {
             if (!on) {
-                Debug.Log("Game object has been deactivated");
                 blockObject.gameObject.SetActive(false);
                 if (block.consumption != 0)
                 {

@@ -91,7 +91,7 @@ public class Options
     {
         options["borderSensivity"] = new SliderOption(6f, 15f, 50f);
         options["rotationSensitivity"] = new SliderOption(0.2f, 1f, 5f);
-        options["grabSensitivity"] = new SliderOption(0.1f, 0.8f, 2f);
+        options["grabSensitivity"] = new SliderOption(0.05f, 0.4f, 1.5f);
         options["musicVolume"] = new SliderOption(0f, 1f, 1f);
         options["bgsVolume"] = new SliderOption(0f, 0.2f, 1f);
 
