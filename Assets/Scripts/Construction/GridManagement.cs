@@ -224,16 +224,16 @@ public class GridManagement : MonoBehaviour
 
     public GameObject CreateBlockFromId(int blockId)
     {
-        BlockScheme block = GameManager.instance.library.GetBlockByID(blockId);
-        if (block == null) { Logger.Warn("BlockScheme index not found - index : " + blockId); return null; }
+        BlockScheme scheme = GameManager.instance.library.GetBlockByID(blockId);
+        if (scheme == null) { Logger.Warn("BlockScheme index not found - index : " + blockId); return null; }
 
-        GameObject newBlock = Instantiate(GameManager.instance.library.blockPrefab);
-        Block newBlockLink = newBlock.GetComponent<Block>();
-        newBlockLink.block = block;
-        newBlockLink.LoadBlock();
-        newBlockLink.container.OpenContainer();
+        GameObject newBlockGO = Instantiate(GameManager.instance.library.blockPrefab);
+        Block newBlock = newBlockGO.GetComponent<Block>();
+        print(newBlock.container.closed);
+        newBlock.block = scheme;
+        newBlock.LoadBlock();
 
-        return newBlock;
+        return newBlockGO;
     }
 
     public blockType GetSlotType(Vector3Int coordinates, bool displayErrorMessages)

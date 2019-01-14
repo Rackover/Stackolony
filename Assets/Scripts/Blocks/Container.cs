@@ -11,7 +11,6 @@ public class Container : MonoBehaviour
     public MeshRenderer[] iconRenderers;
     [Header("States")]
     public bool closed;
-    public bool isFalling;
 
 
 
@@ -59,10 +58,7 @@ public class Container : MonoBehaviour
         croppedTexture.SetPixels( pixels );
         croppedTexture.Apply();
         iconMat.mainTexture = croppedTexture;
-        
-        isFalling = false;
-
-        CloseContainer();
+       
     }
 
     void Update()
@@ -85,7 +81,6 @@ public class Container : MonoBehaviour
     public void DropSound()
     {
         GameManager.instance.sfxManager.PlaySoundAtPosition("DropContainer",this.transform.position);
-        //isFalling = false;
     }
 
     public void ShipSound()
@@ -95,7 +90,6 @@ public class Container : MonoBehaviour
 
     public void DropBlock()
     {
-        //isFalling = true;
         GameManager.instance.sfxManager.PlaySoundWithRandomParameters("FallingContainer",1,1,0.8f,1.2f);
         linkedBlock.ToggleVisuals(false);
         myAnimator.SetTrigger("Drop");

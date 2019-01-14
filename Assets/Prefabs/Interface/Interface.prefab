@@ -593,7 +593,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1366297523477028
 GameObject:
   m_ObjectHideFlags: 1
@@ -2488,7 +2488,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   example: {fileID: 1099861388636502}
-  xSpacing: 0
+  xSpacing: 40
   colorBlendAmount: 0.5
 --- !u!114 &114412113127479260
 MonoBehaviour:

@@ -227,7 +227,8 @@ public class SaveManager : MonoBehaviour {
                 // Todo : Load states aswell
                 Vector3Int coords = blockData.Key;
                 Logger.Debug("Spawning block #" + blockData.Value.id + " at position " + blockData.Key.ToString());
-                gridMan.SpawnBlock(blockData.Value.id, blockData.Key);
+                GameObject spawnedBlock = gridMan.SpawnBlock(blockData.Value.id, blockData.Key);
+                spawnedBlock.GetComponent<Block>().container.closed = false;
             }
 
             // Converting bridges list

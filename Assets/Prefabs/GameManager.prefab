@@ -309,6 +309,7 @@ GameObject:
   - component: {fileID: 4861238627174296}
   - component: {fileID: 33816829965521354}
   - component: {fileID: 23385813803281652}
+  - component: {fileID: 114907808880693618}
   m_Layer: 0
   m_Name: Highlighter
   m_TagString: Untagged
@@ -471,7 +472,7 @@ Transform:
   m_GameObject: {fileID: 1805530614771216}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 74.3, y: 14.9, z: 96.4}
-  m_LocalScale: {x: 5, y: 0.448756, z: 5}
+  m_LocalScale: {x: 4.5, y: 0.448756, z: 4.5}
   m_Children:
   - {fileID: 4179442759437078}
   m_Father: {fileID: 4805539053113026}
@@ -808,8 +809,6 @@ MonoBehaviour:
   - soundName: AmbianceSound
     soundClip:
     - {fileID: 8300000, guid: 4ea4de8fd3b646c42b572602e7ab4e9b, type: 3}
-  musicVolume: 1
-  ambianceSoundVolume: 0.2
 --- !u!114 &114225242450079362
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1077,6 +1076,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerName: Maurice
+--- !u!114 &114907808880693618
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1944363005231262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb07e16cff18d6846b5f1878a1b07687, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  greenMat: {fileID: 2100000, guid: 91bd606313627814bb0d42232036dcf1, type: 2}
+  defaultMat: {fileID: 2100000, guid: ab20dd04b9178c841a1c4ec5583e5ec5, type: 2}
 --- !u!114 &114945228266214062
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1106,7 +1118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f24f8d9162098bf4384d535396448edb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuScene: {fileID: 102900000, guid: ecbb49a739148a94cb28921e3452a2f6, type: 3}
+  menuSceneName: Menu
   temporality: {fileID: 0}
   flagReader: {fileID: 0}
   library: {fileID: 0}

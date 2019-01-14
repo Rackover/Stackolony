@@ -221,10 +221,9 @@ public class Block : MonoBehaviour {
 
     public void ToggleVisuals(bool on)
     {
-        if(blockObject != null)
-        {
-            if (!on)
-            {
+        if(blockObject != null) {
+            if (!on) {
+                Debug.Log("Game object has been deactivated");
                 blockObject.gameObject.SetActive(false);
                 if (block.consumption != 0)
                 {

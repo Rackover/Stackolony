@@ -134,6 +134,7 @@ public class StorageBay : MonoBehaviour {
         GameObject newBlock = Instantiate(gameManager.library.blockPrefab);
         Block newBlockLink = newBlock.GetComponent<Block>();
         newBlockLink.block = blockInfo;
+        newBlockLink.LoadBlock();
         newBlockLink.container.DropBlock();
         StoreBlock(newBlock);
     }
@@ -178,9 +179,6 @@ public class StorageBay : MonoBehaviour {
         blockInfo.gridCoordinates = position;
         blockInfo.container.CloseContainer();
         blockToStore.layer = LayerMask.NameToLayer("StoredBlock");
-        if (blockInfo.container.isFalling == false) {
-            gameManager.sfxManager.PlaySoundLinked("BlockDrop", blockToStore);
-        }
     }
 
     //Agrandi la taille max de la grille de stockage de blocs
