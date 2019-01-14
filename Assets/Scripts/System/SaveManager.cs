@@ -49,7 +49,7 @@ public class SaveManager : MonoBehaviour {
         // Step 0 - Initialize writer
         Writer writer = new Writer();
 
-        if(!writer.OpenSave(Paths.GetSaveFile(GameManager.instance.cityManagement.cityName)))
+        if(!writer.OpenSave(Paths.GetSaveFile(GameManager.instance.cityManager.cityName)))
             yield break;
         
         Logger.Info("Saving...");
@@ -252,7 +252,7 @@ public class SaveManager : MonoBehaviour {
             }
 
             GameManager.instance.player.playerName = saveData.playerName;
-            GameManager.instance.cityManagement.cityName = saveData.cityName;
+            GameManager.instance.cityManager.cityName = saveData.cityName;
             GameManager.instance.temporality.cycleNumber = saveData.cyclesPassed;
             GameManager.instance.temporality.cycleProgression = saveData.timeOfDay;
         }

@@ -17,7 +17,8 @@ public class GameManager : MonoBehaviour
     public Library library;
     public SFXManager sfxManager;
     public SystemManager systemManager;
-    public CityManagement cityManagement;
+    public MissionCallbackManager missionCallbackManager;
+    public CityManager cityManager;
     public MissionManager missionManager;
     public CursorManagement cursorManagement;
     public GridManagement gridManagement;
@@ -100,7 +101,7 @@ public class GameManager : MonoBehaviour
         if (library == null) library = GetComponentInChildren<Library>();
         if (sfxManager == null) sfxManager = GetComponentInChildren<SFXManager>();
         if (systemManager == null) systemManager = GetComponentInChildren<SystemManager>();
-        if (cityManagement == null) cityManagement = GetComponentInChildren<CityManagement>();
+        if (missionCallbackManager == null) missionCallbackManager = GetComponentInChildren<MissionCallbackManager>();
         if (missionManager == null) missionManager = GetComponentInChildren<MissionManager>();
         if (cursorManagement == null) cursorManagement = GetComponentInChildren<CursorManagement>();
         if (gridManagement == null) gridManagement = GetComponentInChildren<GridManagement>();
@@ -108,6 +109,7 @@ public class GameManager : MonoBehaviour
         if (populationManager == null) populationManager = GetComponentInChildren<PopulationManager>();
         if (saveManager == null) saveManager = GetComponentInChildren<SaveManager>();
         if (cinematicManager == null) cinematicManager = GetComponentInChildren<CinematicManager>();
+        if (cityManager == null) cityManager = GetComponentInChildren<CityManager>();
 
         // INTERFACE
         if (cursorDisplay == null) cursorDisplay = FindObjectOfType<CursorDisplay>();
@@ -173,7 +175,7 @@ public class GameManager : MonoBehaviour
                         new Vector3Int(), //storageBay.gridPosition,
                         storageBay.storedBlocks,
                         player.name,
-                        cityManagement.cityName,
+                        cityManager.cityName,
                         temporality.cycleNumber,
                         temporality.cycleProgression
                     )
@@ -253,7 +255,7 @@ public class GameManager : MonoBehaviour
                     StartGame();
                     saveManager.StartCoroutine(
                         saveManager.ReadSaveData(
-                            cityManagement.cityName,
+                            cityManager.cityName,
                             delegate {
                                 saveManager.LoadSaveData(saveManager.loadedData);
                                 isLoading = false;
