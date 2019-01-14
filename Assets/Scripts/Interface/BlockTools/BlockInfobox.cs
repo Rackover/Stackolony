@@ -28,6 +28,39 @@ public class BlockInfobox : MonoBehaviour
 	List<StateTag> stateTags = new List<StateTag>();
 	List<FlagPanel> flagPanels = new List<FlagPanel>();
 
+	void Update()
+	{
+		if(currentSelection != GameManager.instance.cursorManagement.selectedBlock)
+		{
+			currentSelection = GameManager.instance.cursorManagement.selectedBlock;
+			if(currentSelection != null) LoadBlockValues(currentSelection);
+			else Hide();
+		}
+
+		if(generalBox.gameObject.activeSelf && currentSelection != null)
+		{
+			Vector2 o = Camera.main.WorldToScreenPoint(currentSelection.transform.position);
+			Vector2 t = self.position;
+			if(o.x >= t.x)
+				t = new Vector2(self.position.x + generalBox.sizeDelta.x/2 - 5f, self.position.y);
+			else
+				t = new Vector2(self.position.x - generalBox.sizeDelta.x/2 + 5f, self.position.y);
+			line.DrawCanvasLine(o, t, 2f, Color.grey);
+
+			for(int i = 0; i < currentSelection.activeFlags.Count; i++)
+			{
+				if(currentSelection.activeFlags[i] is FiremanStation)
+				{
+					FiremanStation firemanStation = (FiremanStation)currentSelection.activeFlags[i];
+					for(int j = 0; j < firemanStation.targets.Count; j++)
+					{
+						line.DrawCanvasLine(Camera.main.WorldToScreenPoint(currentSelection.transform.position), Camera.main.WorldToScreenPoint(firemanStation.targets[j].transform.position), 1f, Color.blue);
+					}
+				}
+			}
+		}
+	}
+
 	public void LoadBlockValues(Block block)
 	{
 		Hide();
@@ -136,33 +169,6 @@ public class BlockInfobox : MonoBehaviour
 	float GetRequiredHeight(Text text, float width)
 	{
 		return Mathf.Ceil((text.text.Length * text.fontSize)/width) * text.fontSize;
-	}
-
-	void Update()
-	{
-		if(generalBox.gameObject.activeSelf && currentSelection != null)
-		{
-			Vector2 o = Camera.main.WorldToScreenPoint(currentSelection.transform.position);
-			Vector2 t = self.position;
-			if(o.x >= t.x)
-				t = new Vector2(self.position.x + generalBox.sizeDelta.x/2 - 5f, self.position.y);
-			else
-				t = new Vector2(self.position.x - generalBox.sizeDelta.x/2 + 5f, self.position.y);
-			line.DrawCanvasLine(o, t, 2f, Color.grey);
-
-
-			for(int i = 0; i < currentSelection.activeFlags.Count; i++)
-			{
-				if(currentSelection.activeFlags[i] is FiremanStation)
-				{
-					FiremanStation firemanStation = (FiremanStation)currentSelection.activeFlags[i];
-					for(int j = 0; j < firemanStation.targets.Count; j++)
-					{
-						line.DrawCanvasLine(Camera.main.WorldToScreenPoint(currentSelection.transform.position), Camera.main.WorldToScreenPoint(firemanStation.targets[j].transform.position), 1f, Color.blue);
-					}
-				}
-			}
-		}
 	}
 
 	StateTag GetAvailableTag()

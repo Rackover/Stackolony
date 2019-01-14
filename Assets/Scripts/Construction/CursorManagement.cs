@@ -438,7 +438,6 @@ public class CursorManagement : MonoBehaviour
     {
         GameObject newHighlighter = Instantiate(bridgeHighlighter, highlighter.transform.parent);
         newHighlighter.transform.position = GameManager.instance.gridManagement.grid[coordinate.x, coordinate.y, coordinate.z].transform.position;
-        newHighlighter.AddComponent<Highlighter>();
         newHighlighter.GetComponent<Highlighter>().SetGreenHighlighter();
         newHighlighter.SetActive(true);
         permanentHighlighter.Add(newHighlighter);
@@ -476,7 +475,6 @@ public class CursorManagement : MonoBehaviour
                     GameObject newHighlighter = Instantiate(bridgeHighlighter, highlighter.transform.parent);
                     newHighlighter.transform.parent = GameManager.instance.gridManagement.grid[coordinate.x, coordinate.y, coordinate.z].transform;
                     newHighlighter.transform.localPosition = Vector3.zero;
-                    newHighlighter.AddComponent<Highlighter>();
                     newHighlighter.SetActive(true);
                     activeHighlighters[i] = newHighlighter;
                     i++;
