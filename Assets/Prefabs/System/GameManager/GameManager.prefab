@@ -854,7 +854,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 383f5a1cc97742b4e98605009782323d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameManager: {fileID: 114966021634454084}
+  autoSpawn: 0
+  spawnPoint: {x: 60, y: 10, z: 58}
   stockSize: 4
   size: 2
   maxStock: -1
