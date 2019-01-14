@@ -7,31 +7,12 @@ public class MissionCallbackManager : MonoBehaviour
     public GameObject prefabRemoving;
     public GameObject prefabEmitting;
     public MissionManager.Mission mission;
-    public int activeCoroutines;
+    public int activeCoroutinesRelatedToPower;
+    public int activeCoroutinesRelatedToSpatioport;
     
-    //Must be called at the start of every callback function
-    void InitCallback()
-    {
-        activeCoroutines++;
-        MissionManager.Mission myMission = mission;
-    }
-
-    //Must be called at the end of every callback function
-    void EndCallBack()
-    {
-        activeCoroutines--;
-        if (activeCoroutines <= 0)
-        {
-            if (GameManager.instance.systemManager != null)
-            {
-                GameManager.instance.systemManager.OnCalculEnd();
-            }
-        }
-    }
 
     IEnumerator DistributeFood()
     {
-        InitCallback();
         MissionManager.Mission myMission = mission;
         FoodProvider foodProvider = GameManager.instance.gridManagement.grid[myMission.position.x, myMission.position.y, myMission.position.z].GetComponent<FoodProvider>();
         float foodLeft = foodProvider.foodTotal;
@@ -54,12 +35,11 @@ public class MissionCallbackManager : MonoBehaviour
         }
         foodProvider.foodLeft = foodLeft;
         GameManager.instance.missionManager.EndMission(myMission);
-        EndCallBack();
+        activeCoroutinesRelatedToPower--;
         yield return null;
     }
     IEnumerator EmitOccupators()
     {
-        InitCallback();
         MissionManager.Mission myMission = mission;
         Occupator linkedOccupator = GameManager.instance.gridManagement.grid[myMission.position.x, myMission.position.y, myMission.position.z].GetComponent<Occupator>();
         foreach (Block blocklink in myMission.blocksFound)
@@ -68,12 +48,11 @@ public class MissionCallbackManager : MonoBehaviour
             house.occupatorsInRange.Add(linkedOccupator);
         }
         GameManager.instance.missionManager.EndMission(myMission);
-        EndCallBack();
         yield return null;
     }
     IEnumerator EmitEnergy()
     {
-        InitCallback();
+        activeCoroutinesRelatedToPower++;
         MissionManager.Mission myMission = mission;
         foreach (Block blocklink in myMission.blocksFound)
         {
@@ -97,17 +76,36 @@ public class MissionCallbackManager : MonoBehaviour
             }
         }
         GameManager.instance.missionManager.EndMission(myMission);
-
-        EndCallBack();
+        activeCoroutinesRelatedToPower--;
+        if (activeCoroutinesRelatedToPower <= 0)
+        {
+            if (GameManager.instance.systemManager != null)
+            {
+                GameManager.instance.systemManager.UpdateBlocksRequiringPower();
+            }
+        }
         yield return null;
     }
 
     IEnumerator EmitSpatioportInfluence()
     {
-        InitCallback();
-
-
-        EndCallBack();
+        activeCoroutinesRelatedToSpatioport++;
+        MissionManager.Mission myMission = mission;
+        foreach (Block blocklink in mission.blocksFound)
+        {
+            blocklink.isConsideredDisabled = false;
+            blocklink.Enable();
+            yield return new WaitForEndOfFrame();
+        }
+        GameManager.instance.missionManager.EndMission(myMission);
+        activeCoroutinesRelatedToSpatioport--;
+        if (activeCoroutinesRelatedToSpatioport <= 0)
+        {
+            if (GameManager.instance.systemManager != null)
+            {
+                GameManager.instance.systemManager.UpdateBlocksDisabled();
+            }
+        }
         yield return null;
     }
 
