@@ -30,6 +30,9 @@ public class CameraController : MonoBehaviour {
     public float zoomStep = 1f;
     public float minZoom = 0f;
     public float maxZoom = 10f;
+    public LayerMask collideWith;
+    public float size = 5f;
+    //public float heightTarget;
 
     private float borderSensibility = 0.5f;
     private float rotationSensibility = 0.5f;
@@ -103,7 +106,8 @@ public class CameraController : MonoBehaviour {
 
     float GetHeightObjective()
     {
-        return GameManager.instance.gridManagement.myTerrain.SampleHeight(transform.position) + baseHeight; 
+        float ho = GameManager.instance.gridManagement.myTerrain.SampleHeight(transform.position) + baseHeight;
+        return ho; 
     }
 
     public void ResetPosition()
@@ -112,13 +116,18 @@ public class CameraController : MonoBehaviour {
     }
 
     void CatchUpCameraObjective() {
-
         RaycastHit hit;
         Vector3 catchUpPosition = cameraTransformObjective.position;
-        Debug.DrawLine(camCenter.position, cameraTransformObjective.position);
-        if (Physics.Raycast(camCenter.position, cameraTransformObjective.position, out hit, Vector3.Distance(cameraTransformObjective.position, camCenter.position), LayerMask.GetMask("Terrain"))) {
-            catchUpPosition = hit.point;
-            Debug.Log("Taking hit");
+
+        if (Physics.Raycast(
+            camCenter.position, 
+            (cameraTransformObjective.position- camCenter.position).normalized, 
+            out hit, 
+            Mathf.Infinity,
+            collideWith)
+            
+       ) {
+            catchUpPosition = (camCenter.position - hit.point).normalized* size + hit.point;
         }
 
         camTransform.position = Vector3.Lerp(camTransform.position, catchUpPosition, cameraCatchUpSpeed * Time.deltaTime);
@@ -144,7 +153,6 @@ public class CameraController : MonoBehaviour {
             Input.GetAxis("CursorX") * rotateSensibility * rotationSensibility,
             Input.GetAxis("CursorY") * rotateSensibility * rotationSensibility
         );
-        print(Mathf.Clamp(camPivot.eulerAngles.x - lookDirection.y, minLookAngle, maxLookAngle));
         camPivot.rotation = Quaternion.Euler(new Vector3(
             Mathf.Clamp(camPivot.eulerAngles.x - lookDirection.y, minLookAngle, maxLookAngle), 
             camPivot.eulerAngles.y+ lookDirection.x, 
