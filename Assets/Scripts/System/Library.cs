@@ -20,6 +20,10 @@ public class Library : MonoBehaviour
 	public Sprite buildIcon;
 	public Sprite bridgeIcon;
 
+	[Header("Particules")]
+	public GameObject citizenInParticule;
+	public GameObject citizenOutParticule;
+
 	public BlockScheme GetBlockByID(int id)
 	{	
 		foreach(BlockScheme b in blocks)
