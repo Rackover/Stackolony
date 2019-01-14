@@ -51,15 +51,19 @@ public class Logger : MonoBehaviour
 
         // Get informations from stackframe
         Logger loggerInstance = FindObjectOfType<Logger>();
-        StackFrame sf = new StackFrame(2, true);
-        string file = sf.GetFileName().Replace(Application.dataPath.Replace("/", "\\") + "\\Scripts\\", "");
-        string method = sf.GetMethod().Name;
+
+        string caller = "";
 
         // Formatting the "X=>Y" file/method pattern
-        string caller =
-            file.Substring(0, Mathf.Min(file.Length, loggerInstance.callerLength)).PadRight(loggerInstance.callerLength)
-            + "=>" 
-            + method.Substring(0, Mathf.Min(method.Length, loggerInstance.methodLength)).PadRight(loggerInstance.methodLength);
+        if (UnityEngine.Debug.isDebugBuild) {
+            StackFrame sf = new StackFrame(2, true);
+            string file = sf.GetFileName().Replace(Application.dataPath.Replace("/", "\\") + "\\Scripts\\", "");
+            string method = sf.GetMethod().Name;
+            caller =
+                file.Substring(0, Mathf.Min(file.Length, loggerInstance.callerLength)).PadRight(loggerInstance.callerLength)
+                + "=>"
+                + method.Substring(0, Mathf.Min(method.Length, loggerInstance.methodLength)).PadRight(loggerInstance.methodLength);
+        }
 
         // Debug line formatting
         string line =
