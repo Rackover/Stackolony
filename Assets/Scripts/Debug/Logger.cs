@@ -5,6 +5,9 @@ using System.IO;
 using System.Globalization;
 using System.Diagnostics;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class Logger : MonoBehaviour
 {
@@ -92,7 +95,7 @@ public class Logger : MonoBehaviour
         // Kills the app if exit is set to true - useful to write logs before quitting
         if (exit) {
 #if UNITY_EDITOR
-            UnityEditor.EditorApplication.isPlaying = false;
+            EditorApplication.isPlaying = false;
 #else
             Application.Quit();
 #endif

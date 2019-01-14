@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public class DeliveryManagement : MonoBehaviour {
     
     [Header("=== SETTINGS ===")]
@@ -72,7 +76,9 @@ public class DeliveryManagement : MonoBehaviour {
             }
             catch(System.NullReferenceException e) {
                 Debug.LogError("An error occured while initializing the shop. Check that the GAME MANAGER LIBRARY is loaded correctly.");
-                UnityEditor.EditorApplication.isPlaying = false;
+#if UNITY_EDITOR
+                EditorApplication.isPlaying = false;
+#endif
             }
 
             ShopDisplay itemButton = newBlockDisplay.GetComponent<ShopDisplay>();
