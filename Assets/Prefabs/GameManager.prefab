@@ -100,6 +100,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4960340927997784}
   - component: {fileID: 114742037031297190}
+  - component: {fileID: 114234050462785854}
   m_Layer: 0
   m_Name: MissionManager
   m_TagString: Untagged
@@ -753,24 +754,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1495546560690918}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71d847075bba7eb439cfd346d029bf8c, type: 3}
+  m_Script: {fileID: 11500000, guid: b2b740b03d8379641b6ed456bcb94ea3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cityName: Valenciennes
-  prefabRemoving: {fileID: 1330950013455556, guid: c89020d6ae7142645985d5e9a5f46e90,
-    type: 2}
-  prefabEmitting: {fileID: 1109864763100982, guid: 86fe2ef75fc279a4f8f10dff9fb03577,
-    type: 2}
-  mission:
-    exploredPositions: []
-    blocksFound: []
-    blockDistanceToCenter: 
-    power: 0
-    range: 0
-    callBack: 
-    position: {x: 0, y: 0, z: 0}
-    explorerCount: 0
-  activeCoroutineRelatedToPower: 0
 --- !u!114 &114140266050921702
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -857,6 +844,31 @@ MonoBehaviour:
   - Military
   - Artist
   - Tourist
+--- !u!114 &114234050462785854
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1406496392558834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 232ae87137e244a4ab6fa31adeab9560, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabRemoving: {fileID: 1330950013455556, guid: c89020d6ae7142645985d5e9a5f46e90,
+    type: 2}
+  prefabEmitting: {fileID: 1109864763100982, guid: 86fe2ef75fc279a4f8f10dff9fb03577,
+    type: 2}
+  mission:
+    exploredPositions: []
+    blocksFound: []
+    blockDistanceToCenter: 
+    power: 0
+    range: 0
+    callBack: 
+    position: {x: 0, y: 0, z: 0}
+    explorerCount: 0
+  activeCoroutineRelatedToPower: 0
 --- !u!114 &114337926563922024
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1175,7 +1187,8 @@ MonoBehaviour:
   library: {fileID: 0}
   sfxManager: {fileID: 0}
   systemManager: {fileID: 0}
-  cityManagement: {fileID: 0}
+  missionCallbackManager: {fileID: 0}
+  cityManager: {fileID: 0}
   missionManager: {fileID: 0}
   cursorManagement: {fileID: 114459021843446374}
   gridManagement: {fileID: 0}
