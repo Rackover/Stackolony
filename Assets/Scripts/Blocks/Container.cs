@@ -10,24 +10,19 @@ public class Container : MonoBehaviour
     public MeshRenderer[] meshRenderers;
     public MeshRenderer[] iconRenderers;
     [Header("States")]
-    public bool closed;
-
-
+    public bool closed = false;
 
     public Block linkedBlock;
 
     Material containerMat;
     Material iconMat;
-    public Color oColor; // Original color;
-    public Color cColor; // Current color;
+    Color oColor; // Original color;
+    Color cColor; // Current color;
 
     void Awake()
     {
         if(linkedBlock == null) linkedBlock = transform.parent.GetComponent<Block>();
         if(myAnimator == null) myAnimator = GetComponent<Animator>();
-
-
-
     }
 
     void Start()
@@ -40,6 +35,7 @@ public class Container : MonoBehaviour
             mr.material = containerMat;
         }
         oColor = containerMat.color;
+        cColor = oColor;
 
         // ICON MESH PLANE
         iconMat = Instantiate(iconRenderers[0].material);
@@ -91,8 +87,8 @@ public class Container : MonoBehaviour
     public void DropBlock()
     {
         GameManager.instance.sfxManager.PlaySoundWithRandomParameters("FallingContainer",1,1,0.8f,1.2f);
-        linkedBlock.ToggleVisuals(false);
         myAnimator.SetTrigger("Drop");
+        CloseContainer();
     }
 
     public void InitializeBlock()
@@ -102,9 +98,11 @@ public class Container : MonoBehaviour
 
     public void OpenContainer()
     {
+        closed = false;
+        cColor = oColor;
+        
         linkedBlock.ToggleVisuals(true);
         GameManager.instance.sfxManager.PlaySoundLinked("OpenContainer",this.gameObject);
-        closed = false;
         myAnimator.SetBool("Closed", closed);
     }
 
@@ -112,19 +110,11 @@ public class Container : MonoBehaviour
     {
         closed = true;
         cColor = oColor;
-
         if(containerMat != null) containerMat.color = cColor;
 
         visual.SetActive(true);
 
         linkedBlock.ToggleVisuals(false);
         myAnimator.SetBool("Closed", closed);
-
-/*
-        if (!isFalling)
-        {
-            GameManager.instance.sfxManager.PlaySoundLinked("CloseContainer", this.gameObject);
-        }
-*/
     }
 }

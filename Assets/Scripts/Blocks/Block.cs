@@ -116,10 +116,12 @@ public class Block : MonoBehaviour {
             blockObject = Instantiate(block.model, transform.position, Quaternion.identity, transform);
             blockObject.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
         }
+        /*
         else if(blockObject.activeSelf == false)
         {
             blockObject.SetActive(true);
         }
+        */
         foreach (string flag in block.flags)
         {
             flagReader.ReadFlag(this, flag);
@@ -223,7 +225,6 @@ public class Block : MonoBehaviour {
     {
         if(blockObject != null) {
             if (!on) {
-                Debug.Log("Game object has been deactivated");
                 blockObject.gameObject.SetActive(false);
                 if (block.consumption != 0)
                 {
