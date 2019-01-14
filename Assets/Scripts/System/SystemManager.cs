@@ -11,12 +11,15 @@ public class SystemManager : MonoBehaviour {
     public List<Occupator> AllOccupators = new List<Occupator>();
     public List<House> AllHouses = new List<House>();
     public List<FoodProvider> AllFoodProviders = new List<FoodProvider>();
+    public List<Spatioport> AllSpatioports = new List<Spatioport>();
 
+    //Met à jour tout le système
     public void UpdateSystem()
     {
         StartCoroutine(RecalculateSystem());
     }
 
+    //Actualise les données de chaque maisons
     public void UpdateHousesInformations()
     {
         foreach (House house in AllHouses)
@@ -30,30 +33,35 @@ public class SystemManager : MonoBehaviour {
         UpdateOccupators();
     }
 
+    //Assigne un travail à chaque citoyen
     public void UpdateJobsDistribution()
     {
         StartCoroutine(ResetJobs());
         StartCoroutine(RecalculateJobs());
     }
 
+    //Recalcule les maisons influencées par les occupators (Generateurs de travail)
     public void UpdateOccupators()
     {
         StartCoroutine(ResetOccupators());
         StartCoroutine(RecalculateOccupators());
     }
 
+    //Recalcule la distribution de nourriture
     public void UpdateFoodProviders()
     {
         StartCoroutine(ResetFoodConsumption());
         StartCoroutine(RecalculateFoodConsumption());
     }
 
+    //Indique à chaque bloc qu'un cycle est passé
     public void UpdateCycle() {
         foreach (Block block in AllBlockLinks) {
             block.NewCycle();
         }
     }
 
+    //Active ou desactive les blocs qui ont un script "WorkingHour" en fonction de l'heure du jeu
     public void CheckWorkingHours() {
         foreach (WorkingHours workingHour in AllTimeRelatedBlocks) {
             if (GameManager.instance.temporality.GetCurrentCycleProgression() > workingHour.startHour && workingHour.hasStarted == false) {
@@ -64,6 +72,15 @@ public class SystemManager : MonoBehaviour {
         }
     }
 
+    //Lancé automatiquement quand les explorers ont tous terminés leurs calculs
+    public void OnCalculEnd()
+    {
+        UpdateBlocksRequiringPower();
+        UpdateBlocksDisabled();
+    }
+
+    #region SystemCoroutines
+    //Système de coroutine qui permet de mettre à jour tout le système
     IEnumerator RecalculateSystem()
     {
         StartCoroutine(ResetBlocksPower());
@@ -86,6 +103,7 @@ public class SystemManager : MonoBehaviour {
         UpdateJobsDistribution();
         yield return null;
     }
+    #endregion
 
     //Si un block qui requiert du courant n'a pas croisé d'explorer, alors on l'eteint. Sinon on l'allume
     public void UpdateBlocksRequiringPower()
@@ -96,6 +114,18 @@ public class SystemManager : MonoBehaviour {
             {
                 block.currentPower = 0;
                 block.ChangePower(0);
+            }
+        }
+    }
+
+    //Si un bloc consideré disabled n'a pas reçu d'explorer provenant du spatioport, il s'eteint.
+    public void UpdateBlocksDisabled()
+    {
+        foreach (Block block in AllBlockLinks)
+        {
+            if (block.isConsideredDisabled)
+            {
+                block.Disable();
             }
         }
     }
@@ -170,6 +200,15 @@ public class SystemManager : MonoBehaviour {
         yield return null;
     }
 
+    IEnumerator RecalculateSpatioportInfluence()
+    {
+        foreach (Spatioport spatioport in AllSpatioports)
+        {
+            spatioport.Invoke("OnBlockUpdate", 0f);
+            yield return new WaitForEndOfFrame();
+        }
+        yield return null;
+    }
 
 
     IEnumerator ResetBlocksPower()
@@ -211,6 +250,15 @@ public class SystemManager : MonoBehaviour {
         {
             house.foodReceived = 0;
             house.foodProvidersInRange.Clear();
+        }
+        yield return null;
+    }
+
+    IEnumerator ResetSpatioportInfluence()
+    {
+        foreach (Block block in AllBlockLinks)
+        {
+            block.isConsideredDisabled = true;
         }
         yield return null;
     }

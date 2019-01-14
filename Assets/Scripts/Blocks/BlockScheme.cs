@@ -10,7 +10,8 @@ public class BlockScheme : ScriptableObject
 
     [Header("BLOCK PROPERTIES")]
     public bool movable = true;
-    public bool destrucible = true;
+    public bool destroyable = true;
+    public bool storable = true;
 
 	[Header("Datas")]
 	public string title = "BlockScheme Name";

@@ -598,7 +598,7 @@ public class CursorManagement : MonoBehaviour
             else
             {
                 //If the cube is dragged on the stocking bay
-                if(GameManager.instance.gridManagement.GetSlotType(_pos, false) == GridManagement.blockType.STORAGE &&  selectedBlock.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
+                if(GameManager.instance.gridManagement.GetSlotType(_pos, false) == GridManagement.blockType.STORAGE &&  selectedBlock.gameObject.layer != LayerMask.NameToLayer("StoredBlock") && selectedBlock.block.storable == true)
                 {
                     //Update the grid
                     GameManager.instance.gridManagement.UpdateBlocks(selectedBlock.gridCoordinates);
