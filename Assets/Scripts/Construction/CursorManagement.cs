@@ -533,7 +533,7 @@ public class CursorManagement : MonoBehaviour
 
     public void StartDrag(Block _block)
     {
-        if (_block != null)
+        if (_block != null && _block.block.movable == true)
         {
             selectedBlock = _block;
             selectedBlock.StopAllCoroutines();
