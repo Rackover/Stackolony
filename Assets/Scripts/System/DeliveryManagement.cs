@@ -75,12 +75,12 @@ public class DeliveryManagement : MonoBehaviour {
                 UnityEditor.EditorApplication.isPlaying = false;
             }
 
-            ShopDisplay newBlockSettings = newBlockDisplay.GetComponent<ShopDisplay>();
-            shopDisplays.Add(newBlockSettings);
-            newBlockSettings.dm = GameManager.instance.deliveryManagement;
-            newBlockSettings.myBlock = block;
-            newBlockSettings.InitShopDisplay();
-            newBlockSettings.icon.sprite = block.icon;
+            ShopDisplay itemButton = newBlockDisplay.GetComponent<ShopDisplay>();
+            shopDisplays.Add(itemButton);
+            itemButton.dm = GameManager.instance.deliveryManagement;
+            itemButton.myBlock = block;
+            itemButton.InitShopDisplay();
+            itemButton.icon.sprite = block.icon;
         }
     }
 
