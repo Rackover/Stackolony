@@ -12,6 +12,7 @@ public class SFXTrack : MonoBehaviour {
     public bool isLooping;
     public GameObject linkedGameObject;
     public Vector3 playPosition;
+    public string soundName;
 
     private void Start()
     {
@@ -42,6 +43,12 @@ public class SFXTrack : MonoBehaviour {
         mySource.loop = isLooping;
         mySource.clip = mySound;
         mySource.Play();
+    }
+
+    public void ChangeVolume(float newVolume)
+    {
+        mySource = GetComponent<AudioSource>();
+        mySource.volume = newVolume;
     }
 
     private void Update()

@@ -21,14 +21,14 @@ public class ShopDisplay : MonoBehaviour {
     {
         SetPickable(IsPickable());
         quantityPicked = 0;
-        quantityPickedDisplay.text = "" + quantityPicked;
+        UpdateVisual();
     }
 
     public void SetQuantity(int quant)
     {
         if (canBePicked) {
             quantityPicked = quant;
-            quantityPickedDisplay.text = "" + quantityPicked;
+            UpdateVisual();
             dm.UpdateComplexity(myBlock.complexity);
         }
     }
@@ -37,7 +37,7 @@ public class ShopDisplay : MonoBehaviour {
     {
         if (canBePicked) {
             quantityPicked++;
-            quantityPickedDisplay.text = "" + quantityPicked;
+            UpdateVisual();
             dm.UpdateComplexity(myBlock.complexity);
         }
     }
@@ -47,9 +47,15 @@ public class ShopDisplay : MonoBehaviour {
         if (quantityPicked > 0)
         {
             quantityPicked--;
-            quantityPickedDisplay.text = "" + quantityPicked;
+            UpdateVisual();
             dm.UpdateComplexity(-myBlock.complexity);
         }
+    }
+
+    void UpdateVisual()
+    {
+        quantityPickedDisplay.text = "" + quantityPicked;
+        GetComponent<Image>().color = GameManager.instance.library.blockContainerColors[myBlock.ID];
     }
 
     public bool IsPickable()

@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public class DeliveryManagement : MonoBehaviour {
     
     [Header("=== SETTINGS ===")]
@@ -15,15 +19,13 @@ public class DeliveryManagement : MonoBehaviour {
     public GameObject blockDisplayPrefab;
     public GameObject mainPanel;
 
-    [System.NonSerialized] public int complexity;
-    [System.NonSerialized] public List<ShopDisplay> shopDisplays;
+    [System.NonSerialized] public int complexity = 0;
+    [System.NonSerialized] public List<ShopDisplay> shopDisplays = new List<ShopDisplay>();
 
 
 
     public void Start()
     {
-        complexity = 0;
-        shopDisplays = new List<ShopDisplay>();
         //complexitySlider.value = 0;
         InitShop();
     }
@@ -39,7 +41,7 @@ public class DeliveryManagement : MonoBehaviour {
         }
     }
 
-    public void UpdateComplexity(int quantity)
+    public void UpdateComplexity(int quantity=0)
     {
         complexity += quantity;
         complexitySlider.value = (float)complexity / (float)complexityMax;
@@ -74,15 +76,17 @@ public class DeliveryManagement : MonoBehaviour {
             }
             catch(System.NullReferenceException e) {
                 Debug.LogError("An error occured while initializing the shop. Check that the GAME MANAGER LIBRARY is loaded correctly.");
-                UnityEditor.EditorApplication.isPlaying = false;
+#if UNITY_EDITOR
+                EditorApplication.isPlaying = false;
+#endif
             }
 
-            ShopDisplay newBlockSettings = newBlockDisplay.GetComponent<ShopDisplay>();
-            shopDisplays.Add(newBlockSettings);
-            newBlockSettings.dm = GameManager.instance.deliveryManagement;
-            newBlockSettings.myBlock = block;
-            newBlockSettings.InitShopDisplay();
-            newBlockSettings.icon.sprite = block.icon;
+            ShopDisplay itemButton = newBlockDisplay.GetComponent<ShopDisplay>();
+            shopDisplays.Add(itemButton);
+            itemButton.dm = GameManager.instance.deliveryManagement;
+            itemButton.myBlock = block;
+            itemButton.InitShopDisplay();
+            itemButton.icon.sprite = block.icon;
         }
     }
 

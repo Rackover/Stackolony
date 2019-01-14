@@ -20,8 +20,19 @@ public class SFXManager : MonoBehaviour {
     [System.NonSerialized]
     public List<SFXTrack> trackList = new List<SFXTrack>();
     private GameObject trackParent;
-    public float musicVolume;
-    public float ambianceSoundVolume;
+
+    private void Update()
+    {
+        // Dirty... Needs cleanup
+        foreach(SFXTrack track in trackList) {
+            if (track.soundName == "Music") {
+                track.ChangeVolume(GameManager.instance.player.options.GetFloat("musicVolume"));
+            }
+            else if (track.soundName == "AmbianceSound") {
+                track.ChangeVolume(GameManager.instance.player.options.GetFloat("bgsVolume"));
+            }
+        }
+    }
 
     private void Start()
     {
@@ -32,8 +43,8 @@ public class SFXManager : MonoBehaviour {
         trackParent.transform.parent = this.transform;
     
         //Init ambiance sounds
-        PlaySound("Music", musicVolume, 1, true);
-        PlaySound("AmbianceSound", ambianceSoundVolume, 1, true);
+        PlaySound("Music", GameManager.instance.player.options.GetFloat("musicVolume"), 1, true);
+        PlaySound("AmbianceSound", GameManager.instance.player.options.GetFloat("bgsVolume"), 1, true);
 
     }
 
@@ -49,6 +60,7 @@ public class SFXManager : MonoBehaviour {
         myTrack.isSpatialized = false;
         myTrack.linkedGameObject = null;
         myTrack.playPosition = Vector3.zero;
+        myTrack.soundName = soundName;
         myTrack.PlaySound();
     }
 
@@ -64,6 +76,7 @@ public class SFXManager : MonoBehaviour {
         myTrack.isSpatialized = false;
         myTrack.linkedGameObject = null;
         myTrack.playPosition = Vector3.zero;
+        myTrack.soundName = soundName;
         myTrack.PlaySound();
     }
 
@@ -79,6 +92,7 @@ public class SFXManager : MonoBehaviour {
         myTrack.isSpatialized = true;
         myTrack.linkedGameObject = linkedObject;
         myTrack.playPosition = Vector3.zero;
+        myTrack.soundName = soundName;
         myTrack.PlaySound();
     }
 
@@ -94,6 +108,7 @@ public class SFXManager : MonoBehaviour {
         myTrack.isSpatialized = true;
         myTrack.linkedGameObject = null;
         myTrack.playPosition = position;
+        myTrack.soundName = soundName;
         myTrack.PlaySound();
     }
 
