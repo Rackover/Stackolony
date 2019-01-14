@@ -23,6 +23,7 @@ public class CursorManagement : MonoBehaviour
     public bool isBridging = false;
     public Block selectedBlock; //Le block selectionné par le joueur
     public int projectorHeight = 10;
+    public GameObject myProjector;
     [Space(5)]
     
     [Header("=== DEBUG ===")]
@@ -39,7 +40,6 @@ public class CursorManagement : MonoBehaviour
     private List<GameObject> permanentHighlighter = new List<GameObject>(); 
     private GameObject hoveredBlock;
     private GameObject stackSelector; //La petite fléche qui se met au pied de la tour qu'on selectionne
-    private GameObject myProjector;
     Terrain terr; //Terrain principal sur lequel le joueur pourra placer des blocs
     Vector2Int heightmapSize;
     [System.NonSerialized] public bool canSwitchTools = true;
@@ -533,7 +533,7 @@ public class CursorManagement : MonoBehaviour
 
     public void StartDrag(Block _block)
     {
-        if (_block != null)
+        if (_block != null && _block.block.movable == true)
         {
             selectedBlock = _block;
             selectedBlock.StopAllCoroutines();
@@ -598,7 +598,7 @@ public class CursorManagement : MonoBehaviour
             else
             {
                 //If the cube is dragged on the stocking bay
-                if(GameManager.instance.gridManagement.GetSlotType(_pos, false) == GridManagement.blockType.STORAGE &&  selectedBlock.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
+                if(GameManager.instance.gridManagement.GetSlotType(_pos, false) == GridManagement.blockType.STORAGE &&  selectedBlock.gameObject.layer != LayerMask.NameToLayer("StoredBlock") && selectedBlock.block.storable == true)
                 {
                     //Update the grid
                     GameManager.instance.gridManagement.UpdateBlocks(selectedBlock.gridCoordinates);

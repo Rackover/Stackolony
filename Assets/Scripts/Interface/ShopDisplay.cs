@@ -55,6 +55,7 @@ public class ShopDisplay : MonoBehaviour {
     void UpdateVisual()
     {
         quantityPickedDisplay.text = "" + quantityPicked;
+        Logger.Debug("Accessing library color for block "+ myBlock.name+":"+ myBlock.ID);
         GetComponent<Image>().color = GameManager.instance.library.blockContainerColors[myBlock.ID];
     }
 

@@ -52,7 +52,7 @@ LightmapSettings:
     m_AlbedoBoost: 1
     m_TemporalCoherenceThreshold: 1
     m_EnvironmentLightingMode: 0
-    m_EnableBakedLightmaps: 0
+    m_EnableBakedLightmaps: 1
     m_EnableRealtimeLightmaps: 1
   m_LightmapEditorSettings:
     serializedVersion: 10
@@ -653,131 +653,6 @@ Prefab:
       propertyPath: directionalLight
       value: 
       objectReference: {fileID: 83595988}
-    - target: {fileID: 114734179215815194, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-      propertyPath: blockContainerColors.Array.data[0].a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114734179215815194, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-      propertyPath: blockContainerColors.Array.data[1].a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114734179215815194, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-      propertyPath: blockContainerColors.Array.data[3].a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114734179215815194, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-      propertyPath: blockContainerColors.Array.data[2].a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114734179215815194, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-      propertyPath: blockContainerColors.Array.data[4].a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114734179215815194, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-      propertyPath: blockContainerColors.Array.data[5].a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114734179215815194, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-      propertyPath: blockContainerColors.Array.data[6].a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114734179215815194, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-      propertyPath: blockContainerColors.Array.data[7].a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114734179215815194, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-      propertyPath: blockContainerColors.Array.data[8].a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114734179215815194, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-      propertyPath: blockContainerColors.Array.data[9].a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114734179215815194, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-      propertyPath: blockContainerColors.Array.data[10].a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114966021634454084, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-      propertyPath: DEBUG_MODE
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-      propertyPath: skyboxMaterial
-      value: 
-      objectReference: {fileID: 2100000, guid: 87323bcb35246374883b1cc089091bda, type: 2}
-    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-      propertyPath: skyboxVariation.key5.r
-      value: 0.47834766
-      objectReference: {fileID: 0}
-    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-      propertyPath: skyboxVariation.key5.g
-      value: 0.45668605
-      objectReference: {fileID: 0}
-    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-      propertyPath: skyboxVariation.key5.b
-      value: 0.77800006
-      objectReference: {fileID: 0}
-    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-      propertyPath: skyboxVariation.key6.r
-      value: 0.4784314
-      objectReference: {fileID: 0}
-    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-      propertyPath: skyboxVariation.key6.g
-      value: 0.454902
-      objectReference: {fileID: 0}
-    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-      propertyPath: skyboxVariation.key6.b
-      value: 0.77647066
-      objectReference: {fileID: 0}
-    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-      propertyPath: skyboxVariation.key2.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-      propertyPath: skyboxVariation.key2.g
-      value: 0.92337763
-      objectReference: {fileID: 0}
-    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-      propertyPath: skyboxVariation.key2.b
-      value: 0.7122642
-      objectReference: {fileID: 0}
-    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-      propertyPath: skyboxVariation.key3.r
-      value: 0.87322
-      objectReference: {fileID: 0}
-    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-      propertyPath: skyboxVariation.key3.g
-      value: 0.8764588
-      objectReference: {fileID: 0}
-    - target: {fileID: 114401863262684996, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-      propertyPath: skyboxVariation.key3.b
-      value: 0.8773585
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ea01be967b53135488a2ea289dc47db1, type: 2}
   m_IsPrefabAsset: 0
@@ -1519,24 +1394,6 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6e68289d20ccf1141b0e02520a63ce0d, type: 2}
   m_IsPrefabAsset: 0
---- !u!1 &1767222788 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1944363005231262, guid: ea01be967b53135488a2ea289dc47db1,
-    type: 2}
-  m_PrefabInternal: {fileID: 422945175}
---- !u!114 &1767222789
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1767222788}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb07e16cff18d6846b5f1878a1b07687, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  greenMat: {fileID: 2100000, guid: 91bd606313627814bb0d42232036dcf1, type: 2}
-  defaultMat: {fileID: 2100000, guid: ab20dd04b9178c841a1c4ec5583e5ec5, type: 2}
 --- !u!1001 &1859887758
 Prefab:
   m_ObjectHideFlags: 0

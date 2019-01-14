@@ -255,9 +255,16 @@ public class FlagReader : MonoBehaviour
 				newRepairer.range = int.Parse(flagElements[1]);
 				blockLink.activeFlags.Add(newRepairer);
 				break;
-	#endregion
+            #endregion
 
-			default:
+    #region Spatioport
+            case "Spatioport":
+                Spatioport newSpatioport = blockLink.gameObject.AddComponent<Spatioport>();
+                blockLink.activeFlags.Add(newSpatioport);
+                break;
+    #endregion
+
+            default:
 				Debug.Log("Warning : " + flagElements[0] + " flag is undefined. Did you forget to add it to the FlagReader ?");
 				break;
 		}

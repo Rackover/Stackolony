@@ -36,7 +36,8 @@ public class Block : MonoBehaviour {
 
     [Header("Values")]
 	public int currentPower;
-    public bool isConsideredUnpowered;
+    public bool isConsideredUnpowered; //Used when updating energy system
+    public bool isConsideredDisabled; //Used when updating spatioport
 
     public void Awake()
     {
@@ -69,6 +70,38 @@ public class Block : MonoBehaviour {
     public void Update()
     {
         UpdateFlags();
+    }
+
+    //Called when block isn't in range of a spatioport
+    public void Disable()
+    {
+        //Desactive toutes les fonctionnalités du bloc
+        foreach (Flag flag in activeFlags)
+        {
+            flag.Disable(); 
+        }
+
+        //Affiche un feedback pour signaler que le bloc est inactif
+        if (container.closed == false)
+        {
+            container.CloseContainer();
+        }
+    }
+
+    //Called when block is in range of a spatioport
+    public void Enable()
+    {
+        //Active toutes les fonctionnalités du bloc
+        foreach (Flag flag in activeFlags)
+        {
+            flag.Enable();
+        }
+
+        //Affiche un feedback pour signaler que le bloc est inactif
+        if (container.closed == true)
+        {
+            container.OpenContainer();
+        }
     }
 
     public void NewCycle() 
@@ -115,10 +148,6 @@ public class Block : MonoBehaviour {
         {
             blockObject = Instantiate(block.model, transform.position, Quaternion.identity, transform);
             blockObject.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
-        }
-        else if(blockObject.activeSelf == false)
-        {
-            blockObject.SetActive(true);
         }
         foreach (string flag in block.flags)
         {

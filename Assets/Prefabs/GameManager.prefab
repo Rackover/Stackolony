@@ -11,6 +11,22 @@ Prefab:
   m_SourcePrefab: {fileID: 0}
   m_RootGameObject: {fileID: 1638283458723260}
   m_IsPrefabAsset: 1
+--- !u!1 &1126512819341546
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4664780768526932}
+  - component: {fileID: 114732354016464370}
+  m_Layer: 0
+  m_Name: CinematicManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1286739775222780
 GameObject:
   m_ObjectHideFlags: 0
@@ -310,6 +326,7 @@ GameObject:
   - component: {fileID: 33816829965521354}
   - component: {fileID: 23385813803281652}
   - component: {fileID: 114907808880693618}
+  - component: {fileID: 114973182639289298}
   m_Layer: 0
   m_Name: Highlighter
   m_TagString: Untagged
@@ -478,6 +495,19 @@ Transform:
   m_Father: {fileID: 4805539053113026}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4664780768526932
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1126512819341546}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4805539053113026}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4669289768287920
 Transform:
   m_ObjectHideFlags: 1
@@ -543,6 +573,7 @@ Transform:
   - {fileID: 4901883935714976}
   - {fileID: 4507556794296642}
   - {fileID: 4414059712222470}
+  - {fileID: 4664780768526932}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -862,11 +893,11 @@ MonoBehaviour:
     serializedVersion: 2
     key0: {r: 1, g: 0.5707547, b: 0.7082891, a: 1}
     key1: {r: 0.9100357, g: 0.6719659, b: 0.78079665, a: 1}
-    key2: {r: 0.69012886, g: 0.91936463, b: 0.9580327, a: 0}
-    key3: {r: 0.64791596, g: 0.8597175, b: 0.9193, a: 0}
+    key2: {r: 1, g: 0.92337763, b: 0.7122642, a: 0}
+    key3: {r: 0.87322, g: 0.8764588, b: 0.8773585, a: 0}
     key4: {r: 0.990566, g: 0.3687116, b: 0, a: 0}
-    key5: {r: 0.07784305, g: 0.054200795, b: 0.3962264, a: 0}
-    key6: {r: 0.14769772, g: 0.1127304, b: 0.43303967, a: 0}
+    key5: {r: 0.47834766, g: 0.45668605, b: 0.77800006, a: 0}
+    key6: {r: 0.4784314, g: 0.454902, b: 0.77647066, a: 0}
     key7: {r: 1, g: 0.57254905, b: 0.70980394, a: 0}
     ctime0: 0
     ctime1: 3084
@@ -965,6 +996,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 992351ac009527541b66c05b233b8f35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114732354016464370
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1126512819341546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4cf781f5fca2a543bee0a43bf8d4366, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114734179215815194
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -980,6 +1022,8 @@ MonoBehaviour:
     type: 2}
   extinctorPrefab: {fileID: 1040333837174470, guid: 933606df50154f542a5892a642414fe3,
     type: 2}
+  spatioportSpawnerPrefab: {fileID: 1863592346692030, guid: 05e73553118545e4e99b71ce4b0f2534,
+    type: 2}
   blocks:
   - {fileID: 11400000, guid: b7fd27253a34688459ab7ada3dab8486, type: 2}
   - {fileID: 11400000, guid: 296389d451a99b4459868887eb39ba98, type: 2}
@@ -989,6 +1033,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fd7ea45607a83c04fac90962b7d5c194, type: 2}
   - {fileID: 11400000, guid: c11e97e7f91c99741b1129353b9b8aa9, type: 2}
   - {fileID: 11400000, guid: c89624ea9b43f42468c295920b6d19cf, type: 2}
+  - {fileID: 11400000, guid: 4ddcd1206553745469c4f988663339d3, type: 2}
   blockContainerColors:
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 0.42352945, g: 0.6156863, b: 0.9686275, a: 1}
@@ -1001,6 +1046,7 @@ MonoBehaviour:
   - {r: 0.909804, g: 0.92549026, b: 0.9294118, a: 1}
   - {r: 0.5411765, g: 1, b: 0.015686275, a: 1}
   - {r: 0.9294118, g: 0.49803925, b: 0.40784317, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
   cursorSprite: {fileID: 21300000, guid: 7a377ecb85ef8bd4faad716cc2945544, type: 3}
   destroyIcon: {fileID: 21300000, guid: 7e428129950162542a0330dc8f89d509, type: 3}
   buildIcon: {fileID: 21300000, guid: 00aad6060067afb45bb1250f424b0965, type: 3}
@@ -1062,6 +1108,7 @@ MonoBehaviour:
     type: 2}
   bridgesList: []
   buildingsList: []
+  spatioportSpawnPoint: {x: 60, y: 50}
   myTerrain: {fileID: 0}
   gridSize: {x: 0, y: 0, z: 0}
 --- !u!114 &114831770002849496
@@ -1132,6 +1179,7 @@ MonoBehaviour:
   populationManager: {fileID: 114945228266214062}
   player: {fileID: 114831770002849496}
   saveManager: {fileID: 0}
+  cinematicManager: {fileID: 0}
   cursorDisplay: {fileID: 0}
   localization: {fileID: 0}
   deliveryManagement: {fileID: 0}
@@ -1143,3 +1191,16 @@ MonoBehaviour:
   gridDebugger: {fileID: 0}
   DEBUG_MODE: 0
   ENABLE_LOGS: 1
+--- !u!114 &114973182639289298
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1944363005231262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb07e16cff18d6846b5f1878a1b07687, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  greenMat: {fileID: 2100000, guid: 91bd606313627814bb0d42232036dcf1, type: 2}
+  defaultMat: {fileID: 2100000, guid: ab20dd04b9178c841a1c4ec5583e5ec5, type: 2}

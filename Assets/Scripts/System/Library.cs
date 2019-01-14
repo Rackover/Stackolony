@@ -7,6 +7,8 @@ public class Library : MonoBehaviour
 	[Header("Prefabs")]
 	public GameObject blockPrefab;
 	public GameObject extinctorPrefab;
+    public GameObject spatioportSpawnerPrefab;
+    public GameObject disabledBlockPrefab;
 
 	[Space(1)][Header("Blocks")]
 	public BlockScheme[] blocks;
