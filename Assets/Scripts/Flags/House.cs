@@ -96,4 +96,14 @@ public class House : Flag
         }
         citizenOut.Play();  
     }
+<<<<<<< HEAD
+=======
+
+    /*
+    ParticleSystem NewParticuleSystem()
+    {   
+        //GameObject ps = 
+    }
+    */
+>>>>>>> b822c58e1d16e550548d754751e98f75ad19736a
 }

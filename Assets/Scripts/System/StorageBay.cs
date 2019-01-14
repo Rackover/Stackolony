@@ -43,15 +43,15 @@ public class StorageBay : MonoBehaviour {
 
         if (!isPlaced)
         {
-            transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(gameManager.cursorManagement.posInTerrain);
+            transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(gameManager.cursorManagement.posInGrid);
             if (Input.GetMouseButtonDown(0))
             {
-                Vector3 cursorPosition = GameManager.instance.gridManagement.IndexToWorldPosition(gameManager.cursorManagement.posInTerrain);
+                Vector3 cursorPosition = GameManager.instance.gridManagement.IndexToWorldPosition(gameManager.cursorManagement.posInGrid);
               //  cursorPosition += new Vector3(0, storageBayHeight, 0);
 
                 if (CanBePlaced(cursorPosition))
                 {
-                    PlaceBay(gameManager.cursorManagement.posInTerrain);
+                    PlaceBay(gameManager.cursorManagement.posInGrid);
                 }
                 else
                 {
