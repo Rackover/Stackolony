@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class House : Flag {
-
+public class House : Flag
+{
     //House Datas
     public int slotAmount;
     public Population[] acceptedPop;
@@ -81,10 +81,9 @@ public class House : Flag {
     {
         if(citizenIn == null)
         {
-            Instantiate(GameManager.instance.library.citizenInParticule, transform.position, Quaternion.identity, transform);
+            citizenIn = Instantiate(GameManager.instance.library.citizenInParticule, transform.position, Quaternion.identity, transform).GetComponent<ParticleSystem>();
+            citizenIn.maxParticles = 1;
         }
-
-        citizenIn.maxParticles = 1;
         citizenIn.Play();
     }
 
@@ -92,14 +91,9 @@ public class House : Flag {
     {
         if(citizenOut == null)
         {
-            Instantiate(GameManager.instance.library.citizenOutParticule, transform.position, Quaternion.identity, transform);
+            citizenOut = Instantiate(GameManager.instance.library.citizenOutParticule, transform.position, Quaternion.identity, transform).GetComponent<ParticleSystem>();
+            citizenOut.maxParticles = 1;
         }
-        citizenOut.maxParticles = 1;
         citizenOut.Play();  
-    }
-
-    ParticleSystem NewParticuleSystem()
-    {   
-        GameObject ps = 
     }
 }
