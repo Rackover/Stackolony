@@ -50,8 +50,9 @@ public class BlockInfobox : MonoBehaviour
 				t = new Vector2(self.position.x + generalBox.sizeDelta.x/2 - 5f, self.position.y);
 			else
 				t = new Vector2(self.position.x - generalBox.sizeDelta.x/2 + 5f, self.position.y);
-			//line.DrawCanvasLine(o, t, 2f, Color.grey);
 
+/* NOT WORKING LINES
+			line.DrawCanvasLine(o, t, 2f, Color.grey);
 			for(int i = 0; i < currentSelection.activeFlags.Count; i++)
 			{
 				if(currentSelection.activeFlags[i] is FiremanStation)
@@ -63,6 +64,7 @@ public class BlockInfobox : MonoBehaviour
 					}
 				}
 			}
+*/
 		}
 	}
 
@@ -73,11 +75,16 @@ public class BlockInfobox : MonoBehaviour
 
 		Vector2 blockCanvasPosition = Camera.main.WorldToScreenPoint(block.transform.position);
 		Vector2 newPos = Vector2.zero;
-
+/*
 		if(blockCanvasPosition.x >= Screen.width/2)
 			newPos = new Vector2(blockCanvasPosition.x - blockSideShift, blockCanvasPosition.y);
 		else
 			newPos = new Vector2(blockCanvasPosition.x + blockSideShift, blockCanvasPosition.y);
+*/
+		if(blockCanvasPosition.x <= Screen.width/2)
+			newPos = new Vector2(Screen.width - 300, Screen.height/2);
+		else
+			newPos = new Vector2(300, Screen.height/2);
 		
 		self.position = newPos;
 
