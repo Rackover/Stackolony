@@ -44,6 +44,7 @@ public class CameraController : MonoBehaviour {
     Vector3 mouseDelta;
     Vector3 lastMousePosition;
     CursorManagement cursorMan;
+    bool isFrozen = false;
 
     void Start()
     {
@@ -70,6 +71,9 @@ public class CameraController : MonoBehaviour {
 
     void Update()
     {
+        if (isFrozen) {
+            return;
+        }
 
         // Fetch settings from the options
         borderSensibility = GameManager.instance.player.options.GetFloat("borderSensivity");
@@ -97,6 +101,17 @@ public class CameraController : MonoBehaviour {
         }
 
         CatchUpCameraObjective();
+    }
+
+
+    public void FreezeCameraPosition()
+    {
+        isFrozen = true;
+    }
+
+    public void FreeCameraPosition()
+    {
+        isFrozen = false;
     }
 
     void UpdateCameraCenterHeight()

@@ -31,6 +31,7 @@ public class SpatioportSpawner : MonoBehaviour {
         animCam.targetDisplay = 0;
 
         gameCam = Camera.main;
+        FindObjectOfType<CameraController>().FreezeCameraPosition();
         cineMan.SwitchToCamera(animCam);
     }
 
@@ -78,6 +79,7 @@ public class SpatioportSpawner : MonoBehaviour {
     {
         GameManager.instance.cinematicManager.SetCinematicMode(false);
         cineMan.SwitchToMainCamera();
+        FindObjectOfType<CameraController>().FreeCameraPosition();
         Destroy(this.gameObject);
     }
 
