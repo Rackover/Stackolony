@@ -85,10 +85,14 @@ public class GridManagement : MonoBehaviour
     {
         if (grid[coordinates.x, coordinates.y, coordinates.z] != null)
         {
+            if (grid[coordinates.x, coordinates.y, coordinates.z].GetComponent<Block>() == null) {
+                return;
+            }
             grid[coordinates.x, coordinates.y, coordinates.z].GetComponent<Block>().CallFlags("OnBlockDestroy");
             // Removes object from list and destroys the gameObject
             GameObject target = grid[coordinates.x, coordinates.y, coordinates.z];
-            buildingsList.RemoveAll(o => o == target);
+            SystemManager systemManager = GameManager.instance.systemManager;
+            systemManager.RemoveBuilding(target);
             gameManager.sfxManager.PlaySoundLinked("DestroyBlock", target);
             Destroy(target);
         }

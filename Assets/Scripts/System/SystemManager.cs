@@ -14,6 +14,18 @@ public class SystemManager : MonoBehaviour {
     public List<Spatioport> AllSpatioports = new List<Spatioport>();
 
 
+    // removes a buliding from the system entirely
+    public void RemoveBuilding(GameObject target)
+    {
+        AllGenerators.RemoveAll(o => o.gameObject == target);
+        AllBlocksRequiringPower.RemoveAll(o => o.gameObject == target);
+        AllBlockLinks.RemoveAll(o => o.gameObject == target);
+        AllTimeRelatedBlocks.RemoveAll(o => o.gameObject == target);
+        AllHouses.RemoveAll(o => o.gameObject == target);
+        AllFoodProviders.RemoveAll(o => o.gameObject == target);
+        AllSpatioports.RemoveAll(o => o.gameObject == target);
+    }
+
     //Met à jour tout le système
     public void UpdateSystem()
     {
