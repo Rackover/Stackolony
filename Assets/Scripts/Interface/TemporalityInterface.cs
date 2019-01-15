@@ -29,25 +29,25 @@ public class TemporalityInterface : MonoBehaviour {
     public void PauseTime()
     {
         Temporality temporality = GameManager.instance.temporality;
-        temporality.ChangeTimeScale(0);
+        temporality.SetTimeScale(0);
     }
 
     public void PlayTime()
     {
         Temporality temporality = GameManager.instance.temporality;
-        temporality.ChangeTimeScale(1);
+        temporality.SetTimeScale(1);
     }
 
     public void PlayTimeFaster()
     {
         Temporality temporality = GameManager.instance.temporality;
-        temporality.ChangeTimeScale(2);
+        temporality.SetTimeScale(2);
     }
 
     public void PlayTimeFastest()
     {
         Temporality temporality = GameManager.instance.temporality;
-        temporality.ChangeTimeScale(4);
+        temporality.SetTimeScale(4);
     }
 
     //Met à jour l'afficheur jour/nuit 
