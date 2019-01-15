@@ -35,7 +35,7 @@ public class StorageBay : MonoBehaviour
 
     public void Initialize()
     {
-        if(!autoSpawn) PlaceBay(spawnPoint);
+        if(autoSpawn) PlaceBay(spawnPoint);
     }
 
     private void Update()
