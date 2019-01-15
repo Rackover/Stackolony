@@ -88,6 +88,9 @@ public class GridManagement : MonoBehaviour
             if (grid[coordinates.x, coordinates.y, coordinates.z].GetComponent<Block>() == null) {
                 return;
             }
+            if (!grid[coordinates.x, coordinates.y, coordinates.z].GetComponent<Block>().block.isDestroyable) {
+                return;
+            }
             grid[coordinates.x, coordinates.y, coordinates.z].GetComponent<Block>().CallFlags("OnBlockDestroy");
             // Removes object from list and destroys the gameObject
             GameObject target = grid[coordinates.x, coordinates.y, coordinates.z];
