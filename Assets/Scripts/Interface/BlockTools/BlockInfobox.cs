@@ -11,6 +11,10 @@ public class BlockInfobox : MonoBehaviour
 	public Text nameText;
 	public Text descriptionText;
 
+	[Header("Tip")]
+	public RectTransform descBox;
+	public Text descText;
+
 	[Space(1)][Header("Settings")]
 	public float stateTagShift = 5f;
 	public float flagPanelShift = 5f;
@@ -83,7 +87,7 @@ public class BlockInfobox : MonoBehaviour
 		descriptionText.text = block.block.description;
 
 		// Changing box size
-		generalBox.sizeDelta = new Vector2(generalBox.sizeDelta.x, GetRequiredHeight(descriptionText, generalBox.sizeDelta.x));
+		//generalBox.sizeDelta = new Vector2(generalBox.sizeDelta.x, GetRequiredHeight(descriptionText, generalBox.sizeDelta.x));
 		
 		ShowStatesTags(block.states.ToArray());
 		ShowFlagBoxes(block.activeFlags.ToArray());
@@ -188,27 +192,20 @@ public class BlockInfobox : MonoBehaviour
 	{
 		currentSelection = null;
 		generalBox.gameObject.SetActive(false);
+		descBox.gameObject.SetActive(false);
 
 		foreach(StateTag st in stateTags){st.Hide();}
 		foreach(FlagPanel fp in flagPanels){Destroy(fp.gameObject);}
 		flagPanels.Clear();
-
 	}
 
 	public void ShowBlockSheme(BlockScheme blockScheme, Vector2 where)
 	{	
 		Hide();
 		self.position = new Vector2(where.x, where.y);
-
-
-		GameManager.instance.localization.SetCategory("blocknames");
-		nameText.text = GameManager.instance.localization.GetLine("block" + blockScheme.ID);
-
 		GameManager.instance.localization.SetCategory("blockdescriptions");
-		descriptionText.text = GameManager.instance.localization.GetLine("block" + blockScheme.ID);
-
-		generalBox.sizeDelta = new Vector2(generalBox.sizeDelta.x, GetRequiredHeight(descriptionText, generalBox.sizeDelta.x));
-		generalBox.gameObject.SetActive(true);
+		descText.text = GameManager.instance.localization.GetLine("block" + blockScheme.ID);
+		descBox.gameObject.SetActive(true);
 	}
 
 	public void UseBlock()

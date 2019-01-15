@@ -14,6 +14,7 @@ public class Block : MonoBehaviour {
     public Container container;
 	public BlockScheme block;
 	public GameObject blockObject;
+    public GameObject particleVisuals;
 
     [Header("Particules")]
 	public GameObject unpoweredEffect;
@@ -248,20 +249,12 @@ public class Block : MonoBehaviour {
         if(blockObject != null) {
             if (!on) {
                 blockObject.gameObject.SetActive(false);
-                if (block.consumption != 0)
-                {
-                    unpoweredEffect.SetActive(true);
-                }
-                unpoweredEffect.SetActive(false);
-                onFireEffect.SetActive(false);
+                particleVisuals.SetActive(false);
             }
             else
             {
                 blockObject.gameObject.SetActive(true);
-                if (block.consumption != 0)
-                {
-                    unpoweredEffect.SetActive(true);
-                }
+                particleVisuals.SetActive(true);
             }
         }
     }
