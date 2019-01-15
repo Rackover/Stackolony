@@ -34,14 +34,19 @@ public class SFXManager : MonoBehaviour {
         }
     }
 
-    private void Start()
+    private void Awake()
     {
+
         //Genere un gameObject enfant qui contiendra toutes les tracks
         trackParent = new GameObject();
         trackParent.name = "TrackList";
         trackParent.transform.position = Vector3.zero;
         trackParent.transform.parent = this.transform;
-    
+
+    }
+
+    private void Start()
+    {
         //Init ambiance sounds
         PlaySound("Music", GameManager.instance.player.options.GetFloat("musicVolume"), 1, true);
         PlaySound("AmbianceSound", GameManager.instance.player.options.GetFloat("bgsVolume"), 1, true);
