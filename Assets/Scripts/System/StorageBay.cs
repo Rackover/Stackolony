@@ -89,8 +89,9 @@ public class StorageBay : MonoBehaviour
     }
 
     //Place la baie de stockage
-    private void PlaceBay(Vector3 cursorCoordinates)
+    private void PlaceBay(Vector3Int cursorCoordinates)
     {
+        transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(cursorCoordinates);
         GameManager.instance.sfxManager.PlaySoundLinked("BlockDropScientific", this.gameObject,0.1f,1,false);
         GameManager.instance.cursorManagement.canSwitchTools = true;
         isPlaced = true;
@@ -138,6 +139,7 @@ public class StorageBay : MonoBehaviour
         Block newBlockLink = newBlock.GetComponent<Block>();
         newBlockLink.block = blockInfo;
         newBlockLink.container.DropBlock();
+        newBlockLink.LoadBlock();
         StoreBlock(newBlock);
     }
 

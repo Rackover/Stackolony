@@ -62,11 +62,6 @@ public class Block : MonoBehaviour {
 
     }
 
-    public void Start()
-    {
-        LoadBlock();
-    }
-
     public void Update()
     {
         UpdateFlags();
