@@ -34,6 +34,7 @@ public class PopulationManager : MonoBehaviour {
 
         newCitizen.name = ""; //No name right now
         newCitizen.habitation = null;
+        newCitizen.type = type;
         citizenList.Add(newCitizen);
 
         Debug.Log("Citizen " + newCitizen.name + " landed on the spatioport");
@@ -80,6 +81,9 @@ public class PopulationManager : MonoBehaviour {
         }
         if (bestHouse != null)
         {
+            if (citizen.habitation != null) {
+                citizen.habitation.affectedCitizen.Remove(citizen);
+            }
             bestHouse.FillWithCitizen(citizen);
         } else
         {
