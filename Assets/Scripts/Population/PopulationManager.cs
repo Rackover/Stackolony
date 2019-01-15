@@ -40,6 +40,16 @@ public class PopulationManager : MonoBehaviour {
         return newCitizen;
     }
 
+    //Generates a new citizen on the colony
+    public List<Citizen> SpawnCitizens(Population type, int amount=1)
+    {
+        List<Citizen> citizens = new List<Citizen>();
+        for (int i = 0; i < amount; i++) {
+            citizens.Add(SpawnCitizen(type));
+        }
+        return citizens;
+    }
+
     //Kill a citizen
     public void KillCitizen(Citizen citizen)
     {

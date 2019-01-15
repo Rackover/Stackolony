@@ -154,6 +154,15 @@ public class GameManager : MonoBehaviour
             populationManager.AutoHouseCitizen(populationManager.SpawnCitizen(populationManager.populationTypeList[0]));
         }
 
+        // Spawns 5  cit
+        if (Input.GetKeyDown(KeyCode.U)) {
+            populationManager.SpawnCitizens(populationManager.populationTypeList[0], 5);
+        }
+        // Spawns 20 cit
+        if (Input.GetKeyDown(KeyCode.L)) {
+            populationManager.SpawnCitizens(populationManager.populationTypeList[0], 20);
+        }
+
         if (Input.GetButtonDown("Select") && Input.GetKey(KeyCode.F)) {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -192,8 +201,6 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.C)) {
             temporality.AddCycle();
         }
-
-
     }
 
 
