@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class ShopTip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler  
+public class ShopTip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-	public ShopDisplay shopDisplay;
+
+    public float tipHeight = 5f;
+    public ShopDisplay shopDisplay;
 
     void Awake()
     {
@@ -25,7 +27,7 @@ public class ShopTip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public void OnPointerEnter(PointerEventData pointerEventData)
     {
-		GameManager.instance.blockInfobox.ShowBlockSheme(shopDisplay.myBlock, shopDisplay.self.position);
+		GameManager.instance.blockInfobox.ShowBlockSheme(shopDisplay.myBlock, shopDisplay.self.position + new Vector3(0f, tipHeight, 0f));
     }
 
     public void OnPointerExit(PointerEventData pointerEventData)
