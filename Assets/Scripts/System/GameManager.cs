@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
             instance = this;
         }
         else {
-            Destroy(this.gameObject);
+            DestroyImmediate(this.gameObject);
             return;
         }
 
@@ -86,6 +86,11 @@ public class GameManager : MonoBehaviour
         AsyncOperation load = SceneManager.LoadSceneAsync("Game");
         while (!load.isDone) {
             yield return null;
+        }
+        foreach(GameManager gm in FindObjectsOfType<GameManager>()) {
+            if (gm != this) {
+                DestroyImmediate(gm.gameObject);
+            }
         }
         then.Invoke();
         isLoading = !signalEnd;
