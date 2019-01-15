@@ -14,30 +14,24 @@ public class SpatioportSpawner : MonoBehaviour {
     private Camera gameCam;
     public GameObject smokeParticle;
 
+    CinematicManager cineMan;
+
 
     private void Start()
     {
+        cineMan = GameManager.instance.cinematicManager;
+
         GetCoordinates();
-        cameraShake = GetComponent<CameraShake>();
+        cameraShake = cineMan.gameObject.GetComponent<CameraShake>();
         transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(coordinates);
         shipGameObject = transform.Find("Ship").gameObject;
+
         animCam = transform.Find("AnimatorCameraPivot").transform.Find("Camera").GetComponent<Camera>();
         animCam.tag = "Untagged";
         animCam.targetDisplay = 0;
+
         gameCam = Camera.main;
-        SwitchToCinematicCamera();
-    }
-
-    void SwitchToCinematicCamera()
-    {
-        Camera.main.targetDisplay = 1;
-        animCam.targetDisplay = 0;
-    }
-
-    void SwitchToGameCamera()
-    {
-        Camera.main.targetDisplay = 0;
-        animCam.targetDisplay = 1;
+        cineMan.SwitchToCamera(animCam);
     }
 
     private void GetCoordinates()
@@ -83,7 +77,7 @@ public class SpatioportSpawner : MonoBehaviour {
     private void SpawnFinished()
     {
         GameManager.instance.cinematicManager.SetCinematicMode(false);
-        SwitchToGameCamera();
+        cineMan.SwitchToMainCamera();
         Destroy(this.gameObject);
     }
 
@@ -115,7 +109,7 @@ public class SpatioportSpawner : MonoBehaviour {
 
     private IEnumerator ShakeCameraLerpCoroutine(float duration, float shakeEndStrength)
     {
-        cameraShake.shakeDuration = duration;
+        cameraShake.Shake(duration);
         float elapsedTime = 0;
         while (elapsedTime < duration)
         {

@@ -25,4 +25,21 @@ public class CinematicManager : MonoBehaviour {
         storageBayObj.SetActive(!state);
         cursor.myProjector.GetComponent<Projector>().enabled = !state;
     }
+
+    public void SwitchToCamera(Camera cam)
+    {
+        Camera.main.targetDisplay = 1;
+        cam.targetDisplay = 0;
+        GetComponent<CameraShake>().SetCamera(cam);
+    }
+
+    public void SwitchToMainCamera()
+    {
+        foreach(Camera cam in FindObjectsOfType<Camera>()) {
+            cam.targetDisplay = 1;
+        }
+        GetComponent<CameraShake>().SetCamera(Camera.main);
+        Camera.main.targetDisplay = 0;
+    }
+
 }

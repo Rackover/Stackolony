@@ -1940,6 +1940,27 @@ Transform:
   m_Father: {fileID: 2057441736}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 270, y: 0, z: 0}
+--- !u!1 &678757693 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1126512819341546, guid: ea01be967b53135488a2ea289dc47db1,
+    type: 2}
+  m_PrefabInternal: {fileID: 825849245}
+--- !u!114 &678757694
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 678757693}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66810f0dfb1d9a44cbf07b745c048fa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camTransform: {fileID: 4770528335447240, guid: 05e73553118545e4e99b71ce4b0f2534,
+    type: 2}
+  shakeDuration: 0
+  shakeAmount: 0.7
+  decreaseFactor: 1
 --- !u!1 &706002406
 GameObject:
   m_ObjectHideFlags: 0
