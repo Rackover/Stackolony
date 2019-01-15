@@ -19,7 +19,7 @@ public class CinematicManager : MonoBehaviour {
 
     public void SetCinematicMode(bool state)
     {
-        interfaceObj.SetActive(!state);
+        interfaceObj.GetComponent<Canvas>().enabled = (!state);
         cursorObj.SetActive(!state);
         cursor.enabled = !state;
         storageBayObj.SetActive(!state);
