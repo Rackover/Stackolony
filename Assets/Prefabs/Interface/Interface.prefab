@@ -1641,7 +1641,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: ceb16e0fdc3a1e24cb766e8338a46c32, type: 3}
-    m_FontSize: 14
+    m_FontSize: 28
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
@@ -1833,7 +1833,7 @@ MonoBehaviour:
   shopPanelRegular: {fileID: 224798116249549840}
   shopPanelSpecial: {fileID: 224798116249549840}
   complexitySlider: {fileID: 114905552700839362}
-  blockDisplayPrefab: {fileID: 1709231274664860, guid: 274c3b7ff04bcc94c9aeff4cf273fa6a,
+  blockDisplayPrefab: {fileID: 1122040954334256, guid: 72fa841eb499d474988d25f1f455153d,
     type: 2}
   mainPanel: {fileID: 1502431370990772}
 --- !u!114 &114106811576484308
@@ -2503,8 +2503,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65f9985cb809aa849a1825a5758b6651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 
-  category: 
+  id: delivery
+  category: hud
 --- !u!114 &114412113127479260
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2772,7 +2772,7 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 100, y: 100}
+  m_CellSize: {x: 150, y: 150}
   m_Spacing: {x: 10, y: 10}
   m_Constraint: 0
   m_ConstraintCount: 2
@@ -4447,7 +4447,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 7a377ecb85ef8bd4faad716cc2945544, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b631a20d61d7b5b4d9b8897145cac4e0, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5779,7 +5779,7 @@ RectTransform:
   m_GameObject: {fileID: 1702494848818588}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 224292369215704308}
   m_RootOrder: 1
@@ -5936,10 +5936,10 @@ RectTransform:
   m_Father: {fileID: 224824914707928218}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 2.5, y: -2.5}
-  m_SizeDelta: {x: -5, y: -5}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224511527301140910
 RectTransform:
