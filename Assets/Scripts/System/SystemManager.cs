@@ -129,6 +129,7 @@ public class SystemManager : MonoBehaviour {
     //Si un bloc consideré disabled n'a pas reçu d'explorer provenant du spatioport, il s'eteint. || Lancé automatiquement à la fin des calculs liés au spatioport
     public void UpdateBlocksDisabled()
     {
+        Logger.print("Updating disabled blocks");
         foreach (Block block in AllBlockLinks)
         {
             if (block.isConsideredDisabled && block.GetComponent<Spatioport>() == null)
@@ -264,6 +265,7 @@ public class SystemManager : MonoBehaviour {
 
     IEnumerator ResetSpatioportInfluence()
     {
+        Logger.print("Resetting spatioport influence");
         foreach (Block block in AllBlockLinks)
         {
             block.isConsideredDisabled = true;
