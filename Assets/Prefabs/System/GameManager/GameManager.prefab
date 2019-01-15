@@ -100,6 +100,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4960340927997784}
   - component: {fileID: 114742037031297190}
+  - component: {fileID: 114107858326384110}
   m_Layer: 0
   m_Name: MissionManager
   m_TagString: Untagged
@@ -757,6 +758,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cityName: Valenciennes
+--- !u!114 &114107858326384110
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1406496392558834}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0c329f2536211b4baae7ba3aa5cc924, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabRemoving: {fileID: 1330950013455556, guid: c89020d6ae7142645985d5e9a5f46e90,
+    type: 2}
+  prefabEmitting: {fileID: 1109864763100982, guid: 86fe2ef75fc279a4f8f10dff9fb03577,
+    type: 2}
+  mission:
+    exploredPositions: []
+    blocksFound: []
+    blockDistanceToCenter: 
+    power: 0
+    range: 0
+    callBack: 
+    position: {x: 0, y: 0, z: 0}
+    explorerCount: 0
+  activeCoroutinesRelatedToPower: 0
+  activeCoroutinesRelatedToSpatioport: 0
 --- !u!114 &114140266050921702
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -948,7 +975,6 @@ MonoBehaviour:
   cycleDuration: 50
   yearDuration: 5
   cycleNumber: 0
-  cycleProgression: 0
   timeScale: 0
 --- !u!114 &114635777907619166
 MonoBehaviour:
