@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
             instance = this;
         }
         else {
-            Destroy(this.gameObject);
+            DestroyImmediate(this.gameObject);
             return;
         }
 
@@ -86,6 +86,11 @@ public class GameManager : MonoBehaviour
         AsyncOperation load = SceneManager.LoadSceneAsync("Game");
         while (!load.isDone) {
             yield return null;
+        }
+        foreach(GameManager gm in FindObjectsOfType<GameManager>()) {
+            if (gm != this) {
+                DestroyImmediate(gm.gameObject);
+            }
         }
         then.Invoke();
         isLoading = !signalEnd;
@@ -131,7 +136,7 @@ public class GameManager : MonoBehaviour
     {
 
         if (Input.GetKeyDown(KeyCode.P)) {
-            temporality.PauseGame();
+            temporality.PauseTime();
         }
         
         // Pause
@@ -177,7 +182,7 @@ public class GameManager : MonoBehaviour
                         player.name,
                         cityManager.cityName,
                         temporality.cycleNumber,
-                        temporality.cycleProgression
+                        temporality.GetCurrentCycleProgression()
                     )
                 )
             ));
@@ -214,7 +219,10 @@ public class GameManager : MonoBehaviour
             gi.StartGameInterfaces();
         }
         cursorManagement.InitializeGameCursor();
-        temporality.timeScale = 0;
+        temporality.cycleNumber = 0;
+        temporality.SetDate(0);
+        temporality.SetTimeOfDay(20);
+        temporality.SetTimeScale(1);
 
         // Initialize only
         gridManagement.InitializeGridManager();
@@ -243,7 +251,8 @@ public class GameManager : MonoBehaviour
             gi.gameObject.SetActive(false);
         }
         cursorManagement.KillGameCursor();
-        temporality.timeScale = 2;
+        temporality.SetTimeOfDay(20);
+        temporality.SetTimeScale(2);
 
         // Ingame switch
         inGame = false;

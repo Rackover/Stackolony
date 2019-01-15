@@ -3,7 +3,18 @@ guid: ae5c664832a26a049a2b054acc6542ab
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - blockPrefab: {instanceID: 0}
+  - extinctorPrefab: {instanceID: 0}
+  - spatioportSpawnerPrefab: {instanceID: 0}
+  - disabledBlockPrefab: {instanceID: 0}
+  - cursorSprite: {fileID: 21300000, guid: b631a20d61d7b5b4d9b8897145cac4e0, type: 3}
+  - destroyIcon: {instanceID: 0}
+  - buildIcon: {instanceID: 0}
+  - dragIcon: {instanceID: 0}
+  - bridgeIcon: {instanceID: 0}
+  - citizenInParticule: {instanceID: 0}
+  - citizenOutParticule: {instanceID: 0}
   executionOrder: -12
   icon: {instanceID: 0}
   userData: 

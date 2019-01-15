@@ -14,6 +14,7 @@ public class BlockInfobox : MonoBehaviour
 	[Space(1)][Header("Settings")]
 	public float stateTagShift = 5f;
 	public float flagPanelShift = 5f;
+    public float blockSideShift = 400f;
 
 	[Space(1)][Header("Prefabs")]
 	public GameObject stateTagPrefab;
@@ -45,7 +46,7 @@ public class BlockInfobox : MonoBehaviour
 				t = new Vector2(self.position.x + generalBox.sizeDelta.x/2 - 5f, self.position.y);
 			else
 				t = new Vector2(self.position.x - generalBox.sizeDelta.x/2 + 5f, self.position.y);
-			line.DrawCanvasLine(o, t, 2f, Color.grey);
+			//line.DrawCanvasLine(o, t, 2f, Color.grey);
 
 			for(int i = 0; i < currentSelection.activeFlags.Count; i++)
 			{
@@ -70,9 +71,9 @@ public class BlockInfobox : MonoBehaviour
 		Vector2 newPos = Vector2.zero;
 
 		if(blockCanvasPosition.x >= Screen.width/2)
-			newPos = new Vector2(blockCanvasPosition.x - 200f, blockCanvasPosition.y);
+			newPos = new Vector2(blockCanvasPosition.x - blockSideShift, blockCanvasPosition.y);
 		else
-			newPos = new Vector2(blockCanvasPosition.x + 200f, blockCanvasPosition.y);
+			newPos = new Vector2(blockCanvasPosition.x + blockSideShift, blockCanvasPosition.y);
 		
 		self.position = newPos;
 

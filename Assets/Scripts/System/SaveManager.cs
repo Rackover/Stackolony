@@ -253,8 +253,8 @@ public class SaveManager : MonoBehaviour {
 
             GameManager.instance.player.playerName = saveData.playerName;
             GameManager.instance.cityManager.cityName = saveData.cityName;
-            GameManager.instance.temporality.cycleNumber = saveData.cyclesPassed;
-            GameManager.instance.temporality.cycleProgression = saveData.timeOfDay;
+            GameManager.instance.temporality.SetDate(saveData.cyclesPassed);
+            GameManager.instance.temporality.SetTimeOfDay(saveData.timeOfDay);
         }
 
         catch(Exception e) {

@@ -8,15 +8,15 @@ public class Temporality : MonoBehaviour {
     public int cycleDuration; //Durée d'un cycle en secondes
     public int yearDuration; //Durée d'une année en cycle
 
-    [Header("=== DEBUG VALUES ===")][Space(1)]
-    [HideInInspector] public int cycleNumber = 0; //Combien de cycles se sont ecoulés en tout
-    public float cycleProgression; //Combien de secondes se sont ecoulées dans le cycle actuel
+    [Header("=== TIME VALUES ===")][Space(1)]
+    public int cycleNumber = 0; //Combien de cycles se sont ecoulés en tout
     public int timeScale; //Coefficient de vitesse d'écoulement du temps
 
-    private int savedTimeScale; //Variable utilisée pour redéfinir la vitesse du jeu quand le joueur annule la pause
-    private Image savedButton; //Bouton à réactiver quand le joueur annule la pause
+    float cycleProgression; //Combien de secondes se sont ecoulées dans le cycle actuel
+    int savedTimeScale; //Variable utilisée pour redéfinir la vitesse du jeu quand le joueur annule la pause
+    Image savedButton; //Bouton à réactiver quand le joueur annule la pause
 
-    public void PauseGame()
+    public void PauseTime()
     {
         if (timeScale == 0) {
             timeScale = savedTimeScale;
@@ -58,7 +58,7 @@ public class Temporality : MonoBehaviour {
         return (cycleProgression / (float)cycleDuration) * 100f;
     }
 
-    public void ChangeTimeScale(int newTimeScaleCoef)
+    public void SetTimeScale(int newTimeScaleCoef)
     {
         if (newTimeScaleCoef > timeScale)
         {
@@ -70,12 +70,23 @@ public class Temporality : MonoBehaviour {
         timeScale = newTimeScaleCoef;
     }
 
+    public void SetDate(int cycles)
+    {
+        cycleNumber = cycles;
+    }
+
+    public void SetTimeOfDay(float percents)
+    {
+        cycleProgression = (cycleDuration * percents) / 100;
+    }
+
     public void AddCycle() //Ajoute un cycle au compteur
     {
         if (!GameManager.instance.IsInGame()) { return; };
 
         GameManager.instance.deliveryManagement.DeliverBlocks();
         GameManager.instance.systemManager.UpdateCycle();
+        cycleNumber++;
     }
 
     // Returns current cycle of the current year
@@ -87,7 +98,7 @@ public class Temporality : MonoBehaviour {
     // Returns current year
     public int GetYear()
     {
-        return (int)Mathf.Ceil(cycleNumber / yearDuration);
+        return (int)Mathf.Ceil(cycleNumber / yearDuration)+1;
     }
 
     public void UpdateSystem()
