@@ -867,6 +867,12 @@ Prefab:
       propertyPath: category
       value: hud
       objectReference: {fileID: 0}
+    - target: {fileID: 114101771718614216, guid: e1b8e38dfcc75994bbf1b2b6780d0318,
+        type: 2}
+      propertyPath: blockDisplayPrefab
+      value: 
+      objectReference: {fileID: 1122040954334256, guid: 72fa841eb499d474988d25f1f455153d,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e1b8e38dfcc75994bbf1b2b6780d0318, type: 2}
   m_IsPrefabAsset: 0

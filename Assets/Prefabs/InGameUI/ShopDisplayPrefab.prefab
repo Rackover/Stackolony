@@ -57,6 +57,7 @@ GameObject:
   - component: {fileID: 222664293849266318}
   - component: {fileID: 114181593165448000}
   - component: {fileID: 114946739108798570}
+  - component: {fileID: 114910150653914956}
   m_Layer: 5
   m_Name: ShopDisplayPrefab
   m_TagString: Untagged
@@ -488,6 +489,18 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114910150653914956
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1122040954334256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa5b072f671756d4d9cf8a1c2422c34c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shopDisplay: {fileID: 114946739108798570}
 --- !u!114 &114946739108798570
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -506,6 +519,7 @@ MonoBehaviour:
   icon: {fileID: 114510994865065078}
   cantBePickedIcon: {fileID: 114561697649281960}
   dm: {fileID: 0}
+  self: {fileID: 0}
 --- !u!222 &222088912134024922
 CanvasRenderer:
   m_ObjectHideFlags: 1
