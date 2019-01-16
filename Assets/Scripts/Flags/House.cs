@@ -14,7 +14,6 @@ public class House : Flag
     //Variables
     public List<Occupator> occupatorsInRange = new List<Occupator>();
     public List<FoodProvider> foodProvidersInRange = new List<FoodProvider>();
-    public bool connectedToSpatioport;
     public bool powered;
     public float foodReceived;
     public float distanceToGround;
@@ -40,7 +39,6 @@ public class House : Flag
         else
             powered = false;
         GetDistanceFromGround();
-        connectedToSpatioport = myBlockLink.isLinkedToSpatioport;
     }
 
     public void GetDistanceFromGround()

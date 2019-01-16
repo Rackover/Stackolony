@@ -9,6 +9,16 @@ public class PopulationManager : MonoBehaviour {
     public List<Citizen> citizenList = new List<Citizen>(); //Liste de chaque citoyen de la colonie
     public Dictionary<Population, float> averageMoods = new Dictionary<Population, float>();  // average moods between 0 and 1
 
+    [Header("Mood modifiers")]
+    public float MMglobalModifier = 1; //Coefficient par lequel est multiplié le moodmodifier quand il est appliqué
+    public int MMnoHabitation = -4;
+    public int MMnoAppropriatedHabitation = -2;
+    public int MMnoFood = -3;
+    public int MMntoEnoughFood = -1;
+    public int MMnoOccupation = -2;
+    public int MMnoPower = -2;
+    public int MMdamagedHabitation = -2;
+
     [System.Serializable]
     public class Citizen
     {
@@ -23,7 +33,7 @@ public class PopulationManager : MonoBehaviour {
         foreach(Population pop in populationTypeList) {
             //Temporary - Later should be initialized at 1f;
             //averageMoods[pop] = Random.value;
-            averageMoods[pop] = 1f;
+            averageMoods[pop] = 50f;
         }
     }
 
@@ -37,14 +47,26 @@ public class PopulationManager : MonoBehaviour {
             {
                 if (citizen.habitation = null)
                 {
-                    moodModifier -= 4;
+                    moodModifier += MMnoHabitation;
+                } else
+                {
+                    bool houseSupportType = false;
+                    foreach (Population type in citizen.habitation.acceptedPop)
+                    {
+                        if (citizen.type == type)
+                        {
+                            houseSupportType = true;
+                            break;
+                        }
+                    }
+                    if (!houseSupportType) moodModifier += MMnoAppropriatedHabitation;
                 }
             }
         }
     }
 
-    //Generates a new citizen on the colony
-    public Citizen SpawnCitizen(Population type)
+    //Generates a new citizen on the colony, shouldn't be called directly, use the other function with the amount parameter
+    Citizen AddCitizen(Population type)
     {
         Citizen newCitizen = new Citizen();
 
@@ -52,19 +74,26 @@ public class PopulationManager : MonoBehaviour {
         newCitizen.habitation = null;
         newCitizen.type = type;
         citizenList.Add(newCitizen);
-
-        Debug.Log("Citizen " + newCitizen.name + " landed on the spatioport");
         return newCitizen;
     }
 
-    //Generates a new citizen on the colony
+    //Generates new citizens on the colony
     public List<Citizen> SpawnCitizens(Population type, int amount=1)
     {
         List<Citizen> citizens = new List<Citizen>();
         for (int i = 0; i < amount; i++) {
-            citizens.Add(SpawnCitizen(type));
+            citizens.Add(AddCitizen(type));
         }
+        Logger.Debug("Spawned " + amount + " citizens of type " + type.codeName + " to the citizen list");
+        GameManager.instance.systemManager.OnNewMicrocycle();
         return citizens;
+    }
+
+    //Generates a new citizen on the colony
+    public Citizen SpawnCitizen(Population type)
+    {
+        Citizen citizen = SpawnCitizens(type, 1)[0];
+        return citizen;
     }
 
     //Kill a citizen
@@ -75,82 +104,5 @@ public class PopulationManager : MonoBehaviour {
             citizenList.Remove(citizen);
             Debug.Log("Citizen " + citizen.name + " has been killed");
         }
-    }
-
-    //Assign the best house found to a citizen
-    public void AutoHouseCitizen(Citizen citizen)
-    {
-        SystemManager systemManager = GameManager.instance.systemManager;
-        float attraction = -1;
-        House bestHouse = null;
-        foreach (House house in systemManager.AllHouses)
-        {
-            if (house.citizenCount < house.slotAmount)
-            {
-                float houseAttraction = GetHouseAttraction(house, citizen.type);
-                if (houseAttraction > attraction)
-                {
-                    attraction = houseAttraction;
-                    bestHouse = house;
-                }
-            }
-        }
-        if (bestHouse != null)
-        {
-            if (citizen.habitation != null) {
-                citizen.habitation.affectedCitizen.Remove(citizen);
-            }
-            bestHouse.FillWithCitizen(citizen);
-        } else
-        {
-            Debug.Log("Citizen can't find a house");
-        }
-    }
-
-    //Return an int, the bigger it is, the more attractive is the house
-    public float GetHouseAttraction(House house, Population populationType)
-    {
-        float attraction = 0;
-        if (house.connectedToSpatioport)
-            attraction+=2;
-
-        foreach (Population profile in house.acceptedPop)
-        {
-            if (profile == populationType)
-            {
-                attraction+=4;
-            }
-        }
-
-        if (house.powered)
-            attraction+=3;
-
-        bool foodLeft = false;
-        foreach (FoodProvider distributor in house.foodProvidersInRange)
-        {
-            if (distributor.foodLeft >= house.foodConsumptionPerHabitant)
-            {
-                foodLeft = true;
-            }
-        }
-        if (foodLeft)
-            attraction+=2;
-
-        bool jobLeft = false;
-        foreach (Occupator occupator in house.occupatorsInRange)
-        {
-            foreach (Population pop in occupator.acceptedPopulation)
-            {
-                if (pop == populationType)
-                {
-                    jobLeft = true;
-                }
-            }
-        }
-        if (jobLeft)
-            attraction+=2;
-
-        attraction -= house.distanceToGround * 0.2f;
-        return attraction;
     }
 }

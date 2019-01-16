@@ -76,6 +76,7 @@ public class SystemManager : MonoBehaviour {
     public IEnumerator OnGridUpdate()
     {
         yield return StartCoroutine(RecalculateSpatioportInfluence());
+        yield return new WaitForSeconds(0.5f); //Clumsy, à changer rapidement, la propagation doit s'effectuer une fois que le spatioport a tout mis à jour
         yield return StartCoroutine(RecalculatePropagation());
     }
 
@@ -141,7 +142,7 @@ public class SystemManager : MonoBehaviour {
         Logger.Debug("Recalculating habitation distribution");
         foreach (PopulationManager.Citizen citizen in GameManager.instance.populationManager.citizenList)
         {
-            GameManager.instance.populationManager.AutoHouseCitizen(citizen);
+            GameManager.instance.cityManager.AutoHouseCitizen(citizen);
         }
         yield return null;
     }

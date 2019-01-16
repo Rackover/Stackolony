@@ -38,6 +38,7 @@ public class MissionCallbackManager : MonoBehaviour
         activeCoroutinesRelatedToPower--;
         yield return null;
     }
+
     IEnumerator EmitOccupators()
     {
         MissionManager.Mission myMission = mission;
@@ -50,6 +51,7 @@ public class MissionCallbackManager : MonoBehaviour
         GameManager.instance.missionManager.EndMission(myMission);
         yield return null;
     }
+
     IEnumerator EmitEnergy()
     {
         activeCoroutinesRelatedToPower++;
