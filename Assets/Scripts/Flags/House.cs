@@ -40,6 +40,7 @@ public class House : Flag
         else
             powered = false;
         GetDistanceFromGround();
+        connectedToSpatioport = myBlockLink.isLinkedToSpatioport;
     }
 
     public void GetDistanceFromGround()

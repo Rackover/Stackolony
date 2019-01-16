@@ -42,7 +42,6 @@ public class SystemManager : MonoBehaviour {
     //Met à jour tout le système (Only on load)
     public void UpdateSystem()
     {
-        Debug.Log("System update called");
         StartCoroutine(RecalculateSystem());
     }
 
@@ -302,6 +301,7 @@ public class SystemManager : MonoBehaviour {
         Logger.Debug("Resetting spatioport influence");
         foreach (Block block in AllBlockLinks)
         {
+            block.isLinkedToSpatioport = false;
             block.isConsideredDisabled = true;
         }
         yield return null;

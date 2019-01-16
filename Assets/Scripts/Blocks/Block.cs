@@ -39,6 +39,7 @@ public class Block : MonoBehaviour {
 	public int currentPower;
     public bool isConsideredUnpowered; //Used when updating energy system
     public bool isConsideredDisabled; //Used when updating spatioport
+    public bool isLinkedToSpatioport; 
 
     public void Awake()
     {

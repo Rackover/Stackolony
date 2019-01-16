@@ -94,6 +94,7 @@ public class MissionCallbackManager : MonoBehaviour
         foreach (Block blocklink in mission.blocksFound)
         {
             blocklink.isConsideredDisabled = false;
+            blocklink.isLinkedToSpatioport = true;
             blocklink.Enable();
             yield return new WaitForEndOfFrame();
         }
