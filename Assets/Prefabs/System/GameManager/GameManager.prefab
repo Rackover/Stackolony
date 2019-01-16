@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4664780768526932}
   - component: {fileID: 114732354016464370}
+  - component: {fileID: 114608815287014954}
   m_Layer: 0
   m_Name: CinematicManager
   m_TagString: Untagged
@@ -961,6 +962,20 @@ MonoBehaviour:
   posInWorld: {x: 0, y: 0, z: 0}
   cursorOnUI: 0
   sPosition: {x: 0, y: 0, z: 0}
+--- !u!114 &114608815287014954
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1126512819341546}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66810f0dfb1d9a44cbf07b745c048fa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  camTransform: {fileID: 0}
+  shakeAmount: 0.7
+  decreaseFactor: 1
 --- !u!114 &114618521140319092
 MonoBehaviour:
   m_ObjectHideFlags: 1
