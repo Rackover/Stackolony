@@ -15,17 +15,6 @@ public class Generator : Flag {
 
         GameManager.instance.systemManager.AllGenerators.Add(this);
     }
-    public override void Enable()
-    {
-        base.Enable();
-        GameManager.instance.systemManager.UpdateElectricitySystem();
-    }
-
-    public override void Disable()
-    {
-        base.Disable();
-        GameManager.instance.systemManager.UpdateElectricitySystem();
-    }
 
     public override void BeforeMovingBlock()
     {

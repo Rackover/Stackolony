@@ -598,9 +598,6 @@ public class CursorManagement : MonoBehaviour
 
                 // Fait tomber le bloc au sol
                 GameManager.instance.gridManagement.LayBlock(selectedBlock, new Vector2Int(_pos.x,_pos.z));
-
-                // Update the all city
-                GameManager.instance.systemManager.UpdateSystem();
             } 
             else
             {
@@ -612,7 +609,6 @@ public class CursorManagement : MonoBehaviour
                     selectedBlock.gridCoordinates = new Vector3Int(0, 0, 0);
                     //Stock the cube in the stocking bay
                     FindObjectOfType<StorageBay>().StoreBlock(selectedBlock.gameObject);
-                    GameManager.instance.systemManager.UpdateSystem();
                     selectedBlock.collider.enabled = true;
                 }
                 else

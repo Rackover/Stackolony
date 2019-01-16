@@ -201,7 +201,6 @@ public class Block : MonoBehaviour {
 			{
 				case BlockState.Powered:
 					unpoweredEffect.SetActive(false);
-                    Debug.Log("Removing powered particles");
                     break;
 
                 case BlockState.OnFire:
@@ -227,7 +226,6 @@ public class Block : MonoBehaviour {
 			{
 				case BlockState.Powered:
 					unpoweredEffect.SetActive(true);
-                    Debug.Log("adding powered particles");
                     break;
                 case BlockState.OnFire:
 					onFireEffect.SetActive(false);
@@ -255,6 +253,14 @@ public class Block : MonoBehaviour {
             {
                 blockObject.gameObject.SetActive(true);
                 particleVisuals.SetActive(true);
+                UpdatePower();
+                if (block.consumption != 0)
+                {
+                    if (currentPower <= block.consumption)
+                    {
+                        unpoweredEffect.SetActive(true);
+                    }
+                }
             }
         }
     }

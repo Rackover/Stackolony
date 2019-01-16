@@ -149,6 +149,7 @@ public class GridManagement : MonoBehaviour
         Block link = block.GetComponent<Block>();
         grid[coordinates.x, coordinates.y, coordinates.z] = block;
         link.MoveTo(coordinates);
+        StartCoroutine(GameManager.instance.systemManager.OnGridUpdate());
     }
     
     public Vector3 IndexToWorldPosition(Vector3Int index)
@@ -310,6 +311,7 @@ public class GridManagement : MonoBehaviour
         bridgeInfo.allBridgePositions = newBridgePositions.ToArray();
         bridgeInfo.destination.y = newYPosition;
         bridgeInfo.origin.y = newYPosition;
+        StartCoroutine(GameManager.instance.systemManager.OnGridUpdate());
     }
 
     /// <summary>
@@ -450,7 +452,7 @@ public class GridManagement : MonoBehaviour
         gameManager.sfxManager.PlaySoundLinked("CreateBridge", parentBridgeGameObject);
 
         //Update the system
-        gameManager.systemManager.UpdateSystem();
+        StartCoroutine(GameManager.instance.systemManager.OnGridUpdate());
 
         return parentBridgeGameObject;
     }
@@ -482,6 +484,6 @@ public class GridManagement : MonoBehaviour
         gameManager.sfxManager.PlaySoundLinked("DestroyBlock", bridgeObject);
         Destroy(bridgeObject);
         //Update the system
-        gameManager.systemManager.UpdateSystem();
+        StartCoroutine(GameManager.instance.systemManager.OnGridUpdate());
     }
 }

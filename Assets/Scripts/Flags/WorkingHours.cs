@@ -8,12 +8,18 @@ public class WorkingHours : Flag
 	public float endHour;
 	public bool hasStarted;
 
-	public override void Awake() {
-		base.Awake();
-		GameManager.instance.systemManager.AllTimeRelatedBlocks.Add(this);
-		GameManager.instance.systemManager.CheckWorkingHours();
-	}
-	public void StartWork() {
+    public void Update()
+    {
+        if (GameManager.instance.temporality.GetCurrentCycleProgression() > startHour && hasStarted == false)
+        {
+            StartWork();
+        }
+        else if (GameManager.instance.temporality.GetCurrentCycleProgression() > endHour && hasStarted == true)
+        {
+            EndWork();
+        }
+    }
+    public void StartWork() {
         foreach (Flag flags in gameObject.GetComponents<Flag>()) {
 			if (flags != this)
 			flags.Enable();

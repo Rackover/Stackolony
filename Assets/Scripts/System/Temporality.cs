@@ -11,10 +11,22 @@ public class Temporality : MonoBehaviour {
     [Header("=== TIME VALUES ===")][Space(1)]
     public int cycleNumber = 0; //Combien de cycles se sont ecoulés en tout
     public int timeScale; //Coefficient de vitesse d'écoulement du temps
+    public int nbMicroCyclePerCycle = 3; //Combien de micro cycles s'écoulent le temps d'un cycle
+    private float microDuration;
 
     float cycleProgression; //Combien de secondes se sont ecoulées dans le cycle actuel
     int savedTimeScale; //Variable utilisée pour redéfinir la vitesse du jeu quand le joueur annule la pause
     Image savedButton; //Bouton à réactiver quand le joueur annule la pause
+
+    void Start()
+    {
+        GetMicroDuration();
+    }
+
+    void GetMicroDuration()
+    {
+        microDuration = cycleDuration / nbMicroCyclePerCycle;
+    }
 
     public void PauseTime()
     {
@@ -42,15 +54,20 @@ public class Temporality : MonoBehaviour {
     void Update() {
         if (cycleProgression < cycleDuration)
         {
+            if (cycleProgression >= microDuration)
+            {
+                AddMicroCycle();
+                microDuration+= microDuration;
+            }
             cycleProgression+= timeScale*Time.deltaTime;
         }
         else
         {
             cycleProgression = 0f; //On ne reset pas à 0 pour éviter une transition sacadée au niveau de l'aperçu du temps passé
             AddCycle();
+            AddMicroCycle();
+            GetMicroDuration();
         }
-
-         UpdateSystem();
     }
 
     public float GetCurrentCycleProgression()
@@ -85,8 +102,14 @@ public class Temporality : MonoBehaviour {
         if (!GameManager.instance.IsInGame()) { return; };
 
         GameManager.instance.deliveryManagement.DeliverBlocks();
-        GameManager.instance.systemManager.UpdateCycle();
+        StartCoroutine(GameManager.instance.systemManager.OnNewCycle());
         cycleNumber++;
+    }
+
+    void AddMicroCycle()
+    {
+        if (!GameManager.instance.IsInGame()) { return; };
+        StartCoroutine(GameManager.instance.systemManager.OnNewMicrocycle());
     }
 
     // Returns current cycle of the current year
@@ -99,11 +122,5 @@ public class Temporality : MonoBehaviour {
     public int GetYear()
     {
         return (int)Mathf.Ceil(cycleNumber / yearDuration)+1;
-    }
-
-    public void UpdateSystem()
-    {
-        if (!GameManager.instance.IsInGame()) { return; };
-        GameManager.instance.systemManager.CheckWorkingHours();
     }
 }

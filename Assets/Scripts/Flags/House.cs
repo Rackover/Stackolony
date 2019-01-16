@@ -60,7 +60,7 @@ public class House : Flag
             affectedCitizen.Add(citizen);
             citizenCount++;
             //Fourni un travail au nouveau citoyen, s'il y en a un de disponible
-            GameManager.instance.systemManager.UpdateJobsDistribution();
+            StartCoroutine(GameManager.instance.systemManager.RecalculateJobs());
             return;
         }
     }

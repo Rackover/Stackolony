@@ -27,6 +27,22 @@ public class PopulationManager : MonoBehaviour {
         }
     }
 
+    //Calculate the mood of a population type
+    public void CalculateMood(Population pop) 
+    {
+        int moodModifier = 0; //How much "mood points" the population must loose / gain
+        foreach (Citizen citizen in citizenList)
+        {
+            if (citizen.type = pop)
+            {
+                if (citizen.habitation = null)
+                {
+                    moodModifier -= 4;
+                }
+            }
+        }
+    }
+
     //Generates a new citizen on the colony
     public Citizen SpawnCitizen(Population type)
     {

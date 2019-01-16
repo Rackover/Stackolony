@@ -7,12 +7,26 @@ public class SystemManager : MonoBehaviour {
     public List<Generator> AllGenerators = new List<Generator>();
     public List<Block> AllBlocksRequiringPower = new List<Block>();
     public List<Block> AllBlockLinks = new List<Block>();
-    public List<WorkingHours> AllTimeRelatedBlocks = new List<WorkingHours>();
     public List<Occupator> AllOccupators = new List<Occupator>();
     public List<House> AllHouses = new List<House>();
     public List<FoodProvider> AllFoodProviders = new List<FoodProvider>();
     public List<Spatioport> AllSpatioports = new List<Spatioport>();
 
+    /* FONCTIONNEMENT DU SYSTEME 
+     * Système recalculé à chaque déplacement de block : 
+     *      - Spatioport influence
+     *      - Power propagation
+     *      
+     * Système recalculé à chaque cycle :
+     *      - 
+     *      
+     * Système recalculé à chaque microcycle :
+     *      - Food distribution
+     *      - Occupators influence
+     *      - House information
+     *      - Job distribution
+     *      - Mood
+    */
 
     // removes a buliding from the system entirely
     public void RemoveBuilding(GameObject target)
@@ -20,114 +34,72 @@ public class SystemManager : MonoBehaviour {
         AllGenerators.RemoveAll(o => o.gameObject == target);
         AllBlocksRequiringPower.RemoveAll(o => o.gameObject == target);
         AllBlockLinks.RemoveAll(o => o.gameObject == target);
-        AllTimeRelatedBlocks.RemoveAll(o => o.gameObject == target);
         AllHouses.RemoveAll(o => o.gameObject == target);
         AllFoodProviders.RemoveAll(o => o.gameObject == target);
         AllSpatioports.RemoveAll(o => o.gameObject == target);
     }
 
-    //Met à jour tout le système
+    //Met à jour tout le système (Only on load)
     public void UpdateSystem()
     {
+        Debug.Log("System update called");
         StartCoroutine(RecalculateSystem());
     }
 
+    IEnumerator RecalculateSystem()
+    {
+        StartCoroutine(OnGridUpdate());
+        StartCoroutine(OnNewCycle());
+        StartCoroutine(OnNewMicrocycle());
+        yield return null;
+    }
+
+    //S'execute à chaques fois qu'un cycle passe
+    public IEnumerator OnNewCycle()
+    {
+        foreach (Block block in AllBlockLinks)
+        {
+            block.NewCycle();
+        }
+        yield return null;
+    }
+
+    //S'execute à chaques fois qu'un microcycle passe
+    public IEnumerator OnNewMicrocycle()
+    {
+        yield return StartCoroutine(RecalculateFoodConsumption());
+        yield return StartCoroutine(RecalculateOccupators());
+        UpdateHousesInformations();
+        yield return StartCoroutine(RecalculateJobs());
+    }
+
+    //S'execute à chaques fois qu'un bloc est déplacé dans la grille
+    public IEnumerator OnGridUpdate()
+    {
+        yield return StartCoroutine(RecalculateSpatioportInfluence());
+        yield return StartCoroutine(RecalculatePropagation());
+    }
+
+
+    //Met à jour le système electrique
     public void UpdateElectricitySystem()
     {
         StartCoroutine(RecalculatePropagation());
     }
 
-    //Actualise l'influence du spatioport
-    public void UpdateSpatioportInfluence()
-    {
-        StartCoroutine(ResetSpatioportInfluence());
-        StartCoroutine(RecalculateSpatioportInfluence());
-    }
-
     //Actualise les données de chaque maisons
     public void UpdateHousesInformations()
     {
-        foreach (House house in AllHouses)
-        {
-            if (house.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
-            {
-                house.UpdateHouseInformations();
-            }
-        }
-        UpdateFoodProviders();
-        UpdateOccupators();
-    }
-
-    //Assigne un travail à chaque citoyen
-    public void UpdateJobsDistribution()
-    {
-        StartCoroutine(ResetJobs());
-        StartCoroutine(RecalculateJobs());
-    }
-
-    //Recalcule les maisons influencées par les occupators (Generateurs de travail)
-    public void UpdateOccupators()
-    {
-        StartCoroutine(ResetOccupators());
+        StartCoroutine(CalculateHouseInformation());
+        StartCoroutine(RecalculateFoodConsumption());
         StartCoroutine(RecalculateOccupators());
     }
 
-    //Recalcule la distribution de nourriture
-    public void UpdateFoodProviders()
-    {
-        StartCoroutine(ResetFoodConsumption());
-        StartCoroutine(RecalculateFoodConsumption());
-    }
-
-    //Indique à chaque bloc qu'un cycle est passé
-    public void UpdateCycle() {
-        foreach (Block block in AllBlockLinks) {
-            block.NewCycle();
-        }
-    }
-
-    //Active ou desactive les blocs qui ont un script "WorkingHour" en fonction de l'heure du jeu
-    public void CheckWorkingHours() {
-        foreach (WorkingHours workingHour in AllTimeRelatedBlocks) {
-            if (GameManager.instance.temporality.GetCurrentCycleProgression() > workingHour.startHour && workingHour.hasStarted == false) {
-                workingHour.StartWork();
-            } else if (GameManager.instance.temporality.GetCurrentCycleProgression() > workingHour.endHour && workingHour.hasStarted == true) {
-                workingHour.EndWork();
-            }
-        }
-    }
-
-
-    #region SystemCoroutines
-    //Système de coroutine qui permet de mettre à jour tout le système
-    IEnumerator RecalculateSystem()
-    {
-        StartCoroutine(ResetBlocksPower());
-        UpdateSpatioportInfluence();
-        yield return StartCoroutine(RecalculateSystem2());
-    }
-    IEnumerator RecalculateSystem2()
-    {
-        StartCoroutine(RecalculatePropagation());
-        yield return StartCoroutine(RecalculateSystem3());
-    }
-    IEnumerator RecalculateSystem3()
-    {
-        yield return new WaitForSeconds(0.5f);
-        UpdateHousesInformations();
-        yield return StartCoroutine(RecalculateSystem4());
-    }
-    IEnumerator RecalculateSystem4()
-    {
-        yield return new WaitForSeconds(0.5f);
-        UpdateJobsDistribution();
-        yield return null;
-    }
-    #endregion
 
     //Si un block qui requiert du courant n'a pas croisé d'explorer, alors on l'eteint. Sinon on l'allume || Lancé automatiquement à la fin des calculs liés au power
     public void UpdateBlocksRequiringPower()
     {
+        Logger.Debug("Unpowering blocks out of a generator range");
         foreach (Block block in AllBlocksRequiringPower)
         {
             if (block.isConsideredUnpowered == true)
@@ -141,7 +113,7 @@ public class SystemManager : MonoBehaviour {
     //Si un bloc consideré disabled n'a pas reçu d'explorer provenant du spatioport, il s'eteint. || Lancé automatiquement à la fin des calculs liés au spatioport
     public void UpdateBlocksDisabled()
     {
-        Logger.Debug("Updating disabled blocks");
+        Logger.Debug("Disabling blocks out of spatioport range");
         foreach (Block block in AllBlockLinks)
         {
             if (block.isConsideredDisabled && block.GetComponent<Spatioport>() == null)
@@ -151,10 +123,34 @@ public class SystemManager : MonoBehaviour {
         }
     }
 
-
-
-    IEnumerator RecalculateJobs()
+    public IEnumerator CalculateHouseInformation()
     {
+        Logger.Debug("Recalculating house informations");
+        foreach (House house in AllHouses)
+        {
+            if (house.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
+            {
+                house.UpdateHouseInformations();
+            }
+        }
+        yield return null;
+    }
+
+    public IEnumerator RecalculateHabitation()
+    {
+        StartCoroutine(ResetHabitation());
+        Logger.Debug("Recalculating habitation distribution");
+        foreach (PopulationManager.Citizen citizen in GameManager.instance.populationManager.citizenList)
+        {
+            GameManager.instance.populationManager.AutoHouseCitizen(citizen);
+        }
+        yield return null;
+    }
+
+    public IEnumerator RecalculateJobs()
+    {
+        StartCoroutine(ResetJobs());
+        Logger.Debug("Recalculating jobs distribution");
         foreach (House house in AllHouses)
         {
             for (int i = 0; i < house.citizenCount; i++)
@@ -182,8 +178,10 @@ public class SystemManager : MonoBehaviour {
         yield return null;
     }
 
-    IEnumerator RecalculateOccupators()
+    public IEnumerator RecalculateOccupators()
     {
+        StartCoroutine(ResetOccupators());
+        Logger.Debug("Recalculating occupators influence ");
         foreach (Occupator occupator in AllOccupators)
         {
             if (occupator.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
@@ -195,8 +193,10 @@ public class SystemManager : MonoBehaviour {
         yield return null;
     }
 
-    IEnumerator RecalculateFoodConsumption()
+    public IEnumerator RecalculateFoodConsumption()
     {
+        StartCoroutine(ResetFoodConsumption());
+        Logger.Debug("Recalculating food distribution");
         foreach (FoodProvider foodProvider in AllFoodProviders)
         {
             if (foodProvider.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
@@ -208,8 +208,10 @@ public class SystemManager : MonoBehaviour {
         }
     }
 
-    IEnumerator RecalculatePropagation()
+    public IEnumerator RecalculatePropagation()
     {
+        StartCoroutine(ResetBlocksPower());
+        Logger.Debug("recalculating power propagation ");
         foreach (Generator generator in AllGenerators)
         {
             if (generator.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
@@ -221,8 +223,10 @@ public class SystemManager : MonoBehaviour {
         yield return null;
     }
 
-    IEnumerator RecalculateSpatioportInfluence()
+    public IEnumerator RecalculateSpatioportInfluence()
     {
+        StartCoroutine(ResetSpatioportInfluence());
+        Logger.Debug("Recalculating spatioport influence");
         foreach (Spatioport spatioport in AllSpatioports)
         {
             spatioport.Invoke("OnBlockUpdate", 0f);
@@ -234,6 +238,7 @@ public class SystemManager : MonoBehaviour {
 
     IEnumerator ResetBlocksPower()
     {
+        Logger.Debug("Resetting block power ");
         foreach (Block block in AllBlocksRequiringPower)
         {
             block.isConsideredUnpowered = true;
@@ -242,8 +247,23 @@ public class SystemManager : MonoBehaviour {
         yield return null;
     }
 
+    IEnumerator ResetHabitation()
+    {
+        Logger.Debug("Resetting citizens habitations");
+        foreach (House house in AllHouses)
+        {
+            house.affectedCitizen = null;
+        }
+        foreach (PopulationManager.Citizen citizen in GameManager.instance.populationManager.citizenList)
+        {
+            citizen.habitation = null;
+        }
+        yield return null;
+    }
+
     IEnumerator ResetJobs()
     {
+        Logger.Debug("Resetting jobs");
         foreach (Occupator occupator in AllOccupators)
         {
             occupator.affectedCitizen.Clear();
@@ -258,6 +278,7 @@ public class SystemManager : MonoBehaviour {
 
     IEnumerator ResetOccupators()
     {
+        Logger.Debug("Resetting occupators influence");
         foreach (House house in AllHouses)
         {
             house.occupatorsInRange.Clear();
@@ -267,6 +288,7 @@ public class SystemManager : MonoBehaviour {
 
     IEnumerator ResetFoodConsumption()
     {
+        Logger.Debug("Resetting food consumption");
         foreach (House house in AllHouses)
         {
             house.foodReceived = 0;
