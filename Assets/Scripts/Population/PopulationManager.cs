@@ -14,10 +14,11 @@ public class PopulationManager : MonoBehaviour {
     public int MMnoHabitation = -4;
     public int MMnoAppropriatedHabitation = -2;
     public int MMnoFood = -3;
-    public int MMntoEnoughFood = -1;
+    public int MMnotEnoughFood = -1;
     public int MMnoOccupation = -2;
     public int MMnoPower = -2;
     public int MMdamagedHabitation = -2;
+    public int MMeverythingFine = +3;
 
     [System.Serializable]
     public class Citizen
@@ -37,17 +38,27 @@ public class PopulationManager : MonoBehaviour {
         }
     }
 
+    //Calculate the mood of every popluation
+    public void CalculateMoods()
+    {
+        foreach (Population pop in populationTypeList)
+        {
+            CalculateMood(pop);
+        }
+    }
+
     //Calculate the mood of a population type
     public void CalculateMood(Population pop) 
     {
-        int moodModifier = 0; //How much "mood points" the population must loose / gain
+        float moodModifier = 0; //How much "mood points" the population must loose / gain
         foreach (Citizen citizen in citizenList)
         {
+            int citizenMoodModifier = 0;
             if (citizen.type = pop)
             {
                 if (citizen.habitation = null)
                 {
-                    moodModifier += MMnoHabitation;
+                    citizenMoodModifier += MMnoHabitation;
                 } else
                 {
                     bool houseSupportType = false;
@@ -59,10 +70,31 @@ public class PopulationManager : MonoBehaviour {
                             break;
                         }
                     }
-                    if (!houseSupportType) moodModifier += MMnoAppropriatedHabitation;
+                    if (!houseSupportType) citizenMoodModifier += MMnoAppropriatedHabitation;
+                    if (citizen.habitation.foodReceived <= 0)
+                    {
+                        citizenMoodModifier += MMnoFood;
+                    } else if (citizen.habitation.foodReceived < citizen.habitation.foodConsumption)
+                    {
+                        citizenMoodModifier += MMnotEnoughFood;
+                    }
+                    if (citizen.jobless) citizenMoodModifier += MMnoOccupation;
+                    if (citizen.habitation.myBlockLink.currentPower < citizen.habitation.myBlockLink.block.consumption) citizenMoodModifier += MMnoPower;
+                    foreach (BlockState state in citizen.habitation.myBlockLink.states)
+                    {
+                        if (state == BlockState.Damaged || state == BlockState.OnFire)
+                        {
+                            citizenMoodModifier += MMdamagedHabitation;
+                        }
+                    }
                 }
+                if (citizenMoodModifier == 0) citizenMoodModifier += MMeverythingFine;
+                moodModifier += citizenMoodModifier;
             }
         }
+        moodModifier *= MMglobalModifier;
+        averageMoods[pop] += moodModifier;
+        Logger.Debug("Population of type " + pop.codeName + " has been modified by " + moodModifier + " and is now at " + averageMoods[pop]);
     }
 
     //Generates a new citizen on the colony, shouldn't be called directly, use the other function with the amount parameter

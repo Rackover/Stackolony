@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum BlockState{ Powered, OnFire, OnRiot }
+public enum BlockState{ Powered, OnFire, OnRiot, Damaged }
 public enum Profile{ Scientist, Worker, Military, Artist, Tourist }
 public enum Ressource{ Energy, Mood, Food }
 public enum Quality{ Low, Medium, High }

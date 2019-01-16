@@ -66,10 +66,8 @@ public class SystemManager : MonoBehaviour {
     //S'execute à chaques fois qu'un microcycle passe
     public IEnumerator OnNewMicrocycle()
     {
-        yield return StartCoroutine(RecalculateFoodConsumption());
-        yield return StartCoroutine(RecalculateOccupators());
-        UpdateHousesInformations();
-        yield return StartCoroutine(RecalculateJobs());
+        StartCoroutine(UpdateHousesInformations());
+        yield return StartCoroutine(UpdateMood());
     }
 
     //S'execute à chaques fois qu'un bloc est déplacé dans la grille
@@ -88,11 +86,13 @@ public class SystemManager : MonoBehaviour {
     }
 
     //Actualise les données de chaque maisons
-    public void UpdateHousesInformations()
+    public IEnumerator UpdateHousesInformations()
     {
-        StartCoroutine(CalculateHouseInformation());
         StartCoroutine(RecalculateFoodConsumption());
         StartCoroutine(RecalculateOccupators());
+        StartCoroutine(RecalculateJobs());
+        StartCoroutine(CalculateHouseInformation());
+        yield return null;
     }
 
 
@@ -121,6 +121,12 @@ public class SystemManager : MonoBehaviour {
                 block.Disable();
             }
         }
+    }
+
+    public IEnumerator UpdateMood()
+    {
+        GameManager.instance.populationManager.CalculateMoods();
+        yield return null;
     }
 
     public IEnumerator CalculateHouseInformation()
