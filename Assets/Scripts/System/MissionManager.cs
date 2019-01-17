@@ -162,7 +162,7 @@ public class MissionManager : MonoBehaviour {
                 {
                     foreach (Block foundBlock in AdjacentBlocks)
                     {
-                        power -= (foundBlock.block.consumption - foundBlock.currentPower);
+                        power -= (foundBlock.scheme.consumption - foundBlock.currentPower);
                     }
 
                     for (int i = 0; i < AdjacentBlocks.Count; i++)

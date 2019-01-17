@@ -29,7 +29,7 @@ public class Container : MonoBehaviour
     {
         // BOX
         containerMat = Instantiate(meshRenderers[0].material);
-        containerMat.color = GameManager.instance.library.blockContainerColors[linkedBlock.block.ID];
+        containerMat.color = GameManager.instance.library.blockContainerColors[linkedBlock.scheme.ID];
         foreach(MeshRenderer mr in meshRenderers)
         { 
             mr.material = containerMat;
@@ -40,7 +40,7 @@ public class Container : MonoBehaviour
         // ICON MESH PLANE
         iconMat = Instantiate(iconRenderers[0].material);
         foreach(MeshRenderer ic in iconRenderers){ ic.material = iconMat; }
-        Sprite sprite = linkedBlock.block.icon;
+        Sprite sprite = linkedBlock.scheme.icon;
         Texture2D croppedTexture = new Texture2D( (int)sprite.rect.width, (int)sprite.rect.height );
         
         Color[] pixels = sprite.texture.GetPixels

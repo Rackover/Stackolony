@@ -34,7 +34,7 @@ public class House : Flag
             }
         }
         foodConsumption = foodConsumptionPerHabitant * citizenCount;
-        if (myBlockLink.currentPower >= myBlockLink.block.consumption)
+        if (myBlockLink.currentPower >= myBlockLink.scheme.consumption)
             powered = true;
         else
             powered = false;

@@ -245,7 +245,7 @@ public class SaveManager : MonoBehaviour {
 
                 GameObject storedBuilding = Instantiate(GameManager.instance.library.blockPrefab);
                 Block newBlockLink = storedBuilding.GetComponent<Block>();
-                newBlockLink.block = block;
+                newBlockLink.scheme = block;
 
                 GameManager.instance.storageBay.StoreAtPosition(storedBuilding, coords);
                 //GameManager.instance.storageBay.PlaceBayIfPossible(saveData.storagePosition);
@@ -386,7 +386,7 @@ public class SaveManager : MonoBehaviour {
                 if (building != null) {
                     Block blockLink = building.GetComponent<Block>();
                     Vector3Int coords = blockLink.gridCoordinates;
-                    int id = blockLink.block.ID;
+                    int id = blockLink.scheme.ID;
                     storageGrid[coords] = id;
                 }
             }
@@ -406,7 +406,7 @@ public class SaveManager : MonoBehaviour {
                     if(blockLink != null)
                     {
                         Vector3Int coords = blockLink.gridCoordinates;
-                        blockData.id = blockLink.block.ID;
+                        blockData.id = blockLink.scheme.ID;
                         blockData.states = new List<int>();
 
                         foreach (BlockState state in blockLink.states) 

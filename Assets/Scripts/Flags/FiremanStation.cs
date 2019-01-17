@@ -45,7 +45,7 @@ public class FiremanStation : Flag
 					{
 						selecting = false;
 						targets.Add(sBlock);
-						extinctors.Add(Instantiate(myBlockLink.lib.extinctorPrefab, transform.position, Quaternion.identity).GetComponent<Extinctor>());
+						extinctors.Add(Instantiate(GameManager.instance.library.extinctorPrefab, transform.position, Quaternion.identity).GetComponent<Extinctor>());
 						extinctors[extinctors.Count-1].target = targets[targets.Count-1].transform;
 					}
 				}

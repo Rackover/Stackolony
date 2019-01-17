@@ -90,8 +90,8 @@ public class BlockInfobox : MonoBehaviour
 
 		// Changing general box values
 		generalBox.gameObject.SetActive(true);
-		nameText.text = block.block.title;
-		descriptionText.text = block.block.description;
+		nameText.text = block.scheme.title;
+		descriptionText.text = block.scheme.description;
 
 		// Changing box size
 		//generalBox.sizeDelta = new Vector2(generalBox.sizeDelta.x, GetRequiredHeight(descriptionText, generalBox.sizeDelta.x));

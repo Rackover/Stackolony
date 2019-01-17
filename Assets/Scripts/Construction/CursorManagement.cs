@@ -540,7 +540,7 @@ public class CursorManagement : MonoBehaviour
 
     public void StartDrag(Block _block)
     {
-        if (_block != null && _block.block.isMovable == true)
+        if (_block != null && _block.scheme.isMovable == true)
         {
             selectedBlock = _block;
             selectedBlock.StopAllCoroutines();
@@ -562,7 +562,7 @@ public class CursorManagement : MonoBehaviour
                 if(!draging) 
                 {
                     draging = true;
-                    selectedBlock.collider.enabled = false;
+                    selectedBlock.GetComponent<Collider>().enabled = false;
                 }
                 else
                 {
@@ -602,14 +602,14 @@ public class CursorManagement : MonoBehaviour
             else
             {
                 //If the cube is dragged on the stocking bay
-                if(GameManager.instance.gridManagement.GetSlotType(_pos, false) == GridManagement.blockType.STORAGE &&  selectedBlock.gameObject.layer != LayerMask.NameToLayer("StoredBlock") && selectedBlock.block.isStorable == true)
+                if(GameManager.instance.gridManagement.GetSlotType(_pos, false) == GridManagement.blockType.STORAGE &&  selectedBlock.gameObject.layer != LayerMask.NameToLayer("StoredBlock") && selectedBlock.scheme.isStorable == true)
                 {
                     //Update the grid
                     GameManager.instance.gridManagement.UpdateBlocks(selectedBlock.gridCoordinates);
                     selectedBlock.gridCoordinates = new Vector3Int(0, 0, 0);
                     //Stock the cube in the stocking bay
                     FindObjectOfType<StorageBay>().StoreBlock(selectedBlock.gameObject);
-                    selectedBlock.collider.enabled = true;
+                    selectedBlock.GetComponent<Collider>().enabled = true;
                 }
                 else
                 {
@@ -620,7 +620,7 @@ public class CursorManagement : MonoBehaviour
         }
         if(selectedBlock != null)
         {            
-            selectedBlock.collider.enabled = true;
+            selectedBlock.GetComponent<Collider>().enabled = true;
             selectedBlock = null; 
         }
         draging = false;
@@ -631,7 +631,7 @@ public class CursorManagement : MonoBehaviour
         if(selectedBlock != null && draging)
         {
             selectedBlock.transform.position = sPosition;
-            selectedBlock.collider.enabled = true;
+            selectedBlock.GetComponent<Collider>().enabled = true;
             selectedBlock = null;
             draging = false;
         }
