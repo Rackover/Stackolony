@@ -587,7 +587,7 @@ public class CursorManagement : MonoBehaviour
             {
                 if (selectedBlock.gameObject.layer == LayerMask.NameToLayer("StoredBlock"))
                 {
-                    FindObjectOfType<StorageBay>().DeStoreBlock(selectedBlock.gameObject);
+                    GameManager.instance.storageBay.DeStoreBlock(selectedBlock.gameObject);
                 }
 
                 //Play SFX
@@ -608,8 +608,8 @@ public class CursorManagement : MonoBehaviour
                     GameManager.instance.gridManagement.UpdateBlocks(selectedBlock.gridCoordinates);
                     selectedBlock.gridCoordinates = new Vector3Int(0, 0, 0);
                     //Stock the cube in the stocking bay
-                    FindObjectOfType<StorageBay>().StoreBlock(selectedBlock.gameObject);
-                    selectedBlock.GetComponent<Collider>().enabled = true;
+                    GameManager.instance.storageBay.StoreBlock(selectedBlock.gameObject);
+                    selectedBlock.boxCollider.enabled = true;
                 }
                 else
                 {
@@ -619,8 +619,9 @@ public class CursorManagement : MonoBehaviour
             }
         }
         if(selectedBlock != null)
-        {            
-            selectedBlock.GetComponent<Collider>().enabled = true;
+        {         
+            selectedBlock.CallFlags("OnBlockUpdate");
+            selectedBlock.boxCollider.enabled = true;
             selectedBlock = null; 
         }
         draging = false;
@@ -631,7 +632,7 @@ public class CursorManagement : MonoBehaviour
         if(selectedBlock != null && draging)
         {
             selectedBlock.transform.position = sPosition;
-            selectedBlock.GetComponent<Collider>().enabled = true;
+            selectedBlock.boxCollider.enabled = true;
             selectedBlock = null;
             draging = false;
         }

@@ -5,13 +5,13 @@ using UnityEngine;
 public class Flag : MonoBehaviour {
 
     [Header("References")]
-    public Block myBlockLink;
+    public Block block;
     public bool isEnabled = true;
 
     //Fonction appelée lors de la création du script
     virtual public void Awake()
     {
-        myBlockLink = GetComponent<Block>();
+        block = GetComponent<Block>();
     }
 
     //Alimente les blocs
@@ -44,36 +44,29 @@ public class Flag : MonoBehaviour {
     //Fonction appelée à chaque début de cycle
     virtual public void OnNewCycle()
     {
-
     }
 
     //Fonction appelée quand la nuit commence
     virtual public void OnNightStart()
     {
-
     }
 
     //Fonction appelée quand le jour commence
     virtual public void OnDayStart()
     {
-
     }
 
     //Fonction appelée quand la position du bloc se met à jour
     virtual public void OnBlockUpdate()
     {
-
     }
 
-    //Fonction appelée quand la position du bloc se met à jour
     virtual public void UpdateFlag()
     {
-
+        if(isEnabled) return;
     }
 
-    //Fonction appelée quand la position du bloc se met à jour
     virtual public void Use()
     {
-
     }
 }

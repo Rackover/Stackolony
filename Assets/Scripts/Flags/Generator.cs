@@ -32,7 +32,7 @@ public class Generator : Flag {
         base.OnBlockUpdate();
         if (isEnabled)
         {
-            GameManager.instance.missionManager.StartMission(myBlockLink.gridCoordinates, "EmitEnergy", -1, power);
+            GameManager.instance.missionManager.StartMission(block.gridCoordinates, "EmitEnergy", -1, power);
         }
     }
 

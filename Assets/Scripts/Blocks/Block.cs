@@ -88,16 +88,9 @@ public class Block : MonoBehaviour {
     //Apelle une fonction à chaque script "flag" attachés
     public void CallFlags(string function)
     {
-        foreach (Flag myFlag in activeFlags)
+        foreach (Flag f in activeFlags)
         {
-            if (function == "BeforeMovingBlock")
-            {
-                myFlag.BeforeMovingBlock();
-            }
-            else
-            {
-                myFlag.Invoke(function, 1);
-            }
+            f.Invoke(function, 0);
         }
     }
 
@@ -135,14 +128,6 @@ public class Block : MonoBehaviour {
         {
             visuals.SetActive(false);
             unpoweredEffect.SetActive(false);
-        }
-    }
-    
-    public void ReadFlags(string[] flags)
-    {
-        foreach(string flag in flags)
-        {
-            
         }
     }
 
@@ -218,7 +203,8 @@ public class Block : MonoBehaviour {
 
     public void ToggleVisuals(bool on)
     {
-        if(visuals != null) {
+        if(visuals != null) 
+        {
             if (!on) {
                 visuals.gameObject.SetActive(false);
                 effects.SetActive(false);
@@ -271,12 +257,9 @@ public class Block : MonoBehaviour {
 
     public void UpdateFlags()
     {
-        if(states.Contains(BlockState.Powered))
+        foreach (Flag flag in activeFlags)
         {
-            foreach (Flag flag in activeFlags)
-            {
-                flag.UpdateFlag();
-            }
+            flag.UpdateFlag();
         }
     }
 

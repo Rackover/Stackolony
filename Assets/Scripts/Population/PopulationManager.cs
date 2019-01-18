@@ -79,8 +79,8 @@ public class PopulationManager : MonoBehaviour {
                         citizenMoodModifier += MMnotEnoughFood;
                     }
                     if (citizen.jobless) citizenMoodModifier += MMnoOccupation;
-                    if (citizen.habitation.myBlockLink.currentPower < citizen.habitation.myBlockLink.scheme.consumption) citizenMoodModifier += MMnoPower;
-                    foreach (BlockState state in citizen.habitation.myBlockLink.states)
+                    if (citizen.habitation.block.currentPower < citizen.habitation.block.scheme.consumption) citizenMoodModifier += MMnoPower;
+                    foreach (BlockState state in citizen.habitation.block.states)
                     {
                         if (state == BlockState.Damaged || state == BlockState.OnFire)
                         {

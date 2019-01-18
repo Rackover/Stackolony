@@ -32,6 +32,8 @@ public class FiremanStation : Flag
 
 	override public void UpdateFlag()
 	{
+		base.UpdateFlag();
+		
 		if(selecting)
 		{
 			if (Input.GetButtonDown("Select")) 

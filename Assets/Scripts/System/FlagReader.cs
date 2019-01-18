@@ -264,6 +264,29 @@ public class FlagReader : MonoBehaviour
                 break;
     #endregion
 
+    #region FlagNeeder
+            case "FlagNeeder":
+                FlagNeeder newFlagReader = block.gameObject.AddComponent<FlagNeeder>();
+				newFlagReader.needed = flagElements[1];
+				newFlagReader.range = int.Parse(flagElements[2]);
+                block.activeFlags.Add(newFlagReader);
+                break;
+    #endregion
+
+    #region Nest
+            case "Nest":
+                Nest newNest = block.gameObject.AddComponent<Nest>();
+                block.activeFlags.Add(newNest);
+                break;
+    #endregion
+
+    #region Mine
+            case "Mine":
+                Mine newMine = block.gameObject.AddComponent<Mine>();
+                block.activeFlags.Add(newMine);
+                break;
+    #endregion
+
             default:
 				Debug.Log("Warning : " + flagElements[0] + " flag is undefined. Did you forget to add it to the FlagReader ?");
 				break;
