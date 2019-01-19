@@ -85,39 +85,28 @@ public class CityManager : MonoBehaviour {
         return attraction;
     }
     
-    public void TriggerAccident(int accident = -1)
+    public void TriggerAccident(BlockState accident)
     {
         if(GameManager.instance.systemManager.AllBlocks.Count == 0) return;
 
-        if(accident == -1) 
-        {
-            accident = (int)accidentStates[Random.Range(0, accidentStates.Length)];
-        }
-        else if(accident > System.Enum.GetNames(typeof(BlockState)).Length || accident < -1)
-        {
-            Debug.Log("You entered a wrong accident parameter");
-            return;
-        }
-        
-        if( IsConsideredAccident( (BlockState)accident) )
+        if( IsConsideredAccident( accident ) )
         {
             int rand = Random.Range(0, GameManager.instance.systemManager.AllBlocks.Count);
             int blockMet = 0;
-            while( GameManager.instance.systemManager.AllBlocks[rand].states.Contains( (BlockState)accident ))
+            while( GameManager.instance.systemManager.AllBlocks[rand].states.Contains( accident ))
             {
                 if(blockMet++ > GameManager.instance.systemManager.AllBlocks.Count) 
                 {
-                    Debug.Log("AllBlock are in bad condition already");
+                    Logger.Debug("All blocks already have " + accident + " as a state");
                     return;
                 }
-
                 rand = Random.Range(0, GameManager.instance.systemManager.AllBlocks.Count);
             }
-            GameManager.instance.systemManager.AllBlocks[rand].AddState( (BlockState)accident );
+            GameManager.instance.systemManager.AllBlocks[rand].AddState( accident );
         }
         else
         {
-            Debug.Log("This state is not considered as a accident");
+            Debug.Log( accident + " is not considered as a accident" );
         }
     }
 
