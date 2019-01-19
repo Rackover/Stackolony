@@ -112,4 +112,17 @@ public class MissionCallbackManager : MonoBehaviour
         yield return null;
     }
 
+    IEnumerator EmitNuisance()
+    {
+        MissionManager.Mission myMission = mission;
+        NuisanceGenerator linkedGenerator = GameManager.instance.gridManagement.grid[myMission.position.x, myMission.position.y, myMission.position.z].GetComponent<NuisanceGenerator>();
+        for (int i = 0; i < myMission.blocksFound.Count; i++)
+        {
+            int distanceToCenter = myMission.blockDistanceToCenter[i] + 1;
+            if (distanceToCenter > linkedGenerator.amount) distanceToCenter = linkedGenerator.amount; //In case the range is
+            myMission.blocksFound[i].nuisance += linkedGenerator.amount - myMission.blockDistanceToCenter[i] + 1; //+1 because the first block doesn't count
+        }
+        GameManager.instance.missionManager.EndMission(myMission);
+        yield return null;
+    }
 }
