@@ -230,14 +230,14 @@ GameObject:
   m_IsActive: 1
 --- !u!1 &1554898545166950
 GameObject:
-  m_ObjectHideFlags: 1
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4916891919963634}
   m_Layer: 0
-  m_Name: ParticlesVisuals
+  m_Name: Effects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -444,7 +444,7 @@ Transform:
   - {fileID: 4737683537787448}
   - {fileID: 4562671659929184}
   m_Father: {fileID: 4360120478736148}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4249214592145858
 Transform:
@@ -510,7 +510,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 4916891919963634}
   - {fileID: 4238597109392686}
   - {fileID: 4985285186216558}
   m_Father: {fileID: 4517864213787716}
@@ -542,6 +541,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4360120478736148}
+  - {fileID: 4916891919963634}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -651,8 +651,8 @@ Transform:
   m_Children:
   - {fileID: 4075068260546312}
   - {fileID: 4657964912820526}
-  m_Father: {fileID: 4360120478736148}
-  m_RootOrder: 0
+  m_Father: {fileID: 4517864213787716}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4983702950145216
 Transform:
@@ -678,7 +678,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4360120478736148}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!23 &23028059083150618
 MeshRenderer:
@@ -1211,26 +1211,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0252c668615400f47925e40f91aa4710, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collider: {fileID: 65222403905997784}
+  boxCollider: {fileID: 0}
   container: {fileID: 114007146283345702}
-  block: {fileID: 0}
-  blockObject: {fileID: 0}
-  particleVisuals: {fileID: 1554898545166950}
+  scheme: {fileID: 0}
+  visuals: {fileID: 0}
+  effects: {fileID: 1554898545166950}
   unpoweredEffect: {fileID: 1077097437806386}
   onFireEffect: {fileID: 1249191511621426}
   bridge: {fileID: 0}
   gridCoordinates: {x: 0, y: 0, z: 0}
   positionInTower: 0
-  gridManager: {fileID: 0}
-  flagReader: {fileID: 0}
-  systemRef: {fileID: 0}
-  lib: {fileID: 0}
-  gameManager: {fileID: 0}
   activeFlags: []
   states: 
   currentPower: 0
   isConsideredUnpowered: 0
   isConsideredDisabled: 0
+  isLinkedToSpatioport: 0
 --- !u!198 &198034340819890346
 ParticleSystem:
   m_ObjectHideFlags: 1

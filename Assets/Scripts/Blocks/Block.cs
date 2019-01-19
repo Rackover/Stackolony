@@ -10,26 +10,19 @@ public enum Quality{ Low, Medium, High }
 public class Block : MonoBehaviour {
 
     [Header("Referencies")]
-    public BoxCollider collider;
+    public BoxCollider boxCollider;
     public Container container;
-	public BlockScheme block;
-	public GameObject blockObject;
-    public GameObject particleVisuals;
+	public BlockScheme scheme;
+	public GameObject visuals;
+    public GameObject effects;
 
     [Header("Particules")]
 	public GameObject unpoweredEffect;
     public GameObject onFireEffect;
     public GameObject bridge;
 
-    // TEMPORARY ASSET GENERATION
-
     [HideInInspector]   public Vector3Int gridCoordinates = new Vector3Int(0, 0, 0);
     [HideInInspector]   public int positionInTower; //0 = tout en bas
-    [HideInInspector]   public GridManagement gridManager;
-    [HideInInspector]   public FlagReader flagReader;
-    [HideInInspector]   public SystemManager systemRef;
-    [HideInInspector]   public Library lib;
-    public GameManager gameManager;
 
     [Header("Lists")]
     public List<Flag> activeFlags = new List<Flag>();
@@ -44,24 +37,7 @@ public class Block : MonoBehaviour {
     public void Awake()
     {
         isConsideredUnpowered = false;
-        flagReader = FindObjectOfType<FlagReader>();
-        gridManager = FindObjectOfType<GridManagement>();
-        if (collider == null) collider = gameObject.GetComponent<BoxCollider>();
-
-        SystemManager foundSystemRef = FindObjectOfType<SystemManager>();
-        lib = FindObjectOfType<Library>();
-
-        if (foundSystemRef == null)
-        {
-            GameObject newSystemRefGO = new GameObject();
-            newSystemRefGO.name = "SystemReferences";
-            systemRef = newSystemRefGO.AddComponent<SystemManager>();
-        }
-        else
-        {
-            systemRef = foundSystemRef;
-        }
-
+        if (boxCollider == null) boxCollider = gameObject.GetComponent<BoxCollider>();
     }
 
     public void Update()
@@ -112,16 +88,9 @@ public class Block : MonoBehaviour {
     //Apelle une fonction à chaque script "flag" attachés
     public void CallFlags(string function)
     {
-        foreach (Flag myFlag in activeFlags)
+        foreach (Flag f in activeFlags)
         {
-            if (function == "BeforeMovingBlock")
-            {
-                myFlag.BeforeMovingBlock();
-            }
-            else
-            {
-                myFlag.Invoke(function, 1);
-            }
+            f.Invoke(function, 0);
         }
     }
 
@@ -138,46 +107,35 @@ public class Block : MonoBehaviour {
         systemRef.AllBlocks.Add(this);
         if (block.consumption > 0)
         {
-            systemRef.AllBlocksRequiringPower.Add(this);
+            GameManager.instance.systemManager.AllBlocksRequiringPower.Add(this);
         }
 
-        if (blockObject == null)
+        if (visuals == null)
         {
-            blockObject = Instantiate(block.model, transform.position, Quaternion.identity, transform);
-            blockObject.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
+            visuals = Instantiate(scheme.model, transform.position, Quaternion.identity, transform);
+            visuals.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
+            visuals.name = "Visuals";
         }
-        foreach (string flag in block.flags)
+        foreach (string flag in scheme.flags)
         {
-            flagReader.ReadFlag(this, flag);
+            GameManager.instance.flagReader.ReadFlag(this, flag);
         }
     }
 
     public void UnloadBlock()
     {
-        if(blockObject != null)
+        if(visuals != null)
         {
-            blockObject.SetActive(false);
+            visuals.SetActive(false);
             unpoweredEffect.SetActive(false);
-        }
-    }
-    
-    public void ReadFlags(string[] flags)
-    {
-        foreach(string flag in flags)
-        {
-            
         }
     }
 
 	// Check if the block is powered
 	public bool IsPowered()
 	{   
-		if(currentPower >= block.consumption)
-		{
-			return true;
-		}
-		else
-			return false;
+		if(currentPower >= scheme.consumption) return true;
+		else return false;
 	} 
 
     public void UpdatePower()
@@ -257,19 +215,20 @@ public class Block : MonoBehaviour {
 
     public void ToggleVisuals(bool on)
     {
-        if(blockObject != null) {
+        if(visuals != null) 
+        {
             if (!on) {
-                blockObject.gameObject.SetActive(false);
-                particleVisuals.SetActive(false);
+                visuals.gameObject.SetActive(false);
+                effects.SetActive(false);
             }
             else
             {
-                blockObject.gameObject.SetActive(true);
-                particleVisuals.SetActive(true);
+                visuals.gameObject.SetActive(true);
+                effects.SetActive(true);
                 UpdatePower();
-                if (block.consumption != 0)
+                if (scheme.consumption != 0)
                 {
-                    if (currentPower <= block.consumption)
+                    if (currentPower <= scheme.consumption)
                     {
                         unpoweredEffect.SetActive(true);
                     }
@@ -285,7 +244,7 @@ public class Block : MonoBehaviour {
         {
             BridgeInfo bridgeInfo = transform.Find("Bridge").GetComponent<BridgeInfo>();
             if (bridgeInfo != null)
-                gridManager.UpdateBridgePosition(bridgeInfo, gridCoordinates.y);
+                GameManager.instance.gridManagement.UpdateBridgePosition(bridgeInfo, gridCoordinates.y);
         }
         StartCoroutine(MoveToPosition());
     }
@@ -298,24 +257,21 @@ public class Block : MonoBehaviour {
         {
             transform.position = Vector3.Lerp(
                 startingPos,
-                gridManager.IndexToWorldPosition(gridCoordinates),
+                GameManager.instance.gridManagement.IndexToWorldPosition(gridCoordinates),
                 elapsedTime / time
             );
             elapsedTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
-        transform.position = gridManager.IndexToWorldPosition(gridCoordinates);
+        transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(gridCoordinates);
         yield return null;
     }
 
     public void UpdateFlags()
     {
-        if(states.Contains(BlockState.Powered))
+        foreach (Flag flag in activeFlags)
         {
-            foreach (Flag flag in activeFlags)
-            {
-                flag.UpdateFlag();
-            }
+            flag.UpdateFlag();
         }
     }
 

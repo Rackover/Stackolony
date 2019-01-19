@@ -34,7 +34,7 @@ public class House : Flag
             }
         }
         foodConsumption = foodConsumptionPerHabitant * citizenCount;
-        if (myBlockLink.currentPower >= myBlockLink.block.consumption)
+        if (block.currentPower >= block.scheme.consumption)
             powered = true;
         else
             powered = false;
@@ -43,7 +43,7 @@ public class House : Flag
 
     public void GetDistanceFromGround()
     {
-        distanceToGround = GameManager.instance.gridManagement.GetDistanceFromGround(myBlockLink.gridCoordinates) - 0.5f;
+        distanceToGround = GameManager.instance.gridManagement.GetDistanceFromGround(block.gridCoordinates) - 0.5f;
     }
 
     public void InitCitizensSlots()
@@ -95,11 +95,4 @@ public class House : Flag
         }
         citizenOut.Play();  
     }
-
-    /*
-    ParticleSystem NewParticuleSystem()
-    {   
-        //GameObject ps = 
-    }
-    */
 }

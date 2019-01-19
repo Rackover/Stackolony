@@ -17,7 +17,7 @@ public class FlagReader : MonoBehaviour
             existingProfiles.Add(GameManager.instance.populationManager.populationTypeList[i].codeName);
         }
     }
-    public void ReadFlag(Block blockLink, string flag)
+    public void ReadFlag(Block block, string flag)
 	{
 		string[] flagElements = flag.Split(new char[]{'_'}, System.StringSplitOptions.RemoveEmptyEntries);
 
@@ -27,7 +27,7 @@ public class FlagReader : MonoBehaviour
 			case "Generator":
 				if(flagElements.Length == 2)
 				{
-                    Generator newGenerator = blockLink.gameObject.AddComponent<Generator>();
+                    Generator newGenerator = block.gameObject.AddComponent<Generator>();
 
                     try  // TRY SETTING UP THE POWER
 					{
@@ -36,22 +36,22 @@ public class FlagReader : MonoBehaviour
 					catch(FormatException fe)
 					{
 						Destroy(newGenerator);
-						Debug.Log("WARNING - " + blockLink.block.name + " - Generator : Unvalid Power entry for as the first parameter. Please enter an int value.");
+						Debug.Log("WARNING - " + block.scheme.name + " - Generator : Unvalid Power entry for as the first parameter. Please enter an int value.");
 						break;
 					}
 					
 					if(newGenerator.power < 0)
 					{
 						Destroy(newGenerator);
-						Debug.Log("WARNING - " + blockLink.block.name + " - Generator : Power value should be higher than 0");
+						Debug.Log("WARNING - " + block.scheme.name + " - Generator : Power value should be higher than 0");
 						break;
 					}
 
-					blockLink.activeFlags.Add(newGenerator);
+					block.activeFlags.Add(newGenerator);
 				}
 				else
 				{
-					Debug.Log("WARNING - " + blockLink.block.name + " - Generator : flag wrongly setup for. Should be something like this : 'Generator_3'");
+					Debug.Log("WARNING - " + block.scheme.name + " - Generator : flag wrongly setup for. Should be something like this : 'Generator_3'");
 				}
 				break;
 
@@ -61,7 +61,7 @@ public class FlagReader : MonoBehaviour
 			case "MoodModifier":
 				if(flagElements.Length == 4)
 				{
-					MoodModifier newMoodModifier = blockLink.gameObject.AddComponent<MoodModifier>();
+					MoodModifier newMoodModifier = block.gameObject.AddComponent<MoodModifier>();
 
 					try // TRY SETTING UP THE AMOUNT
 					{
@@ -70,7 +70,7 @@ public class FlagReader : MonoBehaviour
 					catch(FormatException fe)
 					{
 						Destroy(newMoodModifier);
-						Debug.Log("WARNING - " + blockLink.block.name + " - MoodModifier : Unvalid range entry as the first parameter. Please enter an int value.");
+						Debug.Log("WARNING - " + block.scheme.name + " - MoodModifier : Unvalid range entry as the first parameter. Please enter an int value.");
 						break;
 					}
 
@@ -81,7 +81,7 @@ public class FlagReader : MonoBehaviour
 					catch(FormatException fe)
 					{
 						Destroy(newMoodModifier);
-						Debug.Log("WARNING - " + blockLink.block.name + " - MoodModifier : Unvalid amount entry as the second parameter. Please enter an int value.");
+						Debug.Log("WARNING - " + block.scheme.name + " - MoodModifier : Unvalid amount entry as the second parameter. Please enter an int value.");
 						break;
 					}
 
@@ -92,15 +92,15 @@ public class FlagReader : MonoBehaviour
 					if(result != "")
 					{
 						Destroy(newMoodModifier);
-						Debug.Log("WARNING - " + blockLink.block.name + " - MoodModifier : " + result);
+						Debug.Log("WARNING - " + block.scheme.name + " - MoodModifier : " + result);
 						break;
 					}
 
-					blockLink.activeFlags.Add(newMoodModifier);
+					block.activeFlags.Add(newMoodModifier);
 				}
 				else
 				{
-					Debug.Log("WARNING - " + blockLink.block.name + " - MoodModifier : flag wrongly setup for '" + blockLink.block.name + "'. Should be something like this : 'MoodModifier_3_5_worker'");
+					Debug.Log("WARNING - " + block.scheme.name + " - MoodModifier : flag wrongly setup for '" + block.scheme.name + "'. Should be something like this : 'MoodModifier_3_5_worker'");
 				}
 				break;
 	#endregion
@@ -109,7 +109,7 @@ public class FlagReader : MonoBehaviour
 			case "Occupator":
 				if(flagElements.Length == 4)
 				{
-					Occupator newOccupator = blockLink.gameObject.AddComponent<Occupator>();
+					Occupator newOccupator = block.gameObject.AddComponent<Occupator>();
                     int slotAmount = 0;
 					try  // TRY SETTING UP THE SLOTAMOUNT
 					{
@@ -118,14 +118,14 @@ public class FlagReader : MonoBehaviour
 					catch(FormatException fe)
 					{
 						Destroy(newOccupator);
-						Debug.Log("WARNING - " + blockLink.block.name + " - Occupator : Unvalid slotAmount entry for as the first parameter. Please enter an int value.");
+						Debug.Log("WARNING - " + block.scheme.name + " - Occupator : Unvalid slotAmount entry for as the first parameter. Please enter an int value.");
 						break;
 					}
 
 					if(slotAmount < 0)
 					{
 						Destroy(newOccupator);
-						Debug.Log("WARNING - " + blockLink.block.name + " - Occupator : slot value has to be higher than 0.");
+						Debug.Log("WARNING - " + block.scheme.name + " - Occupator : slot value has to be higher than 0.");
 						break;
 					}
 
@@ -136,14 +136,14 @@ public class FlagReader : MonoBehaviour
                     catch (FormatException fe)
                     {
                         Destroy(newOccupator);
-                        Debug.Log("WARNING - " + blockLink.block.name + " - Occupator : Unvalid range entry for as the first parameter. Please enter an int value.");
+                        Debug.Log("WARNING - " + block.scheme.name + " - Occupator : Unvalid range entry for as the first parameter. Please enter an int value.");
                         break;
                     }
 
                     if (newOccupator.range < 0)
                     {
                         Destroy(newOccupator);
-                        Debug.Log("WARNING - " + blockLink.block.name + " - Occupator : range value has to be higher than 0.");
+                        Debug.Log("WARNING - " + block.scheme.name + " - Occupator : range value has to be higher than 0.");
                         break;
                     }
 
@@ -155,7 +155,7 @@ public class FlagReader : MonoBehaviour
 					if(result != "")
 					{
 						Destroy(newOccupator);
-						Debug.Log("WARNING - " + blockLink.block.name + " - Occupator : " + result);
+						Debug.Log("WARNING - " + block.scheme.name + " - Occupator : " + result);
 						break;
 					}
 
@@ -176,18 +176,18 @@ public class FlagReader : MonoBehaviour
                     newOccupator.acceptedPopulation = acceptedPop;
 
 
-                    blockLink.activeFlags.Add(newOccupator);
+                    block.activeFlags.Add(newOccupator);
                 }
 				else
 				{
-					Debug.Log("WARNING - " + blockLink.block.name + " - Occupator : flag wrongly setup. Should be something like this : 'Occupator_10_5_scientist,worker'");
+					Debug.Log("WARNING - " + block.scheme.name + " - Occupator : flag wrongly setup. Should be something like this : 'Occupator_10_5_scientist,worker'");
 				}
 				break;
 	#endregion
 
 	#region House 
 			case "House":
-				House newHome = blockLink.gameObject.AddComponent<House>();
+				House newHome = block.gameObject.AddComponent<House>();
 				newHome.slotAmount = int.Parse(flagElements[1]);
                 newHome.foodConsumptionPerHabitant = int.Parse(flagElements[2]);
                 newHome.standingLevel = int.Parse(flagElements[3]);
@@ -210,57 +210,80 @@ public class FlagReader : MonoBehaviour
                 //For debug
                // newHome.FillWithCitizens();
 
-				blockLink.activeFlags.Add(newHome);
+				block.activeFlags.Add(newHome);
 				break;
             #endregion
 
     #region FoodProvider
             case "FoodProvider":
-                FoodProvider newFoodProvider = blockLink.gameObject.AddComponent<FoodProvider>();
+                FoodProvider newFoodProvider = block.gameObject.AddComponent<FoodProvider>();
                 newFoodProvider.range = int.Parse(flagElements[1]);
                 newFoodProvider.foodTotal = int.Parse(flagElements[2]);
                 newFoodProvider.foodLeft = newFoodProvider.foodTotal;
-                blockLink.activeFlags.Add(newFoodProvider);
+                block.activeFlags.Add(newFoodProvider);
                 break;
             #endregion
 
     #region WorkingHours 
             case "WorkingHours":
-				WorkingHours newHours = blockLink.gameObject.AddComponent<WorkingHours>();
+				WorkingHours newHours = block.gameObject.AddComponent<WorkingHours>();
 				newHours.startHour = float.Parse(flagElements[1]);
 				newHours.endHour = float.Parse(flagElements[2]);
-				blockLink.activeFlags.Add(newHours);
+				block.activeFlags.Add(newHours);
 				break;
 	#endregion
 
 	#region PoliceStation 
 			case "PoliceStation":
-				PoliceStation newPoliceStation = blockLink.gameObject.AddComponent<PoliceStation>();
+				PoliceStation newPoliceStation = block.gameObject.AddComponent<PoliceStation>();
 				newPoliceStation.range = int.Parse(flagElements[1]);
-				blockLink.activeFlags.Add(newPoliceStation);
+				block.activeFlags.Add(newPoliceStation);
 				break;
 #endregion
 
 	#region FiremanStation 
 			case "FiremanStation":
-				FiremanStation newFiremanStation = blockLink.gameObject.AddComponent<FiremanStation>();
+				FiremanStation newFiremanStation = block.gameObject.AddComponent<FiremanStation>();
 				newFiremanStation.range = int.Parse(flagElements[1]);
-				blockLink.activeFlags.Add(newFiremanStation);
+				block.activeFlags.Add(newFiremanStation);
 				break;
 #endregion
 
 	#region Repairer 
 			case "Repairer":
-				Repairer newRepairer = blockLink.gameObject.AddComponent<Repairer>();
+				Repairer newRepairer = block.gameObject.AddComponent<Repairer>();
 				newRepairer.range = int.Parse(flagElements[1]);
-				blockLink.activeFlags.Add(newRepairer);
+				block.activeFlags.Add(newRepairer);
 				break;
             #endregion
 
     #region Spatioport
             case "Spatioport":
-                Spatioport newSpatioport = blockLink.gameObject.AddComponent<Spatioport>();
-                blockLink.activeFlags.Add(newSpatioport);
+                Spatioport newSpatioport = block.gameObject.AddComponent<Spatioport>();
+                block.activeFlags.Add(newSpatioport);
+                break;
+    #endregion
+
+    #region FlagNeeder
+            case "FlagNeeder":
+                FlagNeeder newFlagReader = block.gameObject.AddComponent<FlagNeeder>();
+				newFlagReader.needed = flagElements[1];
+				newFlagReader.range = int.Parse(flagElements[2]);
+                block.activeFlags.Add(newFlagReader);
+                break;
+    #endregion
+
+    #region Nest
+            case "Nest":
+                Nest newNest = block.gameObject.AddComponent<Nest>();
+                block.activeFlags.Add(newNest);
+                break;
+    #endregion
+
+    #region Mine
+            case "Mine":
+                Mine newMine = block.gameObject.AddComponent<Mine>();
+                block.activeFlags.Add(newMine);
                 break;
     #endregion
 

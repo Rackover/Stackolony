@@ -148,12 +148,12 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.V)) {
             Camera.main.GetComponent<CameraController>().ResetPosition();
         }
-
+/*
         // Spawns and inhabits citizen
         if (Input.GetKeyDown(KeyCode.B)) {
             populationManager.AutoHouseCitizen(populationManager.SpawnCitizen(populationManager.populationTypeList[0]));
         }
-
+*/
         // Spawns 5  cit
         if (Input.GetKeyDown(KeyCode.U)) {
             populationManager.SpawnCitizens(populationManager.populationTypeList[0], 5);

@@ -22,7 +22,7 @@ public class Spatioport : Flag {
         base.OnBlockUpdate();
         if (isEnabled)
         {
-            GameManager.instance.missionManager.StartMission(myBlockLink.gridCoordinates, "EmitSpatioportInfluence", -1, -1);
+            GameManager.instance.missionManager.StartMission(block.gridCoordinates, "EmitSpatioportInfluence", -1, -1);
         }
     }
 }

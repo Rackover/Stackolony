@@ -23,6 +23,6 @@ public class FoodProvider: Flag
     public override void OnBlockUpdate()
     {
         base.OnBlockUpdate();
-        GameManager.instance.missionManager.StartMission(myBlockLink.gridCoordinates, "DistributeFood", range,0, typeof(House));
+        GameManager.instance.missionManager.StartMission(block.gridCoordinates, "DistributeFood", range,0, typeof(House));
     }
 }

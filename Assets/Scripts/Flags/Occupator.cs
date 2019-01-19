@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class Occupator : Flag 
 {
-
     public int slots;
-    public List<PopulationManager.Citizen> affectedCitizen = new List<PopulationManager.Citizen>();
     public int range;
     public Population[] acceptedPopulation;
-
+    public List<PopulationManager.Citizen> affectedCitizen = new List<PopulationManager.Citizen>();
 
     public override void Awake()
     {
@@ -32,6 +30,6 @@ public class Occupator : Flag
     public override void OnBlockUpdate()
     {
         base.OnBlockUpdate();
-        GameManager.instance.missionManager.StartMission(myBlockLink.gridCoordinates, "EmitOccupators", range,0, typeof(House));
+        GameManager.instance.missionManager.StartMission(block.gridCoordinates, "EmitOccupators", range,0, typeof(House));
     }
 }

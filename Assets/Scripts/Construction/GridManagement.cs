@@ -88,7 +88,7 @@ public class GridManagement : MonoBehaviour
             if (grid[coordinates.x, coordinates.y, coordinates.z].GetComponent<Block>() == null) {
                 return;
             }
-            if (!grid[coordinates.x, coordinates.y, coordinates.z].GetComponent<Block>().block.isDestroyable) {
+            if (!grid[coordinates.x, coordinates.y, coordinates.z].GetComponent<Block>().scheme.isDestroyable) {
                 return;
             }
             grid[coordinates.x, coordinates.y, coordinates.z].GetComponent<Block>().CallFlags("OnBlockDestroy");
@@ -229,7 +229,7 @@ public class GridManagement : MonoBehaviour
     {
         GameObject newBlock = CreateBlockFromId(blockId);
         MoveBlock(newBlock, coordinates);
-        Logger.Debug("Spawned block : " + newBlock.GetComponent<Block>().block.name + " with prefab " + GameManager.instance.library.blockPrefab.name + " at position "+coordinates.ToString());
+        Logger.Debug("Spawned block : " + newBlock.GetComponent<Block>().scheme.name + " with prefab " + GameManager.instance.library.blockPrefab.name + " at position "+ coordinates.ToString());
         return newBlock;
     }
 
@@ -240,7 +240,7 @@ public class GridManagement : MonoBehaviour
 
         GameObject newBlockGO = Instantiate(GameManager.instance.library.blockPrefab);
         Block newBlock = newBlockGO.GetComponent<Block>();
-        newBlock.block = scheme;
+        newBlock.scheme = scheme;
         newBlock.LoadBlock();
 
         return newBlockGO;
