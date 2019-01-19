@@ -93,8 +93,9 @@ public class CityManager : MonoBehaviour {
         {
             accident = (int)accidentStates[Random.Range(0, accidentStates.Length)];
         }
-        else if(accident > System.Enum.GetNames(typeof(BlockState)).Length)
+        else if(accident > System.Enum.GetNames(typeof(BlockState)).Length || accident < -1)
         {
+            Debug.Log("You entered a wrong accident parameter");
             return;
         }
         
