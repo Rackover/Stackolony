@@ -104,7 +104,7 @@ public class Block : MonoBehaviour {
 
     public void LoadBlock()
     {
-        GameManager.instance.systemManager.AllBlockLinks.Add(this);
+        GameManager.instance.systemManager.AllBlocks.Add(this);
         if (scheme.consumption > 0)
         {
             GameManager.instance.systemManager.AllBlocksRequiringPower.Add(this);
