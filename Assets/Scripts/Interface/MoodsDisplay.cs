@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class MoodsDisplay : MonoBehaviour {
 
     public GameObject example;
-    public float xSpacing;
+    public float ySpacing;
     public float colorBlendAmount = 0.5f;
 
     GameManager gameManager;
@@ -20,8 +20,8 @@ public class MoodsDisplay : MonoBehaviour {
         foreach(Population race in populations) {
             GameObject raceO = Instantiate(example.gameObject, transform);
             raceO.GetComponent<RectTransform>().position = new Vector3(
-                raceO.GetComponent<RectTransform>().position.x + offset,
-                raceO.GetComponent<RectTransform>().position.y,
+                raceO.GetComponent<RectTransform>().position.x,
+                raceO.GetComponent<RectTransform>().position.y + offset,
                 raceO.GetComponent<RectTransform>().position.z
             );
 
@@ -32,7 +32,7 @@ public class MoodsDisplay : MonoBehaviour {
 
             moods[raceO] = race;
 
-            offset += raceO.GetComponent<RectTransform>().rect.width/2 + xSpacing;
+            offset += raceO.GetComponent<RectTransform>().rect.width/2 + ySpacing;
         }
 
         Destroy(example);

@@ -61,7 +61,7 @@ public class TemporalityInterface : MonoBehaviour {
     {
         Temporality temporality = GameManager.instance.temporality;
         UpdateCycleText(temporality.GetCycle(), temporality.GetYear());
-        UpdateDayNightDisplay(temporality.GetCurrentCycleProgression());
+       // UpdateDayNightDisplay(temporality.GetCurrentCycleProgression());
         yield return new WaitForSeconds(FindObjectOfType<Interface>().refreshRate);
         yield return StartCoroutine(UpdateInterface());
     }
