@@ -83,26 +83,6 @@ public class CityManager : MonoBehaviour {
         return attraction;
     }
 
-    void TriggerFire()
-    {
-        int rand = Random.Range(0, GameManager.instance.systemManager.AllBlocks.Count);
-        while(GameManager.instance.systemManager.AllBlocks[rand].states.Contains(BlockState.OnFire))
-        {
-            rand = Random.Range(0, GameManager.instance.systemManager.AllBlocks.Count);
-        }
-        GameManager.instance.systemManager.AllBlocks[rand].AddState(BlockState.OnFire);
-    }
-
-    void TriggerRiot(Block block)
-    {
-        block.AddState(BlockState.OnRiot);
-    }
-
-    void TriggerDamage(Block block)
-    {
-        block.AddState(BlockState.Damaged);
-    }
-
     public void TriggerAccident(int accident = -1)
     {
         if(accident == -1) accident = Random.Range(0, System.Enum.GetValues(typeof(BlockState)).Length);
