@@ -6,7 +6,7 @@ public class SystemManager : MonoBehaviour {
 
     public List<Generator> AllGenerators = new List<Generator>();
     public List<Block> AllBlocksRequiringPower = new List<Block>();
-    public List<Block> AllBlockLinks = new List<Block>();
+    public List<Block> AllBlocks = new List<Block>();
     public List<Occupator> AllOccupators = new List<Occupator>();
     public List<House> AllHouses = new List<House>();
     public List<FoodProvider> AllFoodProviders = new List<FoodProvider>();
@@ -33,7 +33,7 @@ public class SystemManager : MonoBehaviour {
     {
         AllGenerators.RemoveAll(o => o.gameObject == target);
         AllBlocksRequiringPower.RemoveAll(o => o.gameObject == target);
-        AllBlockLinks.RemoveAll(o => o.gameObject == target);
+        AllBlocks.RemoveAll(o => o.gameObject == target);
         AllHouses.RemoveAll(o => o.gameObject == target);
         AllFoodProviders.RemoveAll(o => o.gameObject == target);
         AllSpatioports.RemoveAll(o => o.gameObject == target);
@@ -56,7 +56,7 @@ public class SystemManager : MonoBehaviour {
     //S'execute à chaques fois qu'un cycle passe
     public IEnumerator OnNewCycle()
     {
-        foreach (Block block in AllBlockLinks)
+        foreach (Block block in AllBlocks)
         {
             block.NewCycle();
         }
@@ -114,7 +114,7 @@ public class SystemManager : MonoBehaviour {
     public void UpdateBlocksDisabled()
     {
         Logger.Debug("Disabling blocks out of spatioport range");
-        foreach (Block block in AllBlockLinks)
+        foreach (Block block in AllBlocks)
         {
             if (block.isConsideredDisabled && block.GetComponent<Spatioport>() == null)
             {
@@ -306,7 +306,7 @@ public class SystemManager : MonoBehaviour {
     IEnumerator ResetSpatioportInfluence()
     {
         Logger.Debug("Resetting spatioport influence");
-        foreach (Block block in AllBlockLinks)
+        foreach (Block block in AllBlocks)
         {
             block.isLinkedToSpatioport = false;
             block.isConsideredDisabled = true;

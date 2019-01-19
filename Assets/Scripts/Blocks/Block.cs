@@ -104,8 +104,8 @@ public class Block : MonoBehaviour {
 
     public void LoadBlock()
     {
-        GameManager.instance.systemManager.AllBlockLinks.Add(this);
-        if (scheme.consumption > 0)
+        systemRef.AllBlocks.Add(this);
+        if (block.consumption > 0)
         {
             GameManager.instance.systemManager.AllBlocksRequiringPower.Add(this);
         }
@@ -166,6 +166,12 @@ public class Block : MonoBehaviour {
 					onFireEffect.SetActive(true);
                     GameManager.instance.sfxManager.PlaySound("StartingFire");
 					break;
+                
+                case BlockState.OnRiot:
+					break;
+
+                case BlockState.Damaged:
+					break;
 
 				default:
 					Debug.Log("Unclear state");
@@ -189,6 +195,12 @@ public class Block : MonoBehaviour {
                 case BlockState.OnFire:
 					onFireEffect.SetActive(false);
                     GameManager.instance.sfxManager.PlaySound("StoppingFire");
+					break;
+
+                case BlockState.OnRiot:
+					break;
+
+                case BlockState.Damaged:
 					break;
 
 				default:
