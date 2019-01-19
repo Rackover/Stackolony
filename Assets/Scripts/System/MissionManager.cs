@@ -109,7 +109,7 @@ public class MissionManager : MonoBehaviour {
                 if (GameManager.instance.gridManagement.grid[position.x, position.y, position.z].GetComponent<Block>() != null)
                 {
                     myMission.blocksFound.Add(GameManager.instance.gridManagement.grid[position.x, position.y, position.z].GetComponent<Block>());
-                    myMission.blockDistanceToCenter.Add(range);
+                    myMission.blockDistanceToCenter.Add(myMission.range - range);
                     myMission.exploredPositions.Add(position);
                 }
                 else

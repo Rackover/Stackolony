@@ -11,6 +11,7 @@ public class SystemManager : MonoBehaviour {
     public List<House> AllHouses = new List<House>();
     public List<FoodProvider> AllFoodProviders = new List<FoodProvider>();
     public List<Spatioport> AllSpatioports = new List<Spatioport>();
+    public List<NuisanceGenerator> AllNuisanceGenerators = new List<NuisanceGenerator>();
 
     /* FONCTIONNEMENT DU SYSTEME 
      * Système recalculé à chaque déplacement de block : 
@@ -76,6 +77,7 @@ public class SystemManager : MonoBehaviour {
         yield return StartCoroutine(RecalculateSpatioportInfluence());
         yield return new WaitForSeconds(0.5f); //Clumsy, à changer rapidement, la propagation doit s'effectuer une fois que le spatioport a tout mis à jour
         yield return StartCoroutine(RecalculatePropagation());
+        yield return StartCoroutine(RecalculateNuisance());
     }
 
 
@@ -192,7 +194,7 @@ public class SystemManager : MonoBehaviour {
         {
             if (occupator.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
             {
-                occupator.Invoke("OnBlockUpdate", 0f);
+                occupator.Invoke("GenerateOccupations", 0f);
                 yield return new WaitForEndOfFrame();
             }
         }
@@ -207,7 +209,7 @@ public class SystemManager : MonoBehaviour {
         {
             if (foodProvider.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
             {
-                foodProvider.Invoke("OnBlockUpdate", 0f);
+                foodProvider.Invoke("GenerateFood", 0f);
                 yield return new WaitForEndOfFrame();
             }
             yield return new WaitForEndOfFrame();
@@ -222,7 +224,7 @@ public class SystemManager : MonoBehaviour {
         {
             if (generator.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
             {
-                generator.Invoke("OnBlockUpdate", 0f);
+                generator.Invoke("GenerateEnergy", 0f);
                 yield return new WaitForEndOfFrame();
             }
         }
@@ -236,6 +238,18 @@ public class SystemManager : MonoBehaviour {
         foreach (Spatioport spatioport in AllSpatioports)
         {
             spatioport.Invoke("OnBlockUpdate", 0f);
+            yield return new WaitForEndOfFrame();
+        }
+        yield return null;
+    }
+
+    public IEnumerator RecalculateNuisance()
+    {
+        StartCoroutine(ResetNuisance());
+        Logger.Debug("Recalculating nuisance");
+        foreach (NuisanceGenerator nuisanceG in AllNuisanceGenerators)
+        {
+            nuisanceG.Invoke("GenerateNuisance", 0f);
             yield return new WaitForEndOfFrame();
         }
         yield return null;
@@ -310,6 +324,16 @@ public class SystemManager : MonoBehaviour {
         {
             block.isLinkedToSpatioport = false;
             block.isConsideredDisabled = true;
+        }
+        yield return null;
+    }
+
+    IEnumerator ResetNuisance()
+    {
+        Logger.Debug("Resetting nuisance");
+        foreach (Block block in AllBlockLinks)
+        {
+            block.nuisance = 0;
         }
         yield return null;
     }

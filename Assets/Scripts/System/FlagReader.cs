@@ -285,8 +285,16 @@ public class FlagReader : MonoBehaviour
                 Mine newMine = block.gameObject.AddComponent<Mine>();
                 block.activeFlags.Add(newMine);
                 break;
-    #endregion
+            #endregion
 
+    #region NuisanceGenerator
+            case "NuisanceGenerator":
+                NuisanceGenerator newNGenerator = block.gameObject.AddComponent<NuisanceGenerator>();
+                newNGenerator.range = int.Parse(flagElements[1]);
+                newNGenerator.amount = int.Parse(flagElements[2]);
+                block.activeFlags.Add(newNGenerator);
+                break;
+    #endregion
             default:
 				Debug.Log("Warning : " + flagElements[0] + " flag is undefined. Did you forget to add it to the FlagReader ?");
 				break;
