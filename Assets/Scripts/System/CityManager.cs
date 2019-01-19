@@ -104,10 +104,7 @@ public class CityManager : MonoBehaviour {
             }
             GameManager.instance.systemManager.AllBlocks[rand].AddState( accident );
         }
-        else
-        {
-            Debug.Log( accident + " is not considered as a accident" );
-        }
+        else Logger.Debug( accident + " is not considered as a accident" );
     }
 
     bool IsConsideredAccident(BlockState state)
