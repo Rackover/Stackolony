@@ -36,14 +36,14 @@ public class FlagReader : MonoBehaviour
 					catch(FormatException fe)
 					{
 						Destroy(newGenerator);
-						Debug.Log("WARNING - " + block.scheme.name + " - Generator : Unvalid Power entry for as the first parameter. Please enter an int value.");
+						Debug.Log( block.scheme.name + " - Generator : Unvalid Power entry for as the first parameter. Please enter an int value.");
 						break;
 					}
 					
 					if(newGenerator.power < 0)
 					{
 						Destroy(newGenerator);
-						Debug.Log("WARNING - " + block.scheme.name + " - Generator : Power value should be higher than 0");
+						Debug.Log( block.scheme.name + " - Generator : Power value should be higher than 0");
 						break;
 					}
 
@@ -51,7 +51,7 @@ public class FlagReader : MonoBehaviour
 				}
 				else
 				{
-					Debug.Log("WARNING - " + block.scheme.name + " - Generator : flag wrongly setup for. Should be something like this : 'Generator_3'");
+                    Logger.Warn(block.scheme.name + " - Generator : flag wrongly setup for. Should be something like this : 'Generator_3'");
 				}
 				break;
 
@@ -70,7 +70,7 @@ public class FlagReader : MonoBehaviour
 					catch(FormatException fe)
 					{
 						Destroy(newMoodModifier);
-						Debug.Log("WARNING - " + block.scheme.name + " - MoodModifier : Unvalid range entry as the first parameter. Please enter an int value.");
+                        Logger.Warn( block.scheme.name + " - MoodModifier : Unvalid range entry as the first parameter. Please enter an int value.");
 						break;
 					}
 
@@ -81,7 +81,7 @@ public class FlagReader : MonoBehaviour
 					catch(FormatException fe)
 					{
 						Destroy(newMoodModifier);
-						Debug.Log("WARNING - " + block.scheme.name + " - MoodModifier : Unvalid amount entry as the second parameter. Please enter an int value.");
+                        Logger.Warn( block.scheme.name + " - MoodModifier : Unvalid amount entry as the second parameter. Please enter an int value.");
 						break;
 					}
 
@@ -92,7 +92,7 @@ public class FlagReader : MonoBehaviour
 					if(result != "")
 					{
 						Destroy(newMoodModifier);
-						Debug.Log("WARNING - " + block.scheme.name + " - MoodModifier : " + result);
+                        Logger.Warn( block.scheme.name + " - MoodModifier : " + result);
 						break;
 					}
 
@@ -100,7 +100,7 @@ public class FlagReader : MonoBehaviour
 				}
 				else
 				{
-					Debug.Log("WARNING - " + block.scheme.name + " - MoodModifier : flag wrongly setup for '" + block.scheme.name + "'. Should be something like this : 'MoodModifier_3_5_worker'");
+                    Logger.Warn( block.scheme.name + " - MoodModifier : flag wrongly setup for '" + block.scheme.name + "'. Should be something like this : 'MoodModifier_3_5_worker'");
 				}
 				break;
 	#endregion
@@ -118,14 +118,14 @@ public class FlagReader : MonoBehaviour
 					catch(FormatException fe)
 					{
 						Destroy(newOccupator);
-						Debug.Log("WARNING - " + block.scheme.name + " - Occupator : Unvalid slotAmount entry for as the first parameter. Please enter an int value.");
+                        Logger.Warn( block.scheme.name + " - Occupator : Unvalid slotAmount entry for as the first parameter. Please enter an int value.");
 						break;
 					}
 
 					if(slotAmount < 0)
 					{
 						Destroy(newOccupator);
-						Debug.Log("WARNING - " + block.scheme.name + " - Occupator : slot value has to be higher than 0.");
+                        Logger.Warn( block.scheme.name + " - Occupator : slot value has to be higher than 0.");
 						break;
 					}
 
@@ -136,14 +136,14 @@ public class FlagReader : MonoBehaviour
                     catch (FormatException fe)
                     {
                         Destroy(newOccupator);
-                        Debug.Log("WARNING - " + block.scheme.name + " - Occupator : Unvalid range entry for as the first parameter. Please enter an int value.");
+                        Logger.Warn( block.scheme.name + " - Occupator : Unvalid range entry for as the first parameter. Please enter an int value.");
                         break;
                     }
 
                     if (newOccupator.range < 0)
                     {
                         Destroy(newOccupator);
-                        Debug.Log("WARNING - " + block.scheme.name + " - Occupator : range value has to be higher than 0.");
+                        Logger.Warn( block.scheme.name + " - Occupator : range value has to be higher than 0.");
                         break;
                     }
 
@@ -155,7 +155,7 @@ public class FlagReader : MonoBehaviour
 					if(result != "")
 					{
 						Destroy(newOccupator);
-						Debug.Log("WARNING - " + block.scheme.name + " - Occupator : " + result);
+                        Logger.Warn( block.scheme.name + " - Occupator : " + result);
 						break;
 					}
 
@@ -180,7 +180,7 @@ public class FlagReader : MonoBehaviour
                 }
 				else
 				{
-					Debug.Log("WARNING - " + block.scheme.name + " - Occupator : flag wrongly setup. Should be something like this : 'Occupator_10_5_scientist,worker'");
+                    Logger.Warn( block.scheme.name + " - Occupator : flag wrongly setup. Should be something like this : 'Occupator_10_5_scientist,worker'");
 				}
 				break;
 	#endregion
@@ -296,7 +296,7 @@ public class FlagReader : MonoBehaviour
                 break;
     #endregion
             default:
-				Debug.Log("Warning : " + flagElements[0] + " flag is undefined. Did you forget to add it to the FlagReader ?");
+				Logger.Warn("Warning : " + flagElements[0] + " flag is undefined. Did you forget to add it to the FlagReader ?");
 				break;
 		}
 	}

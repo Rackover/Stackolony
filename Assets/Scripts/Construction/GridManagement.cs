@@ -81,7 +81,7 @@ public class GridManagement : MonoBehaviour
         }
     }
 
-    public void SystemGridUpdated()
+    public void UpdateGridSystems()
     {
         Logger.Debug("Updating system - Grid Update");
         StartCoroutine(GameManager.instance.systemManager.OnGridUpdate());
@@ -106,7 +106,7 @@ public class GridManagement : MonoBehaviour
             Destroy(target);
         }
         UpdateBlocks(coordinates);
-        SystemGridUpdated();
+        UpdateGridSystems();
     }
 
     public float GetDistanceFromGround(Vector3Int coordinates)
@@ -142,7 +142,7 @@ public class GridManagement : MonoBehaviour
                     }
                 }
             }
-            SystemGridUpdated();
+            UpdateGridSystems();
         }
     }
 
@@ -218,7 +218,7 @@ public class GridManagement : MonoBehaviour
             }
         }
         MoveBlock(block.gameObject, coordinates3);
-        SystemGridUpdated();
+        UpdateGridSystems();
     }
 
     /// <summary>
@@ -238,7 +238,7 @@ public class GridManagement : MonoBehaviour
         GameObject newBlock = CreateBlockFromId(blockId);
         MoveBlock(newBlock, coordinates);
         Logger.Debug("Spawned block : " + newBlock.GetComponent<Block>().scheme.name + " with prefab " + GameManager.instance.library.blockPrefab.name + " at position "+ coordinates.ToString());
-        SystemGridUpdated();
+        UpdateGridSystems();
         return newBlock;
     }
 
@@ -320,7 +320,7 @@ public class GridManagement : MonoBehaviour
         bridgeInfo.allBridgePositions = newBridgePositions.ToArray();
         bridgeInfo.destination.y = newYPosition;
         bridgeInfo.origin.y = newYPosition;
-        SystemGridUpdated();
+        UpdateGridSystems();
     }
 
     /// <summary>
@@ -461,7 +461,7 @@ public class GridManagement : MonoBehaviour
         gameManager.sfxManager.PlaySoundLinked("CreateBridge", parentBridgeGameObject);
 
         //Update the system
-        SystemGridUpdated();
+        UpdateGridSystems();
 
         return parentBridgeGameObject;
     }
@@ -493,6 +493,6 @@ public class GridManagement : MonoBehaviour
         gameManager.sfxManager.PlaySoundLinked("DestroyBlock", bridgeObject);
         Destroy(bridgeObject);
         //Update the system
-        SystemGridUpdated();
+        UpdateGridSystems();
     }
 }

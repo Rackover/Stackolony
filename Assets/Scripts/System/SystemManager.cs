@@ -17,6 +17,7 @@ public class SystemManager : MonoBehaviour {
      * Système recalculé à chaque déplacement de block : 
      *      - Spatioport influence
      *      - Power propagation
+     *      - Nuisance
      *      
      * Système recalculé à chaque cycle :
      *      - 
@@ -101,7 +102,6 @@ public class SystemManager : MonoBehaviour {
     //Si un block qui requiert du courant n'a pas croisé d'explorer, alors on l'eteint. Sinon on l'allume || Lancé automatiquement à la fin des calculs liés au power
     public void UpdateBlocksRequiringPower()
     {
-        Logger.Debug("Unpowering blocks out of a generator range");
         foreach (Block block in AllBlocksRequiringPower)
         {
             if (block.isConsideredUnpowered == true)
@@ -115,7 +115,6 @@ public class SystemManager : MonoBehaviour {
     //Si un bloc consideré disabled n'a pas reçu d'explorer provenant du spatioport, il s'eteint. || Lancé automatiquement à la fin des calculs liés au spatioport
     public void UpdateBlocksDisabled()
     {
-        Logger.Debug("Disabling blocks out of spatioport range");
         foreach (Block block in AllBlockLinks)
         {
             if (block.isConsideredDisabled && block.GetComponent<Spatioport>() == null)
@@ -133,7 +132,6 @@ public class SystemManager : MonoBehaviour {
 
     public IEnumerator CalculateHouseInformation()
     {
-        Logger.Debug("Recalculating house informations");
         foreach (House house in AllHouses)
         {
             if (house.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
@@ -147,7 +145,6 @@ public class SystemManager : MonoBehaviour {
     public IEnumerator RecalculateHabitation()
     {
         StartCoroutine(ResetHabitation());
-        Logger.Debug("Recalculating habitation distribution");
         foreach (PopulationManager.Citizen citizen in GameManager.instance.populationManager.citizenList)
         {
             GameManager.instance.cityManager.AutoHouseCitizen(citizen);
@@ -158,7 +155,6 @@ public class SystemManager : MonoBehaviour {
     public IEnumerator RecalculateJobs()
     {
         StartCoroutine(ResetJobs());
-        Logger.Debug("Recalculating jobs distribution");
         foreach (House house in AllHouses)
         {
             for (int i = 0; i < house.citizenCount; i++)
@@ -189,7 +185,6 @@ public class SystemManager : MonoBehaviour {
     public IEnumerator RecalculateOccupators()
     {
         StartCoroutine(ResetOccupators());
-        Logger.Debug("Recalculating occupators influence ");
         foreach (Occupator occupator in AllOccupators)
         {
             if (occupator.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
@@ -204,7 +199,6 @@ public class SystemManager : MonoBehaviour {
     public IEnumerator RecalculateFoodConsumption()
     {
         StartCoroutine(ResetFoodConsumption());
-        Logger.Debug("Recalculating food distribution");
         foreach (FoodProvider foodProvider in AllFoodProviders)
         {
             if (foodProvider.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
@@ -219,7 +213,6 @@ public class SystemManager : MonoBehaviour {
     public IEnumerator RecalculatePropagation()
     {
         StartCoroutine(ResetBlocksPower());
-        Logger.Debug("recalculating power propagation ");
         foreach (Generator generator in AllGenerators)
         {
             if (generator.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
@@ -234,7 +227,6 @@ public class SystemManager : MonoBehaviour {
     public IEnumerator RecalculateSpatioportInfluence()
     {
         StartCoroutine(ResetSpatioportInfluence());
-        Logger.Debug("Recalculating spatioport influence");
         foreach (Spatioport spatioport in AllSpatioports)
         {
             spatioport.Invoke("OnBlockUpdate", 0f);
@@ -246,10 +238,9 @@ public class SystemManager : MonoBehaviour {
     public IEnumerator RecalculateNuisance()
     {
         StartCoroutine(ResetNuisance());
-        Logger.Debug("Recalculating nuisance");
-        foreach (NuisanceGenerator nuisanceG in AllNuisanceGenerators)
+        foreach (NuisanceGenerator nuisanceGenerator in AllNuisanceGenerators)
         {
-            nuisanceG.Invoke("GenerateNuisance", 0f);
+            nuisanceGenerator.Invoke("GenerateNuisance", 0f);
             yield return new WaitForEndOfFrame();
         }
         yield return null;
@@ -298,7 +289,6 @@ public class SystemManager : MonoBehaviour {
 
     IEnumerator ResetOccupators()
     {
-        Logger.Debug("Resetting occupators influence");
         foreach (House house in AllHouses)
         {
             house.occupatorsInRange.Clear();
