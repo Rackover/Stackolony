@@ -6,7 +6,8 @@ using UnityEngine.EventSystems;
 public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler  {
 
     private TooltipGO tooltipGO; //Correspond à un script lié au gameObject de tooltip
-    public string tooltipText;
+    public string category;
+    public string id;
     private bool isActive;
 
     void Awake()
@@ -20,9 +21,8 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
         {
             tooltipGO = FindObjectOfType<TooltipGO>();
         }
-        tooltipGO.transform.position = pointerEventData.position;
-        tooltipGO.text = tooltipText;
-        tooltipGO.SetText();
+        tooltipGO.transform.position = pointerEventData.position + tooltipGO.shift;
+        tooltipGO.SetText(category, id);
         isActive = true;
     }
 
@@ -30,7 +30,7 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
     {
         if (isActive)
         {
-            tooltipGO.transform.position = Input.mousePosition + new Vector3(-10,-10,0) ;
+            tooltipGO.transform.position = Input.mousePosition + new Vector3(tooltipGO.shift.x, tooltipGO.shift.y, 0);
             tooltipGO.SetText();
         }
     }

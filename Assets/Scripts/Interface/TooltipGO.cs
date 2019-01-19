@@ -18,6 +18,9 @@ public class TooltipGO : MonoBehaviour {
     public string text;
     public float maxLength; //Taille max pour une ligne (en pixels)
 
+    [Header("Settings")]
+    public Vector2 shift;
+
 
     private alignmentOptionsHorizontal myAlignmentVertical;
     private alignmentOptionsVertical myAlignmentHorizontal;
@@ -31,10 +34,17 @@ public class TooltipGO : MonoBehaviour {
 
     public TooltipIcon[] tooltipIcons;
 
-
-    void Awake()
+    public void SetText(string textToSet)
     {
+        text = textToSet;
         SetText();
+    }
+
+    public void SetText(string category, string id)
+    {
+        Localization loc = GameManager.instance.localization;
+        loc.SetCategory(category);
+        SetText(loc.GetLine(id));
     }
 
     public void SetText()
