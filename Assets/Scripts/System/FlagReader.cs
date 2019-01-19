@@ -17,6 +17,17 @@ public class FlagReader : MonoBehaviour
             existingProfiles.Add(GameManager.instance.populationManager.populationTypeList[i].codeName);
         }
     }
+
+    public static List<string> GetRawFlags (BlockScheme blockScheme) {
+        List<string> list = new List<string>();
+
+        foreach(string flag in blockScheme.flags) {
+            list.Add(flag.Split('_')[0]);
+        }
+
+        return list;
+    }
+
     public void ReadFlag(Block block, string flag)
 	{
 		string[] flagElements = flag.Split(new char[]{'_'}, System.StringSplitOptions.RemoveEmptyEntries);

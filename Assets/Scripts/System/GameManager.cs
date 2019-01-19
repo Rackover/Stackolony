@@ -234,7 +234,6 @@ public class GameManager : MonoBehaviour
         // Initialize only
         gridManagement.InitializeGridManager();
         storageBay.Initialize();
-        deliveryManagement.UpdateComplexity();
         cinematicManager.GetReferences();
 
         // NEW GAME ONLY
