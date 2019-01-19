@@ -20,9 +20,11 @@ public class FoodProvider: Flag
         base.OnDestroy();
     }
 
-    public override void OnBlockUpdate()
+    public void GenerateFood()
     {
-        base.OnBlockUpdate();
-        GameManager.instance.missionManager.StartMission(block.gridCoordinates, "DistributeFood", range,0, typeof(House));
+        if (isEnabled)
+        {
+            GameManager.instance.missionManager.StartMission(block.gridCoordinates, "DistributeFood", range, 0, typeof(House));
+        }
     }
 }

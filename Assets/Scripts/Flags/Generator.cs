@@ -16,20 +16,8 @@ public class Generator : Flag {
         GameManager.instance.systemManager.AllGenerators.Add(this);
     }
 
-    public override void BeforeMovingBlock()
+    public void GenerateEnergy()
     {
-        base.BeforeMovingBlock();
-    }
-
-    public override void AfterMovingBlock()
-    {
-        base.AfterMovingBlock();
-        Invoke("OnBlockUpdate", 0f);
-    }
-
-    public override void OnBlockUpdate()
-    {
-        base.OnBlockUpdate();
         if (isEnabled)
         {
             GameManager.instance.missionManager.StartMission(block.gridCoordinates, "EmitEnergy", -1, power);

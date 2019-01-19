@@ -13,6 +13,7 @@ public class BlockScheme : ScriptableObject
     public bool isDestroyable = true;
     public bool isStorable = true;
     public bool isBuyable = true;
+    public bool canBuildAbove = true;
 
 
 	[Header("Datas")]

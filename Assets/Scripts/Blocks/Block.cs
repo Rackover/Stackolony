@@ -30,6 +30,7 @@ public class Block : MonoBehaviour {
 
     [Header("Values")]
 	public int currentPower;
+    public int nuisance; //Nuisance received by the block
     public bool isConsideredUnpowered; //Used when updating energy system
     public bool isConsideredDisabled; //Used when updating spatioport
     public bool isLinkedToSpatioport; 
