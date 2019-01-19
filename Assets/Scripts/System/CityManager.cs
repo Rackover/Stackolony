@@ -82,15 +82,4 @@ public class CityManager : MonoBehaviour {
         attraction -= house.distanceToGround * 0.2f;
         return attraction;
     }
-
-    public void TriggerAccident(int accident = -1)
-    {
-        if(accident == -1) accident = Random.Range(0, System.Enum.GetValues(typeof(BlockState)).Length);
-        int rand = Random.Range(0, GameManager.instance.systemManager.AllBlocks.Count);
-        while(GameManager.instance.systemManager.AllBlocks[rand].states.Contains((BlockState)accident))
-        {
-            rand = Random.Range(0, GameManager.instance.systemManager.AllBlocks.Count);
-        }
-        GameManager.instance.systemManager.AllBlocks[rand].AddState((BlockState)accident);
-    }
 }
