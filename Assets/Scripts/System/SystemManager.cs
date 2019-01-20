@@ -68,8 +68,8 @@ public class SystemManager : MonoBehaviour {
     //S'execute à chaques fois qu'un microcycle passe
     public IEnumerator OnNewMicrocycle()
     {
-        StartCoroutine(UpdateHousesInformations());
-        yield return StartCoroutine(UpdateMood());
+        yield return StartCoroutine(UpdateHousesInformations());
+        yield return StartCoroutine(RecalculateHabitation());
     }
 
     //S'execute à chaques fois qu'un bloc est déplacé dans la grille
@@ -124,12 +124,6 @@ public class SystemManager : MonoBehaviour {
         }
     }
 
-    public IEnumerator UpdateMood()
-    {
-        GameManager.instance.populationManager.CalculateMoods();
-        yield return null;
-    }
-
     public IEnumerator CalculateHouseInformation()
     {
         foreach (House house in AllHouses)
@@ -145,10 +139,7 @@ public class SystemManager : MonoBehaviour {
     public IEnumerator RecalculateHabitation()
     {
         StartCoroutine(ResetHabitation());
-        foreach (PopulationManager.Citizen citizen in GameManager.instance.populationManager.citizenList)
-        {
-            GameManager.instance.cityManager.AutoHouseCitizen(citizen);
-        }
+        GameManager.instance.cityManager.HouseEveryone();
         yield return null;
     }
 
@@ -157,7 +148,7 @@ public class SystemManager : MonoBehaviour {
         StartCoroutine(ResetJobs());
         foreach (House house in AllHouses)
         {
-            for (int i = 0; i < house.citizenCount; i++)
+            for (int i = 0; i < house.affectedCitizen.Count; i++)
             {
                 if (house.affectedCitizen[i].jobless == true)
                 {
@@ -263,7 +254,7 @@ public class SystemManager : MonoBehaviour {
         Logger.Debug("Resetting citizens habitations");
         foreach (House house in AllHouses)
         {
-            house.affectedCitizen = null;
+            house.affectedCitizen.Clear();
         }
         foreach (PopulationManager.Citizen citizen in GameManager.instance.populationManager.citizenList)
         {

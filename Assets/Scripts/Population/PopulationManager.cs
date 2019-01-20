@@ -2,23 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class PopulationManager : MonoBehaviour {
 
     public Population[] populationTypeList; //Liste de chaques type de population
     public List<Citizen> citizenList = new List<Citizen>(); //Liste de chaque citoyen de la colonie
+
+    public Dictionary<Population, List<Citizen>> populationCitizenList = new Dictionary<Population, List<Citizen>>(); //Assign every citizen to it's population
     public Dictionary<Population, float> averageMoods = new Dictionary<Population, float>();  // average moods between 0 and 1
 
-    [Header("Mood modifiers")]
-    public float MMglobalModifier = 1; //Coefficient par lequel est multiplié le moodmodifier quand il est appliqué
-    public int MMnoHabitation = -4;
-    public int MMnoAppropriatedHabitation = -2;
-    public int MMnoFood = -3;
-    public int MMnotEnoughFood = -1;
-    public int MMnoOccupation = -2;
-    public int MMnoPower = -2;
-    public int MMdamagedHabitation = -2;
-    public int MMeverythingFine = +3;
+
+    public float moodModifierIfNoHabitation = -20f;
 
     [System.Serializable]
     public class Citizen
@@ -35,66 +30,14 @@ public class PopulationManager : MonoBehaviour {
             //Temporary - Later should be initialized at 1f;
             //averageMoods[pop] = Random.value;
             averageMoods[pop] = 50f;
+            populationCitizenList[pop] = new List<Citizen>();
         }
     }
 
-    //Calculate the mood of every popluation
-    public void CalculateMoods()
+    public void ChangePopulationMood(Population type, float amount)
     {
-        foreach (Population pop in populationTypeList)
-        {
-            CalculateMood(pop);
-        }
-    }
-
-    //Calculate the mood of a population type
-    public void CalculateMood(Population pop) 
-    {
-        float moodModifier = 0; //How much "mood points" the population must loose / gain
-        foreach (Citizen citizen in citizenList)
-        {
-            int citizenMoodModifier = 0;
-            if (citizen.type = pop)
-            {
-                if (citizen.habitation = null)
-                {
-                    citizenMoodModifier += MMnoHabitation;
-                } else
-                {
-                    bool houseSupportType = false;
-                    foreach (Population type in citizen.habitation.acceptedPop)
-                    {
-                        if (citizen.type == type)
-                        {
-                            houseSupportType = true;
-                            break;
-                        }
-                    }
-                    if (!houseSupportType) citizenMoodModifier += MMnoAppropriatedHabitation;
-                    if (citizen.habitation.foodReceived <= 0)
-                    {
-                        citizenMoodModifier += MMnoFood;
-                    } else if (citizen.habitation.foodReceived < citizen.habitation.foodConsumption)
-                    {
-                        citizenMoodModifier += MMnotEnoughFood;
-                    }
-                    if (citizen.jobless) citizenMoodModifier += MMnoOccupation;
-                    if (citizen.habitation.block.currentPower < citizen.habitation.block.scheme.consumption) citizenMoodModifier += MMnoPower;
-                    foreach (BlockState state in citizen.habitation.block.states)
-                    {
-                        if (state == BlockState.Damaged || state == BlockState.OnFire)
-                        {
-                            citizenMoodModifier += MMdamagedHabitation;
-                        }
-                    }
-                }
-                if (citizenMoodModifier == 0) citizenMoodModifier += MMeverythingFine;
-                moodModifier += citizenMoodModifier;
-            }
-        }
-        moodModifier *= MMglobalModifier;
-        averageMoods[pop] += moodModifier;
-        Logger.Debug("Population of type " + pop.codeName + " has been modified by " + moodModifier + " and is now at " + averageMoods[pop]);
+        averageMoods[type] += amount;
+        Logger.Debug("Population " + type.codeName + " mood has been changed by " + amount);
     }
 
     //Generates a new citizen on the colony, shouldn't be called directly, use the other function with the amount parameter
@@ -106,6 +49,7 @@ public class PopulationManager : MonoBehaviour {
         newCitizen.habitation = null;
         newCitizen.type = type;
         citizenList.Add(newCitizen);
+        populationCitizenList[type].Add(newCitizen);
         return newCitizen;
     }
 
@@ -133,6 +77,7 @@ public class PopulationManager : MonoBehaviour {
     {
         if (citizenList.Contains(citizen))
         {
+            populationCitizenList[citizen.type].Remove(citizen);
             citizenList.Remove(citizen);
             Debug.Log("Citizen " + citizen.name + " has been killed");
         }
