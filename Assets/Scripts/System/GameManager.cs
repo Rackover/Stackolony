@@ -133,6 +133,14 @@ public class GameManager : MonoBehaviour
     void CheckInputs()
     {
 
+        if (Input.GetKeyDown(KeyCode.N)) { 
+            Notifications.Notification not = new Notifications.Notification(
+                new string[] { "cannotBuild", "notLinked", "newPeople" }[Mathf.FloorToInt(Random.value * 3)], 
+                new Color[]{ Color.red, Color.blue, Color.yellow, Color.Lerp(Color.red, Color.yellow, 0.5f)}[Mathf.FloorToInt(Random.value*4)]
+            );
+            FindObjectOfType<Notifications>().Notify(not);
+        }
+
         if (Input.GetKeyDown(KeyCode.P)) {
             temporality.PauseTime();
         }
