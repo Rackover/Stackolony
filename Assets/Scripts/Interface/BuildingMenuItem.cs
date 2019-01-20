@@ -49,6 +49,7 @@ public class BuildingMenuItem : MonoBehaviour {
 
             if (Input.GetButtonUp("Select")) {
                 isBeingDragged = false;
+                GameManager.instance.cursorManagement.isDragging = false;
                 Destroy(draggingBuilding);
 
                 if (GameManager.instance.cursorManagement.cursorOnUI) {
