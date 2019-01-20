@@ -25,13 +25,15 @@ public class BuildingMenusDisplay : MonoBehaviour {
 
     private void SpawnMenus()
     {
+        Canvas canvas = GetComponentInParent<Canvas>();
+        float factor = canvas.scaleFactor;
         float offset = 0;
         foreach (KeyValuePair<BuildingTypes, List<BlockScheme>> menu in categories) {
             GameObject mO = Instantiate(menuExample, transform);
             mO.GetComponentInChildren<Button>().gameObject.GetComponentsInChildren<Image>()[1].sprite = logos[(int)menu.Key];
 
             mO.GetComponent<RectTransform>().position = new Vector3(
-                menuExample.GetComponent<RectTransform>().position.x + offset,
+                menuExample.GetComponent<RectTransform>().position.x + offset*factor,
                 menuExample.GetComponent<RectTransform>().position.y,
                 menuExample.GetComponent<RectTransform>().position.z
             );

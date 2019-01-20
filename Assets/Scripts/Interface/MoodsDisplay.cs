@@ -15,13 +15,15 @@ public class MoodsDisplay : MonoBehaviour {
 	void Start () {
         gameManager = GameManager.instance;
         Population[] populations = gameManager.populationManager.populationTypeList;
+        Canvas canvas = GetComponentInParent<Canvas>();
+        float factor = canvas.scaleFactor;
 
         float offset = 0;
         foreach(Population race in populations) {
             GameObject raceO = Instantiate(example.gameObject, transform);
             raceO.GetComponent<RectTransform>().position = new Vector3(
                 raceO.GetComponent<RectTransform>().position.x,
-                raceO.GetComponent<RectTransform>().position.y + offset,
+                raceO.GetComponent<RectTransform>().position.y + offset* factor,
                 raceO.GetComponent<RectTransform>().position.z
             );
 
@@ -32,7 +34,7 @@ public class MoodsDisplay : MonoBehaviour {
 
             moods[raceO] = race;
 
-            offset -= raceO.GetComponent<RectTransform>().rect.height/2 + ySpacing;
+            offset -= ySpacing;
         }
 
         Destroy(example);

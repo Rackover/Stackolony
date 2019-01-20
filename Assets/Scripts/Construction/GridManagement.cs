@@ -87,6 +87,10 @@ public class GridManagement : MonoBehaviour
         StartCoroutine(GameManager.instance.systemManager.OnGridUpdate());
     }
 
+    /// <summary>
+    /// Correct function to destroy a building and remove all of its references
+    /// </summary>
+    /// <param name="coordinates"></param>
     public void DestroyBlock(Vector3Int coordinates)
     {
         if (grid[coordinates.x, coordinates.y, coordinates.z] != null)
