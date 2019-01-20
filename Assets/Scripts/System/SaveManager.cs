@@ -6,7 +6,8 @@ using System.IO;
 
 public class SaveManager : MonoBehaviour {
 
-    public int saveVersion = 2;
+    int saveVersion = 3;
+
     public SaveData loadedData;
 
 
@@ -76,29 +77,11 @@ public class SaveManager : MonoBehaviour {
             yield return null;
         }
 
-        // Step 3 - Storage bay grid
-        writer.WriteVector3UInt8(saveData.storagePosition);
-        writer.WriteVector3UInt8(saveData.storageGridSize);
-        writer.WriteUInt16(saveData.storageGrid.Count);
-        foreach (KeyValuePair <Vector3Int, int> data in saveData.storageGrid) {
-            writer.WriteVector3UInt8(data.Key);
-            writer.WriteUInt8(data.Value);
-            yield return null;
-        }
-
-        // Step 4 - Bridges
+        // Step 3 - Bridges
         writer.WriteUInt8(saveData.bridges.Count);
         foreach (KeyValuePair<Vector3Int, Vector3Int> bridge in saveData.bridges) {
             writer.WriteVector3UInt8(bridge.Key);
             writer.WriteVector3UInt8(bridge.Value);
-            yield return null;
-        }
-
-        // Step 5 - Command
-        writer.WriteUInt8(saveData.command.Count);
-        foreach (KeyValuePair<int, int> commandElement in saveData.command) {
-            writer.WriteUInt8(commandElement.Key);
-            writer.WriteUInt8(commandElement.Value);
             yield return null;
         }
 
@@ -157,32 +140,12 @@ public class SaveManager : MonoBehaviour {
             yield return null;
         }
 
-        // Step 3 - Storage bay grid
-        Logger.Debug("Reading storage bay...");
-        Vector3Int storageGridPosition = reader.ReadVector3UInt8();
-        Vector3Int storageGridSize = reader.ReadVector3UInt8();
-        diskSaveData.storageGrid = new Dictionary<Vector3Int, int>();
-        int storedCount = reader.ReadUInt16();
-        for (int i = 0; i < storedCount; i++) {
-            diskSaveData.storageGrid[reader.ReadVector3UInt8()] = reader.ReadUInt8();
-            yield return null;
-        }
-
-        // Step 4 - Bridges
+        // Step 3 - Bridges
         Logger.Debug("Reading bridges...");
         int bridgesCount = reader.ReadUInt8();
         diskSaveData.bridges = new List<KeyValuePair<Vector3Int, Vector3Int>>();
         for (int i = 0; i < bridgesCount; i++) {
             diskSaveData.bridges.Add(new KeyValuePair<Vector3Int, Vector3Int>(reader.ReadVector3UInt8(), reader.ReadVector3UInt8()));
-            yield return null;
-        }
-
-        // Step 5 - Command
-        Logger.Debug("Writing command...");
-        diskSaveData.command = new Dictionary<int, int>();
-        int commandCount = reader.ReadUInt8();
-        for(int i=0; i < commandCount; i++) {
-            diskSaveData.command[reader.ReadUInt8()] = reader.ReadUInt8();
             yield return null;
         }
 
@@ -210,17 +173,6 @@ public class SaveManager : MonoBehaviour {
         try {
             GridManagement gridMan = GameManager.instance.gridManagement;
 
-            // Loading shopping List
-            List<ShopDisplay> shoppingList = new List<ShopDisplay>();
-            foreach (KeyValuePair<int, int> element in saveData.command) {
-                ShopDisplay item = new ShopDisplay();
-                item.myBlock = GameManager.instance.library.GetBlockByID(element.Key);
-                if (item.myBlock == null) { Logger.Warn("BlockScheme index not found - index : " + element.Key.ToString()); return; }
-                item.quantityPicked = element.Value;
-                shoppingList.Add(item);
-            }
-            GameManager.instance.deliveryManagement.LoadShop(shoppingList);
-
             // Loading grid
             Logger.Debug("Loading " + saveData.blockGrid.Count + " objects into the grid");
             foreach (KeyValuePair<Vector3Int, BlockSaveData> blockData in saveData.blockGrid) {
@@ -237,20 +189,7 @@ public class SaveManager : MonoBehaviour {
                 Block destination = gridMan.grid[bridge.Value.x, bridge.Value.y, bridge.Value.z].GetComponent<Block>();
                 if (gridMan.CreateBridge(origin, destination) == null) { Logger.Warn("Could not replicate bridge from " + origin + ":(" + bridge.Key + ") to " + destination + ":(" + bridge.Value + ")"); };
             }
-
-            foreach (KeyValuePair<Vector3Int, int> stored in saveData.storageGrid) {
-                Vector3Int coords = stored.Key;
-                BlockScheme block = GameManager.instance.library.GetBlockByID(stored.Value);
-                if (block == null) { Logger.Warn("BlockScheme index not found - index : " + stored.Value.ToString()); return; }
-
-                GameObject storedBuilding = Instantiate(GameManager.instance.library.blockPrefab);
-                Block newBlockLink = storedBuilding.GetComponent<Block>();
-                newBlockLink.scheme = block;
-
-                GameManager.instance.storageBay.StoreAtPosition(storedBuilding, coords);
-                //GameManager.instance.storageBay.PlaceBayIfPossible(saveData.storagePosition);
-            }
-
+            
             GameManager.instance.player.playerName = saveData.playerName;
             GameManager.instance.cityManager.cityName = saveData.cityName;
             GameManager.instance.temporality.SetDate(saveData.cyclesPassed);
@@ -272,33 +211,24 @@ public class SaveManager : MonoBehaviour {
 
     public class GameData
     {
-        public List<ShopDisplay> shoppingList;
         public GameObject[,,] grid;
         public List<GameObject> bridgesList;
-        public Vector3Int storagePosition;
-        public GameObject[,,] storedBlocks;
         public string playerName;
         public string cityName;
         public int cycleNumber;
         public float cycleProgression;
 
         public GameData(
-            List<ShopDisplay> _shoppingList,
             GameObject[,,] _grid,
             List<GameObject> _bridgesList,
-            Vector3Int _storagePosition,
-            GameObject[,,] _storedBlocks,
             string _playerName,
             string _cityName,
             int _cycleNumber,
             float _cycleProgression
         )
         {
-            shoppingList = _shoppingList;
             grid = _grid;
             bridgesList = _bridgesList;
-            storagePosition = _storagePosition;
-            storedBlocks = _storedBlocks;
             playerName = _playerName;
             cityName = _cityName;
             cycleNumber = _cycleNumber;
@@ -309,12 +239,8 @@ public class SaveManager : MonoBehaviour {
     public class SaveData
     {
         public Vector3Int gridSize;
-        public Vector3Int storageGridSize;
-        public Vector3Int storagePosition;
-        public Dictionary<Vector3Int, int> storageGrid;
         public Dictionary<Vector3Int, BlockSaveData> blockGrid;
         public List<KeyValuePair<Vector3Int,Vector3Int>> bridges;
-        public Dictionary<int, int> command;
 
         public float timeOfDay;
         public int cyclesPassed;
@@ -328,21 +254,13 @@ public class SaveManager : MonoBehaviour {
         // New saveData from game values
         public SaveData(GameData gameData)
         {
-            // Storing command
-            command = ConvertCommand(gameData.shoppingList);
-
             // Storing grid
             gridSize = new Vector3Int(gameData.grid.GetLength(0), gameData.grid.GetLength(1), gameData.grid.GetLength(2));
             blockGrid = ConvertBlocksGrid(gameData.grid, gridSize);
 
             // Storing bridges
             bridges = ConvertBridges(gameData.bridgesList);
-
-            // Storing storage zone
-            storageGridSize = new Vector3Int(gameData.storedBlocks.GetLength(0), gameData.storedBlocks.GetLength(1), gameData.storedBlocks.GetLength(2));
-            storageGrid = ConvertStorageGrid(gameData.storedBlocks, storageGridSize);
-            storagePosition = gameData.storagePosition;
-
+            
             // Other data
             playerName = gameData.playerName;
             cityName = gameData.cityName;
@@ -353,12 +271,8 @@ public class SaveManager : MonoBehaviour {
         // Reading savedata from files
         public SaveData(
             Vector3Int _gridSize,
-            Vector3Int _storageGridSize,
-            Dictionary<Vector3Int, int> _storageGrid,
-            Vector3Int _storagePosition,
             Dictionary<Vector3Int, BlockSaveData> _blockGrid,
             List<KeyValuePair<Vector3Int, Vector3Int>> _bridges,
-            Dictionary<int, int> _command,
             float _timeOfDay,
             int _cyclesPassed,
             string _playerName,
@@ -366,34 +280,14 @@ public class SaveManager : MonoBehaviour {
         )
         {
             _gridSize = gridSize;
-            _storageGridSize = storageGridSize;
-            _storageGrid = storageGrid;
-            _storagePosition = storagePosition;
             _blockGrid = blockGrid;
             _bridges = bridges;
-            _command = command;
             _timeOfDay = timeOfDay;
             _cyclesPassed = cyclesPassed;
             _playerName = playerName;
             _cityName = cityName;
         }
-
-
-        Dictionary<Vector3Int, int> ConvertStorageGrid(GameObject[,,] _storedBlocks, Vector3Int gridSize)
-        {
-            Dictionary<Vector3Int, int> storageGrid = new Dictionary<Vector3Int, int>();
-            foreach (GameObject building in _storedBlocks) {
-                if (building != null) {
-                    Block blockLink = building.GetComponent<Block>();
-                    Vector3Int coords = blockLink.gridCoordinates;
-                    int id = blockLink.scheme.ID;
-                    storageGrid[coords] = id;
-                }
-            }
-
-            return storageGrid;
-        }
-
+        
         Dictionary<Vector3Int, BlockSaveData> ConvertBlocksGrid(GameObject[,,] _grid, Vector3Int gridSize)
         {
             Dictionary<Vector3Int, BlockSaveData> blockGrid = new Dictionary<Vector3Int, BlockSaveData>();
@@ -430,16 +324,6 @@ public class SaveManager : MonoBehaviour {
             }
             return list;
         }
-
-        Dictionary<int, int> ConvertCommand(List<ShopDisplay> _shoppingList)
-        {
-            Dictionary<int, int> command = new Dictionary<int, int>();
-            foreach (ShopDisplay element in _shoppingList) {
-                command.Add(element.myBlock.ID, element.quantityPicked);
-            }
-            return command;
-        }
-
     }
 
     public class BlockSaveData

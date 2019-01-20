@@ -14,7 +14,6 @@ public class CinematicManager : MonoBehaviour {
         interfaceObj = FindObjectOfType<Interface>().gameObject;
         cursorObj = GameManager.instance.cursorDisplay.gameObject;
         cursor = FindObjectOfType<CursorManagement>();
-        storageBayObj = GameManager.instance.storageBay.gameObject;
     }
 
     public void SetCinematicMode(bool state)
@@ -22,7 +21,6 @@ public class CinematicManager : MonoBehaviour {
         interfaceObj.GetComponent<Canvas>().enabled = (!state);
         cursorObj.SetActive(!state);
         cursor.enabled = !state;
-        storageBayObj.SetActive(!state);
         cursor.myProjector.GetComponent<Projector>().enabled = !state;
     }
 

@@ -32,7 +32,7 @@ public class GridManagement : MonoBehaviour
     private GameObject gridGameObject; //GameObject contenant la grille
 
     
-    public enum blockType{ FREE = 0, STORAGE = 1, BRIDGE = 2}
+    public enum blockType{ FREE = 0, BRIDGE = 1}
 
     private void Start()
     {
@@ -262,10 +262,6 @@ public class GridManagement : MonoBehaviour
         {
             switch (objectFound.tag)
             {
-                case "StorageBay":
-                    if (displayErrorMessages)
-                        gameManager.errorDisplay.ShowError("You can't build over the storage bay");
-                    return blockType.STORAGE;
                 case "Bridge":
                     if (displayErrorMessages)
                         gameManager.errorDisplay.ShowError("You can't build over a bridge");

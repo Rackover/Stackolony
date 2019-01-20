@@ -586,10 +586,6 @@ public class CursorManagement : MonoBehaviour
             }
             if (GameManager.instance.gridManagement.GetSlotType(_pos,false) == GridManagement.blockType.FREE)
             {
-                if (selectedBlock.gameObject.layer == LayerMask.NameToLayer("StoredBlock"))
-                {
-                    GameManager.instance.storageBay.DeStoreBlock(selectedBlock.gameObject);
-                }
                 // Check if the blocks under the position allows to have "something above them"
                 for (int i = _pos.y; i >= 0; i--)
                 {
@@ -615,21 +611,8 @@ public class CursorManagement : MonoBehaviour
             } 
             else
             {
-                //If the cube is dragged on the stocking bay
-                if(GameManager.instance.gridManagement.GetSlotType(_pos, false) == GridManagement.blockType.STORAGE &&  selectedBlock.gameObject.layer != LayerMask.NameToLayer("StoredBlock") && selectedBlock.scheme.isStorable == true)
-                {
-                    //Update the grid
-                    GameManager.instance.gridManagement.UpdateBlocks(selectedBlock.gridCoordinates);
-                    selectedBlock.gridCoordinates = new Vector3Int(0, 0, 0);
-                    //Stock the cube in the stocking bay
-                    GameManager.instance.storageBay.StoreBlock(selectedBlock.gameObject);
-                    selectedBlock.boxCollider.enabled = true;
-                }
-                else
-                {
-                    CancelDrag();
-                    return;
-                }
+                CancelDrag();
+                return;
             }
         }
         if(selectedBlock != null)
