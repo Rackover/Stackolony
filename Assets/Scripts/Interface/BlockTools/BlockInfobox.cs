@@ -210,7 +210,7 @@ public class BlockInfobox : MonoBehaviour
 	{	
 		Hide();
 		self.position = new Vector2(where.x, where.y);
-		GameManager.instance.localization.SetCategory("blockdescriptions");
+		GameManager.instance.localization.SetCategory("blockDescription");
 		descText.text = GameManager.instance.localization.GetLine("block" + blockScheme.ID);
 		descBox.gameObject.SetActive(true);
 	}
