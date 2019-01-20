@@ -10,34 +10,30 @@ public class Displayer : MonoBehaviour
 	[HideInInspector] public bool available;
 	RawImage feed;
 	GameObject model;
+	float cSpeed;
 	RenderTexture cTexture;
-
-	public Texture2D GetRender(int width = 256, int height = 256)
-	{
-		cam.enabled = true;
-
-		RenderTexture renderTexture = new RenderTexture(width, height, 16, RenderTextureFormat.ARGB32);
-		cam.targetTexture = renderTexture;
-		RenderTexture.active = cam.targetTexture;
-		cam.Render();
-
-		Texture2D image = new Texture2D(width, height);
-		image.ReadPixels( new Rect(0, 0, width, height), 0, 0);
-		image.Apply();
-
-		Unstage();
-		return image;
-	}
 	
-	public void Stage(GameObject _model, RawImage _feed, int quality)
+	public void Stage(GameObject newObject, RawImage image, float rotation = 0f, float speed = 0f, float camDistance = 3f, float camFOV = 30f,  int size = 64)
 	{
 		cam.enabled = true;
 
-		model = Instantiate(_model, transform.position, Quaternion.identity, transform);
-		feed = _feed;
-		cTexture = new RenderTexture(quality, quality, 16, RenderTextureFormat.ARGB32);
+		// Spawning the new model and applying the rotation
+		model = Instantiate(newObject, transform.position, Quaternion.identity, transform);
+		model.transform.eulerAngles = new Vector3(0f, rotation, 0f);
+
+		// Apply speed
+		cSpeed = speed;
+
+		// Creating new texture and applying referencies
+		feed = image;
+		cTexture = new RenderTexture(size, size, 16, RenderTextureFormat.ARGB32);
 		feed.texture = cTexture;
+
+		// Applying camera settings
 		cam.targetTexture = cTexture;
+		cam.fieldOfView = camFOV;
+		cam.transform.localPosition = new Vector3(0f, 0f, -camDistance);
+
 		available = false;
 	}
 
@@ -53,6 +49,6 @@ public class Displayer : MonoBehaviour
 	void Update()
 	{
 		if(model != null)
-			model.transform.Rotate(Vector3.up);
+			model.transform.Rotate(Vector3.up * cSpeed);
 	}	
 }
