@@ -102,6 +102,7 @@ public class GridManagement : MonoBehaviour
                 return;
             }
             grid[coordinates.x, coordinates.y, coordinates.z].GetComponent<Block>().CallFlags("OnBlockDestroy");
+            
             // Removes object from list and destroys the gameObject
             GameObject target = grid[coordinates.x, coordinates.y, coordinates.z];
             SystemManager systemManager = GameManager.instance.systemManager;
