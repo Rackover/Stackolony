@@ -20,7 +20,7 @@ public class BuildingMenuItem : MonoBehaviour {
     {
         blockPrefab = GameManager.instance.library.GetBlockByID(blockId).model;
         ri = GetComponent<RawImage>();
-        display = GameManager.instance.displayerManager.SetRotationFeed(blockPrefab, ri, 45f, 0f);
+        display = CreateDisplay();
 
         Invoke("Freeze", 0.1f);
         Invoke("SavePreview", 0.1f);
@@ -29,8 +29,14 @@ public class BuildingMenuItem : MonoBehaviour {
     public void SetConcerned()
     {
         concerned = true;
-        display = GameManager.instance.displayerManager.SetRotationFeed(blockPrefab, ri, 45f, 1f);
+        display = CreateDisplay();
     }
+    
+    Displayer CreateDisplay()
+    {
+        return GameManager.instance.displayerManager.SetRotationFeed(blockPrefab, ri, 45f, 2, 5, 20, 128);
+    }
+
     public void UnsetConcerned()
     {
         concerned = false;
