@@ -11,33 +11,45 @@ public class BuildingMenuItem : MonoBehaviour {
     bool concerned = false;
     GameObject draggingBuilding;
     GameObject blockPrefab;
+
     RawImage ri;
-    Displayer preview;
+    Displayer display;
+    Texture preview;
     
     private void Start()
     {
         blockPrefab = GameManager.instance.library.GetBlockByID(blockId).model;
         ri = GetComponent<RawImage>();
-        preview = GameManager.instance.displayerManager.SetRotationFeed(blockPrefab, ri);
+        display = GameManager.instance.displayerManager.SetRotationFeed(blockPrefab, ri, 45f, 0f);
+
         Invoke("Freeze", 0.1f);
+        Invoke("SavePreview", 0.1f);
     }
 
     public void SetConcerned()
     {
         concerned = true;
-        preview = GameManager.instance.displayerManager.SetRotationFeed(blockPrefab, ri);
+        display = GameManager.instance.displayerManager.SetRotationFeed(blockPrefab, ri, 45f, 1f);
     }
     public void UnsetConcerned()
     {
         concerned = false;
-        Freeze();
+        ri.texture = preview;
+        if(display != null) display.Unstage();
+    }
+
+    void SavePreview()
+    {
+        Texture saved = new RenderTexture(ri.texture.height, ri.texture.width, 1);
+        Graphics.CopyTexture(ri.texture, saved);
+        preview = saved;
     }
 
     void Freeze()
     {
         Texture saved = new RenderTexture(ri.texture.height, ri.texture.width, 1);
         Graphics.CopyTexture(ri.texture, saved);
-        preview.Unstage();
+        display.Unstage();
         ri.texture = saved;
     }
 
