@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
     [Header("INTERFACE")]
     public CursorDisplay cursorDisplay;
     public Localization localization;
+    public DisplayerManager displayerManager;
 
     [Space(1)] [Header("INTERFACE INGAME")]
     public DeliveryManagement deliveryManagement;
@@ -118,7 +119,8 @@ public class GameManager : MonoBehaviour
 
         // INTERFACE
         if (cursorDisplay == null) cursorDisplay = FindObjectOfType<CursorDisplay>();
-        if (localization == null) localization = FindObjectOfType<Localization>();
+        if (localization == null) localization = GetComponentInChildren<Localization>();
+        if (displayerManager == null) displayerManager = GetComponentInChildren<DisplayerManager>();
 
         // INTERFACE - INGAME
         if (deliveryManagement == null) deliveryManagement = FindObjectOfType<DeliveryManagement>();

@@ -43,7 +43,7 @@ public class BuildingMenusDisplay : MonoBehaviour {
             } 
 
             foreach(BlockScheme block in menu.Value) {
-                GameObject item = Instantiate(itemExample, content.transform);
+                GameObject item = Instantiate(itemExample, content.transform).transform.GetChild(0).gameObject;
                 item.name = block.ID.ToString();
                 item.GetComponent<BuildingMenuItem>().blockId = block.ID;
 
