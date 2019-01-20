@@ -30,6 +30,7 @@ public class Block : MonoBehaviour {
 
     [Header("Values")]
 	public int currentPower;
+    public int nuisance; //Nuisance received by the block
     public bool isConsideredUnpowered; //Used when updating energy system
     public bool isConsideredDisabled; //Used when updating spatioport
     public bool isLinkedToSpatioport; 
@@ -104,7 +105,7 @@ public class Block : MonoBehaviour {
 
     public void LoadBlock()
     {
-        GameManager.instance.systemManager.AllBlockLinks.Add(this);
+        GameManager.instance.systemManager.AllBlocks.Add(this);
         if (scheme.consumption > 0)
         {
             GameManager.instance.systemManager.AllBlocksRequiringPower.Add(this);

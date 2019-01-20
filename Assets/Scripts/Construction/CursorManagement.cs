@@ -590,7 +590,20 @@ public class CursorManagement : MonoBehaviour
                 {
                     GameManager.instance.storageBay.DeStoreBlock(selectedBlock.gameObject);
                 }
-
+                // Check if the blocks under the position allows to have "something above them"
+                for (int i = _pos.y; i >= 0; i--)
+                {
+                    if (GameManager.instance.gridManagement.grid[_pos.x,i,_pos.z] != null)
+                    {
+                        Block block = GameManager.instance.gridManagement.grid[_pos.x, i, _pos.z].gameObject.GetComponent<Block>();
+                        if (!block.scheme.canBuildAbove)
+                        {
+                            GameManager.instance.errorDisplay.ShowError("You can't build above this block");
+                            CancelDrag();
+                            return;
+                        }
+                    }
+                }
                 //Play SFX
                 GameManager.instance.sfxManager.PlaySoundLinked("BlockDrop",selectedBlock.gameObject);
 

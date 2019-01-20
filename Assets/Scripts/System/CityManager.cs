@@ -5,6 +5,8 @@ using UnityEngine;
 public class CityManager : MonoBehaviour {
 
     public string cityName = "Valenciennes";
+    public BlockState[] accidentStates = { BlockState.OnFire, BlockState.OnRiot, BlockState.Damaged };
+
 
     //Assign the best house found to a citizen
     public void AutoHouseCitizen(PopulationManager.Citizen citizen)
@@ -81,5 +83,39 @@ public class CityManager : MonoBehaviour {
 
         attraction -= house.distanceToGround * 0.2f;
         return attraction;
+    }
+    
+    public void TriggerAccident(BlockState accident)
+    {
+        if(GameManager.instance.systemManager.AllBlocks.Count == 0) return;
+
+        if( IsConsideredAccident( accident ) )
+        {
+            int rand = Random.Range(0, GameManager.instance.systemManager.AllBlocks.Count);
+            int blockMet = 0;
+            while( GameManager.instance.systemManager.AllBlocks[rand].states.Contains( accident ))
+            {
+                if(blockMet++ > GameManager.instance.systemManager.AllBlocks.Count) 
+                {
+                    Logger.Debug("All blocks already have " + accident + " as a state");
+                    return;
+                }
+                rand = Random.Range(0, GameManager.instance.systemManager.AllBlocks.Count);
+            }
+            GameManager.instance.systemManager.AllBlocks[rand].AddState( accident );
+        }
+        else Logger.Debug( accident + " is not considered as a accident" );
+    }
+
+    bool IsConsideredAccident(BlockState state)
+    {
+        foreach(BlockState s in accidentStates)
+        {
+            if(state == s)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

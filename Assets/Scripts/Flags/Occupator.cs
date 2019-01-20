@@ -21,15 +21,11 @@ public class Occupator : Flag
         base.OnDestroy();
     }
 
-    public override void AfterMovingBlock()
+    public void GenerateOccupations()
     {
-        base.AfterMovingBlock();
-     //   Invoke("OnBlockUpdate", 0f);
-    }
-
-    public override void OnBlockUpdate()
-    {
-        base.OnBlockUpdate();
-        GameManager.instance.missionManager.StartMission(block.gridCoordinates, "EmitOccupators", range,0, typeof(House));
+        if (isEnabled)
+        {
+            GameManager.instance.missionManager.StartMission(block.gridCoordinates, "EmitOccupators", range, 0, typeof(House));
+        }
     }
 }
