@@ -18,6 +18,9 @@ public class OptionsWindow : MonoBehaviour {
         options = GameManager.instance.player.options;
         Localization loc = GameManager.instance.localization;
 
+        Canvas canvas = GetComponentInParent<Canvas>();
+        float factor = canvas.scaleFactor;
+
         loc.SetCategory("options");
         int count = 0;
         foreach(KeyValuePair<string, Options.IOption> option in options.Get()) {
@@ -72,7 +75,7 @@ public class OptionsWindow : MonoBehaviour {
             //////////////
 
             Vector3 position = inst.GetComponent<RectTransform>().position;
-            inst.GetComponent<RectTransform>().position = new Vector3(position.x, position.y - optionsSpacing * count, position.z);
+            inst.GetComponent<RectTransform>().position = new Vector3(position.x, position.y - optionsSpacing * count * factor, position.z);
 
             count++;
         }

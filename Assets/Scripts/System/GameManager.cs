@@ -22,7 +22,6 @@ public class GameManager : MonoBehaviour
     public MissionManager missionManager;
     public CursorManagement cursorManagement;
     public GridManagement gridManagement;
-    public StorageBay storageBay;
     public PopulationManager populationManager;
     public Player player;
     public SaveManager saveManager;
@@ -32,9 +31,9 @@ public class GameManager : MonoBehaviour
     [Header("INTERFACE")]
     public CursorDisplay cursorDisplay;
     public Localization localization;
+    public DisplayerManager displayerManager;
 
     [Space(1)] [Header("INTERFACE INGAME")]
-    public DeliveryManagement deliveryManagement;
     public TemporalityInterface temporalityInterface;
     public TooltipGO tooltipGO;
     public BlockInfobox blockInfobox;
@@ -110,7 +109,6 @@ public class GameManager : MonoBehaviour
         if (missionManager == null) missionManager = GetComponentInChildren<MissionManager>();
         if (cursorManagement == null) cursorManagement = GetComponentInChildren<CursorManagement>();
         if (gridManagement == null) gridManagement = GetComponentInChildren<GridManagement>();
-        if (storageBay == null) storageBay = GetComponentInChildren<StorageBay>();
         if (populationManager == null) populationManager = GetComponentInChildren<PopulationManager>();
         if (saveManager == null) saveManager = GetComponentInChildren<SaveManager>();
         if (cinematicManager == null) cinematicManager = GetComponentInChildren<CinematicManager>();
@@ -118,10 +116,10 @@ public class GameManager : MonoBehaviour
 
         // INTERFACE
         if (cursorDisplay == null) cursorDisplay = FindObjectOfType<CursorDisplay>();
-        if (localization == null) localization = FindObjectOfType<Localization>();
+        if (localization == null) localization = GetComponentInChildren<Localization>();
+        if (displayerManager == null) displayerManager = GetComponentInChildren<DisplayerManager>();
 
         // INTERFACE - INGAME
-        if (deliveryManagement == null) deliveryManagement = FindObjectOfType<DeliveryManagement>();
         if (temporalityInterface == null) temporalityInterface = FindObjectOfType<TemporalityInterface>();
         if (tooltipGO == null) tooltipGO = FindObjectOfType<TooltipGO>();
         if (blockInfobox == null) blockInfobox = FindObjectOfType<BlockInfobox>();
@@ -183,11 +181,8 @@ public class GameManager : MonoBehaviour
             StartCoroutine(saveManager.WriteSaveData(
                 new SaveManager.SaveData(
                     new SaveManager.GameData(
-                        deliveryManagement.shopDisplays,
                         gridManagement.grid,
                         gridManagement.bridgesList,
-                        new Vector3Int(), //storageBay.gridPosition,
-                        storageBay.storedBlocks,
                         player.name,
                         cityManager.cityName,
                         temporality.cycleNumber,
@@ -219,7 +214,6 @@ public class GameManager : MonoBehaviour
     {
         
         // Initialize and shut down
-        storageBay.transform.Find("Visuals").GetComponent<MeshRenderer>().enabled = true;
         GameInterfaces gi = FindObjectOfType<GameInterfaces>();
         if (gi != null) {
             gi.gameObject.SetActive(true);
@@ -233,8 +227,6 @@ public class GameManager : MonoBehaviour
 
         // Initialize only
         gridManagement.InitializeGridManager();
-        storageBay.Initialize();
-        deliveryManagement.UpdateComplexity();
         cinematicManager.GetReferences();
 
         // NEW GAME ONLY
@@ -251,7 +243,6 @@ public class GameManager : MonoBehaviour
     public void EndGame()
     {
         // Initialize and shut down
-        storageBay.transform.Find("Visuals").GetComponent<MeshRenderer>().enabled = false;
         GameInterfaces gi = FindObjectOfType<GameInterfaces>();
         if (gi != null) {
             gi.StopGameInterfaces();

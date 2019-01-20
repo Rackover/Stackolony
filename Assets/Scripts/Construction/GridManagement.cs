@@ -32,7 +32,7 @@ public class GridManagement : MonoBehaviour
     private GameObject gridGameObject; //GameObject contenant la grille
 
     
-    public enum blockType{ FREE = 0, STORAGE = 1, BRIDGE = 2}
+    public enum blockType{ FREE = 0, BRIDGE = 1}
 
     private void Start()
     {
@@ -87,6 +87,10 @@ public class GridManagement : MonoBehaviour
         StartCoroutine(GameManager.instance.systemManager.OnGridUpdate());
     }
 
+    /// <summary>
+    /// Correct function to destroy a building and remove all of its references
+    /// </summary>
+    /// <param name="coordinates"></param>
     public void DestroyBlock(Vector3Int coordinates)
     {
         if (grid[coordinates.x, coordinates.y, coordinates.z] != null)
@@ -98,6 +102,7 @@ public class GridManagement : MonoBehaviour
                 return;
             }
             grid[coordinates.x, coordinates.y, coordinates.z].GetComponent<Block>().CallFlags("OnBlockDestroy");
+            
             // Removes object from list and destroys the gameObject
             GameObject target = grid[coordinates.x, coordinates.y, coordinates.z];
             SystemManager systemManager = GameManager.instance.systemManager;
@@ -262,10 +267,6 @@ public class GridManagement : MonoBehaviour
         {
             switch (objectFound.tag)
             {
-                case "StorageBay":
-                    if (displayErrorMessages)
-                        gameManager.errorDisplay.ShowError("You can't build over the storage bay");
-                    return blockType.STORAGE;
                 case "Bridge":
                     if (displayErrorMessages)
                         gameManager.errorDisplay.ShowError("You can't build over a bridge");

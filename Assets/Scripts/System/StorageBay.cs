@@ -15,7 +15,7 @@ public class StorageBay : MonoBehaviour
     public int maxStock; //Combien de blocs au maximum la zone peut elle contenir (-1 = infini)
     public float offset; //A quel point les blocs sont eloignés les uns de les autres quand ils sont dans la zone de stockage
     public float storageBayHeight; //Hauteur de la zone de stockage
-    public float flexibility; //A quel point le systeme sera flexible et permettra au joueur de placer la zone de stockage sur le terrain
+    public float flexibility; //A quelpoint le systeme sera flexible et permettra au joueur de placer la zone de stockage sur le terrain
     
     public GameObject[,,] storedBlocks;
     public GameObject[,] slots; //Liste des slots

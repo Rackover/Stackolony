@@ -101,7 +101,6 @@ public class Temporality : MonoBehaviour {
     {
         if (!GameManager.instance.IsInGame()) { return; };
 
-        GameManager.instance.deliveryManagement.DeliverBlocks();
         StartCoroutine(GameManager.instance.systemManager.OnNewCycle());
         cycleNumber++;
     }

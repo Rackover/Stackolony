@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class MoodsDisplay : MonoBehaviour {
 
     public GameObject example;
-    public float xSpacing;
+    public float ySpacing;
     public float colorBlendAmount = 0.5f;
 
     GameManager gameManager;
@@ -15,24 +15,26 @@ public class MoodsDisplay : MonoBehaviour {
 	void Start () {
         gameManager = GameManager.instance;
         Population[] populations = gameManager.populationManager.populationTypeList;
+        Canvas canvas = GetComponentInParent<Canvas>();
+        float factor = canvas.scaleFactor;
 
         float offset = 0;
         foreach(Population race in populations) {
             GameObject raceO = Instantiate(example.gameObject, transform);
             raceO.GetComponent<RectTransform>().position = new Vector3(
-                raceO.GetComponent<RectTransform>().position.x + offset,
-                raceO.GetComponent<RectTransform>().position.y,
+                raceO.GetComponent<RectTransform>().position.x,
+                raceO.GetComponent<RectTransform>().position.y + offset* factor,
                 raceO.GetComponent<RectTransform>().position.z
             );
 
-            Image face = raceO.transform.GetChild(1).gameObject.GetComponent<Image>();
+            Image face = raceO.transform.GetChild(2).gameObject.GetComponent<Image>();
             face.sprite = race.humorSprite;
             face.color = Color.Lerp(Color.white, race.color, colorBlendAmount);
             face.color = new Color(face.color.r, face.color.g, face.color.b, 1f);
 
             moods[raceO] = race;
 
-            offset += raceO.GetComponent<RectTransform>().rect.width/2 + xSpacing;
+            offset -= ySpacing;
         }
 
         Destroy(example);
@@ -44,7 +46,7 @@ public class MoodsDisplay : MonoBehaviour {
         foreach (KeyValuePair<GameObject, Population> people in moods) {
             GameObject mood = people.Key;
             float moodValue = gameManager.populationManager.averageMoods[people.Value];
-            Image gauge = mood.transform.GetChild(0).gameObject.GetComponent<Image>();
+            Image gauge = mood.transform.GetChild(1).gameObject.GetComponent<Image>();
             gauge.fillAmount = moodValue;
             gauge.color = Color.Lerp(Color.red, Color.green, moodValue);
         }

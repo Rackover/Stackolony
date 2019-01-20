@@ -5,13 +5,21 @@ using UnityEngine.EventSystems;
 
 public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler  {
 
+
+    public bool isFirstLineBold = true;
+
     private TooltipGO tooltipGO; //Correspond à un script lié au gameObject de tooltip
-    public string tooltipText;
+    List<Localization.Line> locs = new List<Localization.Line>();
     private bool isActive;
 
     void Awake()
     {
         isActive = false;
+    }
+
+    public void AddLocalizedLine(Localization.Line line)
+    {
+        locs.Add(line);
     }
 
     public void OnPointerEnter(PointerEventData pointerEventData)
@@ -20,9 +28,23 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
         {
             tooltipGO = FindObjectOfType<TooltipGO>();
         }
-        tooltipGO.transform.position = pointerEventData.position;
-        tooltipGO.text = tooltipText;
-        tooltipGO.SetText();
+        tooltipGO.transform.position = pointerEventData.position + tooltipGO.shift;
+
+        string txt = "";
+        for (int i = 0; i < locs.Count; i++) {
+
+            if (i > 0) {
+                txt += "\n";
+            }
+
+            GameManager.instance.localization.SetCategory(locs[i].category);
+            txt += GameManager.instance.localization.GetLine(locs[i].id);
+            if (i == 0 && isFirstLineBold) {
+                txt = "<b>" + txt + "</b>";
+            }
+        }
+
+        tooltipGO.SetText(txt);
         isActive = true;
     }
 
@@ -30,8 +52,7 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
     {
         if (isActive)
         {
-            tooltipGO.transform.position = Input.mousePosition + new Vector3(-10,-10,0) ;
-            tooltipGO.SetText();
+            tooltipGO.transform.position = Input.mousePosition + new Vector3(tooltipGO.shift.x, tooltipGO.shift.y, 0);
         }
     }
 

@@ -7,29 +7,11 @@ public class DisplayerManager : MonoBehaviour
 {
 	public GameObject displayer;
 	List<Displayer> displayers = new List<Displayer>();
-/*
-	[Header("Test")]
-	public GameObject[] objects;
-	public RawImage[] images;
 
-	void Start()
-	{
-		for(int i = 0; i < objects.Length; i++)
-		{
-			SetRotationFeed(objects[i], images[i]);
-		}
-	}
-
-	[ContextMenu("DEBUG")]
-	void DebugStage()
-	{
-		SetRotationFeed(objects[0], images[0]);
-	}
-*/
-	public Displayer SetRotationFeed(GameObject _model, RawImage _feed, int _quality = 128)
+	public Displayer SetRotationFeed(GameObject newObject, RawImage image, float rotation = 0f, float speed = 0f, float camDistance = 3f, float camFOV = 30f,  int size = 64)
 	{
 		Displayer d = GetDisplayer();
-		d.Stage(_model, _feed, _quality);
+		d.Stage(newObject, image, rotation, speed, camDistance, camFOV, size);
 		return d;
 	}
 
@@ -40,7 +22,7 @@ public class DisplayerManager : MonoBehaviour
 			if(d.available)
 				return d;
 		}
-		Vector3 newPosition = new Vector3(displayers.Count * 2, 0f, 0f);
+		Vector3 newPosition = new Vector3(displayers.Count * 3, 0f, 0f);
 		displayers.Add(Instantiate(displayer, newPosition, Quaternion.identity, transform).GetComponent<Displayer>());
 		return displayers[displayers.Count - 1];
 	}
