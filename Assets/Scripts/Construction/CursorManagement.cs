@@ -29,11 +29,11 @@ public class CursorManagement : MonoBehaviour
     [Header("=== DEBUG ===")]
     public Vector3Int posInGrid; //Position de la souris sur le terrain
     public Vector3 posInWorld;
-    
+    public bool isDragging;
+
     [HideInInspector] public bool cursorOnUI = false;
     [HideInInspector] public Vector3 sPosition;float dragDelay = 1f;
     float timer;
-    bool draging;
     private Vector3Int savedPos;
 
     private GameObject[] activeHighlighters; //Liste contenant plusieurs highlighters actifs
@@ -132,6 +132,7 @@ public class CursorManagement : MonoBehaviour
 
         //Converti la position pour savoir sur quelle case se trouve la souris
         posInGrid = GameManager.instance.gridManagement.WorldPositionToIndex(tempCoord);
+        posInWorld = GameManager.instance.gridManagement.IndexToWorldPosition(posInGrid);
     }
 
     void UpdateProjector()
@@ -559,9 +560,9 @@ public class CursorManagement : MonoBehaviour
         {
             if(_pos != savedPos)
             {
-                if(!draging) 
+                if(!isDragging) 
                 {
-                    draging = true;
+                    isDragging = true;
                     selectedBlock.GetComponent<Collider>().enabled = false;
                 }
                 else
@@ -576,7 +577,7 @@ public class CursorManagement : MonoBehaviour
 
     public void EndDrag(Vector3Int _pos)
     {
-        if(selectedBlock != null && draging)
+        if(selectedBlock != null && isDragging)
         {
             if (_pos.y <= GameManager.instance.gridManagement.minHeight)
             {
@@ -624,17 +625,17 @@ public class CursorManagement : MonoBehaviour
             selectedBlock.boxCollider.enabled = true;
             selectedBlock = null; 
         }
-        draging = false;
+        isDragging = false;
     }
 
     public void CancelDrag()
     {
-        if(selectedBlock != null && draging)
+        if(selectedBlock != null && isDragging)
         {
             selectedBlock.transform.position = sPosition;
             selectedBlock.boxCollider.enabled = true;
             selectedBlock = null;
-            draging = false;
+            isDragging = false;
         }
     }
     #endregion

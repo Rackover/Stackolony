@@ -38,11 +38,18 @@ public class BuildingMenusDisplay : MonoBehaviour {
 
             GameObject content = mO.GetComponentInChildren<ContentSizeFitter>().gameObject;
 
+            for (int i = 0; i < content.transform.childCount; i++) {
+                Destroy(content.transform.GetChild(i).gameObject);
+            } 
+
             foreach(BlockScheme block in menu.Value) {
                 GameObject item = Instantiate(itemExample, content.transform);
+                item.name = block.ID.ToString();
+                item.GetComponent<BuildingMenuItem>().blockId = block.ID;
+
                 Tooltip tt = item.GetComponent<Tooltip>();
-                tt.category = "block";
-                tt.id = block.ID.ToString();
+                tt.AddLocalizedLine(new Localization.Line("blockName", "block" + block.ID.ToString()));
+                tt.AddLocalizedLine(new Localization.Line("blockDescription", "block" + block.ID.ToString()));
             }
 
             mO.transform.GetChild(0).gameObject.SetActive(false);

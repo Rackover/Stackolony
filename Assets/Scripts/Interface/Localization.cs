@@ -31,6 +31,18 @@ public class Localization : MonoBehaviour {
         }
     }
 
+    public class Line
+    {
+        public string category { get; }
+        public string id { get; }
+
+        public Line(string c, string i)
+        {
+            category = c;
+            id = i;
+        }
+    }
+
     private void Awake()
     {
         LoadLocalizationFiles(Paths.GetLocFolder());
