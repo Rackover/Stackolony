@@ -8,6 +8,10 @@ public class GameManager : MonoBehaviour
     // Don't make any of those variables public under any circumstance
     bool inGame = false;
     bool isLoading = false;
+    bool isPaused = false;
+
+    // Used for pausing
+    float oldTimescale = 0f;
 
     public string menuSceneName="Menu";
 
@@ -206,6 +210,27 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void Pause()
+    {
+        if (IsInGame()) {
+            oldTimescale = temporality.timeScale;
+            temporality.SetTimeScale(0);
+            isPaused = true;
+        }
+    }
+    
+    public void UnPause()
+    {
+        if (IsInGame()) {
+            temporality.SetTimeScale(Mathf.FloorToInt(oldTimescale));
+            isPaused = false;
+        }
+    }
+
+    public bool IsPaused()
+    {
+        return IsInGame() && isPaused;
+    }
 
     public bool IsInGame()
     {

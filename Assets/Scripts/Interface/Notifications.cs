@@ -39,27 +39,37 @@ public class Notifications : MonoBehaviour {
 
     private void Update()
     {
+
+        if (GameManager.instance.IsPaused()) {
+            return;
+        }
+
         List<Notification> newList = new List<Notification>();
         int index = 0;
         float factor = canvas.scaleFactor;
         foreach (Notification not in notifications) {
-            if (not.isEternal) {
-                continue;
-            }
+
+            bool destroy = false;
 
             // Lifespan calculation
-            not.duration -= Time.deltaTime;
-            if (not.duration <= 0f) {
-                Destroy(not.gameObject);
-            }
-            else {
-                if (not.duration <= 1f) {
-                    foreach(Image image in not.gameObject.GetComponentsInChildren<Image>()) {
-                        image.color = new Color(image.color.r, image.color.g, image.color.b, not.duration);
-                    }
-                    Text txt = not.gameObject.GetComponentInChildren<Text>();
-                    txt.color = new Color(txt.color.r, txt.color.g, txt.color.b, not.duration);
+            if (!not.isEternal) {
+                not.duration -= Time.deltaTime;
+                if (not.duration <= 0f) {
+                    Destroy(not.gameObject);
+                    destroy = true;
                 }
+                else {
+                    if (not.duration <= 1f) {
+                        foreach(Image image in not.gameObject.GetComponentsInChildren<Image>()) {
+                            image.color = new Color(image.color.r, image.color.g, image.color.b, not.duration);
+                        }
+                        Text txt = not.gameObject.GetComponentInChildren<Text>();
+                        txt.color = new Color(txt.color.r, txt.color.g, txt.color.b, not.duration);
+                    }
+                }
+            }
+            
+            if (!destroy) {
                 newList.Add(not);
             }
 
@@ -72,6 +82,7 @@ public class Notifications : MonoBehaviour {
                       Mathf.Lerp(notTransform.localPosition.y, yShould, 0.05f),
                       notTransform.localPosition.z
              );
+
             index++;
         }
         notifications = newList;
