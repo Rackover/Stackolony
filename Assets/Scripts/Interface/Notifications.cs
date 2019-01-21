@@ -23,6 +23,9 @@ public class Notifications : MonoBehaviour {
         public float duration = 5f;
         public bool isEternal = false;
         public GameObject gameObject;
+        public Image[] images;
+        public Text text;
+        public Transform transform;
 
         public Notification(string _l, Color _c, params string[] _v)
         {
@@ -53,27 +56,7 @@ public class Notifications : MonoBehaviour {
 
         foreach (Notification not in notifications) {
 
-            bool destroy = false;
-
-            // Lifespan calculation
-            if (!not.isEternal) {
-                not.duration -= Time.deltaTime;
-                if (not.duration <= 0f) {
-                    Destroy(not.gameObject);
-                    destroy = true;
-                }
-                else {
-
-                    // Smooth fadeout when near destruction
-                    if (not.duration <= 1f) {
-                        foreach(Image image in not.gameObject.GetComponentsInChildren<Image>()) {
-                            image.color = new Color(image.color.r, image.color.g, image.color.b, not.duration);
-                        }
-                        Text txt = not.gameObject.GetComponentInChildren<Text>();
-                        txt.color = new Color(txt.color.r, txt.color.g, txt.color.b, not.duration);
-                    }
-                }
-            }
+            bool destroy = UpdateLifespan(not);
             
             if (!destroy) {
                 newList.Add(not);
@@ -81,13 +64,7 @@ public class Notifications : MonoBehaviour {
 
             // Position catch up
             float yShould = -yOffset * index;
-            Transform notTransform = not.gameObject.transform;
-            if (notTransform.localPosition.y != yShould)
-                notTransform.localPosition = new Vector3(
-                      notTransform.localPosition.x,
-                      Mathf.Lerp(notTransform.localPosition.y, yShould, 0.05f),
-                      notTransform.localPosition.z
-             );
+            CatchUpPosition(not, yShould);
 
             index++;
         }
@@ -112,16 +89,53 @@ public class Notifications : MonoBehaviour {
         Text text = nO.GetComponentInChildren<Text>();
         text.color = GetTextColor(notification.mainColor);
         text.text = string.Format(loc.GetLine(notification.locId.ToString()), notification.values);
+        notification.text = text;
 
         nO.transform.position = new Vector3(
               nO.transform.position.x,
               nO.transform.position.y - yOffset* factor*notifications.Count,
               nO.transform.position.z
          );
+        notification.transform = nO.transform;
 
         notification.gameObject = nO;
+        notification.images = nO.GetComponentsInChildren<Image>();
 
         notifications.Add(notification);
+    }
+
+    void CatchUpPosition(Notification not, float yPosition)
+    {
+        if (not.transform.localPosition.y != yPosition)
+            not.transform.localPosition = new Vector3(
+                  not.transform.localPosition.x,
+                  Mathf.Lerp(not.transform.localPosition.y, yPosition, 0.05f),
+                  not.transform.localPosition.z
+         );
+    }
+
+    // Returns true if the notification has reached end of life
+    bool UpdateLifespan(Notification not)
+    {
+        // Lifespan calculation
+        if (!not.isEternal) {
+            not.duration -= Time.deltaTime;
+            if (not.duration <= 0f) {
+                Destroy(not.gameObject);
+                return true;
+            }
+            else {
+                // Smooth fadeout when near destruction
+                if (not.duration <= 1f) {
+                    foreach (Image image in not.images) {
+                        image.color = new Color(image.color.r, image.color.g, image.color.b, not.duration);
+                    }
+                    Text txt = not.text;
+                    txt.color = new Color(txt.color.r, txt.color.g, txt.color.b, not.duration);
+                }
+            }
+        }
+        return false;
     }
 
     Color GetStripColor(Color color)
