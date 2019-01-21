@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletinManager : MonoBehaviour {
+public class BulletinDisplay : MonoBehaviour {
 
     public class Bulletin
     {
