@@ -47,5 +47,9 @@
     <block7>A simple house.</block7>
     <block8>Gives 6 food to houses in range.</block8>
   </blockDescription>
-  
+  <notification>
+	<cannotBuild><b>You cannot build here</b></cannotBuild>
+	<notLinked>This building is not connected to the spatioport!</notLinked>
+	<newPeople>5 new people have arrived to the city</newPeople>
+  </notification>
 </lines>

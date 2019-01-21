@@ -8,14 +8,13 @@ public class PauseWindow : MonoBehaviour {
 
     public void Start()
     {
-        oldTimescale = GameManager.instance.temporality.timeScale;
-        GameManager.instance.temporality.SetTimeScale(0);
+        GameManager.instance.Pause();
     }
 
     public void Resume()
     {
+        GameManager.instance.UnPause();
         Destroy(gameObject);
-        GameManager.instance.temporality.SetTimeScale(oldTimescale);
     }
 
     public void Options()
