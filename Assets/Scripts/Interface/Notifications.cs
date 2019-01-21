@@ -40,13 +40,17 @@ public class Notifications : MonoBehaviour {
     private void Update()
     {
 
+        // Not updating notifications if the game is paused - everything should stay frozen
         if (GameManager.instance.IsPaused()) {
             return;
         }
 
+        // Notifications to keep will be put in a new list
         List<Notification> newList = new List<Notification>();
+
         int index = 0;
         float factor = canvas.scaleFactor;
+
         foreach (Notification not in notifications) {
 
             bool destroy = false;
@@ -59,6 +63,8 @@ public class Notifications : MonoBehaviour {
                     destroy = true;
                 }
                 else {
+
+                    // Smooth fadeout when near destruction
                     if (not.duration <= 1f) {
                         foreach(Image image in not.gameObject.GetComponentsInChildren<Image>()) {
                             image.color = new Color(image.color.r, image.color.g, image.color.b, not.duration);
@@ -88,6 +94,10 @@ public class Notifications : MonoBehaviour {
         notifications = newList;
     }
 
+    /// <summary>
+    /// Creates a new notification
+    /// </summary>
+    /// <param name="notification"></param>
     public void Notify(Notification notification)
     {
         float factor = canvas.scaleFactor;
