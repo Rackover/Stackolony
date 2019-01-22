@@ -13,12 +13,9 @@ public class Block : MonoBehaviour {
     public BoxCollider boxCollider;
     public Container container;
 	public BlockScheme scheme;
-	public GameObject visuals;
-    public GameObject effects;
+	public BlockVisual visuals;
+    public BlockEffect effects;
 
-    [Header("Particules")]
-	public GameObject unpoweredEffect;
-    public GameObject onFireEffect;
     public GameObject bridge;
 
     [HideInInspector]   public Vector3Int gridCoordinates = new Vector3Int(0, 0, 0);
@@ -106,17 +103,14 @@ public class Block : MonoBehaviour {
     public void LoadBlock()
     {
         GameManager.instance.systemManager.AllBlocks.Add(this);
+
         if (scheme.consumption > 0)
         {
             GameManager.instance.systemManager.AllBlocksRequiringPower.Add(this);
         }
 
-        if (visuals == null)
-        {
-            visuals = Instantiate(scheme.model, transform.position, Quaternion.identity, transform);
-            visuals.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
-            visuals.name = "Visuals";
-        }
+        visuals.NewVisual(scheme.model);
+
         foreach (string flag in scheme.flags)
         {
             GameManager.instance.flagReader.ReadFlag(this, flag);
@@ -125,11 +119,8 @@ public class Block : MonoBehaviour {
 
     public void UnloadBlock()
     {
-        if(visuals != null)
-        {
-            visuals.SetActive(false);
-            unpoweredEffect.SetActive(false);
-        }
+        visuals.Hide();
+        effects.Hide();
     }
 
 	// Check if the block is powered
@@ -160,12 +151,12 @@ public class Block : MonoBehaviour {
 			switch(state)
 			{
 				case BlockState.Powered:
-					unpoweredEffect.SetActive(false);
+					effects.Desactivate(GameManager.instance.library.unpoweredParticle);
                     break;
 
                 case BlockState.OnFire:
-					onFireEffect.SetActive(true);
-                    GameManager.instance.sfxManager.PlaySound("StartingFire");
+					effects.Activate(GameManager.instance.library.onFireParticle);
+                    //GameManager.instance.sfxManager.PlaySound("StartingFire");
 					break;
 
 				default:
@@ -185,11 +176,11 @@ public class Block : MonoBehaviour {
 			switch(state)
 			{
 				case BlockState.Powered:
-					unpoweredEffect.SetActive(true);
+					effects.Activate(GameManager.instance.library.unpoweredParticle);
                     break;
                 case BlockState.OnFire:
-					onFireEffect.SetActive(false);
-                    GameManager.instance.sfxManager.PlaySound("StoppingFire");
+					effects.Desactivate(GameManager.instance.library.onFireParticle);
+                    //GameManager.instance.sfxManager.PlaySound("StoppingFire");
 					break;
 
 				default:
@@ -206,20 +197,22 @@ public class Block : MonoBehaviour {
     {
         if(visuals != null) 
         {
-            if (!on) {
-                visuals.gameObject.SetActive(false);
-                effects.SetActive(false);
+            if (!on) 
+            {
+                visuals.Hide();
+                effects.Hide();
             }
             else
             {
-                visuals.gameObject.SetActive(true);
-                effects.SetActive(true);
+                visuals.Show();
+                effects.Show();
                 UpdatePower();
-                if (scheme.consumption != 0)
+
+                if(scheme.consumption != 0)
                 {
-                    if (currentPower <= scheme.consumption)
+                    if(currentPower <= scheme.consumption)
                     {
-                        unpoweredEffect.SetActive(true);
+                        effects.Activate(GameManager.instance.library.unpoweredParticle);
                     }
                 }
             }

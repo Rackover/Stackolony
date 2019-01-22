@@ -22,8 +22,12 @@ public class Library : MonoBehaviour
     public Sprite bridgeIcon;
 
 	[Header("Particules")]
-	public GameObject citizenInParticule;
-	public GameObject citizenOutParticule;
+	public GameObject citizenInParticle;
+	public GameObject citizenOutParticle;
+	public GameObject unpoweredParticle;
+	public GameObject onFireParticle;
+	public GameObject onRiotParticle;
+	public GameObject damagedParticle;
 
 	public BlockScheme GetBlockByID(int id)
 	{	
