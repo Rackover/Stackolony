@@ -433,10 +433,8 @@ public class CursorManagement : MonoBehaviour
 
     void GeneratePermanentHighlighter(Vector3Int coordinate)
     {
-        print("GENERATING PERMANENT HIGHLIGHTER");
         GameObject newHighlighter = Instantiate(bridgeHighlighter, highlighter.transform.parent);
         newHighlighter.transform.position = GameManager.instance.gridManagement.grid[coordinate.x, coordinate.y, coordinate.z].transform.position;
-        print("SETTING GREEN HIGHLIGHTER ON IT");
         newHighlighter.GetComponent<Highlighter>().SetGreenHighlighter();
         newHighlighter.SetActive(true);
         permanentHighlighter.Add(newHighlighter);
