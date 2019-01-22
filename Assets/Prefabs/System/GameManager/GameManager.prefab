@@ -72,7 +72,6 @@ GameObject:
   - component: {fileID: 4365852104190820}
   - component: {fileID: 33844690695212690}
   - component: {fileID: 23432335991751874}
-  - component: {fileID: 114691067632118170}
   - component: {fileID: 114028403966188712}
   m_Layer: 0
   m_Name: Highlighter
@@ -156,6 +155,22 @@ GameObject:
   - component: {fileID: 114791494730640664}
   m_Layer: 0
   m_Name: Temporality
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1499466944953066
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4364936759027822}
+  - component: {fileID: 114575123271471090}
+  m_Layer: 0
+  m_Name: BulletinsManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -441,6 +456,19 @@ Transform:
   m_Father: {fileID: 4468432540002810}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4364936759027822
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1499466944953066}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4468432540002810}
+  m_RootOrder: 17
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4365852104190820
 Transform:
   m_ObjectHideFlags: 1
@@ -533,6 +561,7 @@ Transform:
   - {fileID: 4007392450662500}
   - {fileID: 4375217022664054}
   - {fileID: 4111541091294220}
+  - {fileID: 4364936759027822}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -669,6 +698,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb07e16cff18d6846b5f1878a1b07687, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myMeshRenderer: {fileID: 23432335991751874}
   greenMat: {fileID: 2100000, guid: 91bd606313627814bb0d42232036dcf1, type: 2}
   defaultMat: {fileID: 2100000, guid: ab20dd04b9178c841a1c4ec5583e5ec5, type: 2}
 --- !u!114 &114073688948625084
@@ -795,6 +825,7 @@ MonoBehaviour:
   player: {fileID: 114952285814864902}
   saveManager: {fileID: 0}
   cinematicManager: {fileID: 0}
+  bulletinsManager: {fileID: 0}
   cursorDisplay: {fileID: 0}
   localization: {fileID: 0}
   displayerManager: {fileID: 0}
@@ -962,6 +993,17 @@ MonoBehaviour:
     type: 2}
   citizenOutParticule: {fileID: 1952097086203690, guid: 18e01baa419fcec40b1a62e40fddbe38,
     type: 2}
+--- !u!114 &114575123271471090
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1499466944953066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0c82747f6890e449b18bdf92f6bb28b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114593997880595668
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1003,19 +1045,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4cf781f5fca2a543bee0a43bf8d4366, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114691067632118170
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1138115034757224}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb07e16cff18d6846b5f1878a1b07687, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  greenMat: {fileID: 2100000, guid: 91bd606313627814bb0d42232036dcf1, type: 2}
-  defaultMat: {fileID: 2100000, guid: ab20dd04b9178c841a1c4ec5583e5ec5, type: 2}
 --- !u!114 &114714276369706516
 MonoBehaviour:
   m_ObjectHideFlags: 1

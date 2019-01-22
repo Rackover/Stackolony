@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
     public Player player;
     public SaveManager saveManager;
     public CinematicManager cinematicManager;
+    public BulletinsManager bulletinsManager;
 
     [Space(1)]
     [Header("INTERFACE")]
@@ -117,6 +118,7 @@ public class GameManager : MonoBehaviour
         if (saveManager == null) saveManager = GetComponentInChildren<SaveManager>();
         if (cinematicManager == null) cinematicManager = GetComponentInChildren<CinematicManager>();
         if (cityManager == null) cityManager = GetComponentInChildren<CityManager>();
+        if (bulletinsManager == null) bulletinsManager = GetComponentInChildren<BulletinsManager>();
 
         // INTERFACE
         if (cursorDisplay == null) cursorDisplay = FindObjectOfType<CursorDisplay>();

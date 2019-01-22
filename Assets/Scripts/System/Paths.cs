@@ -30,6 +30,18 @@ public class Paths {
         CreateDirectoryIfNotExists(path);
         return path;
     }
+    static public string GetBulletinFolder()
+    {
+        string path = Application.streamingAssetsPath + "/bulletins";
+        CreateDirectoryIfNotExists(path);
+        return path;
+    }
+    static public string GetBulletinFile()
+    {
+        string path = GetBulletinFolder();
+        string file = "bulletins" + ".xml";
+        return path + "/" + file;
+    }
 
     static void CreateDirectoryIfNotExists(string path)
     {

@@ -100,9 +100,9 @@ public class Temporality : MonoBehaviour {
     public void AddCycle() //Ajoute un cycle au compteur
     {
         if (!GameManager.instance.IsInGame()) { return; };
-
         StartCoroutine(GameManager.instance.systemManager.OnNewCycle());
         cycleNumber++;
+        GameManager.instance.bulletinsManager.Renew(cycleNumber);
     }
 
     void AddMicroCycle()
