@@ -73,6 +73,13 @@ public class BulletinsManager : MonoBehaviour {
         XmlNodeList bulletins = bulletinFile.SelectNodes("bulletins")[0].ChildNodes;
         foreach(XmlNode pool in bulletins) {
             foreach (XmlNode xBulletin in pool.ChildNodes) {
+
+                // Most probably a comment - skip
+                if (xBulletin.Name != "bulletin") {
+                    continue;
+                }
+
+                // Bulletin creation
                 Bulletin bulletin = new Bulletin(
                     int.Parse(xBulletin.Attributes["id"].Value),
                     int.Parse(pool.Attributes["minCycle"].Value)
