@@ -25,20 +25,13 @@ public class CityManager : MonoBehaviour {
 
     public HouseNotation houseNotation;
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            GetBestHouses();
-        }
-    }
-
     //Finds a house for every citizens (Soon it'll take a priority order into account)
     public void HouseEveryone()
     {
-        foreach (Population popType in GameManager.instance.populationManager.populationTypeList)
+
+        for (int i = 0; i < GameManager.instance.populationManager.populationTypeList.Length; i++)
         {
-            HousePopulation(popType);
+            HousePopulation(GameManager.instance.populationManager.populationTypeList[i]);
         }
     }
 
@@ -95,7 +88,6 @@ public class CityManager : MonoBehaviour {
                 sortedHabitations[notedHabitation.Key] = notedHabitation.Value;
             }
             topHabitations[pop] = sortedHabitations;
-            Logger.Debug("List of best houses for each population has been updated");
         }
     }
 

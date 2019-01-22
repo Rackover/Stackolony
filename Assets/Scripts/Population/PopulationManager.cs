@@ -27,12 +27,27 @@ public class PopulationManager : MonoBehaviour {
     void Start()
     {
         foreach(Population pop in populationTypeList) {
-            //Temporary - Later should be initialized at 1f;
-            //averageMoods[pop] = Random.value;
             averageMoods[pop] = 50f;
             populationCitizenList[pop] = new List<Citizen>();
         }
     }
+
+    //This function just changes the index of the populations in the array containing every populations
+    public void ChangePopulationPriority(Population type, int priority) //priority 0 means first
+    {
+        if (priority >= populationTypeList.Length)
+            priority = populationTypeList.Length - 1;
+        for (int i = 0; i < populationTypeList.Length; i++) {
+            if (populationTypeList[i] == type)
+            {
+                //Switch the found population object with the one at the wanted index
+                Population destinationPop = populationTypeList[priority];
+                populationTypeList[priority] = type;
+                populationTypeList[i] = destinationPop;
+            }
+        }
+    }
+
 
     public void ChangePopulationMood(Population type, float amount)
     {
