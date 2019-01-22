@@ -13,9 +13,20 @@ public class BulletinDisplay : MonoBehaviour {
     public Text subTitle;
     public Text text;
 
-    BulletinsManager.Bulletin currentBulletin;
+    public float buttonDisableTimespan = 1f;
 
-    public void RefreshBulletin()
+    bool opened = false;
+    BulletinsManager.Bulletin currentBulletin;
+    Animator animator;
+    Button button;
+
+    private void Start()
+    {
+        animator = bulletinWindow.GetComponent<Animator>();
+        button = GetComponent<Button>();
+    }
+
+    public IEnumerator RefreshBulletin()
     {
         if (
             currentBulletin == null ||
@@ -28,14 +39,19 @@ public class BulletinDisplay : MonoBehaviour {
             subTitle.text = loc.GetLine("bulletin" + currentBulletin.id.ToString(), "bulletinSubtitle");
             text.text = loc.GetLine("bulletin" + currentBulletin.id.ToString(), "bulletinText");
 
-            SetUnread(!bulletinWindow.activeSelf);
+            SetUnread(!opened);
         }
+
+        yield return new WaitForSeconds(FindObjectOfType<Interface>().refreshRate);
+        yield return StartCoroutine(RefreshBulletin());
     }
 
     public void ToggleBulletinDisplay()
     {
         SetUnread(false);
-        bulletinWindow.SetActive(!bulletinWindow.activeSelf);
+        animator.Play(opened ? "Fold" : "Unfold");
+        StartCoroutine(AnimateFor(buttonDisableTimespan));
+        opened = !opened;
     }
 
     public void SetUnread(bool unread)
@@ -44,11 +60,10 @@ public class BulletinDisplay : MonoBehaviour {
         notification.SetActive(unread);
     }
 
-
-    private void Update()
+    IEnumerator AnimateFor(float seconds)
     {
-        if (!GameManager.instance.IsInGame()) return;
-
-        RefreshBulletin();
+        button.interactable = false;
+        yield return new WaitForSeconds(seconds);
+        button.interactable = true;
     }
 }
