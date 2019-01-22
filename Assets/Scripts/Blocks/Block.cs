@@ -59,6 +59,25 @@ public class Block : MonoBehaviour {
         }
     }
 
+    public void Destroy()
+    {
+        GameManager.instance.gridManagement.DestroyBlock(gridCoordinates);
+        effects.DesactivateAll();
+        Destroy(gameObject);
+    }
+
+    public void NewCycle() 
+    {
+        // Call Flag function
+        foreach (Flag flag in activeFlags){ flag.OnNewCycle(); }
+
+        if(states.Contains(BlockState.Damaged) && states.Contains(BlockState.OnFire))
+	    {
+            Destroy();
+		}
+    }
+
+
     //Called when block is in range of a spatioport
     public void Enable()
     {
@@ -72,14 +91,6 @@ public class Block : MonoBehaviour {
         if (container.closed == true)
         {
             container.OpenContainer();
-        }
-    }
-
-    public void NewCycle() 
-    {
-        foreach (Flag flag in activeFlags)
-        {
-            flag.OnNewCycle();
         }
     }
 
@@ -159,6 +170,15 @@ public class Block : MonoBehaviour {
                     //GameManager.instance.sfxManager.PlaySound("StartingFire");
 					break;
 
+                case BlockState.OnRiot:
+                    visuals.animator.SetBool("OnRiot", true);
+					effects.Activate(GameManager.instance.library.onRiotParticle);
+					break;
+
+                case BlockState.Damaged:
+					effects.Activate(GameManager.instance.library.damagedParticle);
+					break;
+
 				default:
 					Debug.Log("Unclear state");
 					break;
@@ -178,9 +198,19 @@ public class Block : MonoBehaviour {
 				case BlockState.Powered:
 					effects.Activate(GameManager.instance.library.unpoweredParticle);
                     break;
+
                 case BlockState.OnFire:
 					effects.Desactivate(GameManager.instance.library.onFireParticle);
                     //GameManager.instance.sfxManager.PlaySound("StoppingFire");
+					break;
+
+                case BlockState.OnRiot:
+                    visuals.animator.SetBool("OnRiot", false);
+					effects.Desactivate(GameManager.instance.library.onRiotParticle);
+					break;
+
+                case BlockState.Damaged:
+					effects.Desactivate(GameManager.instance.library.damagedParticle);
 					break;
 
 				default:

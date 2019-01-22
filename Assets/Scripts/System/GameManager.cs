@@ -161,17 +161,40 @@ public class GameManager : MonoBehaviour
             populationManager.SpawnCitizens(populationManager.populationTypeList[0], 20);
         }
 
-        if (Input.GetButtonDown("Select") && Input.GetKey(KeyCode.F)) {
+        // Affect a block under the mouse
+        if(Input.GetButtonDown("Select")) // LEFT MOUSE CLICK
+        {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out hit)) {
+            if (Physics.Raycast(ray, out hit)) 
+            {
                 Block block = hit.collider.gameObject.GetComponent<Block>();
-                if (block != null) {
-                    if (!block.states.Contains(BlockState.OnFire))
-                        block.AddState(BlockState.OnFire);
-                    else
-                        block.RemoveState(BlockState.OnFire);
+                if (block != null) 
+                {
+                    if(Input.GetKey(KeyCode.F))
+                    {
+                        if (!block.states.Contains(BlockState.OnFire))
+                            block.AddState(BlockState.OnFire);
+                        else
+                            block.RemoveState(BlockState.OnFire);     
+                    }
+
+                    if(Input.GetKey(KeyCode.R))
+                    {
+                        if (!block.states.Contains(BlockState.OnRiot))
+                            block.AddState(BlockState.OnRiot);
+                        else
+                            block.RemoveState(BlockState.OnRiot);     
+                    }
+
+                    if(Input.GetKey(KeyCode.D))
+                    {
+                        if (!block.states.Contains(BlockState.Damaged))
+                            block.AddState(BlockState.Damaged);
+                        else
+                            block.RemoveState(BlockState.Damaged);     
+                    }
                 }
             }
         }

@@ -40,4 +40,12 @@ public class BlockEffect : MonoBehaviour
 			effects[particle.name].Stop();
 		}
 	}
+
+	public void DesactivateAll()
+	{
+		foreach( KeyValuePair<string, ParticleSystem> e in effects)
+		{
+			e.Value.Stop();
+		}
+	}
 }

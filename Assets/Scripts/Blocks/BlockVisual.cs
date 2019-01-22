@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class BlockVisual : MonoBehaviour 
 {
-	Animator animator;
+	[HideInInspector] public Animator animator;
 	GameObject visuals;
+
+	public void Awake()
+	{
+		if(animator == null) animator = GetComponent<Animator>();
+	}
 
 	public void NewVisual(GameObject obj)
 	{
@@ -23,7 +28,5 @@ public class BlockVisual : MonoBehaviour
 	{
 		visuals.SetActive(true);
 	}
-
-	
 }
 
