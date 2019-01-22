@@ -38,8 +38,7 @@ public class CityManager : MonoBehaviour {
     //Finds a house for every citizens from a defined population
     public void HousePopulation(Population pop)
     {
-        Dictionary<Population, List<PopulationManager.Citizen>> populationCitizenList = GameManager.instance.populationManager.populationCitizenList;
-        foreach (PopulationManager.Citizen citizen in populationCitizenList[pop])
+        foreach (PopulationManager.Citizen citizen in GameManager.instance.populationManager.populationCitizenList[pop])
         {
             if (topHabitations[pop].Count > 0)
             {

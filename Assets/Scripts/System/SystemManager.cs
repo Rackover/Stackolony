@@ -62,6 +62,7 @@ public class SystemManager : MonoBehaviour {
         {
             block.NewCycle();
         }
+        RefreshMoodModifiers();
         yield return null;
     }
 
@@ -120,6 +121,22 @@ public class SystemManager : MonoBehaviour {
             if (block.isConsideredDisabled && block.GetComponent<Spatioport>() == null)
             {
                 block.Disable();
+            }
+        }
+    }
+
+    //Remove 1 cycle on each moodmodifiers duration
+    public void RefreshMoodModifiers()
+    {
+        foreach (KeyValuePair<Population, List<PopulationManager.MoodModifier>> moodModifiers in GameManager.instance.populationManager.moodModifiers)
+        {
+            foreach (PopulationManager.MoodModifier moodModifier in moodModifiers.Value)
+            {
+                moodModifier.cyclesRemaining--;
+                if (moodModifier.cyclesRemaining <= 0)
+                {
+                    moodModifiers.Value.Remove(moodModifier);
+                }
             }
         }
     }

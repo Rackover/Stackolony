@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using System.Linq;
 
 public class PopulationManager : MonoBehaviour {
 
@@ -10,8 +7,8 @@ public class PopulationManager : MonoBehaviour {
     public List<Citizen> citizenList = new List<Citizen>(); //Liste de chaque citoyen de la colonie
 
     public Dictionary<Population, List<Citizen>> populationCitizenList = new Dictionary<Population, List<Citizen>>(); //Assign every citizen to it's population
-    public Dictionary<Population, float> averageMoods = new Dictionary<Population, float>();  // average moods between 0 and 1
-
+    private Dictionary<Population, float> averageMoods = new Dictionary<Population, float>();  // average moods between 0 and 1
+    public Dictionary<Population, List<MoodModifier>> moodModifiers = new Dictionary<Population, List<MoodModifier>>(); //List of every active moodmodifiers for every population
 
     public float moodModifierIfNoHabitation = -20f;
 
@@ -23,13 +20,31 @@ public class PopulationManager : MonoBehaviour {
         public House habitation;
         public bool jobless = true;
     }
+
+    public class MoodModifier
+    {
+        public int reasonId;
+        public float amount;
+        public int cyclesRemaining;
+    }
     
     void Start()
     {
         foreach(Population pop in populationTypeList) {
             averageMoods[pop] = 50f;
             populationCitizenList[pop] = new List<Citizen>();
+            moodModifiers[pop] = new List<MoodModifier>();
         }
+    }
+
+    //Generates a moodmodifier for a given population
+    public void GenerateMoodModifier(Population popType, int reasonId, float amount, int cyclesRemaining)
+    {
+        MoodModifier newMoodModifier = new MoodModifier();
+        newMoodModifier.reasonId = reasonId;
+        newMoodModifier.amount = amount;
+        newMoodModifier.cyclesRemaining = cyclesRemaining;
+        moodModifiers[popType].Add(newMoodModifier);
     }
 
     //This function just changes the index of the populations in the array containing every populations
@@ -51,8 +66,36 @@ public class PopulationManager : MonoBehaviour {
 
     public void ChangePopulationMood(Population type, float amount)
     {
+        float oldValue = averageMoods[type];
         averageMoods[type] += amount;
-        Logger.Debug("Population " + type.codeName + " mood has been changed by " + amount);
+        float newValue = averageMoods[type];
+        Logger.Debug("Population " + type.codeName + " mood has been changed from " + oldValue + " to " + newValue);
+    }
+
+    public float GetAverageMood(Population type)
+    {
+        float averageMood = GetRawAverageMood(type);
+        foreach (MoodModifier moodModifier in moodModifiers[type])
+        {
+            averageMood += moodModifier.amount;
+        }
+        return averageMood;
+    }
+
+    public float GetRawAverageMood(Population type)
+    {
+        return averageMoods[type];
+    }
+
+    public void ApplyMoodModifiers()
+    {
+        foreach (KeyValuePair<Population, List<MoodModifier>> moodModifiers in moodModifiers)
+        {
+            foreach (MoodModifier moodModifier in moodModifiers.Value)
+            {
+                averageMoods[moodModifiers.Key] += moodModifier.amount;
+            }
+        }
     }
 
     //Generates a new citizen on the colony, shouldn't be called directly, use the other function with the amount parameter
