@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4508389629830412}
   - component: {fileID: 114856474035917588}
   - component: {fileID: 114794454744214778}
-  - component: {fileID: 114446540146475740}
   m_Layer: 0
   m_Name: MissionManager
   m_TagString: Untagged
@@ -90,7 +89,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4178928114387094}
   - component: {fileID: 114956301060769950}
-  - component: {fileID: 114073688948625084}
   m_Layer: 0
   m_Name: Cursor
   m_TagString: Untagged
@@ -671,17 +669,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   greenMat: {fileID: 2100000, guid: 91bd606313627814bb0d42232036dcf1, type: 2}
   defaultMat: {fileID: 2100000, guid: ab20dd04b9178c841a1c4ec5583e5ec5, type: 2}
---- !u!114 &114073688948625084
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1174463090410544}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 992351ac009527541b66c05b233b8f35, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114076638731126872
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -806,32 +793,6 @@ MonoBehaviour:
   gridDebugger: {fileID: 0}
   DEBUG_MODE: 0
   ENABLE_LOGS: 1
---- !u!114 &114446540146475740
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1107635792204446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0c329f2536211b4baae7ba3aa5cc924, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabRemoving: {fileID: 1330950013455556, guid: c89020d6ae7142645985d5e9a5f46e90,
-    type: 2}
-  prefabEmitting: {fileID: 1109864763100982, guid: 86fe2ef75fc279a4f8f10dff9fb03577,
-    type: 2}
-  mission:
-    exploredPositions: []
-    blocksFound: []
-    blockDistanceToCenter: 
-    power: 0
-    range: 0
-    callBack: 
-    position: {x: 0, y: 0, z: 0}
-    explorerCount: 0
-  activeCoroutinesRelatedToPower: 0
-  activeCoroutinesRelatedToSpatioport: 0
 --- !u!114 &114533268757746836
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -958,9 +919,17 @@ MonoBehaviour:
   buildIcon: {fileID: 21300000, guid: 00aad6060067afb45bb1250f424b0965, type: 3}
   dragIcon: {fileID: 21300000, guid: 571f3cd4240e80247bb75fa1ed409adf, type: 3}
   bridgeIcon: {fileID: 21300000, guid: 1e685fff11248c04c993b132e24958be, type: 3}
-  citizenInParticule: {fileID: 1285035770339370, guid: f0ff82113bf4f1546a6f3be882a39c72,
+  citizenInParticle: {fileID: 1285035770339370, guid: f0ff82113bf4f1546a6f3be882a39c72,
     type: 2}
-  citizenOutParticule: {fileID: 1952097086203690, guid: 18e01baa419fcec40b1a62e40fddbe38,
+  citizenOutParticle: {fileID: 1952097086203690, guid: 18e01baa419fcec40b1a62e40fddbe38,
+    type: 2}
+  unpoweredParticle: {fileID: 1342877443669046, guid: 61401a9446dbf294e9c2b7ee742a808f,
+    type: 2}
+  onFireParticle: {fileID: 1254344908387132, guid: 7d93309ef69cf0b48b8522cfe92c22cd,
+    type: 2}
+  onRiotParticle: {fileID: 1278992186517358, guid: 869a1a98069845348b6aaae2bcf17c66,
+    type: 2}
+  damagedParticle: {fileID: 1943145316284874, guid: 8f2db58443c89a346aef2a5762562d14,
     type: 2}
 --- !u!114 &114593997880595668
 MonoBehaviour:
