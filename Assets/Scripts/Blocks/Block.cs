@@ -62,21 +62,13 @@ public class Block : MonoBehaviour {
     public void Destroy()
     {
         GameManager.instance.gridManagement.DestroyBlock(gridCoordinates);
-        effects.DesactivateAll();
-        Destroy(gameObject);
     }
 
-    public void NewCycle() 
+    public void NewCycle()
     {
-        // Call Flag function
         foreach (Flag flag in activeFlags){ flag.OnNewCycle(); }
-
-        if(states.Contains(BlockState.Damaged) && states.Contains(BlockState.OnFire))
-	    {
-            Destroy();
-		}
+        StateCycleUpdate();
     }
-
 
     //Called when block is in range of a spatioport
     public void Enable()
@@ -94,16 +86,15 @@ public class Block : MonoBehaviour {
         }
     }
 
-    //Apelle une fonction à chaque script "flag" attachés
-    public void CallFlags(string function)
-    {
-        foreach (Flag f in activeFlags)
-        {
-            f.Invoke(function, 0);
+    public void ChangePower(int number) {
+        currentPower = number;
+        UpdatePower();
+        if (currentPower > 0) {
+            isConsideredUnpowered = false;
         }
     }
 
-    public void ChangePower(int number) {
+        public void AddPower(int number) {
         currentPower += number;
         UpdatePower();
         if (currentPower > 0) {
@@ -118,6 +109,7 @@ public class Block : MonoBehaviour {
         if (scheme.consumption > 0)
         {
             GameManager.instance.systemManager.AllBlocksRequiringPower.Add(this);
+            UpdatePower();
         }
 
         visuals.NewVisual(scheme.model);
@@ -155,6 +147,23 @@ public class Block : MonoBehaviour {
         }
 	}
 
+#region STATES 
+
+    void StateCycleUpdate()
+    {
+        if(states.Contains(BlockState.Damaged) && states.Contains(BlockState.OnFire))
+	    {
+            //Destroy();
+		}
+
+        if(states.Contains(BlockState.OnFire))
+        {
+            GameManager.instance.missionManager.StartMission(gridCoordinates, "Ignite", 1);
+            RemoveState(BlockState.OnFire);
+            AddState(BlockState.Damaged);
+        }
+    }
+
     public void AddState(BlockState state)
 	{
 		if(!states.Contains(state))
@@ -186,7 +195,7 @@ public class Block : MonoBehaviour {
 			states.Add(state);
 		}
 		else
-			Debug.Log("This block already has this state.");
+			Debug.Log("This block already has the " + state.ToString() + " state on him.");
 	}
 
 	public void RemoveState(BlockState state)
@@ -223,6 +232,8 @@ public class Block : MonoBehaviour {
 			Debug.Log("This block wasn't on this state. You are doing something wrong ?");
 	}
 
+#endregion
+
     public void ToggleVisuals(bool on)
     {
         if(visuals != null) 
@@ -248,6 +259,38 @@ public class Block : MonoBehaviour {
             }
         }
     }
+
+ #region Flag management 
+
+    //Apelle une fonction à chaque script "flag" attachés
+    public void CallFlags(string function)
+    {
+        foreach (Flag f in activeFlags)
+        {
+            f.Invoke(function, 0);
+        }
+    }
+
+    public void UpdateFlags()
+    {
+        foreach (Flag flag in activeFlags)
+        {
+            flag.UpdateFlag();
+        }
+    }
+
+    public void UseFlags()
+    {
+        if(states.Contains(BlockState.Powered))
+        {
+            foreach (Flag flag in activeFlags)
+            {
+                flag.Use();
+            }
+        }
+    }
+
+#endregion
 
     public void MoveToMyPosition() //Deplace le bloc à sa position supposée
     {
@@ -277,25 +320,6 @@ public class Block : MonoBehaviour {
         }
         transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(gridCoordinates);
         yield return null;
-    }
-
-    public void UpdateFlags()
-    {
-        foreach (Flag flag in activeFlags)
-        {
-            flag.UpdateFlag();
-        }
-    }
-
-    public void UseFlags()
-    {
-        if(states.Contains(BlockState.Powered))
-        {
-            foreach (Flag flag in activeFlags)
-            {
-                flag.Use();
-            }
-        }
     }
 
     public void UpdateName()

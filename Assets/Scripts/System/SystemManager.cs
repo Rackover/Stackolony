@@ -106,7 +106,6 @@ public class SystemManager : MonoBehaviour {
         {
             if (block.isConsideredUnpowered == true)
             {
-                block.currentPower = 0;
                 block.ChangePower(0);
             }
         }
@@ -253,7 +252,7 @@ public class SystemManager : MonoBehaviour {
         foreach (Block block in AllBlocksRequiringPower)
         {
             block.isConsideredUnpowered = true;
-            block.currentPower = 0;
+            block.ChangePower(0);
         }
         yield return null;
     }
