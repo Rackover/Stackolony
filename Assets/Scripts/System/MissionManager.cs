@@ -151,8 +151,11 @@ public class MissionManager : MonoBehaviour {
                 {
                     //Forme l'explorer relai qui transportera ses informations
                     int newExplorerID = myMission.activeExplorers.Count;
+                    
                     if (range > 0)
-                    myMission.activeExplorers.Add(StartCoroutine(SpawnExplorer(AdjacentBlocks[i].gridCoordinates, callback, myMission, range-1, power, newExplorerID)));
+                    {
+                        myMission.activeExplorers.Add(StartCoroutine(SpawnExplorer(AdjacentBlocks[i].gridCoordinates, callback, myMission, range-1, power, newExplorerID)));
+                    }
                 }
             }
             //Sinon, si je cherche des blocs dans une portée infinie jusqu'à ce que je n'ai plus de power à donner, alors je continue ma recherche
@@ -209,12 +212,6 @@ public class MissionManager : MonoBehaviour {
             if (myMission.blocksFound.Count > 0)
             {
                 GameManager.instance.missionCallbackManager.mission = myMission;
-                /*
-                foreach (Block block in myMission.blocksFound) 
-                {
-                    Debug.Log(block.gridCoordinates);
-                }
-                */
                 GameManager.instance.missionCallbackManager.StartCoroutine(callback);
             }
             else

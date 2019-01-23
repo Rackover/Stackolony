@@ -15,8 +15,8 @@ public class Block : MonoBehaviour {
 	public BlockScheme scheme;
 	public BlockVisual visuals;
     public BlockEffect effects;
-
     public GameObject bridge;
+    Library library;
 
     [HideInInspector]   public Vector3Int gridCoordinates = new Vector3Int(0, 0, 0);
     [HideInInspector]   public int positionInTower; //0 = tout en bas
@@ -35,7 +35,8 @@ public class Block : MonoBehaviour {
     public void Awake()
     {
         isConsideredUnpowered = false;
-        if (boxCollider == null) boxCollider = gameObject.GetComponent<BoxCollider>();
+        if(boxCollider == null) boxCollider = GetComponent<BoxCollider>();
+        library = GameManager.instance.library;
     }
 
     public void Update()
@@ -64,7 +65,7 @@ public class Block : MonoBehaviour {
         GameManager.instance.gridManagement.DestroyBlock(gridCoordinates);
     }
 
-    public void NewCycle()
+    public void OnNewCycle()
     {
         foreach (Flag flag in activeFlags){ flag.OnNewCycle(); }
         StateCycleUpdate();
@@ -171,31 +172,31 @@ public class Block : MonoBehaviour {
 			switch(state)
 			{
 				case BlockState.Powered:
-					effects.Desactivate(GameManager.instance.library.unpoweredParticle);
+					effects.Desactivate(library.unpoweredParticle);
                     break;
 
                 case BlockState.OnFire:
-					effects.Activate(GameManager.instance.library.onFireParticle);
+					effects.Activate(library.onFireParticle);
                     //GameManager.instance.sfxManager.PlaySound("StartingFire");
 					break;
 
                 case BlockState.OnRiot:
                     visuals.animator.SetBool("OnRiot", true);
-					effects.Activate(GameManager.instance.library.onRiotParticle);
+					effects.Activate(library.onRiotParticle);
 					break;
 
                 case BlockState.Damaged:
-					effects.Activate(GameManager.instance.library.damagedParticle);
+					effects.Activate(library.damagedParticle);
 					break;
 
 				default:
-					Debug.Log("Unclear state");
+					Logger.Debug(state.ToString() + " appearing feedbacks are not implemented yet");
 					break;
 			}
 			states.Add(state);
 		}
 		else
-			Debug.Log("This block already has the " + state.ToString() + " state on him.");
+			Logger.Debug("This block already has the " + state.ToString() + " state on him.");
 	}
 
 	public void RemoveState(BlockState state)
@@ -205,31 +206,31 @@ public class Block : MonoBehaviour {
 			switch(state)
 			{
 				case BlockState.Powered:
-					effects.Activate(GameManager.instance.library.unpoweredParticle);
+					effects.Activate(library.unpoweredParticle);
                     break;
 
                 case BlockState.OnFire:
-					effects.Desactivate(GameManager.instance.library.onFireParticle);
+					effects.Desactivate(library.onFireParticle);
                     //GameManager.instance.sfxManager.PlaySound("StoppingFire");
 					break;
 
                 case BlockState.OnRiot:
                     visuals.animator.SetBool("OnRiot", false);
-					effects.Desactivate(GameManager.instance.library.onRiotParticle);
+					effects.Desactivate(library.onRiotParticle);
 					break;
 
                 case BlockState.Damaged:
-					effects.Desactivate(GameManager.instance.library.damagedParticle);
+					effects.Desactivate(library.damagedParticle);
 					break;
 
 				default:
-					Debug.Log("Unclear state");
+					Logger.Debug(state.ToString() + " removing feedbacks are not implemented yet");
 					break;
 			}
 			states.Remove(state);
 		}
 		else
-			Debug.Log("This block wasn't on this state. You are doing something wrong ?");
+			Logger.Debug(gameObject.name + " tried to remove " + state.ToString() + " from its state, but it didn't have it.");
 	}
 
 #endregion

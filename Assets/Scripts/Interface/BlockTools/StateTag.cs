@@ -44,7 +44,7 @@ public class StateTag : MonoBehaviour
 				break;
 
 			default:
-				Debug.Log(state.ToString() + " don't have any color assigned to it.");
+				Logger.Debug(state.ToString() + " dosn't have any color assigned to it.");
 				break;
 		}
 

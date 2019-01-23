@@ -38,7 +38,7 @@ public class BlockInfobox : MonoBehaviour
 
 	void Update()
 	{
-		if(/*currentSelection != GameManager.instance.cursorManagement.selectedBlock &&*/ GameManager.instance.cursorManagement.selectedBlock != null)
+		if(GameManager.instance.cursorManagement.selectedBlock != null)
 		{
 			currentSelection = GameManager.instance.cursorManagement.selectedBlock;
 			if(currentSelection != null) LoadBlockValues(currentSelection);
@@ -68,7 +68,6 @@ public class BlockInfobox : MonoBehaviour
 					}
 				}
 			}
-		
 */
 	}
 
@@ -94,11 +93,11 @@ public class BlockInfobox : MonoBehaviour
 
 		// Changing general box values
 		generalBox.gameObject.SetActive(true);
-		nameText.text = block.scheme.title;
-		descriptionText.text = block.scheme.description;
 
-		// Changing box size
-		//generalBox.sizeDelta = new Vector2(generalBox.sizeDelta.x, GetRequiredHeight(descriptionText, generalBox.sizeDelta.x));
+		GameManager.instance.localization.SetCategory("blockName");
+		nameText.text = GameManager.instance.localization.GetLine("block" + block.scheme.ID);
+		GameManager.instance.localization.SetCategory("blockDescription");
+		descriptionText.text = GameManager.instance.localization.GetLine("block" + block.scheme.ID);
 		
 		ShowStatesTags(block.states.ToArray());
 		ShowFlagBoxes(block.activeFlags.ToArray());

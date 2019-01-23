@@ -60,7 +60,7 @@ public class SystemManager : MonoBehaviour {
     {
         foreach (Block block in AllBlocks)
         {
-            block.NewCycle();
+            block.OnNewCycle();
         }
         yield return null;
     }
