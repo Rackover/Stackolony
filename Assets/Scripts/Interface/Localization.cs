@@ -11,6 +11,8 @@ public class Localization : MonoBehaviour {
     Lang currentLang;
     string currentCategory;
     Dictionary<KeyValuePair<string, string>, string> locs = new Dictionary<KeyValuePair<string, string>, string>();
+    Dictionary<string, InterpretedName> interpretations = new Dictionary<string, InterpretedName>();
+
 
     public class Lang {
 
@@ -46,6 +48,11 @@ public class Localization : MonoBehaviour {
     private void Awake()
     {
         LoadLocalizationFiles(Paths.GetLocFolder());
+
+        // Setting up name interpreter
+        interpretations["$PLAYERNAME"] = delegate { return GameManager.instance.player.playerName; };
+        interpretations["$CITYNAME"] = delegate { return GameManager.instance.cityManager.cityName; };
+        interpretations["$CURRENT_CYCLE"] = delegate { return GameManager.instance.temporality.cycleNumber.ToString(); };
     }
 
     private void Start()
@@ -122,11 +129,21 @@ public class Localization : MonoBehaviour {
     {
         try { 
             string line = locs[new KeyValuePair<string, string>(currentCategory, id)];
-            return line;
+            return Interpret(line);
         }
         catch(KeyNotFoundException e) {
             Logger.Error("Could not load line ID " + id);
             return "LOC " + currentCategory + ":" + id;
         }
+    }
+
+    public delegate string InterpretedName();
+
+    string Interpret(string line)
+    {
+        foreach(KeyValuePair<string, InterpretedName> interpretation in interpretations) {
+            line.Replace(interpretation.Key, interpretation.Value());
+        }
+        return string.Empty;
     }
 }

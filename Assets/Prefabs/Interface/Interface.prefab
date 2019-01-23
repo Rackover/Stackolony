@@ -90,6 +90,7 @@ GameObject:
   - component: {fileID: 224269957844492772}
   - component: {fileID: 222102297669426118}
   - component: {fileID: 114457852003163276}
+  - component: {fileID: 114160857367610514}
   m_Layer: 5
   m_Name: Title
   m_TagString: Untagged
@@ -1767,6 +1768,39 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114160857367610514
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1061008820736828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: a08bbc953edb4ae4a8929030a7c858da, type: 3}
+    m_FontSize: 48
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 2
+    m_MaxSize: 48
+    m_Alignment: 1
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: ANGRY KAVGAS
 --- !u!114 &114162539846682216
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3075,7 +3109,7 @@ MonoBehaviour:
   hasUnread: 0
   notification: {fileID: 1967508905882830}
   bulletinWindow: {fileID: 1448129763823404}
-  title: {fileID: 0}
+  title: {fileID: 114457852003163276}
   subTitle: {fileID: 114380213048884218}
   text: {fileID: 114254604612372266}
   buttonDisableTimespan: 1
