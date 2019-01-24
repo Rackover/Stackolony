@@ -20,8 +20,9 @@ public class Library : MonoBehaviour
 	public Sprite buildIcon;
     public Sprite dragIcon;
     public Sprite bridgeIcon;
+    public List<Sprite> buildingsIcons = new List<Sprite>();
 
-	[Header("Particules")]
+    [Header("Particules")]
 	public GameObject citizenInParticule;
 	public GameObject citizenOutParticule;
 

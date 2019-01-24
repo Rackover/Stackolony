@@ -730,15 +730,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 62e1baca1586b5e4f85c1cdc5c918ec1, type: 2}
   - {fileID: 11400000, guid: 6f409f9644df9a4459be6032c98ab4dd, type: 2}
   citizenList: []
-  MMglobalModifier: 1
-  MMnoHabitation: -4
-  MMnoAppropriatedHabitation: -2
-  MMnoFood: -3
-  MMnotEnoughFood: -1
-  MMnoOccupation: -2
-  MMnoPower: -2
-  MMdamagedHabitation: -2
-  MMeverythingFine: 3
+  moodModifierIfNoHabitation: -20
 --- !u!114 &114136765406288630
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -985,10 +977,14 @@ MonoBehaviour:
   - {r: 0.9294118, g: 0.49803925, b: 0.40784317, a: 1}
   - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
   cursorSprite: {fileID: 21300000, guid: b631a20d61d7b5b4d9b8897145cac4e0, type: 3}
-  destroyIcon: {fileID: 21300000, guid: 7e428129950162542a0330dc8f89d509, type: 3}
-  buildIcon: {fileID: 21300000, guid: 00aad6060067afb45bb1250f424b0965, type: 3}
-  dragIcon: {fileID: 21300000, guid: 571f3cd4240e80247bb75fa1ed409adf, type: 3}
-  bridgeIcon: {fileID: 21300000, guid: 1e685fff11248c04c993b132e24958be, type: 3}
+  destroyIcon: {fileID: 21300000, guid: 66734752feff9834b85b7ffdc4cc56c9, type: 3}
+  buildIcon: {fileID: 21300000, guid: c36d5e82e42199b4893b3154edd54325, type: 3}
+  dragIcon: {fileID: 21300000, guid: beacc04761958224e8d1da228151e4a7, type: 3}
+  bridgeIcon: {fileID: 21300000, guid: 5a5b51b82a93c814ab6082318d750ab0, type: 3}
+  buildingsIcons:
+  - {fileID: 21300000, guid: 15e2ba685d2ee3143a34ccaebc18bd58, type: 3}
+  - {fileID: 21300000, guid: 5adad3d7d23730644a3815e5653b5256, type: 3}
+  - {fileID: 21300000, guid: 414500052b0d4c04e826f3ecadd2d66c, type: 3}
   citizenInParticule: {fileID: 1285035770339370, guid: f0ff82113bf4f1546a6f3be882a39c72,
     type: 2}
   citizenOutParticule: {fileID: 1952097086203690, guid: 18e01baa419fcec40b1a62e40fddbe38,
@@ -1017,6 +1013,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cityName: Valenciennes
   accidentStates: 010000000200000003000000
+  houseNotation:
+    wrongPopulationType: -2
+    noFood: -3
+    notEnoughFood: -1
+    noOccupations: -2
+    noPower: -2
+    damaged: -2
+    everythingFine: 3
 --- !u!114 &114616872146876998
 MonoBehaviour:
   m_ObjectHideFlags: 1
