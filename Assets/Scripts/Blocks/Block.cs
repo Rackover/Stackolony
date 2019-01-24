@@ -152,11 +152,6 @@ public class Block : MonoBehaviour {
 
     void StateCycleUpdate()
     {
-        if(states.Contains(BlockState.Damaged) && states.Contains(BlockState.OnFire))
-	    {
-            //Destroy();
-		}
-
         if(states.Contains(BlockState.OnFire))
         {
             GameManager.instance.missionManager.StartMission(gridCoordinates, "Ignite", 1);

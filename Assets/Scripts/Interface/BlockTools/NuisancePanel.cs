@@ -20,10 +20,5 @@ public class NuisancePanel : FlagPanel
 		loc.SetCategory("flagDescription");
 		range.text = string.Format(loc.GetLine("range"), ng.range.ToString());
 		amount.text = string.Format(loc.GetLine("amount"), ng.amount.ToString());
-
-/*
-		range.text = GameManager.instance.localization.GetLine("range")+ " " + ng.range.ToString();
-		amount.text = GameManager.instance.localization.GetLine("amount")+ " " + ng.amount.ToString();
-*/
 	}
 }

@@ -24,23 +24,29 @@ public class StateTag : MonoBehaviour
 
 		available = false;
 		stateTxt.text = state.ToString();
+		Localization loc = GameManager.instance.localization;
+		loc.SetCategory("state");
 
 		switch(state)
 		{
 			case BlockState.Powered:
 				stateBackground.color = poweredColor;
+				stateTxt.text = loc.GetLine("powered");
 				break;
 
 			case BlockState.OnFire:
 				stateBackground.color = onFireColor;
+				stateTxt.text = loc.GetLine("onfire");
 				break;
 
 			case BlockState.OnRiot:
 				stateBackground.color = onRiotColor;
+				stateTxt.text = loc.GetLine("onriot");
 				break;
 
 			case BlockState.Damaged:
 				stateBackground.color = damagedColor;
+				stateTxt.text = loc.GetLine("damaged");
 				break;
 
 			default:
