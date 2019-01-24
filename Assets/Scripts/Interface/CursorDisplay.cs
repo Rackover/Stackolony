@@ -6,19 +6,28 @@ public class CursorDisplay : MonoBehaviour {
 	public RectTransform cursorTransform;
 	public Image cursorImage;
 
-    private void Awake()
+    Notifications notifier;
+
+    private void Start()
     {
         Cursor.visible = false;
+        GameManager.instance.cursorManagement.CursorError +=  (x) => DisplayUserError(x);
+        notifier = FindObjectOfType<Notifications>();
     }
 
     private void Update()
     {
         cursorTransform.position = Input.mousePosition;
-        ChangeCursor(GameManager.instance.cursorManagement.selectedMode.ToString());
+        ChangeCursor(GameManager.instance.cursorManagement.selectedMode);
         transform.SetSiblingIndex(transform.parent.childCount);
     }
+    
+    void DisplayUserError(string locId)
+    {
+        notifier.Notify(new Notifications.Notification(locId, Color.red));
+    }
 
-    public void ChangeCursor(string mode)	
+    public void ChangeCursor(CursorManagement.cursorMode mode)	
 	{
 		cursorImage.enabled = true;
 		switch (mode) 
@@ -28,24 +37,19 @@ public class CursorDisplay : MonoBehaviour {
 				cursorImage.enabled = false;
 				break;
 
-			case "Default":
+			case CursorManagement.cursorMode.Move:
                 cursorImage.enabled = true;
                 cursorImage.sprite = GameManager.instance.library.dragIcon;
 				break;
 
-            case "Drag":
+            case CursorManagement.cursorMode.Bridge:
                 cursorImage.enabled = true;
                 cursorImage.sprite = GameManager.instance.library.bridgeIcon;
                 break;
 
-            case "Delete":
+            case CursorManagement.cursorMode.Delete:
                 cursorImage.enabled = true;
                 cursorImage.sprite = GameManager.instance.library.destroyIcon;
-				break;
-
-			case "Bridge":
-                cursorImage.enabled = true;
-                cursorImage.sprite = GameManager.instance.library.bridgeIcon;
 				break;
 		}
 	}

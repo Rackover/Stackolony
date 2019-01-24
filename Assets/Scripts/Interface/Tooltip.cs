@@ -39,6 +39,7 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
 
             GameManager.instance.localization.SetCategory(locs[i].category);
             txt += GameManager.instance.localization.GetLine(locs[i].id);
+
             if (i == 0 && isFirstLineBold) {
                 txt = "<b>" + txt + "</b>";
             }

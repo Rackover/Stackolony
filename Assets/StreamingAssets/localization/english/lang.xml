@@ -48,8 +48,10 @@
     <block8>Gives 6 food to houses in range.</block8>
   </blockDescription>
   <notification>
-	<cannotBuild><b>You cannot build here</b></cannotBuild>
-	<notLinked>This building is not connected to the spatioport!</notLinked>
-	<newPeople>5 new people have arrived to the city</newPeople>
+	<misalignedBlocks>The blocks are not aligned</misalignedBlocks>
+	<differentHeightBlocks>The blocks are at different heights</differentHeightBlocks>
+	<selfBridging>You can't bridge a block to itself</selfBridging>
+	<cannotUseTool>You cannot use this tool here</cannotUseTool>
+	<maxHeightReached>Maximum height reached</maxHeightReached>
   </notification>
 </lines>

@@ -48,7 +48,7 @@ public class PopulationManager : MonoBehaviour {
     void LoadNames()
     {
         // Default name
-        List<string> names = new List<string>() { "Citizen" };
+        names = new List<string>() { "Citizen" };
 
         // Loading names from file
         List<string> newNames;

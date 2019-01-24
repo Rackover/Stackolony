@@ -42,7 +42,6 @@ public class GameManager : MonoBehaviour
     public TemporalityInterface temporalityInterface;
     public TooltipGO tooltipGO;
     public BlockInfobox blockInfobox;
-    public ErrorDisplay errorDisplay;
 
     [Space(1)]
     [Header("DEBUG SETTINGS")]
@@ -129,7 +128,6 @@ public class GameManager : MonoBehaviour
         if (temporalityInterface == null) temporalityInterface = FindObjectOfType<TemporalityInterface>();
         if (tooltipGO == null) tooltipGO = FindObjectOfType<TooltipGO>();
         if (blockInfobox == null) blockInfobox = FindObjectOfType<BlockInfobox>();
-        if (errorDisplay == null) errorDisplay = FindObjectOfType<ErrorDisplay>();
 
         // DEBUG
         if (logger == null) logger = GetComponentInChildren<Logger>();
