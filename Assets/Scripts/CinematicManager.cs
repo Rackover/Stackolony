@@ -9,6 +9,8 @@ public class CinematicManager : MonoBehaviour {
     private GameObject cursorObj;
     private GameObject storageBayObj;
 
+    public bool areCinematicsEnabled = false;
+
     public void GetReferences()
     {
         interfaceObj = FindObjectOfType<Interface>().gameObject;
