@@ -45,6 +45,26 @@ public class MoodsDisplay : MonoBehaviour {
 
     void UpdateMoodAnimations()
     {
-        //if (gameManager.populationManager.citizenList)
+        foreach (MoodDisplay md in moods) {
+            if (gameManager.populationManager.populationCitizenList[md.population].Count > 0) {
+                if (md.isHidden) {
+                    md.Show();
+                }
+                md.UpdateDisplay();
+            }
+            else if (!md.isHidden) { 
+                md.Hide();
+            }
+        }
     }
+
+    public IEnumerator UpdateInterface()
+    {
+        UpdateMoodGauges();
+        UpdateMoodAnimations();
+        yield return new WaitForSeconds(FindObjectOfType<Interface>().refreshRate);
+        yield return StartCoroutine(UpdateInterface());
+    }
+
+
 }

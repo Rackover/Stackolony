@@ -17,12 +17,14 @@ public class MoodDisplay : MonoBehaviour {
     public Color from = Color.green;
     public Color to = Color.red;
     public float colorBlendAmount = 0.5f;
+    public bool isHidden = false;
 
     public void InitializeForPopulation(Population pop)
     {
         face.sprite = pop.humorSprite;
         face.color = Color.Lerp(Color.white, pop.color, colorBlendAmount);
         face.color = new Color(face.color.r, face.color.g, face.color.b, 1f);
+        population = pop;
     }
 
     public void UpdateDisplay()
@@ -30,5 +32,17 @@ public class MoodDisplay : MonoBehaviour {
         float moodValue = GameManager.instance.populationManager.GetAverageMood(population);
         gauge.fillAmount = moodValue;
         gauge.color = Color.Lerp(from, to, moodValue);
+    }
+
+    public void Show()
+    {
+        isHidden = false;
+        animator.Play("Unfold");
+    }
+
+    public void Hide()
+    {
+        isHidden = true;
+        animator.Play("Fold");
     }
 }
