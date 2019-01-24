@@ -142,8 +142,8 @@ public class Localization : MonoBehaviour {
     string Interpret(string line)
     {
         foreach(KeyValuePair<string, InterpretedName> interpretation in interpretations) {
-            line.Replace(interpretation.Key, interpretation.Value());
+            line = line.Replace(interpretation.Key, interpretation.Value());
         }
-        return string.Empty;
+        return line;
     }
 }
