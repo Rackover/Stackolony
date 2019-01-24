@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class PopulationManager : MonoBehaviour {
@@ -11,6 +12,8 @@ public class PopulationManager : MonoBehaviour {
     public Dictionary<Population, List<MoodModifier>> moodModifiers = new Dictionary<Population, List<MoodModifier>>(); //List of every active moodmodifiers for every population
 
     public float moodModifierIfNoHabitation = -20f;
+    List<string> names;
+    public int maxCitizenNameLength = 20;
 
     [System.Serializable]
     public class Citizen
@@ -27,7 +30,12 @@ public class PopulationManager : MonoBehaviour {
         public float amount;
         public int cyclesRemaining;
     }
-    
+
+    private void Awake()
+    {
+        LoadNames();
+    }
+
     void Start()
     {
         foreach(Population pop in populationTypeList) {
@@ -35,6 +43,36 @@ public class PopulationManager : MonoBehaviour {
             populationCitizenList[pop] = new List<Citizen>();
             moodModifiers[pop] = new List<MoodModifier>();
         }
+    }
+
+    void LoadNames()
+    {
+        // Default name
+        List<string> names = new List<string>() { "Citizen" };
+
+        // Loading names from file
+        List<string> newNames;
+        try {
+            newNames = new List<string>(File.ReadAllLines(Paths.GetNamesFile()));
+        }
+        catch (FileNotFoundException e) {
+            Logger.Error("Could not find name file - this should not happen. Defaulting to 'Citizen' name.");
+            return;
+        }
+
+        // Adding only names that aren't too long
+        foreach(string name in newNames) {
+            string newName = name;
+            if (name.Length > maxCitizenNameLength) {
+                newName = newName.Remove(maxCitizenNameLength);
+            }
+            names.Add(newName);
+        }
+    }
+
+    public string GetRandomName()
+    {
+        return names[Mathf.FloorToInt(Random.value * names.Count)];
     }
 
     //Generates a moodmodifier for a given population
@@ -103,7 +141,7 @@ public class PopulationManager : MonoBehaviour {
     {
         Citizen newCitizen = new Citizen();
 
-        newCitizen.name = ""; //No name right now
+        newCitizen.name = GetRandomName();
         newCitizen.habitation = null;
         newCitizen.type = type;
         citizenList.Add(newCitizen);
