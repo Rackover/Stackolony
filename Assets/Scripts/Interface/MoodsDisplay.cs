@@ -45,7 +45,7 @@ public class MoodsDisplay : MonoBehaviour {
 
         foreach (KeyValuePair<GameObject, Population> people in moods) {
             GameObject mood = people.Key;
-            float moodValue = gameManager.populationManager.averageMoods[people.Value];
+            float moodValue = gameManager.populationManager.GetAverageMood(people.Value);
             Image gauge = mood.transform.GetChild(1).gameObject.GetComponent<Image>();
             gauge.fillAmount = moodValue;
             gauge.color = Color.Lerp(Color.red, Color.green, moodValue);
