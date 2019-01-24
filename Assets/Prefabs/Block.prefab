@@ -537,7 +537,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1047592790041198}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 104.66818, y: 71.62559, z: 203.99547}
+  m_LocalPosition: {x: 89.09064, y: 9.998169, z: 80.90993}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4360120478736148}
@@ -1224,6 +1224,7 @@ MonoBehaviour:
   activeFlags: []
   states: 
   currentPower: 0
+  nuisance: 0
   isConsideredUnpowered: 0
   isConsideredDisabled: 0
   isLinkedToSpatioport: 0
