@@ -27,7 +27,7 @@ public class MoodDisplay : MonoBehaviour {
 
     public void UpdateDisplay()
     {
-        float moodValue = GameManager.instance.populationManager.averageMoods[population];
+        float moodValue = GameManager.instance.populationManager.GetAverageMood(population);
         gauge.fillAmount = moodValue;
         gauge.color = Color.Lerp(from, to, moodValue);
     }
