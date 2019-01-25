@@ -153,6 +153,7 @@ public class CityManager : MonoBehaviour {
         if (notation >= 0)
             notation += houseNotation.everythingFine;
 
+        notation += house.notationModifier;
         return notation;
     }
     

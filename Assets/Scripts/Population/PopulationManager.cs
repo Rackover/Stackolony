@@ -37,6 +37,34 @@ public class PopulationManager : MonoBehaviour {
         }
     }
 
+    public Population GetPopulationByID(int id)
+    {
+        foreach (Population type in populationTypeList)
+        {
+            if (type.ID == id)
+            {
+                return type;
+            }
+        }
+        Debug.LogWarning("System searched for population with ID " + id + " and couldn't find it");
+        Logger.Warn("System searched for population with ID " + id + " and couldn't find it");
+        return populationTypeList[0];
+    }
+
+    public Population GetPopulationByName(string name)
+    {
+        foreach (Population type in populationTypeList)
+        {
+            if (type.codeName == name)
+            {
+                return type;
+            }
+        }
+        Debug.LogWarning("System searched for population with name " + name + " and couldn't find it");
+        Logger.Warn("System searched for population with name " + name + " and couldn't find it");
+        return populationTypeList[0];
+    }
+
     //Generates a moodmodifier for a given population
     public void GenerateMoodModifier(Population popType, int reasonId, float amount, int cyclesRemaining)
     {

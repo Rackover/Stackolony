@@ -10,4 +10,5 @@ public class Population : ScriptableObject {
     public string codeName; //Nom utilisé dans les CSV
     public Sprite humorSprite;
     public Color color;
+    public float foodConsumption;
 }

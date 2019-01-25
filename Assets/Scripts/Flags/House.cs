@@ -10,6 +10,7 @@ public class House : Flag
     public float foodConsumptionPerHabitant;
     public List<PopulationManager.Citizen> affectedCitizen = new List<PopulationManager.Citizen>();
     public int standingLevel = 1;
+    public int notationModifier = 0;
 
     //Variables
     public List<Occupator> occupatorsInRange = new List<Occupator>();
