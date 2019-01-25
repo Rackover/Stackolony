@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
 public class FlagReader : MonoBehaviour 
 {
@@ -26,6 +27,24 @@ public class FlagReader : MonoBehaviour
         }
 
         return list;
+    }
+
+    public static CityManager.BuildingType GetCategory(BlockScheme scheme)
+    {
+        string[] rawFlags = GetRawFlags(scheme).ToArray();
+
+        // Habitation
+        if (rawFlags.Contains("House")) {
+            return CityManager.BuildingType.Habitation;
+        }
+
+        // Occupators
+        if (rawFlags.Contains("Occupator")) {
+            return CityManager.BuildingType.Occupators;
+        }
+
+        // Services
+        return CityManager.BuildingType.Services;
     }
 
     public void ReadFlag(Block block, string flag)

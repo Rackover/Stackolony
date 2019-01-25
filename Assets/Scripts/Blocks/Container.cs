@@ -40,7 +40,7 @@ public class Container : MonoBehaviour
         // ICON MESH PLANE
         iconMat = Instantiate(iconRenderers[0].material);
         foreach(MeshRenderer ic in iconRenderers){ ic.material = iconMat; }
-        Sprite sprite = linkedBlock.scheme.icon;
+        Sprite sprite = GameManager.instance.library.buildingsIcons[(int)FlagReader.GetCategory(linkedBlock.scheme)];
         Texture2D croppedTexture = new Texture2D( (int)sprite.rect.width, (int)sprite.rect.height );
         
         Color[] pixels = sprite.texture.GetPixels

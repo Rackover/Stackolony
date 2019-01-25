@@ -111,8 +111,9 @@ MonoBehaviour:
   generalBox: {fileID: 224244146294542648}
   nameText: {fileID: 114758898769041284}
   descriptionText: {fileID: 114354252851258642}
+  descBox: {fileID: 0}
+  descText: {fileID: 0}
   stateTagShift: 2.5
-  flagPanelShift: 5
   stateTagPrefab: {fileID: 1397186742756284, guid: fcd781d8c2d3e4b499eedda7cdecf1bd,
     type: 2}
   housePanel: {fileID: 1706218976364784, guid: 7dbd0274ef2afa749b1b7165f205dd61, type: 2}
@@ -133,14 +134,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.3679245, g: 0.3679245, b: 0.3679245, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.72156864}
   m_RaycastTarget: 0
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 297a6067632946946a4caecd8ab90ce4, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

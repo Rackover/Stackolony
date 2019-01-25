@@ -5,6 +5,7 @@ using System.Linq;
 
 public class CityManager : MonoBehaviour {
 
+    public enum BuildingType { Habitation = 0, Services = 1, Occupators = 2 };
     public string cityName = "Valenciennes";
     public BlockState[] accidentStates = { BlockState.OnFire, BlockState.OnRiot, BlockState.Damaged };
     public Dictionary<Population, Dictionary<House, float>> topHabitations = new Dictionary<Population, Dictionary<House, float>>(); // List of the best habitations (sorted from best to worst)
