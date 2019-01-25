@@ -17,14 +17,17 @@ public class BlockInfobox : MonoBehaviour
 
 	[Space(1)][Header("Settings")]
 	public float stateTagShift = 5f;
+	/*
 	public float flagPanelShift = 5f;
     public float blockSideShift = 400f;
+	*/
 
 	[Space(1)][Header("Prefabs")]
 	public GameObject stateTagPrefab;
 	public GameObject housePanel;
 	public GameObject generatorPanel;
 	public GameObject firemanStationPanel;
+	public GameObject nuisancePanel;
 
 	[Space(1)][Header("Scripts")]
 	public CanvasLineRenderer line;
@@ -35,13 +38,14 @@ public class BlockInfobox : MonoBehaviour
 
 	void Update()
 	{
-		if(currentSelection != GameManager.instance.cursorManagement.selectedBlock && GameManager.instance.cursorManagement.selectedBlock != null)
+		if(GameManager.instance.cursorManagement.selectedBlock != null)
 		{
 			currentSelection = GameManager.instance.cursorManagement.selectedBlock;
 			if(currentSelection != null) LoadBlockValues(currentSelection);
 			else Hide();
 		}
 
+/* NOT WORKING LINES
 		if(generalBox.gameObject.activeSelf && currentSelection != null)
 		{
 			Vector2 o = Camera.main.WorldToScreenPoint(currentSelection.transform.position);
@@ -51,7 +55,7 @@ public class BlockInfobox : MonoBehaviour
 			else
 				t = new Vector2(self.position.x - generalBox.sizeDelta.x/2 + 5f, self.position.y);
 
-/* NOT WORKING LINES
+
 			line.DrawCanvasLine(o, t, 2f, Color.grey);
 			for(int i = 0; i < currentSelection.activeFlags.Count; i++)
 			{
@@ -65,7 +69,6 @@ public class BlockInfobox : MonoBehaviour
 				}
 			}
 */
-		}
 	}
 
 	public void LoadBlockValues(Block block)
@@ -90,11 +93,11 @@ public class BlockInfobox : MonoBehaviour
 
 		// Changing general box values
 		generalBox.gameObject.SetActive(true);
-		nameText.text = block.scheme.title;
-		descriptionText.text = block.scheme.description;
 
-		// Changing box size
-		//generalBox.sizeDelta = new Vector2(generalBox.sizeDelta.x, GetRequiredHeight(descriptionText, generalBox.sizeDelta.x));
+		GameManager.instance.localization.SetCategory("blockName");
+		nameText.text = GameManager.instance.localization.GetLine("block" + block.scheme.ID);
+		GameManager.instance.localization.SetCategory("blockDescription");
+		descriptionText.text = GameManager.instance.localization.GetLine("block" + block.scheme.ID);
 		
 		ShowStatesTags(block.states.ToArray());
 		ShowFlagBoxes(block.activeFlags.ToArray());
@@ -102,29 +105,29 @@ public class BlockInfobox : MonoBehaviour
 
 	void ShowStatesTags(BlockState[] states)
 	{
-		float stateShift = -stateTagShift;
+		float stateShift = 0;
 		for( int i = 0; i < states.Length; i++)
 		{
 			StateTag newTag = GetAvailableTag();
 
 			if(newTag != null)
 			{
-				Vector2 newTagPosition = new Vector2(generalBox.sizeDelta.x/2, generalBox.sizeDelta.y/2 - newTag.self.sizeDelta.y/2 + stateShift);
+				Vector2 newTagPosition = new Vector2(self.sizeDelta.x/2, self.sizeDelta.y/2 - newTag.self.sizeDelta.y/2 + stateShift - stateTagShift);
 				newTag.PrintTag(states[i]);
 				newTag.self.localPosition = newTagPosition;
 			}
 			else 
 			{
-				newTag = Instantiate(stateTagPrefab, self.position, Quaternion.identity, generalBox).GetComponent<StateTag>();
+				newTag = Instantiate(stateTagPrefab, self.position, Quaternion.identity, self).GetComponent<StateTag>();
 				stateTags.Add(newTag);
 
-				Vector2 newTagPosition = new Vector2(generalBox.sizeDelta.x/2, generalBox.sizeDelta.y/2 - newTag.self.sizeDelta.y/2 + stateShift);
+				Vector2 newTagPosition = new Vector2(self.sizeDelta.x/2, self.sizeDelta.y/2 - newTag.self.sizeDelta.y/2 + stateShift - stateTagShift);
 
 				stateTags[stateTags.Count - 1].PrintTag(states[i]);
 				stateTags[stateTags.Count - 1].self.localPosition = newTagPosition;
 			}
 
-			stateShift -= newTag.self.sizeDelta.y + stateTagShift;
+			stateShift -= newTag.self.sizeDelta.y;
 		}
 	}
 
@@ -134,47 +137,41 @@ public class BlockInfobox : MonoBehaviour
 		for( int i = 0; i < flags.Length; i++)
 		{
 			Vector2 newPos = Vector2.zero;
+			FlagPanel fp = null;
+
 			switch(flags[i].GetType().Name)
 			{	
 				case "Generator":
-					GeneratorPanel gp = Instantiate(generatorPanel, self.position, Quaternion.identity, generalBox).GetComponent<GeneratorPanel>();
-
-					// Moving Panel
-					gp.self.localPosition = new Vector2(0, panelShift - gp.self.sizeDelta.y/2);
-					panelShift -= gp.self.sizeDelta.y;
-
-					// Modifying values
-					gp.text.text = (flags[i] as Generator).power.ToString();
-
-					flagPanels.Add(gp);
+					fp = Instantiate(generatorPanel, self.position, Quaternion.identity, generalBox).GetComponent<GeneratorPanel>();
+					fp.ShowFlag(flags[i] as Generator);
 					break;
 
 				case "FiremanStation":	
-					FiremanStationPanel fsp = Instantiate(firemanStationPanel, self.position, Quaternion.identity, generalBox).GetComponent<FiremanStationPanel>();
-					
-					// Moving Panel
-					fsp.self.localPosition = new Vector2(0, panelShift - fsp.self.sizeDelta.y/2);
-					fsp.button.onClick.AddListener(currentSelection.UseFlags);
-					panelShift -= fsp.self.sizeDelta.y;
-
-					// Modifying values
-
-					flagPanels.Add(fsp);
+					fp = Instantiate(firemanStationPanel, self.position, Quaternion.identity, generalBox).GetComponent<FiremanStationPanel>();
+					fp.ShowFlag((flags[i] as FiremanStation));
 					break;
 
 				case "House":
-					HousePanel hp = Instantiate(housePanel, self.position, Quaternion.identity, generalBox).GetComponent<HousePanel>();
-					hp.ShowFlag((flags[i] as House));
+					fp = Instantiate(housePanel, self.position, Quaternion.identity, generalBox).GetComponent<HousePanel>();
+					fp.ShowFlag((flags[i] as House));
+					break;
 
-					hp.self.localPosition = new Vector2(0, panelShift - hp.self.sizeDelta.y/2);
-
-					flagPanels.Add(hp);
+				case "NuisanceGenerator":
+					fp = Instantiate(nuisancePanel, self.position, Quaternion.identity, generalBox).GetComponent<NuisancePanel>();
+					fp.ShowFlag((flags[i] as NuisanceGenerator));
 					break; 
 
 				default:
-					Debug.LogWarning("This flag dosn't need any additional boxes");
+					Debug.LogWarning(flags[i].GetType().Name + " dosn't have any additional boxes");
 					break;
 			}
+
+			if(fp != null)
+			{
+				fp.self.localPosition = new Vector2(0, panelShift - fp.self.sizeDelta.y/2);
+				panelShift -= fp.self.sizeDelta.y;
+				flagPanels.Add(fp);
+			} 
 		}
 	}
 

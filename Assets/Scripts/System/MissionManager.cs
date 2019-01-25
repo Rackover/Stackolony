@@ -144,15 +144,18 @@ public class MissionManager : MonoBehaviour {
 
         //Si l'explorer a trouvé quelque chose, il forme de nouveaux explorers pour continuer d'explorer
         if (AdjacentBlocks.Count > 0) {
-
             //Si je cherche les  blocs dans une certaine range, alors je cherche le bloc suivant et je diminue la range
-            if (myMission.range >= 0)
+            if (myMission.range > 0)
             {
                 for (int i = 0; i < AdjacentBlocks.Count; i++)
                 {
                     //Forme l'explorer relai qui transportera ses informations
                     int newExplorerID = myMission.activeExplorers.Count;
-                    myMission.activeExplorers.Add(StartCoroutine(SpawnExplorer(AdjacentBlocks[i].gridCoordinates, callback, myMission, range-1, power, newExplorerID)));
+                    
+                    if (range > 0)
+                    {
+                        myMission.activeExplorers.Add(StartCoroutine(SpawnExplorer(AdjacentBlocks[i].gridCoordinates, callback, myMission, range-1, power, newExplorerID)));
+                    }
                 }
             }
             //Sinon, si je cherche des blocs dans une portée infinie jusqu'à ce que je n'ai plus de power à donner, alors je continue ma recherche
@@ -181,6 +184,7 @@ public class MissionManager : MonoBehaviour {
                             {
                                 //Forme l'explorer relai qui transportera ses informations
                                 int newExplorerID = myMission.activeExplorers.Count;
+                                if (range > 0)
                                 myMission.activeExplorers.Add(StartCoroutine(SpawnExplorer(foundBlock.gridCoordinates, callback, myMission, range-1, power, newExplorerID)));
                             }
                         }
@@ -199,7 +203,7 @@ public class MissionManager : MonoBehaviour {
 
         //S'il n'y a plus aucun explorer actif, on termine la mission
         myMission.explorerCount = myMission.activeExplorers.Count;
-        if (myMission.activeExplorers.Count == 0 || range == 0)
+        if (myMission.activeExplorers.Count == 0)
         {
             foreach (Coroutine c in myMission.activeExplorers)
             {

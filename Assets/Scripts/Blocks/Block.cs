@@ -13,13 +13,10 @@ public class Block : MonoBehaviour {
     public BoxCollider boxCollider;
     public Container container;
 	public BlockScheme scheme;
-	public GameObject visuals;
-    public GameObject effects;
-
-    [Header("Particules")]
-	public GameObject unpoweredEffect;
-    public GameObject onFireEffect;
+	public BlockVisual visuals;
+    public BlockEffect effects;
     public GameObject bridge;
+    Library library;
 
     [HideInInspector]   public Vector3Int gridCoordinates = new Vector3Int(0, 0, 0);
     [HideInInspector]   public int positionInTower; //0 = tout en bas
@@ -38,7 +35,8 @@ public class Block : MonoBehaviour {
     public void Awake()
     {
         isConsideredUnpowered = false;
-        if (boxCollider == null) boxCollider = gameObject.GetComponent<BoxCollider>();
+        if(boxCollider == null) boxCollider = GetComponent<BoxCollider>();
+        library = GameManager.instance.library;
     }
 
     public void Update()
@@ -62,6 +60,17 @@ public class Block : MonoBehaviour {
         }
     }
 
+    public void Destroy()
+    {
+        GameManager.instance.gridManagement.DestroyBlock(gridCoordinates);
+    }
+
+    public void OnNewCycle()
+    {
+        foreach (Flag flag in activeFlags){ flag.OnNewCycle(); }
+        StateCycleUpdate();
+    }
+
     //Called when block is in range of a spatioport
     public void Enable()
     {
@@ -78,24 +87,15 @@ public class Block : MonoBehaviour {
         }
     }
 
-    public void NewCycle() 
-    {
-        foreach (Flag flag in activeFlags)
-        {
-            flag.OnNewCycle();
-        }
-    }
-
-    //Apelle une fonction à chaque script "flag" attachés
-    public void CallFlags(string function)
-    {
-        foreach (Flag f in activeFlags)
-        {
-            f.Invoke(function, 0);
-        }
-    }
-
     public void ChangePower(int number) {
+        currentPower = number;
+        UpdatePower();
+        if (currentPower > 0) {
+            isConsideredUnpowered = false;
+        }
+    }
+
+        public void AddPower(int number) {
         currentPower += number;
         UpdatePower();
         if (currentPower > 0) {
@@ -106,17 +106,15 @@ public class Block : MonoBehaviour {
     public void LoadBlock()
     {
         GameManager.instance.systemManager.AllBlocks.Add(this);
+
         if (scheme.consumption > 0)
         {
             GameManager.instance.systemManager.AllBlocksRequiringPower.Add(this);
+            UpdatePower();
         }
 
-        if (visuals == null)
-        {
-            visuals = Instantiate(scheme.model, transform.position, Quaternion.identity, transform);
-            visuals.transform.rotation = Quaternion.Euler(-90f, 0f, 0f);
-            visuals.name = "Visuals";
-        }
+        visuals.NewVisual(scheme.model);
+
         foreach (string flag in scheme.flags)
         {
             GameManager.instance.flagReader.ReadFlag(this, flag);
@@ -125,11 +123,8 @@ public class Block : MonoBehaviour {
 
     public void UnloadBlock()
     {
-        if(visuals != null)
-        {
-            visuals.SetActive(false);
-            unpoweredEffect.SetActive(false);
-        }
+        visuals.Hide();
+        effects.Hide();
     }
 
 	// Check if the block is powered
@@ -153,6 +148,18 @@ public class Block : MonoBehaviour {
         }
 	}
 
+#region STATES 
+
+    void StateCycleUpdate()
+    {
+        if(states.Contains(BlockState.OnFire))
+        {
+            GameManager.instance.missionManager.StartMission(gridCoordinates, "Ignite", 1);
+            RemoveState(BlockState.OnFire);
+            AddState(BlockState.Damaged);
+        }
+    }
+
     public void AddState(BlockState state)
 	{
 		if(!states.Contains(state))
@@ -160,22 +167,31 @@ public class Block : MonoBehaviour {
 			switch(state)
 			{
 				case BlockState.Powered:
-					unpoweredEffect.SetActive(false);
+					effects.Desactivate(library.unpoweredParticle);
                     break;
 
                 case BlockState.OnFire:
-					onFireEffect.SetActive(true);
-                    GameManager.instance.sfxManager.PlaySound("StartingFire");
+					effects.Activate(library.onFireParticle);
+                    //GameManager.instance.sfxManager.PlaySound("StartingFire");
+					break;
+
+                case BlockState.OnRiot:
+                    visuals.animator.SetBool("OnRiot", true);
+					effects.Activate(library.onRiotParticle);
+					break;
+
+                case BlockState.Damaged:
+					effects.Activate(library.damagedParticle);
 					break;
 
 				default:
-					Debug.Log("Unclear state");
+					Logger.Warn(state.ToString() + " appearing feedbacks are not implemented yet");
 					break;
 			}
 			states.Add(state);
 		}
 		else
-			Debug.Log("This block already has this state.");
+			Logger.Warn("This block already has the " + state.ToString() + " state on him.");
 	}
 
 	public void RemoveState(BlockState state)
@@ -185,46 +201,92 @@ public class Block : MonoBehaviour {
 			switch(state)
 			{
 				case BlockState.Powered:
-					unpoweredEffect.SetActive(true);
+					effects.Activate(library.unpoweredParticle);
                     break;
+
                 case BlockState.OnFire:
-					onFireEffect.SetActive(false);
-                    GameManager.instance.sfxManager.PlaySound("StoppingFire");
+					effects.Desactivate(library.onFireParticle);
+                    //GameManager.instance.sfxManager.PlaySound("StoppingFire");
+					break;
+
+                case BlockState.OnRiot:
+                    visuals.animator.SetBool("OnRiot", false);
+					effects.Desactivate(library.onRiotParticle);
+					break;
+
+                case BlockState.Damaged:
+					effects.Desactivate(library.damagedParticle);
 					break;
 
 				default:
-					Debug.Log("Unclear state");
+					Logger.Warn(state.ToString() + " removing feedbacks are not implemented yet");
 					break;
 			}
 			states.Remove(state);
 		}
 		else
-			Debug.Log("This block wasn't on this state. You are doing something wrong ?");
+			Logger.Warn(gameObject.name + " tried to remove " + state.ToString() + " from its state, but it didn't have it.");
 	}
+
+#endregion
 
     public void ToggleVisuals(bool on)
     {
         if(visuals != null) 
         {
-            if (!on) {
-                visuals.gameObject.SetActive(false);
-                effects.SetActive(false);
+            if (!on) 
+            {
+                visuals.Hide();
+                effects.Hide();
             }
             else
             {
-                visuals.gameObject.SetActive(true);
-                effects.SetActive(true);
+                visuals.Show();
+                effects.Show();
                 UpdatePower();
-                if (scheme.consumption != 0)
+
+                if(scheme.consumption != 0)
                 {
-                    if (currentPower <= scheme.consumption)
+                    if(currentPower <= scheme.consumption)
                     {
-                        unpoweredEffect.SetActive(true);
+                        effects.Activate(library.unpoweredParticle);
                     }
                 }
             }
         }
     }
+
+ #region Flag management 
+
+    //Apelle une fonction à chaque script "flag" attachés
+    public void CallFlags(string function)
+    {
+        foreach (Flag f in activeFlags)
+        {
+            f.Invoke(function, 0);
+        }
+    }
+
+    public void UpdateFlags()
+    {
+        foreach (Flag flag in activeFlags)
+        {
+            flag.UpdateFlag();
+        }
+    }
+
+    public void UseFlags()
+    {
+        if(states.Contains(BlockState.Powered))
+        {
+            foreach (Flag flag in activeFlags)
+            {
+                flag.Use();
+            }
+        }
+    }
+
+#endregion
 
     public void MoveToMyPosition() //Deplace le bloc à sa position supposée
     {
@@ -254,25 +316,6 @@ public class Block : MonoBehaviour {
         }
         transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(gridCoordinates);
         yield return null;
-    }
-
-    public void UpdateFlags()
-    {
-        foreach (Flag flag in activeFlags)
-        {
-            flag.UpdateFlag();
-        }
-    }
-
-    public void UseFlags()
-    {
-        if(states.Contains(BlockState.Powered))
-        {
-            foreach (Flag flag in activeFlags)
-            {
-                flag.Use();
-            }
-        }
     }
 
     public void UpdateName()
