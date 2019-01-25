@@ -18,22 +18,13 @@ public class House : Flag
     public float foodReceived;
     public float distanceToGround;
     public float foodConsumption;
-    public int citizenCount;
 
     ParticleSystem citizenIn;
     ParticleSystem citizenOut;
 
     public void UpdateHouseInformations()
     {
-        citizenCount = 0;
-        foreach (PopulationManager.Citizen citizen in affectedCitizen)
-        {
-            if (citizen != null)
-            {
-                citizenCount++;
-            }
-        }
-        foodConsumption = foodConsumptionPerHabitant * citizenCount;
+        foodConsumption = foodConsumptionPerHabitant * affectedCitizen.Count;
         if (block.currentPower >= block.scheme.consumption)
             powered = true;
         else
@@ -55,9 +46,18 @@ public class House : Flag
     {
         if (affectedCitizen.Count < slotAmount)
         {
+            //Retire le citoyen de son ancienne habitation
+            if (citizen.habitation != null)
+                citizen.habitation.affectedCitizen.Remove(citizen);
+
             CitizenInFX();
+            //Ajoute le citoyen dans l'habitation
             affectedCitizen.Add(citizen);
-            citizenCount++;
+
+            //Ecrit sur la carte d'identité du citoyen qu'il habite ici désormais
+            citizen.habitation = this;
+
+
             //Fourni un travail au nouveau citoyen, s'il y en a un de disponible
             StartCoroutine(GameManager.instance.systemManager.RecalculateJobs());
             return;

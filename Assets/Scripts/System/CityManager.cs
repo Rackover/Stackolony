@@ -1,71 +1,139 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class CityManager : MonoBehaviour {
 
+    public enum BuildingType { Habitation = 0, Services = 1, Occupators = 2 };
     public string cityName = "Valenciennes";
     public BlockState[] accidentStates = { BlockState.OnFire, BlockState.OnRiot, BlockState.Damaged };
+    public Dictionary<Population, Dictionary<House, float>> topHabitations = new Dictionary<Population, Dictionary<House, float>>(); // List of the best habitations (sorted from best to worst)
 
+    //Comment fonctionne la notation d'une maison :
+    // 
+    [System.Serializable]
+    public class HouseNotation
+    {
+        public int wrongPopulationType = -2;
+        public int noFood = -3;
+        public int notEnoughFood = -1;
+        public int noOccupations = -2;
+        public int noPower = -2;
+        public int damaged = -2; //NOT TAKEN IN ACCOUNT YETTTTTTTTTTTTTTTTTTT
+        public int everythingFine = +3;
+    }
 
-    //Assign the best house found to a citizen
-    public void AutoHouseCitizen(PopulationManager.Citizen citizen)
+    public HouseNotation houseNotation;
+
+    //Finds a house for every citizens (Soon it'll take a priority order into account)
+    public void HouseEveryone()
+    {
+
+        for (int i = 0; i < GameManager.instance.populationManager.populationTypeList.Length; i++)
+        {
+            HousePopulation(GameManager.instance.populationManager.populationTypeList[i]);
+        }
+    }
+
+    //Finds a house for every citizens from a defined population
+    public void HousePopulation(Population pop)
+    {
+        foreach (PopulationManager.Citizen citizen in GameManager.instance.populationManager.populationCitizenList[pop])
+        {
+            if (topHabitations[pop].Count > 0)
+            {
+                House foundHouse = topHabitations[pop].First().Key;
+                foundHouse.FillWithCitizen(citizen);
+                Logger.Debug("Citizen " + citizen.name + " of type " + citizen.type.codeName + " has been housed at the house " + foundHouse);
+                //Applique le changement d'humeur au type de population
+                GameManager.instance.populationManager.ChangePopulationMood(pop, topHabitations[pop].First().Value);
+
+                //Si la maison est désormais remplie, on la retire de la liste des habitations pour chaque population
+                if (foundHouse.affectedCitizen.Count < foundHouse.slotAmount)
+                {
+                    foreach (Population popType in GameManager.instance.populationManager.populationTypeList)
+                    {
+                        topHabitations[popType].Remove(foundHouse);
+                    }
+                }
+            } else
+            {
+                Logger.Debug("Citizen " + citizen.name + " of type " + citizen.type.codeName + " could not find a house");
+                //Si le citoyen n'a pas pu se loger, il applique le malus d'humeur à son type de population
+                GameManager.instance.populationManager.ChangePopulationMood(pop, GameManager.instance.populationManager.moodModifierIfNoHabitation);
+            }
+        }
+    }
+
+    //Get the best houses for each category, and updates the dictionary "topHabitation"
+    public void GetBestHouses()
     {
         SystemManager systemManager = GameManager.instance.systemManager;
-        float attraction = -1;
-        House bestHouse = null;
-        foreach (House house in systemManager.AllHouses)
+        foreach (Population pop in GameManager.instance.populationManager.populationTypeList)
         {
-            if (house.citizenCount < house.slotAmount)
+            //Creates a dictionary assigning each house to it's attraction note
+            Dictionary<House, float> habitationNote = new Dictionary<House, float>(); // Attribute a note to every habitation
+            foreach (House house in systemManager.AllHouses)
             {
-                float houseAttraction = GetHouseAttraction(house, citizen.type);
-                if (houseAttraction > attraction)
-                {
-                    attraction = houseAttraction;
-                    bestHouse = house;
-                }
+                float houseAttraction = GetHouseNotation(house, pop);
+                if (houseAttraction > GameManager.instance.populationManager.moodModifierIfNoHabitation)
+                habitationNote[house] = houseAttraction;
             }
-        }
-        if (bestHouse != null)
-        {
-            if (citizen.habitation != null)
+
+            //Convert the dictionary to a sorted list
+            Dictionary<House, float> sortedHabitations = new Dictionary<House, float>();
+            foreach (KeyValuePair<House, float> notedHabitation in habitationNote.OrderByDescending(key => key.Value))
             {
-                citizen.habitation.affectedCitizen.Remove(citizen);
+                sortedHabitations[notedHabitation.Key] = notedHabitation.Value;
             }
-            bestHouse.FillWithCitizen(citizen);
-        }
-        else
-        {
-            Debug.Log("Citizen can't find a house");
+            topHabitations[pop] = sortedHabitations;
         }
     }
 
     //Return an int, the bigger it is, the more attractive is the house
-    public float GetHouseAttraction(House house, Population populationType)
+    public float GetHouseNotation(House house, Population populationType)
     {
-        float attraction = 0;
+        house.UpdateHouseInformations();
+        float notation = 0;
 
+        //If house isn't connected to spatioport, it sucks
+        if (!house.block.isLinkedToSpatioport)
+            return GameManager.instance.populationManager.moodModifierIfNoHabitation;
+
+        //If house is already full, it also sucks
+        if (house.affectedCitizen.Count >= house.slotAmount)
+            return GameManager.instance.populationManager.moodModifierIfNoHabitation;
+
+
+        bool profileFound = false;
         foreach (Population profile in house.acceptedPop)
         {
             if (profile == populationType)
             {
-                attraction += 4;
+                profileFound = true;
             }
         }
+        if (!profileFound)
+            notation += houseNotation.wrongPopulationType;
 
-        if (house.powered)
-            attraction += 3;
+        if (!house.powered)
+        {
+            notation += houseNotation.noFood;
+        }
 
-        bool foodLeft = false;
+        float foodLeft = 0;
         foreach (FoodProvider distributor in house.foodProvidersInRange)
         {
-            if (distributor.foodLeft >= house.foodConsumptionPerHabitant)
-            {
-                foodLeft = true;
-            }
+            foodLeft += distributor.foodLeft;
         }
-        if (foodLeft)
-            attraction += 2;
+        if (foodLeft > 0 && foodLeft <= house.foodConsumptionPerHabitant)
+        {
+            notation += houseNotation.notEnoughFood;
+        } else if (foodLeft <= 0)
+        {
+            notation += houseNotation.noFood;
+        }
 
         bool jobLeft = false;
         foreach (Occupator occupator in house.occupatorsInRange)
@@ -78,11 +146,15 @@ public class CityManager : MonoBehaviour {
                 }
             }
         }
-        if (jobLeft)
-            attraction += 2;
+        if (!jobLeft)
+        {
+            notation += houseNotation.noOccupations;
+        }
 
-        attraction -= house.distanceToGround * 0.2f;
-        return attraction;
+        if (notation >= 0)
+            notation += houseNotation.everythingFine;
+
+        return notation;
     }
     
     public void TriggerAccident(BlockState accident)

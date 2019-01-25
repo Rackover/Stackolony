@@ -28,6 +28,10 @@ public class Library : MonoBehaviour
 	public GameObject onFireParticle;
 	public GameObject onRiotParticle;
 	public GameObject damagedParticle;
+	
+	[Header("Building")]
+    public List<Sprite> buildingsIcons = new List<Sprite>();
+
 
 	public BlockScheme GetBlockByID(int id)
 	{	

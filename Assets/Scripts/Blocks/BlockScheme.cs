@@ -21,7 +21,6 @@ public class BlockScheme : ScriptableObject
 	[TextArea] public string description = "This needs a proper description";
 	
 	public GameObject model;
-    public Sprite icon;
     public int ID;
 
 	[Header("Properties")]

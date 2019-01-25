@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class CursorManagement : MonoBehaviour
 {
-    public enum cursorMode { Default, Build, Delete, Bridge }; //Chaque mode du curseur
+    public enum cursorMode { Default, Build, Delete, Bridge, Move }; //Chaque mode du curseur
 
     [Header("=== REFERENCIES ===")]
     [Header("Prefabs")]
@@ -71,19 +71,25 @@ public class CursorManagement : MonoBehaviour
 
     private void Update()
     {
-        if (!GameManager.instance.IsInGame()){return;}
+        // Unless ingame, default mode
+        if (!GameManager.instance.IsInGame()) {
+            SwitchMode(cursorMode.Default);
+            return;
+        }
 
+        // Raycast the ground and update the cursor if needed
         UpdateCursor();
 
-        if(EventSystem.current.IsPointerOverGameObject()){cursorOnUI = true;}
-
-        else{cursorOnUI = false;}
+        // Detect cursor over UI
+        cursorOnUI = false;
+        if (EventSystem.current.IsPointerOverGameObject()){cursorOnUI = true;}
     }
 
     public void SwitchMode(cursorMode mode)
     {
         if (canSwitchTools)
         {
+            isBridging = false;
             selectedMode = mode;
             ClearFeedback();
             ClearPermanentHighlighter();
@@ -100,9 +106,10 @@ public class CursorManagement : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit))
         {
-            UpdatePosition(hit);
-            UpdateMouse(hit);
-            UpdateProjector();
+            UpdatePosition(hit);    // Refreshes PosInGrid and PosInTerrain 
+            UpdateTool();           // Switches tool on keypress
+            UpdateMouse(hit);       // Effects depending on the current tool
+            UpdateProjector();      // Visual update
 
             if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Block") || hit.collider.gameObject.layer == LayerMask.NameToLayer("StoredBlock") && hoveredBlock != hit.collider.gameObject && !Input.GetMouseButton(0) || Input.GetMouseButtonUp(0))
             {
@@ -119,11 +126,22 @@ public class CursorManagement : MonoBehaviour
         transform.position = hit.point;
     }
 
+    private void UpdateTool()
+    {
+        // Move mode by default unless the bridge key is pressed
+        if (Input.GetButton("Bridge")) {
+            if (selectedMode != cursorMode.Bridge) SwitchMode(cursorMode.Bridge);
+        }
+        else {
+            if (selectedMode != cursorMode.Move) SwitchMode(cursorMode.Move);
+        }
+    }
+
     void UpdatePosition(RaycastHit hit)
     {
         Vector3 tempCoord = hit.point;
         if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Terrain") ||
-            cursorMode.Default == selectedMode) {
+            cursorMode.Move == selectedMode) {
             //On adapte la position de la souris pour qu'elle corresponde à la taille des cellules
             tempCoord += new Vector3(0,
                 GameManager.instance.gridManagement.cellSize.y / 2
@@ -161,12 +179,7 @@ public class CursorManagement : MonoBehaviour
         // Highlighting block the cursor currently is on if we're in Bridge mode
         if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Block")) 
         {
-            if (selectedMode == cursorMode.Delete) 
-            {
-                ClearFeedback();
-                HighlightBlock(hit.transform.gameObject);
-            }
-            else if (selectedMode == cursorMode.Bridge) {
+            if (selectedMode == cursorMode.Bridge) {
 
                 GameObject objective = hit.transform.gameObject;
                 Vector3Int position = posInGrid;
@@ -227,30 +240,9 @@ public class CursorManagement : MonoBehaviour
         if(Input.GetButtonDown("Select"))
         {
             switch (selectedMode) {
-                case cursorMode.Default:
+                case cursorMode.Move:
                     Block selectedBlock = hit.transform.gameObject.GetComponent<Block>();
-                    // Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
                     StartDrag(selectedBlock);
-                    /*
-                    if(!cursorOnUI)
-                        selector.ShowBlock(selectedBlock);
-                    */
-
-                    break;
-                
-
-                /*
-                case cursorMode.Build:
-                    if (!EventSystem.current.IsPointerOverGameObject()) 
-                    {
-                        GameManager.instance.gridManagement.SpawnBlock(blockDefaultPrefab, new Vector2Int(posInGrid.x, posInGrid.z));
-                    }
-                    break;
-                    */
-
-                case cursorMode.Delete:
-                    GameManager.instance.gridManagement.DestroyBlock(posInGrid);
-                    ClearFeedback();
                     break;
             }
         }
@@ -259,8 +251,7 @@ public class CursorManagement : MonoBehaviour
         if(Input.GetButton("Select")) {
             switch (selectedMode) 
             {
-                case cursorMode.Default:
-                   // Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
+                case cursorMode.Move:
                     DuringDrag(posInGrid);
                     break;
 
@@ -275,8 +266,7 @@ public class CursorManagement : MonoBehaviour
         // Left Mouse up 
         if (Input.GetButtonUp("Select")) {
             switch (selectedMode) {
-                case cursorMode.Default:
-                    //   Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
+                case cursorMode.Move:
                     EndDrag(posInGrid);
                     break;
 
@@ -294,8 +284,7 @@ public class CursorManagement : MonoBehaviour
         if(Input.GetButton("RotateCamera"))
         {
             switch (selectedMode) {
-                case cursorMode.Default:
-                    //  Debug.LogWarning("The selected cursor mode has no code associated to it! Check Cursor.cs/UseTool");
+                case cursorMode.Move:
                     CancelDrag();
                     break;
 
@@ -484,7 +473,7 @@ public class CursorManagement : MonoBehaviour
                     newHighlighter.transform.parent = GameManager.instance.gridManagement.grid[coordinate.x, coordinate.y, coordinate.z].transform;
                     newHighlighter.transform.localPosition = Vector3.zero;
                     newHighlighter.SetActive(true);
-                    activeHighlighters[i] = newHighlighter;
+                    activeHighlighters[i] = newHighlighter; 
                     i++;
                 }
                 else

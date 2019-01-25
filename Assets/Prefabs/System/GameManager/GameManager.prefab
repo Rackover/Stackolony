@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4508389629830412}
   - component: {fileID: 114856474035917588}
   - component: {fileID: 114794454744214778}
+  - component: {fileID: 114446540146475740}
   m_Layer: 0
   m_Name: MissionManager
   m_TagString: Untagged
@@ -71,7 +72,6 @@ GameObject:
   - component: {fileID: 4365852104190820}
   - component: {fileID: 33844690695212690}
   - component: {fileID: 23432335991751874}
-  - component: {fileID: 114691067632118170}
   - component: {fileID: 114028403966188712}
   m_Layer: 0
   m_Name: Highlighter
@@ -89,6 +89,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4178928114387094}
   - component: {fileID: 114956301060769950}
+  - component: {fileID: 114073688948625084}
   m_Layer: 0
   m_Name: Cursor
   m_TagString: Untagged
@@ -154,6 +155,22 @@ GameObject:
   - component: {fileID: 114791494730640664}
   m_Layer: 0
   m_Name: Temporality
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1499466944953066
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4364936759027822}
+  - component: {fileID: 114575123271471090}
+  m_Layer: 0
+  m_Name: BulletinsManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -439,6 +456,19 @@ Transform:
   m_Father: {fileID: 4468432540002810}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4364936759027822
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1499466944953066}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4468432540002810}
+  m_RootOrder: 17
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4365852104190820
 Transform:
   m_ObjectHideFlags: 1
@@ -531,6 +561,7 @@ Transform:
   - {fileID: 4007392450662500}
   - {fileID: 4375217022664054}
   - {fileID: 4111541091294220}
+  - {fileID: 4364936759027822}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -667,8 +698,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb07e16cff18d6846b5f1878a1b07687, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myMeshRenderer: {fileID: 23432335991751874}
   greenMat: {fileID: 2100000, guid: 91bd606313627814bb0d42232036dcf1, type: 2}
   defaultMat: {fileID: 2100000, guid: ab20dd04b9178c841a1c4ec5583e5ec5, type: 2}
+--- !u!114 &114073688948625084
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1174463090410544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 992351ac009527541b66c05b233b8f35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114076638731126872
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -687,15 +730,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 62e1baca1586b5e4f85c1cdc5c918ec1, type: 2}
   - {fileID: 11400000, guid: 6f409f9644df9a4459be6032c98ab4dd, type: 2}
   citizenList: []
-  MMglobalModifier: 1
-  MMnoHabitation: -4
-  MMnoAppropriatedHabitation: -2
-  MMnoFood: -3
-  MMnotEnoughFood: -1
-  MMnoOccupation: -2
-  MMnoPower: -2
-  MMdamagedHabitation: -2
-  MMeverythingFine: 3
+  moodModifierIfNoHabitation: -20
 --- !u!114 &114136765406288630
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -782,6 +817,7 @@ MonoBehaviour:
   player: {fileID: 114952285814864902}
   saveManager: {fileID: 0}
   cinematicManager: {fileID: 0}
+  bulletinsManager: {fileID: 0}
   cursorDisplay: {fileID: 0}
   localization: {fileID: 0}
   displayerManager: {fileID: 0}
@@ -793,6 +829,32 @@ MonoBehaviour:
   gridDebugger: {fileID: 0}
   DEBUG_MODE: 0
   ENABLE_LOGS: 1
+--- !u!114 &114446540146475740
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1107635792204446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0c329f2536211b4baae7ba3aa5cc924, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabRemoving: {fileID: 1330950013455556, guid: c89020d6ae7142645985d5e9a5f46e90,
+    type: 2}
+  prefabEmitting: {fileID: 1109864763100982, guid: 86fe2ef75fc279a4f8f10dff9fb03577,
+    type: 2}
+  mission:
+    exploredPositions: []
+    blocksFound: []
+    blockDistanceToCenter: 
+    power: 0
+    range: 0
+    callBack: 
+    position: {x: 0, y: 0, z: 0}
+    explorerCount: 0
+  activeCoroutinesRelatedToPower: 0
+  activeCoroutinesRelatedToSpatioport: 0
 --- !u!114 &114533268757746836
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -915,22 +977,29 @@ MonoBehaviour:
   - {r: 0.9294118, g: 0.49803925, b: 0.40784317, a: 1}
   - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
   cursorSprite: {fileID: 21300000, guid: b631a20d61d7b5b4d9b8897145cac4e0, type: 3}
-  destroyIcon: {fileID: 21300000, guid: 7e428129950162542a0330dc8f89d509, type: 3}
-  buildIcon: {fileID: 21300000, guid: 00aad6060067afb45bb1250f424b0965, type: 3}
-  dragIcon: {fileID: 21300000, guid: 571f3cd4240e80247bb75fa1ed409adf, type: 3}
-  bridgeIcon: {fileID: 21300000, guid: 1e685fff11248c04c993b132e24958be, type: 3}
-  citizenInParticle: {fileID: 1285035770339370, guid: f0ff82113bf4f1546a6f3be882a39c72,
+  destroyIcon: {fileID: 21300000, guid: 66734752feff9834b85b7ffdc4cc56c9, type: 3}
+  buildIcon: {fileID: 21300000, guid: c36d5e82e42199b4893b3154edd54325, type: 3}
+  dragIcon: {fileID: 21300000, guid: beacc04761958224e8d1da228151e4a7, type: 3}
+  bridgeIcon: {fileID: 21300000, guid: 5a5b51b82a93c814ab6082318d750ab0, type: 3}
+  buildingsIcons:
+  - {fileID: 21300000, guid: 15e2ba685d2ee3143a34ccaebc18bd58, type: 3}
+  - {fileID: 21300000, guid: 5adad3d7d23730644a3815e5653b5256, type: 3}
+  - {fileID: 21300000, guid: 414500052b0d4c04e826f3ecadd2d66c, type: 3}
+  citizenInParticule: {fileID: 1285035770339370, guid: f0ff82113bf4f1546a6f3be882a39c72,
     type: 2}
-  citizenOutParticle: {fileID: 1952097086203690, guid: 18e01baa419fcec40b1a62e40fddbe38,
+  citizenOutParticule: {fileID: 1952097086203690, guid: 18e01baa419fcec40b1a62e40fddbe38,
     type: 2}
-  unpoweredParticle: {fileID: 1342877443669046, guid: 61401a9446dbf294e9c2b7ee742a808f,
-    type: 2}
-  onFireParticle: {fileID: 1254344908387132, guid: 7d93309ef69cf0b48b8522cfe92c22cd,
-    type: 2}
-  onRiotParticle: {fileID: 1278992186517358, guid: 869a1a98069845348b6aaae2bcf17c66,
-    type: 2}
-  damagedParticle: {fileID: 1943145316284874, guid: 8f2db58443c89a346aef2a5762562d14,
-    type: 2}
+--- !u!114 &114575123271471090
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1499466944953066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0c82747f6890e449b18bdf92f6bb28b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114593997880595668
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -944,6 +1013,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cityName: Valenciennes
   accidentStates: 010000000200000003000000
+  houseNotation:
+    wrongPopulationType: -2
+    noFood: -3
+    notEnoughFood: -1
+    noOccupations: -2
+    noPower: -2
+    damaged: -2
+    everythingFine: 3
 --- !u!114 &114616872146876998
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -972,19 +1049,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4cf781f5fca2a543bee0a43bf8d4366, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114691067632118170
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1138115034757224}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb07e16cff18d6846b5f1878a1b07687, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  greenMat: {fileID: 2100000, guid: 91bd606313627814bb0d42232036dcf1, type: 2}
-  defaultMat: {fileID: 2100000, guid: ab20dd04b9178c841a1c4ec5583e5ec5, type: 2}
 --- !u!114 &114714276369706516
 MonoBehaviour:
   m_ObjectHideFlags: 1
