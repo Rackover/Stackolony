@@ -12,11 +12,9 @@ public class SFXManager : MonoBehaviour {
     {
         public string soundName;
         public AudioClip[] soundClip;
-        
-
     }
-    public Sound[] soundList;
 
+    public Sound[] soundList;
     [System.NonSerialized]
     public List<SFXTrack> trackList = new List<SFXTrack>();
     private GameObject trackParent;
