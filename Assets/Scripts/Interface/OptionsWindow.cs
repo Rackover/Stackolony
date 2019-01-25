@@ -8,10 +8,8 @@ public class OptionsWindow : MonoBehaviour {
 
     public GameObject sliderExample;
     public GameObject checkboxExample;
+    public GameObject container;
     Options options;
-
-    public float optionListStart = -200f;
-    public float optionsSpacing = 70f;
 
 	// Use this for initialization
 	void Start () {
@@ -73,9 +71,8 @@ public class OptionsWindow : MonoBehaviour {
             }
             ///
             //////////////
-
-            Vector3 position = inst.GetComponent<RectTransform>().position;
-            inst.GetComponent<RectTransform>().position = new Vector3(position.x, position.y - optionsSpacing * count * factor, position.z);
+            
+            inst.transform.SetParent(container.transform);
 
             count++;
         }

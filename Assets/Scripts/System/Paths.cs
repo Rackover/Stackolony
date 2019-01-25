@@ -42,6 +42,18 @@ public class Paths {
         string file = "bulletins" + ".xml";
         return path + "/" + file;
     }
+    static public string GetNamesFolder()
+    {
+        string path = Application.streamingAssetsPath + "/names";
+        CreateDirectoryIfNotExists(path);
+        return path;
+    }
+    static public string GetNamesFile()
+    {
+        string path = GetBulletinFolder();
+        string file = "names" + ".txt";
+        return path + "/" + file;
+    }
 
     static void CreateDirectoryIfNotExists(string path)
     {
