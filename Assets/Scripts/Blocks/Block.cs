@@ -185,13 +185,13 @@ public class Block : MonoBehaviour {
 					break;
 
 				default:
-					Logger.Debug(state.ToString() + " appearing feedbacks are not implemented yet");
+					Logger.Warn(state.ToString() + " appearing feedbacks are not implemented yet");
 					break;
 			}
 			states.Add(state);
 		}
 		else
-			Logger.Debug("This block already has the " + state.ToString() + " state on him.");
+			Logger.Warn("This block already has the " + state.ToString() + " state on him.");
 	}
 
 	public void RemoveState(BlockState state)
@@ -219,13 +219,13 @@ public class Block : MonoBehaviour {
 					break;
 
 				default:
-					Logger.Debug(state.ToString() + " removing feedbacks are not implemented yet");
+					Logger.Warn(state.ToString() + " removing feedbacks are not implemented yet");
 					break;
 			}
 			states.Remove(state);
 		}
 		else
-			Logger.Debug(gameObject.name + " tried to remove " + state.ToString() + " from its state, but it didn't have it.");
+			Logger.Warn(gameObject.name + " tried to remove " + state.ToString() + " from its state, but it didn't have it.");
 	}
 
 #endregion
@@ -249,7 +249,7 @@ public class Block : MonoBehaviour {
                 {
                     if(currentPower <= scheme.consumption)
                     {
-                        effects.Activate(GameManager.instance.library.unpoweredParticle);
+                        effects.Activate(library.unpoweredParticle);
                     }
                 }
             }
