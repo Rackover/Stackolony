@@ -11,7 +11,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ed80da23eebddf459df27dcc0cb6223, type: 3}
   m_Name: Richies
   m_EditorClassIdentifier: 
-  ID: 0
+  ID: 2
   codeName: Scientist
-  humorSprite: {fileID: 21300000, guid: b2d33eabc81c96e48a16b735585ac70d, type: 3}
-  color: {r: 0, g: 1, b: 0.08776307, a: 1}
+  humorTextures:
+  - {fileID: 2800000, guid: 85ddd2951e560864ab446f1da1fa6204, type: 3}
+  - {fileID: 2800000, guid: e9d43081bb0f8864c9ba6e96137b36c3, type: 3}
+  - {fileID: 2800000, guid: 3cef4aeaa517dcd4b83e5fab8194b446, type: 3}
+  - {fileID: 2800000, guid: 840a08e22264e2b458071f8745e3e924, type: 3}
+  - {fileID: 2800000, guid: 30e3b9818eb9c6543bb5a404db9c6b40, type: 3}
+  color: {r: 0.9096067, g: 0.5990566, b: 1, a: 1}
+  prefab: {fileID: 1497278845058520, guid: 2cc5f27c841585146a8eb235f7ae7121, type: 2}
