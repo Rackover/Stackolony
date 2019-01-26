@@ -16,6 +16,7 @@ public class MoodDisplay : MonoBehaviour {
     public RectTransform rect;
     public AspectRatioFitter fitter;
 
+    public Color notificationColor = Color.blue;
     public Color from = Color.green;
     public Color to = Color.red;
     public float colorBlendAmount = 0.5f;
@@ -37,9 +38,20 @@ public class MoodDisplay : MonoBehaviour {
     public void InitializeForPopulation(Population pop)
     {
         population = pop;
+        Localization loc = GameManager.instance.localization;
         popMan = GameManager.instance.populationManager;
-        GameManager.instance.populationManager.CitizenArrival += (amount, popType) => {
+        popMan.CitizenArrival += (amount, popType) => {
             if (popType == pop) {
+                // Notify
+                FindObjectOfType<Notifications>().Notify(
+                    new Notifications.Notification(
+                        "newPeople",
+                        notificationColor,
+                        new string[] { amount.ToString(), loc.GetLine(popType.codeName, "populationType") }
+                    )
+                );
+
+                // Animation
                 StartCoroutine(Blink(blinkLength));
                 UpdateTexts();
             }
