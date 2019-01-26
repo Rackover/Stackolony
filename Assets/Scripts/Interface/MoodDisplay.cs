@@ -21,21 +21,41 @@ public class MoodDisplay : MonoBehaviour {
     public float colorBlendAmount = 0.5f;
     public bool isHidden = false;
 
+    public Color homelessColor = Color.red;
+    public Color noHomelessColor = Color.grey;
+    public Color blinkColor = Color.grey;
+
     public float angryThreshold = 0.3f;
     public float happyThreshold = 0.7f;
+    public float blinkSpeed = 0.33f;
+    public float blinkLength = 2f;
 
     Displayer preview;
     Options playerOptions;
+    PopulationManager popMan;
 
     public void InitializeForPopulation(Population pop)
     {
         population = pop;
+        popMan = GameManager.instance.populationManager;
+        GameManager.instance.populationManager.CitizenArrival += (amount, popType) => {
+            if (popType == pop) {
+                StartCoroutine(Blink(blinkLength));
+                UpdateTexts();
+            }
+        };
     }
 
     public void UpdateDisplay()
     {
         playerOptions = GameManager.instance.player.options;
-        PopulationManager popMan = GameManager.instance.populationManager;
+
+        UpdateMood();
+        UpdateTexts();
+    }
+
+    public void UpdateMood()
+    {
         float moodValue = popMan.GetAverageMood(population) / popMan.maxMood;
         gauge.fillAmount = moodValue;
         gauge.color = Color.Lerp(from, to, moodValue);
@@ -75,8 +95,21 @@ public class MoodDisplay : MonoBehaviour {
             changeMood(Citizen.Mood.Bad);
         }
 
-        amount.text = popMan.populationCitizenList[population].Count.ToString();
-        homeless.text = popMan.GetHomelessCount(population).ToString();
+    }
+
+    public void UpdateTexts()
+    {
+        int inhabitants = popMan.populationCitizenList[population].Count;
+        int homelessAmount = popMan.GetHomelessCount(population);
+        amount.text = inhabitants.ToString();
+        homeless.text = homelessAmount.ToString();
+
+        if (homelessAmount <= 0) {
+            homeless.color = noHomelessColor;
+        }
+        else {
+            homeless.color = homelessColor;
+        }
     }
 
     public void Show()
@@ -90,4 +123,19 @@ public class MoodDisplay : MonoBehaviour {
         isHidden = true;
         animator.Play("Fold");
     }
+
+    IEnumerator Blink(float seconds)
+    {
+        if (seconds <= 0f) {
+            amount.color = Color.white;
+            yield return null;
+        }
+        else {
+            amount.color = amount.color == blinkColor ? Color.white : blinkColor;
+            yield return new WaitForSeconds(blinkSpeed);
+            yield return StartCoroutine(Blink(seconds - blinkSpeed));
+        }
+    }
+
+
 }
