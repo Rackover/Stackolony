@@ -27,11 +27,11 @@ public class Notifications : MonoBehaviour {
         public Text text;
         public Transform transform;
 
-        public Notification(string _l, Color _c, params string[] _v)
+        public Notification(string localizationId, Color color, params string[] additionalValues)
         {
-            mainColor = _c;
-            values = _v;
-            locId = _l;
+            mainColor = color;
+            values = additionalValues;
+            locId = localizationId;
         }
     }
 
