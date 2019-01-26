@@ -96,6 +96,7 @@ public class Options
         options["bgsVolume"] = new SliderOption(0f, 0.2f, 1f);
 
         options["enableDrifting"] = new CheckboxOption(true);
+        options["animatedCitizens"] = new CheckboxOption(true);
     }
 
     public override string ToString()
