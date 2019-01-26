@@ -11,7 +11,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ed80da23eebddf459df27dcc0cb6223, type: 3}
   m_Name: Scientists
   m_EditorClassIdentifier: 
-  ID: 0
+  ID: 3
   codeName: Scientist
-  humorSprite: {fileID: 21300000, guid: 6cbb88c4715ceec44ac426b83ec49747, type: 3}
-  color: {r: 1, g: 0.7464502, b: 0, a: 1}
+  humorTextures:
+  - {fileID: 2800000, guid: 77d1e7ce870ef5e42a55421e09d0d6ca, type: 3}
+  - {fileID: 2800000, guid: d639e2de2547ff84fb598dfeb9ec210f, type: 3}
+  - {fileID: 2800000, guid: 2a91d72535b4ea943a3fe4c38241bc55, type: 3}
+  - {fileID: 2800000, guid: 2d25d5183195538418f189d81390bcb7, type: 3}
+  - {fileID: 2800000, guid: 7bcc7bd2497930e4b9d14df185c3e127, type: 3}
+  color: {r: 0, g: 0.7410011, b: 1, a: 1}
+  prefab: {fileID: 1497278845058520, guid: 2cc5f27c841585146a8eb235f7ae7121, type: 2}

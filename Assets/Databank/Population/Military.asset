@@ -11,7 +11,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ed80da23eebddf459df27dcc0cb6223, type: 3}
   m_Name: Military
   m_EditorClassIdentifier: 
-  ID: 0
+  ID: 1
   codeName: Military
-  humorSprite: {fileID: 21300000, guid: 877fdbbfd8914304aa06b750912f1843, type: 3}
+  humorTextures:
+  - {fileID: 2800000, guid: d4b0137399114754fb736893b8fcbbef, type: 3}
+  - {fileID: 2800000, guid: 07fecf7dc5fe8334da7c69a0dc18010f, type: 3}
+  - {fileID: 2800000, guid: ab881216c8a1ec9498e26fe5d82440d1, type: 3}
+  - {fileID: 2800000, guid: 3db831443d7237a4dbe8ce77bc145d2d, type: 3}
+  - {fileID: 2800000, guid: 8e81ebed5c0adcc47828c4e01929d2b2, type: 3}
   color: {r: 1, g: 0, b: 0, a: 1}
+  prefab: {fileID: 1497278845058520, guid: 2cc5f27c841585146a8eb235f7ae7121, type: 2}
