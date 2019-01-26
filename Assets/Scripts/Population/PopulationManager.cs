@@ -16,6 +16,8 @@ public class PopulationManager : MonoBehaviour {
     List<string> names;
     public int maxCitizenNameLength = 20;
 
+    public event System.Action<int, Population> CitizenArrival;
+
     [System.Serializable]
     public class Citizen
     {
@@ -176,6 +178,7 @@ public class PopulationManager : MonoBehaviour {
             citizens.Add(AddCitizen(type));
         }
         Logger.Debug("Spawned " + amount + " citizens of type " + type.codeName + " to the citizen list");
+        CitizenArrival.Invoke(citizens.Count, type);
         GameManager.instance.systemManager.OnNewMicrocycle();
         return citizens;
     }
