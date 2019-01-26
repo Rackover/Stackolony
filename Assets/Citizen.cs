@@ -15,7 +15,7 @@ public class Citizen : MonoBehaviour {
     private void Awake()
     {
         UpdateColor();
-        SetEmotion(Mood.Jaded);
+        SetEmotion(Mood.Good);
     }
 
     void UpdateColor()
