@@ -133,7 +133,7 @@ public class Localization : MonoBehaviour {
         }
         catch(KeyNotFoundException e) {
             Logger.Error("Could not load line ID " + id);
-            return "LOC " + currentCategory + ":" + id;
+            return "[LOC:" + currentCategory + "=>" + id+"]";
         }
     }
 
