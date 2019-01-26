@@ -30,7 +30,7 @@ public class Citizen : MonoBehaviour {
 
     public void SetEmotion(Mood mood)
     {
-        face = population.humorTextures[(int)mood];
+        face = population.moodTextures[(int)mood];
         body.GetComponent<MeshRenderer>().materials[0].mainTexture = face;
     }
 }
