@@ -136,6 +136,24 @@ public class PopulationManager : MonoBehaviour {
         }
     }
 
+    public int GetHomelessCount(Population population)
+    {
+        int count = 0;
+        foreach(Citizen citizen in populationCitizenList[population]) {
+            count += citizen.habitation == null ? 1 : 0;
+        }
+        return count;
+    }
+
+    public int GetHomelessCount()
+    {
+        int count = 0;
+        foreach(Population pop in populationTypeList) {
+            count += GetHomelessCount(pop);
+        }
+        return count;
+    }
+
     //Generates a new citizen on the colony, shouldn't be called directly, use the other function with the amount parameter
     Citizen AddCitizen(Population type)
     {
