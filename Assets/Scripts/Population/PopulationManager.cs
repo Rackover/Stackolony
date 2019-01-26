@@ -42,7 +42,7 @@ public class PopulationManager : MonoBehaviour {
     void Start()
     {
         foreach(Population pop in populationTypeList) {
-            averageMoods[pop] = 50f;
+            averageMoods[pop] = Random.value*100f;
             populationCitizenList[pop] = new List<Citizen>();
             moodModifiers[pop] = new List<MoodModifier>();
         }
