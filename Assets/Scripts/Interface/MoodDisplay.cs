@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class MoodDisplay : MonoBehaviour {
 
     public Population population;
-    public Image face;
+    public RawImage face;
     public Image gauge;
     public Text homeless;
     public Text amount;
@@ -21,17 +21,21 @@ public class MoodDisplay : MonoBehaviour {
 
     public void InitializeForPopulation(Population pop)
     {
-        face.sprite = pop.humorSprite;
-        face.color = Color.Lerp(Color.white, pop.color, colorBlendAmount);
-        face.color = new Color(face.color.r, face.color.g, face.color.b, 1f);
         population = pop;
+        Displayer preview = GameManager.instance.displayerManager.SetRotationFeed(population.prefab, face, 200f, 0, 1.5f, 30, 128);
+        preview.cam.backgroundColor = new Color(0, 0, 0, 0);
     }
 
     public void UpdateDisplay()
     {
-        float moodValue = GameManager.instance.populationManager.GetAverageMood(population);
+        PopulationManager popMan = GameManager.instance.populationManager;
+
+        float moodValue = popMan.GetAverageMood(population);
         gauge.fillAmount = moodValue;
         gauge.color = Color.Lerp(from, to, moodValue);
+
+        amount.text = popMan.populationCitizenList[population].Count.ToString();
+        homeless.text = popMan.GetHomelessCount(population).ToString();
     }
 
     public void Show()
