@@ -57,8 +57,8 @@ public class MoodDisplay : MonoBehaviour {
                 preview = null;
             }
             changeMood = (x) => {
-                face.texture = population.humorSprites[(int)x].texture;
-                fitter.aspectRatio = population.humorSprites[0].rect.width / population.humorSprites[0].rect.height;
+                face.texture = population.moodSprites[(int)x].texture;
+                fitter.aspectRatio = population.moodSprites[0].rect.width / population.moodSprites[0].rect.height;
             };
         }
 

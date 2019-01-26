@@ -8,8 +8,8 @@ public class Population : ScriptableObject {
 
     public int ID;
     public string codeName; //Nom utilisé dans les CSV
-    public Texture2D[] humorTextures;
-    public Sprite[] humorSprites;
+    public Texture2D[] moodTextures;
+    public Sprite[] moodSprites;
     public Color color;
     public GameObject prefab;
 }
