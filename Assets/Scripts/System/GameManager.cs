@@ -46,7 +46,7 @@ public class GameManager : MonoBehaviour
     [Space(1)]
     [Header("DEBUG SETTINGS")]
     public Logger logger;
-    public GridDebugger gridDebugger;
+    public OverlayManager overlayManager;
     public bool DEBUG_MODE = false;
     public bool ENABLE_LOGS = true;
 
@@ -131,11 +131,45 @@ public class GameManager : MonoBehaviour
 
         // DEBUG
         if (logger == null) logger = GetComponentInChildren<Logger>();
-        if (gridDebugger == null) gridDebugger = FindObjectOfType<GridDebugger>();
+        if (overlayManager == null) overlayManager = FindObjectOfType<OverlayManager>();
     }
 
     void CheckInputs()
     {
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            overlayManager.SelectOverlayMode(0);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            overlayManager.SelectOverlayMode(1);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F3))
+        {
+            overlayManager.SelectOverlayMode(2);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F4))
+        {
+            overlayManager.SelectOverlayMode(3);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+            overlayManager.SelectOverlayMode(4);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F6))
+        {
+            overlayManager.SelectOverlayMode(5);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F7))
+        {
+            overlayManager.SelectOverlayMode(6);
+        }
 
         if (Input.GetKeyDown(KeyCode.N)) { 
             Notifications.Notification not = new Notifications.Notification(
