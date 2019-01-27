@@ -5,8 +5,16 @@ using UnityEngine.EventSystems;
 
 public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler  {
 
+    [System.Serializable]
+    public class TooltipLocalizationEntry
+    {
+        public string id;
+        public string category;
+        public string[] values;
+    }
 
     public bool isFirstLineBold = true;
+    public List<TooltipLocalizationEntry> localizations;
 
     private TooltipGO tooltipGO; //Correspond à un script lié au gameObject de tooltip
     List<Localization.Line> locs = new List<Localization.Line>();
@@ -15,6 +23,11 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
     void Awake()
     {
         isActive = false;
+    }
+
+    public void ClearLines()
+    {
+        locs.Clear();
     }
 
     public void AddLocalizedLine(Localization.Line line)
@@ -38,7 +51,7 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
             }
 
             GameManager.instance.localization.SetCategory(locs[i].category);
-            txt += GameManager.instance.localization.GetLine(locs[i].id);
+            txt += GameManager.instance.localization.GetLine(locs[i].id, locs[i].values);
 
             if (i == 0 && isFirstLineBold) {
                 txt = "<b>" + txt + "</b>";

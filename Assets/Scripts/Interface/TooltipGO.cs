@@ -51,22 +51,11 @@ public class TooltipGO : MonoBehaviour {
         UpdateTooltipSizeAndPosition();
     }
 
-    public void UpdateSize()
-    {
-
-        //UPDATE SIZE
-        if (myText.preferredWidth > myText.rectTransform.sizeDelta.x) {
-            myRectTransform.sizeDelta = new Vector2(myText.rectTransform.sizeDelta.x * 2, myText.preferredHeight);
-            myText.rectTransform.sizeDelta = new Vector2(myText.rectTransform.sizeDelta.x * 2, myText.preferredHeight);
-        }
-        else {
-            myRectTransform.sizeDelta = new Vector2(myText.preferredWidth, myText.preferredHeight);
-            myText.rectTransform.sizeDelta = new Vector2(myText.preferredWidth, myText.preferredHeight);
-        }
-    }
-
     public void UpdatePosition()
     {
+        // Default alignment
+        SetAlignment(alignmentOptionsHorizontal.LEFT, alignmentOptionsVertical.TOP);
+
         //UPDATE POSITION
         if (myRectTransform.localPosition.x > 0) {
             if (myRectTransform.localPosition.y - myRectTransform.sizeDelta.y < -(myCanvasTransform.sizeDelta.y / 2)) {
@@ -82,16 +71,12 @@ public class TooltipGO : MonoBehaviour {
                 //Le texte est trop bas et passe sous l'écran, il faut le monter
                 SetAlignment(alignmentOptionsHorizontal.LEFT, alignmentOptionsVertical.BOTTOM);
             }
-            else {
-                SetAlignment(alignmentOptionsHorizontal.LEFT, alignmentOptionsVertical.TOP);
-            }
         }
     }
 
     //Recupere le texte et transforme l'infobulle pour qu'elle soit visible
     public void UpdateTooltipSizeAndPosition()
     {
-        //UpdateSize();
         UpdatePosition();
     }
 
@@ -123,7 +108,6 @@ public class TooltipGO : MonoBehaviour {
 
             case alignmentOptionsHorizontal.LEFT:
                 myRectTransform.pivot = new Vector2(0, 0);
-                /*
                 if (alignmentY == alignmentOptionsVertical.TOP)
                 {
                     myText.alignment = TextAlignmentOptions.TopLeft;
@@ -140,7 +124,6 @@ public class TooltipGO : MonoBehaviour {
                     parentT.pivot = new Vector2(0.5f, 0);
                     myRectTransform.pivot = new Vector2(0, 0);
                 }
-                */
                 break;
         }
     }

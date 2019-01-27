@@ -11,11 +11,13 @@ public class MoodDisplay : MonoBehaviour {
     public Population population;
     public RawImage face;
     public Image gauge;
+    public Image dragHitbox;
     public Text homeless;
     public Text amount;
     public Animator animator;
     public RectTransform rect;
     public AspectRatioFitter fitter;
+    public Tooltip tooltip;
 
     public Color notificationColor = Color.blue;
     public Color from = Color.green;
@@ -37,6 +39,9 @@ public class MoodDisplay : MonoBehaviour {
     Displayer preview;
     Options playerOptions;
     PopulationManager popMan;
+    Localization loc;
+    string moodString;
+    Citizen.Mood currentMood;
 
     private void Start()
     {
@@ -46,7 +51,7 @@ public class MoodDisplay : MonoBehaviour {
     public void InitializeForPopulation(Population pop)
     {
         population = pop;
-        Localization loc = GameManager.instance.localization;
+        loc = GameManager.instance.localization;
         popMan = GameManager.instance.populationManager;
         popMan.CitizenArrival += (amount, popType) => {
             if (popType == pop) {
@@ -104,16 +109,19 @@ public class MoodDisplay : MonoBehaviour {
 
         // Emotion based on humor
         if (moodValue <= angryThreshold) {
-            changeMood(Citizen.Mood.Angry);
+            currentMood = Citizen.Mood.Angry;
         }
 
         else if (moodValue >= happyThreshold) {
-            changeMood(Citizen.Mood.Good);
+            currentMood = Citizen.Mood.Good;
         }
 
         else {
-            changeMood(Citizen.Mood.Bad);
+            currentMood = Citizen.Mood.Bad;
         }
+
+        changeMood(currentMood);
+        moodString = loc.GetLine(currentMood.ToString().ToLower(), "mood");
 
     }
 
@@ -130,18 +138,34 @@ public class MoodDisplay : MonoBehaviour {
         else {
             homeless.color = homelessColor;
         }
+
+        float moodValue = popMan.GetAverageMood(population) / popMan.maxMood;
+        string popName = loc.GetLine(population.codeName, "populationType");
+
+        tooltip.ClearLines();
+        tooltip.AddLocalizedLine(new Localization.Line("populationType", population.codeName));
+        tooltip.AddLocalizedLine(
+            new Localization.Line(
+                "stats",
+                "moodValue",
+                popName+"s",
+                moodString.ToUpper()
+            )
+        );
     }
 
     public void Show()
     {
         isHidden = false;
         animator.Play("Unfold");
+        dragHitbox.enabled = true;
     }
 
     public void Hide()
     {
         isHidden = true;
         animator.Play("Fold");
+        dragHitbox.enabled = false;
     }
 
     IEnumerator Blink(float seconds)
@@ -173,7 +197,12 @@ public class MoodDisplay : MonoBehaviour {
 
     void ChangeChildOrder(int by)
     {
-        transform.SetSiblingIndex(transform.GetSiblingIndex() + by);
+        int index = transform.GetSiblingIndex();
+        
+        if (by < 0 && index <= 0) return;
+        if (by > 0 && index >= transform.parent.childCount) return;
+
+        transform.SetSiblingIndex(index + by);
     }
 
     public void BeginDrag()
