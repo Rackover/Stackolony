@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 
 public class MoodDisplay : MonoBehaviour {
@@ -31,9 +32,16 @@ public class MoodDisplay : MonoBehaviour {
     public float blinkSpeed = 0.33f;
     public float blinkLength = 2f;
 
+    bool isDragging = false;
+    float dragMargin;
     Displayer preview;
     Options playerOptions;
     PopulationManager popMan;
+
+    private void Start()
+    {
+        dragMargin = transform.parent.gameObject.GetComponent<VerticalLayoutGroup>().spacing;
+    }
 
     public void InitializeForPopulation(Population pop)
     {
@@ -66,7 +74,7 @@ public class MoodDisplay : MonoBehaviour {
         UpdateTexts();
     }
 
-    public void UpdateMood()
+    void UpdateMood()
     {
         float moodValue = popMan.GetAverageMood(population) / popMan.maxMood;
         gauge.fillAmount = moodValue;
@@ -109,7 +117,7 @@ public class MoodDisplay : MonoBehaviour {
 
     }
 
-    public void UpdateTexts()
+    void UpdateTexts()
     {
         int inhabitants = popMan.populationCitizenList[population].Count;
         int homelessAmount = popMan.GetHomelessCount(population);
@@ -149,5 +157,32 @@ public class MoodDisplay : MonoBehaviour {
         }
     }
 
+    private void Update()
+    {
+        if (isDragging) {
+            if (Input.mousePosition.y + rect.sizeDelta.y + dragMargin < rect.position.y) {
+                ChangeChildOrder(+1);
+            }
+            else if (Input.mousePosition.y - dragMargin > rect.position.y) {
+                ChangeChildOrder(-1);
+            }
+        }
 
+        popMan.ChangePopulationPriority(population, transform.GetSiblingIndex());
+    }
+
+    void ChangeChildOrder(int by)
+    {
+        transform.SetSiblingIndex(transform.GetSiblingIndex() + by);
+    }
+
+    public void BeginDrag()
+    {
+        isDragging = true;
+    }
+
+    public void StopDrag()
+    {
+        isDragging = false;
+    }
 }
