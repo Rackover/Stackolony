@@ -28,6 +28,11 @@ public class OverlayManager : MonoBehaviour
         SelectOverlayMode(activeOverlay);
     }
 
+    public void UpdateOverlay()
+    {
+        SelectOverlayMode(activeOverlay);
+    }
+
     //Overlay "0" means no overlay
     public void SelectOverlayMode(int ID)
     {

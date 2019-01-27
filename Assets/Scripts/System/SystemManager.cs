@@ -63,6 +63,7 @@ public class SystemManager : MonoBehaviour {
             block.OnNewCycle();
         }
         RefreshMoodModifiers();
+        yield return StartCoroutine(OnGridUpdate());
         yield return null;
     }
 
@@ -71,6 +72,7 @@ public class SystemManager : MonoBehaviour {
     {
         yield return StartCoroutine(UpdateHousesInformations());
         yield return StartCoroutine(RecalculateHabitation());
+        yield return StartCoroutine(OnGridUpdate());
     }
 
     //S'execute à chaques fois qu'un bloc est déplacé dans la grille
@@ -80,6 +82,7 @@ public class SystemManager : MonoBehaviour {
         yield return new WaitForSeconds(0.5f); //Clumsy, à changer rapidement, la propagation doit s'effectuer une fois que le spatioport a tout mis à jour
         yield return StartCoroutine(RecalculatePropagation());
         yield return StartCoroutine(RecalculateNuisance());
+        yield return StartCoroutine(UpdateOverlays());
     }
 
 
@@ -87,6 +90,13 @@ public class SystemManager : MonoBehaviour {
     public void UpdateElectricitySystem()
     {
         StartCoroutine(RecalculatePropagation());
+    }
+
+    //Met à jour les overlays
+    public IEnumerator UpdateOverlays()
+    {
+        GameManager.instance.overlayManager.UpdateOverlay();
+        yield return null;
     }
 
     //Actualise les données de chaque maisons
