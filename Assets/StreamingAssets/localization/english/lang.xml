@@ -92,4 +92,17 @@
 	<military>Kavga</military>
 	<scientist>Covridian</scientist>
   </populationType>
+  
+  <stats>
+	<percentage>{0}%</percentage>
+	<moodValue>{0} are {1}</moodValue>
+	<gauge>{0}/{1}</gauge>
+	<completion>{0} out of {1}</completion>
+  </stats>
+  
+  <mood>
+	<angry>angry</angry>
+	<bad>unhappy</bad>
+	<good>happy</good>
+  </mood>
 </lines>
