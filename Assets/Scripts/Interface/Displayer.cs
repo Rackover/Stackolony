@@ -37,6 +37,11 @@ public class Displayer : MonoBehaviour
 		available = false;
 	}
 
+    public GameObject GetModel()
+    {
+        return model;
+    }
+
 	public void Unstage()
 	{
 		cam.targetTexture = null;

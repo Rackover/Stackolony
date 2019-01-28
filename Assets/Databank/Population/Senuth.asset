@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ed80da23eebddf459df27dcc0cb6223, type: 3}
+  m_Name: Senuth
+  m_EditorClassIdentifier: 
+  ID: 2
+  codeName: richie
+  moodTextures:
+  - {fileID: 2800000, guid: 85ddd2951e560864ab446f1da1fa6204, type: 3}
+  - {fileID: 2800000, guid: e9d43081bb0f8864c9ba6e96137b36c3, type: 3}
+  - {fileID: 2800000, guid: 3cef4aeaa517dcd4b83e5fab8194b446, type: 3}
+  - {fileID: 2800000, guid: 840a08e22264e2b458071f8745e3e924, type: 3}
+  - {fileID: 2800000, guid: 30e3b9818eb9c6543bb5a404db9c6b40, type: 3}
+  moodSprites:
+  - {fileID: 21300000, guid: a081a5a251409664c85c2969c4a3b60e, type: 3}
+  - {fileID: 21300000, guid: 63ea90cecfd974d4488c9e9cfad1c2d7, type: 3}
+  - {fileID: 21300000, guid: 5cf9dfb942dd0aa4887336036ddcd9d0, type: 3}
+  - {fileID: 21300000, guid: 8901ef4f3d806774b9f1432ac3e4b2ae, type: 3}
+  - {fileID: 21300000, guid: 6cf05bd4be8a8fc4b94b9cba313f2ee0, type: 3}
+  color: {r: 0.9096067, g: 0.5990566, b: 1, a: 1}
+  prefab: {fileID: 1497278845058520, guid: 2cc5f27c841585146a8eb235f7ae7121, type: 2}
