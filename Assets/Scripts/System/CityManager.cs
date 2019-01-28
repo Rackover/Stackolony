@@ -26,13 +26,6 @@ public class CityManager : MonoBehaviour {
 
     public HouseNotation houseNotation;
 
-    private void Start()
-    {
-        foreach (Population pop in GameManager.instance.populationManager.populationTypeList) {
-            topHabitations[pop] = new Dictionary<House, float>();
-        }
-    }
-
     //Finds a house for every citizens (Soon it'll take a priority order into account)
     public void HouseEveryone()
     {

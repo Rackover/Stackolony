@@ -34,7 +34,7 @@ public class HousePanel : FlagPanel
 		for(int i = 0; i < h.acceptedPop.Length; i++)
 		{
 			citizenIcons[i].self.SetActive(true);
-            citizenIcons[i].image.sprite = h.acceptedPop[i].moodSprites[(int)Citizen.Mood.Good];
+			citizenIcons[i].image.sprite = h.acceptedPop[i].humorSprite;
 		}
 	}
 }

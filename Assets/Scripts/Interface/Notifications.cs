@@ -27,11 +27,11 @@ public class Notifications : MonoBehaviour {
         public Text text;
         public Transform transform;
 
-        public Notification(string localizationId, Color color, params string[] additionalValues)
+        public Notification(string _l, Color _c, params string[] _v)
         {
-            mainColor = color;
-            values = additionalValues;
-            locId = localizationId;
+            mainColor = _c;
+            values = _v;
+            locId = _l;
         }
     }
 
@@ -88,7 +88,7 @@ public class Notifications : MonoBehaviour {
 
         Text text = nO.GetComponentInChildren<Text>();
         text.color = GetTextColor(notification.mainColor);
-        text.text = loc.GetLine(notification.locId.ToString(), notification.values);
+        text.text = string.Format(loc.GetLine(notification.locId.ToString()), notification.values);
         notification.text = text;
 
         nO.transform.position = new Vector3(

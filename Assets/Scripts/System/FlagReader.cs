@@ -19,46 +19,11 @@ public class FlagReader : MonoBehaviour
         }
     }
 
-    public static bool IsPositive(string flagName)
-    {
-        switch (flagName) {
-            case "Generator":
-            case "MoodModifier":
-            case "Occupator":
-            case "House":
-            case "FoodProvider":
-            case "PoliceStation":
-            case "FiremanStation":
-            case "Repairer":
-            case "Spatioport":
-                return true;
-        }
-        return false;
-
-    }
-
-    public static List<string> UnpackFlag(string flag)
-    {
-        return new List<string>(flag.Split('_'));
-    }
-
     public static List<string> GetRawFlags (BlockScheme blockScheme) {
-        List<List<string>> flags = GetFlags(blockScheme);
-
         List<string> list = new List<string>();
-        foreach(List<string> parameters in flags) {
-            list.Add(parameters[0]);
-        }
 
-        return list;
-    }
-    
-    public static List<List<string>> GetFlags(BlockScheme blockScheme)
-    {
-        List<List<string>> list = new List<List<string>>();
-
-        foreach (string flag in blockScheme.flags) {
-            list.Add(UnpackFlag(flag));
+        foreach(string flag in blockScheme.flags) {
+            list.Add(flag.Split('_')[0]);
         }
 
         return list;

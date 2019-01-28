@@ -89,6 +89,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4178928114387094}
   - component: {fileID: 114956301060769950}
+  - component: {fileID: 114073688948625084}
   m_Layer: 0
   m_Name: Cursor
   m_TagString: Untagged
@@ -700,6 +701,17 @@ MonoBehaviour:
   myMeshRenderer: {fileID: 23432335991751874}
   greenMat: {fileID: 2100000, guid: 91bd606313627814bb0d42232036dcf1, type: 2}
   defaultMat: {fileID: 2100000, guid: ab20dd04b9178c841a1c4ec5583e5ec5, type: 2}
+--- !u!114 &114073688948625084
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1174463090410544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 992351ac009527541b66c05b233b8f35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114076638731126872
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -719,7 +731,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 6f409f9644df9a4459be6032c98ab4dd, type: 2}
   citizenList: []
   moodModifierIfNoHabitation: -20
-  maxCitizenNameLength: 20
 --- !u!114 &114136765406288630
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -813,6 +824,7 @@ MonoBehaviour:
   temporalityInterface: {fileID: 0}
   tooltipGO: {fileID: 0}
   blockInfobox: {fileID: 0}
+  errorDisplay: {fileID: 0}
   logger: {fileID: 0}
   gridDebugger: {fileID: 0}
   DEBUG_MODE: 0
@@ -969,22 +981,14 @@ MonoBehaviour:
   buildIcon: {fileID: 21300000, guid: c36d5e82e42199b4893b3154edd54325, type: 3}
   dragIcon: {fileID: 21300000, guid: beacc04761958224e8d1da228151e4a7, type: 3}
   bridgeIcon: {fileID: 21300000, guid: 5a5b51b82a93c814ab6082318d750ab0, type: 3}
-  citizenInParticle: {fileID: 1265812207320648, guid: 17785de2569fed64aad26ce8e15bb5f0,
-    type: 2}
-  citizenOutParticle: {fileID: 1755618298536564, guid: 39d81c62dd68d884495218dfdbf00859,
-    type: 2}
-  unpoweredParticle: {fileID: 1342877443669046, guid: 61401a9446dbf294e9c2b7ee742a808f,
-    type: 2}
-  onFireParticle: {fileID: 1254344908387132, guid: 7d93309ef69cf0b48b8522cfe92c22cd,
-    type: 2}
-  onRiotParticle: {fileID: 1278992186517358, guid: 869a1a98069845348b6aaae2bcf17c66,
-    type: 2}
-  damagedParticle: {fileID: 1943145316284874, guid: 8f2db58443c89a346aef2a5762562d14,
-    type: 2}
   buildingsIcons:
   - {fileID: 21300000, guid: 15e2ba685d2ee3143a34ccaebc18bd58, type: 3}
   - {fileID: 21300000, guid: 5adad3d7d23730644a3815e5653b5256, type: 3}
   - {fileID: 21300000, guid: 414500052b0d4c04e826f3ecadd2d66c, type: 3}
+  citizenInParticule: {fileID: 1285035770339370, guid: f0ff82113bf4f1546a6f3be882a39c72,
+    type: 2}
+  citizenOutParticule: {fileID: 1952097086203690, guid: 18e01baa419fcec40b1a62e40fddbe38,
+    type: 2}
 --- !u!114 &114575123271471090
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1045,7 +1049,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4cf781f5fca2a543bee0a43bf8d4366, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  areCinematicsEnabled: 0
 --- !u!114 &114714276369706516
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1182,6 +1185,7 @@ MonoBehaviour:
   bridgeStartPrefab: {fileID: 1146988753402014, guid: 7946d88d264faff40a74486a170fb140,
     type: 2}
   bridgesList: []
+  buildingsList: []
   spatioportSpawnPoint: {x: 60, y: 50}
   myTerrain: {fileID: 0}
   gridSize: {x: 0, y: 0, z: 0}

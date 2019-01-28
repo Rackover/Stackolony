@@ -20,6 +20,8 @@ public class GridManagement : MonoBehaviour
     [Header("=== LISTS ===")][Space(1)]
     [Header("Liste de ponts")]
     public List<GameObject> bridgesList = new List<GameObject>();
+    [Header("Liste des batiments")]
+    public List<GameObject> buildingsList = new List<GameObject>();
     [Header("Grille de blocs")]
     public Vector3[,,] bridgesGrid;
     public GameObject[,,] grid;

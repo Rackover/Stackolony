@@ -160,6 +160,10 @@ public class BlockInfobox : MonoBehaviour
 					fp = Instantiate(nuisancePanel, self.position, Quaternion.identity, generalBox).GetComponent<NuisancePanel>();
 					fp.ShowFlag((flags[i] as NuisanceGenerator));
 					break; 
+
+				default:
+					Debug.LogWarning(flags[i].GetType().Name + " dosn't have any additional boxes");
+					break;
 			}
 
 			if(fp != null)
