@@ -50,6 +50,16 @@ public class BuildingMenusDisplay : MonoBehaviour {
                 Tooltip tt = item.GetComponent<Tooltip>();
                 tt.AddLocalizedLine(new Localization.Line("blockName", "block" + block.ID.ToString()));
                 tt.AddLocalizedLine(new Localization.Line("blockDescription", "block" + block.ID.ToString()));
+
+                // Flag reading to get the block bonuses and maluses
+                foreach (List<string> flag in FlagReader.GetFlags(block)) {
+                    string name = flag[0];
+                    flag.Remove(name);
+                    string[] parameters = flag.ToArray();
+                    tt.AddLocalizedLine(new Tooltip.TooltipLocalizationEntry(
+                        name.ToLower(), "flagParameter", FlagReader.IsPositive(name) ? Tooltip.tooltipType.Positive : Tooltip.tooltipType.Negative, parameters
+                    ));
+                }
             }
 
             mO.transform.GetChild(0).gameObject.SetActive(false);

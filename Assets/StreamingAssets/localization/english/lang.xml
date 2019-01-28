@@ -38,27 +38,38 @@
 
   <blockDescription>
     <block0>Center of the city, all block should be connected to it.</block0>
-    <block1>Extinguish the selected onfire block.</block1>
-    <block2>Occupy 5 scientists.</block2>
-    <block3>Produce 5 power.</block3>
-    <block4>Produce 2 power.</block4>
-    <block5>Stops any riot in a range of 5.</block5>
-    <block6>Increase the mood of the nearby houseblocks by 10 in a range of 3 blocks.</block6>
-    <block7>A simple house.</block7>
-    <block8>Gives 6 food to houses in range.</block8>
+    <block1></block1>
+    <block2></block2>
+    <block3>A big generator</block3>
+    <block4>A small generator</block4>
+    <block5></block5>
+    <block6>People like casinos</block6>
+    <block7>A simple house</block7>
+    <block8></block8>
   </blockDescription>
 
   <flagName>
     <generator>Power Generator</generator>
     <house>Habitation</house>
     <occupator>Occupation</occupator>
-    <nuisance>Occupation</nuisance>
+    <nuisance>Nuisance</nuisance>
     <fireman>Fire Extinguisher</fireman>
     <workinghours>Working hours</workinghours>
     <police>Police</police>
     <flagneeder>Dependencies</flagneeder>
   </flagName>
 
+  <flagParameter>
+    <generator>Generates {0} power</generator>
+    <house>Houses {0} {3}s</house>
+    <occupator>Employs {0} {2}s at a range of {1}</occupator>
+    <nuisance>todo:nuisance</nuisance>
+    <fireman>Puts out fires at a range of {0}</fireman>
+    <workinghours>todo:working hours</workinghours>
+    <police>Prevents riots at a range of {0}</police>
+    <flagneeder>todo: dependencies</flagneeder>
+  </flagParameter>
+  
   <flagDescription>
     <citizenSlot>People slot count : {0}</citizenSlot>
     <range>Range {0}</range>
@@ -92,7 +103,7 @@
 	<military>Kavga</military>
 	<scientist>Covridian</scientist>
   </populationType>
-  
+	
   <stats>
 	<percentage>{0}%</percentage>
 	<moodValue>{0} are {1}</moodValue>
