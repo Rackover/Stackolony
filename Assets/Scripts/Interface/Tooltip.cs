@@ -11,14 +11,24 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
         public string id;
         public string category;
         public string[] values;
+        public tooltipType type;
+
+        public TooltipLocalizationEntry(string _id, string _category, tooltipType _type, params string[] _values)
+        {
+            id = _id;
+            category = _category;
+            type = _type;
+            values = _values;
+        }
     }
 
+    public enum tooltipType { Neutral, Positive, Negative};
     public bool isFirstLineBold = true;
-    public List<TooltipLocalizationEntry> localizations;
+    public List<Color> colors = new List<Color> { Color.black, Color.Lerp(Color.green, Color.black, 0.5f), Color.Lerp(Color.red, Color.black, 0.5f) };
 
-    private TooltipGO tooltipGO; //Correspond à un script lié au gameObject de tooltip
-    List<Localization.Line> locs = new List<Localization.Line>();
-    private bool isActive;
+    TooltipGO tooltipGO; //Correspond à un script lié au gameObject de tooltip
+    List<TooltipLocalizationEntry> locs = new List<TooltipLocalizationEntry>();
+    bool isActive;
 
     void Awake()
     {
@@ -30,9 +40,14 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
         locs.Clear();
     }
 
-    public void AddLocalizedLine(Localization.Line line)
+    public void AddLocalizedLine(TooltipLocalizationEntry line)
     {
         locs.Add(line);
+    }
+
+    public void AddLocalizedLine(Localization.Line line, tooltipType type=tooltipType.Neutral)
+    {
+        locs.Add(new TooltipLocalizationEntry(line.id, line.category, type, line.values));
     }
 
     public void OnPointerEnter(PointerEventData pointerEventData)
@@ -49,9 +64,9 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
             if (i > 0) {
                 txt += "\n";
             }
-
+            
             GameManager.instance.localization.SetCategory(locs[i].category);
-            txt += GameManager.instance.localization.GetLine(locs[i].id, locs[i].values);
+            txt += "<color=#"+ ColorUtility.ToHtmlStringRGB(colors[(int)locs[i].type])+ ">"+GameManager.instance.localization.GetLine(locs[i].id, locs[i].values)+"</color>";
 
             if (i == 0 && isFirstLineBold) {
                 txt = "<b>" + txt + "</b>";
