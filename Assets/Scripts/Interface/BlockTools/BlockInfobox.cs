@@ -162,7 +162,7 @@ public class BlockInfobox : MonoBehaviour
 					break; 
 
 				default:
-					Debug.LogWarning(flags[i].GetType().Name + " dosn't have any additional boxes");
+					//Debug.LogWarning(flags[i].GetType().Name + " dosn't have any additional boxes");
 					break;
 			}
 

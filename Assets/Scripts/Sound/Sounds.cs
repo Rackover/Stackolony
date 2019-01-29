@@ -5,5 +5,5 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "sound", menuName = "sound")]
 public class Sounds : ScriptableObject 
 {
-	public SFXManager.Sound[] sounds;
+	public SoundManager.Sound[] sounds;
 }

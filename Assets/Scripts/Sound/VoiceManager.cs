@@ -6,20 +6,21 @@ public class VoiceManager : MonoBehaviour
 {
 	AudioSource source;
 
-	Dictionary<string, int> populationVoice = new Dictionary<string, int>()
-	{
-		{"Eari", 0},
-		{"Kavga", 1},
-		{"Senuth", 2},
-		{"Covridian", 3},
-		{"Krowser", 4}
-	};
+	Dictionary<string, AudioClip> populationVoice = new Dictionary<string, AudioClip>();
 
 	void Awake()
 	{
+		// REFERENCE TO THE AUDIOSOURCE
 		source = gameObject.GetComponent<AudioSource>();
 		if(source == null) source = gameObject.AddComponent<AudioSource>();
 		source.loop = true;
+
+		// FILLING DICTIONARY
+		populationVoice.Add("Eari", GameManager.instance.library.voices[0]);
+		populationVoice.Add("Kavga", GameManager.instance.library.voices[1]);
+		populationVoice.Add("Senuth", GameManager.instance.library.voices[2]);
+		populationVoice.Add("Covridian", GameManager.instance.library.voices[3]);
+		populationVoice.Add("Krowser", GameManager.instance.library.voices[4]);
 	}
 
 	public void ChangeVolume(float v)
@@ -29,7 +30,7 @@ public class VoiceManager : MonoBehaviour
 
 	public void Play(string popName, float duration = 5f)
 	{
-		source.clip = GameManager.instance.library.voices[populationVoice[popName]];
+		source.clip = populationVoice[popName];
 		source.time = Random.Range(0f, source.clip.length);
 		source.pitch = Random.Range(0.9f, 1.1f);
 		source.Play();

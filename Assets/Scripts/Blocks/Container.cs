@@ -76,17 +76,17 @@ public class Container : MonoBehaviour
 
     public void DropSound()
     {
-        GameManager.instance.soundManager.sfxPlayer.PlaySoundAtPosition("DropContainer",this.transform.position);
+        GameManager.instance.soundManager.Play("DropContainer");
     }
 
     public void ShipSound()
     {
-        GameManager.instance.soundManager.sfxPlayer.PlaySoundAtPosition("Ship", this.transform.position + new Vector3(0, 10, 0)); //Joue le son un peu plus haut pour comprendre que le vaisseau se trouve au dessus
+        GameManager.instance.soundManager.Play("Ship"); //Joue le son un peu plus haut pour comprendre que le vaisseau se trouve au dessus
     }
 
     public void DropBlock()
     {
-        GameManager.instance.soundManager.sfxPlayer.PlaySoundWithRandomParameters("FallingContainer",1,1,0.8f,1.2f);
+        GameManager.instance.soundManager.Play("FallingContainer");
         myAnimator.SetTrigger("Drop");
         CloseContainer();
     }
@@ -102,7 +102,7 @@ public class Container : MonoBehaviour
         cColor = oColor;
         
         linkedBlock.ToggleVisuals(true);
-        GameManager.instance.soundManager.sfxPlayer.PlaySoundLinked("OpenContainer",this.gameObject);
+        GameManager.instance.soundManager.Play("OpenContainer");
         myAnimator.SetBool("Closed", closed);
     }
 
