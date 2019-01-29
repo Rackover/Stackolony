@@ -23,7 +23,7 @@ public class OverlayManager : MonoBehaviour
     //PRIvATE DATAS
     public interface IOverlay
     {
-        string displayName { get; }
+        string codeName { get; }
         Gradient color { get; set; }
         Color defaultColor { get; set; }
         Image sprite { get; set; }
@@ -32,9 +32,9 @@ public class OverlayManager : MonoBehaviour
 
     public class Default : IOverlay
     {
-        public string displayName
+        public string codeName
         {
-            get { return "Default"; }
+            get { return "default"; }
         }
         public Gradient color { get; set; }
         public Image sprite { get; set; }
@@ -52,9 +52,9 @@ public class OverlayManager : MonoBehaviour
 
     class Type : IOverlay
     {
-        public string displayName
+        public string codeName
         {
-            get { return "Type"; }
+            get { return "type"; }
         }
         public Gradient color { get; set; }
         public Image sprite { get; set; }
@@ -68,20 +68,15 @@ public class OverlayManager : MonoBehaviour
                 blockMat.color = defaultColor;
                 foreach (Flag flag in block.activeFlags)
                 {
-                    if (flag.GetType() == typeof(House))
+                    if (FlagReader.GetCategory(block.scheme) == CityManager.BuildingType.Habitation)
                     {
                         blockMat.color = color.Evaluate(0f);
                     }
-                    else if (flag.GetType() == typeof(Occupator))
+                    else if (FlagReader.GetCategory(block.scheme) == CityManager.BuildingType.Occupators)
                     {
                         blockMat.color = color.Evaluate(0.5f);
                     }
-                    else if (flag.GetType() == typeof(FiremanStation) ||
-                      flag.GetType() == typeof(Generator) ||
-                      flag.GetType() == typeof(FoodProvider) ||
-                      flag.GetType() == typeof(PoliceStation) ||
-                      flag.GetType() == typeof(Repairer) ||
-                      flag.GetType() == typeof(Spatioport))
+                    else if (FlagReader.GetCategory(block.scheme) == CityManager.BuildingType.Services)
                     {
                         blockMat.color = color.Evaluate(1f);
                     }
@@ -93,9 +88,9 @@ public class OverlayManager : MonoBehaviour
     // TODO : IMPLEMENT FIRE RISKS
     class FireRisks : IOverlay
     {
-        public string displayName
+        public string codeName
         {
-            get { return "Fire Risks"; }
+            get { return "firerisk"; }
         }
         public Gradient color { get; set; }
         public Image sprite { get; set; }
@@ -113,9 +108,9 @@ public class OverlayManager : MonoBehaviour
 
     class Power : IOverlay
     {
-        public string displayName
+        public string codeName
         {
-            get { return "Power distribution"; }
+            get { return "power"; }
         }
         public Gradient color { get; set; }
         public Image sprite { get; set; }
@@ -148,9 +143,9 @@ public class OverlayManager : MonoBehaviour
 
     class Food : IOverlay
     {
-        public string displayName
+        public string codeName
         {
-            get { return "Food consumption"; }
+            get { return "foodconsumption"; }
         }
         public Gradient color { get; set; }
         public Image sprite { get; set; }
@@ -185,9 +180,9 @@ public class OverlayManager : MonoBehaviour
 
     class Habitation : IOverlay
     {
-        public string displayName
+        public string codeName
         {
-            get { return "Habitation quality"; }
+            get { return "habitation"; }
         }
         public Gradient color { get; set; }
         public Image sprite { get; set; }
@@ -235,9 +230,9 @@ public class OverlayManager : MonoBehaviour
 
     class Density : IOverlay
     {
-        public string displayName
+        public string codeName
         {
-            get { return "Population density"; }
+            get { return "density"; }
         }
         public Gradient color { get; set; }
         public Image sprite { get; set; }
@@ -299,11 +294,9 @@ public class OverlayManager : MonoBehaviour
         activeOverlay = type;
     }
 
-    public IEnumerator UpdateOverlay()
+    public void UpdateOverlay()
     {
         SelectOverlay(activeOverlay);
-        yield return new WaitForSeconds(FindObjectOfType<Interface>().refreshRate);
-        yield return StartCoroutine(UpdateOverlay());
     }
 
     private void Awake()
