@@ -5,39 +5,55 @@ using UnityEditor;
 using System;
 using System.IO;
 
-public class BlockReader : MonoBehaviour {
-/*
+public class BlockReader : EditorWindow 
+{
 	Vector2 scroll;
 	TextAsset csvFile;
 	bool preview;
 
+	string fileName = "";
+
     [MenuItem("Window/BlockReader")]
-    public static void Init()
+    static void Init()
     {
-        BlockReader br = EditorWindow.GetWindow<BlockReader>();
+        BlockReader br = (BlockReader)EditorWindow.GetWindow(typeof(BlockReader));
         br.Show();
     }
 
-	private void OnGUI()
+	void OnGUI()
     {
+		GUI.color = Color.white;
 		GUILayout.Label("Blocks CSV data reader", EditorStyles.boldLabel);
 
         csvFile = EditorGUILayout.ObjectField("Drop a CSV file here", csvFile, typeof(TextAsset), false) as TextAsset;
 		if (csvFile != null)
         {
+			GUILayout.BeginHorizontal();
+			GUILayout.Label("Enter folder name :");
 
-			if(preview)
-			{
-				//scroll = EditorGUILayout.BeginScrollView(scroll);
-				EditorGUILayout.TextArea(csvFile.ToString());
-				//EditorGUILayout.EndScrollView();
-			}
+			if(fileName == "") GUI.color = Color.red;
+			else GUI.color = Color.green;
+
+			fileName = GUILayout.TextField(fileName);
+			GUILayout.EndHorizontal();
+
+			GUI.color = Color.white;
 
 			GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Read CSV and generate Blocks")) 
+			if(fileName != "")
 			{
-				GenerateQuests();
+				if(GUILayout.Button("Read CSV and generate Blocks")) 
+				{
+					GenerateBlocks();
+				}
 			}
+			else
+			{
+				GUI.color = Color.grey;
+				GUILayout.Button("Read CSV and generate Blocks");
+				GUI.color = Color.white;
+			}
+
 			if(preview)
 			{
 				if (GUILayout.Button("Hide datas")) 
@@ -53,15 +69,21 @@ public class BlockReader : MonoBehaviour {
 				}
 			}
 			GUILayout.EndHorizontal();
+
+			if(preview)
+			{
+				GUI.color = Color.grey;
+				EditorGUILayout.TextArea(csvFile.ToString());
+			}				
         }
     }	
 
-	private void GenerateQuests()
+	private void GenerateBlocks()
     {
 		string fullText = csvFile.text;
 		
 		string[] lineSeparators = new string[]{"\n", "\r", "\n\r", "\r\n"};
-		char[] cellSeparators = new char[]{';'};
+		char[] cellSeparators = new char[]{','};
 		string[] lines = fullText.Split(lineSeparators, System.StringSplitOptions.RemoveEmptyEntries);
 		
 		List<string[]> completeExcelFile = new List<string[]>();
@@ -79,20 +101,33 @@ public class BlockReader : MonoBehaviour {
 
 	void SaveBlock(string[] dataLine)
 	{
-		BlockScheme block = ScriptableObject.CreateInstance<BlockScheme>();
-		
-		block.title = dataLine[0];
-		block.level = int.Parse(dataLine[1]);
-		block.consumption = int.Parse(dataLine[2]);
-		block.complexity = int.Parse(dataLine[3]);
-		block.description = dataLine[4];
-		block.flags = dataLine[5].Split(new char[]{'/'}, System.StringSplitOptions.RemoveEmptyEntries);
+		if(dataLine.Length == 9)
+		{
+			BlockScheme block = ScriptableObject.CreateInstance<BlockScheme>();
 
-		if(!Directory.Exists("Assets/Databank/Blocks")) Directory.CreateDirectory("Assets/Databank/Blocks");
+			// Ints
+			block.ID = int.Parse(dataLine[1]);
+			block.consumption = int.Parse(dataLine[2]);
+			block.sensibility = int.Parse(dataLine[3]);
 
-		AssetDatabase.CreateAsset(block, "Assets/Databank/Blocks/Block_" + block.title + ".asset");
-		AssetDatabase.SaveAssets();
-		AssetDatabase.Refresh();
+			// Flags
+			block.flags = dataLine[4].Split(new char[]{'/'}, System.StringSplitOptions.RemoveEmptyEntries);
+
+			// Booleans
+			block.isMovable = bool.Parse(dataLine[5]);
+			block.isDestroyable = bool.Parse(dataLine[6]);
+			block.isBuyable = bool.Parse(dataLine[7]);
+			block.canBuildAbove = bool.Parse(dataLine[8]);
+
+			if(!Directory.Exists("Assets/Databank/Blocks/" + fileName)) Directory.CreateDirectory("Assets/Databank/Blocks/" + fileName);
+
+			AssetDatabase.CreateAsset(block, "Assets/Databank/Blocks/" + fileName + "/Block_" + dataLine[0] + ".asset");
+			AssetDatabase.SaveAssets();
+			AssetDatabase.Refresh();
+		}
+		else
+		{
+			Debug.LogWarning("Your file is not properly setup, there is only " + dataLine.Length + " elements in each lines. Where there should be 9." );
+		}
 	}
-    */
 }
