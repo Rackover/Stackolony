@@ -34,7 +34,6 @@ public class Library : MonoBehaviour
 
 	[Header("Sounds")]
 	public Sounds soundBank;
-	public AudioClip[] voices;
 	public AudioClip mainMusic;
 
 	public BlockScheme GetBlockByID(int id)

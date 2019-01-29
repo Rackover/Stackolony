@@ -12,4 +12,5 @@ public class Population : ScriptableObject {
     public Sprite[] moodSprites;
     public Color color;
     public GameObject prefab;
+    public AudioClip voice;
 }
