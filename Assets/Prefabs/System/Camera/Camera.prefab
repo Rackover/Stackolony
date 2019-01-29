@@ -41,6 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4585608947273694}
   - component: {fileID: 20722758007433312}
+  - component: {fileID: 114796242473385964}
   m_Layer: 0
   m_Name: CameraStandardProcess
   m_TagString: MainCamera
@@ -124,7 +125,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 4
-  m_BackGroundColor: {r: 0.10693307, g: 0.16309094, b: 0.254717, a: 0}
+  m_BackGroundColor: {r: 1, g: 0, b: 0.89338493, a: 1}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
@@ -186,7 +187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b9a305e18de0c04dbd257a21cd47087, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sharedProfile: {fileID: 11400000, guid: 024a0e7f4dc20a74fa92d6786a84688c, type: 2}
+  sharedProfile: {fileID: 11400000, guid: f37f796a025d56743ae4543f5bc53029, type: 2}
   isGlobal: 1
   blendDistance: 0
   weight: 1
@@ -249,6 +250,17 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles: []
+--- !u!114 &114796242473385964
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1979716195221794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89f038ee7dc677e43b7d9b59e9fc53cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114853268940141986
 MonoBehaviour:
   m_ObjectHideFlags: 1
