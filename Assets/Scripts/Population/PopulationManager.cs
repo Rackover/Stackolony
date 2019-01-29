@@ -11,6 +11,7 @@ public class PopulationManager : MonoBehaviour {
     private Dictionary<Population, float> averageMoods = new Dictionary<Population, float>();  // average moods between 0 and 1
     public Dictionary<Population, List<MoodModifier>> moodModifiers = new Dictionary<Population, List<MoodModifier>>(); //List of every active moodmodifiers for every population
 
+    public float startingMood = 50f;
     public float maxMood = 100f;
     public float moodModifierIfNoHabitation = -20f;
     List<string> names;
@@ -42,7 +43,7 @@ public class PopulationManager : MonoBehaviour {
     void Start()
     {
         foreach(Population pop in populationTypeList) {
-            averageMoods[pop] = Random.value*100f;
+            averageMoods[pop] = startingMood;
             populationCitizenList[pop] = new List<Citizen>();
             moodModifiers[pop] = new List<MoodModifier>();
         }
