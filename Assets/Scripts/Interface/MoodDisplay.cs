@@ -33,6 +33,10 @@ public class MoodDisplay : MonoBehaviour {
     public float happyThreshold = 0.7f;
     public float blinkSpeed = 0.33f;
     public float blinkLength = 2f;
+    public float angle = 200f;
+    public float rotationSpeed = 0f;
+    public float cameraDistance = 2f;
+    public float FOV = 30f;
 
     bool isDragging = false;
     float dragMargin;
@@ -89,7 +93,7 @@ public class MoodDisplay : MonoBehaviour {
 
         if (playerOptions.GetBool("animatedCitizens")) {
             if (preview == null) {
-                preview = GameManager.instance.displayerManager.SetRotationFeed(population.prefab, face, 200f, 0, 2f, 30, 128);
+                preview = GameManager.instance.displayerManager.SetRotationFeed(population.prefab, face, angle, rotationSpeed, cameraDistance, FOV, 128);
             }
             changeMood = (x) => {
                 preview.GetModel().GetComponent<Citizen>().SetEmotion(x);
