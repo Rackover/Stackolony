@@ -19,11 +19,6 @@
 		<musicVolume>Music volume</musicVolume>
 		<bgsVolume>Background sound volume</bgsVolume>
 	</options>
-
-  <hud>
-    <delivery>Delivery</delivery>
-  </hud>
-
   <blockName>
     <block0>StatioPort</block0>
     <block1>Fireman Station</block1>
@@ -70,15 +65,6 @@
     <flagneeder>todo: dependencies</flagneeder>
   </flagParameter>
   
-  <flagDescription>
-    <citizenSlot>People slot count : {0}</citizenSlot>
-    <range>Range {0}</range>
-    <amount>Amount {0}</amount>
-    <powerGeneration>Power generation {0}</powerGeneration>
-    <timeperiod>From {0} to {1}</timeperiod>
-    <flagneed>A {0} is required in a range of {0}</flagneed>
-  </flagDescription>
-
   <state>
     <onfire>On fire</onfire>
     <powered>Powered</powered>
