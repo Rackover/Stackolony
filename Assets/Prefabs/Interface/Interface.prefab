@@ -2153,11 +2153,12 @@ MonoBehaviour:
   isHidden: 1
   homelessColor: {r: 1, g: 0, b: 0, a: 1}
   noHomelessColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  blinkColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
   angryThreshold: 0.3
   happyThreshold: 0.7
-  blinkSpeed: 0.25
-  blinkLength: 2
+  angle: 200
+  rotationSpeed: 0
+  cameraDistance: 2
+  FOV: 30
 --- !u!114 &114293169936178226
 MonoBehaviour:
   m_ObjectHideFlags: 1
