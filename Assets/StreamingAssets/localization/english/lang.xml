@@ -47,9 +47,40 @@
     <block7>A simple house.</block7>
     <block8>Gives 6 food to houses in range.</block8>
   </blockDescription>
+
+  <flagName>
+    <generator>Power Generator</generator>
+    <house>Habitation</house>
+    <occupator>Occupation</occupator>
+    <nuisance>Occupation</nuisance>
+    <fireman>Fire Extinguisher</fireman>
+    <workinghours>Working hours</workinghours>
+    <police>Police</police>
+    <flagneeder>Dependencies</flagneeder>
+  </flagName>
+
+  <flagDescription>
+    <citizenSlot>People slot count : {0}</citizenSlot>
+    <range>Range {0}</range>
+    <amount>Amount {0}</amount>
+    <powerGeneration>Power generation {0}</powerGeneration>
+    <timeperiod>From {0} to {1}</timeperiod>
+    <flagneed>A {0} is required in a range of {0}</flagneed>
+  </flagDescription>
+
+  <state>
+    <onfire>On fire</onfire>
+    <powered>Powered</powered>
+    <onriot>On riot</onriot>
+    <damaged>Damaged</damaged>
+    <burned>Burned</burned>
+  </state>
+  
   <notification>
-	<cannotBuild><b>You cannot build here</b></cannotBuild>
-	<notLinked>This building is not connected to the spatioport!</notLinked>
-	<newPeople>5 new people have arrived to the city</newPeople>
+	<misalignedBlocks>The blocks are not aligned</misalignedBlocks>
+	<differentHeightBlocks>The blocks are at different heights</differentHeightBlocks>
+	<selfBridging>You can't bridge a block to itself</selfBridging>
+	<cannotUseTool>You cannot use this tool here</cannotUseTool>
+	<maxHeightReached>Maximum height reached</maxHeightReached>
   </notification>
 </lines>

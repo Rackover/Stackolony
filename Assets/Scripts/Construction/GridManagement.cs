@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class GridManagement : MonoBehaviour 
 {
@@ -24,7 +25,6 @@ public class GridManagement : MonoBehaviour
     [Header("Grille de blocs")]
     public Vector3[,,] bridgesGrid;
     public GameObject[,,] grid;
-
 
     public Vector2Int spatioportSpawnPoint;
     public Terrain myTerrain; //Terrain sur lequel la grille doit être generée
@@ -136,13 +136,13 @@ public class GridManagement : MonoBehaviour
                 }
                 else
                 {
-                    if (GetSlotType(new Vector3Int(coordinates.x, i, coordinates.z),false) == GridManagement.blockType.FREE)
+                    if (GetSlotType(new Vector3Int(coordinates.x, i, coordinates.z)) == GridManagement.blockType.FREE)
                     {
                         MoveBlock(grid[coordinates.x, i, coordinates.z], new Vector3Int(coordinates.x, i - 1, coordinates.z));
                     } else
                     {
                         grid[coordinates.x, i - 1, coordinates.z] = null;
-                        gameManager.errorDisplay.ShowError("Error at update");
+                        Logger.Error("An error happened while moving blocks down the grid from " + coordinates + " to " + (new Vector3Int(coordinates.x, i - 1, coordinates.z)));
                         return;
                     }
                 }
@@ -200,7 +200,7 @@ public class GridManagement : MonoBehaviour
         // Candidate coordinates
         Vector3Int coordinates3 = new Vector3Int(coordinates.x, y, coordinates.y);
 
-        if (GetSlotType(coordinates3, true) != GridManagement.blockType.FREE)
+        if (GetSlotType(coordinates3) != GridManagement.blockType.FREE)
         {
             return;
         }
@@ -211,7 +211,7 @@ public class GridManagement : MonoBehaviour
             // The slot is occupied - let's see if we can lay our block ontop
             for (int i = coordinates3.y; i < gridSize.y - 1; i++)
             {
-                if (GetSlotType(new Vector3Int(coordinates3.x, i, coordinates3.z), true) != GridManagement.blockType.FREE)
+                if (GetSlotType(new Vector3Int(coordinates3.x, i, coordinates3.z)) != GridManagement.blockType.FREE)
                 {
                     continue;
                 }
@@ -260,20 +260,11 @@ public class GridManagement : MonoBehaviour
         return newBlockGO;
     }
 
-    public blockType GetSlotType(Vector3Int coordinates, bool displayErrorMessages)
+    public blockType GetSlotType(Vector3Int coordinates)
     {
         GameObject objectFound = grid[coordinates.x, coordinates.y, coordinates.z];
-        if (objectFound != null)
-        {
-            switch (objectFound.tag)
-            {
-                case "Bridge":
-                    if (displayErrorMessages)
-                        gameManager.errorDisplay.ShowError("You can't build over a bridge");
-                    return blockType.BRIDGE;
-                default:
-                    break;
-            }
+        if (objectFound != null && objectFound.tag == "Bridge") {
+                return blockType.BRIDGE;
         }
         return blockType.FREE;
     }
@@ -371,7 +362,7 @@ public class GridManagement : MonoBehaviour
                 _posToCheck.y = blockA.gridCoordinates.y;
                 _posToCheck.z = blockA.gridCoordinates.z + (i * direction.y);
 
-            if (GetSlotType(new Vector3Int(_posToCheck.x, _posToCheck.y, _posToCheck.z), true) != GridManagement.blockType.FREE)
+            if (GetSlotType(new Vector3Int(_posToCheck.x, _posToCheck.y, _posToCheck.z)) != GridManagement.blockType.FREE)
             {
                 return null;
             }

@@ -20,11 +20,17 @@ public class Library : MonoBehaviour
 	public Sprite buildIcon;
     public Sprite dragIcon;
     public Sprite bridgeIcon;
-    public List<Sprite> buildingsIcons = new List<Sprite>();
 
-    [Header("Particules")]
-	public GameObject citizenInParticule;
-	public GameObject citizenOutParticule;
+	[Header("Particules")]
+	public GameObject citizenInParticle;
+	public GameObject citizenOutParticle;
+	public GameObject unpoweredParticle;
+	public GameObject onFireParticle;
+	public GameObject onRiotParticle;
+	public GameObject damagedParticle;
+	
+	[Header("Building")]
+    public List<Sprite> buildingsIcons = new List<Sprite>();
 
 	[Header("Sounds")]
 	public Sounds soundBank;

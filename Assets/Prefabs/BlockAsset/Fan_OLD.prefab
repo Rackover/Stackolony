@@ -106,7 +106,6 @@ GameObject:
   - component: {fileID: 4020545741031304}
   - component: {fileID: 33415506234372584}
   - component: {fileID: 23149552180486514}
-  - component: {fileID: 111025390423683600}
   m_Layer: 0
   m_Name: Fan_OLD
   m_TagString: Untagged
@@ -601,18 +600,3 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1315314900280652}
   m_Mesh: {fileID: 4300008, guid: 48bfc87dbcca5404a8ff902085bcf35b, type: 3}
---- !u!111 &111025390423683600
-Animation:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1606115355712488}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Animation: {fileID: 7400000, guid: 7c7f8af28f2fb984c863842a3200ac05, type: 2}
-  m_Animations:
-  - {fileID: 7400000, guid: 7c7f8af28f2fb984c863842a3200ac05, type: 2}
-  m_WrapMode: 0
-  m_PlayAutomatically: 1
-  m_AnimatePhysics: 0
-  m_CullingType: 0
