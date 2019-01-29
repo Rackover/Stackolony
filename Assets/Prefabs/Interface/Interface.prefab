@@ -284,6 +284,8 @@ GameObject:
   - component: {fileID: 114213417641897422}
   - component: {fileID: 114310085347876202}
   - component: {fileID: 114646473113273508}
+  - component: {fileID: 114158959254967068}
+  - component: {fileID: 114344910242005302}
   m_Layer: 5
   m_Name: BulletinButton
   m_TagString: Untagged
@@ -335,6 +337,7 @@ GameObject:
   - component: {fileID: 222888886454799412}
   - component: {fileID: 114274365666061790}
   - component: {fileID: 114217966640076696}
+  - component: {fileID: 114562028889621222}
   m_Layer: 0
   m_Name: Button
   m_TagString: Untagged
@@ -1159,7 +1162,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 224527383778805756}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1522,6 +1525,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114158959254967068
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1228944326810986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aec1859cd764b7b4fbd193a2926b4066, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: 
 --- !u!114 &114160857367610514
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1939,7 +1954,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 224951944361754420}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.666
+  m_Size: 0.6825084
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2124,6 +2139,18 @@ MonoBehaviour:
   maxLength: 10
   shift: {x: 20, y: 20}
   tooltipIcons: []
+--- !u!114 &114344910242005302
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1228944326810986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aec1859cd764b7b4fbd193a2926b4066, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: Tick
 --- !u!114 &114348392251556806
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2589,6 +2616,18 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &114562028889621222
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1261451157716532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aec1859cd764b7b4fbd193a2926b4066, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: Tick
 --- !u!114 &114571689687669616
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -4334,7 +4373,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00000007859527, y: -0.000034332275}
+  m_AnchoredPosition: {x: 0.00000007859527, y: -0.000032552784}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224513103916148610
@@ -4805,7 +4844,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.000076293945, y: 0}
+  m_AnchoredPosition: {x: -0.000076293945, y: -0.000030517578}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!224 &224951944361754420
