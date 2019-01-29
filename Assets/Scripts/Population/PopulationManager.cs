@@ -20,6 +20,15 @@ public class PopulationManager : MonoBehaviour {
         public int cyclesRemaining;
     }
 
+    [System.Serializable]
+    public class MoodEvent
+    {
+        Population population;
+        float[] moments;
+        bool[] occured;
+        string[] function;
+    }
+
     [Header("System")]
     public Population[] populationTypeList; //Liste de chaques type de population
     public List<Citizen> citizenList = new List<Citizen>(); //Liste de chaque citoyen de la colonie
