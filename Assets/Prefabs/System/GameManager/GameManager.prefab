@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 4508389629830412}
   - component: {fileID: 114856474035917588}
   - component: {fileID: 114794454744214778}
-  - component: {fileID: 114446540146475740}
   m_Layer: 0
   m_Name: MissionManager
   m_TagString: Untagged
@@ -970,6 +969,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 62e1baca1586b5e4f85c1cdc5c918ec1, type: 2}
   - {fileID: 11400000, guid: 6f409f9644df9a4459be6032c98ab4dd, type: 2}
   citizenList: []
+  startingMood: 50
+  maxMood: 100
   moodModifierIfNoHabitation: -20
   maxCitizenNameLength: 20
 --- !u!114 &114136765406288630
@@ -1065,7 +1066,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f958b8d138443547baa4728294e9872, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sfxPlayer: {fileID: 0}
   voicePlayer: {fileID: 114319189306262394}
   musicPlayer: {fileID: 114325092135369002}
 --- !u!114 &114441833141659196
@@ -1100,37 +1100,10 @@ MonoBehaviour:
   displayerManager: {fileID: 0}
   temporalityInterface: {fileID: 0}
   tooltipGO: {fileID: 0}
-  blockInfobox: {fileID: 0}
   logger: {fileID: 0}
   gridDebugger: {fileID: 0}
   DEBUG_MODE: 0
   ENABLE_LOGS: 1
---- !u!114 &114446540146475740
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1107635792204446}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0c329f2536211b4baae7ba3aa5cc924, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabRemoving: {fileID: 1330950013455556, guid: c89020d6ae7142645985d5e9a5f46e90,
-    type: 2}
-  prefabEmitting: {fileID: 1109864763100982, guid: 86fe2ef75fc279a4f8f10dff9fb03577,
-    type: 2}
-  mission:
-    exploredPositions: []
-    blocksFound: []
-    blockDistanceToCenter: 
-    power: 0
-    range: 0
-    callBack: 
-    position: {x: 0, y: 0, z: 0}
-    explorerCount: 0
-  activeCoroutinesRelatedToPower: 0
-  activeCoroutinesRelatedToSpatioport: 0
 --- !u!114 &114537474688601184
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1205,12 +1178,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 5adad3d7d23730644a3815e5653b5256, type: 3}
   - {fileID: 21300000, guid: 414500052b0d4c04e826f3ecadd2d66c, type: 3}
   soundBank: {fileID: 11400000, guid: 764899dc09e5a5841b21cf448bc2fd96, type: 2}
-  voices:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   mainMusic: {fileID: 8300000, guid: 59d725638fc69e74fadca7c5b3140659, type: 3}
 --- !u!114 &114575123271471090
 MonoBehaviour:
