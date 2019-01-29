@@ -32,6 +32,10 @@ public class Library : MonoBehaviour
 	[Header("Building")]
     public List<Sprite> buildingsIcons = new List<Sprite>();
 
+	[Header("Sounds")]
+	public Sounds soundBank;
+	public AudioClip[] voices;
+	public AudioClip mainMusic;
 
 	public BlockScheme GetBlockByID(int id)
 	{	

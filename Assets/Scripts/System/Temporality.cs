@@ -79,10 +79,10 @@ public class Temporality : MonoBehaviour {
     {
         if (newTimeScaleCoef > timeScale)
         {
-            GameManager.instance.sfxManager.PlaySound("IncreaseSpeed");
+            GameManager.instance.soundManager.Play("IncreaseSpeed");
         } else if (newTimeScaleCoef < timeScale)
         {
-            GameManager.instance.sfxManager.PlaySound("DecreaseSpeed");
+            GameManager.instance.soundManager.Play("DecreaseSpeed");
         }
         timeScale = newTimeScaleCoef;
     }
