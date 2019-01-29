@@ -138,37 +138,37 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F1))
         {
-            overlayManager.SelectOverlayMode(0);
+            overlayManager.selectOverlay(OverlayType.Default);
         }
 
         if (Input.GetKeyDown(KeyCode.F2))
         {
-            overlayManager.SelectOverlayMode(1);
+            overlayManager.selectOverlay(OverlayType.Type);
         }
 
         if (Input.GetKeyDown(KeyCode.F3))
         {
-            overlayManager.SelectOverlayMode(2);
+            overlayManager.selectOverlay(OverlayType.FireRisks);
         }
 
         if (Input.GetKeyDown(KeyCode.F4))
         {
-            overlayManager.SelectOverlayMode(3);
+            overlayManager.selectOverlay(OverlayType.Food);
         }
 
         if (Input.GetKeyDown(KeyCode.F5))
         {
-            overlayManager.SelectOverlayMode(4);
+            overlayManager.selectOverlay(OverlayType.Habitation);
         }
 
         if (Input.GetKeyDown(KeyCode.F6))
         {
-            overlayManager.SelectOverlayMode(5);
+            overlayManager.selectOverlay(OverlayType.Power);
         }
 
         if (Input.GetKeyDown(KeyCode.F7))
         {
-            overlayManager.SelectOverlayMode(6);
+            overlayManager.selectOverlay(OverlayType.Density);
         }
 
         if (Input.GetKeyDown(KeyCode.N)) { 
