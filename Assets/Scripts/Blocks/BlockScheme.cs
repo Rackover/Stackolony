@@ -15,10 +15,7 @@ public class BlockScheme : ScriptableObject
     public bool isBuyable = true;
     public bool canBuildAbove = true;
 
-	[Header("Datas")]
-	public string title = "BlockScheme Name";
-	[TextArea] public string description = "This needs a proper description";
-	
+	[Header("Datas")]	
 	public GameObject model;
     public int ID;
 
