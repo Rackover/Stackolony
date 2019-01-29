@@ -172,7 +172,7 @@ public class Block : MonoBehaviour {
 
                 case BlockState.OnFire:
 					effects.Activate(library.onFireParticle);
-                    //GameManager.instance.sfxManager.PlaySound("StartingFire");
+                    GameManager.instance.soundManager.Play("StartingFire");
 					break;
 
                 case BlockState.OnRiot:
@@ -206,7 +206,7 @@ public class Block : MonoBehaviour {
 
                 case BlockState.OnFire:
 					effects.Desactivate(library.onFireParticle);
-                    //GameManager.instance.sfxManager.PlaySound("StoppingFire");
+                    GameManager.instance.soundManager.Play("StoppingFire");
 					break;
 
                 case BlockState.OnRiot:
