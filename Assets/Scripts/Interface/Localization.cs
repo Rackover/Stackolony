@@ -32,16 +32,27 @@ public class Localization : MonoBehaviour {
             return name + "=>" + locFilePath;
         }
     }
-
+    
+    [Serializable]
     public class Line
     {
         public string category { get; }
         public string id { get; }
+        public string[] values { get; }
 
-        public Line(string c, string i)
+
+        public Line(Tooltip.TooltipLocalizationEntry tt, params string[] vs)
+        {
+            category = tt.category;
+            id = tt.id;
+            values = vs;
+        }
+
+        public Line(string c, string i, params string[] vs)
         {
             category = c;
             id = i;
+            values = vs;
         }
     }
 
@@ -119,21 +130,21 @@ public class Localization : MonoBehaviour {
         currentCategory = category;
     }
 
-    public string GetLine(string id, string category)
+    public string GetLine(string id, string category, params string[] values)
     {
         SetCategory(category);
-        return GetLine(id);
+        return GetLine(id, values);
     }
     
-    public string GetLine(string id)
+    public string GetLine(string id, params string[] values)
     {
-        try { 
-            string line = locs[new KeyValuePair<string, string>(currentCategory, id)];
+        try {
+            string line = string.Format(locs[new KeyValuePair<string, string>(currentCategory, id)], values);
             return Interpret(line);
         }
         catch(KeyNotFoundException e) {
             Logger.Error("Could not load line ID " + id);
-            return "LOC " + currentCategory + ":" + id;
+            return "[LOC:" + currentCategory + "=>" + id+"]";
         }
     }
 

@@ -11,9 +11,13 @@ public class PopulationManager : MonoBehaviour {
     private Dictionary<Population, float> averageMoods = new Dictionary<Population, float>();  // average moods between 0 and 1
     public Dictionary<Population, List<MoodModifier>> moodModifiers = new Dictionary<Population, List<MoodModifier>>(); //List of every active moodmodifiers for every population
 
+    public float startingMood = 50f;
+    public float maxMood = 100f;
     public float moodModifierIfNoHabitation = -20f;
     List<string> names;
     public int maxCitizenNameLength = 20;
+
+    public event System.Action<int, Population> CitizenArrival;
 
     [System.Serializable]
     public class Citizen
@@ -39,7 +43,7 @@ public class PopulationManager : MonoBehaviour {
     void Start()
     {
         foreach(Population pop in populationTypeList) {
-            averageMoods[pop] = 50f;
+            averageMoods[pop] = startingMood;
             populationCitizenList[pop] = new List<Citizen>();
             moodModifiers[pop] = new List<MoodModifier>();
         }
@@ -136,6 +140,24 @@ public class PopulationManager : MonoBehaviour {
         }
     }
 
+    public int GetHomelessCount(Population population)
+    {
+        int count = 0;
+        foreach(Citizen citizen in populationCitizenList[population]) {
+            count += citizen.habitation == null ? 1 : 0;
+        }
+        return count;
+    }
+
+    public int GetHomelessCount()
+    {
+        int count = 0;
+        foreach(Population pop in populationTypeList) {
+            count += GetHomelessCount(pop);
+        }
+        return count;
+    }
+
     //Generates a new citizen on the colony, shouldn't be called directly, use the other function with the amount parameter
     Citizen AddCitizen(Population type)
     {
@@ -157,6 +179,7 @@ public class PopulationManager : MonoBehaviour {
             citizens.Add(AddCitizen(type));
         }
         Logger.Debug("Spawned " + amount + " citizens of type " + type.codeName + " to the citizen list");
+        CitizenArrival.Invoke(citizens.Count, type);
         GameManager.instance.systemManager.OnNewMicrocycle();
         return citizens;
     }
