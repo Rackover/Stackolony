@@ -9,7 +9,6 @@ public class ButtonSound : MonoBehaviour
 	void Awake()
 	{
 		button = GetComponent<Button>();
-		if(button == null) Destroy(button);
 	}
 
 	void Start()
