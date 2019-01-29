@@ -10,7 +10,7 @@ public class ErrorDisplay : MonoBehaviour
 
 	public void ShowError(string message)
 	{
-        GameManager.instance.sfxManager.PlaySoundWithRandomParameters("Error",1,1,0.8f,1.2f);
+        GameManager.instance.soundManager.sfxPlayer.PlaySoundWithRandomParameters("Error",1,1,0.8f,1.2f);
 		
 		backgroundError.gameObject.SetActive(true);
 		backgroundError.sizeDelta = new Vector2(15f * message.Length, backgroundError.sizeDelta.y);

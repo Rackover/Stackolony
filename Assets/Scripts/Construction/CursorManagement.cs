@@ -539,7 +539,7 @@ public class CursorManagement : MonoBehaviour
             if (selectedBlock.transform.Find("Bridge") != null) {
                 GameManager.instance.gridManagement.DestroyBridge(selectedBlock.transform.Find("Bridge").gameObject);
             }
-            GameManager.instance.sfxManager.PlaySound("BlockDrag");
+            GameManager.instance.soundManager.sfxPlayer.PlaySound("BlockDrag");
         }
     }
 
@@ -557,7 +557,7 @@ public class CursorManagement : MonoBehaviour
                 else
                 {
                     savedPos = _pos;
-                    GameManager.instance.sfxManager.PlaySoundWithRandomParameters("Tick", 1, 1, 0.8f, 1.2f);
+                    GameManager.instance.soundManager.sfxPlayer.PlaySoundWithRandomParameters("Tick", 1, 1, 0.8f, 1.2f);
                     selectedBlock.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(_pos);
                 }
             }
@@ -590,7 +590,7 @@ public class CursorManagement : MonoBehaviour
                     }
                 }
                 //Play SFX
-                GameManager.instance.sfxManager.PlaySoundLinked("BlockDrop",selectedBlock.gameObject);
+                GameManager.instance.soundManager.sfxPlayer.PlaySoundLinked("BlockDrop",selectedBlock.gameObject);
 
                 // Fait tomber les blocs au dessus de la position initiale du bloc qui vient d'être déplacé
                 GameManager.instance.gridManagement.UpdateBlocks(selectedBlock.gridCoordinates);

@@ -94,6 +94,7 @@ public class Options
         options["grabSensitivity"] = new SliderOption(0.1f, 0.8f, 2f);
         options["musicVolume"] = new SliderOption(0f, 1f, 1f);
         options["bgsVolume"] = new SliderOption(0f, 0.2f, 1f);
+        options["voiceVolume"] = new SliderOption(0f, 0.2f, 1f);
 
         options["enableDrifting"] = new CheckboxOption(true);
     }

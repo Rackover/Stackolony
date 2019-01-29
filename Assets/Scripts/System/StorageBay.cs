@@ -92,7 +92,7 @@ public class StorageBay : MonoBehaviour
     private void PlaceBay(Vector3Int cursorCoordinates)
     {
         transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(cursorCoordinates);
-        GameManager.instance.sfxManager.PlaySoundLinked("BlockDropScientific", this.gameObject,0.1f,1,false);
+        GameManager.instance.soundManager.sfxPlayer.PlaySoundLinked("BlockDropScientific", this.gameObject,0.1f,1,false);
         GameManager.instance.cursorManagement.canSwitchTools = true;
         isPlaced = true;
         for (int x = 0; x < size; x++)

@@ -13,42 +13,21 @@ public class SFXManager : MonoBehaviour {
         public string soundName;
         public AudioClip[] soundClip;
     }
-
-    public Sound[] soundList;
     [System.NonSerialized]
     public List<SFXTrack> trackList = new List<SFXTrack>();
-    private GameObject trackParent;
 
-    private void Update()
+    AudioSource source;
+    
+	void Awake()
+	{
+		source = gameObject.GetComponent<AudioSource>();
+		if(source == null) source = gameObject.AddComponent<AudioSource>();
+	}
+
+    public void SimplePlaySound(string soundName)
     {
-        // Dirty... Needs cleanup
-        foreach(SFXTrack track in trackList) {
-            if (track.soundName == "Music") {
-                track.ChangeVolume(GameManager.instance.player.options.GetFloat("musicVolume"));
-            }
-            else if (track.soundName == "AmbianceSound") {
-                track.ChangeVolume(GameManager.instance.player.options.GetFloat("bgsVolume"));
-            }
-        }
-    }
-
-    private void Awake()
-    {
-
-        //Genere un gameObject enfant qui contiendra toutes les tracks
-        trackParent = new GameObject();
-        trackParent.name = "TrackList";
-        trackParent.transform.position = Vector3.zero;
-        trackParent.transform.parent = this.transform;
-
-    }
-
-    private void Start()
-    {
-        //Init ambiance sounds
-        PlaySound("Music", GameManager.instance.player.options.GetFloat("musicVolume"), 1, true);
-        PlaySound("AmbianceSound", GameManager.instance.player.options.GetFloat("bgsVolume"), 1, true);
-
+        source.clip = FindClipByName(soundName);
+        source.Play();
     }
 
     //Recupere une track libre et lui ajoute un son
@@ -118,7 +97,7 @@ public class SFXManager : MonoBehaviour {
     //Renvoit un clip en fonction de son nom
     public AudioClip FindClipByName(string name)
     {
-        foreach (Sound clip in soundList)
+        foreach (Sound clip in GameManager.instance.library.soundBank.sounds)
         {
             if (clip.soundName == name)
             {
@@ -153,7 +132,7 @@ public class SFXManager : MonoBehaviour {
     public void GenerateTrack()
     {
         GameObject newTrack = new GameObject();
-        newTrack.transform.parent = trackParent.transform;
+        newTrack.transform.parent = transform;
         AudioSource trackSource = newTrack.AddComponent<AudioSource>();
         trackSource.maxDistance = 100;
         trackSource.rolloffMode = AudioRolloffMode.Custom;

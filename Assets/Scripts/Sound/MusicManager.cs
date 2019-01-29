@@ -2,9 +2,7 @@
 
 public class MusicManager : MonoBehaviour 
 {
-	public AudioClip music;
 	AudioSource source;
-	float volume;
 
 	void Awake()
 	{
@@ -14,13 +12,7 @@ public class MusicManager : MonoBehaviour
 
 	public void ChangeVolume(float v)
 	{
-		volume = v;
-	}
-
-	[ContextMenu("MUSIC")]
-	public void Music()
-	{
-		Play(music);
+		source.volume = v;
 	}
 
 	public void Play(AudioClip clip = null)

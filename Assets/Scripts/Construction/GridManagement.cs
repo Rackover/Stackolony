@@ -107,7 +107,7 @@ public class GridManagement : MonoBehaviour
             GameObject target = grid[coordinates.x, coordinates.y, coordinates.z];
             SystemManager systemManager = GameManager.instance.systemManager;
             systemManager.RemoveBuilding(target);
-            gameManager.sfxManager.PlaySoundLinked("DestroyBlock", target);
+            GameManager.instance.soundManager.sfxPlayer.PlaySoundLinked("DestroyBlock", target);
             Destroy(target);
         }
         UpdateBlocks(coordinates);
@@ -459,7 +459,7 @@ public class GridManagement : MonoBehaviour
         ] = blockB.gridCoordinates;
 
         //Joue le son
-        gameManager.sfxManager.PlaySoundLinked("CreateBridge", parentBridgeGameObject);
+        GameManager.instance.soundManager.sfxPlayer.PlaySoundLinked("CreateBridge", parentBridgeGameObject);
 
         //Update the system
         UpdateGridSystems();
@@ -491,7 +491,7 @@ public class GridManagement : MonoBehaviour
         {
             grid[subpartPos.x, subpartPos.y, subpartPos.z] = null;
         }
-        gameManager.sfxManager.PlaySoundLinked("DestroyBlock", bridgeObject);
+        GameManager.instance.soundManager.sfxPlayer.PlaySoundLinked("DestroyBlock", bridgeObject);
         Destroy(bridgeObject);
         //Update the system
         UpdateGridSystems();
