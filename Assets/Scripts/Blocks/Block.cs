@@ -75,6 +75,7 @@ public class Block : MonoBehaviour {
     //Called when block is in range of a spatioport
     public void Enable()
     {
+        AddState(BlockState.Powered);
         //Active toutes les fonctionnalités du bloc
         foreach (Flag flag in activeFlags)
         {
@@ -107,7 +108,6 @@ public class Block : MonoBehaviour {
     public void LoadBlock()
     {
         GameManager.instance.systemManager.AllBlocks.Add(this);
-
         if (scheme.consumption > 0)
         {
             GameManager.instance.systemManager.AllBlocksRequiringPower.Add(this);
