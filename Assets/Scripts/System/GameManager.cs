@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     public Temporality temporality;
     public FlagReader flagReader;
     public Library library;
-    public SFXManager sfxManager;
+    public SoundManager soundManager;
     public SystemManager systemManager;
     public MissionCallbackManager missionCallbackManager;
     public CityManager cityManager;
@@ -41,12 +41,11 @@ public class GameManager : MonoBehaviour
     [Space(1)] [Header("INTERFACE INGAME")]
     public TemporalityInterface temporalityInterface;
     public TooltipGO tooltipGO;
-    public BlockInfobox blockInfobox;
 
     [Space(1)]
     [Header("DEBUG SETTINGS")]
     public Logger logger;
-    public OverlayManager overlayManager;
+    public GridDebugger gridDebugger;
     public bool DEBUG_MODE = false;
     public bool ENABLE_LOGS = true;
 
@@ -107,7 +106,7 @@ public class GameManager : MonoBehaviour
         if (temporality == null) temporality = GetComponentInChildren<Temporality>();
         if (flagReader == null) flagReader = GetComponentInChildren<FlagReader>();
         if (library == null) library = GetComponentInChildren<Library>();
-        if (sfxManager == null) sfxManager = GetComponentInChildren<SFXManager>();
+        if (soundManager == null) soundManager = GetComponentInChildren<SoundManager>();
         if (systemManager == null) systemManager = GetComponentInChildren<SystemManager>();
         if (missionCallbackManager == null) missionCallbackManager = GetComponentInChildren<MissionCallbackManager>();
         if (missionManager == null) missionManager = GetComponentInChildren<MissionManager>();
@@ -127,15 +126,15 @@ public class GameManager : MonoBehaviour
         // INTERFACE - INGAME
         if (temporalityInterface == null) temporalityInterface = FindObjectOfType<TemporalityInterface>();
         if (tooltipGO == null) tooltipGO = FindObjectOfType<TooltipGO>();
-        if (blockInfobox == null) blockInfobox = FindObjectOfType<BlockInfobox>();
 
         // DEBUG
         if (logger == null) logger = GetComponentInChildren<Logger>();
-        if (overlayManager == null) overlayManager = FindObjectOfType<OverlayManager>();
+        if (gridDebugger == null) gridDebugger = FindObjectOfType<GridDebugger>();
     }
 
     void CheckInputs()
     {
+		
         if (Input.GetKeyDown(KeyCode.F1))
         {
             overlayManager.SelectOverlay(OverlayType.Default);
