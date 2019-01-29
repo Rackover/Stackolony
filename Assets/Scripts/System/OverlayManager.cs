@@ -65,6 +65,7 @@ public class OverlayManager : MonoBehaviour
             {
                 block.overlayVisuals.SetActive(true);
                 Material blockMat = block.overlayVisuals.GetComponent<MeshRenderer>().material;
+                blockMat.color = defaultColor;
                 foreach (Flag flag in block.activeFlags)
                 {
                     if (flag.GetType() == typeof(House))
@@ -84,15 +85,12 @@ public class OverlayManager : MonoBehaviour
                     {
                         blockMat.color = color.Evaluate(1f);
                     }
-                    else
-                    {
-                        blockMat.color = defaultColor;
-                    }
                 }
             }
         }
     }
 
+    // TODO : IMPLEMENT FIRE RISKS
     class FireRisks : IOverlay
     {
         public string displayName
@@ -127,6 +125,7 @@ public class OverlayManager : MonoBehaviour
             foreach (Block block in GameManager.instance.systemManager.AllBlocks)
             {
                 Material blockMat = block.overlayVisuals.GetComponent<MeshRenderer>().material;
+                blockMat.color = defaultColor;
                 if (block.scheme.consumption > 0)
                 {
                     if (block.currentPower <= 0)
@@ -141,10 +140,6 @@ public class OverlayManager : MonoBehaviour
                     {
                         blockMat.color = color.Evaluate(0.5f);
                     }
-                }
-                else
-                {
-                    blockMat.color = defaultColor;
                 }
                 block.overlayVisuals.SetActive(true);
             }
@@ -207,24 +202,24 @@ public class OverlayManager : MonoBehaviour
                 if (house != null)
                 {
                     house.UpdateHouseInformations();
-                    float mediumNotation = 0;
+                    float averageNotation = 0;
                     PopulationManager popManager = GameManager.instance.populationManager;
                     CityManager cityManager = GameManager.instance.cityManager;
                     for (int i = 0; i < popManager.populationTypeList.Length; i++)
                     {
-                        mediumNotation += cityManager.GetHouseNotation(house, popManager.populationTypeList[i]);
+                        averageNotation += cityManager.GetHouseNotation(house, popManager.populationTypeList[i]);
                     }
 
-                    mediumNotation = mediumNotation / popManager.populationTypeList.Length;
-                    mediumNotation += -cityManager.houseNotation.notEnoughFood;
-                    mediumNotation += -cityManager.houseNotation.noOccupations;
-                    mediumNotation += -cityManager.houseNotation.wrongPopulationType;
+                    averageNotation = averageNotation / popManager.populationTypeList.Length;
+                    averageNotation += -cityManager.houseNotation.notEnoughFood;
+                    averageNotation += -cityManager.houseNotation.noOccupations;
+                    averageNotation += -cityManager.houseNotation.wrongPopulationType;
 
-                    if (mediumNotation < -5)
+                    if (averageNotation < cityManager.houseNotation.badNotationTreshold)
                     {
                         blockMat.color = color.Evaluate(0f);
                     }
-                    else if (mediumNotation > 0)
+                    else if (averageNotation > cityManager.houseNotation.goodNotationTreshold)
                     {
                         blockMat.color = color.Evaluate(1f);
                     }
@@ -298,15 +293,17 @@ public class OverlayManager : MonoBehaviour
         }
     }
 
-    public void selectOverlay(OverlayType type)
+    public void SelectOverlay(OverlayType type)
     {
         overlays[type].SetBlocksColor();
         activeOverlay = type;
     }
 
-    public void UpdateOverlay()
+    public IEnumerator UpdateOverlay()
     {
-        selectOverlay(activeOverlay);
+        SelectOverlay(activeOverlay);
+        yield return new WaitForSeconds(FindObjectOfType<Interface>().refreshRate);
+        yield return StartCoroutine(UpdateOverlay());
     }
 
     private void Awake()
