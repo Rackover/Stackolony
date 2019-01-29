@@ -71,7 +71,30 @@ public class OptionsWindow : MonoBehaviour {
             }
             ///
             //////////////
-            
+
+            /////////////
+            ///
+            /// Select option <string>
+            ///
+            /*
+            else if (option.Value is Options.SelectOption<string>) {
+                Options.SelectOption<string> opt = (Options.SelectOption<string>)option.Value;
+
+                Destroy(inst);
+                inst = Instantiate(checkboxExample, transform);
+                Text tag = inst.GetComponentInChildren<Text>();
+                tag.text = loc.GetLine(option.Key);
+
+                Toggle checkbox = inst.GetComponentInChildren<Toggle>();
+                checkbox.isOn = opt.value;
+                checkbox.onValueChanged.AddListener(delegate {
+                    opt.Set(checkbox.isOn);
+                });
+            }
+            */
+            ///
+            ////////////
+
             inst.transform.SetParent(container.transform);
 
             count++;
