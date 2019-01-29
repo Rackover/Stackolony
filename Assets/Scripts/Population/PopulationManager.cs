@@ -23,14 +23,21 @@ public class PopulationManager : MonoBehaviour {
     [System.Serializable]
     public class MoodEvent
     {
-        Population population;
-        float[] moments;
-        bool[] occured;
-        string[] function;
+        public string function;
+        public float moodValue;
+        [HideInInspector] public bool occured = false;
+    }
+
+    [System.Serializable]
+    public class PopulationReaction
+    {
+        public Population type;
+        public MoodEvent[] events;
     }
 
     [Header("System")]
     public Population[] populationTypeList; //Liste de chaques type de population
+    public PopulationReaction[] reactions; //Liste de chaques type de population
     public List<Citizen> citizenList = new List<Citizen>(); //Liste de chaque citoyen de la colonie
 
     [Header("Settings")]
@@ -58,6 +65,47 @@ public class PopulationManager : MonoBehaviour {
             populationCitizenList[pop] = new List<Citizen>();
             moodModifiers[pop] = new List<MoodModifier>();
         }
+    }
+
+    void Update()
+    {
+        UpdateReactions();
+    }
+
+    void UpdateReactions()
+    {
+        foreach(PopulationReaction r in reactions)
+        {
+            float averageMood = GetAverageMood(r.type);
+            foreach(MoodEvent me in r.events)
+            {
+                if(averageMood <= me.moodValue)
+                {
+                    if(!me.occured)
+                    {
+                        me.occured = true;
+                        Invoke(me.function, 0f);
+                    }
+                }
+                else
+                {
+                    if(me.occured)
+                    {
+                        me.occured = false;
+                    }
+                }
+            }
+        }
+    }
+
+    void CovridianMad()
+    {
+        Debug.Log("Covridian are mad");
+    }
+
+    void CovridianAngry()
+    {
+        Debug.Log("Covridian are angry");
     }
 
     void LoadNames()
