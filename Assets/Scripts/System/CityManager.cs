@@ -15,6 +15,8 @@ public class CityManager : MonoBehaviour {
     [System.Serializable]
     public class HouseNotation
     {
+        public int goodNotationTreshold = 0; //Above this note, house is considered "Good"
+        public int badNotationTreshold = -5; //Under this note, house is considered "Bad"
         public int wrongPopulationType = -2;
         public int noFood = -3;
         public int notEnoughFood = -1;

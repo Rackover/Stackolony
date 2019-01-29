@@ -134,6 +134,41 @@ public class GameManager : MonoBehaviour
 
     void CheckInputs()
     {
+		
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            overlayManager.SelectOverlay(OverlayType.Default);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            overlayManager.SelectOverlay(OverlayType.Type);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F3))
+        {
+            overlayManager.SelectOverlay(OverlayType.FireRisks);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F4))
+        {
+            overlayManager.SelectOverlay(OverlayType.Food);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+            overlayManager.SelectOverlay(OverlayType.Habitation);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F6))
+        {
+            overlayManager.SelectOverlay(OverlayType.Power);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F7))
+        {
+            overlayManager.SelectOverlay(OverlayType.Density);
+        }
 
         if (Input.GetKeyDown(KeyCode.N)) { 
             Notifications.Notification not = new Notifications.Notification(
