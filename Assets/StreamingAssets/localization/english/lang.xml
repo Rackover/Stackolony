@@ -84,14 +84,23 @@
 	<newPeople>{0} new {1}s joined the colony</newPeople>
   </notification>
   
-  <populationType>
+  <overlay>
+	<default>Default</default>
+	<type>Block Type</type>
+	<firerisk>Fire risks</firerisk>
+	<power>Power distribution</power>
+	<habitation>Habitation quality</habitation>
+	<density>Population density</density>
+	<foodconsumption>Food consumption</foodconsumption>
+  </overlay>
+  
+    <populationType>
 	<worker>Krowser</worker>
 	<richie>Senuth</richie>
 	<artist>Eari</artist>
 	<military>Kavga</military>
 	<scientist>Covridian</scientist>
   </populationType>
-	
   <stats>
 	<percentage>{0}%</percentage>
 	<moodValue>{0} are {1}</moodValue>
