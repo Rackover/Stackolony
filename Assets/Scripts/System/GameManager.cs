@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
     [Space(1)]
     [Header("DEBUG SETTINGS")]
     public Logger logger;
-    public GridDebugger gridDebugger;
+    public OverlayManager overlayManager;
     public bool DEBUG_MODE = false;
     public bool ENABLE_LOGS = true;
 
@@ -129,7 +129,7 @@ public class GameManager : MonoBehaviour
 
         // DEBUG
         if (logger == null) logger = GetComponentInChildren<Logger>();
-        if (gridDebugger == null) gridDebugger = FindObjectOfType<GridDebugger>();
+        if (overlayManager == null) overlayManager = FindObjectOfType<OverlayManager>();
     }
 
     void CheckInputs()
