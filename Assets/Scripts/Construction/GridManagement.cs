@@ -20,8 +20,6 @@ public class GridManagement : MonoBehaviour
     [Header("=== LISTS ===")][Space(1)]
     [Header("Liste de ponts")]
     public List<GameObject> bridgesList = new List<GameObject>();
-    [Header("Liste des batiments")]
-    public List<GameObject> buildingsList = new List<GameObject>();
     [Header("Grille de blocs")]
     public Vector3[,,] bridgesGrid;
     public GameObject[,,] grid;
@@ -107,7 +105,7 @@ public class GridManagement : MonoBehaviour
             GameObject target = grid[coordinates.x, coordinates.y, coordinates.z];
             SystemManager systemManager = GameManager.instance.systemManager;
             systemManager.RemoveBuilding(target);
-            gameManager.sfxManager.PlaySoundLinked("DestroyBlock", target);
+            GameManager.instance.soundManager.Play("DestroyBlock");
             Destroy(target);
         }
         UpdateBlocks(coordinates);
@@ -450,7 +448,7 @@ public class GridManagement : MonoBehaviour
         ] = blockB.gridCoordinates;
 
         //Joue le son
-        gameManager.sfxManager.PlaySoundLinked("CreateBridge", parentBridgeGameObject);
+        GameManager.instance.soundManager.Play("CreateBridge");
 
         //Update the system
         UpdateGridSystems();
@@ -482,7 +480,7 @@ public class GridManagement : MonoBehaviour
         {
             grid[subpartPos.x, subpartPos.y, subpartPos.z] = null;
         }
-        gameManager.sfxManager.PlaySoundLinked("DestroyBlock", bridgeObject);
+        GameManager.instance.soundManager.Play("DestroyBlock");
         Destroy(bridgeObject);
         //Update the system
         UpdateGridSystems();

@@ -93,9 +93,11 @@ public class Options
         options["rotationSensitivity"] = new SliderOption(0.2f, 1f, 3f);
         options["grabSensitivity"] = new SliderOption(0.1f, 0.8f, 2f);
         options["musicVolume"] = new SliderOption(0f, 1f, 1f);
-        options["bgsVolume"] = new SliderOption(0f, 0.2f, 1f);
+        options["sfxVolume"] = new SliderOption(0f, 0.2f, 1f);
+        options["voiceVolume"] = new SliderOption(0f, 0.2f, 1f);
 
         options["enableDrifting"] = new CheckboxOption(true);
+        options["animatedCitizens"] = new CheckboxOption(true);
     }
 
     public override string ToString()

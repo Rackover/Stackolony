@@ -25,6 +25,7 @@ public class CursorDisplay : MonoBehaviour {
     void DisplayUserError(string locId)
     {
         notifier.Notify(new Notifications.Notification(locId, Color.red));
+        GameManager.instance.soundManager.Play("Error");
     }
 
     public void ChangeCursor(CursorManagement.cursorMode mode)	
