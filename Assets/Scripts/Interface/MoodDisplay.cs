@@ -27,12 +27,9 @@ public class MoodDisplay : MonoBehaviour {
 
     public Color homelessColor = Color.red;
     public Color noHomelessColor = Color.grey;
-    public Color blinkColor = Color.grey;
 
     public float angryThreshold = 0.3f;
     public float happyThreshold = 0.7f;
-    public float blinkSpeed = 0.33f;
-    public float blinkLength = 2f;
     public float angle = 200f;
     public float rotationSpeed = 0f;
     public float cameraDistance = 2f;
@@ -69,7 +66,7 @@ public class MoodDisplay : MonoBehaviour {
                 );
 
                 // Animation
-                StartCoroutine(Blink(blinkLength));
+                Blink();
                 UpdateTexts();
             }
         };
@@ -172,16 +169,10 @@ public class MoodDisplay : MonoBehaviour {
         dragHitbox.enabled = false;
     }
 
-    IEnumerator Blink(float seconds)
+    void Blink()
     {
-        if (seconds <= 0f) {
-            amount.color = Color.white;
-            yield return null;
-        }
-        else {
-            amount.color = amount.color == blinkColor ? Color.white : blinkColor;
-            yield return new WaitForSeconds(blinkSpeed);
-            yield return StartCoroutine(Blink(seconds - blinkSpeed));
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("Await")) {
+            animator.Play("Blink");
         }
     }
 
