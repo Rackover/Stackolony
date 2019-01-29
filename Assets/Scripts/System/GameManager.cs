@@ -41,7 +41,6 @@ public class GameManager : MonoBehaviour
     [Space(1)] [Header("INTERFACE INGAME")]
     public TemporalityInterface temporalityInterface;
     public TooltipGO tooltipGO;
-    public BlockInfobox blockInfobox;
 
     [Space(1)]
     [Header("DEBUG SETTINGS")]
@@ -127,7 +126,6 @@ public class GameManager : MonoBehaviour
         // INTERFACE - INGAME
         if (temporalityInterface == null) temporalityInterface = FindObjectOfType<TemporalityInterface>();
         if (tooltipGO == null) tooltipGO = FindObjectOfType<TooltipGO>();
-        if (blockInfobox == null) blockInfobox = FindObjectOfType<BlockInfobox>();
 
         // DEBUG
         if (logger == null) logger = GetComponentInChildren<Logger>();
