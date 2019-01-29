@@ -164,7 +164,7 @@ public class GameManager : MonoBehaviour
 */
         // Spawns 5  cit
         if (Input.GetKeyDown(KeyCode.U)) {
-            populationManager.SpawnCitizens(populationManager.populationTypeList[0], 5);
+            populationManager.SpawnCitizens(populationManager.populationTypeList[Mathf.FloorToInt(populationManager.populationTypeList.Length*Random.value)], 5);
         }
         // Spawns 20 cit
         if (Input.GetKeyDown(KeyCode.L)) {
