@@ -63,7 +63,7 @@ public class SystemManager : MonoBehaviour {
             block.OnNewCycle();
         }
         RefreshMoodModifiers();
-        yield return StartCoroutine(OnGridUpdate());
+        yield return StartCoroutine(OnNewMicrocycle());
         yield return null;
     }
 
@@ -71,13 +71,19 @@ public class SystemManager : MonoBehaviour {
     public IEnumerator OnNewMicrocycle()
     {
         yield return StartCoroutine(UpdateHousesInformations());
+        yield return StartCoroutine(RecalculateFoodConsumption());
+        yield return StartCoroutine(RecalculateOccupators());
+        yield return StartCoroutine(UpdateHousesInformations());
         yield return StartCoroutine(RecalculateHabitation());
+        yield return StartCoroutine(UpdateHousesInformations());
+        yield return StartCoroutine(RecalculateJobs());
         yield return StartCoroutine(OnGridUpdate());
     }
 
     //S'execute à chaques fois qu'un bloc est déplacé dans la grille
     public IEnumerator OnGridUpdate()
     {
+        StopAllCoroutines();
         yield return StartCoroutine(RecalculateSpatioportInfluence());
         yield return new WaitForSeconds(0.5f); //Clumsy, à changer rapidement, la propagation doit s'effectuer une fois que le spatioport a tout mis à jour
         yield return StartCoroutine(RecalculatePropagation());
@@ -91,6 +97,11 @@ public class SystemManager : MonoBehaviour {
         yield return null;
     }
 
+    public void OnCalculEnd()
+    {
+        StartCoroutine(UpdateOverlay());
+    }
+
     //Met à jour le système electrique
     public void UpdateElectricitySystem()
     {
@@ -100,9 +111,6 @@ public class SystemManager : MonoBehaviour {
     //Actualise les données de chaque maisons
     public IEnumerator UpdateHousesInformations()
     {
-        StartCoroutine(RecalculateFoodConsumption());
-        StartCoroutine(RecalculateOccupators());
-        StartCoroutine(RecalculateJobs());
         StartCoroutine(CalculateHouseInformation());
         yield return null;
     }
@@ -163,6 +171,7 @@ public class SystemManager : MonoBehaviour {
     public IEnumerator RecalculateHabitation()
     {
         StartCoroutine(ResetHabitation());
+        yield return new WaitForEndOfFrame();
         GameManager.instance.cityManager.HouseEveryone();
         yield return null;
     }
@@ -170,6 +179,7 @@ public class SystemManager : MonoBehaviour {
     public IEnumerator RecalculateJobs()
     {
         StartCoroutine(ResetJobs());
+        yield return new WaitForEndOfFrame();
         foreach (House house in AllHouses)
         {
             for (int i = 0; i < house.affectedCitizen.Count; i++)
@@ -227,7 +237,7 @@ public class SystemManager : MonoBehaviour {
 
     public IEnumerator RecalculatePropagation()
     {
-        StartCoroutine(ResetBlocksPower());
+        yield return StartCoroutine(ResetBlocksPower());
         foreach (Generator generator in AllGenerators)
         {
             if (generator.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))

@@ -65,7 +65,6 @@ public class Temporality : MonoBehaviour {
         {
             cycleProgression = 0f; //On ne reset pas à 0 pour éviter une transition sacadée au niveau de l'aperçu du temps passé
             AddCycle();
-            AddMicroCycle();
             GetMicroDuration();
         }
     }
