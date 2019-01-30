@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using System;
 using System.IO;
@@ -15,6 +16,12 @@ public class Options
         void SetFromString(string val);
         string ToString();
     };
+
+    public interface IGenericTypeOption
+    {
+        Type GetGenericType();
+        object[] GetRange();
+    }
 
     public class SliderOption : IOption
     {
@@ -87,7 +94,7 @@ public class Options
         }
     }
 
-    public class SelectOption<T> : IOption
+    public class SelectOption<T> : IOption, IGenericTypeOption
     {
         public int defaultIndex { get; }
         public int index;
@@ -122,12 +129,22 @@ public class Options
 
         public void SetFromString(string str)
         {
-            Set((T)Convert.ChangeType(str, typeof(T)));
+            Set(Convert.ToInt32(str));
         }
 
         public override string ToString()
         {
-            return possibleValues[index].ToString();
+            return index.ToString();
+        }
+
+        public object[] GetRange()
+        {
+            return possibleValues.Cast<object>().ToArray();
+        }
+
+        public Type GetGenericType()
+        {
+            return possibleValues[0].GetType();
         }
     }
 
@@ -140,10 +157,8 @@ public class Options
         options["sfxVolume"] = new SliderOption(0f, 0.2f, 1f);
         options["voiceVolume"] = new SliderOption(0f, 0.2f, 1f);
 
-        /*
-        Debug.Log(GameManager.instance);
-        options["lang"] = new SelectOption<string>(GameManager.instance.localization.GetLanguages().ToArray());
-        */
+        // TODO - Scan loc folders automatically
+        options["lang"] = new SelectOption<string>(new string[] { "english", "french" });
 
         options["enableDrifting"] = new CheckboxOption(true);
         options["animatedCitizens"] = new CheckboxOption(true);
