@@ -157,4 +157,13 @@ public class Localization : MonoBehaviour {
         }
         return line;
     }
+
+    public List<string> GetLanguages()
+    {
+        List<string> langs = new List<string>();
+        foreach(Lang lang in languages) {
+            langs.Add(lang.name);
+        }
+        return langs;
+    }
 }
