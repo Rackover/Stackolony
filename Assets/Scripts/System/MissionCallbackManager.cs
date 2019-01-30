@@ -84,6 +84,7 @@ public class MissionCallbackManager : MonoBehaviour
             if (GameManager.instance.systemManager != null)
             {
                 GameManager.instance.systemManager.UpdateBlocksRequiringPower();
+                GameManager.instance.systemManager.OnCalculEnd();
             }
         }
         yield return null;
@@ -107,6 +108,7 @@ public class MissionCallbackManager : MonoBehaviour
             if (GameManager.instance.systemManager != null)
             {
                 GameManager.instance.systemManager.UpdateBlocksDisabled();
+                GameManager.instance.systemManager.OnCalculEnd();
             }
         }
         yield return null;

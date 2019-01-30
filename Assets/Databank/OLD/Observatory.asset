@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Name: Observatory
   m_EditorClassIdentifier: 
   link: {fileID: 0}
-  title: Observatory
-  description: Occupy 5 scientists
+  isMovable: 1
+  isDestroyable: 1
+  isStorable: 1
+  isBuyable: 1
+  canBuildAbove: 1
   model: {fileID: 1547902619353416, guid: 8c422b2db74c1ca4288c9fcf898e47c5, type: 2}
-  icon: {fileID: 21300000, guid: e971c1619afda2c4fabc73ddd1d52eb6, type: 3}
   ID: 2
-  level: 1
-  complexity: 1
   consumption: 1
+  sensibility: 1
   flags:
-  - Occupator_5_3_Scientist
+  - Occupator_5_3_scientist

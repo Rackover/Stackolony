@@ -182,14 +182,14 @@ public class FlagReader : MonoBehaviour
 					}
 					catch(FormatException fe)
 					{
-						Destroy(newOccupator);
+                        Destroy(newOccupator);
                         Logger.Warn( block.scheme.name + " - Occupator : Unvalid slotAmount entry for as the first parameter. Please enter an int value.");
 						break;
 					}
 
 					if(slotAmount < 0)
 					{
-						Destroy(newOccupator);
+                        Destroy(newOccupator);
                         Logger.Warn( block.scheme.name + " - Occupator : slot value has to be higher than 0.");
 						break;
 					}
@@ -219,7 +219,7 @@ public class FlagReader : MonoBehaviour
 
 					if(result != "")
 					{
-						Destroy(newOccupator);
+                        Destroy(newOccupator);
                         Logger.Warn( block.scheme.name + " - Occupator : " + result);
 						break;
 					}

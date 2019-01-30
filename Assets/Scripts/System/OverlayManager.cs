@@ -206,9 +206,8 @@ public class OverlayManager : MonoBehaviour
                     }
 
                     averageNotation = averageNotation / popManager.populationTypeList.Length;
-                    averageNotation += -cityManager.houseNotation.notEnoughFood;
-                    averageNotation += -cityManager.houseNotation.noOccupations;
-                    averageNotation += -cityManager.houseNotation.wrongPopulationType;
+                    averageNotation -= cityManager.houseNotation.noOccupations;
+                    averageNotation -= cityManager.houseNotation.wrongPopulationType;
 
                     if (averageNotation < cityManager.houseNotation.badNotationTreshold)
                     {

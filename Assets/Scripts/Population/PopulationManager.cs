@@ -180,7 +180,6 @@ public class PopulationManager : MonoBehaviour {
         }
         Logger.Debug("Spawned " + amount + " citizens of type " + type.codeName + " to the citizen list");
         CitizenArrival.Invoke(citizens.Count, type);
-        GameManager.instance.systemManager.OnNewMicrocycle();
         return citizens;
     }
 
