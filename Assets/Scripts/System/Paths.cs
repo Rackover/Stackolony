@@ -50,7 +50,7 @@ public class Paths {
     }
     static public string GetNamesFile()
     {
-        string path = GetBulletinFolder();
+        string path = GetNamesFolder();
         string file = "names" + ".txt";
         return path + "/" + file;
     }

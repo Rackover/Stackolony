@@ -51,9 +51,9 @@
     <occupator>Occupation</occupator>
     <nuisance>Nuisance</nuisance>
     <fireman>Fire Extinguisher</fireman>
-    <workinghours>Working hours</workinghours>
+    <workingHours>Working hours</workingHours>
     <police>Police</police>
-    <flagneeder>Dependencies</flagneeder>
+    <flagNeeder>Dependencies</flagNeeder>
   </flagName>
 
   <flagParameter>
@@ -62,15 +62,15 @@
     <occupator>Employs {0} {2}s at a range of {1}</occupator>
     <nuisance>todo:nuisance</nuisance>
     <fireman>Puts out fires at a range of {0}</fireman>
-    <workinghours>todo:working hours</workinghours>
+    <workingHours>todo:working hours</workingHours>
     <police>Prevents riots at a range of {0}</police>
-    <flagneeder>todo: dependencies</flagneeder>
+    <flagNeeder>todo: dependencies</flagNeeder>
   </flagParameter>
   
   <state>
-    <onfire>On fire</onfire>
+    <onFire>On fire</onFire>
     <powered>Powered</powered>
-    <onriot>On riot</onriot>
+    <onRiot>On riot</onRiot>
     <damaged>Damaged</damaged>
     <burned>Burned</burned>
   </state>
@@ -84,14 +84,23 @@
 	<newPeople>{0} new {1}s joined the colony</newPeople>
   </notification>
   
-  <populationType>
+  <overlay>
+	<default>Default</default>
+	<type>Block Type</type>
+	<fireRisk>Fire risks</fireRisk>
+	<power>Power distribution</power>
+	<habitation>Habitation quality</habitation>
+	<density>Population density</density>
+	<foodConsumption>Food consumption</foodConsumption>
+  </overlay>
+  
+    <populationType>
 	<worker>Krowser</worker>
 	<richie>Senuth</richie>
 	<artist>Eari</artist>
 	<military>Kavga</military>
 	<scientist>Covridian</scientist>
   </populationType>
-	
   <stats>
 	<percentage>{0}%</percentage>
 	<moodValue>{0} are {1}</moodValue>

@@ -71,12 +71,6 @@ public class GridManagement : MonoBehaviour
         gridGameObject.transform.localPosition = Vector3.zero;
         Logger.Debug("Generated grid of size "+gridSize.ToString());
 
-        //GENERATION DES GRILLES DE DEBUG
-        if (GameManager.instance.DEBUG_MODE) {
-            gameManager.gridDebugger.gridManager = this;
-            gameManager.gridDebugger.InitAllGrids();
-            gameManager.gridDebugger.InitButtons();
-        }
     }
 
     public void UpdateGridSystems()

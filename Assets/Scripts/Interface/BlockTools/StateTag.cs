@@ -36,12 +36,12 @@ public class StateTag : MonoBehaviour
 
 			case BlockState.OnFire:
 				stateBackground.color = onFireColor;
-				stateTxt.text = loc.GetLine("onfire");
+				stateTxt.text = loc.GetLine("onFire");
 				break;
 
 			case BlockState.OnRiot:
 				stateBackground.color = onRiotColor;
-				stateTxt.text = loc.GetLine("onriot");
+				stateTxt.text = loc.GetLine("onRiot");
 				break;
 
 			case BlockState.Damaged:

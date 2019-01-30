@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
     [Space(1)]
     [Header("DEBUG SETTINGS")]
     public Logger logger;
-    public GridDebugger gridDebugger;
+    public OverlayManager overlayManager;
     public bool DEBUG_MODE = false;
     public bool ENABLE_LOGS = true;
 
@@ -129,11 +129,46 @@ public class GameManager : MonoBehaviour
 
         // DEBUG
         if (logger == null) logger = GetComponentInChildren<Logger>();
-        if (gridDebugger == null) gridDebugger = FindObjectOfType<GridDebugger>();
+        if (overlayManager == null) overlayManager = FindObjectOfType<OverlayManager>();
     }
 
     void CheckInputs()
     {
+		
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            overlayManager.SelectOverlay(OverlayType.Default);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            overlayManager.SelectOverlay(OverlayType.Type);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F3))
+        {
+            overlayManager.SelectOverlay(OverlayType.FireRisks);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F4))
+        {
+            overlayManager.SelectOverlay(OverlayType.Food);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+            overlayManager.SelectOverlay(OverlayType.Habitation);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F6))
+        {
+            overlayManager.SelectOverlay(OverlayType.Power);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F7))
+        {
+            overlayManager.SelectOverlay(OverlayType.Density);
+        }
 
         if (Input.GetKeyDown(KeyCode.N)) { 
             Notifications.Notification not = new Notifications.Notification(
@@ -164,7 +199,7 @@ public class GameManager : MonoBehaviour
 */
         // Spawns 5  cit
         if (Input.GetKeyDown(KeyCode.U)) {
-            populationManager.SpawnCitizens(populationManager.populationTypeList[0], 5);
+            populationManager.SpawnCitizens(populationManager.populationTypeList[Mathf.FloorToInt(populationManager.populationTypeList.Length*Random.value)], 5);
         }
         // Spawns 20 cit
         if (Input.GetKeyDown(KeyCode.L)) {

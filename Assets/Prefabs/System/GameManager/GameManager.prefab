@@ -256,6 +256,22 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1643751095699196
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4816460766562744}
+  - component: {fileID: 114679853328871888}
+  m_Layer: 0
+  m_Name: OverlayManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1683601966409452
 GameObject:
   m_ObjectHideFlags: 0
@@ -395,7 +411,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4468432540002810}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4027571504882778
 Transform:
@@ -410,7 +426,7 @@ Transform:
   - {fileID: 4777722325397090}
   - {fileID: 4207176622820506}
   m_Father: {fileID: 4468432540002810}
-  m_RootOrder: 17
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4082942352364192
 Transform:
@@ -423,7 +439,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4468432540002810}
-  m_RootOrder: 6
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4111541091294220
 Transform:
@@ -436,7 +452,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4468432540002810}
-  m_RootOrder: 15
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4177361016474540
 Transform:
@@ -449,7 +465,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4468432540002810}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4178928114387094
 Transform:
@@ -488,7 +504,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4468432540002810}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4313591900632262
 Transform:
@@ -501,7 +517,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4468432540002810}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4316929440791852
 Transform:
@@ -514,7 +530,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4468432540002810}
-  m_RootOrder: 8
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4364936759027822
 Transform:
@@ -527,7 +543,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4468432540002810}
-  m_RootOrder: 16
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4365852104190820
 Transform:
@@ -553,7 +569,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4468432540002810}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4417703633281736
 Transform:
@@ -566,7 +582,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4468432540002810}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4425981156609706
 Transform:
@@ -579,7 +595,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4468432540002810}
-  m_RootOrder: 11
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4451846035219226
 Transform:
@@ -592,7 +608,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4468432540002810}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4468432540002810
 Transform:
@@ -604,6 +620,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 4816460766562744}
   - {fileID: 4417703633281736}
   - {fileID: 4451846035219226}
   - {fileID: 4177361016474540}
@@ -636,7 +653,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4468432540002810}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4526923441402940
 Transform:
@@ -651,7 +668,7 @@ Transform:
   - {fileID: 4365852104190820}
   - {fileID: 4178928114387094}
   m_Father: {fileID: 4468432540002810}
-  m_RootOrder: 7
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4536940705807890
 Transform:
@@ -664,7 +681,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4468432540002810}
-  m_RootOrder: 10
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4697813859889242
 Transform:
@@ -677,7 +694,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4468432540002810}
-  m_RootOrder: 5
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4777722325397090
 Transform:
@@ -692,6 +709,19 @@ Transform:
   m_Father: {fileID: 4027571504882778}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4816460766562744
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1643751095699196}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 102.978424, y: 5.320513, z: 67.03249}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4468432540002810}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4969514154901834
 Transform:
   m_ObjectHideFlags: 1
@@ -703,7 +733,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4468432540002810}
-  m_RootOrder: 9
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &23432335991751874
 MeshRenderer:
@@ -993,9 +1023,9 @@ MonoBehaviour:
     key1: {r: 0.9100357, g: 0.6719659, b: 0.78079665, a: 1}
     key2: {r: 1, g: 0.92337763, b: 0.7122642, a: 0}
     key3: {r: 0.87322, g: 0.8764588, b: 0.8773585, a: 0}
-    key4: {r: 0.990566, g: 0.3687116, b: 0, a: 0}
-    key5: {r: 0.5686275, g: 0.5529412, b: 0.77647066, a: 0}
-    key6: {r: 0.5699294, g: 0.55362356, b: 0.7764706, a: 0}
+    key4: {r: 1, g: 0.7005929, b: 0.5235849, a: 0}
+    key5: {r: 0.70237505, g: 0.6863207, b: 0.9150943, a: 0}
+    key6: {r: 0.7019608, g: 0.6862745, b: 0.91372555, a: 0}
     key7: {r: 1, g: 0.57254905, b: 0.70980394, a: 0}
     ctime0: 0
     ctime1: 3084
@@ -1101,7 +1131,7 @@ MonoBehaviour:
   temporalityInterface: {fileID: 0}
   tooltipGO: {fileID: 0}
   logger: {fileID: 0}
-  gridDebugger: {fileID: 0}
+  overlayManager: {fileID: 0}
   DEBUG_MODE: 0
   ENABLE_LOGS: 1
 --- !u!114 &114537474688601184
@@ -1204,6 +1234,8 @@ MonoBehaviour:
   cityName: Valenciennes
   accidentStates: 010000000200000003000000
   houseNotation:
+    goodNotationTreshold: 0
+    badNotationTreshold: -5
     wrongPopulationType: -2
     noFood: -3
     notEnoughFood: -1
@@ -1240,6 +1272,230 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   areCinematicsEnabled: 0
+--- !u!114 &114679853328871888
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1643751095699196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccef35c953a459d49bda34fd0b9db13f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultColor: {r: 0.735849, g: 0.735849, b: 0.735849, a: 0.39215687}
+  overlayDatas:
+  - sprite: {fileID: 0}
+    color:
+      serializedVersion: 2
+      key0: {r: 1, g: 0, b: 0, a: 0.19607843}
+      key1: {r: 0, g: 0, b: 1, a: 0.19607843}
+      key2: {r: 0, g: 1, b: 0.020439148, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 32768
+      ctime2: 58018
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 65535
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 3
+      m_NumAlphaKeys: 2
+  - sprite: {fileID: 0}
+    color:
+      serializedVersion: 2
+      key0: {r: 1, g: 0, b: 0, a: 0.19607843}
+      key1: {r: 0, g: 0, b: 1, a: 0.19607843}
+      key2: {r: 0, g: 1, b: 0.020439148, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 32768
+      ctime2: 58018
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 3
+      m_NumAlphaKeys: 2
+  - sprite: {fileID: 0}
+    color:
+      serializedVersion: 2
+      key0: {r: 1, g: 0, b: 0, a: 0.19607843}
+      key1: {r: 1, g: 0.5019608, b: 0, a: 0.19607843}
+      key2: {r: 0, g: 1, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 32768
+      ctime2: 65535
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 3
+      m_NumAlphaKeys: 2
+  - sprite: {fileID: 0}
+    color:
+      serializedVersion: 2
+      key0: {r: 1, g: 0, b: 0, a: 0.19607843}
+      key1: {r: 1, g: 0.5019608, b: 0, a: 0.19607843}
+      key2: {r: 0, g: 1, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 32768
+      ctime2: 65535
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 3
+      m_NumAlphaKeys: 2
+  - sprite: {fileID: 0}
+    color:
+      serializedVersion: 2
+      key0: {r: 1, g: 0, b: 0, a: 0.19607843}
+      key1: {r: 1, g: 0.5019608, b: 0, a: 0.19607843}
+      key2: {r: 0, g: 1, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 32768
+      ctime2: 65535
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 3
+      m_NumAlphaKeys: 2
+  - sprite: {fileID: 0}
+    color:
+      serializedVersion: 2
+      key0: {r: 1, g: 0, b: 0, a: 0.19607843}
+      key1: {r: 1, g: 0.5019608, b: 0, a: 0.19607843}
+      key2: {r: 0, g: 1, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 32768
+      ctime2: 65535
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 3
+      m_NumAlphaKeys: 2
+  - sprite: {fileID: 0}
+    color:
+      serializedVersion: 2
+      key0: {r: 1, g: 0, b: 0, a: 0.19607843}
+      key1: {r: 1, g: 0.5019608, b: 0, a: 0.19607843}
+      key2: {r: 0, g: 1, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 32768
+      ctime2: 65535
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_NumColorKeys: 3
+      m_NumAlphaKeys: 2
+  activeOverlay: 0
 --- !u!114 &114714276369706516
 MonoBehaviour:
   m_ObjectHideFlags: 1
