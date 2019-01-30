@@ -10,6 +10,8 @@ public class CityManager : MonoBehaviour {
     public BlockState[] accidentStates = { BlockState.OnFire, BlockState.OnRiot, BlockState.Damaged };
     public Dictionary<Population, Dictionary<House, float>> topHabitations = new Dictionary<Population, Dictionary<House, float>>(); // List of the best habitations (sorted from best to worst)
 
+    List<int> lockedBuildings = new List<int >();
+
     //Comment fonctionne la notation d'une maison :
     // 
     [System.Serializable]
@@ -32,6 +34,22 @@ public class CityManager : MonoBehaviour {
         foreach (Population pop in GameManager.instance.populationManager.populationTypeList) {
             topHabitations[pop] = new Dictionary<House, float>();
         }
+    }
+
+    public void LockBuilding(int id)
+    {
+        UnlockBuilding(id);
+        lockedBuildings.Add(id);
+    }
+
+    public void UnlockBuilding(int id)
+    {
+        lockedBuildings.RemoveAll(i => i==id);
+    }
+
+    public bool IsLocked(int id)
+    {
+        return lockedBuildings.Contains(id);
     }
 
     //Finds a house for every citizens (Soon it'll take a priority order into account)
