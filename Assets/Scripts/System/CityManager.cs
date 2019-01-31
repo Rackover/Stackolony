@@ -200,24 +200,7 @@ public class CityManager : MonoBehaviour {
             }
         }
 
-<<<<<<< HEAD
-        if (!profileFound)
-        {
-            notation += houseNotation.wrongPopulationType;
-        }
-        if (!powered)
-        {
-            notation += houseNotation.noPower;
-        }
-        if (!foodLeft)
-        {
-            notation += houseNotation.noFood;
-        }
-        if (!jobLeft)
-        {
-            notation += houseNotation.noOccupations;
-=======
-        if (!profileFound)
+        if(!profileFound)
         {
             notation += moodValues.wrongPopulationType;
         }
@@ -232,7 +215,6 @@ public class CityManager : MonoBehaviour {
         if (!jobLeft)
         {
             notation += moodValues.noOccupations;
->>>>>>> 01bca8f68eae74224d448e866668dbede8dc7ede
         }
 
         if (notation >= 0)
