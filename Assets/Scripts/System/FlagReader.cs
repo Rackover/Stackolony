@@ -254,9 +254,8 @@ public class FlagReader : MonoBehaviour
 			case "House":
 				House newHome = block.gameObject.AddComponent<House>();
 				newHome.slotAmount = int.Parse(flagElements[1]);
-                newHome.foodConsumptionPerHabitant = int.Parse(flagElements[2]);
-                newHome.standingLevel = int.Parse(flagElements[3]);
-				string[] profilesList = SplitParametorInArray(flagElements[4]);
+                newHome.standingLevel = int.Parse(flagElements[2]);
+				string[] profilesList = SplitParametorInArray(flagElements[3]);
                 Population[] acceptedPopList = new Population[profilesList.Length];
                 for (int i = 0; i < profilesList.Length; i++)
                 {

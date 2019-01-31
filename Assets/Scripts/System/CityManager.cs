@@ -159,7 +159,7 @@ public class CityManager : MonoBehaviour {
         {
             foodStock += distributor.foodLeft;
         }
-        if (foodStock > 0 && foodStock >= house.foodConsumptionPerHabitant)
+        if (foodStock > 0 && foodStock >= GameManager.instance.populationManager.GetFoodConsumption(populationType))
         {
             foodLeft = true;
         } else

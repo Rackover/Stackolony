@@ -7,7 +7,6 @@ public class House : Flag
     //House Datas
     public int slotAmount;
     public Population[] acceptedPop;
-    public float foodConsumptionPerHabitant;
     public List<PopulationManager.Citizen> affectedCitizen = new List<PopulationManager.Citizen>();
     public int standingLevel = 1;
     public int notationModifier = 0;
@@ -38,7 +37,7 @@ public class House : Flag
         float fconsumption = 0;
         foreach (PopulationManager.Citizen citizen in affectedCitizen)
         {
-            fconsumption += (foodConsumptionPerHabitant + GameManager.instance.populationManager.GetFoodConsumption(citizen.type));
+            fconsumption += (GameManager.instance.populationManager.GetFoodConsumption(citizen.type));
         }
         return fconsumption;
     }
