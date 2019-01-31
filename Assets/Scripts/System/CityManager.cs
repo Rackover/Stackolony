@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -117,6 +117,25 @@ public class CityManager : MonoBehaviour {
         }
     }
 
+    public Block FindRandomBlockWithFlag(System.Type type)
+    {
+        List<Block> candidates = new List<Block>();
+        foreach (Block block in GameManager.instance.systemManager.AllBlocks)
+        {
+            if (block.activeFlags[0].GetFlagType() == type) {
+                candidates.Add(block);
+            }
+        }
+        int random = Random.Range(0, candidates.Count - 1);
+        Block result = candidates[random];
+        if (result != null)
+        {
+            return result;
+        }
+        return null;
+    }
+
+
     //Return an int, the bigger it is, the more attractive is the house
     public float GetHouseNotation(House house, Population populationType)
     {
@@ -159,7 +178,7 @@ public class CityManager : MonoBehaviour {
         {
             foodStock += distributor.foodLeft;
         }
-        if (foodStock > 0 && foodStock >= house.foodConsumptionPerHabitant)
+        if (foodStock > 0 && foodStock >= GameManager.instance.populationManager.GetFoodConsumption(populationType))
         {
             foodLeft = true;
         } else
@@ -200,6 +219,7 @@ public class CityManager : MonoBehaviour {
         if (notation >= 0)
             notation += houseNotation.everythingFine;
 
+        notation += house.notationModifier;
         return notation;
     }
     

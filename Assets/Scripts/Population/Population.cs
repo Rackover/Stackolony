@@ -13,4 +13,5 @@ public class Population : ScriptableObject
     public Color color;
     public GameObject prefab;
     public AudioClip voice;
+    public float baseFoodConsumption = 1;
 }

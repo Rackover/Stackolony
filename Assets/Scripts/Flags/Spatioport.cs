@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spatioport : Flag {
+public class Spatioport : Flag, Flag.IFlag {
 
     public override void Awake()
     {
@@ -24,5 +24,10 @@ public class Spatioport : Flag {
         {
             GameManager.instance.missionManager.StartMission(block.gridCoordinates, "EmitSpatioportInfluence", -1, -1);
         }
+    }
+
+    public System.Type GetFlagType()
+    {
+        return GetType();
     }
 }

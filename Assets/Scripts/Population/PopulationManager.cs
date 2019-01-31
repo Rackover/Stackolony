@@ -2,8 +2,8 @@
 using System.IO;
 using UnityEngine;
 
-public class PopulationManager : MonoBehaviour {
-
+public class PopulationManager : MonoBehaviour 
+{
     [System.Serializable]
     public class Citizen
     {
@@ -20,12 +20,20 @@ public class PopulationManager : MonoBehaviour {
         public int cyclesRemaining;
     }
 
+    public class FoodModifier
+    {
+        public int reasonId;
+        public float amount;
+        public int cyclesRemaining;
+    }
+
     public class PopulationInformation
     {
         public float averageMood; // average moods between 0 and 1
         public float riotRisk;
         public List<Citizen> citizens = new List<Citizen>(); //Assign every citizen to it's population
         public List<MoodModifier> moodModifiers = new List<MoodModifier>(); //List of every active moodmodifiers for every population
+        public List<FoodModifier> foodModifiers = new List<FoodModifier>(); //List of every food modifier affecting every population
     }
 
     [Header("System")]
@@ -91,6 +99,27 @@ public class PopulationManager : MonoBehaviour {
         return names[Mathf.FloorToInt(Random.value * names.Count)];
     }
 
+    //Return the food consumed by a type of population
+    public float GetFoodConsumption(Population popType)
+    {
+        float foodConsumption = 0;
+        foreach (FoodModifier foodModifier in populations[popType].foodModifiers)
+        {
+            foodConsumption += foodModifier.amount;
+        }
+        return foodConsumption;
+    }
+
+    //Generates a foodmodifier for a given population
+    public void GenerateFoodModifier(Population popType, int reasonId, float newAmount, int cyclesRemaining)
+    {
+        FoodModifier newFoodModifier = new FoodModifier();
+        newFoodModifier.reasonId = reasonId;
+        newFoodModifier.amount = newAmount;
+        newFoodModifier.cyclesRemaining = cyclesRemaining;
+        populations[popType].foodModifiers.Add(newFoodModifier);
+    }
+
     //Generates a moodmodifier for a given population
     public void GenerateMoodModifier(Population popType, int reasonId, float amount, int cyclesRemaining)
     {
@@ -116,7 +145,6 @@ public class PopulationManager : MonoBehaviour {
             }
         }
     }
-
 
     public void ChangePopulationMood(Population type, float amount)
     {

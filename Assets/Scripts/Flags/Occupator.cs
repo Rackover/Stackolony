@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Occupator : Flag 
+public class Occupator : Flag, Flag.IFlag
 {
     public int slots;
     public int range;
@@ -27,5 +27,10 @@ public class Occupator : Flag
         {
             GameManager.instance.missionManager.StartMission(block.gridCoordinates, "EmitOccupators", range, 0, typeof(House));
         }
+    }
+
+    public System.Type GetFlagType()
+    {
+        return GetType();
     }
 }
