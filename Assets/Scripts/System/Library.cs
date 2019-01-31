@@ -47,4 +47,14 @@ public class Library : MonoBehaviour
 		}
 		return null;
 	}
+
+    public bool BlockExists(int id)
+    {
+        foreach (BlockScheme b in blocks) {
+            if (b.ID == id) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

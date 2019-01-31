@@ -200,4 +200,15 @@ public class PopulationManager : MonoBehaviour {
             Debug.Log("Citizen " + citizen.name + " has been killed");
         }
     }
+
+    public Population GetPopulationByCodename(string codeName)
+    {
+        foreach(Population pop in populationTypeList) {
+            if (pop.codeName == codeName) {
+                return pop;
+            }
+        }
+
+        return null;
+    }
 }

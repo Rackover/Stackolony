@@ -1,49 +1,105 @@
 <?xml version="1.0"?>
 <timeline>
 	<cycle>
-		<event time="0.3">2</event>
 		<unlocks>
-			<building>1</building>
-			<building>3</building>
-			<building>4</building>
+			<building>block28</building>
+			<building>block14</building>
 		</unlocks>
+	</cycle>
+	<cycle>
 		<settlers>
-			<workers>5</workers>
+			<scientist>2</scientist>
 		</settlers>
 	</cycle>
 	<cycle>
-		<event>2</event>
 		<unlocks>
-			<building>1</building>
-			<building>3</building>
-			<building>4</building>
+			<building>block19</building>
+			<building>block27</building>
+		</unlocks>
+	</cycle>
+	<cycle>
+		<unlocks>
+			<building>block3</building>
 		</unlocks>
 		<settlers>
-			<workers>5</workers>
+			<workers>3</workers>
 		</settlers>
 	</cycle>
 	<cycle>
-		<event>2</event>
 		<unlocks>
-			<building>1</building>
-			<building>3</building>
-			<building>4</building>
+			<building>block8</building>
+			<building>block25</building>
 		</unlocks>
+	</cycle>
+	<cycle>
 		<settlers>
-			<workers>5</workers>
+			<military>2</military>
 		</settlers>
 	</cycle>
 	<cycle>
-		<event>2</event>
 		<unlocks>
-			<building>1</building>
-			<building>3</building>
-			<building>4</building>
+			<building>block7</building>
+			<building>block16</building>
+		</unlocks>
+	</cycle>
+	<cycle>
+		<unlocks>
+			<building>block1</building>
+			<building>block5</building>
 		</unlocks>
 		<settlers>
-			<workers>5</workers>
+			<artist>3</artist>
+		</settlers>
+	</cycle>
+	<cycle>
+		<unlocks>
+			<building>block11</building>
+		</unlocks>
+	</cycle>
+		<cycle>
+		<unlocks>
+			<building>block24</building>
+		</unlocks>
+	</cycle>
+	<cycle>
+		<settlers>
+			<richie>3</richie>
 		</settlers>
 	</cycle>
 </timeline>
 
-
+<events>
+	<pool minCycle="0">
+		<event time="30">event2</event>
+		<event time="40">event6</event>
+		<event time="20">event7</event>
+		<event time="30">event8</event>
+		<event time="35">event10</event>
+		<event time="45">event14</event>
+		<event time="20">event23</event>
+		<event time="25">event26</event>
+		
+	</pool>
+	<pool minCycle="15">
+		<event time="40">event1</event>
+		<event time="30">event3</event>
+		<event time="15">event5</event>
+		<event time="35">event9</event>
+		<event time="30">event11</event>
+		<event time="25">event13</event>
+		<event time="20">event16</event>
+		<event time="15">event17</event>
+		<event time="35">event18</event>
+		<event time="25">event22</event>
+		<event time="30">event25</event>
+	</pool>
+	<pool minCycle="30">
+		<event time="40">event4</event>
+		<event time="45">event12</event>
+		<event time="50">event19</event>
+		<event time="55">event20</event>
+		<event time="60">event24</event>
+		<event time="65">event27</event>
+		<event time="70">event28</event>
+	</pool>
+</events>
