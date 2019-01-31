@@ -191,7 +191,7 @@ public class GameManager : MonoBehaviour
 
         // Reset camera
         if (Input.GetKeyDown(KeyCode.V)) {
-            Camera.main.GetComponent<CameraController>().ResetPosition();
+            FindObjectOfType<CameraController>().ResetPosition();
         }
 /*
         // Spawns and inhabits citizen

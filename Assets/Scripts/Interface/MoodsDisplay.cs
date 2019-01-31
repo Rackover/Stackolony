@@ -38,7 +38,7 @@ public class MoodsDisplay : MonoBehaviour {
     void UpdateMoodAnimations()
     {
         foreach (MoodDisplay md in moods) {
-            if (gameManager.populationManager.populationCitizenList[md.population].Count > 0) {
+            if (gameManager.populationManager.populations[md.population].citizens.Count > 0) {
                 if (md.isHidden) {
                     md.Show();
                 }

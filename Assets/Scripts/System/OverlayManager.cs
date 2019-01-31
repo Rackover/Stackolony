@@ -206,14 +206,14 @@ public class OverlayManager : MonoBehaviour
                     }
 
                     averageNotation = averageNotation / popManager.populationTypeList.Length;
-                    averageNotation -= cityManager.houseNotation.noOccupations;
-                    averageNotation -= cityManager.houseNotation.wrongPopulationType;
+                    averageNotation -= cityManager.moodValues.noOccupations;
+                    averageNotation -= cityManager.moodValues.wrongPopulationType;
 
-                    if (averageNotation < cityManager.houseNotation.badNotationTreshold)
+                    if (averageNotation < cityManager.moodValues.badNotationTreshold)
                     {
                         blockMat.color = color.Evaluate(0f);
                     }
-                    else if (averageNotation > cityManager.houseNotation.goodNotationTreshold)
+                    else if (averageNotation > cityManager.moodValues.goodNotationTreshold)
                     {
                         blockMat.color = color.Evaluate(1f);
                     }

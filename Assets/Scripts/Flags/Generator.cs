@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Generator : Flag {
+public class Generator : Flag, Flag.IFlag
+{
     
     public int power;
 
@@ -28,5 +29,10 @@ public class Generator : Flag {
     {
         GameManager.instance.systemManager.AllGenerators.Remove(this);
         base.OnDestroy();
+    }
+
+    public System.Type GetFlagType()
+    {
+        return GetType();
     }
 }

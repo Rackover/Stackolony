@@ -126,22 +126,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1279173201474530
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4838795266356942}
-  - component: {fileID: 114964409961682186}
-  m_Layer: 0
-  m_Name: TimelineController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
 --- !u!1 &1288901295932130
 GameObject:
   m_ObjectHideFlags: 1
@@ -232,6 +216,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4082942352364192}
   - component: {fileID: 114076638731126872}
+  - component: {fileID: 114119694372932414}
   m_Layer: 0
   m_Name: Population
   m_TagString: Untagged
@@ -251,6 +236,22 @@ GameObject:
   - component: {fileID: 82364655299147082}
   m_Layer: 0
   m_Name: MusicManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1584153604884110
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4168957075449492}
+  - component: {fileID: 114173115742324510}
+  m_Layer: 0
+  m_Name: EventManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -470,6 +471,19 @@ Transform:
   m_Father: {fileID: 4468432540002810}
   m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4168957075449492
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1584153604884110}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4468432540002810}
+  m_RootOrder: 19
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4177361016474540
 Transform:
   m_ObjectHideFlags: 1
@@ -655,7 +669,7 @@ Transform:
   - {fileID: 4111541091294220}
   - {fileID: 4364936759027822}
   - {fileID: 4027571504882778}
-  - {fileID: 4838795266356942}
+  - {fileID: 4168957075449492}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -738,19 +752,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4468432540002810}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &4838795266356942
-Transform:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1279173201474530}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4468432540002810}
-  m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4969514154901834
 Transform:
@@ -1033,6 +1034,25 @@ MonoBehaviour:
   maxMood: 100
   moodModifierIfNoHabitation: -20
   maxCitizenNameLength: 20
+--- !u!114 &114119694372932414
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1513318231525256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a843292c0245e9444b71ee4d76c72749, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reactions:
+  - type: {fileID: 11400000, guid: efb40861fc2eccd438b0b5e2e903caac, type: 2}
+    events:
+    - function: 
+      moodValue: 50
+      occured: 0
+  angryCap: 0.2
+  chanceIncrementation: 0.02
 --- !u!114 &114136765406288630
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1076,6 +1096,17 @@ MonoBehaviour:
     m_Mode: 0
     m_NumColorKeys: 8
     m_NumAlphaKeys: 2
+--- !u!114 &114173115742324510
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1584153604884110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d031db2390fcc9a48b7349f213dc6680, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114319189306262394
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1155,7 +1186,6 @@ MonoBehaviour:
   saveManager: {fileID: 0}
   cinematicManager: {fileID: 0}
   bulletinsManager: {fileID: 0}
-  timelineController: {fileID: 114964409961682186}
   cursorDisplay: {fileID: 0}
   localization: {fileID: 0}
   displayerManager: {fileID: 0}
@@ -1269,6 +1299,7 @@ MonoBehaviour:
     badNotationTreshold: -5
     wrongPopulationType: -2
     noFood: -3
+    notEnoughFood: -1
     noOccupations: -2
     noPower: -2
     damaged: -2
@@ -1707,14 +1738,3 @@ MonoBehaviour:
   isDragging: 0
   cursorOnUI: 0
   sPosition: {x: 0, y: 0, z: 0}
---- !u!114 &114964409961682186
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1279173201474530}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4c64c7a4569e524b9a932ba80638ad9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NuisanceGenerator : Flag {
+public class NuisanceGenerator : Flag, Flag.IFlag {
 
     public int range;
     public int amount;
@@ -25,5 +25,10 @@ public class NuisanceGenerator : Flag {
         {
             GameManager.instance.missionManager.StartMission(block.gridCoordinates, "EmitNuisance", range);
         }
+    }
+
+    public System.Type GetFlagType()
+    {
+        return GetType();
     }
 }
