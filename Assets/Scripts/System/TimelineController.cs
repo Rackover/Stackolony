@@ -9,40 +9,28 @@ public class TimelineController : MonoBehaviour {
 
     class CycleInformation
     {
-        //public CycleEvent cycleEvent;
         public List<int> unlocks = new List<int>();
         public Dictionary<Population, int> settlers = new Dictionary<Population, int>();
     }
 
     List<CycleInformation> cycles;
     CycleInformation currentCycle;
-    bool triggeredEvent = false;
-
-    private void Update()
-    {
-        if (!GameManager.instance.IsInGame()) { return; };
-        if (currentCycle == null) { return; };
-
-        // Triggering current cycle event
-        //if (currentCycle.cycleEvent == null || triggeredEvent) { return; };
-
-        float time = GameManager.instance.temporality.GetCurrentCycleProgression();
-        
-        /*
-        if (triggeredEvent && time >= currentCycle.cycleEvent.time) {
-            //EventManager.Trigger(currentCycle.cycleEvent.id);
-        }
-        */
-    }
 
     public void UpdateCycle(int cycleNumber)
     {
         currentCycle = cycleNumber < cycles.Count ? cycles[cycleNumber] : null;
-        triggeredEvent = false;
+
+        if (currentCycle == null) return;
 
         foreach (KeyValuePair<Population, int> settler in currentCycle.settlers) {
             GameManager.instance.populationManager.SpawnCitizens(settler.Key, settler.Value);
         }
+
+        foreach(int blockId in currentCycle.unlocks) {
+            GameManager.instance.cityManager.UnlockBuilding(blockId);
+        }
+
+        Logger.Debug("New cycle, spawning " + currentCycle.settlers.Count.ToString() + " citizens and unlocking " + currentCycle.unlocks.Count.ToString() + " buildings");
     }
 
     public void LoadCycles()

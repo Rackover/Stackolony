@@ -2,8 +2,8 @@
 <timeline>
 	<cycle>
 		<unlocks>
-			<building>block28</building>
-			<building>block14</building>
+			<building>28</building>
+			<building>14</building>
 		</unlocks>
 	</cycle>
 	<cycle>
@@ -13,13 +13,13 @@
 	</cycle>
 	<cycle>
 		<unlocks>
-			<building>block19</building>
-			<building>block27</building>
+			<building>19</building>
+			<building>27</building>
 		</unlocks>
 	</cycle>
 	<cycle>
 		<unlocks>
-			<building>block3</building>
+			<building>3</building>
 		</unlocks>
 		<settlers>
 			<workers>3</workers>
@@ -27,8 +27,8 @@
 	</cycle>
 	<cycle>
 		<unlocks>
-			<building>block8</building>
-			<building>block25</building>
+			<building>8</building>
+			<building>25</building>
 		</unlocks>
 	</cycle>
 	<cycle>
@@ -38,14 +38,14 @@
 	</cycle>
 	<cycle>
 		<unlocks>
-			<building>block7</building>
-			<building>block16</building>
+			<building>7</building>
+			<building>16</building>
 		</unlocks>
 	</cycle>
 	<cycle>
 		<unlocks>
-			<building>block1</building>
-			<building>block5</building>
+			<building>1</building>
+			<building>5</building>
 		</unlocks>
 		<settlers>
 			<artist>3</artist>
@@ -53,12 +53,12 @@
 	</cycle>
 	<cycle>
 		<unlocks>
-			<building>block11</building>
+			<building>11</building>
 		</unlocks>
 	</cycle>
 		<cycle>
 		<unlocks>
-			<building>block24</building>
+			<building>24</building>
 		</unlocks>
 	</cycle>
 	<cycle>
@@ -67,39 +67,3 @@
 		</settlers>
 	</cycle>
 </timeline>
-
-<events>
-	<pool minCycle="0">
-		<event time="30">event2</event>
-		<event time="40">event6</event>
-		<event time="20">event7</event>
-		<event time="30">event8</event>
-		<event time="35">event10</event>
-		<event time="45">event14</event>
-		<event time="20">event23</event>
-		<event time="25">event26</event>
-		
-	</pool>
-	<pool minCycle="15">
-		<event time="40">event1</event>
-		<event time="30">event3</event>
-		<event time="15">event5</event>
-		<event time="35">event9</event>
-		<event time="30">event11</event>
-		<event time="25">event13</event>
-		<event time="20">event16</event>
-		<event time="15">event17</event>
-		<event time="35">event18</event>
-		<event time="25">event22</event>
-		<event time="30">event25</event>
-	</pool>
-	<pool minCycle="30">
-		<event time="40">event4</event>
-		<event time="45">event12</event>
-		<event time="50">event19</event>
-		<event time="55">event20</event>
-		<event time="60">event24</event>
-		<event time="65">event27</event>
-		<event time="70">event28</event>
-	</pool>
-</events>
