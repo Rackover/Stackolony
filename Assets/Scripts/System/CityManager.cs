@@ -15,7 +15,7 @@ public class CityManager : MonoBehaviour {
     //Comment fonctionne la notation d'une maison :
     // 
     [System.Serializable]
-    public class HouseNotation
+    public class MoodValues
     {
         public int goodNotationTreshold = -5; //Above this note, house is considered "Good"
         public int badNotationTreshold = -10; //Under this note, house is considered "Bad"
@@ -25,9 +25,10 @@ public class CityManager : MonoBehaviour {
         public int noPower = -2;
         public int damaged = -2; //NOT TAKEN IN ACCOUNT YETTTTTTTTTTTTTTTTTTT
         public int everythingFine = +3;
+        public int noHouse = -20;
     }
 
-    public HouseNotation houseNotation;
+    public MoodValues moodValues;
 
     private void Start()
     {
@@ -53,17 +54,17 @@ public class CityManager : MonoBehaviour {
     }
 
     //Finds a house for every citizens (Soon it'll take a priority order into account)
-    public void HouseEveryone()
+    public void HouseEveryone(float x)
     {
         GetBestHouses();
         for (int i = 0; i < GameManager.instance.populationManager.populationTypeList.Length; i++)
         {
-            HousePopulation(GameManager.instance.populationManager.populationTypeList[i]);
+            HousePopulation(GameManager.instance.populationManager.populationTypeList[i], x);
         }
     }
 
     //Finds a house for every citizens from a defined population
-    public void HousePopulation(Population pop)
+    public void HousePopulation(Population pop, float x)
     {
         foreach (PopulationManager.Citizen citizen in GameManager.instance.populationManager.populations[pop].citizens)
         {
@@ -87,7 +88,7 @@ public class CityManager : MonoBehaviour {
             {
                 Logger.Debug("Citizen " + citizen.name + " of type " + citizen.type.codeName + " could not find a house");
                 //Si le citoyen n'a pas pu se loger, il applique le malus d'humeur à son type de population
-                GameManager.instance.populationManager.ChangePopulationMood(pop, GameManager.instance.populationManager.moodModifierIfNoHabitation);
+                GameManager.instance.populationManager.ChangePopulationMood(pop, moodValues.noHouse * x);
             }
         }
     }
@@ -199,6 +200,7 @@ public class CityManager : MonoBehaviour {
             }
         }
 
+<<<<<<< HEAD
         if (!profileFound)
         {
             notation += houseNotation.wrongPopulationType;
@@ -214,10 +216,27 @@ public class CityManager : MonoBehaviour {
         if (!jobLeft)
         {
             notation += houseNotation.noOccupations;
+=======
+        if (!profileFound)
+        {
+            notation += moodValues.wrongPopulationType;
+        }
+        if (!powered)
+        {
+            notation += moodValues.noPower;
+        }
+        if (!foodLeft)
+        {
+            notation += moodValues.noFood;
+        }
+        if (!jobLeft)
+        {
+            notation += moodValues.noOccupations;
+>>>>>>> 01bca8f68eae74224d448e866668dbede8dc7ede
         }
 
         if (notation >= 0)
-            notation += houseNotation.everythingFine;
+            notation += moodValues.everythingFine;
 
         notation += house.notationModifier;
         return notation;

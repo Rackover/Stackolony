@@ -78,7 +78,7 @@ public class SystemManager : MonoBehaviour {
         yield return StartCoroutine(RecalculateFoodConsumption());
         yield return StartCoroutine(RecalculateOccupators());
         yield return StartCoroutine(UpdateHousesInformations());
-        yield return StartCoroutine(RecalculateHabitation());
+        yield return StartCoroutine(RecalculateHabitation(GameManager.instance.temporality.GetMicroCoef()));
         yield return StartCoroutine(UpdateHousesInformations());
         yield return StartCoroutine(RecalculateJobs());
         yield return StartCoroutine(OnGridUpdate());
@@ -189,11 +189,11 @@ public class SystemManager : MonoBehaviour {
         yield return null;
     }
 
-    public IEnumerator RecalculateHabitation()
+    public IEnumerator RecalculateHabitation(float x)
     {
         StartCoroutine(ResetHabitation());
         yield return new WaitForEndOfFrame();
-        GameManager.instance.cityManager.HouseEveryone();
+        GameManager.instance.cityManager.HouseEveryone(x);
         yield return null;
     }
 
