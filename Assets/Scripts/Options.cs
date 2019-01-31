@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using System;
 using System.IO;
@@ -15,6 +16,12 @@ public class Options
         void SetFromString(string val);
         string ToString();
     };
+
+    public interface IGenericTypeOption
+    {
+        Type GetGenericType();
+        object[] GetRange();
+    }
 
     public class SliderOption : IOption
     {
@@ -87,6 +94,60 @@ public class Options
         }
     }
 
+    public class SelectOption<T> : IOption, IGenericTypeOption
+    {
+        public int defaultIndex { get; }
+        public int index;
+        public T[] possibleValues { get; }
+
+        public SelectOption(T[] _possibleValues, int _defaultIndex=0)
+        {
+            defaultIndex = _defaultIndex;
+            index = defaultIndex;
+            possibleValues = _possibleValues;
+        }
+
+        public void Set(int newIndex)
+        {
+            index = newIndex < possibleValues.Length ? newIndex : defaultIndex;
+        }
+
+        public void Set(T newValue)
+        {
+            for (int i = 0; i < possibleValues.Length; i++) {
+                if (EqualityComparer<T>.Default.Equals(possibleValues[i], newValue)) {
+                    index = i;
+                    return;
+                }
+            }
+        }
+
+        public void Reset()
+        {
+            index = defaultIndex;
+        }
+
+        public void SetFromString(string str)
+        {
+            Set(Convert.ToInt32(str));
+        }
+
+        public override string ToString()
+        {
+            return index.ToString();
+        }
+
+        public object[] GetRange()
+        {
+            return possibleValues.Cast<object>().ToArray();
+        }
+
+        public Type GetGenericType()
+        {
+            return possibleValues[0].GetType();
+        }
+    }
+
     public Options()
     {
         options["borderSensivity"] = new SliderOption(6f, 15f, 50f);
@@ -95,6 +156,9 @@ public class Options
         options["musicVolume"] = new SliderOption(0f, 1f, 1f);
         options["sfxVolume"] = new SliderOption(0f, 0.2f, 1f);
         options["voiceVolume"] = new SliderOption(0f, 0.2f, 1f);
+
+        // TODO - Scan loc folders automatically
+        options["lang"] = new SelectOption<string>(new string[] { "english", "french" });
 
         options["enableDrifting"] = new CheckboxOption(true);
         options["animatedCitizens"] = new CheckboxOption(true);

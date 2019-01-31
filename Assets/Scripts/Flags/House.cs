@@ -57,9 +57,6 @@ public class House : Flag
             //Ecrit sur la carte d'identité du citoyen qu'il habite ici désormais
             citizen.habitation = this;
 
-
-            //Fourni un travail au nouveau citoyen, s'il y en a un de disponible
-            StartCoroutine(GameManager.instance.systemManager.RecalculateJobs());
             return;
         }
     }
