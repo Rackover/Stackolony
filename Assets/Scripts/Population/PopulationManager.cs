@@ -235,7 +235,12 @@ public class PopulationManager : MonoBehaviour
     public void ChangePopulationMood(Population type, float amount)
     {
         float oldValue = populations[type].averageMood;
-        populations[type].averageMood += amount;
+        populations[type].averageMood += amount/populations[type].citizens.Count;
+
+        // Clamping mood
+        if(populations[type].averageMood < 0) populations[type].averageMood = 0f;
+        if(populations[type].averageMood > maxMood) populations[type].averageMood = 100f;
+
         float newValue = populations[type].averageMood;
         Logger.Debug("Population " + type.codeName + " mood has been changed from " + oldValue + " to " + newValue);
     }

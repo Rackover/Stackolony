@@ -30,7 +30,7 @@ public class Temporality : MonoBehaviour {
 
     public float GetMicroCoef()
     {
-        return 1 / nbMicroCyclePerCycle;
+        return 1f / (float)nbMicroCyclePerCycle;
     }
 
     public void PauseTime()
