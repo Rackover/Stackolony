@@ -4,8 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "Population", menuName = "Population", order = 1)]
-public class Population : ScriptableObject {
-
+public class Population : ScriptableObject 
+{
     public int ID;
     public string codeName; //Nom utilisé dans les CSV
     public Texture2D[] moodTextures;

@@ -20,9 +20,18 @@ public class PopulationManager : MonoBehaviour {
         public int cyclesRemaining;
     }
 
+    public class PopulationInformation
+    {
+        public float averageMood; // average moods between 0 and 1
+        public float riotRisk;
+        public List<Citizen> citizens = new List<Citizen>(); //Assign every citizen to it's population
+        public List<MoodModifier> moodModifiers = new List<MoodModifier>(); //List of every active moodmodifiers for every population
+    }
+
     [Header("System")]
     public Population[] populationTypeList; //Liste de chaques type de population
     public List<Citizen> citizenList = new List<Citizen>(); //Liste de chaque citoyen de la colonie
+    public Dictionary<Population, PopulationInformation> populations = new Dictionary<Population, PopulationInformation>();
 
     [Header("Settings")]
     public float startingMood = 50f;
@@ -31,9 +40,8 @@ public class PopulationManager : MonoBehaviour {
     public int maxCitizenNameLength = 20;
 
     public event System.Action<int, Population> CitizenArrival;
-    public Dictionary<Population, List<Citizen>> populationCitizenList = new Dictionary<Population, List<Citizen>>(); //Assign every citizen to it's population
-    public Dictionary<Population, List<MoodModifier>> moodModifiers = new Dictionary<Population, List<MoodModifier>>(); //List of every active moodmodifiers for every population
-    private Dictionary<Population, float> averageMoods = new Dictionary<Population, float>();  // average moods between 0 and 1
+    //public Dictionary<Population, List<MoodModifier>> moodModifiers = new Dictionary<Population, List<MoodModifier>>(); //List of every active moodmodifiers for every population
+    //private Dictionary<Population, float> averageMoods = new Dictionary<Population, float>();  // average moods between 0 and 1
     List<string> names;
 
     private void Awake()
@@ -45,9 +53,11 @@ public class PopulationManager : MonoBehaviour {
     {
         foreach(Population pop in populationTypeList) 
         {
-            averageMoods[pop] = startingMood;
-            populationCitizenList[pop] = new List<Citizen>();
-            moodModifiers[pop] = new List<MoodModifier>();
+            populations.Add(pop, new PopulationInformation());
+
+            populations[pop].averageMood = startingMood;
+            populations[pop].citizens = new List<Citizen>();
+            populations[pop].moodModifiers = new List<MoodModifier>();
         }
     }
 
@@ -88,7 +98,7 @@ public class PopulationManager : MonoBehaviour {
         newMoodModifier.reasonId = reasonId;
         newMoodModifier.amount = amount;
         newMoodModifier.cyclesRemaining = cyclesRemaining;
-        moodModifiers[popType].Add(newMoodModifier);
+        populations[popType].moodModifiers.Add(newMoodModifier);
     }
 
     //This function just changes the index of the populations in the array containing every populations
@@ -110,16 +120,16 @@ public class PopulationManager : MonoBehaviour {
 
     public void ChangePopulationMood(Population type, float amount)
     {
-        float oldValue = averageMoods[type];
-        averageMoods[type] += amount;
-        float newValue = averageMoods[type];
+        float oldValue = populations[type].averageMood;
+        populations[type].averageMood += amount;
+        float newValue = populations[type].averageMood;
         Logger.Debug("Population " + type.codeName + " mood has been changed from " + oldValue + " to " + newValue);
     }
 
     public float GetAverageMood(Population type)
     {
         float averageMood = GetRawAverageMood(type);
-        foreach (MoodModifier moodModifier in moodModifiers[type])
+        foreach (MoodModifier moodModifier in populations[type].moodModifiers)
         {
             averageMood += moodModifier.amount;
         }
@@ -128,16 +138,16 @@ public class PopulationManager : MonoBehaviour {
 
     public float GetRawAverageMood(Population type)
     {
-        return averageMoods[type];
+        return populations[type].averageMood;
     }
 
     public void ApplyMoodModifiers()
     {
-        foreach (KeyValuePair<Population, List<MoodModifier>> moodModifiers in moodModifiers)
+        foreach (KeyValuePair<Population, PopulationInformation> pc in populations)
         {
-            foreach (MoodModifier moodModifier in moodModifiers.Value)
+            foreach (MoodModifier moodModifier in pc.Value.moodModifiers)
             {
-                averageMoods[moodModifiers.Key] += moodModifier.amount;
+                pc.Value.averageMood += moodModifier.amount;
             }
         }
     }
@@ -145,7 +155,7 @@ public class PopulationManager : MonoBehaviour {
     public int GetHomelessCount(Population population)
     {
         int count = 0;
-        foreach(Citizen citizen in populationCitizenList[population]) {
+        foreach(Citizen citizen in populations[population].citizens) {
             count += citizen.habitation == null ? 1 : 0;
         }
         return count;
@@ -169,7 +179,7 @@ public class PopulationManager : MonoBehaviour {
         newCitizen.habitation = null;
         newCitizen.type = type;
         citizenList.Add(newCitizen);
-        populationCitizenList[type].Add(newCitizen);
+        populations[type].citizens.Add(newCitizen);
         return newCitizen;
     }
 
@@ -197,7 +207,7 @@ public class PopulationManager : MonoBehaviour {
     {
         if (citizenList.Contains(citizen))
         {
-            populationCitizenList[citizen.type].Remove(citizen);
+            populations[citizen.type].citizens.Remove(citizen);
             citizenList.Remove(citizen);
             Debug.Log("Citizen " + citizen.name + " has been killed");
         }

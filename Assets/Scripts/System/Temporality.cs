@@ -18,6 +18,9 @@ public class Temporality : MonoBehaviour {
     int savedTimeScale; //Variable utilisée pour redéfinir la vitesse du jeu quand le joueur annule la pause
     Image savedButton; //Bouton à réactiver quand le joueur annule la pause
 
+    public System.Action OnNewCycle;
+    public System.Action OnNewMicroCycle;
+
     void Start()
     {
         GetMicroDuration();
@@ -102,12 +105,16 @@ public class Temporality : MonoBehaviour {
         StartCoroutine(GameManager.instance.systemManager.OnNewCycle());
         cycleNumber++;
         GameManager.instance.bulletinsManager.Renew(cycleNumber);
+
+        OnNewCycle.Invoke();
     }
 
     void AddMicroCycle()
     {
         if (!GameManager.instance.IsInGame()) { return; };
         StartCoroutine(GameManager.instance.systemManager.OnNewMicrocycle());
+
+        OnNewMicroCycle.Invoke();
     }
 
     // Returns current cycle of the current year

@@ -143,14 +143,15 @@ public class SystemManager : MonoBehaviour {
     //Remove 1 cycle on each moodmodifiers duration
     public void RefreshMoodModifiers()
     {
-        foreach (KeyValuePair<Population, List<PopulationManager.MoodModifier>> moodModifiers in GameManager.instance.populationManager.moodModifiers)
+        foreach (KeyValuePair<Population, PopulationManager.PopulationInformation> p in GameManager.instance.populationManager.populations)
         {
-            foreach (PopulationManager.MoodModifier moodModifier in moodModifiers.Value)
+            foreach (PopulationManager.MoodModifier moodModifier in p.Value.moodModifiers)
             {
                 moodModifier.cyclesRemaining--;
+
                 if (moodModifier.cyclesRemaining <= 0)
                 {
-                    moodModifiers.Value.Remove(moodModifier);
+                    p.Value.moodModifiers.Remove(moodModifier);
                 }
             }
         }
