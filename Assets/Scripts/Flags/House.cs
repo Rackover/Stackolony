@@ -25,12 +25,22 @@ public class House : Flag
 
     public void UpdateHouseInformations()
     {
-        foodConsumption = foodConsumptionPerHabitant * affectedCitizen.Count;
+        foodConsumption = GetFoodConsumption();
         if (block.currentPower >= block.scheme.consumption)
             powered = true;
         else
             powered = false;
         GetDistanceFromGround();
+    }
+
+    float GetFoodConsumption()
+    {
+        float fconsumption = 0;
+        foreach (PopulationManager.Citizen citizen in affectedCitizen)
+        {
+            fconsumption += (foodConsumptionPerHabitant + GameManager.instance.populationManager.GetFoodConsumption(citizen.type));
+        }
+        return fconsumption;
     }
 
     public void GetDistanceFromGround()

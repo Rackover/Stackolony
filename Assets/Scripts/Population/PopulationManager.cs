@@ -10,6 +10,7 @@ public class PopulationManager : MonoBehaviour {
     public Dictionary<Population, List<Citizen>> populationCitizenList = new Dictionary<Population, List<Citizen>>(); //Assign every citizen to it's population
     private Dictionary<Population, float> averageMoods = new Dictionary<Population, float>();  // average moods between 0 and 1
     public Dictionary<Population, List<MoodModifier>> moodModifiers = new Dictionary<Population, List<MoodModifier>>(); //List of every active moodmodifiers for every population
+    public Dictionary<Population, List<FoodModifier>> foodModifiers = new Dictionary<Population, List<FoodModifier>>(); //List of every food modifier affecting every population
 
     public float startingMood = 50f;
     public float maxMood = 100f;
@@ -29,6 +30,13 @@ public class PopulationManager : MonoBehaviour {
     }
 
     public class MoodModifier
+    {
+        public int reasonId;
+        public float amount;
+        public int cyclesRemaining;
+    }
+
+    public class FoodModifier
     {
         public int reasonId;
         public float amount;
@@ -79,6 +87,27 @@ public class PopulationManager : MonoBehaviour {
         return names[Mathf.FloorToInt(Random.value * names.Count)];
     }
 
+    //Return the food consumed by a type of population
+    public float GetFoodConsumption(Population popType)
+    {
+        float foodConsumption = 0;
+        foreach (FoodModifier foodModifier in foodModifiers[popType])
+        {
+            foodConsumption += foodModifier.amount;
+        }
+        return foodConsumption;
+    }
+
+    //Generates a foodmodifier for a given population
+    public void GenerateFoodModifier(Population popType, int reasonId, float newAmount, int cyclesRemaining)
+    {
+        FoodModifier newFoodModifier = new FoodModifier();
+        newFoodModifier.reasonId = reasonId;
+        newFoodModifier.amount = newAmount;
+        newFoodModifier.cyclesRemaining = cyclesRemaining;
+        foodModifiers[popType].Add(newFoodModifier);
+    }
+
     //Generates a moodmodifier for a given population
     public void GenerateMoodModifier(Population popType, int reasonId, float amount, int cyclesRemaining)
     {
@@ -104,7 +133,6 @@ public class PopulationManager : MonoBehaviour {
             }
         }
     }
-
 
     public void ChangePopulationMood(Population type, float amount)
     {

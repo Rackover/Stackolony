@@ -156,6 +156,22 @@ public class SystemManager : MonoBehaviour {
         }
     }
 
+    //Remove 1 cycle on each foodmodifiers
+    public void RefreshFoodModifiers()
+    {
+        foreach (KeyValuePair<Population, List<PopulationManager.FoodModifier>> foodModifiers in GameManager.instance.populationManager.foodModifiers)
+        {
+            foreach (PopulationManager.FoodModifier foodModifier in foodModifiers.Value)
+            {
+                foodModifier.cyclesRemaining--;
+                if (foodModifier.cyclesRemaining <= 0)
+                {
+                    foodModifiers.Value.Remove(foodModifier);
+                }
+            }
+        }
+    }
+
     public IEnumerator CalculateHouseInformation()
     {
         foreach (House house in AllHouses)

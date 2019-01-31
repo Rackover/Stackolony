@@ -7,6 +7,7 @@ public class EventsManager : MonoBehaviour {
     public enum Type { BlockRequest, ValueModification, DamageBlockRequest, FoodModification, PopulationRequest, MoveBlockRequest, PopulationGreet, RepairBuildingRequest, PowerRequest, RangeModificationRequest}
     public enum Difficulty { Easy, Medium, Hard }
 
+
     [System.Serializable]
     public class Consequence
     {
