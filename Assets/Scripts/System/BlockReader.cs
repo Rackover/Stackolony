@@ -11,7 +11,7 @@ public class BlockReader : EditorWindow
 	TextAsset csvFile;
 	bool preview;
 
-	string fileName = "";
+	string folderName = "";
 
     [MenuItem("Window/BlockReader")]
     static void Init()
@@ -31,16 +31,16 @@ public class BlockReader : EditorWindow
 			GUILayout.BeginHorizontal();
 			GUILayout.Label("Enter folder name :");
 
-			if(fileName == "") GUI.color = Color.red;
+			if(folderName == "") GUI.color = Color.red;
 			else GUI.color = Color.green;
 
-			fileName = GUILayout.TextField(fileName);
+			folderName = GUILayout.TextField(folderName);
 			GUILayout.EndHorizontal();
 
 			GUI.color = Color.white;
 
 			GUILayout.BeginHorizontal();
-			if(fileName != "")
+			if(folderName != "")
 			{
 				if(GUILayout.Button("Read CSV and generate Blocks")) 
 				{
@@ -119,10 +119,7 @@ public class BlockReader : EditorWindow
 			block.isBuyable = bool.Parse(dataLine[7]);
 			block.canBuildAbove = bool.Parse(dataLine[8]);
 
-
-			Paths.CreateDirectoryIfNotExists("Assets/Databank/Blocks/" + fileName);
-
-			AssetDatabase.CreateAsset(block, "Assets/Databank/Blocks/" + fileName + "/Block_" + dataLine[0] + ".asset");
+			AssetDatabase.CreateAsset(block, Paths.GetBlockFolder(folderName) + "/Block_" + dataLine[0] + ".asset");
 			AssetDatabase.SaveAssets();
 			AssetDatabase.Refresh();
 		}

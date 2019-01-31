@@ -55,7 +55,14 @@ public class Paths {
         return path + "/" + file;
     }
 
-    static public void CreateDirectoryIfNotExists(string path)
+    static public string GetBlockFolder(string folderName)
+    {
+        string path = "Assets/Databank/Blocks/" + folderName;
+        CreateDirectoryIfNotExists(path);
+        return path;
+    }
+
+    static void CreateDirectoryIfNotExists(string path)
     {
         if (!Directory.Exists(path)) {
             Directory.CreateDirectory(path);
