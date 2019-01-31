@@ -58,6 +58,8 @@ public class SystemManager : MonoBehaviour {
     //S'execute à chaques fois qu'un cycle passe
     public IEnumerator OnNewCycle()
     {
+        GameManager.instance.populationManager.OnNewCycle();
+        
         foreach (Block block in AllBlocks)
         {
             block.OnNewCycle();
@@ -70,6 +72,8 @@ public class SystemManager : MonoBehaviour {
     //S'execute à chaques fois qu'un microcycle passe
     public IEnumerator OnNewMicrocycle()
     {
+        GameManager.instance.populationManager.OnNewMicrocycle();
+
         yield return StartCoroutine(UpdateHousesInformations());
         yield return StartCoroutine(RecalculateFoodConsumption());
         yield return StartCoroutine(RecalculateOccupators());
@@ -143,14 +147,31 @@ public class SystemManager : MonoBehaviour {
     //Remove 1 cycle on each moodmodifiers duration
     public void RefreshMoodModifiers()
     {
-        foreach (KeyValuePair<Population, List<PopulationManager.MoodModifier>> moodModifiers in GameManager.instance.populationManager.moodModifiers)
+        foreach (KeyValuePair<Population, PopulationManager.PopulationInformation> p in GameManager.instance.populationManager.populations)
         {
-            foreach (PopulationManager.MoodModifier moodModifier in moodModifiers.Value)
+            foreach (PopulationManager.MoodModifier moodModifier in p.Value.moodModifiers)
             {
                 moodModifier.cyclesRemaining--;
+
                 if (moodModifier.cyclesRemaining <= 0)
                 {
-                    moodModifiers.Value.Remove(moodModifier);
+                    p.Value.moodModifiers.Remove(moodModifier);
+                }
+            }
+        }
+    }
+
+    //Remove 1 cycle on each foodmodifiers
+    public void RefreshFoodModifiers()
+    {
+        foreach (KeyValuePair<Population, PopulationManager.PopulationInformation> p in GameManager.instance.populationManager.populations)
+        {
+            foreach (PopulationManager.FoodModifier fm in p.Value.foodModifiers)
+            {
+                fm.cyclesRemaining--;
+                if (fm.cyclesRemaining <= 0)
+                {
+                    p.Value.foodModifiers.Remove(fm);
                 }
             }
         }
