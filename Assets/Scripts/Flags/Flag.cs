@@ -8,6 +8,11 @@ public class Flag : MonoBehaviour {
     public Block block;
     public bool isEnabled = true;
 
+
+    public interface IFlag {
+        System.Type GetFlagType();
+    }
+
     //Fonction appelée lors de la création du script
     virtual public void Awake()
     {

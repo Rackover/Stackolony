@@ -131,7 +131,7 @@ public class MoodDisplay : MonoBehaviour {
 
     void UpdateTexts()
     {
-        int inhabitants = popMan.populationCitizenList[population].Count;
+        int inhabitants = popMan.populations[population].citizens.Count;
         int homelessAmount = popMan.GetHomelessCount(population);
         amount.text = inhabitants.ToString();
         homeless.text = homelessAmount.ToString();

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class FlagNeeder : Flag 
+public class FlagNeeder : Flag, Flag.IFlag
 {
 	public string needed;
 	public int range;
@@ -19,5 +19,10 @@ public class FlagNeeder : Flag
 		}
 		*/
 	}
+
+    public System.Type GetFlagType()
+    {
+        return GetType();
+    }
 
 }

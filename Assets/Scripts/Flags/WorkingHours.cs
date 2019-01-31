@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WorkingHours : Flag 
+public class WorkingHours : Flag, Flag.IFlag
 {
 	public float startHour;
 	public float endHour;
@@ -34,4 +34,9 @@ public class WorkingHours : Flag
 		}
 		hasStarted = false;
 	}
+
+    public System.Type GetFlagType()
+    {
+        return GetType();
+    }
 }

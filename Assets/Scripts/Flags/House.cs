@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class House : Flag
+public class House : Flag, Flag.IFlag
 {
     //House Datas
     public int slotAmount;
     public Population[] acceptedPop;
-    public float foodConsumptionPerHabitant;
     public List<PopulationManager.Citizen> affectedCitizen = new List<PopulationManager.Citizen>();
     public int standingLevel = 1;
+    public int notationModifier = 0;
 
     //Variables
     public List<Occupator> occupatorsInRange = new List<Occupator>();
@@ -24,12 +24,22 @@ public class House : Flag
 
     public void UpdateHouseInformations()
     {
-        foodConsumption = foodConsumptionPerHabitant * affectedCitizen.Count;
+        foodConsumption = GetFoodConsumption();
         if (block.currentPower >= block.scheme.consumption)
             powered = true;
         else
             powered = false;
         GetDistanceFromGround();
+    }
+
+    float GetFoodConsumption()
+    {
+        float fconsumption = 0;
+        foreach (PopulationManager.Citizen citizen in affectedCitizen)
+        {
+            fconsumption += (GameManager.instance.populationManager.GetFoodConsumption(citizen.type));
+        }
+        return fconsumption;
     }
 
     public void GetDistanceFromGround()
@@ -91,5 +101,10 @@ public class House : Flag
             citizenOut.maxParticles = 1;
         }
         citizenOut.Play();  
+    }
+
+    public System.Type GetFlagType()
+    {
+        return GetType();
     }
 }
