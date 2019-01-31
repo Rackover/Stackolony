@@ -2,8 +2,12 @@
 using System.IO;
 using UnityEngine;
 
+public enum ModifierReason { NoCandyMachine, CouldntPaintHisHouse, PaintedHisHouse, GotExtraSpinach, CleanedFactory, UncleanedFactory, ThrowedTrashOnKavgas, CouldntThrowTrashOnKavgas, AutorizedWiredCommunication, RefusedWiredCommunication, AcceptedKrowserFamily, AcceptedCrystalResearchs, AccidentallyBurnedHouse, HadBanquet, NoBanquet, GoodLighting, AllowedConcert};
+
 public class PopulationManager : MonoBehaviour 
 {
+
+
     [System.Serializable]
     public class Citizen
     {
@@ -15,14 +19,14 @@ public class PopulationManager : MonoBehaviour
 
     public class MoodModifier
     {
-        public int reasonId;
+        public ModifierReason reason;
         public float amount;
         public int cyclesRemaining;
     }
 
     public class FoodModifier
     {
-        public int reasonId;
+        public ModifierReason reason;
         public float amount;
         public int cyclesRemaining;
     }
@@ -188,7 +192,7 @@ public class PopulationManager : MonoBehaviour
     //Return the food consumed by a type of population
     public float GetFoodConsumption(Population popType)
     {
-        float foodConsumption = 0;
+        float foodConsumption = popType.baseFoodConsumption;
         foreach (FoodModifier foodModifier in populations[popType].foodModifiers)
         {
             foodConsumption += foodModifier.amount;
@@ -196,21 +200,32 @@ public class PopulationManager : MonoBehaviour
         return foodConsumption;
     }
 
+    public Population GetPopulationByID(int ID)
+    {
+        foreach (Population pop in populationTypeList)
+        {
+            if (pop.ID == ID)
+            {
+                return pop;
+            }
+        }
+        return null;
+    }
     //Generates a foodmodifier for a given population
-    public void GenerateFoodModifier(Population popType, int reasonId, float newAmount, int cyclesRemaining)
+    public void GenerateFoodModifier(Population popType, ModifierReason reason, float newAmount, int cyclesRemaining)
     {
         FoodModifier newFoodModifier = new FoodModifier();
-        newFoodModifier.reasonId = reasonId;
+        newFoodModifier.reason = reason;
         newFoodModifier.amount = newAmount;
         newFoodModifier.cyclesRemaining = cyclesRemaining;
         populations[popType].foodModifiers.Add(newFoodModifier);
     }
 
     //Generates a moodmodifier for a given population
-    public void GenerateMoodModifier(Population popType, int reasonId, float amount, int cyclesRemaining)
+    public void GenerateMoodModifier(Population popType, ModifierReason reason, float amount, int cyclesRemaining)
     {
         MoodModifier newMoodModifier = new MoodModifier();
-        newMoodModifier.reasonId = reasonId;
+        newMoodModifier.reason = reason;
         newMoodModifier.amount = amount;
         newMoodModifier.cyclesRemaining = cyclesRemaining;
         populations[popType].moodModifiers.Add(newMoodModifier);
