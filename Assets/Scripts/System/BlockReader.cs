@@ -119,7 +119,8 @@ public class BlockReader : EditorWindow
 			block.isBuyable = bool.Parse(dataLine[7]);
 			block.canBuildAbove = bool.Parse(dataLine[8]);
 
-			if(!Directory.Exists("Assets/Databank/Blocks/" + fileName)) Directory.CreateDirectory("Assets/Databank/Blocks/" + fileName);
+
+			Paths.CreateDirectoryIfNotExists("Assets/Databank/Blocks/" + fileName);
 
 			AssetDatabase.CreateAsset(block, "Assets/Databank/Blocks/" + fileName + "/Block_" + dataLine[0] + ".asset");
 			AssetDatabase.SaveAssets();

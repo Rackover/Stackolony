@@ -55,7 +55,7 @@ public class Paths {
         return path + "/" + file;
     }
 
-    static void CreateDirectoryIfNotExists(string path)
+    static public void CreateDirectoryIfNotExists(string path)
     {
         if (!Directory.Exists(path)) {
             Directory.CreateDirectory(path);
