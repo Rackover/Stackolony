@@ -23,7 +23,7 @@ public class Block : MonoBehaviour {
     [HideInInspector]   public int positionInTower; //0 = tout en bas
 
     [Header("Lists")]
-    public List<Flag> activeFlags = new List<Flag>();
+    public List<Flag.IFlag> activeFlags = new List<Flag.IFlag>();
 	public List<BlockState> states = new List<BlockState>();
 
     [Header("Values")]

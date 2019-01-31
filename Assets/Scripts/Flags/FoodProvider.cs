@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FoodProvider: Flag
+public class FoodProvider: Flag, Flag.IFlag
 {
     public int range;
     public float foodTotal;
@@ -26,5 +26,10 @@ public class FoodProvider: Flag
         {
             GameManager.instance.missionManager.StartMission(block.gridCoordinates, "DistributeFood", range, 0, typeof(House));
         }
+    }
+
+    public System.Type GetFlagType()
+    {
+        return GetType();
     }
 }

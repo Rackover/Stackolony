@@ -117,6 +117,25 @@ public class CityManager : MonoBehaviour {
         }
     }
 
+    public Block FindRandomBlockWithFlag(System.Type type)
+    {
+        List<Block> candidates = new List<Block>();
+        foreach (Block block in GameManager.instance.systemManager.AllBlocks)
+        {
+            if (block.activeFlags[0].GetFlagType() == type) {
+                candidates.Add(block);
+            }
+        }
+        int random = Random.Range(0, candidates.Count - 1);
+        Block result = candidates[random];
+        if (result != null)
+        {
+            return result;
+        }
+        return null;
+    }
+
+
     //Return an int, the bigger it is, the more attractive is the house
     public float GetHouseNotation(House house, Population populationType)
     {

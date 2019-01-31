@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FiremanStation : Flag 
+public class FiremanStation : Flag, Flag.IFlag
 {
 	[Header("Policeman")]
 	public int range;
@@ -54,4 +54,9 @@ public class FiremanStation : Flag
 			}
 		}
 	}
+
+    public System.Type GetFlagType()
+    {
+        return GetType();
+    }
 }

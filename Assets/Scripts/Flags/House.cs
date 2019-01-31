@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class House : Flag
+public class House : Flag, Flag.IFlag
 {
     //House Datas
     public int slotAmount;
@@ -101,5 +101,10 @@ public class House : Flag
             citizenOut.maxParticles = 1;
         }
         citizenOut.Play();  
+    }
+
+    public System.Type GetFlagType()
+    {
+        return GetType();
     }
 }
