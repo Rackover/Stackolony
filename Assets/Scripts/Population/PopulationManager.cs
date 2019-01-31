@@ -2,7 +2,7 @@
 using System.IO;
 using UnityEngine;
 
-public enum ModifierReason { NoCandyMachine, CouldntPaintHisHouse, PaintedHisHouse, GotExtraSpinach, CleanedFactory, UncleanedFactory, ThrowedTrashOnKavgas, CouldntThrowTrashOnKavgas, AutorizedWiredCommunication, RefusedWiredCommunication, AcceptedKrowserFamily, AcceptedCrystalResearchs, AccidentallyBurnedHouse, HadBanquet, NoBanquet, GoodLighting, AllowedConcert};
+public enum ModifierReason { NoCandyMachine, CouldntPaintHisHouse, PaintedHisHouse, GotExtraSpinach, CleanedFactory, UncleanedFactory, ThrowedTrashOnKavgas, CouldntThrowTrashOnKavgas, AutorizedWiredCommunication, RefusedWiredCommunication, AcceptedKrowserFamily, AcceptedCrystalResearchs, AccidentallyBurnedHouse, HadBanquet, NoBanquet, GoodLighting, AllowedConcert, RepairedPowerAccumulator};
 
 public class PopulationManager : MonoBehaviour 
 {

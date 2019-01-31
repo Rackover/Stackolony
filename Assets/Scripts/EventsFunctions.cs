@@ -43,7 +43,7 @@ public class EventsFunctions : MonoBehaviour {
 
         //Event 2
         events.Add(
-            0,
+            1,
             new Action<int>(
                 (eventOutput) => {
                     Population affectedPop = populationManager.GetPopulationByID(0);
@@ -64,7 +64,7 @@ public class EventsFunctions : MonoBehaviour {
 
         //Event 3
         events.Add(
-            0,
+            2,
             new Action<int>(
                 (eventOutput) => {
                     switch (eventOutput)
@@ -83,7 +83,7 @@ public class EventsFunctions : MonoBehaviour {
 
         //Event 4
         events.Add(
-            0,
+            3,
             new Action<int>(
                 (eventOutput) => {
                     switch (eventOutput)
@@ -101,7 +101,7 @@ public class EventsFunctions : MonoBehaviour {
 
         //Event 5
         events.Add(
-            0,
+            4,
             new Action<int>(
                 (eventOutput) => {
                     Population affectedPop = populationManager.GetPopulationByID(4);
@@ -122,7 +122,7 @@ public class EventsFunctions : MonoBehaviour {
 
         //Event 6
         events.Add(
-            0,
+            5,
             new Action<int>(
                 (eventOutput) => {
                     switch (eventOutput)
@@ -142,7 +142,7 @@ public class EventsFunctions : MonoBehaviour {
 
         //Event 7
         events.Add(
-            0,
+            6,
             new Action<int>(
                 (eventOutput) => {
                     switch (eventOutput)
@@ -161,7 +161,7 @@ public class EventsFunctions : MonoBehaviour {
 
         //Event 8
         events.Add(
-            0,
+            7,
             new Action<int>(
                 (eventOutput) => {
                     switch (eventOutput)
@@ -179,7 +179,7 @@ public class EventsFunctions : MonoBehaviour {
 
         //Event 9
         events.Add(
-            0,
+            8,
             new Action<int>(
                 (eventOutput) => {
                     switch (eventOutput)
@@ -203,7 +203,7 @@ public class EventsFunctions : MonoBehaviour {
 
         //Event 10
         events.Add(
-            0,
+            9,
             new Action<int>(
                 (eventOutput) => {
                     switch (eventOutput)
@@ -220,7 +220,7 @@ public class EventsFunctions : MonoBehaviour {
 
         //Event 11
         events.Add(
-            0,
+            10,
             new Action<int>(
                 (eventOutput) => {
                     switch (eventOutput)
@@ -246,7 +246,7 @@ public class EventsFunctions : MonoBehaviour {
 
         //Event 12
         events.Add(
-            0,
+            11,
             new Action<int>(
                 (eventOutput) => {
                     switch (eventOutput)
@@ -265,7 +265,7 @@ public class EventsFunctions : MonoBehaviour {
 
         //Event 13
         events.Add(
-            0,
+            12,
             new Action<int>(
                 (eventOutput) => {
                     switch (eventOutput)
@@ -284,7 +284,7 @@ public class EventsFunctions : MonoBehaviour {
 
         //Event 14
         events.Add(
-            0,
+            13,
             new Action<int>(
                 (eventOutput) => {
                     switch (eventOutput)
@@ -301,7 +301,7 @@ public class EventsFunctions : MonoBehaviour {
 
         //Event 15
         events.Add(
-            0,
+            14,
             new Action<int>(
                 (eventOutput) => {
                     switch (eventOutput)
@@ -311,6 +311,30 @@ public class EventsFunctions : MonoBehaviour {
                             populationManager.GenerateMoodModifier(populationManager.GetPopulationByID(0), ModifierReason.AllowedConcert, 2, 3);
                             break;
                         default:
+                            break;
+                    }
+                }
+             )
+        );
+
+        //Event 16
+        events.Add(
+            15,
+            new Action<int>(
+                (eventOutput) => {
+                    switch (eventOutput)
+                    {
+                        case 0:
+                            //A generate +2 electricity
+                            populationManager.GenerateMoodModifier(populationManager.GetPopulationByID(4), ModifierReason.RepairedPowerAccumulator, 1, 3);
+                            populationManager.GenerateMoodModifier(populationManager.GetPopulationByID(2), ModifierReason.RepairedPowerAccumulator, -2, 3);
+                            break;
+                        default:
+                            int random = UnityEngine.Random.Range(0, 100);
+                            if (random <= 50)
+                            {
+                                //The energy generator / wind turbine / solar panel "1" catches fire
+                            }
                             break;
                     }
                 }
