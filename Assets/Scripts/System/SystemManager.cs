@@ -58,6 +58,8 @@ public class SystemManager : MonoBehaviour {
     //S'execute à chaques fois qu'un cycle passe
     public IEnumerator OnNewCycle()
     {
+        GameManager.instance.populationManager.OnNewCycle();
+        
         foreach (Block block in AllBlocks)
         {
             block.OnNewCycle();
@@ -70,6 +72,8 @@ public class SystemManager : MonoBehaviour {
     //S'execute à chaques fois qu'un microcycle passe
     public IEnumerator OnNewMicrocycle()
     {
+        GameManager.instance.populationManager.OnNewMicrocycle();
+
         yield return StartCoroutine(UpdateHousesInformations());
         yield return StartCoroutine(RecalculateFoodConsumption());
         yield return StartCoroutine(RecalculateOccupators());
