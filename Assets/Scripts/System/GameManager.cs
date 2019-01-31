@@ -172,6 +172,12 @@ public class GameManager : MonoBehaviour
             overlayManager.SelectOverlay(OverlayType.Density);
         }
 
+
+        if (Input.GetKeyDown(KeyCode.End)) {
+            temporality.timeScale = 100;
+        }
+
+
         if (Input.GetKeyDown(KeyCode.N)) { 
             Notifications.Notification not = new Notifications.Notification(
                 new string[] { "cannotBuild", "notLinked", "newPeople" }[Mathf.FloorToInt(Random.value * 3)], 
