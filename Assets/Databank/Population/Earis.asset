@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ed80da23eebddf459df27dcc0cb6223, type: 3}
+  m_Name: Earis
+  m_EditorClassIdentifier: 
+  ID: 0
+  codeName: artist
+  moodTextures:
+  - {fileID: 2800000, guid: 3f4cbe95b5b32d14aa51eda8c632d8be, type: 3}
+  - {fileID: 2800000, guid: 91b168c2b0fdb484289c6f03fc0d6c79, type: 3}
+  - {fileID: 2800000, guid: f666d7ae6fcf96d429c4a699bc5c3c01, type: 3}
+  - {fileID: 2800000, guid: 8f412fbc985dbc047be9e8cb00480b7b, type: 3}
+  - {fileID: 2800000, guid: d23942ae47244414fa8976d7e1f9c023, type: 3}
+  moodSprites:
+  - {fileID: 21300000, guid: 57ca8035b0141f64e8e01e90fd27a768, type: 3}
+  - {fileID: 21300000, guid: 21cfa06011ad8054083109c38d1496a6, type: 3}
+  - {fileID: 21300000, guid: 0661840342039e74e8c63c588e6f5a6b, type: 3}
+  - {fileID: 21300000, guid: 65a0b58ec265e0b448c50daf42ab8d68, type: 3}
+  - {fileID: 21300000, guid: dec4d3462bd0b7146be3261ec2eaf4ef, type: 3}
+  color: {r: 0, g: 1, b: 0.49738646, a: 1}
+  prefab: {fileID: 1735061709073256, guid: 9ebcaafb27a39eb4ea2c5a7fccaeea16, type: 2}
+  voice: {fileID: 8300000, guid: 8787e940d203e064ebe093ab7edf9695, type: 3}

@@ -16,14 +16,11 @@
 		<rotationSensitivity>Camera rotation speed</rotationSensitivity>
 		<grabSensitivity>Camera movement speed</grabSensitivity>
 		<enableDrifting>Enable border scrolling</enableDrifting>
-		<musicVolume>Music volume</musicVolume>
+		<voiceVolume>Voice volume</voiceVolume>
+    <sfxVolume>Effects volume</sfxVolume>
+    <musicVolume>Music volume</musicVolume>
 		<bgsVolume>Background sound volume</bgsVolume>
 	</options>
-
-  <hud>
-    <delivery>Delivery</delivery>
-  </hud>
-
   <blockName>
     <block0>StatioPort</block0>
     <block1>Fireman Station</block1>
@@ -38,18 +35,82 @@
 
   <blockDescription>
     <block0>Center of the city, all block should be connected to it.</block0>
-    <block1>Extinguish the selected onfire block.</block1>
-    <block2>Occupy 5 scientists.</block2>
-    <block3>Produce 5 power.</block3>
-    <block4>Produce 2 power.</block4>
-    <block5>Stops any riot in a range of 5.</block5>
-    <block6>Increase the mood of the nearby houseblocks by 10 in a range of 3 blocks.</block6>
-    <block7>A simple house.</block7>
-    <block8>Gives 6 food to houses in range.</block8>
+    <block1></block1>
+    <block2></block2>
+    <block3>A big generator</block3>
+    <block4>A small generator</block4>
+    <block5></block5>
+    <block6>People like casinos</block6>
+    <block7>A simple house</block7>
+    <block8></block8>
   </blockDescription>
+
+  <flagName>
+    <generator>Power Generator</generator>
+    <house>Habitation</house>
+    <occupator>Occupation</occupator>
+    <nuisance>Nuisance</nuisance>
+    <fireman>Fire Extinguisher</fireman>
+    <workingHours>Working hours</workingHours>
+    <police>Police</police>
+    <flagNeeder>Dependencies</flagNeeder>
+  </flagName>
+
+  <flagParameter>
+    <generator>Generates {0} power</generator>
+    <house>Houses {0} {3}s</house>
+    <occupator>Employs {0} {2}s at a range of {1}</occupator>
+    <nuisance>todo:nuisance</nuisance>
+    <fireman>Puts out fires at a range of {0}</fireman>
+    <workingHours>todo:working hours</workingHours>
+    <police>Prevents riots at a range of {0}</police>
+    <flagNeeder>todo: dependencies</flagNeeder>
+  </flagParameter>
+  
+  <state>
+    <onFire>On fire</onFire>
+    <powered>Powered</powered>
+    <onRiot>On riot</onRiot>
+    <damaged>Damaged</damaged>
+    <burned>Burned</burned>
+  </state>
+  
   <notification>
-	<cannotBuild><b>You cannot build here</b></cannotBuild>
-	<notLinked>This building is not connected to the spatioport!</notLinked>
-	<newPeople>5 new people have arrived to the city</newPeople>
+	<misalignedBlocks>The blocks are not aligned</misalignedBlocks>
+	<differentHeightBlocks>The blocks are at different heights</differentHeightBlocks>
+	<selfBridging>You can't bridge a block to itself</selfBridging>
+	<cannotUseTool>You cannot use this tool here</cannotUseTool>
+	<maxHeightReached>Maximum height reached</maxHeightReached>
+	<newPeople>{0} new {1}s joined the colony</newPeople>
   </notification>
+  
+  <overlay>
+	<default>Default</default>
+	<type>Block Type</type>
+	<fireRisk>Fire risks</fireRisk>
+	<power>Power distribution</power>
+	<habitation>Habitation quality</habitation>
+	<density>Population density</density>
+	<foodConsumption>Food consumption</foodConsumption>
+  </overlay>
+  
+    <populationType>
+	<worker>Krowser</worker>
+	<richie>Senuth</richie>
+	<artist>Eari</artist>
+	<military>Kavga</military>
+	<scientist>Covridian</scientist>
+  </populationType>
+  <stats>
+	<percentage>{0}%</percentage>
+	<moodValue>{0} are {1}</moodValue>
+	<gauge>{0}/{1}</gauge>
+	<completion>{0} out of {1}</completion>
+  </stats>
+  
+  <mood>
+	<angry>angry</angry>
+	<bad>unhappy</bad>
+	<good>happy</good>
+  </mood>
 </lines>

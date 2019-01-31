@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System;
 
 public class OptionsWindow : MonoBehaviour {
 
     public GameObject sliderExample;
     public GameObject checkboxExample;
+    public GameObject selectExample;
+    public GameObject container;
     Options options;
-
-    public float optionListStart = -200f;
-    public float optionsSpacing = 70f;
 
 	// Use this for initialization
 	void Start () {
@@ -74,14 +74,45 @@ public class OptionsWindow : MonoBehaviour {
             ///
             //////////////
 
-            Vector3 position = inst.GetComponent<RectTransform>().position;
-            inst.GetComponent<RectTransform>().position = new Vector3(position.x, position.y - optionsSpacing * count * factor, position.z);
+            /////////////
+            ///
+            /// Select option <string>
+            ///
+
+            else if (option.Value.GetType().IsGenericType && option.Value.GetType().GetGenericTypeDefinition() == typeof(Options.SelectOption<>)) {
+
+                Options.IGenericTypeOption opt = option.Value as Options.IGenericTypeOption;
+
+                Destroy(inst);
+                inst = Instantiate(selectExample, transform);
+                Text tag = inst.GetComponentInChildren<Text>();
+                tag.text = loc.GetLine(option.Key);
+
+                Dropdown dd = inst.GetComponentInChildren<Dropdown>();
+                foreach(object obj in opt.GetRange()) {
+                    string name = obj.ToString();
+                    Dropdown.OptionData optionData = new Dropdown.OptionData(name);
+                    dd.options.Add(optionData);
+                }
+                dd.value = Convert.ToInt32(opt.ToString());
+
+                dd.onValueChanged.AddListener(delegate {
+                    option.Value.SetFromString(dd.value.ToString());
+                });
+            }
+
+
+            ///
+            ////////////
+            
+            inst.transform.SetParent(container.transform);
 
             count++;
         }
 
         Destroy(sliderExample);
         Destroy(checkboxExample);
+        Destroy(selectExample);
     }
 
     public void SaveAndExit()

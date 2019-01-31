@@ -58,9 +58,6 @@ public class House : Flag
             //Ecrit sur la carte d'identité du citoyen qu'il habite ici désormais
             citizen.habitation = this;
 
-
-            //Fourni un travail au nouveau citoyen, s'il y en a un de disponible
-            StartCoroutine(GameManager.instance.systemManager.RecalculateJobs());
             return;
         }
     }
@@ -81,7 +78,7 @@ public class House : Flag
     {
         if(citizenIn == null)
         {
-            citizenIn = Instantiate(GameManager.instance.library.citizenInParticule, transform.position, Quaternion.identity, transform).GetComponent<ParticleSystem>();
+            citizenIn = Instantiate(GameManager.instance.library.citizenInParticle, transform.position, Quaternion.identity, transform).GetComponent<ParticleSystem>();
             citizenIn.maxParticles = 1;
         }
         citizenIn.Play();
@@ -91,7 +88,7 @@ public class House : Flag
     {
         if(citizenOut == null)
         {
-            citizenOut = Instantiate(GameManager.instance.library.citizenOutParticule, transform.position, Quaternion.identity, transform).GetComponent<ParticleSystem>();
+            citizenOut = Instantiate(GameManager.instance.library.citizenOutParticle, transform.position, Quaternion.identity, transform).GetComponent<ParticleSystem>();
             citizenOut.maxParticles = 1;
         }
         citizenOut.Play();  

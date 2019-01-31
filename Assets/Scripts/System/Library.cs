@@ -22,8 +22,19 @@ public class Library : MonoBehaviour
     public Sprite bridgeIcon;
 
 	[Header("Particules")]
-	public GameObject citizenInParticule;
-	public GameObject citizenOutParticule;
+	public GameObject citizenInParticle;
+	public GameObject citizenOutParticle;
+	public GameObject unpoweredParticle;
+	public GameObject onFireParticle;
+	public GameObject onRiotParticle;
+	public GameObject damagedParticle;
+	
+	[Header("Building")]
+    public List<Sprite> buildingsIcons = new List<Sprite>();
+
+	[Header("Sounds")]
+	public Sounds soundBank;
+	public AudioClip mainMusic;
 
 	public BlockScheme GetBlockByID(int id)
 	{	

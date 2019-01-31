@@ -5,18 +5,22 @@ using System.Linq;
 
 public class CityManager : MonoBehaviour {
 
+    public enum BuildingType { Habitation = 0, Services = 1, Occupators = 2 };
     public string cityName = "Valenciennes";
     public BlockState[] accidentStates = { BlockState.OnFire, BlockState.OnRiot, BlockState.Damaged };
     public Dictionary<Population, Dictionary<House, float>> topHabitations = new Dictionary<Population, Dictionary<House, float>>(); // List of the best habitations (sorted from best to worst)
+
+    List<int> lockedBuildings = new List<int >();
 
     //Comment fonctionne la notation d'une maison :
     // 
     [System.Serializable]
     public class HouseNotation
     {
+        public int goodNotationTreshold = -5; //Above this note, house is considered "Good"
+        public int badNotationTreshold = -10; //Under this note, house is considered "Bad"
         public int wrongPopulationType = -2;
         public int noFood = -3;
-        public int notEnoughFood = -1;
         public int noOccupations = -2;
         public int noPower = -2;
         public int damaged = -2; //NOT TAKEN IN ACCOUNT YETTTTTTTTTTTTTTTTTTT
@@ -25,10 +29,33 @@ public class CityManager : MonoBehaviour {
 
     public HouseNotation houseNotation;
 
+    private void Start()
+    {
+        foreach (Population pop in GameManager.instance.populationManager.populationTypeList) {
+            topHabitations[pop] = new Dictionary<House, float>();
+        }
+    }
+
+    public void LockBuilding(int id)
+    {
+        UnlockBuilding(id);
+        lockedBuildings.Add(id);
+    }
+
+    public void UnlockBuilding(int id)
+    {
+        lockedBuildings.RemoveAll(i => i==id);
+    }
+
+    public bool IsLocked(int id)
+    {
+        return lockedBuildings.Contains(id);
+    }
+
     //Finds a house for every citizens (Soon it'll take a priority order into account)
     public void HouseEveryone()
     {
-
+        GetBestHouses();
         for (int i = 0; i < GameManager.instance.populationManager.populationTypeList.Length; i++)
         {
             HousePopulation(GameManager.instance.populationManager.populationTypeList[i]);
@@ -49,7 +76,7 @@ public class CityManager : MonoBehaviour {
                 GameManager.instance.populationManager.ChangePopulationMood(pop, topHabitations[pop].First().Value);
 
                 //Si la maison est désormais remplie, on la retire de la liste des habitations pour chaque population
-                if (foundHouse.affectedCitizen.Count < foundHouse.slotAmount)
+                if (foundHouse.affectedCitizen.Count >= foundHouse.slotAmount)
                 {
                     foreach (Population popType in GameManager.instance.populationManager.populationTypeList)
                     {
@@ -98,14 +125,22 @@ public class CityManager : MonoBehaviour {
 
         //If house isn't connected to spatioport, it sucks
         if (!house.block.isLinkedToSpatioport)
+        {
             return GameManager.instance.populationManager.moodModifierIfNoHabitation;
+        }
 
         //If house is already full, it also sucks
         if (house.affectedCitizen.Count >= house.slotAmount)
+        {
             return GameManager.instance.populationManager.moodModifierIfNoHabitation;
+        }
 
 
         bool profileFound = false;
+        bool powered = false;
+        bool foodLeft = false;
+        bool jobLeft = false;
+
         foreach (Population profile in house.acceptedPop)
         {
             if (profile == populationType)
@@ -113,28 +148,27 @@ public class CityManager : MonoBehaviour {
                 profileFound = true;
             }
         }
-        if (!profileFound)
-            notation += houseNotation.wrongPopulationType;
 
-        if (!house.powered)
+        if (house.powered)
         {
-            notation += houseNotation.noFood;
+            powered = true;
         }
 
-        float foodLeft = 0;
+        float foodStock = 0;
         foreach (FoodProvider distributor in house.foodProvidersInRange)
         {
-            foodLeft += distributor.foodLeft;
+            foodStock += distributor.foodLeft;
         }
-        if (foodLeft > 0 && foodLeft <= house.foodConsumptionPerHabitant)
+        if (foodStock > 0 && foodStock >= house.foodConsumptionPerHabitant)
         {
-            notation += houseNotation.notEnoughFood;
-        } else if (foodLeft <= 0)
+            foodLeft = true;
+        } else
         {
-            notation += houseNotation.noFood;
+            foodLeft = false;
         }
 
-        bool jobLeft = false;
+
+
         foreach (Occupator occupator in house.occupatorsInRange)
         {
             foreach (Population pop in occupator.acceptedPopulation)
@@ -144,6 +178,19 @@ public class CityManager : MonoBehaviour {
                     jobLeft = true;
                 }
             }
+        }
+
+        if (!profileFound)
+        {
+            notation += houseNotation.wrongPopulationType;
+        }
+        if (!powered)
+        {
+            notation += houseNotation.noPower;
+        }
+        if (!foodLeft)
+        {
+            notation += houseNotation.noFood;
         }
         if (!jobLeft)
         {

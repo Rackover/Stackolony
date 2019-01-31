@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
 public class FlagReader : MonoBehaviour 
 {
@@ -18,14 +19,67 @@ public class FlagReader : MonoBehaviour
         }
     }
 
-    public static List<string> GetRawFlags (BlockScheme blockScheme) {
-        List<string> list = new List<string>();
+    public static bool IsPositive(string flagName)
+    {
+        switch (flagName) {
+            case "Generator":
+            case "MoodModifier":
+            case "Occupator":
+            case "House":
+            case "FoodProvider":
+            case "PoliceStation":
+            case "FiremanStation":
+            case "Repairer":
+            case "Spatioport":
+                return true;
+        }
+        return false;
 
-        foreach(string flag in blockScheme.flags) {
-            list.Add(flag.Split('_')[0]);
+    }
+
+    public static List<string> UnpackFlag(string flag)
+    {
+        return new List<string>(flag.Split('_'));
+    }
+
+    public static List<string> GetRawFlags (BlockScheme blockScheme) {
+        List<List<string>> flags = GetFlags(blockScheme);
+
+        List<string> list = new List<string>();
+        foreach(List<string> parameters in flags) {
+            list.Add(parameters[0]);
         }
 
         return list;
+    }
+    
+    public static List<List<string>> GetFlags(BlockScheme blockScheme)
+    {
+        List<List<string>> list = new List<List<string>>();
+
+        foreach (string flag in blockScheme.flags) {
+            list.Add(UnpackFlag(flag));
+        }
+
+        return list;
+    }
+
+    public static CityManager.BuildingType GetCategory(BlockScheme scheme)
+    {
+        string[] rawFlags = GetRawFlags(scheme).ToArray();
+
+        // Habitation
+        if (rawFlags.Contains("House")) {
+            return CityManager.BuildingType.Habitation;
+        }
+
+        // Occupators
+        if (rawFlags.Contains("Occupator")) {
+            return CityManager.BuildingType.Occupators;
+        }
+
+        // Services
+        return CityManager.BuildingType.Services;
     }
 
     public void ReadFlag(Block block, string flag)
@@ -128,14 +182,14 @@ public class FlagReader : MonoBehaviour
 					}
 					catch(FormatException fe)
 					{
-						Destroy(newOccupator);
+                        Destroy(newOccupator);
                         Logger.Warn( block.scheme.name + " - Occupator : Unvalid slotAmount entry for as the first parameter. Please enter an int value.");
 						break;
 					}
 
 					if(slotAmount < 0)
 					{
-						Destroy(newOccupator);
+                        Destroy(newOccupator);
                         Logger.Warn( block.scheme.name + " - Occupator : slot value has to be higher than 0.");
 						break;
 					}
@@ -165,7 +219,7 @@ public class FlagReader : MonoBehaviour
 
 					if(result != "")
 					{
-						Destroy(newOccupator);
+                        Destroy(newOccupator);
                         Logger.Warn( block.scheme.name + " - Occupator : " + result);
 						break;
 					}

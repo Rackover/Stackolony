@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System;
 
 public class CursorManagement : MonoBehaviour
 {
     public enum cursorMode { Default, Build, Delete, Bridge, Move }; //Chaque mode du curseur
+
+    public event Action<string> CursorError;
 
     [Header("=== REFERENCIES ===")]
     [Header("Prefabs")]
@@ -87,15 +90,16 @@ public class CursorManagement : MonoBehaviour
 
     public void SwitchMode(cursorMode mode)
     {
-        if (canSwitchTools)
-        {
+        if (canSwitchTools) {
             isBridging = false;
             selectedMode = mode;
             ClearFeedback();
             ClearPermanentHighlighter();
             selectedBlock = null;
-        } 
-        else{GameManager.instance.errorDisplay.ShowError("You can't use that tool right now");}
+        }
+        else {
+            CursorError.Invoke("cannotUseTool");
+        }
     }
 
     //Place le curseur correctement sur la grille et sur le terrain
@@ -375,7 +379,7 @@ public class CursorManagement : MonoBehaviour
         //Check les blocs devant la face x
         for (int i = coordinate.x+1; i < GameManager.instance.gridManagement.grid.GetLength(0); i++)
         {
-            if (GameManager.instance.gridManagement.GetSlotType(new Vector3Int(i, coordinate.y, coordinate.z),false) != GridManagement.blockType.FREE)
+            if (GameManager.instance.gridManagement.GetSlotType(new Vector3Int(i, coordinate.y, coordinate.z)) != GridManagement.blockType.FREE)
             {
                 break;
             }
@@ -389,7 +393,7 @@ public class CursorManagement : MonoBehaviour
         //Check les blocs derriere la face x
         for (int i = coordinate.x-1; i >= 0; i--)
         {
-            if (GameManager.instance.gridManagement.GetSlotType(new Vector3Int(i, coordinate.y, coordinate.z),false) != GridManagement.blockType.FREE)
+            if (GameManager.instance.gridManagement.GetSlotType(new Vector3Int(i, coordinate.y, coordinate.z)) != GridManagement.blockType.FREE)
             {
                 break;
             }
@@ -403,7 +407,7 @@ public class CursorManagement : MonoBehaviour
         //Check les blocs devant la face z
         for (int i = coordinate.z+1; i < GameManager.instance.gridManagement.grid.GetLength(2); i++)
         {
-            if (GameManager.instance.gridManagement.GetSlotType(new Vector3Int(coordinate.x, coordinate.y, i),false) != GridManagement.blockType.FREE)
+            if (GameManager.instance.gridManagement.GetSlotType(new Vector3Int(coordinate.x, coordinate.y, i)) != GridManagement.blockType.FREE)
             {
                 break;
             }
@@ -417,7 +421,7 @@ public class CursorManagement : MonoBehaviour
         //Check les blocs derriere la face z
         for (int i = coordinate.z-1; i >= 0; i--)
         {
-            if (GameManager.instance.gridManagement.GetSlotType(new Vector3Int(coordinate.x, coordinate.y, i),false) != GridManagement.blockType.FREE)
+            if (GameManager.instance.gridManagement.GetSlotType(new Vector3Int(coordinate.x, coordinate.y, i)) != GridManagement.blockType.FREE)
             {
                 break;
             }
@@ -506,18 +510,15 @@ public class CursorManagement : MonoBehaviour
                         ClearPermanentHighlighter();
                     }
                     else {
-                        GameManager.instance.errorDisplay.ShowError("You can't link two blocks that aren't aligned");
-                        Debug.LogWarning("You can't link two blocks that aren't aligned");
+                        CursorError.Invoke("misalignedBlocks");
                     }
                 }
                 else {
-                    GameManager.instance.errorDisplay.ShowError("You can't link two blocks of different heights");
-                    Debug.LogWarning("You can't link two blocks of different heights");
+                    CursorError.Invoke("differentHeightBlocks");
                 }
             }
             else {
-                GameManager.instance.errorDisplay.ShowError("You can't select the same point");
-                Debug.LogWarning("You can't select the same point");
+                CursorError.Invoke("selfBridging");
             }
             ResetSelection();
             ClearPermanentHighlighter();
@@ -539,7 +540,7 @@ public class CursorManagement : MonoBehaviour
             if (selectedBlock.transform.Find("Bridge") != null) {
                 GameManager.instance.gridManagement.DestroyBridge(selectedBlock.transform.Find("Bridge").gameObject);
             }
-            GameManager.instance.sfxManager.PlaySound("BlockDrag");
+            GameManager.instance.soundManager.Play("BlockDrag");
         }
     }
 
@@ -557,7 +558,7 @@ public class CursorManagement : MonoBehaviour
                 else
                 {
                     savedPos = _pos;
-                    GameManager.instance.sfxManager.PlaySoundWithRandomParameters("Tick", 1, 1, 0.8f, 1.2f);
+                    GameManager.instance.soundManager.Play("Tick");
                     selectedBlock.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(_pos);
                 }
             }
@@ -573,7 +574,7 @@ public class CursorManagement : MonoBehaviour
                 CancelDrag();
                 return;
             }
-            if (GameManager.instance.gridManagement.GetSlotType(_pos,false) == GridManagement.blockType.FREE)
+            if (GameManager.instance.gridManagement.GetSlotType(_pos) == GridManagement.blockType.FREE)
             {
                 // Check if the blocks under the position allows to have "something above them"
                 for (int i = _pos.y; i >= 0; i--)
@@ -581,16 +582,15 @@ public class CursorManagement : MonoBehaviour
                     if (GameManager.instance.gridManagement.grid[_pos.x,i,_pos.z] != null)
                     {
                         Block block = GameManager.instance.gridManagement.grid[_pos.x, i, _pos.z].gameObject.GetComponent<Block>();
-                        if (!block.scheme.canBuildAbove)
-                        {
-                            GameManager.instance.errorDisplay.ShowError("You can't build above this block");
+                        if (!block.scheme.canBuildAbove) {
+                            CursorError.Invoke("maxHeightReached");
                             CancelDrag();
                             return;
                         }
                     }
                 }
                 //Play SFX
-                GameManager.instance.sfxManager.PlaySoundLinked("BlockDrop",selectedBlock.gameObject);
+                GameManager.instance.soundManager.Play("BlockDrop");
 
                 // Fait tomber les blocs au dessus de la position initiale du bloc qui vient d'être déplacé
                 GameManager.instance.gridManagement.UpdateBlocks(selectedBlock.gridCoordinates);

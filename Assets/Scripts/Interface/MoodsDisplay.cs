@@ -6,49 +6,57 @@ using UnityEngine.UI;
 public class MoodsDisplay : MonoBehaviour {
 
     public GameObject example;
-    public float ySpacing;
-    public float colorBlendAmount = 0.5f;
 
     GameManager gameManager;
-    Dictionary<GameObject, Population> moods = new Dictionary<GameObject, Population>();
+    List<MoodDisplay> moods = new List<MoodDisplay>();
 
 	void Start () {
         gameManager = GameManager.instance;
         Population[] populations = gameManager.populationManager.populationTypeList;
         Canvas canvas = GetComponentInParent<Canvas>();
         float factor = canvas.scaleFactor;
-
-        float offset = 0;
+        
         foreach(Population race in populations) {
             GameObject raceO = Instantiate(example.gameObject, transform);
-            raceO.GetComponent<RectTransform>().position = new Vector3(
-                raceO.GetComponent<RectTransform>().position.x,
-                raceO.GetComponent<RectTransform>().position.y + offset* factor,
-                raceO.GetComponent<RectTransform>().position.z
-            );
+            MoodDisplay md = raceO.GetComponent<MoodDisplay>();
+            RectTransform rect = md.rect;
+            md.InitializeForPopulation(race);
 
-            Image face = raceO.transform.GetChild(2).gameObject.GetComponent<Image>();
-            face.sprite = race.humorSprite;
-            face.color = Color.Lerp(Color.white, race.color, colorBlendAmount);
-            face.color = new Color(face.color.r, face.color.g, face.color.b, 1f);
-
-            moods[raceO] = race;
-
-            offset -= ySpacing;
+            moods.Add(md);
         }
 
         Destroy(example);
     }
 
-    private void Update()
+    void UpdateMoodGauges()
     {
-
-        foreach (KeyValuePair<GameObject, Population> people in moods) {
-            GameObject mood = people.Key;
-            float moodValue = gameManager.populationManager.GetAverageMood(people.Value);
-            Image gauge = mood.transform.GetChild(1).gameObject.GetComponent<Image>();
-            gauge.fillAmount = moodValue;
-            gauge.color = Color.Lerp(Color.red, Color.green, moodValue);
+        foreach (MoodDisplay md in moods) {
+            md.UpdateDisplay();
         }
     }
+
+    void UpdateMoodAnimations()
+    {
+        foreach (MoodDisplay md in moods) {
+            if (gameManager.populationManager.populationCitizenList[md.population].Count > 0) {
+                if (md.isHidden) {
+                    md.Show();
+                }
+                md.UpdateDisplay();
+            }
+            else if (!md.isHidden) {
+                md.Hide();
+            }
+        }
+    }
+
+    public IEnumerator UpdateInterface()
+    {
+        UpdateMoodGauges();
+        UpdateMoodAnimations();
+        yield return new WaitForSeconds(FindObjectOfType<Interface>().refreshRate);
+        yield return StartCoroutine(UpdateInterface());
+    }
+
+
 }

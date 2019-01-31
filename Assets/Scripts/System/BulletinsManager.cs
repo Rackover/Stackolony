@@ -47,6 +47,13 @@ public class BulletinsManager : MonoBehaviour {
             }
             newList.Add(bulletin);
         }
+
+        if (pick == null) {
+            // No more bulletins, let's reload
+            LoadBulletins();
+            return;
+        }
+
         currentBulletin = pick;
         bulletinList = newList;
 

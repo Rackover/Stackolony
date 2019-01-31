@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     public Temporality temporality;
     public FlagReader flagReader;
     public Library library;
-    public SFXManager sfxManager;
+    public SoundManager soundManager;
     public SystemManager systemManager;
     public MissionCallbackManager missionCallbackManager;
     public CityManager cityManager;
@@ -41,13 +41,11 @@ public class GameManager : MonoBehaviour
     [Space(1)] [Header("INTERFACE INGAME")]
     public TemporalityInterface temporalityInterface;
     public TooltipGO tooltipGO;
-    public BlockInfobox blockInfobox;
-    public ErrorDisplay errorDisplay;
 
     [Space(1)]
     [Header("DEBUG SETTINGS")]
     public Logger logger;
-    public GridDebugger gridDebugger;
+    public OverlayManager overlayManager;
     public bool DEBUG_MODE = false;
     public bool ENABLE_LOGS = true;
 
@@ -108,7 +106,7 @@ public class GameManager : MonoBehaviour
         if (temporality == null) temporality = GetComponentInChildren<Temporality>();
         if (flagReader == null) flagReader = GetComponentInChildren<FlagReader>();
         if (library == null) library = GetComponentInChildren<Library>();
-        if (sfxManager == null) sfxManager = GetComponentInChildren<SFXManager>();
+        if (soundManager == null) soundManager = GetComponentInChildren<SoundManager>();
         if (systemManager == null) systemManager = GetComponentInChildren<SystemManager>();
         if (missionCallbackManager == null) missionCallbackManager = GetComponentInChildren<MissionCallbackManager>();
         if (missionManager == null) missionManager = GetComponentInChildren<MissionManager>();
@@ -128,16 +126,49 @@ public class GameManager : MonoBehaviour
         // INTERFACE - INGAME
         if (temporalityInterface == null) temporalityInterface = FindObjectOfType<TemporalityInterface>();
         if (tooltipGO == null) tooltipGO = FindObjectOfType<TooltipGO>();
-        if (blockInfobox == null) blockInfobox = FindObjectOfType<BlockInfobox>();
-        if (errorDisplay == null) errorDisplay = FindObjectOfType<ErrorDisplay>();
 
         // DEBUG
         if (logger == null) logger = GetComponentInChildren<Logger>();
-        if (gridDebugger == null) gridDebugger = FindObjectOfType<GridDebugger>();
+        if (overlayManager == null) overlayManager = FindObjectOfType<OverlayManager>();
     }
 
     void CheckInputs()
     {
+		
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            overlayManager.SelectOverlay(OverlayType.Default);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            overlayManager.SelectOverlay(OverlayType.Type);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F3))
+        {
+            overlayManager.SelectOverlay(OverlayType.FireRisks);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F4))
+        {
+            overlayManager.SelectOverlay(OverlayType.Food);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+            overlayManager.SelectOverlay(OverlayType.Habitation);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F6))
+        {
+            overlayManager.SelectOverlay(OverlayType.Power);
+        }
+
+        if (Input.GetKeyDown(KeyCode.F7))
+        {
+            overlayManager.SelectOverlay(OverlayType.Density);
+        }
 
         if (Input.GetKeyDown(KeyCode.N)) { 
             Notifications.Notification not = new Notifications.Notification(
@@ -168,24 +199,47 @@ public class GameManager : MonoBehaviour
 */
         // Spawns 5  cit
         if (Input.GetKeyDown(KeyCode.U)) {
-            populationManager.SpawnCitizens(populationManager.populationTypeList[0], 5);
+            populationManager.SpawnCitizens(populationManager.populationTypeList[Mathf.FloorToInt(populationManager.populationTypeList.Length*Random.value)], 5);
         }
         // Spawns 20 cit
         if (Input.GetKeyDown(KeyCode.L)) {
             populationManager.SpawnCitizens(populationManager.populationTypeList[0], 20);
         }
 
-        if (Input.GetButtonDown("Select") && Input.GetKey(KeyCode.F)) {
+        // Affect a block under the mouse
+        if(Input.GetButtonDown("Select")) // LEFT MOUSE CLICK
+        {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-            if (Physics.Raycast(ray, out hit)) {
+            if (Physics.Raycast(ray, out hit)) 
+            {
                 Block block = hit.collider.gameObject.GetComponent<Block>();
-                if (block != null) {
-                    if (!block.states.Contains(BlockState.OnFire))
-                        block.AddState(BlockState.OnFire);
-                    else
-                        block.RemoveState(BlockState.OnFire);
+                if (block != null) 
+                {
+                    if(Input.GetKey(KeyCode.F))
+                    {
+                        if (!block.states.Contains(BlockState.OnFire))
+                            block.AddState(BlockState.OnFire);
+                        else
+                            block.RemoveState(BlockState.OnFire);     
+                    }
+
+                    if(Input.GetKey(KeyCode.R))
+                    {
+                        if (!block.states.Contains(BlockState.OnRiot))
+                            block.AddState(BlockState.OnRiot);
+                        else
+                            block.RemoveState(BlockState.OnRiot);     
+                    }
+
+                    if(Input.GetKey(KeyCode.D))
+                    {
+                        if (!block.states.Contains(BlockState.Damaged))
+                            block.AddState(BlockState.Damaged);
+                        else
+                            block.RemoveState(BlockState.Damaged);     
+                    }
                 }
             }
         }

@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4775471038194526}
   - component: {fileID: 33246773432276660}
   - component: {fileID: 23627189327190322}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: FBX_Arcade_Screens
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4437386461903132}
   - component: {fileID: 33886821427136808}
   - component: {fileID: 23797363643142348}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: FBX_Arcade_Button_3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 4127548249629308}
   - component: {fileID: 33030402545861754}
   - component: {fileID: 23713792856114890}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: FBX_Arcade_Joystick_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   - component: {fileID: 4810997119522780}
   - component: {fileID: 33289215650573676}
   - component: {fileID: 23678997126994612}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: FBX_Arcade_Button_7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 4087721296056268}
   - component: {fileID: 33139779145792704}
   - component: {fileID: 23906490803067110}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: FBX_Arcade_Button_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 4064862963920664}
   - component: {fileID: 33206635669045106}
   - component: {fileID: 23234724335943794}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: FBX_Services_Entertainment_Arcade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -123,7 +123,7 @@ GameObject:
   - component: {fileID: 4067825288492940}
   - component: {fileID: 33048600188066034}
   - component: {fileID: 23464609935827560}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: FBX_Arcade_Button_4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -140,7 +140,7 @@ GameObject:
   - component: {fileID: 4351074511515134}
   - component: {fileID: 33756642090303332}
   - component: {fileID: 23792340977354734}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: FBX_Arcade_Joystick_Arms
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -157,7 +157,7 @@ GameObject:
   - component: {fileID: 4338664264504540}
   - component: {fileID: 33394758614759812}
   - component: {fileID: 23448233361300392}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: FBX_Arcade_Button_6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -174,7 +174,7 @@ GameObject:
   - component: {fileID: 4669130384621752}
   - component: {fileID: 33895057087667968}
   - component: {fileID: 23715455346942824}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: FBX_Arcade_Button_8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -191,7 +191,7 @@ GameObject:
   - component: {fileID: 4455071548368312}
   - component: {fileID: 33486644547310734}
   - component: {fileID: 23585174124391460}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: FBX_Arcade_Joystick_2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -208,7 +208,7 @@ GameObject:
   - component: {fileID: 4159763638056430}
   - component: {fileID: 33426205656642332}
   - component: {fileID: 23547394063778982}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: FBX_Arcade_Button_5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -223,7 +223,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4731659816082082}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Arcade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -240,7 +240,7 @@ GameObject:
   - component: {fileID: 4893279260264762}
   - component: {fileID: 33243876489308468}
   - component: {fileID: 23796061610909558}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: FBX_Arcade_Button_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -253,8 +253,8 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1296097609617718}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2.074, z: -0.466}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: -0.5, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4893279260264762}
@@ -271,7 +271,7 @@ Transform:
   - {fileID: 4775471038194526}
   m_Father: {fileID: 4731659816082082}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!4 &4067825288492940
 Transform:
   m_ObjectHideFlags: 1

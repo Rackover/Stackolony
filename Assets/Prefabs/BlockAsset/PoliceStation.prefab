@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4711796960440914}
   - component: {fileID: 33814176215713388}
   - component: {fileID: 23352217925868272}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: FBX_Services_Police_Name002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4855156812682872}
   - component: {fileID: 33257480168176408}
   - component: {fileID: 23999246964697476}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: FBX_Services_Police_Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 4011782228335536}
   - component: {fileID: 33940743198996962}
   - component: {fileID: 23925924097173442}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: FBX_Services_Police_Hat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   - component: {fileID: 4446021283741046}
   - component: {fileID: 33231297525560294}
   - component: {fileID: 23108190260470046}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: FBX_Services_Police_Beacon_Socle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,7 +87,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4696603087068068}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: PoliceStation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 4801628578066026}
   - component: {fileID: 33960062886367020}
   - component: {fileID: 23196449563518702}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: FBX_Services_Police_Hat_Socle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -121,7 +121,7 @@ GameObject:
   - component: {fileID: 4911747513921740}
   - component: {fileID: 33802343988083732}
   - component: {fileID: 23189944590970996}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: FBX_Services_Police_Beacon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,7 +138,7 @@ GameObject:
   - component: {fileID: 4136441246941380}
   - component: {fileID: 33330229736715694}
   - component: {fileID: 23643126775825528}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: FBX_Services_Police
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -167,15 +167,15 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1875307054699666}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -0.5}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4911747513921740}
   - {fileID: 4011782228335536}
   m_Father: {fileID: 4696603087068068}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!4 &4446021283741046
 Transform:
   m_ObjectHideFlags: 1
@@ -196,7 +196,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1767130253757384}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 181.71338, y: 116.77292, z: -1514.8647}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4136441246941380}

@@ -71,7 +71,7 @@ public class MissionCallbackManager : MonoBehaviour
                     }
                     energyFeedback.transform.position = blocklink.transform.position;
                     Destroy(energyFeedback, 2);
-                    blocklink.ChangePower(1);
+                    blocklink.AddPower(1);
                     myMission.power--;
                     yield return new WaitForEndOfFrame();
                 }
@@ -84,6 +84,7 @@ public class MissionCallbackManager : MonoBehaviour
             if (GameManager.instance.systemManager != null)
             {
                 GameManager.instance.systemManager.UpdateBlocksRequiringPower();
+                GameManager.instance.systemManager.OnCalculEnd();
             }
         }
         yield return null;
@@ -107,6 +108,7 @@ public class MissionCallbackManager : MonoBehaviour
             if (GameManager.instance.systemManager != null)
             {
                 GameManager.instance.systemManager.UpdateBlocksDisabled();
+                GameManager.instance.systemManager.OnCalculEnd();
             }
         }
         yield return null;
@@ -121,6 +123,17 @@ public class MissionCallbackManager : MonoBehaviour
             int distanceToCenter = myMission.blockDistanceToCenter[i] + 1;
             if (distanceToCenter > linkedGenerator.amount) distanceToCenter = linkedGenerator.amount; //In case the range is
             myMission.blocksFound[i].nuisance += linkedGenerator.amount - myMission.blockDistanceToCenter[i] + 1; //+1 because the first block doesn't count
+        }
+        GameManager.instance.missionManager.EndMission(myMission);
+        yield return null;
+    }
+
+    IEnumerator Ignite() 
+    {
+        MissionManager.Mission myMission = mission;
+        for (int i = 1; i < myMission.blocksFound.Count; i++)
+        {
+            myMission.blocksFound[i].AddState(BlockState.OnFire);
         }
         GameManager.instance.missionManager.EndMission(myMission);
         yield return null;

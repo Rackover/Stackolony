@@ -40,7 +40,7 @@ public class Container : MonoBehaviour
         // ICON MESH PLANE
         iconMat = Instantiate(iconRenderers[0].material);
         foreach(MeshRenderer ic in iconRenderers){ ic.material = iconMat; }
-        Sprite sprite = linkedBlock.scheme.icon;
+        Sprite sprite = GameManager.instance.library.buildingsIcons[(int)FlagReader.GetCategory(linkedBlock.scheme)];
         Texture2D croppedTexture = new Texture2D( (int)sprite.rect.width, (int)sprite.rect.height );
         
         Color[] pixels = sprite.texture.GetPixels
@@ -76,17 +76,17 @@ public class Container : MonoBehaviour
 
     public void DropSound()
     {
-        GameManager.instance.sfxManager.PlaySoundAtPosition("DropContainer",this.transform.position);
+        GameManager.instance.soundManager.Play("DropContainer");
     }
 
     public void ShipSound()
     {
-        GameManager.instance.sfxManager.PlaySoundAtPosition("Ship", this.transform.position + new Vector3(0, 10, 0)); //Joue le son un peu plus haut pour comprendre que le vaisseau se trouve au dessus
+        GameManager.instance.soundManager.Play("Ship"); //Joue le son un peu plus haut pour comprendre que le vaisseau se trouve au dessus
     }
 
     public void DropBlock()
     {
-        GameManager.instance.sfxManager.PlaySoundWithRandomParameters("FallingContainer",1,1,0.8f,1.2f);
+        GameManager.instance.soundManager.Play("FallingContainer");
         myAnimator.SetTrigger("Drop");
         CloseContainer();
     }
@@ -102,7 +102,7 @@ public class Container : MonoBehaviour
         cColor = oColor;
         
         linkedBlock.ToggleVisuals(true);
-        GameManager.instance.sfxManager.PlaySoundLinked("OpenContainer",this.gameObject);
+        GameManager.instance.soundManager.Play("OpenContainer");
         myAnimator.SetBool("Closed", closed);
     }
 

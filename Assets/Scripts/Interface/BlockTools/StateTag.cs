@@ -4,9 +4,16 @@ using UnityEngine.UI;
 
 public class StateTag : MonoBehaviour 
 {
+	[Header("Referencies")]
 	public RectTransform self;
 	public Text stateTxt;
 	public Image stateBackground;
+
+	[Header("Settings")]
+	public Color onFireColor;
+	public Color poweredColor;
+	public Color onRiotColor;
+	public Color damagedColor;
 
 	public bool available;
 
@@ -17,21 +24,33 @@ public class StateTag : MonoBehaviour
 
 		available = false;
 		stateTxt.text = state.ToString();
+		Localization loc = GameManager.instance.localization;
+		loc.SetCategory("state");
 
 		switch(state)
 		{
 			case BlockState.Powered:
-				stateBackground.color = Color.green;
+				stateBackground.color = poweredColor;
+				stateTxt.text = loc.GetLine("powered");
 				break;
+
 			case BlockState.OnFire:
-				stateBackground.color = Color.red;
+				stateBackground.color = onFireColor;
+				stateTxt.text = loc.GetLine("onFire");
 				break;
+
 			case BlockState.OnRiot:
-				stateBackground.color = Color.blue;
+				stateBackground.color = onRiotColor;
+				stateTxt.text = loc.GetLine("onRiot");
+				break;
+
+			case BlockState.Damaged:
+				stateBackground.color = damagedColor;
+				stateTxt.text = loc.GetLine("damaged");
 				break;
 
 			default:
-				Debug.Log("Unclear state");
+				Logger.Debug(state.ToString() + " dosn't have any color assigned to it.");
 				break;
 		}
 
