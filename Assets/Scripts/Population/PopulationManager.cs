@@ -105,6 +105,11 @@ public class PopulationManager : MonoBehaviour {
         }
     }
 
+    public void GetPopulationByID(int id)
+    {
+        //foreach (Population pop in population)
+    }
+
 
     public void ChangePopulationMood(Population type, float amount)
     {

@@ -28,6 +28,11 @@ public class Temporality : MonoBehaviour {
         microDuration = cycleDuration / nbMicroCyclePerCycle;
     }
 
+    public float GetMicroCoef()
+    {
+        return 1 / nbMicroCyclePerCycle;
+    }
+
     public void PauseTime()
     {
         if (timeScale == 0) {
