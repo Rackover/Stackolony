@@ -15,7 +15,7 @@ public class Block : MonoBehaviour {
 	public BlockScheme scheme;
 	public BlockVisual visuals;
     public BlockEffect effects;
-    public GameObject overlayVisuals;
+    public BlockOverlayColor overlayVisuals;
     public GameObject bridge;
     Library library;
 

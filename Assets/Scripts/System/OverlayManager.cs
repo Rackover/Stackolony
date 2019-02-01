@@ -43,10 +43,7 @@ public class OverlayManager : MonoBehaviour
         {
             foreach (Block block in GameManager.instance.systemManager.AllBlocks)
             {
-                Material blockMat = block.overlayVisuals.GetComponent<MeshRenderer>().material;
-                blockMat.color = defaultColor;
-                block.overlayVisuals.SetActive(false);
-                block.visuals.Show();
+                block.overlayVisuals.Deactivate();
             }
         }
     }
@@ -64,25 +61,25 @@ public class OverlayManager : MonoBehaviour
         {
             foreach (Block block in GameManager.instance.systemManager.AllBlocks) {
 
-                block.visuals.Hide();
-                block.overlayVisuals.SetActive(true);
-                Material blockMat = block.overlayVisuals.GetComponent<MeshRenderer>().material;
-                blockMat.color = defaultColor;
+                Color chosenColor = defaultColor;
+
                 foreach (Flag flag in block.activeFlags)
                 {
                     if (FlagReader.GetCategory(block.scheme) == CityManager.BuildingType.Habitation)
                     {
-                        blockMat.color = color.Evaluate(0f);
+                        chosenColor = color.Evaluate(0f);
                     }
                     else if (FlagReader.GetCategory(block.scheme) == CityManager.BuildingType.Occupators)
                     {
-                        blockMat.color = color.Evaluate(0.5f);
+                        chosenColor = color.Evaluate(0.5f);
                     }
                     else if (FlagReader.GetCategory(block.scheme) == CityManager.BuildingType.Services)
                     {
-                        blockMat.color = color.Evaluate(1f);
+                        chosenColor = color.Evaluate(1f);
                     }
                 }
+
+                block.overlayVisuals.Activate(chosenColor);
             }
         }
     }
@@ -101,10 +98,7 @@ public class OverlayManager : MonoBehaviour
         {
             foreach (Block block in GameManager.instance.systemManager.AllBlocks)
             {
-                Material blockMat = block.overlayVisuals.GetComponent<MeshRenderer>().material;
-                blockMat.color = defaultColor;
-                block.visuals.Hide();
-                block.overlayVisuals.SetActive(true);
+                block.overlayVisuals.Activate(defaultColor);
             }
         }
     }
@@ -122,25 +116,24 @@ public class OverlayManager : MonoBehaviour
         {
             foreach (Block block in GameManager.instance.systemManager.AllBlocks)
             {
-                Material blockMat = block.overlayVisuals.GetComponent<MeshRenderer>().material;
-                blockMat.color = defaultColor;
+                Color chosenColor = defaultColor;
+
                 if (block.scheme.consumption > 0)
                 {
                     if (block.currentPower <= 0)
                     {
-                        blockMat.color = color.Evaluate(0f);
+                        chosenColor = color.Evaluate(0f);
                     }
                     else if (block.currentPower >= block.scheme.consumption)
                     {
-                        blockMat.color = color.Evaluate(1f);
+                        chosenColor = color.Evaluate(1f);
                     }
                     else
                     {
-                        blockMat.color = color.Evaluate(0.5f);
+                        chosenColor = color.Evaluate(0.5f);
                     }
                 }
-                block.visuals.Hide();
-                block.overlayVisuals.SetActive(true);
+                block.overlayVisuals.Activate(chosenColor);
             }
         }
     }
@@ -159,26 +152,25 @@ public class OverlayManager : MonoBehaviour
             foreach (Block block in GameManager.instance.systemManager.AllBlocks)
             {
                 House house = block.GetComponent<House>();
-                Material blockMat = block.overlayVisuals.GetComponent<MeshRenderer>().material;
-                blockMat.color = defaultColor;
+                Color chosenColor = defaultColor;
+
                 if (house != null)
                 {
                     house.UpdateHouseInformations();
                     if (house.foodReceived <= 0 && house.foodConsumption > 0)
                     {
-                        blockMat.color = color.Evaluate(0f);
+                        chosenColor = color.Evaluate(0f);
                     }
                     else if (house.foodConsumption >= house.foodReceived)
                     {
-                        blockMat.color = color.Evaluate(1f);
+                        chosenColor = color.Evaluate(1f);
                     }
                     else if (house.foodConsumption < house.foodReceived)
                     {
-                        blockMat.color = color.Evaluate(0.5f);
+                        chosenColor = color.Evaluate(0.5f);
                     }
                 }
-                block.visuals.Hide();
-                block.overlayVisuals.SetActive(true);
+                block.overlayVisuals.Activate(chosenColor);
             }
         }
     }
@@ -197,8 +189,7 @@ public class OverlayManager : MonoBehaviour
             foreach (Block block in GameManager.instance.systemManager.AllBlocks)
             {
                 House house = block.GetComponent<House>();
-                Material blockMat = block.overlayVisuals.GetComponent<MeshRenderer>().material;
-                blockMat.color = defaultColor;
+                Color chosenColor = defaultColor;
                 if (house != null)
                 {
                     house.UpdateHouseInformations();
@@ -216,19 +207,18 @@ public class OverlayManager : MonoBehaviour
 
                     if (averageNotation < cityManager.moodValues.badNotationTreshold)
                     {
-                        blockMat.color = color.Evaluate(0f);
+                        chosenColor = color.Evaluate(0f);
                     }
                     else if (averageNotation > cityManager.moodValues.goodNotationTreshold)
                     {
-                        blockMat.color = color.Evaluate(1f);
+                        chosenColor = color.Evaluate(1f);
                     }
                     else
                     {
-                        blockMat.color = color.Evaluate(0.5f);
+                        chosenColor = color.Evaluate(0.5f);
                     }
                 }
-                block.visuals.Hide();
-                block.overlayVisuals.SetActive(true);
+                block.overlayVisuals.Activate(chosenColor);
             }
         }
     }
@@ -247,26 +237,24 @@ public class OverlayManager : MonoBehaviour
             foreach (Block block in GameManager.instance.systemManager.AllBlocks)
             {
                 House house = block.GetComponent<House>();
-                Material blockMat = block.overlayVisuals.GetComponent<MeshRenderer>().material;
-                blockMat.color = defaultColor;
+                Color chosenColor = defaultColor;
                 if (house != null)
                 {
                     house.UpdateHouseInformations();
                     if (house.affectedCitizen.Count == 0)
                     {
-                        blockMat.color = color.Evaluate(0f);
+                        chosenColor = color.Evaluate(0f);
                     }
                     else if (house.affectedCitizen.Count >= house.slotAmount)
                     {
-                        blockMat.color = color.Evaluate(1f);
+                        chosenColor = color.Evaluate(1f);
                     }
                     else
                     {
-                        blockMat.color = color.Evaluate(0.5f);
+                        chosenColor = color.Evaluate(0.5f);
                     }
                 }
-                block.visuals.Hide();
-                block.overlayVisuals.SetActive(true);
+                block.overlayVisuals.Activate(chosenColor);
             }
         }
     }
