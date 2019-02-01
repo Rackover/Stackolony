@@ -206,7 +206,6 @@ public class GameManager : MonoBehaviour
             populationManager.SpawnCitizens(populationManager.populationTypeList[0], 20);
         }
 
-/*
         // Affect a block under the mouse
         if(Input.GetButtonDown("Select")) // LEFT MOUSE CLICK
         {
@@ -220,31 +219,31 @@ public class GameManager : MonoBehaviour
                 {
                     if(Input.GetKey(KeyCode.F))
                     {
-                        if (!block.states.Contains(BlockState.OnFire))
-                            block.AddState(BlockState.OnFire);
+                        if (!block.states.ContainsKey(State.OnFire))
+                            block.AddState(State.OnFire);
                         else
-                            block.RemoveState(BlockState.OnFire);     
+                            block.RemoveState(State.OnFire);     
                     }
 
                     if(Input.GetKey(KeyCode.R))
                     {
-                        if (!block.states.Contains(BlockState.OnRiot))
-                            block.AddState(BlockState.OnRiot);
+                        if (!block.states.ContainsKey(State.OnRiot))
+                            block.AddState(State.OnRiot);
                         else
-                            block.RemoveState(BlockState.OnRiot);     
+                            block.RemoveState(State.OnRiot);     
                     }
 
                     if(Input.GetKey(KeyCode.D))
                     {
-                        if (!block.states.Contains(BlockState.Damaged))
-                            block.AddState(BlockState.Damaged);
+                        if (!block.states.ContainsKey(State.Damaged))
+                            block.AddState(State.Damaged);
                         else
-                            block.RemoveState(BlockState.Damaged);     
+                            block.RemoveState(State.Damaged);     
                     }
                 }
             }
         }
-*/
+        
         // Saves the game
         if (Input.GetKeyDown(KeyCode.M)) {
             StartCoroutine(saveManager.WriteSaveData(
