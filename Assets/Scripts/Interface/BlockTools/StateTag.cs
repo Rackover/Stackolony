@@ -26,7 +26,7 @@ public class StateTag : MonoBehaviour
 		stateTxt.text = state.ToString();
 		Localization loc = GameManager.instance.localization;
 		loc.SetCategory("state");
-
+/*
 		switch(state)
 		{
 			case BlockState.Powered:
@@ -53,7 +53,7 @@ public class StateTag : MonoBehaviour
 				Logger.Debug(state.ToString() + " dosn't have any color assigned to it.");
 				break;
 		}
-
+*/
 	}
 
 	public void Hide()

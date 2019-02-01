@@ -7,7 +7,7 @@ public class CityManager : MonoBehaviour {
 
     public enum BuildingType { Habitation = 0, Services = 1, Occupators = 2 };
     public string cityName = "Valenciennes";
-    public BlockState[] accidentStates = { BlockState.OnFire, BlockState.OnRiot, BlockState.Damaged };
+    //public BlockState[] accidentStates = { BlockState.OnFire, BlockState.OnRiot, BlockState.Damaged };
     public Dictionary<Population, Dictionary<House, float>> topHabitations = new Dictionary<Population, Dictionary<House, float>>(); // List of the best habitations (sorted from best to worst)
 
     List<int> lockedBuildings = new List<int >();
@@ -224,6 +224,7 @@ public class CityManager : MonoBehaviour {
         return notation;
     }
     
+    /*
     public void TriggerAccident(BlockState accident)
     {
         if(GameManager.instance.systemManager.AllBlocks.Count == 0) return;
@@ -241,7 +242,7 @@ public class CityManager : MonoBehaviour {
                 }
                 rand = Random.Range(0, GameManager.instance.systemManager.AllBlocks.Count);
             }
-            GameManager.instance.systemManager.AllBlocks[rand].AddState( accident );
+            //GameManager.instance.systemManager.AllBlocks[rand].AddState( accident );
         }
         else Logger.Debug( accident + " is not considered as a accident" );
     }
@@ -257,4 +258,5 @@ public class CityManager : MonoBehaviour {
         }
         return false;
     }
+    */
 }

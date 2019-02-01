@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum BlockState{ Powered, OnFire, OnRiot, Damaged }
 public enum Profile{ Scientist, Worker, Military, Artist, Tourist }
 public enum Ressource{ Energy, Mood, Food }
 public enum Quality{ Low, Medium, High }
@@ -69,13 +68,13 @@ public class Block : MonoBehaviour {
     public void OnNewCycle()
     {
         foreach (Flag flag in activeFlags){ flag.OnNewCycle(); }
-        StateCycleUpdate();
+        //StateCycleUpdate();
     }
 
     //Called when block is in range of a spatioport
     public void Enable()
     {
-        AddState(BlockState.Powered);
+        //AddState(BlockState.Powered);
         //Active toutes les fonctionnalités du bloc
         foreach (Flag flag in activeFlags)
         {
@@ -91,7 +90,7 @@ public class Block : MonoBehaviour {
 
     public void ChangePower(int number) {
         currentPower = number;
-        UpdatePower();
+        //UpdatePower();
         if (currentPower > 0) {
             isConsideredUnpowered = false;
         }
@@ -99,7 +98,7 @@ public class Block : MonoBehaviour {
 
         public void AddPower(int number) {
         currentPower += number;
-        UpdatePower();
+        //UpdatePower();
         if (currentPower > 0) {
             isConsideredUnpowered = false;
         }
@@ -111,7 +110,7 @@ public class Block : MonoBehaviour {
         if (scheme.consumption > 0)
         {
             GameManager.instance.systemManager.AllBlocksRequiringPower.Add(this);
-            UpdatePower();
+            //UpdatePower();
         }
 
         visuals.NewVisual(scheme.model);
@@ -135,6 +134,7 @@ public class Block : MonoBehaviour {
 		else return false;
 	} 
 
+/*
     public void UpdatePower()
 	{
 		if(IsPowered())
@@ -148,9 +148,10 @@ public class Block : MonoBehaviour {
 				RemoveState(BlockState.Powered);
         }
 	}
+*/
 
 #region STATES 
-
+/* 
     void StateCycleUpdate()
     {
         if(states.Contains(BlockState.OnFire))
@@ -228,7 +229,7 @@ public class Block : MonoBehaviour {
 		else
 			Logger.Warn(gameObject.name + " tried to remove " + state.ToString() + " from its state, but it didn't have it.");
 	}
-
+*/
 #endregion
 
     public void ToggleVisuals(bool on)
@@ -244,7 +245,7 @@ public class Block : MonoBehaviour {
             {
                 visuals.Show();
                 effects.Show();
-                UpdatePower();
+                //UpdatePower();
 
                 if(scheme.consumption != 0)
                 {
@@ -276,6 +277,7 @@ public class Block : MonoBehaviour {
         }
     }
 
+/*
     public void UseFlags()
     {
         if(states.Contains(BlockState.Powered))
@@ -286,6 +288,7 @@ public class Block : MonoBehaviour {
             }
         }
     }
+*/
 
 #endregion
 

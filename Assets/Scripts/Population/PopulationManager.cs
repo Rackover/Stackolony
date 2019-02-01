@@ -112,18 +112,18 @@ public class PopulationManager : MonoBehaviour
 		// If there is an occupation of my type
 		if(targets.Length > 0)
 		{
-			targets[Random.Range(0, targets.Length)].AddState(BlockState.OnRiot);
+			//targets[Random.Range(0, targets.Length)].AddState(BlockState.OnRiot);
 		}
 		else
 		{
 			targets = GetTargets();
 			if(targets.Length > 0)
 			{
-				targets[Random.Range(0, targets.Length)].AddState(BlockState.OnRiot);
+				//targets[Random.Range(0, targets.Length)].AddState(BlockState.OnRiot);
 			}
 			else
 			{
-				GameManager.instance.systemManager.AllBlocks[Random.Range(0, GameManager.instance.systemManager.AllBlocks.Count)].AddState(BlockState.OnRiot);
+				//GameManager.instance.systemManager.AllBlocks[Random.Range(0, GameManager.instance.systemManager.AllBlocks.Count)].AddState(BlockState.OnRiot);
 			}
 		}
 	}
@@ -136,12 +136,14 @@ public class PopulationManager : MonoBehaviour
 		// Check all Occupators in the city
 		foreach(Occupator occupator in GameManager.instance.systemManager.AllOccupators)
 		{
+            /*
 			// If the Occupator is designed for {pop} and isn't being Ramped right now
 			if(IsForMe(pop, occupator.acceptedPopulation) && !occupator.block.states.Contains(BlockState.OnRiot))
 			{
 				// Add the block as a potentialTarget
 				targets.Add(occupator.block);
 			}
+            */
 		}
 		return targets.ToArray();
 	}

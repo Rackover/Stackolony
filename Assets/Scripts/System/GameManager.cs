@@ -206,6 +206,7 @@ public class GameManager : MonoBehaviour
             populationManager.SpawnCitizens(populationManager.populationTypeList[0], 20);
         }
 
+/*
         // Affect a block under the mouse
         if(Input.GetButtonDown("Select")) // LEFT MOUSE CLICK
         {
@@ -243,7 +244,7 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
-
+*/
         // Saves the game
         if (Input.GetKeyDown(KeyCode.M)) {
             StartCoroutine(saveManager.WriteSaveData(
