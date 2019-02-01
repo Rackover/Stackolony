@@ -22,6 +22,8 @@ public class House : Flag, Flag.IFlag
     ParticleSystem citizenIn;
     ParticleSystem citizenOut;
 
+    Light light;
+
     public void UpdateHouseInformations()
     {
         foodConsumption = GetFoodConsumption();
@@ -67,6 +69,8 @@ public class House : Flag, Flag.IFlag
             //Ecrit sur la carte d'identité du citoyen qu'il habite ici désormais
             citizen.habitation = this;
 
+            light.intensity = (affectedCitizen.Count / slotAmount) * 10;
+
             return;
         }
     }
@@ -75,6 +79,10 @@ public class House : Flag, Flag.IFlag
     {
         base.Awake();
         GameManager.instance.systemManager.AllHouses.Add(this);
+        
+        light = block.effects.gameObject.AddComponent<Light>();
+        light.range = 1f;
+        light.intensity = 0f;
     }
 
     public override void OnDestroy()

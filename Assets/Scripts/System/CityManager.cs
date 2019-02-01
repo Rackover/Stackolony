@@ -76,7 +76,7 @@ public class CityManager : MonoBehaviour {
                 foundHouse.FillWithCitizen(citizen);
                 Logger.Debug("Citizen " + citizen.name + " of type " + citizen.type.codeName + " has been housed at the house " + foundHouse);
                 //Applique le changement d'humeur au type de population
-                GameManager.instance.populationManager.ChangePopulationMood(pop, topHabitations[pop].First().Value);
+                GameManager.instance.populationManager.ChangePopulationMood(pop, topHabitations[pop].First().Value * x);
 
                 //Si la maison est désormais remplie, on la retire de la liste des habitations pour chaque population
                 if (foundHouse.affectedCitizen.Count >= foundHouse.slotAmount)
