@@ -6,6 +6,8 @@ public class Damaged : BlockState
 {
     public override void Start()
     {
+        base.Start();
+
         block.effects.Activate(GameManager.instance.library.damagedParticle);
 
         foreach(Flag f in block.activeFlags)
