@@ -118,8 +118,9 @@ public class GameManager : MonoBehaviour
         if (cinematicManager == null) cinematicManager = GetComponentInChildren<CinematicManager>();
         if (cityManager == null) cityManager = GetComponentInChildren<CityManager>();
         if (bulletinsManager == null) bulletinsManager = GetComponentInChildren<BulletinsManager>();
+        if (overlayManager == null) overlayManager = FindObjectOfType<OverlayManager>();
         if (timelineController == null) timelineController = GetComponentInChildren<TimelineController>();
-
+        
         // INTERFACE
         if (cursorDisplay == null) cursorDisplay = FindObjectOfType<CursorDisplay>();
         if (localization == null) localization = GetComponentInChildren<Localization>();
@@ -131,7 +132,6 @@ public class GameManager : MonoBehaviour
 
         // DEBUG
         if (logger == null) logger = GetComponentInChildren<Logger>();
-        if (overlayManager == null) overlayManager = FindObjectOfType<OverlayManager>();
     }
 
     void CheckInputs()
@@ -325,6 +325,7 @@ public class GameManager : MonoBehaviour
         // Initialize only
         gridManagement.InitializeGridManager();
         cinematicManager.GetReferences();
+        FindObjectOfType<OverlayDisplayer>().Initialize();
         timelineController.LoadCycles();
 
         // NEW GAME ONLY
