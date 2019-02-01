@@ -1,12 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public enum Profile{ Scientist, Worker, Military, Artist, Tourist }
+public enum State{ OnFire, OnRiot, Damaged }
 public enum Ressource{ Energy, Mood, Food }
 public enum Quality{ Low, Medium, High }
 
-public class Block : MonoBehaviour {
+public class Block : MonoBehaviour
+{
 
     [Header("Referencies")]
     public BoxCollider boxCollider;
@@ -23,7 +26,7 @@ public class Block : MonoBehaviour {
 
     [Header("Lists")]
     public List<Flag.IFlag> activeFlags = new List<Flag.IFlag>();
-	public List<BlockState> states = new List<BlockState>();
+	public Dictionary<State, BlockState> states = new Dictionary<State, BlockState>();
 
     [Header("Values")]
 	public int currentPower;
@@ -37,6 +40,8 @@ public class Block : MonoBehaviour {
         isConsideredUnpowered = false;
         if(boxCollider == null) boxCollider = GetComponent<BoxCollider>();
         library = GameManager.instance.library;
+
+        AddState(State.OnFire);
     }
 
     public void Update()
@@ -67,14 +72,16 @@ public class Block : MonoBehaviour {
 
     public void OnNewCycle()
     {
-        foreach (Flag flag in activeFlags){ flag.OnNewCycle(); }
-        //StateCycleUpdate();
+        // The .ToArray() is used to make a copy of the array to prevent errors
+        foreach (Flag flag in activeFlags.ToArray()){ flag.OnNewCycle(); }
+        //foreach (BlockState state in states.ToArray()){ state.OnNewCycle(); }
+
+        RemoveState(State.OnFire);
     }
 
     //Called when block is in range of a spatioport
     public void Enable()
     {
-        //AddState(BlockState.Powered);
         //Active toutes les fonctionnalités du bloc
         foreach (Flag flag in activeFlags)
         {
@@ -88,7 +95,8 @@ public class Block : MonoBehaviour {
         }
     }
 
-    public void ChangePower(int number) {
+    public void ChangePower(int number) 
+    {
         currentPower = number;
         //UpdatePower();
         if (currentPower > 0) {
@@ -96,7 +104,8 @@ public class Block : MonoBehaviour {
         }
     }
 
-        public void AddPower(int number) {
+    public void AddPower(int number) 
+    {
         currentPower += number;
         //UpdatePower();
         if (currentPower > 0) {
@@ -133,6 +142,23 @@ public class Block : MonoBehaviour {
 		if(currentPower >= scheme.consumption) return true;
 		else return false;
 	} 
+
+    public void AddState(State state)
+    {
+		Type type = Type.GetType(state.ToString());
+        if(!states.ContainsKey(state))
+        {
+            states.Add(state, (BlockState)gameObject.AddComponent(type));
+        }
+    }
+
+    public void RemoveState(State state)
+    {
+		if(states.ContainsKey(state))
+		{
+            states[state].Remove();
+        }
+    }
 
 /*
     public void UpdatePower()
