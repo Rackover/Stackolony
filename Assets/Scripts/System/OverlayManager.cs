@@ -16,7 +16,7 @@ public class OverlayManager : MonoBehaviour
     [System.Serializable]
     public class OverlayDatas
     {
-        public Image sprite;
+        public Sprite sprite;
         public Gradient color;
     }
 
@@ -26,7 +26,7 @@ public class OverlayManager : MonoBehaviour
         string codeName { get; }
         Gradient color { get; set; }
         Color defaultColor { get; set; }
-        Image sprite { get; set; }
+        Sprite sprite { get; set; }
         void SetBlocksColor();
     }
 
@@ -37,7 +37,7 @@ public class OverlayManager : MonoBehaviour
             get { return "default"; }
         }
         public Gradient color { get; set; }
-        public Image sprite { get; set; }
+        public Sprite sprite { get; set; }
         public Color defaultColor { get; set; }
         public void SetBlocksColor()
         {
@@ -46,6 +46,7 @@ public class OverlayManager : MonoBehaviour
                 Material blockMat = block.overlayVisuals.GetComponent<MeshRenderer>().material;
                 blockMat.color = defaultColor;
                 block.overlayVisuals.SetActive(false);
+                block.visuals.Show();
             }
         }
     }
@@ -57,12 +58,13 @@ public class OverlayManager : MonoBehaviour
             get { return "type"; }
         }
         public Gradient color { get; set; }
-        public Image sprite { get; set; }
+        public Sprite sprite { get; set; }
         public Color defaultColor { get; set; }
         public void SetBlocksColor()
         {
-            foreach (Block block in GameManager.instance.systemManager.AllBlocks)
-            {
+            foreach (Block block in GameManager.instance.systemManager.AllBlocks) {
+
+                block.visuals.Hide();
                 block.overlayVisuals.SetActive(true);
                 Material blockMat = block.overlayVisuals.GetComponent<MeshRenderer>().material;
                 blockMat.color = defaultColor;
@@ -90,10 +92,10 @@ public class OverlayManager : MonoBehaviour
     {
         public string codeName
         {
-            get { return "firerisk"; }
+            get { return "fireRisk"; }
         }
         public Gradient color { get; set; }
-        public Image sprite { get; set; }
+        public Sprite sprite { get; set; }
         public Color defaultColor { get; set; }
         public void SetBlocksColor()
         {
@@ -101,6 +103,7 @@ public class OverlayManager : MonoBehaviour
             {
                 Material blockMat = block.overlayVisuals.GetComponent<MeshRenderer>().material;
                 blockMat.color = defaultColor;
+                block.visuals.Hide();
                 block.overlayVisuals.SetActive(true);
             }
         }
@@ -113,7 +116,7 @@ public class OverlayManager : MonoBehaviour
             get { return "power"; }
         }
         public Gradient color { get; set; }
-        public Image sprite { get; set; }
+        public Sprite sprite { get; set; }
         public Color defaultColor { get; set; }
         public void SetBlocksColor()
         {
@@ -136,6 +139,7 @@ public class OverlayManager : MonoBehaviour
                         blockMat.color = color.Evaluate(0.5f);
                     }
                 }
+                block.visuals.Hide();
                 block.overlayVisuals.SetActive(true);
             }
         }
@@ -145,10 +149,10 @@ public class OverlayManager : MonoBehaviour
     {
         public string codeName
         {
-            get { return "foodconsumption"; }
+            get { return "foodConsumption"; }
         }
         public Gradient color { get; set; }
-        public Image sprite { get; set; }
+        public Sprite sprite { get; set; }
         public Color defaultColor { get; set; }
         public void SetBlocksColor()
         {
@@ -173,6 +177,7 @@ public class OverlayManager : MonoBehaviour
                         blockMat.color = color.Evaluate(0.5f);
                     }
                 }
+                block.visuals.Hide();
                 block.overlayVisuals.SetActive(true);
             }
         }
@@ -185,7 +190,7 @@ public class OverlayManager : MonoBehaviour
             get { return "habitation"; }
         }
         public Gradient color { get; set; }
-        public Image sprite { get; set; }
+        public Sprite sprite { get; set; }
         public Color defaultColor { get; set; }
         public void SetBlocksColor()
         {
@@ -222,6 +227,7 @@ public class OverlayManager : MonoBehaviour
                         blockMat.color = color.Evaluate(0.5f);
                     }
                 }
+                block.visuals.Hide();
                 block.overlayVisuals.SetActive(true);
             }
         }
@@ -234,7 +240,7 @@ public class OverlayManager : MonoBehaviour
             get { return "density"; }
         }
         public Gradient color { get; set; }
-        public Image sprite { get; set; }
+        public Sprite sprite { get; set; }
         public Color defaultColor { get; set; }
         public void SetBlocksColor()
         {
@@ -259,6 +265,7 @@ public class OverlayManager : MonoBehaviour
                         blockMat.color = color.Evaluate(0.5f);
                     }
                 }
+                block.visuals.Hide();
                 block.overlayVisuals.SetActive(true);
             }
         }
@@ -266,13 +273,13 @@ public class OverlayManager : MonoBehaviour
 
     void InitOverlays()
     {
-        overlays[OverlayType.Default] = new Default();
         overlays[OverlayType.Type] = new Type();
         overlays[OverlayType.FireRisks] = new FireRisks();
         overlays[OverlayType.Power] = new Power();
         overlays[OverlayType.Food] = new Food();
         overlays[OverlayType.Habitation] = new Habitation();
         overlays[OverlayType.Density] = new Density();
+        overlays[OverlayType.Default] = new Default();
 
         LoadOverlaysDatas();
     }

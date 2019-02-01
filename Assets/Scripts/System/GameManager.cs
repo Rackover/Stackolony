@@ -117,6 +117,7 @@ public class GameManager : MonoBehaviour
         if (cinematicManager == null) cinematicManager = GetComponentInChildren<CinematicManager>();
         if (cityManager == null) cityManager = GetComponentInChildren<CityManager>();
         if (bulletinsManager == null) bulletinsManager = GetComponentInChildren<BulletinsManager>();
+        if (overlayManager == null) overlayManager = FindObjectOfType<OverlayManager>();
 
         // INTERFACE
         if (cursorDisplay == null) cursorDisplay = FindObjectOfType<CursorDisplay>();
@@ -129,7 +130,6 @@ public class GameManager : MonoBehaviour
 
         // DEBUG
         if (logger == null) logger = GetComponentInChildren<Logger>();
-        if (overlayManager == null) overlayManager = FindObjectOfType<OverlayManager>();
     }
 
     void CheckInputs()
@@ -317,6 +317,7 @@ public class GameManager : MonoBehaviour
         // Initialize only
         gridManagement.InitializeGridManager();
         cinematicManager.GetReferences();
+        FindObjectOfType<OverlayDisplayer>().Initialize();
 
         // NEW GAME ONLY
         if(newGame)
