@@ -997,9 +997,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 224924732830900772}
-  - component: {fileID: 114352079535290116}
   - component: {fileID: 114545160969087220}
   - component: {fileID: 114260932044570638}
+  - component: {fileID: 95645010065478282}
+  - component: {fileID: 114650258778162196}
   m_Layer: 5
   m_Name: OverlaysContainer
   m_TagString: Untagged
@@ -1162,6 +1163,24 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!95 &95645010065478282
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1882530926213710}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d2f6db7f64466934eae5e8e902b20c0d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!95 &95974873614735432
 Animator:
   serializedVersion: 3
@@ -1313,7 +1332,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 224527383778805756}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99999994
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1388,7 +1407,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 6
+  m_ChildAlignment: 8
   m_Spacing: 20
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
@@ -2001,6 +2020,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   overlayButtonExample: {fileID: 1362469390762032}
+  animator: {fileID: 95645010065478282}
 --- !u!114 &114270917054224208
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2156,8 +2176,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114571689687669616}
   m_HandleRect: {fileID: 224951944361754420}
   m_Direction: 2
-  m_Value: 0.99999964
-  m_Size: 0.6708299
+  m_Value: 1
+  m_Size: 0.666
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -2381,19 +2401,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114352079535290116
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1882530926213710}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1741964061, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalFit: 1
-  m_VerticalFit: 0
 --- !u!114 &114380213048884218
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2902,7 +2909,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 3
+  m_ChildAlignment: 5
   m_Spacing: 10
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
@@ -3113,8 +3120,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: ToggleBulletinDisplay
+      - m_Target: {fileID: 114260932044570638}
+        m_MethodName: Toggle
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3268,6 +3275,19 @@ MonoBehaviour:
   subTitle: {fileID: 114380213048884218}
   text: {fileID: 114254604612372266}
   buttonDisableTimespan: 1
+--- !u!114 &114650258778162196
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1882530926213710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1741964061, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 1
+  m_VerticalFit: 0
 --- !u!114 &114650865692891816
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3925,7 +3945,7 @@ MonoBehaviour:
     m_Right: 0
     m_Top: 0
     m_Bottom: 0
-  m_ChildAlignment: 2
+  m_ChildAlignment: 5
   m_Spacing: 20
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
@@ -4770,16 +4790,16 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.999996, y: 0.999996, z: 0.999996}
   m_Children:
-  - {fileID: 224948368879784148}
   - {fileID: 224924732830900772}
+  - {fileID: 224948368879784148}
   m_Father: {fileID: 224236097259807458}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 100}
-  m_Pivot: {x: 0, y: 0}
+  m_Pivot: {x: 1, y: 0}
 --- !u!224 &224411096102006964
 RectTransform:
   m_ObjectHideFlags: 1
@@ -4925,7 +4945,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.00000007859527, y: -0.000030298343}
+  m_AnchoredPosition: {x: 0.00000007859527, y: -0.00003155411}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224513103916148610
@@ -4980,7 +5000,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -230}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 176.6, y: 0}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!224 &224527383778805756
@@ -5388,13 +5408,13 @@ RectTransform:
   m_Children:
   - {fileID: 224318747427045612}
   m_Father: {fileID: 224368979370568060}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 120, y: 0}
-  m_SizeDelta: {x: 0, y: 100}
-  m_Pivot: {x: 0, y: 0.5}
+  m_AnchoredPosition: {x: 100, y: 0}
+  m_SizeDelta: {x: 0, y: -200}
+  m_Pivot: {x: 1, y: 0.5}
 --- !u!224 &224940870333966736
 RectTransform:
   m_ObjectHideFlags: 1
@@ -5448,7 +5468,7 @@ RectTransform:
   m_Children:
   - {fileID: 224836360181525324}
   m_Father: {fileID: 224368979370568060}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
