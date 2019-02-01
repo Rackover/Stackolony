@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Damaged : BlockState 
+public class Damaged : StateBehavior 
 {
     public override void Start()
     {
@@ -18,11 +18,15 @@ public class Damaged : BlockState
 
     public override void Remove()
     {
+        base.Remove();
+
         block.effects.Desactivate(GameManager.instance.library.damagedParticle);
 
         foreach(Flag f in block.activeFlags)
         {
             f.Enable();
         }
+
+        Destroy(this);
     }
 }

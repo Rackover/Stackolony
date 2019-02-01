@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BlockState : MonoBehaviour 
+public class StateBehavior : MonoBehaviour 
 {
 
 	[HideInInspector] public Block block;
@@ -19,7 +19,7 @@ public class BlockState : MonoBehaviour
 	{
 		if(block.states.ContainsValue(this))
 		{
-			foreach(KeyValuePair<State, BlockState> state in block.states)
+			foreach(KeyValuePair<State, StateBehavior> state in block.states)
 			{
 				if(Object.ReferenceEquals(state.Value, this))
 				{

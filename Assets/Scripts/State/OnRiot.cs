@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class OnRiot : BlockState 
+public class OnRiot : StateBehavior 
 {
     public override void Start()
     {
@@ -17,6 +17,8 @@ public class OnRiot : BlockState
 
     public override void Remove()
     {
+        base.Remove();
+
         block.effects.Desactivate(GameManager.instance.library.onRiotParticle);
         block.visuals.animator.SetBool("OnRiot", false);
 
@@ -24,5 +26,7 @@ public class OnRiot : BlockState
         {
             f.Enable();
         }
+
+        Destroy(this);
     }
 }

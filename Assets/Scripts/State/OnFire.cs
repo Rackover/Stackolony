@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class OnFire : BlockState 
+public class OnFire : StateBehavior 
 {
     public override void Start()
     {
