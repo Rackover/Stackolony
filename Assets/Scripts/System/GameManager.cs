@@ -79,6 +79,9 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if (IsInGame()) {
+            CheckGameInputs();
+        }
         CheckInputs();
     }
 
@@ -135,6 +138,11 @@ public class GameManager : MonoBehaviour
     }
 
     void CheckInputs()
+    {
+
+    }
+
+    void CheckGameInputs()
     {
 		
         if (Input.GetKeyDown(KeyCode.F1))
