@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<events>
+	<pool minCycle="0">
+		<event time="30">2</event>
+		<event time="40">6</event>
+		<event time="20">7</event>
+		<event time="30">8</event>
+		<event time="35">10</event>
+		<event time="45">14</event>
+		<event time="20">23</event>
+		<event time="25">26</event>
+		
+	</pool>
+	<pool minCycle="15">
+		<event time="40">1</event>
+		<event time="30">3</event>
+		<event time="15">5</event>
+		<event time="35">9</event>
+		<event time="30">11</event>
+		<event time="25">13</event>
+		<event time="20">16</event>
+		<event time="15">17</event>
+		<event time="35">18</event>
+		<event time="25">22</event>
+		<event time="30">25</event>
+	</pool>
+	<pool minCycle="30">
+		<event time="40">4</event>
+		<event time="45">12</event>
+		<event time="50">19</event>
+		<event time="55">20</event>
+		<event time="60">24</event>
+		<event time="65">27</event>
+		<event time="70">28</event>
+	</pool>
+</events>

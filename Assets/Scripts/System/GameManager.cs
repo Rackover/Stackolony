@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
     public SaveManager saveManager;
     public CinematicManager cinematicManager;
     public BulletinsManager bulletinsManager;
+    public TimelineController timelineController;
 
     [Space(1)]
     [Header("INTERFACE")]
@@ -78,7 +79,12 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        CheckInputs();
+        if (DEBUG_MODE) {
+            if (IsInGame()) {
+                CheckDebugGameInputs();
+            }
+            CheckDebugInputs();
+        }
     }
 
 
@@ -117,7 +123,9 @@ public class GameManager : MonoBehaviour
         if (cinematicManager == null) cinematicManager = GetComponentInChildren<CinematicManager>();
         if (cityManager == null) cityManager = GetComponentInChildren<CityManager>();
         if (bulletinsManager == null) bulletinsManager = GetComponentInChildren<BulletinsManager>();
-
+        if (overlayManager == null) overlayManager = FindObjectOfType<OverlayManager>();
+        if (timelineController == null) timelineController = GetComponentInChildren<TimelineController>();
+        
         // INTERFACE
         if (cursorDisplay == null) cursorDisplay = FindObjectOfType<CursorDisplay>();
         if (localization == null) localization = GetComponentInChildren<Localization>();
@@ -129,10 +137,14 @@ public class GameManager : MonoBehaviour
 
         // DEBUG
         if (logger == null) logger = GetComponentInChildren<Logger>();
-        if (overlayManager == null) overlayManager = FindObjectOfType<OverlayManager>();
     }
 
-    void CheckInputs()
+    void CheckDebugInputs()
+    {
+
+    }
+
+    void CheckDebugGameInputs()
     {
 		
         if (Input.GetKeyDown(KeyCode.F1))
@@ -169,6 +181,12 @@ public class GameManager : MonoBehaviour
         {
             overlayManager.SelectOverlay(OverlayType.Density);
         }
+
+
+        if (Input.GetKeyDown(KeyCode.End)) {
+            temporality.timeScale = 100;
+        }
+
 
         if (Input.GetKeyDown(KeyCode.N)) { 
             Notifications.Notification not = new Notifications.Notification(
@@ -317,9 +335,11 @@ public class GameManager : MonoBehaviour
         // Initialize only
         gridManagement.InitializeGridManager();
         cinematicManager.GetReferences();
+        FindObjectOfType<OverlayDisplayer>().Initialize();
+        timelineController.LoadCycles();
 
         // NEW GAME ONLY
-        if(newGame)
+        if (newGame)
         {
             // CINEMATIC
             Instantiate(library.spatioportSpawnerPrefab);

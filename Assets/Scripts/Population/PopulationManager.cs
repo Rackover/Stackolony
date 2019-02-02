@@ -185,6 +185,11 @@ public class PopulationManager : MonoBehaviour
         return names[Mathf.FloorToInt(Random.value * names.Count)];
     }
 
+    public Population GetRandomPopulation()
+    {
+        return populationTypeList[Mathf.FloorToInt(Random.value * populationTypeList.Length)];
+    }
+
     //Return the food consumed by a type of population
     public float GetFoodConsumption(Population popType)
     {
@@ -330,5 +335,16 @@ public class PopulationManager : MonoBehaviour
             citizenList.Remove(citizen);
             Debug.Log("Citizen " + citizen.name + " has been killed");
         }
+    }
+
+    public Population GetPopulationByCodename(string codeName)
+    {
+        foreach(Population pop in populationTypeList) {
+            if (pop.codeName == codeName) {
+                return pop;
+            }
+        }
+
+        return null;
     }
 }

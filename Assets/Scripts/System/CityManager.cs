@@ -9,6 +9,7 @@ public class CityManager : MonoBehaviour {
     public string cityName = "Valenciennes";
     public State[] accidentStates = { State.OnFire, State.OnRiot, State.Damaged };
     public Dictionary<Population, Dictionary<House, float>> topHabitations = new Dictionary<Population, Dictionary<House, float>>(); // List of the best habitations (sorted from best to worst)
+    public bool isTutorialRun = true;
 
     List<int> lockedBuildings = new List<int >();
 
