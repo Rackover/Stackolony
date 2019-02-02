@@ -64,6 +64,7 @@ public class SystemManager : MonoBehaviour {
         {
             block.OnNewCycle();
         }
+        
         RefreshMoodModifiers();
         yield return StartCoroutine(OnNewMicrocycle());
         yield return null;

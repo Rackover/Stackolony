@@ -5,13 +5,17 @@ using UnityEngine;
 public class StateBehavior : MonoBehaviour 
 {
 
-	[HideInInspector] public Block block;
+	[HideInInspector] public Block block; // Reference to the linked block
+	[HideInInspector] public bool refresher = false;	// Determine if this state disable all flags or not
+	[HideInInspector] public bool disabler = false;	// Determine if this state disable all flags or not
 
 	// When the State is added
 	virtual public void Start()
 	{
 		if(block == null) block = gameObject.GetComponent<Block>();
 		if(block == null) Destroy(this);
+
+		if(refresher) StartCoroutine(GameManager.instance.systemManager.OnGridUpdate());
 	}
 
 	// When the State is removed

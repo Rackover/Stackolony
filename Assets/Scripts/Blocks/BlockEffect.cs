@@ -30,6 +30,7 @@ public class BlockEffect : MonoBehaviour
 				particle.name,
 				Instantiate(particle, transform.position, Quaternion.identity, holder.transform).GetComponent<ParticleSystem>()
 			);
+			effects[particle.name].Play();
 		}
 	}
 

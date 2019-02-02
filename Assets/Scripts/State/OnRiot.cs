@@ -4,15 +4,13 @@ public class OnRiot : StateBehavior
 {
     public override void Start()
     {
+        disabler = true;
+        refresher = true;
         base.Start();
 
         block.effects.Activate(GameManager.instance.library.onRiotParticle);
         block.visuals.animator.SetBool("OnRiot", true);
-
-        foreach(Flag f in block.activeFlags)
-        {
-            f.Disable();
-        }
+        block.DisableFlags();
     }
 
     public override void Remove()
@@ -21,11 +19,7 @@ public class OnRiot : StateBehavior
 
         block.effects.Desactivate(GameManager.instance.library.onRiotParticle);
         block.visuals.animator.SetBool("OnRiot", false);
-
-        foreach(Flag f in block.activeFlags)
-        {
-            f.Enable();
-        }
+        block.EnableFlags();
 
         Destroy(this);
     }

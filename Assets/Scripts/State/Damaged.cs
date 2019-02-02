@@ -6,14 +6,12 @@ public class Damaged : StateBehavior
 {
     public override void Start()
     {
+        disabler = true;
+        refresher = true;
         base.Start();
 
         block.effects.Activate(GameManager.instance.library.damagedParticle);
-
-        foreach(Flag f in block.activeFlags)
-        {
-            f.Disable();
-        }
+        block.DisableFlags();
     }
 
     public override void Remove()
@@ -21,11 +19,7 @@ public class Damaged : StateBehavior
         base.Remove();
 
         block.effects.Desactivate(GameManager.instance.library.damagedParticle);
-
-        foreach(Flag f in block.activeFlags)
-        {
-            f.Enable();
-        }
+        block.EnableFlags();
 
         Destroy(this);
     }

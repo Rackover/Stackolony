@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Powered : StateBehavior 
 {
@@ -10,12 +8,12 @@ public class Powered : StateBehavior
 
 		if(block.states.ContainsKey(State.Unpowered))
 		{
-			block.states[State.Unpowered].Remove();
+			block.RemoveState(State.Unpowered);
 		}
 		else
 		{
 			block.effects.Desactivate(GameManager.instance.library.unpoweredParticle);
-			foreach(Flag f in block.activeFlags) { f.Enable(); }
+			block.EnableFlags();
 		}
     }
 
@@ -23,14 +21,14 @@ public class Powered : StateBehavior
     {
         base.Remove();
 
-        if(block.states.ContainsKey(State.Unpowered))
+        if(!block.states.ContainsKey(State.Unpowered))
 		{
 			block.AddState(State.Unpowered);
 		}
 		else
 		{
 			block.effects.Activate(GameManager.instance.library.unpoweredParticle);
-			foreach(Flag f in block.activeFlags){ f.Disable(); }
+			block.DisableFlags();
 		}
 
 		Destroy(this);

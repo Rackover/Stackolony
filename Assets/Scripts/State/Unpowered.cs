@@ -1,20 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Unpowered : StateBehavior  
 {
     public override void Start()
     {
+		disabler = true;
 		base.Start();
+
 		if(block.states.ContainsKey(State.Powered))
 		{
-			block.states[State.Powered].Remove();
+			block.RemoveState(State.Powered);
 		}
 		else
 		{
 			block.effects.Activate(GameManager.instance.library.unpoweredParticle);
-			foreach(Flag f in block.activeFlags) {f.Disable(); }
+			block.DisableFlags();
 		}
     }
 
@@ -22,14 +22,14 @@ public class Unpowered : StateBehavior
     {
         base.Remove();
 
-		if(block.states.ContainsKey(State.Powered))
+		if(!block.states.ContainsKey(State.Powered))
 		{
 			block.AddState(State.Powered);
 		}
 		else
 		{
 			block.effects.Desactivate(GameManager.instance.library.unpoweredParticle);
-			foreach(Flag f in block.activeFlags){ f.Enable(); }
+			block.EnableFlags();
 		}
 
 		Destroy(this);

@@ -4,6 +4,8 @@ public class OnFire : StateBehavior
 {
     public override void Start()
     {
+        disabler = true;
+        refresher = true;
         base.Start();
 
         // Add fire effect and play fire sound
@@ -11,16 +13,16 @@ public class OnFire : StateBehavior
         GameManager.instance.soundManager.Play("StartingFire");
 
         // Disactivate all flags of the block
-        foreach(Flag f in block.activeFlags)
-        {
-            f.Disable();
-        }
+        block.DisableFlags();
     }
 
     public override void OnNewCycle()
     {
         base.OnNewCycle();
+        
         GameManager.instance.missionManager.StartMission(block.gridCoordinates, "Ignite", 1);
+
+        Remove();
     }
 
 
@@ -33,10 +35,7 @@ public class OnFire : StateBehavior
         GameManager.instance.soundManager.Play("StoppingFire");
 
         // Reactivate all flags of the block
-        foreach(Flag f in block.activeFlags)
-        {
-            f.Enable();
-        }
+        block.EnableFlags();
 
         Destroy(this);
     }

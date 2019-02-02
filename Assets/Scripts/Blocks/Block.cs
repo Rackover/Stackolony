@@ -51,15 +51,57 @@ public class Block : MonoBehaviour
     public void Disable()
     {
         //Desactive toutes les fonctionnalités du bloc
-        foreach (Flag flag in activeFlags)
-        {
-            flag.Disable(); 
-        }
+        DisableFlags();
 
         //Affiche un feedback pour signaler que le bloc est inactif
         if (container.closed == false)
         {
             container.CloseContainer();
+        }
+    }
+
+    public void DisableFlags() // Disable all flags of this block
+    {
+        foreach (Flag flag in activeFlags)
+        {
+            flag.Disable(); 
+        }
+    }
+
+    public void EnableFlags() // Enable all flags of this block
+    {
+        foreach (Flag flag in activeFlags)
+        {
+            flag.Enable(); 
+        }
+    }
+
+    public void RefreshStates() // Refresh the block depending on it's states
+    {
+        foreach (KeyValuePair<State, StateBehavior> state in new Dictionary<State, StateBehavior>(states))
+        {
+            if(state.Value.disabler)
+            {
+                DisableFlags();
+                break;
+            }
+        }
+    }
+    
+    public void AddState(State state)
+    {
+		Type type = Type.GetType(state.ToString());
+        if(!states.ContainsKey(state))
+        {
+            states.Add(state, (StateBehavior)gameObject.AddComponent(type));
+        }
+    }
+
+    public void RemoveState(State state)
+    {
+		if(states.ContainsKey(state))
+		{
+            states[state].Remove();
         }
     }
 
@@ -72,8 +114,7 @@ public class Block : MonoBehaviour
     {
         // The .ToArray() is used to make a copy of the array to prevent errors
         foreach (Flag flag in activeFlags.ToArray()){ flag.OnNewCycle(); }
-
-        foreach (KeyValuePair<State, StateBehavior> state in states)
+        foreach (KeyValuePair<State, StateBehavior> state in new Dictionary<State, StateBehavior>(states))
         {
             state.Value.OnNewCycle();
         }
@@ -83,10 +124,10 @@ public class Block : MonoBehaviour
     public void Enable()
     {
         //Active toutes les fonctionnalités du bloc
-        foreach (Flag flag in activeFlags)
-        {
-            flag.Enable();
-        }
+        EnableFlags();
+
+        // Check if a state isn't going to disable the states
+        RefreshStates();
 
         //Affiche un feedback pour signaler que le bloc est inactif
         if (container.closed == true)
@@ -135,23 +176,6 @@ public class Block : MonoBehaviour
     {
         visuals.Hide();
         effects.Hide();
-    }
-
-    public void AddState(State state)
-    {
-		Type type = Type.GetType(state.ToString());
-        if(!states.ContainsKey(state))
-        {
-            states.Add(state, (StateBehavior)gameObject.AddComponent(type));
-        }
-    }
-
-    public void RemoveState(State state)
-    {
-		if(states.ContainsKey(state))
-		{
-            states[state].Remove();
-        }
     }
 
     public void UpdatePower()
