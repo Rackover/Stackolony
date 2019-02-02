@@ -88,7 +88,6 @@ public class SystemManager : MonoBehaviour {
     //S'execute à chaques fois qu'un bloc est déplacé dans la grille
     public IEnumerator OnGridUpdate()
     {
-        Debug.Log("Recalculation");
         StopAllCoroutines();
         yield return StartCoroutine(RecalculateSpatioportInfluence());
         yield return new WaitForSeconds(0.5f); //Clumsy, à changer rapidement, la propagation doit s'effectuer une fois que le spatioport a tout mis à jour
