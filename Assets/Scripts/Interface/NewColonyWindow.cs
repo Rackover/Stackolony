@@ -35,7 +35,7 @@ public class NewColonyWindow : MonoBehaviour {
             errorText.text = GameManager.instance.localization.GetLine("cityNameTooShort", "newColony");
         }
         else if (governorName.text.Length <= 0) {
-            errorText.text = GameManager.instance.localization.GetLine("governorTooshort", "newColony");
+            errorText.text = GameManager.instance.localization.GetLine("governorNameTooShort", "newColony");
         }
         else if (cityName.text.Length > maxCityNameLength) {
             errorText.text = GameManager.instance.localization.GetLine("cityNameTooLong", "newColony");
