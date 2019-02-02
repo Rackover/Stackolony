@@ -64,6 +64,7 @@ public class SystemManager : MonoBehaviour {
         {
             block.OnNewCycle();
         }
+        
         RefreshMoodModifiers();
         yield return StartCoroutine(OnNewMicrocycle());
         yield return null;
@@ -181,10 +182,7 @@ public class SystemManager : MonoBehaviour {
     {
         foreach (House house in AllHouses)
         {
-            if (house.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
-            {
-                house.UpdateHouseInformations();
-            }
+            house.UpdateHouseInformations();
         }
         yield return null;
     }
@@ -233,11 +231,8 @@ public class SystemManager : MonoBehaviour {
         StartCoroutine(ResetOccupators());
         foreach (Occupator occupator in AllOccupators)
         {
-            if (occupator.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
-            {
-                occupator.Invoke("GenerateOccupations", 0f);
-                yield return new WaitForEndOfFrame();
-            }
+            occupator.Invoke("GenerateOccupations", 0f);
+            yield return new WaitForEndOfFrame();
         }
         yield return null;
     }
@@ -247,11 +242,7 @@ public class SystemManager : MonoBehaviour {
         StartCoroutine(ResetFoodConsumption());
         foreach (FoodProvider foodProvider in AllFoodProviders)
         {
-            if (foodProvider.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
-            {
-                foodProvider.Invoke("GenerateFood", 0f);
-                yield return new WaitForEndOfFrame();
-            }
+            foodProvider.Invoke("GenerateFood", 0f);
             yield return new WaitForEndOfFrame();
         }
     }
@@ -261,11 +252,8 @@ public class SystemManager : MonoBehaviour {
         yield return StartCoroutine(ResetBlocksPower());
         foreach (Generator generator in AllGenerators)
         {
-            if (generator.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
-            {
-                generator.Invoke("GenerateEnergy", 0f);
-                yield return new WaitForEndOfFrame();
-            }
+            generator.Invoke("GenerateEnergy", 0f);
+            yield return new WaitForEndOfFrame();
         }
         yield return null;
     }

@@ -605,7 +605,7 @@ Prefab:
     - target: {fileID: 224470981121806966, guid: f9a0d7668fd606d469ae9be6dc086c74,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000030409126
+      value: -0.000014509551
       objectReference: {fileID: 0}
     - target: {fileID: 224527383778805756, guid: f9a0d7668fd606d469ae9be6dc086c74,
         type: 2}
@@ -811,40 +811,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccef35c953a459d49bda34fd0b9db13f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  debugCellEmpty: {fileID: 1283736071169836, guid: b0ab7ecaff90fd84f8f2a6b732a83885,
-    type: 2}
-  debugCellBridge: {fileID: 1950324803484832, guid: 8dff6ffac746bc64a90b24c214c426fa,
-    type: 2}
-  debugCellCube: {fileID: 1585538548652960, guid: 6038f9b16abe67a43a55ec7cb7cd5ea1,
-    type: 2}
-  debugCellOther: {fileID: 1625007679925146, guid: 7d982d2f723cc504389fef62a84b71eb,
-    type: 2}
-  debugCellUnpowered: {fileID: 1895412504763200, guid: 52ccada3b1c19754b968f7cbc4ecdc86,
-    type: 2}
-  debugCellPower: {fileID: 1829734420885436, guid: 9ef0a9dddede10e4b85fb79092d8a4fc,
-    type: 2}
-  debugCellGenerator: {fileID: 1455483664259520, guid: 692ba36f42496f741971ad316f06537b,
-    type: 2}
-  overlayModes:
-  - linkedButton: {fileID: 489774772}
-    gridName: Default
-    gridID: 0
-  - linkedButton: {fileID: 1919269502}
-    gridName: Debug
-    gridID: 1
-  - linkedButton: {fileID: 902058382}
-    gridName: Power
-    gridID: 2
-  - linkedButton: {fileID: 1939640746}
-    gridName: Mood
-    gridID: 3
-  gridManager: {fileID: 0}
---- !u!114 &489774772 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114005231881565872, guid: 725a6bfbc52f4cf4c90fb2ed5f54ac64,
-    type: 2}
-  m_PrefabInternal: {fileID: 94516948}
-  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  defaultColor: {r: 0, g: 0, b: 0, a: 0}
+  overlayDatas: []
+  activeOverlay: 0
 --- !u!1 &852756056
 GameObject:
   m_ObjectHideFlags: 0
@@ -941,12 +910,6 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!114 &902058382 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114011614566102574, guid: 725a6bfbc52f4cf4c90fb2ed5f54ac64,
-    type: 2}
-  m_PrefabInternal: {fileID: 94516948}
-  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1001 &909229682
 Prefab:
   m_ObjectHideFlags: 0
@@ -1533,18 +1496,6 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!114 &1919269502 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114962404938309192, guid: 725a6bfbc52f4cf4c90fb2ed5f54ac64,
-    type: 2}
-  m_PrefabInternal: {fileID: 94516948}
-  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
---- !u!114 &1939640746 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 114623064586908214, guid: 725a6bfbc52f4cf4c90fb2ed5f54ac64,
-    type: 2}
-  m_PrefabInternal: {fileID: 94516948}
-  m_Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!4 &1952383540
 Transform:
   m_ObjectHideFlags: 0

@@ -303,10 +303,12 @@ public class SaveManager : MonoBehaviour {
                         blockData.id = blockLink.scheme.ID;
                         blockData.states = new List<int>();
 
-                        foreach (BlockState state in blockLink.states) 
+                        
+                        foreach (KeyValuePair<State, StateBehavior> state in blockLink.states) 
                         {
-                            blockData.states.Add((int)state);
+                            blockData.states.Add((int)state.Key);
                         }
+    
                         blockGrid[coords] = blockData;
                     }
                 }

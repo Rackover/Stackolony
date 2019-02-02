@@ -4,6 +4,7 @@ using UnityEngine.UI;
 
 public class StateTag : MonoBehaviour 
 {
+/*
 	[Header("Referencies")]
 	public RectTransform self;
 	public Text stateTxt;
@@ -53,7 +54,6 @@ public class StateTag : MonoBehaviour
 				Logger.Debug(state.ToString() + " dosn't have any color assigned to it.");
 				break;
 		}
-
 	}
 
 	public void Hide()
@@ -62,4 +62,5 @@ public class StateTag : MonoBehaviour
 		stateTxt.enabled = false;
 		stateBackground.enabled = false;
 	}
+*/
 }

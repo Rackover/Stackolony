@@ -6,10 +6,9 @@ using System.Linq;
 public class CityManager : MonoBehaviour {
 
     public enum BuildingType { Habitation = 0, Services = 1, Occupators = 2 };
-    public BlockState[] accidentStates = { BlockState.OnFire, BlockState.OnRiot, BlockState.Damaged };
-    public Dictionary<Population, Dictionary<House, float>> topHabitations = new Dictionary<Population, Dictionary<House, float>>(); // List of the best habitations (sorted from best to worst)
-
     public string cityName = "Valenciennes";
+    public State[] accidentStates = { State.OnFire, State.OnRiot, State.Damaged };
+    public Dictionary<Population, Dictionary<House, float>> topHabitations = new Dictionary<Population, Dictionary<House, float>>(); // List of the best habitations (sorted from best to worst)
     public bool isTutorialRun = true;
 
     List<int> lockedBuildings = new List<int >();
@@ -226,15 +225,15 @@ public class CityManager : MonoBehaviour {
         return notation;
     }
     
-    public void TriggerAccident(BlockState accident)
+    public void TriggerAccident(State accident)
     {
         if(GameManager.instance.systemManager.AllBlocks.Count == 0) return;
 
-        if( IsConsideredAccident( accident ) )
+        if( IsConsideredAccident(accident) )
         {
             int rand = Random.Range(0, GameManager.instance.systemManager.AllBlocks.Count);
             int blockMet = 0;
-            while( GameManager.instance.systemManager.AllBlocks[rand].states.Contains( accident ))
+            while( GameManager.instance.systemManager.AllBlocks[rand].states.ContainsKey( accident ))
             {
                 if(blockMet++ > GameManager.instance.systemManager.AllBlocks.Count) 
                 {
@@ -243,14 +242,14 @@ public class CityManager : MonoBehaviour {
                 }
                 rand = Random.Range(0, GameManager.instance.systemManager.AllBlocks.Count);
             }
-            GameManager.instance.systemManager.AllBlocks[rand].AddState( accident );
+            GameManager.instance.systemManager.AllBlocks[rand].AddState(accident);
         }
         else Logger.Debug( accident + " is not considered as a accident" );
     }
 
-    bool IsConsideredAccident(BlockState state)
+    bool IsConsideredAccident(State state)
     {
-        foreach(BlockState s in accidentStates)
+        foreach(State s in accidentStates)
         {
             if(state == s)
             {
