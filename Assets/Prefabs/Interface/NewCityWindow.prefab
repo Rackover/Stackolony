@@ -506,7 +506,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224251341342669178}
   - component: {fileID: 222566256448057602}
-  - component: {fileID: 114472285853539054}
+  - component: {fileID: 114162109055882982}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -702,6 +702,32 @@ MonoBehaviour:
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
   m_ChildControlHeight: 0
+--- !u!114 &114162109055882982
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1946358265547708}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -98529514, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_Texture: {fileID: 0}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!114 &114186890716091402
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -998,11 +1024,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxCityNameLength: 32
   maxGovernorNameLength: 24
+  parentGameObject: {fileID: 1291346838252744}
   cityName: {fileID: 114457671805103374}
   governorName: {fileID: 114902125361147806}
   enableTutorial: {fileID: 114997657621634990}
   errorText: {fileID: 114797957861288468}
-  popImage: {fileID: 114472285853539054}
+  popImage: {fileID: 114162109055882982}
   cityNameInput: {fileID: 114063406421530742}
   governorNameInput: {fileID: 114194319448492124}
 --- !u!114 &114301363757746052
@@ -1222,33 +1249,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: cityName
   category: newColony
---- !u!114 &114472285853539054
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1946358265547708}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
-      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 99c7e695292550e489ca3f62b1e750aa, type: 3}
-  m_Type: 0
-  m_PreserveAspect: 1
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
 --- !u!114 &114473232139902508
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2440,8 +2440,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 670, y: 0}
-  m_SizeDelta: {x: 1300, y: 0}
+  m_AnchoredPosition: {x: 656.4263, y: 0}
+  m_SizeDelta: {x: 1272.8525, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224925567109894308
 RectTransform:
@@ -2498,8 +2498,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 670, y: 0}
-  m_SizeDelta: {x: 1300, y: 0}
+  m_AnchoredPosition: {x: 656.4263, y: 0}
+  m_SizeDelta: {x: 1272.8525, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224994405763251084
 RectTransform:

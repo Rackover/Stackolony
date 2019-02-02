@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     bool inGame = false;
     bool isLoading = false;
     bool isPaused = false;
+    bool isNewGame = false;
 
     // Used for pausing
     float oldTimescale = 0f;
@@ -64,17 +65,15 @@ public class GameManager : MonoBehaviour
         }
 
         SceneManager.sceneLoaded += delegate { FindAllReferences(); };
+        SceneManager.sceneLoaded += delegate {
+            if (menuSceneName != SceneManager.GetActiveScene().name) {
+                StartGame();
+            }
+            else {
+                EndGame();
+            }
+        };
         FindAllReferences();
-    }
-
-    private void Start()
-    {
-        if (menuSceneName != SceneManager.GetActiveScene().name) {
-            StartGame();
-        }
-        else {
-            EndGame();
-        }
     }
 
     void Update()
@@ -317,7 +316,7 @@ public class GameManager : MonoBehaviour
     }
 
     // Interface functions
-    public void StartGame(bool newGame = true)
+    void StartGame()
     {
         
         // Initialize and shut down
@@ -339,7 +338,7 @@ public class GameManager : MonoBehaviour
         timelineController.LoadCycles();
 
         // NEW GAME ONLY
-        if (newGame)
+        if (isNewGame)
         {
             // CINEMATIC
             Instantiate(library.spatioportSpawnerPrefab);
@@ -349,7 +348,7 @@ public class GameManager : MonoBehaviour
         inGame = true;
     }
 
-    public void EndGame()
+    void EndGame()
     {
         // Initialize and shut down
         GameInterfaces gi = FindObjectOfType<GameInterfaces>();
@@ -361,6 +360,9 @@ public class GameManager : MonoBehaviour
         temporality.SetTimeOfDay(20);
         temporality.SetTimeScale(2);
 
+        // Shut down only
+        displayerManager.UnstageAll();
+
         // Ingame switch
         inGame = false;
     }
@@ -368,15 +370,16 @@ public class GameManager : MonoBehaviour
 
     public void NewGame()
     {
-        StartCoroutine(LoadGameScene(delegate { StartGame(); }));
+        isNewGame = true;
+        StartCoroutine(LoadGameScene(delegate { }));
     }
 
     public void Load()
     {
+        isNewGame = false;
         StartCoroutine(
             LoadGameScene(
                 delegate {
-                    StartGame(false);
                     saveManager.StartCoroutine(
                         saveManager.ReadSaveData(
                             cityManager.cityName,
@@ -395,7 +398,6 @@ public class GameManager : MonoBehaviour
 
     public void ExitToMenu()
     {
-        EndGame();
         SceneManager.LoadScene(menuSceneName);
     }
 

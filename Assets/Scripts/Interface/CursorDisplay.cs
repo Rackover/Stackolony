@@ -10,13 +10,13 @@ public class CursorDisplay : MonoBehaviour {
 
     private void Start()
     {
-        Cursor.visible = false;
         GameManager.instance.cursorManagement.CursorError +=  (x) => DisplayUserError(x);
         notifier = FindObjectOfType<Notifications>();
     }
 
     private void Update()
     {
+        Cursor.visible = false;
         cursorTransform.position = Input.mousePosition;
         ChangeCursor(GameManager.instance.cursorManagement.selectedMode);
         transform.SetSiblingIndex(transform.parent.childCount);
