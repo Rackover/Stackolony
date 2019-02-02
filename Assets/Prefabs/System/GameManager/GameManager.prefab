@@ -513,7 +513,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4468432540002810}
-  m_RootOrder: 20
+  m_RootOrder: 21
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4177361016474540
 Transform:
@@ -715,6 +715,7 @@ Transform:
   - {fileID: 4364936759027822}
   - {fileID: 4027571504882778}
   - {fileID: 4971256421652676}
+  - {fileID: 4168957075449492}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -822,7 +823,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 4468432540002810}
-  m_RootOrder: 19
+  m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &23432335991751874
 MeshRenderer:
@@ -1108,7 +1109,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   refreshRate: 0.1
   directionalLight: {fileID: 0}
-  skyboxMaterial: {fileID: 2100000, guid: 87323bcb35246374883b1cc089091bda, type: 2}
+  skyboxMaterial: {fileID: 2100000, guid: 65e5c642bb192da4ba95c4d7fcb1a418, type: 2}
   skyboxVariation:
     serializedVersion: 2
     key0: {r: 1, g: 0.5707547, b: 0.7082891, a: 1}
@@ -1188,6 +1189,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4c64c7a4569e524b9a932ba80638ad9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseRandomValue: 3
+  spikeEvery: 5
+  spikeIncrement: 3
+  normalIncrement: 1
+  randomRange: 2
 --- !u!114 &114410866645379690
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1290,6 +1296,36 @@ MonoBehaviour:
   - {r: 0.5411765, g: 1, b: 0.015686275, a: 1}
   - {r: 0.9294118, g: 0.49803925, b: 0.40784317, a: 1}
   - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
   cursorSprite: {fileID: 21300000, guid: b631a20d61d7b5b4d9b8897145cac4e0, type: 3}
   destroyIcon: {fileID: 21300000, guid: 66734752feff9834b85b7ffdc4cc56c9, type: 3}
   buildIcon: {fileID: 21300000, guid: c36d5e82e42199b4893b3154edd54325, type: 3}
@@ -1335,8 +1371,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f712d07e9274a0741974426a00f1931d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cityName: Valenciennes
   accidentStates: 010000000200000003000000
+  cityName: Valenciennes
+  isTutorialRun: 1
   moodValues:
     goodNotationTreshold: -5
     badNotationTreshold: -10
