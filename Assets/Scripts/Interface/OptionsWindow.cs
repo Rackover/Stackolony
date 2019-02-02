@@ -11,6 +11,7 @@ public class OptionsWindow : MonoBehaviour {
     public GameObject checkboxExample;
     public GameObject selectExample;
     public GameObject container;
+    public GameObject parentGameObject;
     Options options;
 
 	// Use this for initialization
@@ -118,7 +119,7 @@ public class OptionsWindow : MonoBehaviour {
     public void SaveAndExit()
     {
         options.WriteAndLoadFromDisk(Paths.GetOptionsFile());
-        Destroy(this.gameObject);
+        Destroy(parentGameObject);
     }
 
 }

@@ -185,6 +185,11 @@ public class PopulationManager : MonoBehaviour
         return names[Mathf.FloorToInt(Random.value * names.Count)];
     }
 
+    public Population GetRandomPopulation()
+    {
+        return populationTypeList[Mathf.FloorToInt(Random.value * populationTypeList.Length)];
+    }
+
     //Return the food consumed by a type of population
     public float GetFoodConsumption(Population popType)
     {
