@@ -998,6 +998,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxCityNameLength: 32
   maxGovernorNameLength: 24
+  parentGameObject: {fileID: 1291346838252744}
   cityName: {fileID: 114457671805103374}
   governorName: {fileID: 114902125361147806}
   enableTutorial: {fileID: 114997657621634990}
@@ -2440,8 +2441,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 670, y: 0}
-  m_SizeDelta: {x: 1300, y: 0}
+  m_AnchoredPosition: {x: 656.4263, y: 0}
+  m_SizeDelta: {x: 1272.8525, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224925567109894308
 RectTransform:
@@ -2498,8 +2499,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 670, y: 0}
-  m_SizeDelta: {x: 1300, y: 0}
+  m_AnchoredPosition: {x: 656.4263, y: 0}
+  m_SizeDelta: {x: 1272.8525, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224994405763251084
 RectTransform:
