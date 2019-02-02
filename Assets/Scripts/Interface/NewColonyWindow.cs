@@ -8,6 +8,7 @@ public class NewColonyWindow : MonoBehaviour {
     public int maxCityNameLength = 32;
     public int maxGovernorNameLength = 24;
 
+    public GameObject parentGameObject;
     public Text cityName;
     public Text governorName;
     public Toggle enableTutorial;
@@ -26,7 +27,7 @@ public class NewColonyWindow : MonoBehaviour {
 
     public void DestroyWindow()
     {
-        Destroy(gameObject);
+        Destroy(parentGameObject);
     }
 
     public void CreateColony()
