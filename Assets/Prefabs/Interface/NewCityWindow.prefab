@@ -788,7 +788,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65f9985cb809aa849a1825a5758b6651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: colonyName
+  id: cityName
   category: newColony
 --- !u!114 &114235780245476688
 MonoBehaviour:
@@ -862,8 +862,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65f9985cb809aa849a1825a5758b6651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: createColony
-  category: newColony
+  id: cancel
+  category: generalUI
 --- !u!114 &114363577832523342
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1472,7 +1472,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: menu
-  category: createColony
+  category: newColony
 --- !u!114 &114863789063297530
 MonoBehaviour:
   m_ObjectHideFlags: 1
