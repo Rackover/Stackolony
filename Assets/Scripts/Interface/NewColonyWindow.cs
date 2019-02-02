@@ -13,20 +13,35 @@ public class NewColonyWindow : MonoBehaviour {
     public Text governorName;
     public Toggle enableTutorial;
     public Text errorText;
-    public Image popImage;
+    public RawImage popImage;
 
     public InputField cityNameInput;
     public InputField governorNameInput;
+
+    Displayer preview;
 
     void Start()
     {
         cityNameInput.characterLimit = maxCityNameLength;
         governorNameInput.characterLimit = maxGovernorNameLength;
-        popImage.sprite = GameManager.instance.populationManager.GetRandomPopulation().moodSprites[(int)Citizen.Mood.Good];
+
+        Population pop = GameManager.instance.populationManager.GetRandomPopulation();
+        if (!GameManager.instance.player.options.GetBool("animatedCitizens")) {
+            float ratio = pop.moodSprites[0].rect.width / pop.moodSprites[0].rect.height;
+            popImage.texture = pop.moodSprites[(int)Citizen.Mood.Good].texture;
+            popImage.transform.parent.gameObject.GetComponent<AspectRatioFitter>().aspectRatio = ratio;
+        }
+        else {
+            preview = GameManager.instance.displayerManager.SetRotationFeed(pop.prefab, popImage, 180, 0, 3, 30, 512);
+            preview.GetModel().transform.GetChild(0).gameObject.GetComponent<Animator>().Play("LookAround");
+        }
     }
 
     public void DestroyWindow()
     {
+        if (preview != null) {
+            preview.Unstage();
+        }
         Destroy(parentGameObject);
     }
 
