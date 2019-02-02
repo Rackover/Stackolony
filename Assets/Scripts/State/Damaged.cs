@@ -7,20 +7,19 @@ public class Damaged : StateBehavior
     public override void Start()
     {
         disabler = true;
-        refresher = true;
         base.Start();
 
         block.effects.Activate(GameManager.instance.library.damagedParticle);
         block.DisableFlags();
+        StartCoroutine(GameManager.instance.systemManager.OnGridUpdate());
     }
 
     public override void Remove()
     {
-        base.Remove();
-
         block.effects.Desactivate(GameManager.instance.library.damagedParticle);
         block.EnableFlags();
+        StartCoroutine(GameManager.instance.systemManager.OnGridUpdate());
 
-        Destroy(this);
+        base.Remove();
     }
 }

@@ -20,8 +20,6 @@ public class Unpowered : StateBehavior
 
     public override void Remove()
     {
-        base.Remove();
-
 		if(!block.states.ContainsKey(State.Powered))
 		{
 			block.AddState(State.Powered);
@@ -32,6 +30,6 @@ public class Unpowered : StateBehavior
 			block.EnableFlags();
 		}
 
-		Destroy(this);
+        base.Remove();
     }
 }

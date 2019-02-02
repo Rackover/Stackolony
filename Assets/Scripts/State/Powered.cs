@@ -19,8 +19,6 @@ public class Powered : StateBehavior
 
     public override void Remove()
     {
-        base.Remove();
-
         if(!block.states.ContainsKey(State.Unpowered))
 		{
 			block.AddState(State.Unpowered);
@@ -30,7 +28,7 @@ public class Powered : StateBehavior
 			block.effects.Activate(GameManager.instance.library.unpoweredParticle);
 			block.DisableFlags();
 		}
-
-		Destroy(this);
+		
+		base.Remove();
     }
 }

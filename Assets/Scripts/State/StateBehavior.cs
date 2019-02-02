@@ -6,7 +6,6 @@ public class StateBehavior : MonoBehaviour
 {
 
 	[HideInInspector] public Block block; // Reference to the linked block
-	[HideInInspector] public bool refresher = false;	// Determine if this state disable all flags or not
 	[HideInInspector] public bool disabler = false;	// Determine if this state disable all flags or not
 
 	// When the State is added
@@ -14,8 +13,6 @@ public class StateBehavior : MonoBehaviour
 	{
 		if(block == null) block = gameObject.GetComponent<Block>();
 		if(block == null) Destroy(this);
-
-		if(refresher) StartCoroutine(GameManager.instance.systemManager.OnGridUpdate());
 	}
 
 	// When the State is removed
@@ -32,6 +29,7 @@ public class StateBehavior : MonoBehaviour
 				}
 			}
 		}
+		Destroy(this);
 	}
 
 	// When a new Cycle start
