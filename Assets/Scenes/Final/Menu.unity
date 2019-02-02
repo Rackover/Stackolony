@@ -2494,7 +2494,7 @@ Prefab:
     - target: {fileID: 224470981121806966, guid: f9a0d7668fd606d469ae9be6dc086c74,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -0.0000016613952
+      value: -0.0000011674337
       objectReference: {fileID: 0}
     - target: {fileID: 224527383778805756, guid: f9a0d7668fd606d469ae9be6dc086c74,
         type: 2}
@@ -2674,7 +2674,7 @@ Prefab:
     - target: {fileID: 224924732830900772, guid: f9a0d7668fd606d469ae9be6dc086c74,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 224318747427045612, guid: f9a0d7668fd606d469ae9be6dc086c74,
         type: 2}
@@ -3753,8 +3753,8 @@ MonoBehaviour:
   m_Script: {fileID: -619905303, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_FirstSelected: {fileID: 986511560}
-  m_sendNavigationEvents: 1
+  m_FirstSelected: {fileID: 0}
+  m_sendNavigationEvents: 0
   m_DragThreshold: 10
 --- !u!1 &1441158233
 GameObject:

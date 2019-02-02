@@ -79,10 +79,12 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (IsInGame()) {
-            CheckGameInputs();
+        if (DEBUG_MODE) {
+            if (IsInGame()) {
+                CheckDebugGameInputs();
+            }
+            CheckDebugInputs();
         }
-        CheckInputs();
     }
 
 
@@ -137,12 +139,12 @@ public class GameManager : MonoBehaviour
         if (logger == null) logger = GetComponentInChildren<Logger>();
     }
 
-    void CheckInputs()
+    void CheckDebugInputs()
     {
 
     }
 
-    void CheckGameInputs()
+    void CheckDebugGameInputs()
     {
 		
         if (Input.GetKeyDown(KeyCode.F1))

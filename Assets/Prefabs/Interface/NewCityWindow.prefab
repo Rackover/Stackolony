@@ -39,7 +39,7 @@ GameObject:
   - component: {fileID: 224966090144456446}
   - component: {fileID: 222871988872885946}
   - component: {fileID: 114928428725785304}
-  - component: {fileID: 114036987098474188}
+  - component: {fileID: 114224965337245232}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -506,7 +506,7 @@ GameObject:
   - component: {fileID: 224309486177779982}
   - component: {fileID: 222634860710160460}
   - component: {fileID: 114922245624644702}
-  - component: {fileID: 114307402392132666}
+  - component: {fileID: 114672815084729832}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -672,26 +672,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxCityNameLength: 32
   maxGovernorNameLength: 24
-  cityName: {fileID: 114928428725785304}
-  governorName: {fileID: 114922245624644702}
+  cityName: {fileID: 114571679612840852}
+  governorName: {fileID: 114863789063297530}
   enableTutorial: {fileID: 114097583781482826}
   errorText: {fileID: 114583203955899740}
   popImage: {fileID: 114730655185297370}
   cityNameInput: {fileID: 114460124306692300}
   governorNameInput: {fileID: 114030029867114928}
---- !u!114 &114036987098474188
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1099027744274676}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65f9985cb809aa849a1825a5758b6651, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: colonyName
-  category: newColony
 --- !u!114 &114079065151313230
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -790,6 +777,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: enableTutorial
   category: newColony
+--- !u!114 &114224965337245232
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1099027744274676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65f9985cb809aa849a1825a5758b6651, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: colonyName
+  category: newColony
 --- !u!114 &114235780245476688
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -836,7 +836,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65f9985cb809aa849a1825a5758b6651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: cityNamePlaceholder
+  id: gouvernorNamePlaceholder
   category: newColony
 --- !u!114 &114299517544029318
 MonoBehaviour:
@@ -851,19 +851,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 1
   m_VerticalFit: 0
---- !u!114 &114307402392132666
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1993428516106256}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65f9985cb809aa849a1825a5758b6651, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: governorName
-  category: newColony
 --- !u!114 &114350433105811204
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1293,6 +1280,19 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114672815084729832
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1993428516106256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 65f9985cb809aa849a1825a5758b6651, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: governorName
+  category: newColony
 --- !u!114 &114678392894135090
 MonoBehaviour:
   m_ObjectHideFlags: 1
