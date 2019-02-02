@@ -12,7 +12,7 @@ public class BlockEffect : MonoBehaviour
 		public bool active = false;
 	}
 
-	Dictionary <string, Particle> effects = new Dictionary <string, Particle>();
+	Dictionary <int, Particle> effects = new Dictionary <int, Particle>();
 
  
 	public void Hide()
@@ -24,7 +24,7 @@ public class BlockEffect : MonoBehaviour
 	{
 		holder.SetActive(true);
 
-		foreach(KeyValuePair<string, Particle> e in effects)
+		foreach(KeyValuePair<int, Particle> e in effects)
 		{
 			if(e.Value.active)
 			{
@@ -35,28 +35,32 @@ public class BlockEffect : MonoBehaviour
 
 	public void Activate(GameObject particle)
 	{
-		if(effects.ContainsKey(particle.name))
+		int index = particle.GetHashCode();
+
+		if(effects.ContainsKey(index))
 		{
-			effects[particle.name].system.Play();
-			effects[particle.name].active = true;
+			effects[index].system.Play();
+			effects[index].active = true;
 		}
 		else
 		{
 			Particle p = new Particle();
 			p.system = Instantiate(particle, transform.position, Quaternion.identity, holder.transform).GetComponent<ParticleSystem>();
-			effects.Add(particle.name, p);
+			effects.Add(index, p);
 
-			effects[particle.name].system.Play();
-			effects[particle.name].active = true;
+			effects[index].system.Play();
+			effects[index].active = true;
 		}
 	}
 
 	public void Desactivate(GameObject particle)
 	{
-		if(effects.ContainsKey(particle.name))
+		int index = particle.GetHashCode();
+
+		if(effects.ContainsKey(index))
 		{
-			effects[particle.name].system.Stop();
-			effects[particle.name].active = false;
+			effects[index].system.Stop();
+			effects[index].active = false;
 		}
 	}
 }
