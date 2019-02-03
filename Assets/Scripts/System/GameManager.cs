@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     bool inGame = false;
     bool isLoading = false;
     bool isPaused = false;
-    bool isNewGame = false;
+    bool isNewGame = true;
 
     // Used for pausing
     float oldTimescale = 0f;
@@ -73,7 +73,6 @@ public class GameManager : MonoBehaviour
                 EndGame();
             }
         };
-        FindAllReferences();
     }
 
     void Update()
@@ -108,34 +107,35 @@ public class GameManager : MonoBehaviour
     void FindAllReferences()
     {
         // SYSTEM
-        if (temporality == null) temporality = GetComponentInChildren<Temporality>();
-        if (flagReader == null) flagReader = GetComponentInChildren<FlagReader>();
-        if (library == null) library = GetComponentInChildren<Library>();
-        if (soundManager == null) soundManager = GetComponentInChildren<SoundManager>();
-        if (systemManager == null) systemManager = GetComponentInChildren<SystemManager>();
-        if (missionCallbackManager == null) missionCallbackManager = GetComponentInChildren<MissionCallbackManager>();
-        if (missionManager == null) missionManager = GetComponentInChildren<MissionManager>();
-        if (cursorManagement == null) cursorManagement = GetComponentInChildren<CursorManagement>();
-        if (gridManagement == null) gridManagement = GetComponentInChildren<GridManagement>();
-        if (populationManager == null) populationManager = GetComponentInChildren<PopulationManager>();
-        if (saveManager == null) saveManager = GetComponentInChildren<SaveManager>();
-        if (cinematicManager == null) cinematicManager = GetComponentInChildren<CinematicManager>();
-        if (cityManager == null) cityManager = GetComponentInChildren<CityManager>();
-        if (bulletinsManager == null) bulletinsManager = GetComponentInChildren<BulletinsManager>();
+        if (temporality == null) temporality = FindObjectOfType<Temporality>();
+        if (flagReader == null) flagReader = FindObjectOfType<FlagReader>();
+        if (library == null) library = FindObjectOfType<Library>();
+        if (soundManager == null) soundManager = FindObjectOfType<SoundManager>();
+        if (systemManager == null) systemManager = FindObjectOfType<SystemManager>();
+        if (missionCallbackManager == null) missionCallbackManager = FindObjectOfType<MissionCallbackManager>();
+        if (missionManager == null) missionManager = FindObjectOfType<MissionManager>();
+        if (cursorManagement == null) cursorManagement = FindObjectOfType<CursorManagement>();
+        if (gridManagement == null) gridManagement = FindObjectOfType<GridManagement>();
+        if (populationManager == null) populationManager = FindObjectOfType<PopulationManager>();
+        if (saveManager == null) saveManager = FindObjectOfType<SaveManager>();
+        if (cinematicManager == null) cinematicManager = FindObjectOfType<CinematicManager>();
+        if (cityManager == null) cityManager = FindObjectOfType<CityManager>();
+        if (bulletinsManager == null) bulletinsManager = FindObjectOfType<BulletinsManager>();
         if (overlayManager == null) overlayManager = FindObjectOfType<OverlayManager>();
-        if (timelineController == null) timelineController = GetComponentInChildren<TimelineController>();
-        
+        if (timelineController == null) timelineController = FindObjectOfType<TimelineController>();
+        if (player == null) player = FindObjectOfType<Player>();
+
         // INTERFACE
         if (cursorDisplay == null) cursorDisplay = FindObjectOfType<CursorDisplay>();
-        if (localization == null) localization = GetComponentInChildren<Localization>();
-        if (displayerManager == null) displayerManager = GetComponentInChildren<DisplayerManager>();
+        if (localization == null) localization = FindObjectOfType<Localization>();
+        if (displayerManager == null) displayerManager = FindObjectOfType<DisplayerManager>();
 
         // INTERFACE - INGAME
         if (temporalityInterface == null) temporalityInterface = FindObjectOfType<TemporalityInterface>();
         if (tooltipGO == null) tooltipGO = FindObjectOfType<TooltipGO>();
 
         // DEBUG
-        if (logger == null) logger = GetComponentInChildren<Logger>();
+        if (logger == null) logger = FindObjectOfType<Logger>();
     }
 
     void CheckDebugInputs()
@@ -318,7 +318,6 @@ public class GameManager : MonoBehaviour
     // Interface functions
     void StartGame()
     {
-        
         // Initialize and shut down
         GameInterfaces gi = FindObjectOfType<GameInterfaces>();
         if (gi != null) {
@@ -334,12 +333,10 @@ public class GameManager : MonoBehaviour
         // Initialize only
         gridManagement.InitializeGridManager();
         cinematicManager.GetReferences();
-        FindObjectOfType<OverlayDisplayer>().Initialize();
         timelineController.LoadCycles();
 
         // NEW GAME ONLY
-        if (isNewGame)
-        {
+        if (isNewGame) {
             // CINEMATIC
             Instantiate(library.spatioportSpawnerPrefab);
         }

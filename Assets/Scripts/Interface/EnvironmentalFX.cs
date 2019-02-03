@@ -17,6 +17,7 @@ public class EnvironmentalFX : MonoBehaviour {
 
     private void Awake()
     {
+        skyboxMaterial = Instantiate(skyboxMaterial);
         RenderSettings.skybox = skyboxMaterial;
 
         if (directionalLight == null) {

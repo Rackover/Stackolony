@@ -12,10 +12,14 @@ public class OverlayDisplayer : MonoBehaviour {
     OverlayManager overMan;
     float referenceWidth;
 
+    private void Start()
+    {
+        Initialize();
+    }
+
     public void Initialize()
     {
         overMan = GameManager.instance.overlayManager;
-
         foreach (KeyValuePair<OverlayType, OverlayManager.IOverlay> overPair in overMan.overlays) {
             OverlayType overType = overPair.Key;
             OverlayManager.IOverlay over = overPair.Value;
