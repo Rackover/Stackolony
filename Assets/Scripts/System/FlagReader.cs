@@ -224,25 +224,8 @@ public class FlagReader : MonoBehaviour
                         block.activeFlags.Add(newOccupator);
                     } else
                     {
-                        string[] profiles = SplitParametorInArray(flagElements[3]);
-
-                        string result = IsProfileArrayIsValid(profiles);
-
-                        Population[] acceptedPop = new Population[profiles.Length];
-
-                        for (int i = 0; i < profiles.Length; i++)
-                        {
-                            foreach (Population pop in GameManager.instance.populationManager.populationTypeList)
-                            {
-                                if (profiles[i] == pop.codeName)
-                                {
-                                    acceptedPop[i] = pop;
-                                }
-                            }
-                        }
                         foundOccupator.range += int.Parse(flagElements[2]);
                         foundOccupator.slots += int.Parse(flagElements[1]);
-                        foundOccupator.acceptedPopulation = acceptedPop;
                     }
                 }
 				else
@@ -279,20 +262,6 @@ public class FlagReader : MonoBehaviour
                 {
                     foundHouse.slotAmount += int.Parse(flagElements[1]);
                     foundHouse.standingLevel = int.Parse(flagElements[2]);
-                    string[] profilesList = SplitParametorInArray(flagElements[3]);
-                    Population[] acceptedPopList = new Population[profilesList.Length];
-                    for (int i = 0; i < profilesList.Length; i++)
-                    {
-                        foreach (Population pop in GameManager.instance.populationManager.populationTypeList)
-                        {
-                            if (profilesList[i] == pop.codeName)
-                            {
-                                acceptedPopList[i] = pop;
-                            }
-                        }
-                    }
-                    foundHouse.acceptedPop = acceptedPopList;
-                    foundHouse.InitCitizensSlots();
                 }
 				break;
             #endregion

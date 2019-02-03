@@ -4,14 +4,12 @@ using UnityEngine;
 
 public class MoodModifier
 {
-    public string reason;
     public float amount;
     public int cyclesRemaining;
 }
 
 public class FoodModifier
 {
-    public string reason;
     public float amount;
     public int cyclesRemaining;
 }
@@ -212,20 +210,18 @@ public class PopulationManager : MonoBehaviour
         return null;
     }
     //Generates a foodmodifier for a given population
-    public void GenerateFoodModifier(Population popType, string reason, float newAmount, int cyclesRemaining)
+    public void GenerateFoodModifier(Population popType, float newAmount, int cyclesRemaining)
     {
         FoodModifier newFoodModifier = new FoodModifier();
-        newFoodModifier.reason = reason;
         newFoodModifier.amount = newAmount;
         newFoodModifier.cyclesRemaining = cyclesRemaining;
         populations[popType].foodModifiers.Add(newFoodModifier);
     }
 
     //Generates a moodmodifier for a given population
-    public void GenerateMoodModifier(Population popType, string reason, float amount, int cyclesRemaining)
+    public void GenerateMoodModifier(Population popType, float amount, int cyclesRemaining)
     {
         MoodModifier newMoodModifier = new MoodModifier();
-        newMoodModifier.reason = reason;
         newMoodModifier.amount = amount;
         newMoodModifier.cyclesRemaining = cyclesRemaining;
         populations[popType].moodModifiers.Add(newMoodModifier);

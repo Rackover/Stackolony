@@ -5,28 +5,24 @@ using System.Linq;
 
 public class NotationModifier
 {
-    public string reason;
     public float amount;
     public int cyclesRemaining;
 }
 
 public class ConsumptionModifier
 {
-    public string reason;
     public int amount;
     public int cyclesRemaining;
 }
 
 public class FlagModifier
 {
-    public ModifierReason reason;
     public string flagInformations;
     public int cyclesRemaining;
 }
 
 public class TempFlag
 {
-    public ModifierReason reason;
     public string flagInformations;
     public int cyclesRemaining;
     public System.Type flagType;
@@ -94,25 +90,23 @@ public class CityManager : MonoBehaviour {
     }
 
     //Generates a notationModifier for a given house
-    public void GenerateNotationModifier(House house, string reason, float newAmount, int cyclesRemaining)
+    public void GenerateNotationModifier(House house, float newAmount, int cyclesRemaining)
     {
         NotationModifier newNotationModifier = new NotationModifier();
-        newNotationModifier.reason = reason;
         newNotationModifier.amount = newAmount;
         newNotationModifier.cyclesRemaining = cyclesRemaining;
         house.notationModifiers.Add(newNotationModifier);
     }
 
-    public void GenerateConsumptionModifier(Block block, string reason, int newAmount, int cyclesRemaining)
+    public void GenerateConsumptionModifier(Block block, int newAmount, int cyclesRemaining)
     {
         ConsumptionModifier newConsumptionModifier = new ConsumptionModifier();
-        newConsumptionModifier.reason = reason;
         newConsumptionModifier.amount = newAmount;
         newConsumptionModifier.cyclesRemaining = cyclesRemaining;
         block.consumptionModifiers.Add(newConsumptionModifier);
     }
 
-    public void GenerateFlagModifier(Block block, ModifierReason reason, string flagInformations, int cyclesRemaining)
+    public void GenerateFlagModifier(Block block, string flagInformations, int cyclesRemaining)
     {
         string[] flagElements = flagInformations.Split(new char[] { '_' }, System.StringSplitOptions.RemoveEmptyEntries);
         bool flagFound = false;
@@ -127,7 +121,6 @@ public class CityManager : MonoBehaviour {
             return;
         }
         FlagModifier newFlagModifier = new FlagModifier();
-        newFlagModifier.reason = reason;
         newFlagModifier.cyclesRemaining = cyclesRemaining;
         newFlagModifier.flagInformations = flagInformations;
         //Apply the flag modification
@@ -135,7 +128,7 @@ public class CityManager : MonoBehaviour {
         block.flagModifiers.Add(newFlagModifier);
     }
 
-    public void GenerateTempFlag(Block block, ModifierReason reason, string flagInformations, int cyclesRemaining)
+    public void GenerateTempFlag(Block block, string flagInformations, int cyclesRemaining)
     {
         string[] flagElements = flagInformations.Split(new char[] { '_' }, System.StringSplitOptions.RemoveEmptyEntries);
         foreach (Flag.IFlag flags in block.activeFlags)
@@ -146,7 +139,6 @@ public class CityManager : MonoBehaviour {
             }
         }
         TempFlag newTempFlag = new TempFlag();
-        newTempFlag.reason = reason;
         newTempFlag.cyclesRemaining = cyclesRemaining;
         newTempFlag.flagInformations = flagInformations;
         newTempFlag.flagType = System.Type.GetType(flagElements[0]);
