@@ -9,7 +9,7 @@ public class GameManager : MonoBehaviour
     bool inGame = false;
     bool isLoading = false;
     bool isPaused = false;
-    bool isNewGame = false;
+    bool isNewGame = true;
 
     // Used for pausing
     float oldTimescale = 0f;
@@ -318,7 +318,6 @@ public class GameManager : MonoBehaviour
     // Interface functions
     void StartGame()
     {
-        
         // Initialize and shut down
         GameInterfaces gi = FindObjectOfType<GameInterfaces>();
         if (gi != null) {
@@ -337,8 +336,7 @@ public class GameManager : MonoBehaviour
         timelineController.LoadCycles();
 
         // NEW GAME ONLY
-        if (isNewGame)
-        {
+        if (isNewGame) {
             // CINEMATIC
             Instantiate(library.spatioportSpawnerPrefab);
         }
