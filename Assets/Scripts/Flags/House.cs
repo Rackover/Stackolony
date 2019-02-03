@@ -27,7 +27,7 @@ public class House : Flag, Flag.IFlag
     public void UpdateHouseInformations()
     {
         foodConsumption = GetFoodConsumption();
-        if (block.currentPower >= block.scheme.consumption)
+        if (block.currentPower >= block.GetConsumption())
             powered = true;
         else
             powered = false;

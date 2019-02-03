@@ -10,6 +10,13 @@ public class NotationModifier
     public int cyclesRemaining;
 }
 
+public class ConsumptionModifier
+{
+    public ModifierReason reason;
+    public int amount;
+    public int cyclesRemaining;
+}
+
 public class CityManager : MonoBehaviour {
 
     public enum BuildingType { Habitation = 0, Services = 1, Occupators = 2 };
@@ -79,6 +86,15 @@ public class CityManager : MonoBehaviour {
         newNotationModifier.amount = newAmount;
         newNotationModifier.cyclesRemaining = cyclesRemaining;
         house.notationModifiers.Add(newNotationModifier);
+    }
+
+    public void GenerateConsumptionModifier(Block block, ModifierReason reason, int newAmount, int cyclesRemaining)
+    {
+        ConsumptionModifier newConsumptionModifier = new ConsumptionModifier();
+        newConsumptionModifier.reason = reason;
+        newConsumptionModifier.amount = newAmount;
+        newConsumptionModifier.cyclesRemaining = cyclesRemaining;
+        block.consumptionModifiers.Add(newConsumptionModifier);
     }
 
     //Finds a house for every citizens from a defined population

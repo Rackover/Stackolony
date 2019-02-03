@@ -68,6 +68,7 @@ public class SystemManager : MonoBehaviour {
         RefreshMoodModifiers();
         RefreshFoodModifiers();
         RefreshNotationModifiers();
+        RefreshConsumptionModifiers();
         yield return StartCoroutine(OnNewMicrocycle());
         yield return null;
     }
@@ -194,6 +195,21 @@ public class SystemManager : MonoBehaviour {
                 if (fm.cyclesRemaining <= 0)
                 {
                     p.Value.foodModifiers.Remove(fm);
+                }
+            }
+        }
+    }
+
+    public void RefreshConsumptionModifiers()
+    {
+        foreach (Block block in AllBlocks)
+        {
+            foreach (ConsumptionModifier consumptionModifier in block.consumptionModifiers)
+            {
+                consumptionModifier.cyclesRemaining--;
+                if (consumptionModifier.cyclesRemaining <=0)
+                {
+                    block.consumptionModifiers.Remove(consumptionModifier);
                 }
             }
         }

@@ -27,6 +27,7 @@ public class Block : MonoBehaviour
     [Header("Lists")]
     public List<Flag.IFlag> activeFlags = new List<Flag.IFlag>();
 	public Dictionary<State, StateBehavior> states = new Dictionary<State, StateBehavior>();
+    public List<ConsumptionModifier> consumptionModifiers = new List<ConsumptionModifier>();
 
     [Header("Values")]
 	public int currentPower;
@@ -177,10 +178,20 @@ public class Block : MonoBehaviour
         }
     }
 
+    public int GetConsumption()
+    {
+        int consumption = scheme.consumption;
+        foreach (ConsumptionModifier consumptionModifier in consumptionModifiers)
+        {
+            consumption += consumptionModifier.amount;
+        }
+        return consumption;
+    }
+
     public void LoadBlock()
     {
         GameManager.instance.systemManager.AllBlocks.Add(this);
-        if (scheme.consumption > 0)
+        if (GetConsumption() > 0)
         {
             GameManager.instance.systemManager.AllBlocksRequiringPower.Add(this);
         }
@@ -197,7 +208,7 @@ public class Block : MonoBehaviour
     public void UnloadBlock()
     {
         GameManager.instance.systemManager.AllBlocks.Remove(this);
-        if (scheme.consumption > 0)
+        if (GetConsumption() > 0)
         {
             GameManager.instance.systemManager.AllBlocksRequiringPower.Remove(this);
         }
@@ -209,7 +220,7 @@ public class Block : MonoBehaviour
 
     public void UpdatePower()
 	{
-		if(currentPower >= scheme.consumption)
+		if(currentPower >= GetConsumption())
 		{
 			AddState(State.Powered);
 		}
