@@ -11,7 +11,7 @@ public class EventInterpreter {
 
         List<System.Action> actions = new List<System.Action>();
 
-        List<string> lines = new List<string>(eventDeclaration.Replace(" ", "").Replace("\n", "").Split(';'));
+        List<string> lines = new List<string>(eventDeclaration.Replace(" ", "").Replace("\n", "").Replace("	", "").Split(';'));
         foreach (string line in lines) {
             if (!CheckSyntax(line)) {
                 Throw(line);
@@ -71,6 +71,10 @@ public class EventInterpreter {
         string funcName = explodedStatement[0];
         string content = explodedStatement[1];
 
+        if (!dataFunctions.ContainsKey(funcName)) {
+            Throw("Unsupported action function " + funcName + ". Supported action functions \n :" + GetDataFunctions());
+        }
+
         return dataFunctions[funcName].Invoke(content);
     }
 
@@ -114,20 +118,99 @@ public class EventInterpreter {
         string funcName = explodedStatement[0];
         string arguments = explodedStatement[1];
 
-        return delegate { actionFunctions[funcName](arguments); };
+        if (!actionFunctions.ContainsKey(funcName)) {
+            Throw("Unsupported action function " + funcName + ". Supported action functions \n :"+GetActionFunctions());
+        }
+
+        return delegate { actionFunctions[funcName](arguments, context); };
+    }
+    
+    // Returns list of supported action functions
+    List<string> GetActionFunctions()
+    {
+        List<string> funcs = new List<string>();
+        foreach(KeyValuePair<string, System.Action<string, Dictionary<string, Object>>> function in actionFunctions) {
+            funcs.Add(function.Key);
+        }
+        return funcs;
     }
 
-
-
-
-
-
-    Dictionary<string, System.Action<string>> actionFunctions = new Dictionary<string, System.Action<string>>() {
-        { "INCREASE_ENERGY_CONSUMPTION", (args) =>
-            {
-
-            }
+    // Returns list of supported data functions
+    List<string> GetDataFunctions()
+    {
+        List<string> funcs = new List<string>();
+        foreach (KeyValuePair<string, System.Func<string, Object>> function in dataFunctions) {
+            funcs.Add(function.Key);
         }
+        return funcs;
+    }
+
+    /// <summary>
+    /// ACTION FUNCTIONS
+    /// </summary>
+    Dictionary<string, System.Action<string, Dictionary<string, Object>>> actionFunctions = new Dictionary<string, System.Action<string, Dictionary<string, Object>>>() {
+        { "INCREASE_ENERGY_CONSUMPTION", (args, context) =>
+            {
+                Block block = null;
+                try{
+                    block = (Block)context[GetArgument(args, "building")];
+                }
+                catch(System.Exception e) {
+                    Throw("Impossible cast in "+args+"\n"+e.ToString());
+                }
+                int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
+                int amount = System.Convert.ToInt32(GetArgument(args, "amount"));
+                string reason = GetArgument(args, "reason");
+
+                ConsequencesManager.GenerateConsumptionModifier(block, reason, amount, duration);
+            }
+        },
+        { "INCREASE_MOOD_FOR_POPULATION", (args, context) =>
+            {
+                Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
+                int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
+                int amount = System.Convert.ToInt32(GetArgument(args, "amount"));
+                string reason = GetArgument(args, "reason");
+
+                ConsequencesManager.GenerateMoodModifier(pop, reason, amount, duration);
+            }
+        },
+        { "INCREASE_FOOD_CONSUMPTION_FOR_POPULATION", (args, context) =>
+            {
+                Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
+                int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
+                float amount = System.Convert.ToSingle(GetArgument(args, "amount"));
+                string reason = GetArgument(args, "reason");
+
+                ConsequencesManager.GenerateFoodConsumptionModifier(pop, reason, amount, duration);
+            }
+        },
+        { "INCREASE_HOUSE_NOTATION", (args, context) =>
+            {
+                House house = null;
+                try{
+                    house = (House)context[GetArgument(args, "house")];
+                }
+                catch(System.Exception e) {
+                    Throw("Impossible cast in "+args+"\n"+e.ToString());
+                }
+                float amount = System.Convert.ToSingle(GetArgument(args, "amount"));
+                string reason = GetArgument(args, "reason");
+                int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
+
+                ConsequencesManager.ChangeHouseNotation(house, reason, amount, duration);
+            }
+        },
+        { "DECREASE_MOOD_FOR_POPULATION", (args, context) =>
+            {
+                Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
+                int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
+                int amount = System.Convert.ToInt32(GetArgument(args, "amount"));
+                string reason = GetArgument(args, "reason");
+
+                ConsequencesManager.GenerateMoodModifier(pop, reason, -amount, duration);
+            }
+        },
     };
 
 
