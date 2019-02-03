@@ -6,25 +6,25 @@ public class ConsequencesManager : MonoBehaviour {
 
     //DONE
     //Add a moodModifier to a type of population
-    public void GenerateMoodModifier(Population pop, string reason, float amount, int durationInCycle)
+    static public void GenerateMoodModifier(Population pop, string reason, float amount, int durationInCycle)
     {
         GameManager.instance.populationManager.GenerateMoodModifier(pop, reason, amount, durationInCycle);
     }
 
     //Change the consumption of a population type, affecting the houses they're in
-    public void GenerateFoodConsumptionModifier(Population pop, string reason, float amount, int durationInCycle)
+    static public void GenerateFoodConsumptionModifier(Population pop, string reason, float amount, int durationInCycle)
     {
         GameManager.instance.populationManager.GenerateFoodModifier(pop, reason, amount, durationInCycle);
     }
 
     //Changes the notation of a house (Raising the mood gained when a citizen chose this house)
-    public void ChangeHouseNotation(House house, string reason, float amount, int durationInCycle)
+    static public void ChangeHouseNotation(House house, string reason, float amount, int durationInCycle)
     {
         GameManager.instance.cityManager.GenerateNotationModifier(house, reason, amount, durationInCycle);
     }
 
     //Changes the energy consumption of a block
-    public void GenerateConsumptionModifier(Block block, string reason, int amount, int durationInCycle)
+    static public void GenerateConsumptionModifier(Block block, string reason, int amount, int durationInCycle)
     {
         GameManager.instance.cityManager.GenerateConsumptionModifier(block, reason, amount, durationInCycle);
     }
