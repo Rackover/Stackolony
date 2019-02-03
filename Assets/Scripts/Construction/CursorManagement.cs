@@ -27,6 +27,7 @@ public class CursorManagement : MonoBehaviour
     public Block selectedBlock; //Le block selectionné par le joueur
     public int projectorHeight = 10;
     public GameObject myProjector;
+    public Projector myProjectorComponent;
     [Space(5)]
     
     [Header("=== DEBUG ===")]
@@ -54,8 +55,9 @@ public class CursorManagement : MonoBehaviour
         myProjector = Instantiate(projectorPrefab);
         myProjector.name = "Projector";
         float cellMedianSize = (GameManager.instance.gridManagement.cellSize.x + GameManager.instance.gridManagement.cellSize.z) / 2;
-        myProjector.GetComponent<Projector>().orthographicSize = 2.5f * cellMedianSize; //On adapte la taille du projecteur (qui projette la grille au sol) à la taille des cellules
-        myProjector.GetComponent<Projector>().enabled = false;
+        myProjectorComponent = myProjector.GetComponent<Projector>();
+        myProjectorComponent.orthographicSize = 2.5f * cellMedianSize; //On adapte la taille du projecteur (qui projette la grille au sol) à la taille des cellules
+        myProjectorComponent.enabled = false;
 
         //Instantie la fleche qui indique la tour selectionnée par le joueur
         stackSelector = Instantiate(stackSelectorPrefab);
@@ -124,7 +126,7 @@ public class CursorManagement : MonoBehaviour
         }
         else // If the mouse is pointing at nothing
         {
-            myProjector.GetComponent<Projector>().enabled = false;
+            myProjectorComponent.enabled = false;
             stackSelector.SetActive(false);
         }
         transform.position = hit.point;
@@ -161,10 +163,10 @@ public class CursorManagement : MonoBehaviour
     {
         if (cursorOnUI)
         {
-            myProjector.GetComponent<Projector>().enabled = false;
+            myProjectorComponent.enabled = false;
         } else
         {
-            myProjector.GetComponent<Projector>().enabled = true;
+            myProjectorComponent.enabled = true;
         }
         //Met à jour la position du projecteur
         myProjector.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(posInGrid) + new Vector3(0, projectorHeight, 0);
