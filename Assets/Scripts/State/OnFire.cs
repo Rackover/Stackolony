@@ -4,6 +4,7 @@ public class OnFire : StateBehavior
 {
     [Header("On fire")]
     public bool beingExtinguished = false;
+    public int id;
 
     public override void Start()
     {
@@ -31,13 +32,8 @@ public class OnFire : StateBehavior
     {
         if(!beingExtinguished)
         {
-            Debug.Log("Starting Extinguishing");
             beingExtinguished = true;
-            if(block != null)
-            {
-                block.effects.Activate(GameManager.instance.library.extinguishParticle);
-
-            }
+            if(block != null) block.effects.Activate(GameManager.instance.library.extinguishParticle);
         }
     }
     
@@ -45,8 +41,7 @@ public class OnFire : StateBehavior
     {
         beingExtinguished = false;
 
-        if(block != null)
-            block.effects.Desactivate(GameManager.instance.library.extinguishParticle);
+        if(block != null) block.effects.Desactivate(GameManager.instance.library.extinguishParticle);
     }
 
     public override void OnNewMicrocycle()
@@ -65,8 +60,19 @@ public class OnFire : StateBehavior
 
     public void Spread()
     {
-        GameManager.instance.missionManager.StartMission(block.gridCoordinates, "Ignite", 1);
-        block.AddState(State.Damaged);
+        block = GetComponent<Block>();
+        FireManager.Spread(this);
+
+        if(block.states.ContainsKey(State.Damaged))
+        {
+            block.Destroy();
+        }
+        else
+        {
+            block.AddState(State.Damaged);
+        }
+         
+
         Remove();
     }
 

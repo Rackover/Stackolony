@@ -128,17 +128,6 @@ public class MissionCallbackManager : MonoBehaviour
         yield return null;
     }
 
-    IEnumerator Ignite() 
-    {
-        MissionManager.Mission myMission = mission;
-        for (int i = 1; i < myMission.blocksFound.Count; i++)
-        {
-            myMission.blocksFound[i].AddState(State.OnFire);
-        }
-        GameManager.instance.missionManager.EndMission(myMission);
-        yield return null;
-    }
-
     IEnumerator Extinguish() 
     {
         MissionManager.Mission myMission = mission;
@@ -147,10 +136,53 @@ public class MissionCallbackManager : MonoBehaviour
             if(myMission.blocksFound[i].states.ContainsKey(State.OnFire))
             {
                 OnFire state = myMission.blocksFound[i].states[State.OnFire] as OnFire;
-                state.StartExtinguish();
-                Debug.Log(myMission.blocksFound[i].name);
-                break;
-                yield return null;
+
+                if(!state.beingExtinguished)
+                {
+                    state.StartExtinguish();
+                    break;
+                    yield return null;
+                }
+            }
+        }
+        GameManager.instance.missionManager.EndMission(myMission);
+        yield return null;
+    }
+
+    IEnumerator Repress() 
+    {
+        MissionManager.Mission myMission = mission;
+        for (int i = 1; i < myMission.blocksFound.Count; i++)
+        {
+            if(myMission.blocksFound[i].states.ContainsKey(State.OnRiot))
+            {
+                OnRiot state = myMission.blocksFound[i].states[State.OnRiot] as OnRiot;
+                if(!state.beingRepressed)
+                {
+                    state.StartRepress();
+                    break;
+                    yield return null;
+                }
+            }
+        }
+        GameManager.instance.missionManager.EndMission(myMission);
+        yield return null;
+    }
+
+    IEnumerator Repair() 
+    {
+        MissionManager.Mission myMission = mission;
+        for (int i = 1; i < myMission.blocksFound.Count; i++)
+        {
+            if(myMission.blocksFound[i].states.ContainsKey(State.Damaged))
+            {
+                Damaged state = myMission.blocksFound[i].states[State.Damaged] as Damaged;
+                if(!state.beingRepaired)
+                {
+                    state.StartRepair();
+                    break;
+                    yield return null;
+                }
             }
         }
         GameManager.instance.missionManager.EndMission(myMission);

@@ -237,7 +237,7 @@ public class GameManager : MonoBehaviour
                     if(Input.GetKey(KeyCode.F))
                     {
                         if (!block.states.ContainsKey(State.OnFire))
-                            block.AddState(State.OnFire);
+                            FireManager.Ignite(block);
                         else
                             block.RemoveState(State.OnFire);     
                     }

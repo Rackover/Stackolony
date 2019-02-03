@@ -80,6 +80,11 @@ public class Flag : MonoBehaviour {
         
     }
 
+    virtual public void OnBlockDestroy()
+    {
+        
+    }
+
     virtual public void Update()
     {
         if(!isEnabled) return;

@@ -11,10 +11,9 @@ public class FiremanStation : Flag, Flag.IFlag
 	public override void Enable()
 	{
 		base.Enable();
-		Debug.Log("Enable FireStation");
 		if(isEnabled) GameManager.instance.missionManager.StartMission(block.gridCoordinates, "Extinguish", range);
 	}
-
+	
 	public override void OnGridUpdate()
 	{
 		base.OnGridUpdate();

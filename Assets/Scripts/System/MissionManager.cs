@@ -223,7 +223,7 @@ public class MissionManager : MonoBehaviour {
     }
 
     //Renvoit une liste des blockLink adjacents à une position
-    List<Block> CheckAdjacentBlocks(Vector3Int position, Mission myMission)
+    public List<Block> CheckAdjacentBlocks(Vector3Int position, Mission myMission)
     {
         List<Block> blocksFound = new List<Block>();
 
