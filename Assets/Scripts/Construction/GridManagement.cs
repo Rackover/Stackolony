@@ -251,7 +251,6 @@ public class GridManagement : MonoBehaviour
     public GameObject SpawnBlock(int blockId, Vector3Int coordinates)
     {
         GameObject newBlock = CreateBlockFromId(blockId);
-        Debug.Log(coordinates);
         MoveBlock(newBlock, coordinates);
         Logger.Debug("Spawned block : " + newBlock.GetComponent<Block>().scheme.name + " with prefab " + GameManager.instance.library.blockPrefab.name + " at position "+ coordinates.ToString());
         return newBlock;

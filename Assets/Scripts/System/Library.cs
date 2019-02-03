@@ -53,7 +53,7 @@ public class Library : MonoBehaviour
         List<BlockScheme> candidates = new List<BlockScheme>();
         foreach (BlockScheme b in blocks)
         {
-            if (b.isBuyable == true)
+            if (b.isBuyable == true && !GameManager.instance.cityManager.IsLocked(b.ID))
             {
                 candidates.Add(b);
             }
