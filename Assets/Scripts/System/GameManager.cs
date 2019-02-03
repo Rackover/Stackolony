@@ -277,8 +277,14 @@ public class GameManager : MonoBehaviour
         }
         
         // Goes forward in time by 1 cycle
-        if (Input.GetKeyDown(KeyCode.C)) {
+        if (Input.GetKeyDown(KeyCode.C)) 
+        {
             temporality.AddCycle();
+        }
+        
+        if (Input.GetKeyDown(KeyCode.B)) 
+        {
+            temporality.AddMicroCycle();
         }
     }
 
