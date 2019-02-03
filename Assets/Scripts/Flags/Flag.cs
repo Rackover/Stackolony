@@ -11,6 +11,7 @@ public class Flag : MonoBehaviour {
 
     public interface IFlag {
         System.Type GetFlagType();
+        string GetFlagDatas();
     }
 
     //Fonction appelée lors de la création du script

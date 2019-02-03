@@ -41,4 +41,9 @@ public class Spatioport : Flag, Flag.IFlag {
     {
         return GetType();
     }
+
+    public string GetFlagDatas()
+    {
+        return "Spatioport";
+    }
 }

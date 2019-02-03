@@ -91,12 +91,25 @@ public class ConsequencesManager : MonoBehaviour {
         yield return null;
     }
 
+    public void DestroyBlock(Block block)
+    {
+        GameManager.instance.gridManagement.DestroyBlock(block.gridCoordinates);
+    }
 
-    //TO DO
-    //Generates a new flag, taking the informations like in flag declaration (Ex : Generator_1_3), changes flag values if flag is already here
+    //Generates a new flag, taking the informations like in flag declaration (Ex : Generator_1_3), overrides flag values if flag is already here
     public void GenerateNewFlag(Block block, string flagInformations)
     {
-       // GameManager.instance.flagReader.ReadFlag(block, flagInformations);
+        string[] flagElements = flagInformations.Split(new char[] { '_' }, System.StringSplitOptions.RemoveEmptyEntries);
+        DestroyFlag(block, flagElements[0].GetType());
+        GameManager.instance.flagReader.ReadFlag(block, flagInformations);
+    }
+
+
+    //TO DO
+
+    public void GenerateConsumptionModifier(Block block, ModifierReason reason, float amount, int durationInCycle)
+    {
+
     }
 
     //Modify the flag with the new settings, only if flag already exists

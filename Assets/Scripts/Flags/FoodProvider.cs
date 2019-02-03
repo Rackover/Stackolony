@@ -44,4 +44,9 @@ public class FoodProvider: Flag, Flag.IFlag
     {
         return GetType();
     }
+
+    public string GetFlagDatas()
+    {
+        return "FoodProvider_" + range + "_" + foodTotal;
+    }
 }

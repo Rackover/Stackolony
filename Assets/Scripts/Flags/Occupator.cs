@@ -45,4 +45,17 @@ public class Occupator : Flag, Flag.IFlag
     {
         return GetType();
     }
+
+
+    public string GetFlagDatas()
+    {
+        string profiles = "";
+        for (int i = 0; i < acceptedPopulation.Length; i++)
+        {
+            if (i != 0)
+                profiles += "-";
+            profiles += acceptedPopulation[i].codeName;
+        }
+        return "Occupator_" + slots + "_" + range + "_" + profiles;
+    }
 }

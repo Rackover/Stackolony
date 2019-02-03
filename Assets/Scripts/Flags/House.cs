@@ -126,4 +126,16 @@ public class House : Flag, Flag.IFlag
     {
         return GetType();
     }
+
+    public string GetFlagDatas()
+    {
+        string profiles = "";
+        for (int i = 0; i < acceptedPop.Length; i++)
+        {
+            if (i != 0)
+                profiles += "-";
+            profiles += acceptedPop[i].codeName;
+        }
+        return "House_" + slotAmount + "_" + standingLevel + "_" + profiles;
+    }
 }
