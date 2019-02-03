@@ -561,9 +561,9 @@ public class CursorManagement : MonoBehaviour
 
     public void EndDrag(Vector3Int _pos)
     {
-        if(selectedBlock != null && isDragging)
+        if (selectedBlock != null && isDragging)
         {
-            if (_pos.y <= GameManager.instance.gridManagement.minHeight)
+            if (_pos.y < GameManager.instance.gridManagement.minHeight)
             {
                 CancelDrag();
                 return;
@@ -599,7 +599,7 @@ public class CursorManagement : MonoBehaviour
             }
         }
         if(selectedBlock != null)
-        {         
+        {        
             selectedBlock.CallFlags("OnBlockUpdate");
             selectedBlock.boxCollider.enabled = true;
             selectedBlock = null; 
@@ -611,6 +611,13 @@ public class CursorManagement : MonoBehaviour
     {
         if(selectedBlock != null && isDragging)
         {
+            if (selectedBlock.GetComponent<Block>() != null)
+            {
+                selectedBlock.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(selectedBlock.gridCoordinates);
+            } else
+            {
+                Destroy(selectedBlock);
+            }
             selectedBlock.boxCollider.enabled = true;
             selectedBlock = null;
             isDragging = false;
