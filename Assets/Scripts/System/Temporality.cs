@@ -16,7 +16,6 @@ public class Temporality : MonoBehaviour {
 
     float cycleProgression; //Combien de secondes se sont ecoulées dans le cycle actuel
     int savedTimeScale; //Variable utilisée pour redéfinir la vitesse du jeu quand le joueur annule la pause
-    Image savedButton; //Bouton à réactiver quand le joueur annule la pause
     int lastYear = 1;
 
     void Start()
@@ -43,16 +42,6 @@ public class Temporality : MonoBehaviour {
         {
             savedTimeScale = timeScale;
             timeScale = 0;
-
-            Color32 colorOfEnabledButton = new Color32(255, 255, 255, 255);
-            foreach (GameObject child in transform)
-            {
-                Color32 colorToCompare = child.GetComponent<Image>().color;
-                if (colorOfEnabledButton.Equals(colorToCompare))
-                {
-                    savedButton = child.GetComponent<Image>();
-                }
-            }
         }
     }
     

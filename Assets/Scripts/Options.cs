@@ -7,8 +7,8 @@ using System.IO;
 
 public class Options
 {
-    
-    Dictionary<string, IOption> options = new Dictionary<string, IOption>();
+    public enum Option { borderSensitivity, rotationSensitivity, grabSensitivity, musicVolume, sfxVolume, voiceVolume, lang, enableDrifting, animatedCitizens };    
+    Dictionary<Option, IOption> options = new Dictionary<Option, IOption>();
 
     public interface IOption
     {
@@ -98,7 +98,8 @@ public class Options
     {
         public int defaultIndex { get; }
         public int index;
-        public T[] possibleValues { get; }
+        public T[] possibleValues { get; private set; }
+        public Action onValidate;
 
         public SelectOption(T[] _possibleValues, int _defaultIndex=0)
         {
@@ -122,6 +123,10 @@ public class Options
             }
         }
 
+        public void SetRange(T[] range)
+        {
+            possibleValues = range;
+        }
         public void Reset()
         {
             index = defaultIndex;
@@ -130,6 +135,7 @@ public class Options
         public void SetFromString(string str)
         {
             Set(Convert.ToInt32(str));
+            onValidate.Invoke();
         }
 
         public override string ToString()
@@ -150,45 +156,51 @@ public class Options
 
     public Options()
     {
-        options["borderSensivity"] = new SliderOption(6f, 15f, 50f);
-        options["rotationSensitivity"] = new SliderOption(0.2f, 1f, 3f);
-        options["grabSensitivity"] = new SliderOption(0.1f, 0.8f, 2f);
-        options["musicVolume"] = new SliderOption(0f, 1f, 1f);
-        options["sfxVolume"] = new SliderOption(0f, 0.2f, 1f);
-        options["voiceVolume"] = new SliderOption(0f, 0.2f, 1f);
+        options[Option.borderSensitivity] = new SliderOption(6f, 15f, 50f);
+        options[Option.rotationSensitivity] = new SliderOption(0.2f, 1f, 3f);
+        options[Option.grabSensitivity] = new SliderOption(0.1f, 0.8f, 2f);
+        options[Option.musicVolume] = new SliderOption(0f, 1f, 1f);
+        options[Option.sfxVolume] = new SliderOption(0f, 0.2f, 1f);
+        options[Option.voiceVolume] = new SliderOption(0f, 0.2f, 1f);
 
-        // TODO - Scan loc folders automatically
-        options["lang"] = new SelectOption<string>(new string[] { "english", "french" });
+        // Localization is a bit tricky to load
+        SelectOption<Localization.Lang> langOption = new SelectOption<Localization.Lang>(GameManager.instance.localization.GetLanguages().ToArray());
+        options[Option.lang] = langOption;
+        langOption.onValidate += delegate {
+            if (langOption.possibleValues.Length > 0) {
+                GameManager.instance.localization.LoadLocalization(langOption.possibleValues[langOption.index]);
+            }
+        };
 
-        options["enableDrifting"] = new CheckboxOption(true);
-        options["animatedCitizens"] = new CheckboxOption(true);
+        options[Option.enableDrifting] = new CheckboxOption(true);
+        options[Option.animatedCitizens] = new CheckboxOption(true);
     }
 
     public override string ToString()
     {
         string data = "";
-        foreach (KeyValuePair<string, IOption> option in options) {
-            data += option.Key + "=" + option.Value.ToString() + "\n";
+        foreach (KeyValuePair<Option, IOption> option in options) {
+            data += option.Key.ToString() + "=" + option.Value.ToString() + "\n";
         }
         return data;
     }
 
-    public Dictionary<string, IOption> Get()
+    public Dictionary<Option, IOption> Get()
     {
         return options;
     }
 
-    public IOption Get(string key)
+    public IOption Get(Option key)
     {
         return options[key];
     }
 
-    public float GetFloat(string key)
+    public float GetFloat(Option key)
     {
         return ((SliderOption)options[key]).value;
     }
 
-    public bool GetBool(string key)
+    public bool GetBool(Option key)
     {
         return ((CheckboxOption)options[key]).value;
     }
@@ -202,7 +214,7 @@ public class Options
                 continue;
             }
             try {
-                options[option[0]].SetFromString(option[1]);
+                options[(Option)Enum.Parse(typeof(Option), option[0])].SetFromString(option[1]);
             }
             catch(KeyNotFoundException e) {
                 // garbage option, skipping
