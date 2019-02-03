@@ -6,27 +6,27 @@ public class ConsequencesManager : MonoBehaviour {
 
     //DONE
     //Add a moodModifier to a type of population
-    static public void GenerateMoodModifier(Population pop, string reason, float amount, int durationInCycle)
+    static public void GenerateMoodModifier(Population pop, float amount, int durationInCycle)
     {
-        GameManager.instance.populationManager.GenerateMoodModifier(pop, reason, amount, durationInCycle);
+        GameManager.instance.populationManager.GenerateMoodModifier(pop, amount, durationInCycle);
     }
 
     //Change the consumption of a population type, affecting the houses they're in
-    static public void GenerateFoodConsumptionModifier(Population pop, string reason, float amount, int durationInCycle)
+    static public void GenerateFoodConsumptionModifier(Population pop, float amount, int durationInCycle)
     {
-        GameManager.instance.populationManager.GenerateFoodModifier(pop, reason, amount, durationInCycle);
+        GameManager.instance.populationManager.GenerateFoodModifier(pop, amount, durationInCycle);
     }
 
     //Changes the notation of a house (Raising the mood gained when a citizen chose this house)
-    static public void ChangeHouseNotation(House house, string reason, float amount, int durationInCycle)
+    static public void ChangeHouseNotation(House house, float amount, int durationInCycle)
     {
-        GameManager.instance.cityManager.GenerateNotationModifier(house, reason, amount, durationInCycle);
+        GameManager.instance.cityManager.GenerateNotationModifier(house, amount, durationInCycle);
     }
 
     //Changes the energy consumption of a block
-    static public void GenerateConsumptionModifier(Block block, string reason, int amount, int durationInCycle)
+    static public void GenerateConsumptionModifier(Block block, int amount, int durationInCycle)
     {
-        GameManager.instance.cityManager.GenerateConsumptionModifier(block, reason, amount, durationInCycle);
+        GameManager.instance.cityManager.GenerateConsumptionModifier(block, amount, durationInCycle);
     }
 
     //Destroys the specified flag
@@ -111,15 +111,15 @@ public class ConsequencesManager : MonoBehaviour {
     }
 
     //Modify the flag with the new settings, only if flag already exists
-    static public void ModifyFlag(Block block, string reason, string flagInformations, int durationInCycle)
+    static public void ModifyFlag(Block block, string flagInformations, int durationInCycle)
     {
-        GameManager.instance.cityManager.GenerateFlagModifier(block, reason, flagInformations, durationInCycle);
+        GameManager.instance.cityManager.GenerateFlagModifier(block, flagInformations, durationInCycle);
     }
 
     //Generates a flag that'll be removed after X time, only if the flag isn't already there
     static public void GenerateTempFlag(Block block, string reason, string flagInformations, int durationInCycle)
     {
-        GameManager.instance.cityManager.GenerateTempFlag(block, reason, flagInformations, durationInCycle);
+        GameManager.instance.cityManager.GenerateTempFlag(block, flagInformations, durationInCycle);
     }
 
     static public Block GetRandomBuildingOfId(int id)
