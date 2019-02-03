@@ -211,6 +211,21 @@ public class EventInterpreter {
                 ConsequencesManager.GenerateMoodModifier(pop, reason, -amount, duration);
             }
         },
+        { "ADD_FLAG_MODIFIER", (args, context) =>
+            {
+                Block block = null;
+                try{
+                    block = (Block)context[GetArgument(args, "building")];
+                }
+                catch(System.Exception e) {
+                    Throw("Impossible cast in "+args+"\n"+e.ToString());
+                }
+                int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
+                string flagModifier = GetArgument(args, "flagModifier");
+                    
+                ConsequencesManager.ModifyFlag(block, flagModifier, duration);
+            }
+        },
     };
 
 
