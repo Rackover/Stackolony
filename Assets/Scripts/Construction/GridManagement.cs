@@ -176,6 +176,24 @@ public class GridManagement : MonoBehaviour
         return output;
     }
 
+    public Vector3Int GetRandomCoordinates()
+    {
+        Vector3Int coordinates = new Vector3Int(UnityEngine.Random.Range(0, gridSize.x), gridSize.y, UnityEngine.Random.Range(0, gridSize.z));
+
+        //Position en Y des coordonnées au sol données
+        float worldY =
+            myTerrain.SampleHeight(
+                IndexToWorldPosition(
+                    new Vector3Int(coordinates.x, 0, coordinates.z)
+                )
+            );
+        // Index de Y
+        int y = WorldPositionToIndex(new Vector3(coordinates.x, worldY + cellSize.y / 2, coordinates.y)).y;
+
+        coordinates.y = y;
+        return coordinates;
+    }
+
     //Update a block so he touch the ground or the first block encountered (Like if gravity was applied to it)
     public void LayBlock(Block block, Vector2Int coordinates)
     {
@@ -226,13 +244,14 @@ public class GridManagement : MonoBehaviour
     /// <param name="coordinates"></param>
     public void LayBlock(int blockId, Vector2Int coordinates)
     {
-        GameObject newBlock = SpawnBlock(blockId, new Vector3Int(coordinates.x,0,coordinates.y));
+        GameObject newBlock = SpawnBlock(blockId, new Vector3Int(coordinates.x,gridSize.y-1,coordinates.y));
         LayBlock(newBlock.GetComponent<Block>(), coordinates);
     }
 
     public GameObject SpawnBlock(int blockId, Vector3Int coordinates)
     {
         GameObject newBlock = CreateBlockFromId(blockId);
+        Debug.Log(coordinates);
         MoveBlock(newBlock, coordinates);
         Logger.Debug("Spawned block : " + newBlock.GetComponent<Block>().scheme.name + " with prefab " + GameManager.instance.library.blockPrefab.name + " at position "+ coordinates.ToString());
         return newBlock;

@@ -98,7 +98,7 @@ public class MissionCallbackManager : MonoBehaviour
         {
             blocklink.isConsideredDisabled = false;
             blocklink.isLinkedToSpatioport = true;
-            blocklink.Enable();
+            blocklink.UnPack();
             yield return new WaitForEndOfFrame();
         }
         GameManager.instance.missionManager.EndMission(myMission);

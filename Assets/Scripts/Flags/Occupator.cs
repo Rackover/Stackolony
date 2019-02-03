@@ -12,13 +12,25 @@ public class Occupator : Flag, Flag.IFlag
     public override void Awake()
     {
         base.Awake();
-        GameManager.instance.systemManager.AllOccupators.Add(this);
     }
 
     public override void OnDestroy()
     {
         GameManager.instance.systemManager.AllOccupators.Remove(this);
         base.OnDestroy();
+    }
+
+    public override void Enable()
+    {
+        base.Enable();
+        GameManager.instance.systemManager.AllOccupators.Add(this);
+    }
+
+    public override void Disable()
+    {
+        base.Disable();
+        GameManager.instance.systemManager.AllOccupators.Remove(this);
+        StartCoroutine(GameManager.instance.systemManager.RecalculateOccupators());
     }
 
     public void GenerateOccupations()

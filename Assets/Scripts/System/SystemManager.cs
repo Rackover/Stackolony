@@ -142,7 +142,7 @@ public class SystemManager : MonoBehaviour {
         {
             if (block.isConsideredDisabled && block.GetComponent<Spatioport>() == null)
             {
-                block.Disable();
+                block.Pack();
             }
         }
     }

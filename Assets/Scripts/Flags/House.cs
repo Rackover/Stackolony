@@ -78,7 +78,6 @@ public class House : Flag, Flag.IFlag
     public override void Awake()
     {
         base.Awake();
-        GameManager.instance.systemManager.AllHouses.Add(this);
         
         light = block.effects.gameObject.AddComponent<Light>();
         light.range = 1f;
@@ -89,6 +88,18 @@ public class House : Flag, Flag.IFlag
     {
         GameManager.instance.systemManager.AllHouses.Remove(this);
         base.OnDestroy();
+    }
+
+    public override void Enable()
+    {
+        base.Enable();
+        GameManager.instance.systemManager.AllHouses.Add(this);
+    }
+
+    public override void Disable()
+    {
+        base.Disable();
+        GameManager.instance.systemManager.AllHouses.Remove(this);
     }
 
     void CitizenInFX()
