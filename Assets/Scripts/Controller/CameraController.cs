@@ -76,9 +76,9 @@ public class CameraController : MonoBehaviour {
         }
 
         // Fetch settings from the options
-        borderSensibility = GameManager.instance.player.options.GetFloat("borderSensivity");
-        rotationSensibility = GameManager.instance.player.options.GetFloat("rotationSensitivity");
-        grabSensitivity = GameManager.instance.player.options.GetFloat("grabSensitivity");
+        borderSensibility = GameManager.instance.player.options.GetFloat(Options.Option.borderSensitivity);
+        rotationSensibility = GameManager.instance.player.options.GetFloat(Options.Option.rotationSensitivity);
+        grabSensitivity = GameManager.instance.player.options.GetFloat(Options.Option.grabSensitivity);
 
         UpdateCameraCenterHeight();
 
@@ -94,7 +94,7 @@ public class CameraController : MonoBehaviour {
                 Rotation();
             }
             
-            if (GameManager.instance.player.options.GetBool("enableDrifting")) {
+            if (GameManager.instance.player.options.GetBool(Options.Option.enableDrifting)) {
                 Drift();
             }
             Zoom();

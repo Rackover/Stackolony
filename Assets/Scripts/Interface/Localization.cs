@@ -29,7 +29,7 @@ public class Localization : MonoBehaviour {
 
         public override string ToString()
         {
-            return name + "=>" + locFilePath;
+            return name;
         }
     }
     
@@ -56,7 +56,7 @@ public class Localization : MonoBehaviour {
         }
     }
 
-    private void Awake()
+    private void Start()
     {
         LoadLocalizationFiles(Paths.GetLocFolder());
 
@@ -64,10 +64,8 @@ public class Localization : MonoBehaviour {
         interpretations["$PLAYERNAME"] = delegate { return GameManager.instance.player.playerName; };
         interpretations["$CITYNAME"] = delegate { return GameManager.instance.cityManager.cityName; };
         interpretations["$CURRENT_CYCLE"] = delegate { return GameManager.instance.temporality.cycleNumber.ToString(); };
-    }
 
-    private void Start()
-    {
+        // Init
         LoadLocalization(0);
         Logger.Info("Loaded localization file succesfully");
     }
@@ -83,7 +81,6 @@ public class Localization : MonoBehaviour {
 
     public void LoadLocalization(int index)
     {
-        XmlDocument locFile = new XmlDocument();
         Lang lang;
         try {
             lang = languages[index];
@@ -93,6 +90,14 @@ public class Localization : MonoBehaviour {
             return;
         }
 
+        LoadLocalization(lang);
+    }
+
+    public void LoadLocalization(Lang lang)
+    {
+
+        XmlDocument locFile = new XmlDocument();
+
         string path = lang.locFilePath;
         try {
             locFile.Load(path);
@@ -101,6 +106,8 @@ public class Localization : MonoBehaviour {
             Logger.Throw("Could not access localization file at path "+ path+". Error : "+e.ToString());
             return;
         }
+
+        locs = new Dictionary<KeyValuePair<string, string>, string>();
 
         XmlNodeList nodeList = locFile.SelectNodes("lines")[0].ChildNodes;
         foreach (XmlNode node in nodeList) {
@@ -158,12 +165,17 @@ public class Localization : MonoBehaviour {
         return line;
     }
 
-    public List<string> GetLanguages()
+    public List<string> GetLanguageNames()
     {
         List<string> langs = new List<string>();
         foreach(Lang lang in languages) {
             langs.Add(lang.name);
         }
         return langs;
+    }
+
+    public List<Lang> GetLanguages()
+    {
+        return languages;
     }
 }

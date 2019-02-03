@@ -6,10 +6,11 @@ using UnityEngine;
 public class Player : MonoBehaviour {
 
     public string playerName = "Player";
-    public Options options = new Options();
+    public Options options;
 
-    private void Awake()
+    private void Start()
     {
+        options = new Options();
         options.LoadFromDisk(Paths.GetOptionsFile());
     }
 }

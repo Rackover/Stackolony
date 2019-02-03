@@ -91,7 +91,7 @@ public class MoodDisplay : MonoBehaviour {
 
         Action<Bystander.Mood> changeMood;
 
-        if (playerOptions.GetBool("animatedCitizens")) {
+        if (playerOptions.GetBool(Options.Option.animatedCitizens)) {
             if (preview == null) {
                 preview = GameManager.instance.displayerManager.SetRotationFeed(population.prefab, face, angle, rotationSpeed, cameraDistance, FOV, 128);
             }
