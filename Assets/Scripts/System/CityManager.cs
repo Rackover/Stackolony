@@ -19,14 +19,14 @@ public class ConsumptionModifier
 
 public class FlagModifier
 {
-    public ModifierReason reason;
+    public string reason;
     public string flagInformations;
     public int cyclesRemaining;
 }
 
 public class TempFlag
 {
-    public ModifierReason reason;
+    public string reason;
     public string flagInformations;
     public int cyclesRemaining;
     public System.Type flagType;
@@ -112,7 +112,7 @@ public class CityManager : MonoBehaviour {
         block.consumptionModifiers.Add(newConsumptionModifier);
     }
 
-    public void GenerateFlagModifier(Block block, ModifierReason reason, string flagInformations, int cyclesRemaining)
+    public void GenerateFlagModifier(Block block, string reason, string flagInformations, int cyclesRemaining)
     {
         string[] flagElements = flagInformations.Split(new char[] { '_' }, System.StringSplitOptions.RemoveEmptyEntries);
         bool flagFound = false;
@@ -135,7 +135,7 @@ public class CityManager : MonoBehaviour {
         block.flagModifiers.Add(newFlagModifier);
     }
 
-    public void GenerateTempFlag(Block block, ModifierReason reason, string flagInformations, int cyclesRemaining)
+    public void GenerateTempFlag(Block block, string reason, string flagInformations, int cyclesRemaining)
     {
         string[] flagElements = flagInformations.Split(new char[] { '_' }, System.StringSplitOptions.RemoveEmptyEntries);
         foreach (Flag.IFlag flags in block.activeFlags)
