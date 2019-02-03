@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 83595989}
-  m_IndirectSpecularColor: {r: 0.047210716, g: 0.018066445, b: 0.5581066, a: 1}
+  m_IndirectSpecularColor: {r: 0.97216564, g: 0.43676597, b: 0.23095676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -605,7 +605,7 @@ Prefab:
     - target: {fileID: 224470981121806966, guid: f9a0d7668fd606d469ae9be6dc086c74,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000011462997
+      value: -0.000021758198
       objectReference: {fileID: 0}
     - target: {fileID: 224527383778805756, guid: f9a0d7668fd606d469ae9be6dc086c74,
         type: 2}
@@ -795,7 +795,7 @@ Prefab:
     - target: {fileID: 224924732830900772, guid: f9a0d7668fd606d469ae9be6dc086c74,
         type: 2}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 224318747427045612, guid: f9a0d7668fd606d469ae9be6dc086c74,
         type: 2}
@@ -1281,11 +1281,6 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 114150780711503702, guid: b068d1418428ab046b3ae64fdf0d3621,
-        type: 2}
-      propertyPath: gameComponents.Array.size
-      value: 22
-      objectReference: {fileID: 0}
     - target: {fileID: 4751704881100830, guid: b068d1418428ab046b3ae64fdf0d3621, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1317,136 +1312,6 @@ Prefab:
     - target: {fileID: 4751704881100830, guid: b068d1418428ab046b3ae64fdf0d3621, type: 2}
       propertyPath: m_RootOrder
       value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 114150780711503702, guid: b068d1418428ab046b3ae64fdf0d3621,
-        type: 2}
-      propertyPath: gameComponents.Array.data[0]
-      value: 
-      objectReference: {fileID: 1558928470849890, guid: ea01be967b53135488a2ea289dc47db1,
-        type: 2}
-    - target: {fileID: 114150780711503702, guid: b068d1418428ab046b3ae64fdf0d3621,
-        type: 2}
-      propertyPath: gameComponents.Array.data[1]
-      value: 
-      objectReference: {fileID: 1564147138939126, guid: 635005d88494f944193ebb9e38d135b1,
-        type: 2}
-    - target: {fileID: 114150780711503702, guid: b068d1418428ab046b3ae64fdf0d3621,
-        type: 2}
-      propertyPath: gameComponents.Array.data[2]
-      value: 
-      objectReference: {fileID: 1496594729153212, guid: 5df31e32faa89844591fb1a697698087,
-        type: 2}
-    - target: {fileID: 114150780711503702, guid: b068d1418428ab046b3ae64fdf0d3621,
-        type: 2}
-      propertyPath: gameComponents.Array.data[3]
-      value: 
-      objectReference: {fileID: 1997355252095966, guid: 3552f6ff34a8801428e35728d2e5a24a,
-        type: 2}
-    - target: {fileID: 114150780711503702, guid: b068d1418428ab046b3ae64fdf0d3621,
-        type: 2}
-      propertyPath: gameComponents.Array.data[4]
-      value: 
-      objectReference: {fileID: 1717500509867252, guid: 9ca213db5f9d250428c89ba04c8b8c15,
-        type: 2}
-    - target: {fileID: 114150780711503702, guid: b068d1418428ab046b3ae64fdf0d3621,
-        type: 2}
-      propertyPath: gameComponents.Array.data[5]
-      value: 
-      objectReference: {fileID: 1737872851293028, guid: 01ce856e30e1899479d269914712f96e,
-        type: 2}
-    - target: {fileID: 114150780711503702, guid: b068d1418428ab046b3ae64fdf0d3621,
-        type: 2}
-      propertyPath: gameComponents.Array.data[6]
-      value: 
-      objectReference: {fileID: 1811491897340878, guid: 09299c70ea1c2be44b6e506b5ecba486,
-        type: 2}
-    - target: {fileID: 114150780711503702, guid: b068d1418428ab046b3ae64fdf0d3621,
-        type: 2}
-      propertyPath: gameComponents.Array.data[7]
-      value: 
-      objectReference: {fileID: 1989193328768768, guid: f676b5507822dac4bb1f264677f6767b,
-        type: 2}
-    - target: {fileID: 114150780711503702, guid: b068d1418428ab046b3ae64fdf0d3621,
-        type: 2}
-      propertyPath: gameComponents.Array.data[8]
-      value: 
-      objectReference: {fileID: 1727890883093070, guid: 81bd17d6446c5d34a99349dc1423a9e2,
-        type: 2}
-    - target: {fileID: 114150780711503702, guid: b068d1418428ab046b3ae64fdf0d3621,
-        type: 2}
-      propertyPath: gameComponents.Array.data[9]
-      value: 
-      objectReference: {fileID: 1766971074038560, guid: ab9569e526a10cb48b4800816becfd42,
-        type: 2}
-    - target: {fileID: 114150780711503702, guid: b068d1418428ab046b3ae64fdf0d3621,
-        type: 2}
-      propertyPath: gameComponents.Array.data[10]
-      value: 
-      objectReference: {fileID: 1015600714736674, guid: 2f1a05cae39c4d44b990bdcfdc2141c4,
-        type: 2}
-    - target: {fileID: 114150780711503702, guid: b068d1418428ab046b3ae64fdf0d3621,
-        type: 2}
-      propertyPath: gameComponents.Array.data[11]
-      value: 
-      objectReference: {fileID: 1999897728682882, guid: 4eff8dfdd0070a94282c948e900734f3,
-        type: 2}
-    - target: {fileID: 114150780711503702, guid: b068d1418428ab046b3ae64fdf0d3621,
-        type: 2}
-      propertyPath: gameComponents.Array.data[12]
-      value: 
-      objectReference: {fileID: 1225672482424560, guid: af500e13b234dea4cba8f5c22c3629f3,
-        type: 2}
-    - target: {fileID: 114150780711503702, guid: b068d1418428ab046b3ae64fdf0d3621,
-        type: 2}
-      propertyPath: gameComponents.Array.data[13]
-      value: 
-      objectReference: {fileID: 1737872851293028, guid: 01ce856e30e1899479d269914712f96e,
-        type: 2}
-    - target: {fileID: 114150780711503702, guid: b068d1418428ab046b3ae64fdf0d3621,
-        type: 2}
-      propertyPath: gameComponents.Array.data[14]
-      value: 
-      objectReference: {fileID: 1746997870437356, guid: 2ded786aa433acb438735c629021c99e,
-        type: 2}
-    - target: {fileID: 114150780711503702, guid: b068d1418428ab046b3ae64fdf0d3621,
-        type: 2}
-      propertyPath: gameComponents.Array.data[15]
-      value: 
-      objectReference: {fileID: 1612651385213828, guid: 6378d3c420268504d932f33b3336f2d2,
-        type: 2}
-    - target: {fileID: 114150780711503702, guid: b068d1418428ab046b3ae64fdf0d3621,
-        type: 2}
-      propertyPath: gameComponents.Array.data[16]
-      value: 
-      objectReference: {fileID: 1447809380583140, guid: be542c580d5f6194fa096321a2d5c5c6,
-        type: 2}
-    - target: {fileID: 114150780711503702, guid: b068d1418428ab046b3ae64fdf0d3621,
-        type: 2}
-      propertyPath: gameComponents.Array.data[17]
-      value: 
-      objectReference: {fileID: 1429112507841266, guid: 09d3442b6143c7b4e9af0e0de5cabdf4,
-        type: 2}
-    - target: {fileID: 114150780711503702, guid: b068d1418428ab046b3ae64fdf0d3621,
-        type: 2}
-      propertyPath: gameComponents.Array.data[18]
-      value: 
-      objectReference: {fileID: 1526610025343746, guid: e54657bad46a2864cb75cdf38627d948,
-        type: 2}
-    - target: {fileID: 114150780711503702, guid: b068d1418428ab046b3ae64fdf0d3621,
-        type: 2}
-      propertyPath: gameComponents.Array.data[19]
-      value: 
-      objectReference: {fileID: 1142791590976370, guid: d1d3b5632f42092418f02c7055bb5e3d,
-        type: 2}
-    - target: {fileID: 114150780711503702, guid: b068d1418428ab046b3ae64fdf0d3621,
-        type: 2}
-      propertyPath: gameComponents.Array.data[20]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114150780711503702, guid: b068d1418428ab046b3ae64fdf0d3621,
-        type: 2}
-      propertyPath: gameComponents.Array.data[21]
-      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b068d1418428ab046b3ae64fdf0d3621, type: 2}
