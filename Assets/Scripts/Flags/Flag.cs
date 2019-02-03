@@ -49,6 +49,13 @@ public class Flag : MonoBehaviour {
     //Fonction appelée à chaque début de cycle
     virtual public void OnNewCycle()
     {
+        if(!isEnabled) return;
+    }
+
+    //Fonction appelée à chaque début de cycle
+    virtual public void OnNewMicrocycle()
+    {
+        if(!isEnabled) return;
     }
 
     //Fonction appelée quand la nuit commence
@@ -66,7 +73,7 @@ public class Flag : MonoBehaviour {
     {
     }
 
-    virtual public void UpdateFlag()
+    virtual public void Update()
     {
         if(!isEnabled) return;
     }

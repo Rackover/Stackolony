@@ -42,11 +42,6 @@ public class Block : MonoBehaviour
         library = GameManager.instance.library;
     }
 
-    public void Update()
-    {
-        UpdateFlags();
-    }
-
     //Called when block isn't in range of a spatioport
     public void Disable()
     {
@@ -213,14 +208,6 @@ public class Block : MonoBehaviour
         foreach (Flag f in activeFlags)
         {
             f.Invoke(function, 0);
-        }
-    }
-
-    public void UpdateFlags()
-    {
-        foreach (Flag flag in activeFlags)
-        {
-            flag.UpdateFlag();
         }
     }
 

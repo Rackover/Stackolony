@@ -138,4 +138,15 @@ public class MissionCallbackManager : MonoBehaviour
         GameManager.instance.missionManager.EndMission(myMission);
         yield return null;
     }
+
+    IEnumerator Extinguish() 
+    {
+        MissionManager.Mission myMission = mission;
+        for (int i = 1; i < myMission.blocksFound.Count; i++)
+        {
+            myMission.blocksFound[i].RemoveState(State.OnFire);
+        }
+        GameManager.instance.missionManager.EndMission(myMission);
+        yield return null;
+    }
 }
