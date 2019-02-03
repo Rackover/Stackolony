@@ -17,6 +17,21 @@ public class ConsumptionModifier
     public int cyclesRemaining;
 }
 
+public class FlagModifier
+{
+    public ModifierReason reason;
+    public string flagInformations;
+    public int cyclesRemaining;
+}
+
+public class TempFlag
+{
+    public ModifierReason reason;
+    public string flagInformations;
+    public int cyclesRemaining;
+    public System.Type flagType;
+}
+
 public class CityManager : MonoBehaviour {
 
     public enum BuildingType { Habitation = 0, Services = 1, Occupators = 2 };
@@ -95,6 +110,49 @@ public class CityManager : MonoBehaviour {
         newConsumptionModifier.amount = newAmount;
         newConsumptionModifier.cyclesRemaining = cyclesRemaining;
         block.consumptionModifiers.Add(newConsumptionModifier);
+    }
+
+    public void GenerateFlagModifier(Block block, ModifierReason reason, string flagInformations, int cyclesRemaining)
+    {
+        string[] flagElements = flagInformations.Split(new char[] { '_' }, System.StringSplitOptions.RemoveEmptyEntries);
+        bool flagFound = false;
+        foreach (Flag.IFlag flags in block.activeFlags)
+        {
+            if (flags.GetFlagType() == System.Type.GetType(flagElements[0])) {
+                flagFound = true;
+            }
+        }
+        if (!flagFound)
+        {
+            return;
+        }
+        FlagModifier newFlagModifier = new FlagModifier();
+        newFlagModifier.reason = reason;
+        newFlagModifier.cyclesRemaining = cyclesRemaining;
+        newFlagModifier.flagInformations = flagInformations;
+        //Apply the flag modification
+        GameManager.instance.flagReader.ReadFlag(block, flagInformations);
+        block.flagModifiers.Add(newFlagModifier);
+    }
+
+    public void GenerateTempFlag(Block block, ModifierReason reason, string flagInformations, int cyclesRemaining)
+    {
+        string[] flagElements = flagInformations.Split(new char[] { '_' }, System.StringSplitOptions.RemoveEmptyEntries);
+        foreach (Flag.IFlag flags in block.activeFlags)
+        {
+            if (flags.GetFlagType() == System.Type.GetType(flagElements[0]))
+            {
+                return;
+            }
+        }
+        TempFlag newTempFlag = new TempFlag();
+        newTempFlag.reason = reason;
+        newTempFlag.cyclesRemaining = cyclesRemaining;
+        newTempFlag.flagInformations = flagInformations;
+        newTempFlag.flagType = System.Type.GetType(flagElements[0]);
+        //Generates the flag
+        GameManager.instance.flagReader.ReadFlag(block, flagInformations);
+        block.tempFlags.Add(newTempFlag);
     }
 
     //Finds a house for every citizens from a defined population

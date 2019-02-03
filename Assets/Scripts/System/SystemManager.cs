@@ -69,6 +69,9 @@ public class SystemManager : MonoBehaviour {
         RefreshFoodModifiers();
         RefreshNotationModifiers();
         RefreshConsumptionModifiers();
+        RefreshFlagModifiers();
+        RefreshTempFlags();
+
         yield return StartCoroutine(OnNewMicrocycle());
         yield return null;
     }
@@ -153,15 +156,17 @@ public class SystemManager : MonoBehaviour {
     {
         foreach (KeyValuePair<Population, PopulationManager.PopulationInformation> p in GameManager.instance.populationManager.populations)
         {
+            List<MoodModifier> newMoodModifiers = new List<MoodModifier>();
             foreach (MoodModifier moodModifier in p.Value.moodModifiers)
             {
                 moodModifier.cyclesRemaining--;
 
-                if (moodModifier.cyclesRemaining <= 0)
+                if (moodModifier.cyclesRemaining != 0)
                 {
-                    p.Value.moodModifiers.Remove(moodModifier);
+                    newMoodModifiers.Add(moodModifier);
                 }
             }
+            p.Value.moodModifiers = newMoodModifiers;
         }
     }
 
@@ -171,15 +176,17 @@ public class SystemManager : MonoBehaviour {
     {
         foreach (House house in AllHouses)
         {
+            List<NotationModifier> newNotationModifiers = new List<NotationModifier>();
             foreach (NotationModifier notationModifier in house.notationModifiers)
             {
                 notationModifier.cyclesRemaining--;
 
-                if (notationModifier.cyclesRemaining <= 0)
+                if (notationModifier.cyclesRemaining != 0)
                 {
-                    house.notationModifiers.Remove(notationModifier);
+                    newNotationModifiers.Add(notationModifier);
                 }
             }
+            house.notationModifiers = newNotationModifiers;
         }
     }
 
@@ -189,14 +196,16 @@ public class SystemManager : MonoBehaviour {
     {
         foreach (KeyValuePair<Population, PopulationManager.PopulationInformation> p in GameManager.instance.populationManager.populations)
         {
+            List<FoodModifier> newFoodModifierList = new List<FoodModifier>();
             foreach (FoodModifier fm in p.Value.foodModifiers)
             {
                 fm.cyclesRemaining--;
-                if (fm.cyclesRemaining <= 0)
+                if (fm.cyclesRemaining != 0)
                 {
-                    p.Value.foodModifiers.Remove(fm);
+                    newFoodModifierList.Add(fm);
                 }
             }
+            p.Value.foodModifiers = newFoodModifierList;
         }
     }
 
@@ -204,14 +213,60 @@ public class SystemManager : MonoBehaviour {
     {
         foreach (Block block in AllBlocks)
         {
+            List<ConsumptionModifier> newConsumptionModifierList = new List<ConsumptionModifier>();
             foreach (ConsumptionModifier consumptionModifier in block.consumptionModifiers)
             {
                 consumptionModifier.cyclesRemaining--;
-                if (consumptionModifier.cyclesRemaining <=0)
+                if (consumptionModifier.cyclesRemaining != 0)
                 {
-                    block.consumptionModifiers.Remove(consumptionModifier);
+                    newConsumptionModifierList.Add(consumptionModifier);
                 }
             }
+            block.consumptionModifiers = newConsumptionModifierList;
+        }
+    }
+
+    public void RefreshFlagModifiers()
+    {
+        foreach (Block block in AllBlocks)
+        {
+            List<FlagModifier> newFlagModifierList = new List<FlagModifier>();
+            foreach (FlagModifier flagModifier in block.flagModifiers)
+            {
+                flagModifier.cyclesRemaining--;
+                if (flagModifier.cyclesRemaining == 0)
+                {
+                    //Removes the flagModifier effect
+                    string invertedFlagDatas = GameManager.instance.flagReader.GetInvertedFlag(flagModifier.flagInformations);
+                    GameManager.instance.flagReader.ReadFlag(block, invertedFlagDatas);
+                } else
+                {
+                    newFlagModifierList.Add(flagModifier);
+                }
+            }
+            block.flagModifiers = newFlagModifierList;
+        }
+    }
+
+    public void RefreshTempFlags()
+    {
+        foreach (Block block in AllBlocks)
+        {
+            List<TempFlag> newTempFlagList = new List<TempFlag>();
+            foreach (TempFlag tempFlag in block.tempFlags)
+            {
+                tempFlag.cyclesRemaining--;
+                if (tempFlag.cyclesRemaining == 0)
+                {
+                    System.Type flagToRemove = tempFlag.flagType;
+                    Destroy(block.GetComponent(flagToRemove));
+                }
+                else
+                {
+                    newTempFlagList.Add(tempFlag);
+                }
+            }
+            block.tempFlags = newTempFlagList;
         }
     }
 

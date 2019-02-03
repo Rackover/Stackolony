@@ -28,6 +28,8 @@ public class Block : MonoBehaviour
     public List<Flag.IFlag> activeFlags = new List<Flag.IFlag>();
 	public Dictionary<State, StateBehavior> states = new Dictionary<State, StateBehavior>();
     public List<ConsumptionModifier> consumptionModifiers = new List<ConsumptionModifier>();
+    public List<FlagModifier> flagModifiers = new List<FlagModifier>();
+    public List<TempFlag> tempFlags = new List<TempFlag>();
 
     [Header("Values")]
 	public int currentPower;

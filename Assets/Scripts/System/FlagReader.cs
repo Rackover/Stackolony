@@ -42,6 +42,23 @@ public class FlagReader : MonoBehaviour
         return new List<string>(flag.Split('_'));
     }
 
+    public string GetInvertedFlag(string flag)
+    {
+        string invertedFlag = "";
+        for (int i = 0; i < flag.Length; i++)
+        {
+            if (System.Char.IsDigit(flag[i]) && flag[i-1].ToString() == "_") {
+                invertedFlag += "-" + flag[i];
+            } else {
+                invertedFlag += flag[i];
+            }
+        }
+
+
+
+        return invertedFlag;
+    }
+
     public static List<string> GetRawFlags (BlockScheme blockScheme) {
         List<List<string>> flags = GetFlags(blockScheme);
 
@@ -92,7 +109,7 @@ public class FlagReader : MonoBehaviour
 			case "Generator":
 				if(flagElements.Length == 2)
 				{
-                    Generator foundGenerator = GetComponent<Generator>();
+                    Generator foundGenerator = block.GetComponent<Generator>();
 
                     if (foundGenerator == null)
                     {
@@ -134,7 +151,7 @@ public class FlagReader : MonoBehaviour
 			case "Occupator":
 				if(flagElements.Length == 4)
 				{
-                    Occupator foundOccupator = GetComponent<Occupator>();
+                    Occupator foundOccupator = block.GetComponent<Occupator>();
                     if (foundOccupator == null)
                     {
                         Occupator newOccupator = block.gameObject.AddComponent<Occupator>();
@@ -237,7 +254,7 @@ public class FlagReader : MonoBehaviour
 
 	#region House 
 			case "House":
-                House foundHouse = GetComponent<House>();
+                House foundHouse = block.GetComponent<House>();
                 if (foundHouse == null)
                 {
                     House newHome = block.gameObject.AddComponent<House>();

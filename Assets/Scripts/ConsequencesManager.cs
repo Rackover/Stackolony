@@ -102,6 +102,18 @@ public class ConsequencesManager : MonoBehaviour {
         GameManager.instance.gridManagement.DestroyBlock(block.gridCoordinates);
     }
 
+    //Modify the flag with the new settings, only if flag already exists, no duration mean INFINITE DURATION
+    public void ModifyFlag(Block block, ModifierReason reason, string flagInformations, int durationInCycle)
+    {
+        GameManager.instance.cityManager.GenerateFlagModifier(block, reason, flagInformations, durationInCycle);
+    }
+
+    //Generates a flag that'll be removed after X time, only if the flag isn't already there
+    public void GenerateTempFlag(Block block, ModifierReason reason, string flagInformations, int durationInCycle)
+    {
+        GameManager.instance.cityManager.GenerateTempFlag(block, reason, flagInformations, durationInCycle);
+    }
+
     //Generates a new flag, taking the informations like in flag declaration (Ex : Generator_1_3), overrides flag values if flag is already here
     public void GenerateNewFlag(Block block, string flagInformations)
     {
@@ -112,19 +124,6 @@ public class ConsequencesManager : MonoBehaviour {
 
 
     //TO DO
-    //Modify the flag with the new settings, only if flag already exists
-    public void ModifyFlag(Block block, ModifierReason reason, string flagInformations, int durationInCycle)
-    {
-
-    }
-
-    //Generates a flag that'll be removed after X time, only if the flag isn't already there
-    public void GenerateTempFlag(Block block, ModifierReason reason, string flagInformations, int durationInCycle)
-    {
-
-    }
-
-
     //Randomly spawns a mine on the map
     public void SpawnMine(int amount)
     {
