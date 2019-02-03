@@ -21,7 +21,7 @@
 	<event id="3">
 		<yes>
 			A = RANDOM_BUILDING(id:24);
-			ADD_FLAG_MODIFIER(building:A, flagModifier:Occupator_0_-1_, duration:1);
+			ADD_FLAG_MODIFIER_ON_BUILDING(building:A, flagModifier:Occupator_0_-1_, duration:1);
 		</yes>
 	</event>
 </eventsDatabase>	

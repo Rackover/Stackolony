@@ -39,12 +39,12 @@ public class ConsequencesManager : MonoBehaviour {
     }
 
     //Change the state of a block (Damaged, Fire, Riot)
-    public void AddState(Block block, State state)
+    static public void AddState(Block block, State state)
     {
         block.AddState(state);
     }
 
-    public void RemoveState(Block block, State state)
+    static public void RemoveState(Block block, State state)
     {
         block.RemoveState(state);
     }

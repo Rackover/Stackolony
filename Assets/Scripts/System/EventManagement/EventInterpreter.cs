@@ -211,7 +211,7 @@ public class EventInterpreter {
                 ConsequencesManager.GenerateMoodModifier(pop, reason, -amount, duration);
             }
         },
-        { "ADD_FLAG_MODIFIER", (args, context) =>
+        { "ADD_FLAG_MODIFIER_ON_BUILDING", (args, context) =>
             {
                 Block block = null;
                 try{
@@ -224,6 +224,21 @@ public class EventInterpreter {
                 string flagModifier = GetArgument(args, "flagModifier");
                     
                 ConsequencesManager.ModifyFlag(block, flagModifier, duration);
+            }
+        },
+        { "ADD_STATE_ON_BUILDING", (args, context) =>
+            {
+                Block block = null;
+                try{
+                    block = (Block)context[GetArgument(args, "building")];
+                }
+                catch(System.Exception e) {
+                    Throw("Impossible cast in "+args+"\n"+e.ToString());
+                }
+
+                State state = (State)System.Enum.Parse(typeof(State), GetArguments(args, "state"));
+
+                ConsequencesManager.AddState(block, state);
             }
         },
     };
