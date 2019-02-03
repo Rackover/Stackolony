@@ -49,6 +49,11 @@ public class ConsequencesManager : MonoBehaviour {
         block.RemoveState(state);
     }
 
+    static public void AddSettlerBonusForNextWave(Population pop, int amount)
+    {
+        GameManager.instance.timelineController.AddSettlerBonus(new KeyValuePair<Population, int>(pop, amount));
+    }
+
     //Spawn a X blocks at a random location, choose a random block if no blockID is specified
     static public void SpawnBlocksAtRandomLocation(int amount, int blockID = -1)
     {
