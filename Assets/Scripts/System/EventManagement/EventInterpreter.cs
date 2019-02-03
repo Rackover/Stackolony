@@ -7,16 +7,20 @@ public class EventInterpreter {
 
 	public EventManager.GameEvent MakeEvent(int id, string eventDeclaration)
     {
+        LoadActionFunctions();
+
         Dictionary<string, Object> context = new Dictionary<string, Object>();
 
         List<System.Action> actions = new List<System.Action>();
 
         List<string> lines = new List<string>(eventDeclaration.Replace(" ", "").Replace("\n", "").Replace("	", "").Split(';'));
         foreach (string line in lines) {
+            
             if (!CheckSyntax(line)) {
                 Throw(line);
             }
             actions.Add(InterpretStatement(line, context));
+            
         }
 
         return new EventManager.GameEvent(id, actions);
@@ -36,6 +40,14 @@ public class EventInterpreter {
         return Regex.Matches(statement, @"\(").Count == Regex.Matches(statement, @"/)").Count;
     }
 
+    
+    // Crashes the interpreter, throws an exception
+    static void Throw(string info)
+    {
+        Logger.Throw("Syntax error while parsing event : \n" + info);
+        throw null;
+    }
+    
     // Returns an action based on the string statement
     System.Action InterpretStatement(string statement, Dictionary<string, Object> context)
     {
@@ -46,11 +58,13 @@ public class EventInterpreter {
             Assign(statement, context);
             return delegate { };
         }
-
+        
         // XCution statement
         return ExecuteActionFunctionFromString(statement, context);
+        
     }
 
+  
     // Assigns data to a variable in the context
     void Assign(string assignationStatement, Dictionary<string, Object> context)
     {
@@ -64,203 +78,226 @@ public class EventInterpreter {
         context[varName] = generated;
     }
 
-    // Fetches data from a function taken from a statement
-    Object ExecuteDataFunctionFromString(string statement)
-    {
-        string[] explodedStatement = ExplodeFunction(statement);
-        string funcName = explodedStatement[0];
-        string content = explodedStatement[1];
+     // Fetches data from a function taken from a statement
+     Object ExecuteDataFunctionFromString(string statement)
+     {
+         string[] explodedStatement = ExplodeFunction(statement);
+         string funcName = explodedStatement[0];
+         string content = explodedStatement[1];
+        
+         if (!dataFunctions.ContainsKey(funcName)) {
+             Throw("Unsupported action function " + funcName + ". Supported action functions \n :" + GetDataFunctions());
+         }
 
-        if (!dataFunctions.ContainsKey(funcName)) {
-            Throw("Unsupported action function " + funcName + ". Supported action functions \n :" + GetDataFunctions());
-        }
-
-        return dataFunctions[funcName].Invoke(content);
+         return dataFunctions[funcName].Invoke(content);
     }
 
-    // Returns function name and string content
-    string[] ExplodeFunction(string statement)
-    {
-        if (!CheckParenthesisCount(statement)) {
-            Throw(statement);
-        }
-        string[] explodedStatement = statement.Split('(');
-        string functionName = explodedStatement[0].ToUpper();
-        string content = explodedStatement[1].Remove(explodedStatement[1].Length - 1, 1);
+  
+     // Returns function name and string content
+     string[] ExplodeFunction(string statement)
+     {
+         if (!CheckParenthesisCount(statement)) {
+             Throw(statement);
+         }
+         string[] explodedStatement = statement.Split('(');
+         string functionName = explodedStatement[0].ToUpper();
+         string content = explodedStatement[1].Remove(explodedStatement[1].Length - 1, 1);
 
-        return new string[] { functionName, content };
-    }
+         return new string[] { functionName, content };
+     }
 
-    // Crashes the interpreter, throws an exception
-    static void Throw(string info)
-    {
-        Logger.Throw("Syntax error while parsing event : \n" + info);
-        throw null;
-    }
-
+     
     // Get specific string argument from argument list
-    static string GetArgument(string args, string key)
+    static string GetArgument(string arguments, string key)
     {
-        foreach(string statement in args.Split(',')) {
-            string[] explodedStatement = statement.Split(':');
-            if (explodedStatement[0] == key) {
-                return explodedStatement[1];
-            }
-        }
-        Throw("Missing argument \"" + key + "\" in args \"" + args + "\"");
-        return "";
-    }
+         foreach(string statement in arguments.Split(',')) {
+             string[] explodedStatement = statement.Split(':');
+             if (explodedStatement[0] == key) {
+                 return explodedStatement[1];
+             }
+         }
+         Throw("Missing argument \"" + key + "\" in args \"" + arguments + "\"");
+         return "";
+     }
 
-    // Execute action from function 
-    System.Action ExecuteActionFunctionFromString(string statement, Dictionary<string, Object> context)
-    {
-        string[] explodedStatement = ExplodeFunction(statement);
-        string funcName = explodedStatement[0];
-        string arguments = explodedStatement[1];
+   
+     // Execute action from function 
+     System.Action ExecuteActionFunctionFromString(string statement, Dictionary<string, Object> context)
+     {
+         string[] explodedStatement = ExplodeFunction(statement);
+         string funcName = explodedStatement[0];
+         string arguments = explodedStatement[1];
 
-        if (!actionFunctions.ContainsKey(funcName)) {
-            Throw("Unsupported action function " + funcName + ". Supported action functions \n :"+GetActionFunctions());
-        }
+        return delegate { };
+        
+         if (!actionFunctions.ContainsKey(funcName)) {
+             Throw("Unsupported action function " + funcName + ". Supported action functions \n :"+GetActionFunctions());
+         }
 
-        return delegate { actionFunctions[funcName](arguments, context); };
-    }
-    
-    // Returns list of supported action functions
-    List<string> GetActionFunctions()
-    {
-        List<string> funcs = new List<string>();
-        foreach(KeyValuePair<string, System.Action<string, Dictionary<string, Object>>> function in actionFunctions) {
-            funcs.Add(function.Key);
-        }
-        return funcs;
-    }
-
+         return delegate { actionFunctions[funcName](arguments, context); };
+         
+     }
+     
+     // Returns list of supported action functions
+     List<string> GetActionFunctions()
+     {
+         List<string> funcs = new List<string>();
+         foreach(KeyValuePair<string, System.Action<string, Dictionary<string, Object>>> function in actionFunctions) {
+             funcs.Add(function.Key);
+         }
+         return funcs;
+     }
+ 
     // Returns list of supported data functions
-    List<string> GetDataFunctions()
-    {
-        List<string> funcs = new List<string>();
-        foreach (KeyValuePair<string, System.Func<string, Object>> function in dataFunctions) {
-            funcs.Add(function.Key);
-        }
-        return funcs;
-    }
+     List<string> GetDataFunctions()
+     {
+         List<string> funcs = new List<string>();
+         foreach (KeyValuePair<string, System.Func<string, Object>> function in dataFunctions) {
+             funcs.Add(function.Key);
+         }
+         return funcs;
+     }
+
+
 
     /// <summary>
     /// ACTION FUNCTIONS
     /// </summary>
-    Dictionary<string, System.Action<string, Dictionary<string, Object>>> actionFunctions = new Dictionary<string, System.Action<string, Dictionary<string, Object>>>() {
-        { "INCREASE_ENERGY_CONSUMPTION", (args, context) =>
-            {
+    Dictionary<string, System.Action<string, Dictionary<string, Object>>> actionFunctions = new Dictionary<string, System.Action<string, Dictionary<string, Object>>>();
+    void LoadActionFunctions() {
+        actionFunctions.Add(
+            "INCREASE_ENERGY_CONSUMPTION", (args, context) => {
                 Block block = null;
-                try{
+                try {
                     block = (Block)context[GetArgument(args, "building")];
                 }
-                catch(System.Exception e) {
-                    Throw("Impossible cast in "+args+"\n"+e.ToString());
+                catch (System.Exception e) {
+                    Throw("Impossible cast in " + args + "\n" + e.ToString());
                 }
                 int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
                 int amount = System.Convert.ToInt32(GetArgument(args, "amount"));
 
                 ConsequencesManager.GenerateConsumptionModifier(block, amount, duration);
             }
-        },
-        { "INCREASE_MOOD_FOR_POPULATION", (args, context) =>
-            {
+        );
+        actionFunctions.Add(
+            "INCREASE_MOOD_FOR_POPULATION", (args, context) =>{
                 Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
                 int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
                 int amount = System.Convert.ToInt32(GetArgument(args, "amount"));
 
                 ConsequencesManager.GenerateMoodModifier(pop, amount, duration);
             }
-        },
-        { "INCREASE_FOOD_CONSUMPTION_FOR_POPULATION", (args, context) =>
-            {
+        );
+        actionFunctions.Add(
+            "INCREASE_FOOD_CONSUMPTION_FOR_POPULATION", (args, context) =>{
                 Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
                 int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
                 float amount = System.Convert.ToSingle(GetArgument(args, "amount"));
 
                 ConsequencesManager.GenerateFoodConsumptionModifier(pop, amount, duration);
             }
-        },
-        { "INCREASE_HOUSE_NOTATION", (args, context) =>
+        );
+        actionFunctions.Add(
+            "INCREASE_HOUSE_NOTATION", (args, context) =>
             {
                 House house = null;
-                try{
+                try {
                     house = (House)context[GetArgument(args, "house")];
                 }
-                catch(System.Exception e) {
-                    Throw("Impossible cast in "+args+"\n"+e.ToString());
+                catch (System.Exception e) {
+                    Throw("Impossible cast in " + args + "\n" + e.ToString());
                 }
                 float amount = System.Convert.ToSingle(GetArgument(args, "amount"));
                 int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
 
                 ConsequencesManager.ChangeHouseNotation(house, amount, duration);
             }
-        },
-        { "DECREASE_MOOD_FOR_POPULATION", (args, context) =>
+        );
+        actionFunctions.Add(
+            "DECREASE_MOOD_FOR_POPULATION", (args, context) =>
             {
                 Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
                 int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
                 int amount = System.Convert.ToInt32(GetArgument(args, "amount"));
 
                 ConsequencesManager.GenerateMoodModifier(pop, -amount, duration);
+
             }
-        },
-        { "ADD_FLAG_MODIFIER_ON_BUILDING", (args, context) =>
-            {
+        );
+        actionFunctions.Add(
+            "ADD_FLAG_MODIFIER_ON_BUILDING", (args, context) => {
                 Block block = null;
-                try{
+                try {
                     block = (Block)context[GetArgument(args, "building")];
                 }
-                catch(System.Exception e) {
-                    Throw("Impossible cast in "+args+"\n"+e.ToString());
+                catch (System.Exception e) {
+                    Throw("Impossible cast in " + args + "\n" + e.ToString());
                 }
                 int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
                 string flagModifier = GetArgument(args, "flagModifier");
-                    
+
                 ConsequencesManager.ModifyFlag(block, flagModifier, duration);
             }
-        },
-        { "ADD_STATE_ON_BUILDING", (args, context) =>
+        );
+        actionFunctions.Add(
+            "ADD_STATE_ON_BUILDING", (args, context) =>
             {
                 Block block = null;
-                try{
+                try {
                     block = (Block)context[GetArgument(args, "building")];
                 }
-                catch(System.Exception e) {
-                    Throw("Impossible cast in "+args+"\n"+e.ToString());
+                catch (System.Exception e) {
+                    Throw("Impossible cast in " + args + "\n" + e.ToString());
                 }
 
                 State state = (State)System.Enum.Parse(typeof(State), GetArgument(args, "state"));
 
                 ConsequencesManager.AddState(block, state);
             }
-        },
-    };
+        );
+        actionFunctions.Add(
+            "ADD_SETTLERS_TO_NEXT_WAVE", (args, context) => {
+                Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
+                int amount = System.Convert.ToInt32(GetArgument(args, "amount"));
 
+                ConsequencesManager.AddSettlerBonusForNextWave(pop, amount); 
+            }
+        );
+        actionFunctions.Add(
+            "DESTROY_BUILDING", (args, context) => {
+                Block block = null;
+                try {
+                    block = (Block)context[GetArgument(args, "building")];
+                }
+                catch (System.Exception e) {
+                    Throw("Impossible cast in " + args + "\n" + e.ToString());
+                }
 
+                ConsequencesManager.DestroyBlock(block);
+            }
+        );
+    }
 
     /// <summary>
     /// DATA FUNCTIONS
     /// </summary>
     Dictionary<string, System.Func<string, Object>> dataFunctions = new Dictionary<string, System.Func<string, Object>>() {
 
-        {  "RANDOM_BUILDING", (args) => 
-            {
-                int id = System.Convert.ToInt32(GetArgument(args, "id"));
-                return ConsequencesManager.GetRandomBuildingOfId(id);
-            }
-        },
-        {   "RANDOM_HOUSE", (args) =>
-            {
-                Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
-                return ConsequencesManager.GetRandomHouseOf(pop);
-            }
-        }
+       {  "RANDOM_BUILDING", (args) => 
+           {
+               int id = System.Convert.ToInt32(GetArgument(args, "id"));
+               return ConsequencesManager.GetRandomBuildingOfId(id);
+           }
+       },
+       {   "RANDOM_HOUSE", (args) =>
+           {
+               Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
+               return ConsequencesManager.GetRandomHouseOf(pop);
+           }
+       }
 
     };
-
-
 
 
 }
