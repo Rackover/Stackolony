@@ -22,7 +22,7 @@ public class House : Flag, Flag.IFlag
     ParticleSystem citizenIn;
     ParticleSystem citizenOut;
 
-    Light light;
+    Light houseLight;
 
     public void UpdateHouseInformations()
     {
@@ -69,7 +69,7 @@ public class House : Flag, Flag.IFlag
             //Ecrit sur la carte d'identité du citoyen qu'il habite ici désormais
             citizen.habitation = this;
 
-            light.intensity = (affectedCitizen.Count / slotAmount) * 10;
+            houseLight.intensity = (affectedCitizen.Count / slotAmount) * 10;
 
             return;
         }
@@ -78,10 +78,11 @@ public class House : Flag, Flag.IFlag
     public override void Awake()
     {
         base.Awake();
-        
-        light = block.effects.gameObject.AddComponent<Light>();
-        light.range = 1f;
-        light.intensity = 0f;
+        GameManager.instance.systemManager.AllHouses.Add(this);
+
+        houseLight = block.effects.gameObject.AddComponent<Light>();
+        houseLight.range = 1f;
+        houseLight.intensity = 0f;
     }
 
     public override void OnDestroy()

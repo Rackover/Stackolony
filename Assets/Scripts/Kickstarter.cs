@@ -8,10 +8,17 @@ public class Kickstarter : MonoBehaviour {
 
     private void Awake()
     {
+        // Game has already been kickstarted
+        if (GameManager.instance != null) {
+            DestroyImmediate(gameObject);
+            return;
+        }
+
+        // Kickstart
         foreach(GameObject g in gameComponents) {
             GameObject i = Instantiate<GameObject>(g);
-            DontDestroyOnLoad(i);
             Logger.Debug("Kickstarting " + i.name);
+            DontDestroyOnLoad(i);
         }
 
         Destroy(gameObject);

@@ -19,7 +19,6 @@ public class Block : MonoBehaviour
     public BlockEffect effects;
     public BlockOverlayColor overlayVisuals;
     public GameObject bridge;
-    Library library;
 
     [HideInInspector]   public Vector3Int gridCoordinates = new Vector3Int(0, 0, 0);
     [HideInInspector]   public int positionInTower; //0 = tout en bas
@@ -43,7 +42,6 @@ public class Block : MonoBehaviour
     {
         isConsideredUnpowered = false;
         if(boxCollider == null) boxCollider = GetComponent<BoxCollider>();
-        library = GameManager.instance.library;
     }
 
     public void Update()
