@@ -28,7 +28,7 @@ public class NewColonyWindow : MonoBehaviour {
         Population pop = GameManager.instance.populationManager.GetRandomPopulation();
         if (!GameManager.instance.player.options.GetBool("animatedCitizens")) {
             float ratio = pop.moodSprites[0].rect.width / pop.moodSprites[0].rect.height;
-            popImage.texture = pop.moodSprites[(int)Citizen.Mood.Good].texture;
+            popImage.texture = pop.moodSprites[(int)Bystander.Mood.Good].texture;
             popImage.transform.parent.gameObject.GetComponent<AspectRatioFitter>().aspectRatio = ratio;
         }
         else {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Citizen : MonoBehaviour {
+public class Bystander : MonoBehaviour {
 
     public Population population;
     public GameObject body;
