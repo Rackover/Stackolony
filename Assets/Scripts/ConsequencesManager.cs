@@ -130,4 +130,18 @@ public class ConsequencesManager : MonoBehaviour {
     {
 
     }
+
+    public Block GetRandomBuildingOfId(int id)
+    {
+        List<Block> concerned = new List<Block>();
+        foreach(Block block in GameManager.instance.systemManager.AllBlocks) {
+            if (block.scheme.ID == id) {
+                concerned.Add(block);
+            }
+        }
+        if (concerned.Count > 0) {
+            return null;
+        }
+        return concerned[Mathf.FloorToInt(Random.value * concerned.Count)];
+    }
 }
