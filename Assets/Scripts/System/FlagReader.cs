@@ -122,54 +122,6 @@ public class FlagReader : MonoBehaviour
 
 	#endregion
 
-	#region MoodModifier 
-			case "MoodModifier":
-				if(flagElements.Length == 4)
-				{
-					MoodModifier newMoodModifier = block.gameObject.AddComponent<MoodModifier>();
-
-					try // TRY SETTING UP THE AMOUNT
-					{
-						newMoodModifier.range = int.Parse(flagElements[1]);
-					}
-					catch(FormatException fe)
-					{
-						Destroy(newMoodModifier);
-                        Logger.Warn( block.scheme.name + " - MoodModifier : Unvalid range entry as the first parameter. Please enter an int value.");
-						break;
-					}
-
-					try // TRY SETTING UP THE AMOUNT
-					{
-						newMoodModifier.amount = int.Parse(flagElements[2]);
-					}
-					catch(FormatException fe)
-					{
-						Destroy(newMoodModifier);
-                        Logger.Warn( block.scheme.name + " - MoodModifier : Unvalid amount entry as the second parameter. Please enter an int value.");
-						break;
-					}
-
-					newMoodModifier.profiles = SplitParametorInArray(flagElements[3]);
-
-					string result = IsProfileArrayIsValid(newMoodModifier.profiles);
-
-					if(result != "")
-					{
-						Destroy(newMoodModifier);
-                        Logger.Warn( block.scheme.name + " - MoodModifier : " + result);
-						break;
-					}
-
-					block.activeFlags.Add(newMoodModifier);
-				}
-				else
-				{
-                    Logger.Warn( block.scheme.name + " - MoodModifier : flag wrongly setup for '" + block.scheme.name + "'. Should be something like this : 'MoodModifier_3_5_worker'");
-				}
-				break;
-	#endregion
-
 	#region Occupator 
 			case "Occupator":
 				if(flagElements.Length == 4)

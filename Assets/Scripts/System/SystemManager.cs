@@ -65,6 +65,8 @@ public class SystemManager : MonoBehaviour {
             block.OnNewCycle();
         }
         RefreshMoodModifiers();
+        RefreshFoodModifiers();
+        RefreshNotationModifiers();
         yield return StartCoroutine(OnNewMicrocycle());
         yield return null;
     }
@@ -149,7 +151,7 @@ public class SystemManager : MonoBehaviour {
     {
         foreach (KeyValuePair<Population, PopulationManager.PopulationInformation> p in GameManager.instance.populationManager.populations)
         {
-            foreach (PopulationManager.MoodModifier moodModifier in p.Value.moodModifiers)
+            foreach (MoodModifier moodModifier in p.Value.moodModifiers)
             {
                 moodModifier.cyclesRemaining--;
 
@@ -161,12 +163,31 @@ public class SystemManager : MonoBehaviour {
         }
     }
 
+
+    //Remove 1 cycle on each notationModifier duration
+    public void RefreshNotationModifiers()
+    {
+        foreach (House house in AllHouses)
+        {
+            foreach (NotationModifier notationModifier in house.notationModifiers)
+            {
+                notationModifier.cyclesRemaining--;
+
+                if (notationModifier.cyclesRemaining <= 0)
+                {
+                    house.notationModifiers.Remove(notationModifier);
+                }
+            }
+        }
+    }
+
+
     //Remove 1 cycle on each foodmodifiers
     public void RefreshFoodModifiers()
     {
         foreach (KeyValuePair<Population, PopulationManager.PopulationInformation> p in GameManager.instance.populationManager.populations)
         {
-            foreach (PopulationManager.FoodModifier fm in p.Value.foodModifiers)
+            foreach (FoodModifier fm in p.Value.foodModifiers)
             {
                 fm.cyclesRemaining--;
                 if (fm.cyclesRemaining <= 0)

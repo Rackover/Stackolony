@@ -9,11 +9,11 @@ public class House : Flag, Flag.IFlag
     public Population[] acceptedPop;
     public List<PopulationManager.Citizen> affectedCitizen = new List<PopulationManager.Citizen>();
     public int standingLevel = 1;
-    public int notationModifier = 0;
 
     //Variables
     public List<Occupator> occupatorsInRange = new List<Occupator>();
     public List<FoodProvider> foodProvidersInRange = new List<FoodProvider>();
+    public List<NotationModifier> notationModifiers = new List<NotationModifier>();
     public bool powered;
     public float foodReceived;
     public float distanceToGround;

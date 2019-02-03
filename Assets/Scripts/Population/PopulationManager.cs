@@ -4,31 +4,28 @@ using UnityEngine;
 
 public enum ModifierReason { NoCandyMachine, CouldntPaintHisHouse, PaintedHisHouse, GotExtraSpinach, CleanedFactory, UncleanedFactory, ThrowedTrashOnKavgas, CouldntThrowTrashOnKavgas, AutorizedWiredCommunication, RefusedWiredCommunication, AcceptedKrowserFamily, AcceptedCrystalResearchs, AccidentallyBurnedHouse, HadBanquet, NoBanquet, GoodLighting, AllowedConcert, RepairedPowerAccumulator};
 
+public class MoodModifier
+{
+    public ModifierReason reason;
+    public float amount;
+    public int cyclesRemaining;
+}
+
+public class FoodModifier
+{
+    public ModifierReason reason;
+    public float amount;
+    public int cyclesRemaining;
+}
+
 public class PopulationManager : MonoBehaviour 
 {
-
-
-    [System.Serializable]
     public class Citizen
     {
         public string name;
         public Population type;
         public House habitation;
         public bool jobless = true;
-    }
-
-    public class MoodModifier
-    {
-        public ModifierReason reason;
-        public float amount;
-        public int cyclesRemaining;
-    }
-
-    public class FoodModifier
-    {
-        public ModifierReason reason;
-        public float amount;
-        public int cyclesRemaining;
     }
 
     public class PopulationInformation

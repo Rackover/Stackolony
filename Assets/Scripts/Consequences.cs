@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Consequences : MonoBehaviour {
 
+    //DONE
     //Add a moodModifier to a type of population
     public void GenerateMoodModifier(Population pop, ModifierReason reason, float amount, int durationInCycle)
     {
@@ -19,9 +20,11 @@ public class Consequences : MonoBehaviour {
     //Changes the notation of a house (Raising the mood gained when a citizen chose this house)
     public void ChangeHouseNotation(House house, ModifierReason reason, float amount, int durationInCycle)
     {
-
+        GameManager.instance.cityManager.GenerateNotationModifier(house, reason, amount, durationInCycle);
     }
 
+
+    //TO DO
     //Generates a new flag, taking the informations like in flag declaration (Ex : Generator_1_3), changes flag values if flag is already here
     public void GenerateNewFlag(Block block, string flagInformations)
     {

@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+public class NotationModifier
+{
+    public ModifierReason reason;
+    public float amount;
+    public int cyclesRemaining;
+}
+
 public class CityManager : MonoBehaviour {
 
     public enum BuildingType { Habitation = 0, Services = 1, Occupators = 2 };
@@ -12,8 +19,7 @@ public class CityManager : MonoBehaviour {
 
     List<int> lockedBuildings = new List<int >();
 
-    //Comment fonctionne la notation d'une maison :
-    // 
+
     [System.Serializable]
     public class MoodValues
     {
@@ -29,6 +35,7 @@ public class CityManager : MonoBehaviour {
     }
 
     public MoodValues moodValues;
+
 
     private void Start()
     {
@@ -61,6 +68,16 @@ public class CityManager : MonoBehaviour {
         {
             HousePopulation(GameManager.instance.populationManager.populationTypeList[i], x);
         }
+    }
+
+    //Generates a notationModifier for a given house
+    public void GenerateNotationModifier(House house, ModifierReason reason, float newAmount, int cyclesRemaining)
+    {
+        NotationModifier newNotationModifier = new NotationModifier();
+        newNotationModifier.reason = reason;
+        newNotationModifier.amount = newAmount;
+        newNotationModifier.cyclesRemaining = cyclesRemaining;
+        house.notationModifiers.Add(newNotationModifier);
     }
 
     //Finds a house for every citizens from a defined population
@@ -220,7 +237,10 @@ public class CityManager : MonoBehaviour {
         if (notation >= 0)
             notation += moodValues.everythingFine;
 
-        notation += house.notationModifier;
+        foreach (NotationModifier notationModifier in house.notationModifiers)
+        {
+            notation += notationModifier.amount;
+        }
         return notation;
     }
     
