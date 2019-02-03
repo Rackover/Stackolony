@@ -6,25 +6,25 @@ public class ConsequencesManager : MonoBehaviour {
 
     //DONE
     //Add a moodModifier to a type of population
-    public void GenerateMoodModifier(Population pop, ModifierReason reason, float amount, int durationInCycle)
+    public void GenerateMoodModifier(Population pop, string reason, float amount, int durationInCycle)
     {
         GameManager.instance.populationManager.GenerateMoodModifier(pop, reason, amount, durationInCycle);
     }
 
     //Change the consumption of a population type, affecting the houses they're in
-    public void GenerateFoodConsumptionModifier(Population pop, ModifierReason reason, float amount, int durationInCycle)
+    public void GenerateFoodConsumptionModifier(Population pop, string reason, float amount, int durationInCycle)
     {
         GameManager.instance.populationManager.GenerateFoodModifier(pop, reason, amount, durationInCycle);
     }
 
     //Changes the notation of a house (Raising the mood gained when a citizen chose this house)
-    public void ChangeHouseNotation(House house, ModifierReason reason, float amount, int durationInCycle)
+    public void ChangeHouseNotation(House house, string reason, float amount, int durationInCycle)
     {
         GameManager.instance.cityManager.GenerateNotationModifier(house, reason, amount, durationInCycle);
     }
 
     //Changes the energy consumption of a block
-    public void GenerateConsumptionModifier(Block block, ModifierReason reason, int amount, int durationInCycle)
+    public void GenerateConsumptionModifier(Block block, string reason, int amount, int durationInCycle)
     {
         GameManager.instance.cityManager.GenerateConsumptionModifier(block, reason, amount, durationInCycle);
     }
@@ -104,12 +104,24 @@ public class ConsequencesManager : MonoBehaviour {
 
     //Modify the flag with the new settings, only if flag already exists, no duration mean INFINITE DURATION
     public void ModifyFlag(Block block, ModifierReason reason, string flagInformations, int durationInCycle)
+    //Generates a new flag, taking the informations like in flag declaration (Ex : Generator_1_3), overrides flag values if flag is already here
+    public void GenerateNewFlag(Block block, string flagInformations)
+    {
+        string[] flagElements = flagInformations.Split(new char[] { '_' }, System.StringSplitOptions.RemoveEmptyEntries);
+        DestroyFlag(block, flagElements[0].GetType());
+        GameManager.instance.flagReader.ReadFlag(block, flagInformations);
+    }
+
+
+    //TO DO
+    //Modify the flag with the new settings, only if flag already exists
+    public void ModifyFlag(Block block, string reason, string flagInformations, int durationInCycle)
     {
         GameManager.instance.cityManager.GenerateFlagModifier(block, reason, flagInformations, durationInCycle);
     }
 
     //Generates a flag that'll be removed after X time, only if the flag isn't already there
-    public void GenerateTempFlag(Block block, ModifierReason reason, string flagInformations, int durationInCycle)
+    public void GenerateTempFlag(Block block, string reason, string flagInformations, int durationInCycle)
     {
         GameManager.instance.cityManager.GenerateTempFlag(block, reason, flagInformations, durationInCycle);
     }
@@ -128,5 +140,36 @@ public class ConsequencesManager : MonoBehaviour {
     public void SpawnMine(int amount)
     {
 
+    }
+
+    static public Block GetRandomBuildingOfId(int id)
+    {
+        List<Block> concerned = new List<Block>();
+        foreach(Block block in GameManager.instance.systemManager.AllBlocks) {
+            if (block.scheme.ID == id) {
+                concerned.Add(block);
+            }
+        }
+        if (concerned.Count > 0) {
+            return null;
+        }
+
+        return concerned[Mathf.FloorToInt(Random.value * concerned.Count)];
+    }
+
+    static public House GetRandomHouseOf(Population pop)
+    {
+        List<House> houses = new List<House>();
+        foreach(PopulationManager.Citizen citizen in GameManager.instance.populationManager.citizenList) {
+            if (citizen.type == pop && citizen.habitation != null) {
+                houses.Add(citizen.habitation);
+            }
+        }
+
+        if (houses.Count > 0) {
+            return null;
+        }
+
+        return houses[Mathf.FloorToInt(Random.value * houses.Count)];
     }
 }

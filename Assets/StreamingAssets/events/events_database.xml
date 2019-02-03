@@ -1,0 +1,14 @@
+<eventsDatabase>
+	<event id="1">
+		A = RANDOM_BUILDING(id:18);
+		INCREASE_ENERGY_CONSUMPTION(building:A, duration:3);
+		INCREASE_MOOD_FOR_POPULATION(population:richies, amount:1);
+		INCREASE_FOOD_CONSUMPTION_FOR_POPULATION(population:richies, amount:1.5);
+	</event>
+	<event id="2">
+		INCREASE_MOOD_FOR_POPULATION(population:artist, amount:2);
+		A = RANDOM_HOUSE(population:artist);
+		INCREASE_HOUSE_NOTATION(house:A, amount:1);
+		ADD_FLAG_ON_BUILDING(building:A, flag: NuisanceGenerator_2_3, duration:1);
+	</event>
+</eventsDatabase>
