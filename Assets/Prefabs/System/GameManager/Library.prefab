@@ -1,0 +1,136 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1811491897340878}
+  m_IsPrefabAsset: 1
+--- !u!1 &1811491897340878
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4372386622270336}
+  - component: {fileID: 114735874438384254}
+  m_Layer: 0
+  m_Name: Library
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4372386622270336
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1811491897340878}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114735874438384254
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1811491897340878}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae5c664832a26a049a2b054acc6542ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blockPrefab: {fileID: 1047592790041198, guid: 10acb4a691cc05347b0b3c186c84acc4,
+    type: 2}
+  extinctorPrefab: {fileID: 1040333837174470, guid: 933606df50154f542a5892a642414fe3,
+    type: 2}
+  spatioportSpawnerPrefab: {fileID: 1863592346692030, guid: 05e73553118545e4e99b71ce4b0f2534,
+    type: 2}
+  disabledBlockPrefab: {fileID: 0}
+  blocks:
+  - {fileID: 11400000, guid: b7fd27253a34688459ab7ada3dab8486, type: 2}
+  - {fileID: 11400000, guid: 296389d451a99b4459868887eb39ba98, type: 2}
+  - {fileID: 11400000, guid: e682240a92e0c9848af62459a7c632d4, type: 2}
+  - {fileID: 11400000, guid: 71520957214271d428ae7f6622bf754a, type: 2}
+  - {fileID: 11400000, guid: 877f64fcbe812c2449d42d43ec5c6dcf, type: 2}
+  - {fileID: 11400000, guid: fd7ea45607a83c04fac90962b7d5c194, type: 2}
+  - {fileID: 11400000, guid: c11e97e7f91c99741b1129353b9b8aa9, type: 2}
+  - {fileID: 11400000, guid: c89624ea9b43f42468c295920b6d19cf, type: 2}
+  - {fileID: 11400000, guid: 4ddcd1206553745469c4f988663339d3, type: 2}
+  blockContainerColors:
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 0.42352945, g: 0.6156863, b: 0.9686275, a: 1}
+  - {r: 1, g: 0.77647066, b: 0, a: 1}
+  - {r: 0.6392157, g: 0.8705883, b: 0.882353, a: 1}
+  - {r: 0.4156863, g: 0.4901961, b: 0.6039216, a: 1}
+  - {r: 1, g: 1, b: 0.07058824, a: 1}
+  - {r: 0.5372549, g: 0.78823537, b: 0.043137256, a: 1}
+  - {r: 0, g: 0.15294118, b: 0.5137255, a: 1}
+  - {r: 0.909804, g: 0.92549026, b: 0.9294118, a: 1}
+  - {r: 0.5411765, g: 1, b: 0.015686275, a: 1}
+  - {r: 0.9294118, g: 0.49803925, b: 0.40784317, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  - {r: 0.06666667, g: 0.007843138, b: 0.14117648, a: 1}
+  cursorSprite: {fileID: 21300000, guid: b631a20d61d7b5b4d9b8897145cac4e0, type: 3}
+  destroyIcon: {fileID: 21300000, guid: 66734752feff9834b85b7ffdc4cc56c9, type: 3}
+  buildIcon: {fileID: 21300000, guid: c36d5e82e42199b4893b3154edd54325, type: 3}
+  dragIcon: {fileID: 21300000, guid: beacc04761958224e8d1da228151e4a7, type: 3}
+  bridgeIcon: {fileID: 21300000, guid: 5a5b51b82a93c814ab6082318d750ab0, type: 3}
+  citizenInParticle: {fileID: 1285035770339370, guid: f0ff82113bf4f1546a6f3be882a39c72,
+    type: 2}
+  citizenOutParticle: {fileID: 1952097086203690, guid: 18e01baa419fcec40b1a62e40fddbe38,
+    type: 2}
+  unpoweredParticle: {fileID: 1342877443669046, guid: 61401a9446dbf294e9c2b7ee742a808f,
+    type: 2}
+  onFireParticle: {fileID: 1254344908387132, guid: 7d93309ef69cf0b48b8522cfe92c22cd,
+    type: 2}
+  onRiotParticle: {fileID: 1278992186517358, guid: 869a1a98069845348b6aaae2bcf17c66,
+    type: 2}
+  damagedParticle: {fileID: 1943145316284874, guid: 8f2db58443c89a346aef2a5762562d14,
+    type: 2}
+  buildingsIcons:
+  - {fileID: 21300000, guid: 15e2ba685d2ee3143a34ccaebc18bd58, type: 3}
+  - {fileID: 21300000, guid: 5adad3d7d23730644a3815e5653b5256, type: 3}
+  - {fileID: 21300000, guid: 414500052b0d4c04e826f3ecadd2d66c, type: 3}
+  soundBank: {fileID: 11400000, guid: 764899dc09e5a5841b21cf448bc2fd96, type: 2}
+  mainMusic: {fileID: 8300000, guid: 59d725638fc69e74fadca7c5b3140659, type: 3}
