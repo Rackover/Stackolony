@@ -60,9 +60,9 @@ public class SystemManager : MonoBehaviour {
     {
         GameManager.instance.populationManager.OnNewCycle();
         
-        foreach (Block block in AllBlocks)
+        foreach (Block block in AllBlocks.ToArray())
         {
-            block.OnNewCycle();
+            if(block != null) block.OnNewCycle();
         }
         
         RefreshMoodModifiers();
