@@ -45,7 +45,7 @@ public class Logger : MonoBehaviour
 
     private static void LogMessage(type type, params string[] msgs)
     {
-        if (!GameManager.instance.ENABLE_LOGS) {
+        if (GameManager.instance != null && !GameManager.instance.ENABLE_LOGS) {
             return;
         }
 
