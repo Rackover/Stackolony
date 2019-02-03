@@ -160,9 +160,8 @@ public class EventInterpreter {
                 }
                 int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
                 int amount = System.Convert.ToInt32(GetArgument(args, "amount"));
-                string reason = GetArgument(args, "reason");
 
-                ConsequencesManager.GenerateConsumptionModifier(block, reason, amount, duration);
+                ConsequencesManager.GenerateConsumptionModifier(block, amount, duration);
             }
         },
         { "INCREASE_MOOD_FOR_POPULATION", (args, context) =>
@@ -170,9 +169,8 @@ public class EventInterpreter {
                 Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
                 int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
                 int amount = System.Convert.ToInt32(GetArgument(args, "amount"));
-                string reason = GetArgument(args, "reason");
 
-                ConsequencesManager.GenerateMoodModifier(pop, reason, amount, duration);
+                ConsequencesManager.GenerateMoodModifier(pop, amount, duration);
             }
         },
         { "INCREASE_FOOD_CONSUMPTION_FOR_POPULATION", (args, context) =>
@@ -180,9 +178,8 @@ public class EventInterpreter {
                 Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
                 int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
                 float amount = System.Convert.ToSingle(GetArgument(args, "amount"));
-                string reason = GetArgument(args, "reason");
 
-                ConsequencesManager.GenerateFoodConsumptionModifier(pop, reason, amount, duration);
+                ConsequencesManager.GenerateFoodConsumptionModifier(pop, amount, duration);
             }
         },
         { "INCREASE_HOUSE_NOTATION", (args, context) =>
@@ -195,10 +192,9 @@ public class EventInterpreter {
                     Throw("Impossible cast in "+args+"\n"+e.ToString());
                 }
                 float amount = System.Convert.ToSingle(GetArgument(args, "amount"));
-                string reason = GetArgument(args, "reason");
                 int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
 
-                ConsequencesManager.ChangeHouseNotation(house, reason, amount, duration);
+                ConsequencesManager.ChangeHouseNotation(house, amount, duration);
             }
         },
         { "DECREASE_MOOD_FOR_POPULATION", (args, context) =>
@@ -206,9 +202,8 @@ public class EventInterpreter {
                 Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
                 int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
                 int amount = System.Convert.ToInt32(GetArgument(args, "amount"));
-                string reason = GetArgument(args, "reason");
 
-                ConsequencesManager.GenerateMoodModifier(pop, reason, -amount, duration);
+                ConsequencesManager.GenerateMoodModifier(pop, -amount, duration);
             }
         },
         { "ADD_FLAG_MODIFIER_ON_BUILDING", (args, context) =>
@@ -236,7 +231,7 @@ public class EventInterpreter {
                     Throw("Impossible cast in "+args+"\n"+e.ToString());
                 }
 
-                State state = (State)System.Enum.Parse(typeof(State), GetArguments(args, "state"));
+                State state = (State)System.Enum.Parse(typeof(State), GetArgument(args, "state"));
 
                 ConsequencesManager.AddState(block, state);
             }
