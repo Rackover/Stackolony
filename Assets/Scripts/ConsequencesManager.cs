@@ -131,7 +131,7 @@ public class ConsequencesManager : MonoBehaviour {
 
     }
 
-    public Block GetRandomBuildingOfId(int id)
+    static public Block GetRandomBuildingOfId(int id)
     {
         List<Block> concerned = new List<Block>();
         foreach(Block block in GameManager.instance.systemManager.AllBlocks) {
@@ -142,6 +142,23 @@ public class ConsequencesManager : MonoBehaviour {
         if (concerned.Count > 0) {
             return null;
         }
+
         return concerned[Mathf.FloorToInt(Random.value * concerned.Count)];
+    }
+
+    static public House GetRandomHouseOf(Population pop)
+    {
+        List<House> houses = new List<House>();
+        foreach(PopulationManager.Citizen citizen in GameManager.instance.populationManager.citizenList) {
+            if (citizen.type == pop && citizen.habitation != null) {
+                houses.Add(citizen.habitation);
+            }
+        }
+
+        if (houses.Count > 0) {
+            return null;
+        }
+
+        return houses[Mathf.FloorToInt(Random.value * houses.Count)];
     }
 }
