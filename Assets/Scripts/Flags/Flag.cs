@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Flag : MonoBehaviour {
 
-    [Header("References")]
+    [Header("Flag")]
     public Block block;
     public bool isEnabled = true;
 
@@ -71,6 +71,13 @@ public class Flag : MonoBehaviour {
     //Fonction appelée quand la position du bloc se met à jour
     virtual public void OnBlockUpdate()
     {
+
+    }
+
+    //Fonction appelée quand la position du bloc se met à jour
+    virtual public void OnGridUpdate()
+    {
+        
     }
 
     virtual public void Update()

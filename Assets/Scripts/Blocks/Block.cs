@@ -45,30 +45,49 @@ public class Block : MonoBehaviour
     //Called when block isn't in range of a spatioport
     public void Disable()
     {
-        //Desactive toutes les fonctionnalités du bloc
-        DisableFlags();
+        RefreshStates();
 
-        //Affiche un feedback pour signaler que le bloc est inactif
         if (container.closed == false)
         {
-            container.CloseContainer();
+            container.CloseContainer();   
         }
+
+        UpdatePower();
+    }
+
+    //Called when block is in range of a spatioport
+    public void Enable()
+    {
+        RefreshStates();
+
+        if (container.closed == true)
+        {
+            container.OpenContainer();
+        }
+        
+        UpdatePower();
+    }
+
+    public void OnGridUpdate()
+    {
+        foreach (Flag flag in activeFlags)
+        {
+            flag.OnGridUpdate(); 
+        }
+        foreach (KeyValuePair<State, StateBehavior> state in new Dictionary<State, StateBehavior>(states))
+        {
+            state.Value.OnGridUpdate();
+        }
+    }     
+
+    public void EnableFlags() // Enable all flags of this block
+    {
+        foreach (Flag flag in activeFlags) { flag.Enable(); }
     }
 
     public void DisableFlags() // Disable all flags of this block
     {
-        foreach (Flag flag in activeFlags)
-        {
-            flag.Disable(); 
-        }
-    }
-
-    public void EnableFlags() // Enable all flags of this block
-    {
-        foreach (Flag flag in activeFlags)
-        {
-            flag.Enable(); 
-        }
+        foreach (Flag flag in activeFlags) { flag.Disable(); }
     }
 
     public void RefreshStates() // Refresh the block depending on it's states
@@ -107,27 +126,19 @@ public class Block : MonoBehaviour
 
     public void OnNewCycle()
     {
-        // The .ToArray() is used to make a copy of the array to prevent errors
         foreach (Flag flag in activeFlags.ToArray()){ flag.OnNewCycle(); }
         foreach (KeyValuePair<State, StateBehavior> state in new Dictionary<State, StateBehavior>(states))
         {
-            state.Value.OnNewCycle();
+            state.Value.OnNewMicrocycle();
         }
     }
 
-    //Called when block is in range of a spatioport
-    public void Enable()
+    public void OnNewMicroycle()
     {
-        //Active toutes les fonctionnalités du bloc
-        EnableFlags();
-
-        // Check if a state isn't going to disable the states
-        RefreshStates();
-
-        //Affiche un feedback pour signaler que le bloc est inactif
-        if (container.closed == true)
+        foreach (Flag flag in activeFlags.ToArray()){ flag.OnNewCycle(); }
+        foreach (KeyValuePair<State, StateBehavior> state in new Dictionary<State, StateBehavior>(states))
         {
-            container.OpenContainer();
+            state.Value.OnNewMicrocycle();
         }
     }
 

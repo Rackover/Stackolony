@@ -278,7 +278,6 @@ public class MissionManager : MonoBehaviour {
         return blocksFound;
     }
 
-
     //Renvoit un blockLink à une position donnée, si "onlyBridges" est à true, alors le systeme ne renverra que les blocs aux extrémités des ponts
     Block CheckBlock(Vector3Int initialPos, Vector3Int position, Mission myMission, bool onlyBridges)
     {

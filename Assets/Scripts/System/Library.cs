@@ -28,6 +28,7 @@ public class Library : MonoBehaviour
 	public GameObject onFireParticle;
 	public GameObject onRiotParticle;
 	public GameObject damagedParticle;
+	public GameObject extinguishParticle;
 	
 	[Header("Building")]
     public List<Sprite> buildingsIcons = new List<Sprite>();

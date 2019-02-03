@@ -144,7 +144,14 @@ public class MissionCallbackManager : MonoBehaviour
         MissionManager.Mission myMission = mission;
         for (int i = 1; i < myMission.blocksFound.Count; i++)
         {
-            myMission.blocksFound[i].RemoveState(State.OnFire);
+            if(myMission.blocksFound[i].states.ContainsKey(State.OnFire))
+            {
+                OnFire state = myMission.blocksFound[i].states[State.OnFire] as OnFire;
+                state.StartExtinguish();
+                Debug.Log(myMission.blocksFound[i].name);
+                break;
+                yield return null;
+            }
         }
         GameManager.instance.missionManager.EndMission(myMission);
         yield return null;

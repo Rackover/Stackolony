@@ -4,18 +4,23 @@ using UnityEngine;
 
 public class FiremanStation : Flag, Flag.IFlag
 {
+	[Header("Fireman Behavior")]
 	public int range;
 
-	public override void Update()
+
+	public override void Enable()
 	{
-		base.Update();
+		base.Enable();
+		Debug.Log("Enable FireStation");
+		if(isEnabled) GameManager.instance.missionManager.StartMission(block.gridCoordinates, "Extinguish", range);
 	}
 
-	public override void OnNewMicrocycle()
-	{	
-		base.OnNewMicrocycle();
-		Debug.Log("FireMan duty");
+	public override void OnGridUpdate()
+	{
+		base.OnGridUpdate();
+		if(!isEnabled) return;
+		if(isEnabled) GameManager.instance.missionManager.StartMission(block.gridCoordinates, "Extinguish", range);
 	}
 
-    public System.Type GetFlagType(){ return GetType(); }
+   	public System.Type GetFlagType(){ return GetType(); }
 }
