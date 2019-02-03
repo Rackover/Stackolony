@@ -22,9 +22,9 @@ public class SoundManager : MonoBehaviour
 
 	void Update()
     {
-		ChangeVolume(GameManager.instance.player.options.GetFloat("sfxVolume"));
-		musicPlayer.ChangeVolume(GameManager.instance.player.options.GetFloat("musicVolume"));
-		voicePlayer.ChangeVolume(GameManager.instance.player.options.GetFloat("voiceVolume"));
+		ChangeVolume(GameManager.instance.player.options.GetFloat(Options.Option.voiceVolume));
+		musicPlayer.ChangeVolume(GameManager.instance.player.options.GetFloat(Options.Option.voiceVolume));
+		voicePlayer.ChangeVolume(GameManager.instance.player.options.GetFloat(Options.Option.voiceVolume));
     }
 
 	AudioSource source;

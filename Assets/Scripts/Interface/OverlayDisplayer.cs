@@ -10,7 +10,6 @@ public class OverlayDisplayer : MonoBehaviour {
 
     bool isFolded = true;
     OverlayManager overMan;
-    float referenceWidth;
 
     private void Start()
     {
@@ -37,7 +36,6 @@ public class OverlayDisplayer : MonoBehaviour {
             overlayButton.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = over.sprite;
         }
 
-        referenceWidth = overlayButtonExample.GetComponent<RectTransform>().sizeDelta.x;
         Destroy(overlayButtonExample);
     }
 

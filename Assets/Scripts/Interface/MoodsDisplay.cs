@@ -19,7 +19,6 @@ public class MoodsDisplay : MonoBehaviour {
         foreach(Population race in populations) {
             GameObject raceO = Instantiate(example.gameObject, transform);
             MoodDisplay md = raceO.GetComponent<MoodDisplay>();
-            RectTransform rect = md.rect;
             md.InitializeForPopulation(race);
 
             moods.Add(md);
