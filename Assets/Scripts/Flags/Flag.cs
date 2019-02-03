@@ -68,7 +68,7 @@ public class Flag : MonoBehaviour {
 
     virtual public void UpdateFlag()
     {
-        if(isEnabled) return;
+        if(!isEnabled) return;
     }
 
     virtual public void Use()

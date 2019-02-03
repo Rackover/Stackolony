@@ -29,6 +29,8 @@ public class SpatioportSpawner : MonoBehaviour {
             return;
         }
 
+        GetComponent<Animator>().SetTrigger("StartAnimation");
+
         cameraShake = cineMan.gameObject.GetComponent<CameraShake>();
         transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(coordinates);
         shipGameObject = transform.Find("Ship").gameObject;
@@ -45,7 +47,7 @@ public class SpatioportSpawner : MonoBehaviour {
     private void GetCoordinates()
     {
         GridManagement gridManager = GameManager.instance.gridManagement;
-        coordinates = new Vector3Int(GameManager.instance.gridManagement.spatioportSpawnPoint.x, 0, GameManager.instance.gridManagement.spatioportSpawnPoint.y);
+        coordinates = new Vector3Int(gridManager.spatioportSpawnPoint.x, 0, gridManager.spatioportSpawnPoint.y);
         float worldY = gridManager.myTerrain.SampleHeight(gridManager.IndexToWorldPosition(new Vector3Int(coordinates.x, 0, coordinates.z))) + (gridManager.cellSize.y/2); //+( GameManager.instance.gridManagement.cellSize.y/2); //Les blocs sont placés à 0.5case de haut par rapport au sol, on augmente donc la valeur y de cette taille
         int y = gridManager.WorldPositionToIndex(new Vector3(coordinates.x, worldY, coordinates.z)).y;
         coordinates.y = y;

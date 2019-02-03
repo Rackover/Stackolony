@@ -26,4 +26,11 @@ public class DisplayerManager : MonoBehaviour
 		displayers.Add(Instantiate(displayer, newPosition, Quaternion.identity, transform).GetComponent<Displayer>());
 		return displayers[displayers.Count - 1];
 	}
+
+    public void UnstageAll()
+    {
+        foreach(Displayer displayer in displayers) {
+            displayer.Unstage();
+        }
+    }
 }

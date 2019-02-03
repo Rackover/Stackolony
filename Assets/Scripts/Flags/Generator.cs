@@ -17,9 +17,21 @@ public class Generator : Flag, Flag.IFlag
         GameManager.instance.systemManager.AllGenerators.Add(this);
     }
 
+    public override void Enable()
+    {
+        base.Enable();
+        StartCoroutine(GameManager.instance.systemManager.RecalculatePropagation());
+    }
+
+    public override void Disable()
+    {
+        base.Disable();
+        StartCoroutine(GameManager.instance.systemManager.RecalculatePropagation());
+    }
+
     public void GenerateEnergy()
     {
-        if (isEnabled)
+        if(isEnabled)
         {
             GameManager.instance.missionManager.StartMission(block.gridCoordinates, "EmitEnergy", -1, power);
         }

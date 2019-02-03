@@ -113,18 +113,18 @@ public class PopulationManager : MonoBehaviour
 		// If there is an occupation of my type
 		if(targets.Length > 0)
 		{
-			targets[Random.Range(0, targets.Length)].AddState(BlockState.OnRiot);
+		    targets[Random.Range(0, targets.Length)].AddState(State.OnRiot);
 		}
 		else
 		{
 			targets = GetTargets();
 			if(targets.Length > 0)
 			{
-				targets[Random.Range(0, targets.Length)].AddState(BlockState.OnRiot);
+				targets[Random.Range(0, targets.Length)].AddState(State.OnRiot);
 			}
 			else
 			{
-				GameManager.instance.systemManager.AllBlocks[Random.Range(0, GameManager.instance.systemManager.AllBlocks.Count)].AddState(BlockState.OnRiot);
+				GameManager.instance.systemManager.AllBlocks[Random.Range(0, GameManager.instance.systemManager.AllBlocks.Count)].AddState(State.OnRiot);
 			}
 		}
 	}
@@ -136,9 +136,9 @@ public class PopulationManager : MonoBehaviour
 
 		// Check all Occupators in the city
 		foreach(Occupator occupator in GameManager.instance.systemManager.AllOccupators)
-		{
+		{   
 			// If the Occupator is designed for {pop} and isn't being Ramped right now
-			if(IsForMe(pop, occupator.acceptedPopulation) && !occupator.block.states.Contains(BlockState.OnRiot))
+			if(IsForMe(pop, occupator.acceptedPopulation) && !occupator.block.states.ContainsKey(State.OnRiot))
 			{
 				// Add the block as a potentialTarget
 				targets.Add(occupator.block);
@@ -184,6 +184,11 @@ public class PopulationManager : MonoBehaviour
     public string GetRandomName()
     {
         return names[Mathf.FloorToInt(Random.value * names.Count)];
+    }
+
+    public Population GetRandomPopulation()
+    {
+        return populationTypeList[Mathf.FloorToInt(Random.value * populationTypeList.Length)];
     }
 
     //Return the food consumed by a type of population
@@ -247,7 +252,12 @@ public class PopulationManager : MonoBehaviour
     public void ChangePopulationMood(Population type, float amount)
     {
         float oldValue = populations[type].averageMood;
-        populations[type].averageMood += amount;
+        populations[type].averageMood += amount/populations[type].citizens.Count;
+
+        // Clamping mood
+        if(populations[type].averageMood < 0) populations[type].averageMood = 0f;
+        if(populations[type].averageMood > maxMood) populations[type].averageMood = 100f;
+
         float newValue = populations[type].averageMood;
         Logger.Debug("Population " + type.codeName + " mood has been changed from " + oldValue + " to " + newValue);
     }
@@ -337,5 +347,16 @@ public class PopulationManager : MonoBehaviour
             citizenList.Remove(citizen);
             Debug.Log("Citizen " + citizen.name + " has been killed");
         }
+    }
+
+    public Population GetPopulationByCodename(string codeName)
+    {
+        foreach(Population pop in populationTypeList) {
+            if (pop.codeName == codeName) {
+                return pop;
+            }
+        }
+
+        return null;
     }
 }
