@@ -107,7 +107,7 @@ public class Localization : MonoBehaviour {
             return;
         }
 
-        locs = new Dictionary<KeyValuePair<string, string>, string>();
+        locs = new Dictionary<KeyValuePair<string, string>, string>();  
 
         XmlNodeList nodeList = locFile.SelectNodes("lines")[0].ChildNodes;
         foreach (XmlNode node in nodeList) {

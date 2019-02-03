@@ -143,7 +143,6 @@ public class MoodDisplay : MonoBehaviour {
             homeless.color = homelessColor;
         }
 
-        float moodValue = popMan.GetAverageMood(population) / popMan.maxMood;
         string popName = loc.GetLine(population.codeName, "populationType");
 
         tooltip.ClearLines();

@@ -123,7 +123,7 @@ public class SaveManager : MonoBehaviour {
 
         // Step 2 - Main grid
         Logger.Debug("Reading grid...");
-        Vector3Int gridSize = reader.ReadVector3UInt8();
+        diskSaveData.gridSize = reader.ReadVector3UInt8();
         diskSaveData.blockGrid = new Dictionary<Vector3Int, BlockSaveData>();
         int count = reader.ReadUInt16();
         for (int i = 0; i < count; i++) {

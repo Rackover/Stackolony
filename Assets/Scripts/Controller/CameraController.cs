@@ -11,7 +11,6 @@ public class CameraController : MonoBehaviour {
     [Header("Transforms")] [Space(1)]
     public Transform camCenter;                 // Center of the camera (Used for Lookat + movement)
     public Transform camPivot;                  // Pivot point of the camera (Used for rotation)
-    Transform camTarget;              // Current target of the camera (Should be null at start)
     Vector3 startPosition;
     //public Toggle control;
 
@@ -43,13 +42,11 @@ public class CameraController : MonoBehaviour {
     Transform cameraTransformObjective;  // The camera will try to have the same transform as this
     Vector3 mouseDelta;
     Vector3 lastMousePosition;
-    CursorManagement cursorMan;
     bool isFrozen = false;
 
     void Start()
     {
         startPosition = transform.position;
-        cursorMan = GameManager.instance.cursorManagement;
 
         // Spawning camera
         cameraInstance = Instantiate(cameraModel);
@@ -157,7 +154,6 @@ public class CameraController : MonoBehaviour {
     {
         if (Input.GetButtonDown("MoveCamera")) {
             lastMousePosition = (Vector3)Input.mousePosition;
-            camTarget = null;
         }
         mouseDelta = (Vector3)lastMousePosition - (Vector3)Input.mousePosition;
         camCenter.position += mouseDelta.x * cameraTransformObjective.right.normalized * mouseDriftSensibility * grabSensitivity;

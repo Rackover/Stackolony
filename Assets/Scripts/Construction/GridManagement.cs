@@ -117,8 +117,6 @@ public class GridManagement : MonoBehaviour
     {
         if (grid[coordinates.x, coordinates.y, coordinates.z] != null)
         {
-            GameObject target = grid[coordinates.x, coordinates.y, coordinates.z];
-
             for (int i = coordinates.y + 1; i < maxHeight; i++) //Fait descendre d'une case les blocs
             {
                 if (grid[coordinates.x, i, coordinates.z] == null)

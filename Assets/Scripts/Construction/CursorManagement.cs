@@ -36,7 +36,6 @@ public class CursorManagement : MonoBehaviour
     public bool isDragging;
 
     [HideInInspector] public bool cursorOnUI = false;
-    [HideInInspector] public Vector3 sPosition;float dragDelay = 1f;
     float timer;
     private Vector3Int savedPos;
 
@@ -44,8 +43,6 @@ public class CursorManagement : MonoBehaviour
     private List<GameObject> permanentHighlighter = new List<GameObject>(); 
     private GameObject hoveredBlock;
     private GameObject stackSelector; //La petite fléche qui se met au pied de la tour qu'on selectionne
-    Terrain terr; //Terrain principal sur lequel le joueur pourra placer des blocs
-    Vector2Int heightmapSize;
     [System.NonSerialized] public bool canSwitchTools = true;
 
     public void InitializeGameCursor()
@@ -63,10 +60,6 @@ public class CursorManagement : MonoBehaviour
         stackSelector = Instantiate(stackSelectorPrefab);
         stackSelector.name = "Stack_Selector";
         stackSelector.SetActive(false);
-
-        //Recupere le terrain et ses dimensions
-        terr = Terrain.activeTerrain;
-        heightmapSize = new Vector2Int(terr.terrainData.heightmapWidth, terr.terrainData.heightmapHeight);
     }
     public void KillGameCursor()
     {
@@ -537,7 +530,6 @@ public class CursorManagement : MonoBehaviour
         {
             selectedBlock = _block;
             selectedBlock.StopAllCoroutines();
-            sPosition = selectedBlock.transform.position;
             savedPos = selectedBlock.gridCoordinates;
             if (selectedBlock.transform.Find("Bridge") != null) {
                 GameManager.instance.gridManagement.DestroyBridge(selectedBlock.transform.Find("Bridge").gameObject);
@@ -619,7 +611,6 @@ public class CursorManagement : MonoBehaviour
     {
         if(selectedBlock != null && isDragging)
         {
-            selectedBlock.transform.position = sPosition;
             selectedBlock.boxCollider.enabled = true;
             selectedBlock = null;
             isDragging = false;
