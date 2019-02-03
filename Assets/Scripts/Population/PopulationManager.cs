@@ -2,18 +2,16 @@
 using System.IO;
 using UnityEngine;
 
-public enum ModifierReason { NoCandyMachine, CouldntPaintHisHouse, PaintedHisHouse, GotExtraSpinach, CleanedFactory, UncleanedFactory, ThrowedTrashOnKavgas, CouldntThrowTrashOnKavgas, AutorizedWiredCommunication, RefusedWiredCommunication, AcceptedKrowserFamily, AcceptedCrystalResearchs, AccidentallyBurnedHouse, HadBanquet, NoBanquet, GoodLighting, AllowedConcert, RepairedPowerAccumulator};
-
 public class MoodModifier
 {
-    public ModifierReason reason;
+    public string reason;
     public float amount;
     public int cyclesRemaining;
 }
 
 public class FoodModifier
 {
-    public ModifierReason reason;
+    public string reason;
     public float amount;
     public int cyclesRemaining;
 }
@@ -214,7 +212,7 @@ public class PopulationManager : MonoBehaviour
         return null;
     }
     //Generates a foodmodifier for a given population
-    public void GenerateFoodModifier(Population popType, ModifierReason reason, float newAmount, int cyclesRemaining)
+    public void GenerateFoodModifier(Population popType, string reason, float newAmount, int cyclesRemaining)
     {
         FoodModifier newFoodModifier = new FoodModifier();
         newFoodModifier.reason = reason;
@@ -224,7 +222,7 @@ public class PopulationManager : MonoBehaviour
     }
 
     //Generates a moodmodifier for a given population
-    public void GenerateMoodModifier(Population popType, ModifierReason reason, float amount, int cyclesRemaining)
+    public void GenerateMoodModifier(Population popType, string reason, float amount, int cyclesRemaining)
     {
         MoodModifier newMoodModifier = new MoodModifier();
         newMoodModifier.reason = reason;

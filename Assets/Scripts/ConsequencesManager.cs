@@ -6,25 +6,25 @@ public class ConsequencesManager : MonoBehaviour {
 
     //DONE
     //Add a moodModifier to a type of population
-    public void GenerateMoodModifier(Population pop, ModifierReason reason, float amount, int durationInCycle)
+    public void GenerateMoodModifier(Population pop, string reason, float amount, int durationInCycle)
     {
         GameManager.instance.populationManager.GenerateMoodModifier(pop, reason, amount, durationInCycle);
     }
 
     //Change the consumption of a population type, affecting the houses they're in
-    public void GenerateFoodConsumptionModifier(Population pop, ModifierReason reason, float amount, int durationInCycle)
+    public void GenerateFoodConsumptionModifier(Population pop, string reason, float amount, int durationInCycle)
     {
         GameManager.instance.populationManager.GenerateFoodModifier(pop, reason, amount, durationInCycle);
     }
 
     //Changes the notation of a house (Raising the mood gained when a citizen chose this house)
-    public void ChangeHouseNotation(House house, ModifierReason reason, float amount, int durationInCycle)
+    public void ChangeHouseNotation(House house, string reason, float amount, int durationInCycle)
     {
         GameManager.instance.cityManager.GenerateNotationModifier(house, reason, amount, durationInCycle);
     }
 
     //Changes the energy consumption of a block
-    public void GenerateConsumptionModifier(Block block, ModifierReason reason, int amount, int durationInCycle)
+    public void GenerateConsumptionModifier(Block block, string reason, int amount, int durationInCycle)
     {
         GameManager.instance.cityManager.GenerateConsumptionModifier(block, reason, amount, durationInCycle);
     }
@@ -113,13 +113,13 @@ public class ConsequencesManager : MonoBehaviour {
 
     //TO DO
     //Modify the flag with the new settings, only if flag already exists
-    public void ModifyFlag(Block block, ModifierReason reason, string flagInformations, int durationInCycle)
+    public void ModifyFlag(Block block, string reason, string flagInformations, int durationInCycle)
     {
 
     }
 
     //Generates a flag that'll be removed after X time, only if the flag isn't already there
-    public void GenerateTempFlag(Block block, ModifierReason reason, string flagInformations, int durationInCycle)
+    public void GenerateTempFlag(Block block, string reason, string flagInformations, int durationInCycle)
     {
 
     }

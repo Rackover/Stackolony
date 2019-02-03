@@ -114,7 +114,7 @@ public class EventInterpreter {
         string funcName = explodedStatement[0];
         string arguments = explodedStatement[1];
 
-        return delegate { actionFunctions[funcName](arguments)};
+        return delegate { actionFunctions[funcName](arguments); };
     }
 
 

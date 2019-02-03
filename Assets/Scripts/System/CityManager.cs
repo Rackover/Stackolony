@@ -5,14 +5,14 @@ using System.Linq;
 
 public class NotationModifier
 {
-    public ModifierReason reason;
+    public string reason;
     public float amount;
     public int cyclesRemaining;
 }
 
 public class ConsumptionModifier
 {
-    public ModifierReason reason;
+    public string reason;
     public int amount;
     public int cyclesRemaining;
 }
@@ -79,7 +79,7 @@ public class CityManager : MonoBehaviour {
     }
 
     //Generates a notationModifier for a given house
-    public void GenerateNotationModifier(House house, ModifierReason reason, float newAmount, int cyclesRemaining)
+    public void GenerateNotationModifier(House house, string reason, float newAmount, int cyclesRemaining)
     {
         NotationModifier newNotationModifier = new NotationModifier();
         newNotationModifier.reason = reason;
@@ -88,7 +88,7 @@ public class CityManager : MonoBehaviour {
         house.notationModifiers.Add(newNotationModifier);
     }
 
-    public void GenerateConsumptionModifier(Block block, ModifierReason reason, int newAmount, int cyclesRemaining)
+    public void GenerateConsumptionModifier(Block block, string reason, int newAmount, int cyclesRemaining)
     {
         ConsumptionModifier newConsumptionModifier = new ConsumptionModifier();
         newConsumptionModifier.reason = reason;
