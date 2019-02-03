@@ -27,7 +27,7 @@ public class House : Flag, Flag.IFlag
     public void UpdateHouseInformations()
     {
         foodConsumption = GetFoodConsumption();
-        if (block.currentPower >= block.scheme.consumption)
+        if (block.currentPower >= block.GetConsumption())
             powered = true;
         else
             powered = false;
@@ -125,5 +125,17 @@ public class House : Flag, Flag.IFlag
     public System.Type GetFlagType()
     {
         return GetType();
+    }
+
+    public string GetFlagDatas()
+    {
+        string profiles = "";
+        for (int i = 0; i < acceptedPop.Length; i++)
+        {
+            if (i != 0)
+                profiles += "-";
+            profiles += acceptedPop[i].codeName;
+        }
+        return "House_" + slotAmount + "_" + standingLevel + "_" + profiles;
     }
 }

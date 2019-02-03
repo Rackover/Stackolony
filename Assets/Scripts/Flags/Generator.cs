@@ -43,4 +43,9 @@ public class Generator : Flag, Flag.IFlag
     {
         return GetType();
     }
+
+    public string GetFlagDatas()
+    {
+        return "Generator_" + power;
+    }
 }

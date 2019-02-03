@@ -23,6 +23,12 @@ public class ConsequencesManager : MonoBehaviour {
         GameManager.instance.cityManager.GenerateNotationModifier(house, reason, amount, durationInCycle);
     }
 
+    //Changes the energy consumption of a block
+    public void GenerateConsumptionModifier(Block block, ModifierReason reason, int amount, int durationInCycle)
+    {
+        GameManager.instance.cityManager.GenerateConsumptionModifier(block, reason, amount, durationInCycle);
+    }
+
     //Destroys the specified flag
     public void DestroyFlag(Block block, System.Type flag)
     {
@@ -91,14 +97,21 @@ public class ConsequencesManager : MonoBehaviour {
         yield return null;
     }
 
-
-    //TO DO
-    //Generates a new flag, taking the informations like in flag declaration (Ex : Generator_1_3), changes flag values if flag is already here
-    public void GenerateNewFlag(Block block, string flagInformations)
+    public void DestroyBlock(Block block)
     {
-       // GameManager.instance.flagReader.ReadFlag(block, flagInformations);
+        GameManager.instance.gridManagement.DestroyBlock(block.gridCoordinates);
     }
 
+    //Generates a new flag, taking the informations like in flag declaration (Ex : Generator_1_3), overrides flag values if flag is already here
+    public void GenerateNewFlag(Block block, string flagInformations)
+    {
+        string[] flagElements = flagInformations.Split(new char[] { '_' }, System.StringSplitOptions.RemoveEmptyEntries);
+        DestroyFlag(block, flagElements[0].GetType());
+        GameManager.instance.flagReader.ReadFlag(block, flagInformations);
+    }
+
+
+    //TO DO
     //Modify the flag with the new settings, only if flag already exists
     public void ModifyFlag(Block block, ModifierReason reason, string flagInformations, int durationInCycle)
     {

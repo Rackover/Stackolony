@@ -10,4 +10,9 @@ public class PoliceStation : Flag, Flag.IFlag
     {
         return GetType();
     }
+
+    public string GetFlagDatas()
+    {
+        return "PoliceStation_" + range;
+    }
 }

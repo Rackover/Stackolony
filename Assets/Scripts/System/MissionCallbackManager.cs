@@ -58,7 +58,7 @@ public class MissionCallbackManager : MonoBehaviour
         MissionManager.Mission myMission = mission;
         foreach (Block blocklink in myMission.blocksFound)
         {
-            for (int i = blocklink.scheme.consumption - blocklink.currentPower; i > 0; i--)
+            for (int i = (int)blocklink.GetConsumption() - blocklink.currentPower; i > 0; i--)
             {
                 if (myMission.power > 0)
                 {

@@ -43,4 +43,9 @@ public class NuisanceGenerator : Flag, Flag.IFlag {
     {
         return GetType();
     }
+
+    public string GetFlagDatas()
+    {
+        return "NuisanceGenerator_" + range + "_" + amount;
+    }
 }
