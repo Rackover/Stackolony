@@ -135,13 +135,29 @@ public class CityManager : MonoBehaviour {
         }
     }
 
+    public Flag.IFlag FindFlag(Block block, System.Type type)
+    {
+            for (int i = 0; i < block.activeFlags.Count; i++)
+            {
+                if (block.activeFlags[i].GetFlagType() == type)
+                {
+                    return block.activeFlags[i];
+                }
+            }
+        return null;
+    }
+
     public Block FindRandomBlockWithFlag(System.Type type)
     {
         List<Block> candidates = new List<Block>();
         foreach (Block block in GameManager.instance.systemManager.AllBlocks)
         {
-            if (block.activeFlags[0].GetFlagType() == type) {
-                candidates.Add(block);
+            for (int i = 0; i < block.activeFlags.Count; i++)
+            {
+                if (block.activeFlags[i].GetFlagType() == type)
+                {
+                    candidates.Add(block);
+                }
             }
         }
         int random = Random.Range(0, candidates.Count - 1);

@@ -23,18 +23,21 @@ public class Consequences : MonoBehaviour {
         GameManager.instance.cityManager.GenerateNotationModifier(house, reason, amount, durationInCycle);
     }
 
+    //Destroys the specified flag
+    public void DestroyFlag(Block block, System.Type flag)
+    {
+        if (GameManager.instance.cityManager.FindFlag(block, flag) != null)
+        {
+            Destroy(block.GetComponent<Flag>());
+        }
+    }
+
 
     //TO DO
     //Generates a new flag, taking the informations like in flag declaration (Ex : Generator_1_3), changes flag values if flag is already here
     public void GenerateNewFlag(Block block, string flagInformations)
     {
-
-    }
-
-    //Destroys the specified flag
-    public void DestroyFlag(Block block, System.Type flagName)
-    {
-
+        GameManager.instance.flagReader.ReadFlag(block, flagInformations);
     }
 
     //Modify the flag with the new settings, only if flag already exists
@@ -44,9 +47,14 @@ public class Consequences : MonoBehaviour {
     }
 
     //Change the state of a block (Damaged, Fire, Riot)
-    public void ChangeState(Block block, BlockState state)
+    public void AddState(Block block, BlockState state)
     {
+        block.AddState(state);
+    }
 
+    public void RemoveState(Block block, BlockState state)
+    {
+        block.RemoveState(state);
     }
 
     //Generates a flag that'll be removed after X time, only if the flag isn't already there
