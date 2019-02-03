@@ -60,8 +60,6 @@ public class OnRiot : StateBehavior
 
     public override void Remove()
     {
-        Debug.Log("RemoveRiot");
-
         block.effects.Desactivate(GameManager.instance.library.onRiotParticle);
         block.visuals.animator.SetBool("OnRiot", false);
         block.EnableFlags();

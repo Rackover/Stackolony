@@ -75,6 +75,11 @@ public class SystemManager : MonoBehaviour {
     {
         GameManager.instance.populationManager.OnNewMicrocycle();
 
+        foreach (Block block in AllBlocks.ToArray())
+        {
+            if(block != null) block.OnNewMicroycle();
+        }
+
         yield return StartCoroutine(UpdateHousesInformations());
         yield return StartCoroutine(RecalculateFoodConsumption());
         yield return StartCoroutine(RecalculateOccupators());
