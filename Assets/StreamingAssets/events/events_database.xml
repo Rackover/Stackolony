@@ -31,13 +31,14 @@
 		<yes>
 			[
 				40%{
-					A = RANDOM_BUILDING(id:24) 1;
-					ADD_FLAG_MODIFIER_ON_BUILDING(building:A, flagModifier:Occupator_0_-1_, duration:1) 1;
+					A = RANDOM_BUILDING(id:7) 1;
 				}
 				ELSE{
 				
+					A = RANDOM_BUILDING(id:0) 1;
 				}
 			];;
+			DESTROY_BUILDING(building:A);;
 				
 		</yes>
 	</event>
