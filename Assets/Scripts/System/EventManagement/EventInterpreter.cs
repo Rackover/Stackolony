@@ -30,19 +30,27 @@ public class EventInterpreter {
         }
     }
 
+
+    ////////////////////////////////////////////////
+    ///
+    ///     MAIN EVENT CREATION FUNCTION
+    /// 
+    ///
     public EventManager.GameEvent MakeEvent(int id, string eventDeclaration)
     {
         LoadActionFunctions();
-
         Dictionary<string, Object> context = new Dictionary<string, Object>();
-
-
         eventDeclaration = eventDeclaration.Replace(" ", "").Replace("\n", "").Replace("	", "");
 
         // Double separator (;;) for regular lines
         List<System.Action> actions =  InterpretBlock(eventDeclaration, context, lineSeparator + lineSeparator);
         return new EventManager.GameEvent(id, actions);
     }
+    /// 
+    /// 
+    ////////////////////////////////////////////////
+
+
 
     List<System.Action> InterpretBlock(string block, Dictionary<string, Object> context, string separator, int depth=0){
 
@@ -87,6 +95,7 @@ public class EventInterpreter {
     // Crashes the interpreter, throws an exception
     static void Throw(string info)
     {
+        GameManager.instance.eventManager.interpreterError.Invoke(info);
         Logger.Throw("Syntax error while parsing event : \n" + info);
         throw null;
     }
@@ -188,14 +197,20 @@ public class EventInterpreter {
      // Returns function name and string content
      string[] ExplodeFunction(string statement)
      {
-         if (!CheckDelimiterCount(statement, '(', ')')) {
-             Throw(statement);
-         }
-         string[] explodedStatement = statement.Split('(');
-         string functionName = explodedStatement[0].ToUpper();
-         string content = explodedStatement[1].Remove(explodedStatement[1].Length - 1, 1);
+        if (!CheckDelimiterCount(statement, '(', ')')) {
+            Throw(statement);
+        }
+        string[] explodedStatement = statement.Split('(');
+        string functionName = explodedStatement[0].ToUpper();
+        string content = "";
+        try {
+            content = explodedStatement[1].Remove(explodedStatement[1].Length - 1, 1);
+        }
+        catch(System.Exception e) {
+            Throw("Invalid function call :\n" + statement);
+        }
 
-         return new string[] { functionName, content };
+        return new string[] { functionName, content };
      }
 
      
