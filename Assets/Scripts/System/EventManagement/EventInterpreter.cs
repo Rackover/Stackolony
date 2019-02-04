@@ -329,7 +329,7 @@ public class EventInterpreter {
             }
         );
         actionFunctions.Add(
-            "ADD_FLAG_MODIFIER_ON_BUILDING", (args, context) => {
+            "ADD_FLAG_MODIFIER_ON_BUILDING_FOR_DURATION", (args, context) => {
                 Block block = null;
                 try {
                     block = (Block)context[GetArgument(args, "building")];
@@ -344,7 +344,7 @@ public class EventInterpreter {
             }
         );
         actionFunctions.Add(
-            "ADD_FLAG_ON_BUILDING", (args, context) => {
+            "ADD_FLAG_ON_BUILDING_FOR_DURATION", (args, context) => {
                 Block block = null;
                 try {
                     block = (Block)context[GetArgument(args, "building")];
@@ -356,6 +356,21 @@ public class EventInterpreter {
                 string flag = GetArgument(args, "flag");
 
                 ConsequencesManager.GenerateTempFlag(block, flag, duration);
+            }
+        );
+        actionFunctions.Add(
+            "ADD_FLAG_ON_BUILDING", (args, context) => {
+                Block block = null;
+                try {
+                    block = (Block)context[GetArgument(args, "building")];
+                }
+                catch (System.Exception e) {
+                    Throw("Impossible cast in " + args + "\n" + e.ToString());
+                }
+                string flag = GetArgument(args, "flag");
+
+                // TODO
+                //ConsequencesManager.GenerateFlag(block, flag);
             }
         );
         actionFunctions.Add(
@@ -396,7 +411,7 @@ public class EventInterpreter {
             }
         );
         actionFunctions.Add(
-            "CONVERT_BUILDING_INTO_SCHEME", (args, context) => {
+            "CHANGE_BUILDING_SCHEME", (args, context) => {
                 Block block = null;
                 try {
                     block = (Block)context[GetArgument(args, "building")];
@@ -416,6 +431,7 @@ public class EventInterpreter {
                 int id = System.Convert.ToInt32(GetArgument(args, "id"));
                 BlockScheme into = GameManager.instance.library.GetBlockByID(id);
 
+                // TODO
                 // ConsequencesManager.ConvertBlock(block, into);
             }
         );
@@ -452,8 +468,24 @@ public class EventInterpreter {
                 }
                 int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
                 string flag = GetArgument(args, "flag");
+                
+                ConsequencesManager.DestroyFlag(block, System.Type.GetType(flag));
+            }
+        );
+        actionFunctions.Add(
+            "REMOVE_FLAG_FROM_BUILDING_FOR_DURATION", (args, context) => {
+                Block block = null;
+                try {
+                    block = (Block)context[GetArgument(args, "building")];
+                }
+                catch (System.Exception e) {
+                    Throw("Impossible cast in " + args + "\n" + e.ToString());
+                }
+                int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
+                string flag = GetArgument(args, "flag");
 
-                ConsequencesManager.DestroyFlag(block, flag);
+                // TODO
+                //ConsequencesManager.TempDestroyFlag(block, FlagReader.Get flag, duration);
             }
         );
     }
@@ -523,7 +555,7 @@ public class EventInterpreter {
 
                return block.scheme;
            }
-       },
+       }
 
     };
 
