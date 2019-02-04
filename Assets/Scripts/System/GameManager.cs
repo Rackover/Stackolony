@@ -78,6 +78,11 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         if (DEBUG_MODE) {
+            foreach(UnityEngine.UI.InputField i in FindObjectsOfType<UnityEngine.UI.InputField>()) {
+                if (i.isFocused) {
+                    return;
+                }
+            }
             if (IsInGame()) {
                 CheckDebugGameInputs();
             }
