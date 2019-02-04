@@ -72,6 +72,7 @@ public class SystemManager : MonoBehaviour {
         RefreshFlagModifiers();
         RefreshTempFlags();
         RefreshTempFlagDestroyers();
+        RefreshFireRiskModifiers();
 
         yield return StartCoroutine(OnNewMicrocycle());
         yield return null;
@@ -211,6 +212,22 @@ public class SystemManager : MonoBehaviour {
         }
     }
 
+    public void RefreshFireRiskModifiers()
+    {
+        foreach (Block block in AllBlocks)
+        {
+            List<FireRiskModifier> newFireRiskModifiers = new List<FireRiskModifier>();
+            foreach (FireRiskModifier fireRiskModifier in block.fireRiskModifiers)
+            {
+                fireRiskModifier.cyclesRemaining--;
+                if (fireRiskModifier.cyclesRemaining != 0)
+                {
+                    newFireRiskModifiers.Add(fireRiskModifier);
+                }
+            }
+            block.fireRiskModifiers = newFireRiskModifiers;
+        }
+    }
 
     //Remove 1 cycle on each foodmodifiers
     public void RefreshFoodModifiers()

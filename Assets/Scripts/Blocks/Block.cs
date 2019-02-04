@@ -30,10 +30,12 @@ public class Block : MonoBehaviour
     public List<FlagModifier> flagModifiers = new List<FlagModifier>();
     public List<TempFlag> tempFlags = new List<TempFlag>();
     public List<TempFlagDestroyer> tempFlagDestroyers = new List<TempFlagDestroyer>();
+    public List<FireRiskModifier> fireRiskModifiers = new List<FireRiskModifier>();
 
     [Header("Values")]
 	public int currentPower;
     public int nuisance; //Nuisance received by the block
+    public int fireRiskPercentage; //Fire risk in percent
     public bool isConsideredUnpowered; //Used when updating energy system
     public bool isConsideredDisabled; //Used when updating spatioport
     public bool isLinkedToSpatioport;
@@ -82,6 +84,20 @@ public class Block : MonoBehaviour
         DisableFlags();
     }
 
+    public void TestFireRisks()
+    {
+        int totalFireChances = fireRiskPercentage;
+        foreach (FireRiskModifier fireRiskModifier in fireRiskModifiers)
+        {
+            totalFireChances += fireRiskModifier.amountInPercent;
+        }
+        int random = UnityEngine.Random.Range(0, 100);
+        if (totalFireChances >= random)
+        {
+            //Set block in fire
+            AddState(State.OnFire);
+        }
+    } 
 
     //Called when block is in range of a spatioport
     public void Enable()

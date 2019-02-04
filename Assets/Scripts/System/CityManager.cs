@@ -35,6 +35,12 @@ public class TempFlagDestroyer
     public string flagInformations;
 }
 
+public class FireRiskModifier
+{
+    public int amountInPercent;
+    public int cyclesRemaining;
+}
+
 public class CityManager : MonoBehaviour {
 
     public enum BuildingType { Habitation = 0, Services = 1, Occupators = 2 };
@@ -94,6 +100,15 @@ public class CityManager : MonoBehaviour {
         {
             HousePopulation(GameManager.instance.populationManager.populationTypeList[i], x);
         }
+    }
+
+    //Generates a fireRiskModifier for a gien block
+    public void GenerateFireRiskModifier(Block block, int amountInPercent, int cyclesRemaining)
+    {
+        FireRiskModifier newFireRiskModifier = new FireRiskModifier();
+        newFireRiskModifier.amountInPercent = amountInPercent;
+        newFireRiskModifier.cyclesRemaining = cyclesRemaining;
+        block.fireRiskModifiers.Add(newFireRiskModifier);
     }
 
     //Generates a notationModifier for a given house

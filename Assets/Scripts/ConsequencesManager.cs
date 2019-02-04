@@ -23,6 +23,12 @@ public class ConsequencesManager : MonoBehaviour {
         GameManager.instance.cityManager.GenerateNotationModifier(house, amount, durationInCycle);
     }
 
+    //Generates a fireRiskModifier, to change the chances of a blockbeing set on fire each cycle
+    static public void GenerateFireRiskModifier(Block block, int amountInPercent, int durationInCycle)
+    {
+        GameManager.instance.cityManager.GenerateFireRiskModifier(block, amountInPercent, durationInCycle);
+    }
+
     //Changes the energy consumption of a block
     static public void GenerateConsumptionModifier(Block block, int amount, int durationInCycle)
     {
