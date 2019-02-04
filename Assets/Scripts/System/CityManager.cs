@@ -3,6 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+public class NotationModifier
+{
+    public float amount;
+    public int cyclesRemaining;
+}
+
+public class ConsumptionModifier
+{
+    public int amount;
+    public int cyclesRemaining;
+}
+
+public class FlagModifier
+{
+    public string flagInformations;
+    public int cyclesRemaining;
+}
+
+public class TempFlag
+{
+    public string flagInformations;
+    public int cyclesRemaining;
+    public System.Type flagType;
+}
+
 public class CityManager : MonoBehaviour {
 
     public enum BuildingType { Habitation = 0, Services = 1, Occupators = 2 };
@@ -13,8 +38,7 @@ public class CityManager : MonoBehaviour {
 
     List<int> lockedBuildings = new List<int >();
 
-    //Comment fonctionne la notation d'une maison :
-    // 
+
     [System.Serializable]
     public class MoodValues
     {
@@ -30,6 +54,7 @@ public class CityManager : MonoBehaviour {
     }
 
     public MoodValues moodValues;
+
 
     private void Start()
     {
@@ -62,6 +87,64 @@ public class CityManager : MonoBehaviour {
         {
             HousePopulation(GameManager.instance.populationManager.populationTypeList[i], x);
         }
+    }
+
+    //Generates a notationModifier for a given house
+    public void GenerateNotationModifier(House house, float newAmount, int cyclesRemaining)
+    {
+        NotationModifier newNotationModifier = new NotationModifier();
+        newNotationModifier.amount = newAmount;
+        newNotationModifier.cyclesRemaining = cyclesRemaining;
+        house.notationModifiers.Add(newNotationModifier);
+    }
+
+    public void GenerateConsumptionModifier(Block block, int newAmount, int cyclesRemaining)
+    {
+        ConsumptionModifier newConsumptionModifier = new ConsumptionModifier();
+        newConsumptionModifier.amount = newAmount;
+        newConsumptionModifier.cyclesRemaining = cyclesRemaining;
+        block.consumptionModifiers.Add(newConsumptionModifier);
+    }
+
+    public void GenerateFlagModifier(Block block, string flagInformations, int cyclesRemaining)
+    {
+        string[] flagElements = flagInformations.Split(new char[] { '_' }, System.StringSplitOptions.RemoveEmptyEntries);
+        bool flagFound = false;
+        foreach (Flag.IFlag flags in block.activeFlags)
+        {
+            if (flags.GetFlagType() == System.Type.GetType(flagElements[0])) {
+                flagFound = true;
+            }
+        }
+        if (!flagFound)
+        {
+            return;
+        }
+        FlagModifier newFlagModifier = new FlagModifier();
+        newFlagModifier.cyclesRemaining = cyclesRemaining;
+        newFlagModifier.flagInformations = flagInformations;
+        //Apply the flag modification
+        GameManager.instance.flagReader.ReadFlag(block, flagInformations);
+        block.flagModifiers.Add(newFlagModifier);
+    }
+
+    public void GenerateTempFlag(Block block, string flagInformations, int cyclesRemaining)
+    {
+        string[] flagElements = flagInformations.Split(new char[] { '_' }, System.StringSplitOptions.RemoveEmptyEntries);
+        foreach (Flag.IFlag flags in block.activeFlags)
+        {
+            if (flags.GetFlagType() == System.Type.GetType(flagElements[0]))
+            {
+                return;
+            }
+        }
+        TempFlag newTempFlag = new TempFlag();
+        newTempFlag.cyclesRemaining = cyclesRemaining;
+        newTempFlag.flagInformations = flagInformations;
+        newTempFlag.flagType = System.Type.GetType(flagElements[0]);
+        //Generates the flag
+        GameManager.instance.flagReader.ReadFlag(block, flagInformations);
+        block.tempFlags.Add(newTempFlag);
     }
 
     //Finds a house for every citizens from a defined population
@@ -119,13 +202,29 @@ public class CityManager : MonoBehaviour {
         }
     }
 
+    public Flag.IFlag FindFlag(Block block, System.Type type)
+    {
+            for (int i = 0; i < block.activeFlags.Count; i++)
+            {
+                if (block.activeFlags[i].GetFlagType() == type)
+                {
+                    return block.activeFlags[i];
+                }
+            }
+        return null;
+    }
+
     public Block FindRandomBlockWithFlag(System.Type type)
     {
         List<Block> candidates = new List<Block>();
         foreach (Block block in GameManager.instance.systemManager.AllBlocks)
         {
-            if (block.activeFlags[0].GetFlagType() == type) {
-                candidates.Add(block);
+            for (int i = 0; i < block.activeFlags.Count; i++)
+            {
+                if (block.activeFlags[i].GetFlagType() == type)
+                {
+                    candidates.Add(block);
+                }
             }
         }
         int random = Random.Range(0, candidates.Count - 1);
@@ -221,7 +320,10 @@ public class CityManager : MonoBehaviour {
         if (notation >= 0)
             notation += moodValues.everythingFine;
 
-        notation += house.notationModifier;
+        foreach (NotationModifier notationModifier in house.notationModifiers)
+        {
+            notation += notationModifier.amount;
+        }
         return notation;
     }
     

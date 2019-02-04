@@ -59,4 +59,9 @@ public class FiremanStation : Flag, Flag.IFlag
     {
         return GetType();
     }
+
+    public string GetFlagDatas()
+    {
+        return "FiremanStation_" + range;
+    }
 }

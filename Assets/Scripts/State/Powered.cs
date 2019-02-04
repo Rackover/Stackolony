@@ -13,7 +13,7 @@ public class Powered : StateBehavior
 		else
 		{
 			block.effects.Desactivate(GameManager.instance.library.unpoweredParticle);
-			block.EnableFlags();
+            block.Enable();
 		}
     }
 
@@ -26,7 +26,7 @@ public class Powered : StateBehavior
 		else
 		{
 			block.effects.Activate(GameManager.instance.library.unpoweredParticle);
-			block.DisableFlags();
+            block.Disable();
 		}
 		
 		base.Remove();

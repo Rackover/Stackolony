@@ -26,13 +26,17 @@ public class Block : MonoBehaviour
     [Header("Lists")]
     public List<Flag.IFlag> activeFlags = new List<Flag.IFlag>();
 	public Dictionary<State, StateBehavior> states = new Dictionary<State, StateBehavior>();
+    public List<ConsumptionModifier> consumptionModifiers = new List<ConsumptionModifier>();
+    public List<FlagModifier> flagModifiers = new List<FlagModifier>();
+    public List<TempFlag> tempFlags = new List<TempFlag>();
 
     [Header("Values")]
 	public int currentPower;
     public int nuisance; //Nuisance received by the block
     public bool isConsideredUnpowered; //Used when updating energy system
     public bool isConsideredDisabled; //Used when updating spatioport
-    public bool isLinkedToSpatioport; 
+    public bool isLinkedToSpatioport;
+    public bool isEnabled = false;
 
     public void Awake()
     {
@@ -45,17 +49,54 @@ public class Block : MonoBehaviour
         UpdateFlags();
     }
 
-    //Called when block isn't in range of a spatioport
-    public void Disable()
+    public void Pack()
     {
-        //Desactive toutes les fonctionnalités du bloc
-        DisableFlags();
-
+        Disable();
         //Affiche un feedback pour signaler que le bloc est inactif
         if (container.closed == false)
         {
             container.CloseContainer();
         }
+    }
+
+    public void UnPack()
+    {
+        Enable();
+        //Affiche un feedback pour signaler que le bloc est inactif
+        if (container.closed == true)
+        {
+            container.OpenContainer();
+        }
+    }
+
+    //Called when block isn't in range of a spatioport
+    public void Disable()
+    {
+        if (!isEnabled)
+        {
+            return;
+        }
+        isEnabled = false;
+        //Desactive toutes les fonctionnalités du bloc
+        DisableFlags();
+    }
+
+
+    //Called when block is in range of a spatioport
+    public void Enable()
+    {
+        if (isEnabled)
+        {
+            return;
+        }
+
+        isEnabled = true; 
+
+        //Active toutes les fonctionnalités du bloc
+        EnableFlags();
+
+        // Check if a state isn't going to disable the states
+        RefreshStates();
     }
 
     public void DisableFlags() // Disable all flags of this block
@@ -118,22 +159,6 @@ public class Block : MonoBehaviour
         }
     }
 
-    //Called when block is in range of a spatioport
-    public void Enable()
-    {
-        //Active toutes les fonctionnalités du bloc
-        EnableFlags();
-
-        // Check if a state isn't going to disable the states
-        RefreshStates();
-
-        //Affiche un feedback pour signaler que le bloc est inactif
-        if (container.closed == true)
-        {
-            container.OpenContainer();
-        }
-    }
-
     public void ChangePower(int number) 
     {
         currentPower = number;
@@ -153,32 +178,49 @@ public class Block : MonoBehaviour
         }
     }
 
+    public int GetConsumption()
+    {
+        int consumption = scheme.consumption;
+        foreach (ConsumptionModifier consumptionModifier in consumptionModifiers)
+        {
+            consumption += consumptionModifier.amount;
+        }
+        return consumption;
+    }
+
     public void LoadBlock()
     {
         GameManager.instance.systemManager.AllBlocks.Add(this);
-        if (scheme.consumption > 0)
+        if (GetConsumption() > 0)
         {
             GameManager.instance.systemManager.AllBlocksRequiringPower.Add(this);
-            UpdatePower();
         }
-
         visuals.NewVisual(scheme.model);
 
         foreach (string flag in scheme.flags)
         {
             GameManager.instance.flagReader.ReadFlag(this, flag);
         }
+
+        Enable();
     }
 
     public void UnloadBlock()
     {
+        GameManager.instance.systemManager.AllBlocks.Remove(this);
+        if (GetConsumption() > 0)
+        {
+            GameManager.instance.systemManager.AllBlocksRequiringPower.Remove(this);
+        }
         visuals.Hide();
         effects.Hide();
+
+        Disable();
     }
 
     public void UpdatePower()
 	{
-		if(currentPower >= scheme.consumption)
+		if(currentPower >= GetConsumption())
 		{
 			AddState(State.Powered);
 		}

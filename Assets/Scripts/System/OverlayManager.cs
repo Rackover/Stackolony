@@ -118,13 +118,13 @@ public class OverlayManager : MonoBehaviour
             {
                 Color chosenColor = defaultColor;
 
-                if (block.scheme.consumption > 0)
+                if (block.GetConsumption() > 0)
                 {
                     if (block.currentPower <= 0)
                     {
                         chosenColor = color.Evaluate(0f);
                     }
-                    else if (block.currentPower >= block.scheme.consumption)
+                    else if (block.currentPower >= block.GetConsumption())
                     {
                         chosenColor = color.Evaluate(1f);
                     }

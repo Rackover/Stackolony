@@ -10,13 +10,25 @@ public class NuisanceGenerator : Flag, Flag.IFlag {
     public override void Awake()
     {
         base.Awake();
-        GameManager.instance.systemManager.AllNuisanceGenerators.Add(this);
     }
 
     public override void OnDestroy()
     {
         GameManager.instance.systemManager.AllNuisanceGenerators.Remove(this);
         base.OnDestroy();
+    }
+
+    public override void Enable()
+    {
+        base.Enable();
+        GameManager.instance.systemManager.AllNuisanceGenerators.Add(this);
+    }
+
+    public override void Disable()
+    {
+        base.Disable();
+        GameManager.instance.systemManager.AllNuisanceGenerators.Remove(this);
+        StartCoroutine(GameManager.instance.systemManager.RecalculateNuisance());
     }
 
     public void GenerateNuisance()
@@ -30,5 +42,10 @@ public class NuisanceGenerator : Flag, Flag.IFlag {
     public System.Type GetFlagType()
     {
         return GetType();
+    }
+
+    public string GetFlagDatas()
+    {
+        return "NuisanceGenerator_" + range + "_" + amount;
     }
 }

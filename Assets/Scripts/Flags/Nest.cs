@@ -6,4 +6,9 @@ public class Nest : Flag, Flag.IFlag
     {
         return GetType();
     }
+
+    public string GetFlagDatas()
+    {
+        return "Nest";
+    }
 }
