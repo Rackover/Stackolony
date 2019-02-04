@@ -99,14 +99,16 @@ public class BuildingMenuItem : MonoBehaviour {
                 if (GameManager.instance.cursorManagement.cursorOnUI) {
                     return;
                 }
-
-                GameManager.instance.gridManagement.LayBlock(
-                    blockId, 
-                    new Vector2Int(
-                        GameManager.instance.cursorManagement.posInGrid.x,
-                        GameManager.instance.cursorManagement.posInGrid.z
-                    )
-                );
+                if (GameManager.instance.cursorManagement.posInGrid.y >= GameManager.instance.gridManagement.minHeight)
+                {
+                    GameManager.instance.gridManagement.LayBlock(
+                        blockId,
+                        new Vector2Int(
+                            GameManager.instance.cursorManagement.posInGrid.x,
+                            GameManager.instance.cursorManagement.posInGrid.z
+                        )
+                    );
+                }
             }
 
         }
