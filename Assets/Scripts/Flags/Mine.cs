@@ -12,6 +12,7 @@ public class Mine : Flag, Flag.IFlag
             block.Destroy();
         }
     }
+    
     public System.Type GetFlagType() { return GetType(); }
     public string GetFlagDatas() { return "Mine"; }
 }

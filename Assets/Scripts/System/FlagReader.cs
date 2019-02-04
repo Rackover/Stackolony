@@ -235,92 +235,180 @@ public class FlagReader : MonoBehaviour
 				break;
 	#endregion
 
-    	#region Occupator 
-			case "Extractor":
-				if(flagElements.Length == 4)
-				{
-                    Extractor foundOccupator = block.GetComponent<Extractor>();
-                    if (foundOccupator == null)
+    #region Extractor 
+        case "Extractor":
+            if(flagElements.Length == 4)
+            {
+                Extractor foundOccupator = block.GetComponent<Extractor>();
+                if (foundOccupator == null)
+                {
+                    Extractor newOccupator = block.gameObject.AddComponent<Extractor>();
+                    int slotAmount = 0;
+                    try  // TRY SETTING UP THE SLOTAMOUNT
                     {
-                        Extractor newOccupator = block.gameObject.AddComponent<Extractor>();
-                        int slotAmount = 0;
-                        try  // TRY SETTING UP THE SLOTAMOUNT
+                        slotAmount = int.Parse(flagElements[1]);
+                    }
+                    catch (FormatException fe)
+                    {
+                        Destroy(newOccupator);
+                        Logger.Warn(block.scheme.name + " - Occupator : Unvalid slotAmount entry for as the first parameter. Please enter an int value.");
+                        break;
+                    }
+
+                    if (slotAmount < 0)
+                    {
+                        Destroy(newOccupator);
+                        Logger.Warn(block.scheme.name + " - Occupator : slot value has to be higher than 0.");
+                        break;
+                    }
+
+                    try  // TRY SETTING UP THE RANGE
+                    {
+                        newOccupator.range = int.Parse(flagElements[2]);
+                    }
+                    catch (FormatException fe)
+                    {
+                        Destroy(newOccupator);
+                        Logger.Warn(block.scheme.name + " - Occupator : Unvalid range entry for as the first parameter. Please enter an int value.");
+                        break;
+                    }
+
+                    if (newOccupator.range < 0)
+                    {
+                        Destroy(newOccupator);
+                        Logger.Warn(block.scheme.name + " - Occupator : range value has to be higher than 0.");
+                        break;
+                    }
+
+
+                    string[] profiles = SplitParametorInArray(flagElements[3]);
+
+                    string result = IsProfileArrayIsValid(profiles);
+
+                    if (result != "")
+                    {
+                        Destroy(newOccupator);
+                        Logger.Warn(block.scheme.name + " - Occupator : " + result);
+                        break;
+                    }
+
+                    newOccupator.slots = slotAmount;
+                    Population[] acceptedPop = new Population[profiles.Length];
+
+                    for (int i = 0; i < profiles.Length; i++)
+                    {
+                        foreach (Population pop in GameManager.instance.populationManager.populationTypeList)
                         {
-                            slotAmount = int.Parse(flagElements[1]);
-                        }
-                        catch (FormatException fe)
-                        {
-                            Destroy(newOccupator);
-                            Logger.Warn(block.scheme.name + " - Occupator : Unvalid slotAmount entry for as the first parameter. Please enter an int value.");
-                            break;
-                        }
-
-                        if (slotAmount < 0)
-                        {
-                            Destroy(newOccupator);
-                            Logger.Warn(block.scheme.name + " - Occupator : slot value has to be higher than 0.");
-                            break;
-                        }
-
-                        try  // TRY SETTING UP THE RANGE
-                        {
-                            newOccupator.range = int.Parse(flagElements[2]);
-                        }
-                        catch (FormatException fe)
-                        {
-                            Destroy(newOccupator);
-                            Logger.Warn(block.scheme.name + " - Occupator : Unvalid range entry for as the first parameter. Please enter an int value.");
-                            break;
-                        }
-
-                        if (newOccupator.range < 0)
-                        {
-                            Destroy(newOccupator);
-                            Logger.Warn(block.scheme.name + " - Occupator : range value has to be higher than 0.");
-                            break;
-                        }
-
-
-                        string[] profiles = SplitParametorInArray(flagElements[3]);
-
-                        string result = IsProfileArrayIsValid(profiles);
-
-                        if (result != "")
-                        {
-                            Destroy(newOccupator);
-                            Logger.Warn(block.scheme.name + " - Occupator : " + result);
-                            break;
-                        }
-
-                        newOccupator.slots = slotAmount;
-                        Population[] acceptedPop = new Population[profiles.Length];
-
-                        for (int i = 0; i < profiles.Length; i++)
-                        {
-                            foreach (Population pop in GameManager.instance.populationManager.populationTypeList)
+                            if (profiles[i] == pop.codeName)
                             {
-                                if (profiles[i] == pop.codeName)
-                                {
-                                    acceptedPop[i] = pop;
-                                }
+                                acceptedPop[i] = pop;
                             }
                         }
-
-                        newOccupator.acceptedPopulation = acceptedPop;
-
-
-                        block.activeFlags.Add(newOccupator);
-                    } else
-                    {
-                        foundOccupator.range += int.Parse(flagElements[2]);
-                        foundOccupator.slots += int.Parse(flagElements[1]);
                     }
+
+                    newOccupator.acceptedPopulation = acceptedPop;
+
+
+                    block.activeFlags.Add(newOccupator);
+                } else
+                {
+                    foundOccupator.range += int.Parse(flagElements[2]);
+                    foundOccupator.slots += int.Parse(flagElements[1]);
                 }
-				else
-				{
-                    Logger.Warn( block.scheme.name + " - Occupator : flag wrongly setup. Should be something like this : 'Occupator_10_5_scientist,worker'");
-				}
-				break;
+            }
+            else
+            {
+                Logger.Warn( block.scheme.name + " - Occupator : flag wrongly setup. Should be something like this : 'Occupator_10_5_scientist,worker'");
+            }
+        break;
+	#endregion
+
+#region Extractor 
+        case "Barrack":
+            if(flagElements.Length == 4)
+            {
+                Barrack foundOccupator = block.GetComponent<Barrack>();
+                if (foundOccupator == null)
+                {
+                    Barrack newOccupator = block.gameObject.AddComponent<Barrack>();
+                    int slotAmount = 0;
+                    try  // TRY SETTING UP THE SLOTAMOUNT
+                    {
+                        slotAmount = int.Parse(flagElements[1]);
+                    }
+                    catch (FormatException fe)
+                    {
+                        Destroy(newOccupator);
+                        Logger.Warn(block.scheme.name + " - Occupator : Unvalid slotAmount entry for as the first parameter. Please enter an int value.");
+                        break;
+                    }
+
+                    if (slotAmount < 0)
+                    {
+                        Destroy(newOccupator);
+                        Logger.Warn(block.scheme.name + " - Occupator : slot value has to be higher than 0.");
+                        break;
+                    }
+
+                    try  // TRY SETTING UP THE RANGE
+                    {
+                        newOccupator.range = int.Parse(flagElements[2]);
+                    }
+                    catch (FormatException fe)
+                    {
+                        Destroy(newOccupator);
+                        Logger.Warn(block.scheme.name + " - Occupator : Unvalid range entry for as the first parameter. Please enter an int value.");
+                        break;
+                    }
+
+                    if (newOccupator.range < 0)
+                    {
+                        Destroy(newOccupator);
+                        Logger.Warn(block.scheme.name + " - Occupator : range value has to be higher than 0.");
+                        break;
+                    }
+
+
+                    string[] profiles = SplitParametorInArray(flagElements[3]);
+
+                    string result = IsProfileArrayIsValid(profiles);
+
+                    if (result != "")
+                    {
+                        Destroy(newOccupator);
+                        Logger.Warn(block.scheme.name + " - Occupator : " + result);
+                        break;
+                    }
+
+                    newOccupator.slots = slotAmount;
+                    Population[] acceptedPop = new Population[profiles.Length];
+
+                    for (int i = 0; i < profiles.Length; i++)
+                    {
+                        foreach (Population pop in GameManager.instance.populationManager.populationTypeList)
+                        {
+                            if (profiles[i] == pop.codeName)
+                            {
+                                acceptedPop[i] = pop;
+                            }
+                        }
+                    }
+
+                    newOccupator.acceptedPopulation = acceptedPop;
+
+
+                    block.activeFlags.Add(newOccupator);
+                } else
+                {
+                    foundOccupator.range += int.Parse(flagElements[2]);
+                    foundOccupator.slots += int.Parse(flagElements[1]);
+                }
+            }
+            else
+            {
+                Logger.Warn( block.scheme.name + " - Occupator : flag wrongly setup. Should be something like this : 'Occupator_10_5_scientist,worker'");
+            }
+        break;
 	#endregion
 
 	#region House 

@@ -1,14 +1,16 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
-public class Extractor : Occupator
-{
-	[Header("Extraction")]
-	public Mine mine;
+public class Barrack : Occupator {
+
+	[Header("Holding")]
+	public Nest nest;
 
 	public override void OnGridUpdate()
 	{
 		base.OnGridUpdate();
-		mine = null;
+		nest = null;
         MissionManager.Mission newMission = GameManager.instance.missionManager.PrepareNewMission();
         newMission.position = block.gridCoordinates;
         newMission.callBack = "";
@@ -19,15 +21,15 @@ public class Extractor : Occupator
 
 		foreach(Block b in blocks)
 		{
-			Mine m = b.GetComponent<Mine>();
-			if(m != null)
+			Nest n = b.GetComponent<Nest>();
+			if(n != null)
 			{
-				mine = m;
+				nest = n;
 				break;
 			}
 		}
 
-		if(mine == null)
+		if(nest == null)
 		{
 			isEnabled = false;
 		}
@@ -36,12 +38,9 @@ public class Extractor : Occupator
     public override void OnNewMicrocycle()
     {
         if(!isEnabled) return;
-		if(mine != null)
+		if(nest != null)
 		{
-			mine.health -= affectedCitizen.Count;
+			nest.health -= affectedCitizen.Count;
 		}
     }
-
-	public System.Type GetFlagType(){ return GetType(); }
-	public string GetFlagDatas(){ return "Extractor"; }
 }
