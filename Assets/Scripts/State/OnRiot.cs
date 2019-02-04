@@ -13,8 +13,7 @@ public class OnRiot : StateBehavior
 
         block.effects.Activate(GameManager.instance.library.onRiotParticle);
         block.visuals.animator.SetBool("OnRiot", true);
-        block.DisableFlags();
-        StartCoroutine(GameManager.instance.systemManager.OnGridUpdate());
+        block.Disable();
     }
 
     public override void OnGridUpdate()
@@ -62,9 +61,7 @@ public class OnRiot : StateBehavior
     {
         block.effects.Desactivate(GameManager.instance.library.onRiotParticle);
         block.visuals.animator.SetBool("OnRiot", false);
-        block.EnableFlags();
-        
-        StartCoroutine(GameManager.instance.systemManager.OnGridUpdate());
+        block.Enable();
         base.Remove();
     }
 }

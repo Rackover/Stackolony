@@ -43,11 +43,16 @@ public class MissionCallbackManager : MonoBehaviour
     {
         MissionManager.Mission myMission = mission;
         Occupator linkedOccupator = GameManager.instance.gridManagement.grid[myMission.position.x, myMission.position.y, myMission.position.z].GetComponent<Occupator>();
-        foreach (Block blocklink in myMission.blocksFound)
+
+        lock(myMission.blocksFound)
         {
-            House house = blocklink.GetComponent<House>();
-            house.occupatorsInRange.Add(linkedOccupator);
+            foreach (Block blocklink in myMission.blocksFound)
+            {
+                House house = blocklink.GetComponent<House>();
+                house.occupatorsInRange.Add(linkedOccupator);
+            }
         }
+
         GameManager.instance.missionManager.EndMission(myMission);
         yield return null;
     }

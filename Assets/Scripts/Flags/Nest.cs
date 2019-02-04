@@ -3,7 +3,7 @@
 public class Nest : Flag, Flag.IFlag
 {    
     [Header("Nest")]
-    public float health;
+    public float health = 100f;
 
     public override void OnNewMicrocycle()
     {

@@ -16,8 +16,7 @@ public class Damaged : StateBehavior
 
         block.effects.Activate(GameManager.instance.library.damagedParticle);
         block.visuals.NewVisual(GameManager.instance.library.ruinPrefab);
-        block.DisableFlags();
-        StartCoroutine(GameManager.instance.systemManager.OnGridUpdate());
+        block.Disable();
     }
 
     public override void OnGridUpdate()
@@ -53,8 +52,7 @@ public class Damaged : StateBehavior
     {
         block.visuals.NewVisual(block.scheme.model);
         block.effects.Desactivate(GameManager.instance.library.damagedParticle);
-        block.EnableFlags();
-        StartCoroutine(GameManager.instance.systemManager.OnGridUpdate());
+        block.Enable();
 
         base.Remove();
     }

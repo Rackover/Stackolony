@@ -41,14 +41,14 @@ public class OnFire : StateBehavior
 
     public override void OnNewMicrocycle()
     {
-        base.OnNewCycle();
-        
+        base.OnNewMicrocycle();
         if(!beingExtinguished)
         {
             Spread();
         }
         else 
         {
+            block.Enable();
             Remove();
         }
     }
@@ -65,10 +65,8 @@ public class OnFire : StateBehavior
         else
         {
             block.AddState(State.Damaged);
+            Remove();
         }
-         
-
-        Remove();
     }
 
     public override void Remove()
@@ -76,9 +74,6 @@ public class OnFire : StateBehavior
         block.effects.Desactivate(GameManager.instance.library.extinguishParticle);
         block.effects.Desactivate(GameManager.instance.library.onFireParticle);
         GameManager.instance.soundManager.Play("StoppingFire");
-
-        block.EnableFlags();
-
         base.Remove();
     }
 }

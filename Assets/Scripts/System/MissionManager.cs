@@ -212,7 +212,7 @@ public class MissionManager : MonoBehaviour {
             if (myMission.blocksFound.Count > 0)
             {
                 GameManager.instance.missionCallbackManager.mission = myMission;
-                GameManager.instance.missionCallbackManager.StartCoroutine(callback);
+                if(callback != "") GameManager.instance.missionCallbackManager.StartCoroutine(callback);
             }
             else
             {
