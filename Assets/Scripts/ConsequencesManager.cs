@@ -57,11 +57,16 @@ public class ConsequencesManager : MonoBehaviour {
     //Spawn a X blocks at a random location, choose a random block if no blockID is specified
     static public void SpawnBlocksAtRandomLocation(int amount, int blockID = -1)
     {
-        GameManager.instance.StartCoroutine(SpawnBlocksAtRandomLocationC(amount, blockID));
-    }
-    static IEnumerator SpawnBlocksAtRandomLocationC(int amount, int blockID)
-    {
         Vector3Int location = GameManager.instance.gridManagement.GetRandomCoordinates();
+        GameManager.instance.StartCoroutine(SpawnBlocksAtLocationC(amount, blockID, location));
+    }
+
+    static public void SpawnBlocksAtLocation(int amount, int blockID, Vector3Int location)
+    {
+        GameManager.instance.StartCoroutine(SpawnBlocksAtLocationC(amount, blockID, location));
+    }
+    static IEnumerator SpawnBlocksAtLocationC(int amount, int blockID, Vector3Int location)
+    {
         location.y = GameManager.instance.gridManagement.gridSize.y - 1;
         for (int i = 0; i < amount; i++)
         {
@@ -122,7 +127,7 @@ public class ConsequencesManager : MonoBehaviour {
     }
 
     //Generates a flag that'll be removed after X time, only if the flag isn't already there
-    static public void GenerateTempFlag(Block block, string reason, string flagInformations, int durationInCycle)
+    static public void GenerateTempFlag(Block block, string flagInformations, int durationInCycle)
     {
         GameManager.instance.cityManager.GenerateTempFlag(block, flagInformations, durationInCycle);
     }

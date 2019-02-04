@@ -1,43 +1,86 @@
 ﻿using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
 public class EventInterpreter {
 
-	public EventManager.GameEvent MakeEvent(int id, string eventDeclaration)
+    public string lineSeparator = ";";
+
+    class ObjectPosition : Object{
+        public int x;
+        public int y;
+        public int z;
+
+        public ObjectPosition(string data){
+            x = System.Convert.ToInt32(data.Split(',')[0]);
+            y = System.Convert.ToInt32(data.Split(',')[1]);
+            z = System.Convert.ToInt32(data.Split(',')[2]);
+        }
+
+        public ObjectPosition()
+        {
+
+        }
+
+        public Vector3Int ToVector3Int()
+        {
+            return new Vector3Int(x, y, z);
+        }
+    }
+
+    public EventManager.GameEvent MakeEvent(int id, string eventDeclaration)
     {
         LoadActionFunctions();
 
         Dictionary<string, Object> context = new Dictionary<string, Object>();
 
-        List<System.Action> actions = new List<System.Action>();
 
-        List<string> lines = new List<string>(eventDeclaration.Replace(" ", "").Replace("\n", "").Replace("	", "").Split(';'));
-        foreach (string line in lines) {
-            
-            if (!CheckSyntax(line)) {
-                Throw(line);
-            }
-            actions.Add(InterpretStatement(line, context));
-            
-        }
+        eventDeclaration = eventDeclaration.Replace(" ", "").Replace("\n", "").Replace("	", "");
 
+        // Double separator (;;) for regular lines
+        List<System.Action> actions =  InterpretBlock(eventDeclaration, context, lineSeparator + lineSeparator);
         return new EventManager.GameEvent(id, actions);
     }
 
-    // Checks syntax is correct on statement
-    bool CheckSyntax(string statement)
+    List<System.Action> InterpretBlock(string block, Dictionary<string, Object> context, string separator, int depth=0){
+
+        List<System.Action> actions = new List<System.Action>();
+        List<string> lines = new List<string>(block.Split(new[] { separator }, System.StringSplitOptions.None));
+
+        foreach (string line in lines) {
+
+            if (!CheckSyntax(line)) {
+                Throw(line);
+            }
+            actions.Add(InterpretStatement(line, context, depth));
+
+        }
+
+        return actions;
+    }
+
+    // Interprets list of statement separated by [separator]
+    List<System.Action> InterpretBlock(string block, Dictionary<string, Object> context, char separator)
     {
-        return 
-            CheckParenthesisCount(statement)
+        return InterpretBlock(block, context, separator.ToString());
+    }
+
+     // Checks syntax is correct on statement
+     bool CheckSyntax(string statement)
+    {
+        return
+            CheckDelimiterCount(statement, '(', ')') &&
+            CheckDelimiterCount(statement, '{', ']') &&
+            CheckDelimiterCount(statement, '[', '}')
         ;
     }
 
     // Checks there is as much ) than there is (
-    bool CheckParenthesisCount(string statement)
+    bool CheckDelimiterCount(string statement, char blockOpener, char blockCloser)
     {
-        return Regex.Matches(statement, @"\(").Count == Regex.Matches(statement, @"/)").Count;
+        return statement.Count(f=>f== blockOpener) == statement.Count(f => f == blockCloser);
     }
 
     
@@ -49,9 +92,10 @@ public class EventInterpreter {
     }
     
     // Returns an action based on the string statement
-    System.Action InterpretStatement(string statement, Dictionary<string, Object> context)
+    System.Action InterpretStatement(string statement, Dictionary<string, Object> context, int depth=0)
     {
         System.Action action = delegate { };
+
 
         // Assignation statement
         if (statement.Contains("=")) {
@@ -59,12 +103,60 @@ public class EventInterpreter {
             return delegate { };
         }
         
+        // Chance statement
+        if (statement.StartsWith("[")) {
+            return UnpackControlStructure(statement, context, depth);
+        }
+
         // XCution statement
         return ExecuteActionFunctionFromString(statement, context);
         
     }
 
-  
+    // Interprets inside of a control structure
+    System.Action UnpackControlStructure(string statement, Dictionary<string, Object> context, int depth=0)
+    {
+        string statementInside = statement.Remove(statement.Length-1, 1).Remove(0, 1);
+
+        if (!CheckDelimiterCount(statementInside, '(', ')')) {
+            Throw("Wrong parenthesis count :\n" + statement);
+        }
+        string[] explodedStatement = statementInside.Split(new char[] { '{', '}' }, System.StringSplitOptions.None);
+        
+        if (explodedStatement.Length != 5) {
+            Throw("Invalid control structure :\n" + statement);
+        }
+
+        if (!explodedStatement[2].Contains("ELSE")) {
+            Throw("No ELSE statement in control structure :\n" + string.Join("\n", explodedStatement));
+        }
+
+        // Chances 0-1
+        int amount = 0;
+        try {
+            amount = System.Convert.ToInt32(explodedStatement[0].Replace("%", ""))/100;
+        }
+        catch(System.Exception e) {
+            Throw("Invalid probability in control structure : \n" + explodedStatement[0]);
+        }
+
+        string chanceStatement = explodedStatement[1];
+        string elseStatement = explodedStatement[3];
+
+        return delegate {
+            List<System.Action> blockActions = new List<System.Action>();
+            if (Random.value <= amount) {
+                blockActions = InterpretBlock(chanceStatement, context, lineSeparator + depth.ToString(), depth + 1);
+            }
+            else {
+                blockActions = InterpretBlock(elseStatement, context, lineSeparator + depth.ToString(), depth+1);
+            }
+            foreach(System.Action action in blockActions) {
+                action.Invoke();
+            }
+        };
+    }
+
     // Assigns data to a variable in the context
     void Assign(string assignationStatement, Dictionary<string, Object> context)
     {
@@ -73,13 +165,13 @@ public class EventInterpreter {
             Throw(assignationStatement);
         }
         string varName = explodedStatement[0];
-        Object generated = ExecuteDataFunctionFromString(explodedStatement[1]);
+        Object generated = ExecuteDataFunctionFromString(explodedStatement[1], context);
 
         context[varName] = generated;
     }
 
      // Fetches data from a function taken from a statement
-     Object ExecuteDataFunctionFromString(string statement)
+     Object ExecuteDataFunctionFromString(string statement, Dictionary<string, Object>  context)
      {
          string[] explodedStatement = ExplodeFunction(statement);
          string funcName = explodedStatement[0];
@@ -89,14 +181,14 @@ public class EventInterpreter {
              Throw("Unsupported action function " + funcName + ". Supported action functions \n :" + GetDataFunctions());
          }
 
-         return dataFunctions[funcName].Invoke(content);
+         return dataFunctions[funcName].Invoke(content, context);
     }
 
   
      // Returns function name and string content
      string[] ExplodeFunction(string statement)
      {
-         if (!CheckParenthesisCount(statement)) {
+         if (!CheckDelimiterCount(statement, '(', ')')) {
              Throw(statement);
          }
          string[] explodedStatement = statement.Split('(');
@@ -113,13 +205,25 @@ public class EventInterpreter {
          foreach(string statement in arguments.Split(',')) {
              string[] explodedStatement = statement.Split(':');
              if (explodedStatement[0] == key) {
-                 return explodedStatement[1];
+                try {
+                    return explodedStatement[1];
+                }
+                catch(System.Exception e) {
+                    Throw("Invalid argument : " + statement);
+                }
              }
          }
          Throw("Missing argument \"" + key + "\" in args \"" + arguments + "\"");
          return "";
      }
 
+     // Add an argument to an argument list
+     static string AddArgument(string arguments, string argument)
+    {
+        string[] args = arguments.Split(',');
+        args[args.Length] = argument;
+        return string.Join(",", args);
+    }
    
      // Execute action from function 
      System.Action ExecuteActionFunctionFromString(string statement, Dictionary<string, Object> context)
@@ -128,7 +232,6 @@ public class EventInterpreter {
          string funcName = explodedStatement[0];
          string arguments = explodedStatement[1];
 
-        return delegate { };
         
          if (!actionFunctions.ContainsKey(funcName)) {
              Throw("Unsupported action function " + funcName + ". Supported action functions \n :"+GetActionFunctions());
@@ -152,7 +255,7 @@ public class EventInterpreter {
      List<string> GetDataFunctions()
      {
          List<string> funcs = new List<string>();
-         foreach (KeyValuePair<string, System.Func<string, Object>> function in dataFunctions) {
+         foreach (KeyValuePair<string, System.Func<string, Dictionary<string, Object>, Object>> function in dataFunctions) {
              funcs.Add(function.Key);
          }
          return funcs;
@@ -241,6 +344,21 @@ public class EventInterpreter {
             }
         );
         actionFunctions.Add(
+            "ADD_FLAG_ON_BUILDING", (args, context) => {
+                Block block = null;
+                try {
+                    block = (Block)context[GetArgument(args, "building")];
+                }
+                catch (System.Exception e) {
+                    Throw("Impossible cast in " + args + "\n" + e.ToString());
+                }
+                int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
+                string flag = GetArgument(args, "flag");
+
+                ConsequencesManager.GenerateTempFlag(block, flag, duration);
+            }
+        );
+        actionFunctions.Add(
             "ADD_STATE_ON_BUILDING", (args, context) =>
             {
                 Block block = null;
@@ -277,25 +395,135 @@ public class EventInterpreter {
                 ConsequencesManager.DestroyBlock(block);
             }
         );
+        actionFunctions.Add(
+            "CONVERT_BUILDING_INTO_SCHEME", (args, context) => {
+                Block block = null;
+                try {
+                    block = (Block)context[GetArgument(args, "building")];
+                }
+                catch (System.Exception e) {
+                    Throw("Impossible cast in " + args + "\n" + e.ToString());
+                }
+
+                BlockScheme scheme = null;
+                try {
+                    scheme = (BlockScheme)context[GetArgument(args, "scheme")];
+                }
+                catch (System.Exception e) {
+                    Throw("Impossible cast in " + args + "\n" + e.ToString());
+                }
+
+                int id = System.Convert.ToInt32(GetArgument(args, "id"));
+                BlockScheme into = GameManager.instance.library.GetBlockByID(id);
+
+                // ConsequencesManager.ConvertBlock(block, into);
+            }
+        );
+        actionFunctions.Add(
+            "LAY_MULTIPLE_SCHEME_ON_POSITION", (args, context) => {
+                BlockScheme scheme = null;
+                try {
+                    scheme = (BlockScheme)context[GetArgument(args, "scheme")];
+                }
+                catch (System.Exception e) {
+                    Throw("Impossible cast in " + args + "\n" + e.ToString());
+                }
+
+                int amount = System.Convert.ToInt32(GetArgument(args, "amount"));
+                Vector3Int position = new ObjectPosition(GetArgument(args, "position")).ToVector3Int();
+
+                ConsequencesManager.SpawnBlocksAtLocation(amount, scheme.ID, position);
+            }
+        );
+        actionFunctions.Add(
+            "LAY_SCHEME_ON_POSITION", (args, context) => {
+                AddArgument(args, "amount:1");
+                actionFunctions["LAY_MULTIPLE_SCHEME_ON_POSITION"](args, context);
+            }
+        );
+        actionFunctions.Add(
+            "REMOVE_FLAG_FROM_BUILDING", (args, context) => {
+                Block block = null;
+                try {
+                    block = (Block)context[GetArgument(args, "building")];
+                }
+                catch (System.Exception e) {
+                    Throw("Impossible cast in " + args + "\n" + e.ToString());
+                }
+                int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
+                string flag = GetArgument(args, "flag");
+
+                ConsequencesManager.DestroyFlag(block, flag);
+            }
+        );
     }
 
     /// <summary>
     /// DATA FUNCTIONS
     /// </summary>
-    Dictionary<string, System.Func<string, Object>> dataFunctions = new Dictionary<string, System.Func<string, Object>>() {
+    Dictionary<string, System.Func<string, Dictionary<string, Object>, Object>> dataFunctions = new Dictionary<string, System.Func<string, Dictionary<string, Object>, Object>>() {
 
-       {  "RANDOM_BUILDING", (args) => 
+       {  "RANDOM_BUILDING", (args, ctx) => 
            {
                int id = System.Convert.ToInt32(GetArgument(args, "id"));
                return ConsequencesManager.GetRandomBuildingOfId(id);
            }
        },
-       {   "RANDOM_HOUSE", (args) =>
+       {   "RANDOM_HOUSE", (args, ctx) =>
            {
                Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
                return ConsequencesManager.GetRandomHouseOf(pop);
            }
-       }
+       },
+       {   "SCHEME", (args, ctx) =>
+           {
+               int id = System.Convert.ToInt32(GetArgument(args, "id"));
+               return GameManager.instance.library.GetBlockByID(id);
+           }
+       },
+       {   "BUILDING_FROM_HOUSE", (args, ctx) =>
+           {
+                House house = null;
+                try {
+                    house = (House)ctx[GetArgument(args, "house")];
+                }
+                catch (System.Exception e) {
+                    Throw("Impossible cast in " + args + "\n" + e.ToString());
+                }
+
+               return house.block;
+           }
+       },
+       {   "POSITION_FROM_BUILDING", (args, ctx) =>
+           {
+                Block block = null;
+                try {
+                    block = (Block)ctx[GetArgument(args, "building")];
+                }
+                catch (System.Exception e) {
+                    Throw("Impossible cast in " + args + "\n" + e.ToString());
+                }
+
+               return new ObjectPosition(){
+                   x = block.gridCoordinates.x,
+                   y = block.gridCoordinates.y,
+                   z = block.gridCoordinates.z
+                };
+           }
+       },
+       {   "SCHEME_FROM_BUILDING", (args, ctx) =>
+           {
+                Block block = null;
+                try {
+                    block = (Block)ctx[GetArgument(args, "building")];
+                }
+                catch (System.Exception e) {
+                    Throw("Impossible cast in " + args + "\n" + e.ToString());
+                }
+
+               return block.scheme;
+           }
+       },
 
     };
 

@@ -1,27 +1,61 @@
 <eventsDatabase>
 	<event id="1">
 		<yes>
-			A = RANDOM_BUILDING(id:18);
-			INCREASE_ENERGY_CONSUMPTION(building:A, amount:1, duration:3);
-			INCREASE_MOOD_FOR_POPULATION(population:richies, amount:1);
-			INCREASE_FOOD_CONSUMPTION_FOR_POPULATION(population:richies, amount:1.5);
+			A = RANDOM_BUILDING(id:18);;
+			INCREASE_ENERGY_CONSUMPTION(building:A, amount:1, duration:3);;
+			INCREASE_MOOD_FOR_POPULATION(population:richies, amount:1);;
+			INCREASE_FOOD_CONSUMPTION_FOR_POPULATION(population:richies, amount:1.5);;
 		</yes>
 	</event>
 	<event id="2">
 		<yes>
-			INCREASE_MOOD_FOR_POPULATION(population:artist, amount:2);
-			A = RANDOM_HOUSE(population:artist);
-			INCREASE_HOUSE_NOTATION(house:A, amount:1);
-			ADD_FLAG_ON_BUILDING(building:A, flag: NuisanceGenerator_2_3, duration:1);
+			INCREASE_MOOD_FOR_POPULATION(population:artist, amount:2);;
+			A = RANDOM_HOUSE(population:artist);;
+			INCREASE_HOUSE_NOTATION(house:A, amount:1);;
+			ADD_FLAG_ON_BUILDING(building:A, flag: NuisanceGenerator_2_3, duration:1);;
 		</yes>
 		<no>
-			DECREASE_MOOD_FOR_POPULATION(population:artist, amount:-1);
+			DECREASE_MOOD_FOR_POPULATION(population:artist, amount:-1);;
 		</no>
 	</event>
 	<event id="3">
 		<yes>
-			A = RANDOM_BUILDING(id:24);
-			ADD_FLAG_MODIFIER_ON_BUILDING(building:A, flagModifier:Occupator_0_-1_, duration:1);
+			A = RANDOM_BUILDING(id:24);;
+			ADD_FLAG_MODIFIER_ON_BUILDING(building:A, flagModifier:Occupator_0_-1_, duration:1);;
+			ADD_SETTLERS_TO_NEXT_WAVE(population:richies, amount:4);;
+			DESTROY_BUILDING(building:A);;
+			
+		</yes>
+	</event>
+	<event id="3">
+		<yes>
+			[
+				40%{
+					A = RANDOM_BUILDING(id:24) 1;
+					ADD_FLAG_MODIFIER_ON_BUILDING(building:A, flagModifier:Occupator_0_-1_, duration:1) 1;
+				}
+				ELSE{
+				
+				}
+			];;
+				
+		</yes>
+	</event>
+	<event id="4">
+		<yes>
+			Machin = RANDOM_BUILDING(id:10);;
+			CONVERT_BUILDING_INTO(building:Machin, id:40);;
+		</yes>
+	</event>
+	<event>
+		<yes>
+			maison = RANDOM_HOUSE(population:artist);;
+			Bidule = BUILDING_FROM_HOUSE(house:maison);;
+			pos = POSITION_FROM_BUILDING(building:Bidule);;
+			scc = SCHEME_FROM_BUILDING(building:Bidule);;
+			ADD_FLAG_ON_BUILDING(building:Bidule, flag:NuisanceGenerator_3_1);;
+			LAY_SCHEME_ON_POSITION(position:pos, scheme:scc);;
+			LAY_MULTIPLE_SCHEME_ON_POSITION(position:pos, scheme:scc, amount:10);;
 		</yes>
 	</event>
 </eventsDatabase>	
