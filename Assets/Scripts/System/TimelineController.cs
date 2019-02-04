@@ -66,16 +66,26 @@ public class TimelineController : MonoBehaviour {
         }
 
         // Effective spawn
+        SpawnCitizens();
+
+        // Unlocks
+        CheckUnlocks();
+
+        Logger.Debug("New cycle, spawning " + currentCycle.settlers.Count.ToString() + " citizens and unlocking " + currentCycle.unlocks.Count.ToString() + " buildings");
+    }
+
+    public void SpawnCitizens()
+    {
         foreach (KeyValuePair<Population, int> settler in currentCycle.settlers) {
             GameManager.instance.populationManager.SpawnCitizens(settler.Key, settler.Value);
         }
-
-        // Unlocks
-        foreach(int blockId in currentCycle.unlocks) {
+    }
+    
+    public void CheckUnlocks()
+    {
+        foreach (int blockId in currentCycle.unlocks) {
             GameManager.instance.cityManager.UnlockBuilding(blockId);
         }
-
-        Logger.Debug("New cycle, spawning " + currentCycle.settlers.Count.ToString() + " citizens and unlocking " + currentCycle.unlocks.Count.ToString() + " buildings");
     }
 
     public void LoadCycles()
@@ -134,7 +144,6 @@ public class TimelineController : MonoBehaviour {
                         if (!GameManager.instance.library.BlockExists(id)) {
                             continue;
                         }
-
                         cycle.unlocks.Add(id);
                     }
                     break;

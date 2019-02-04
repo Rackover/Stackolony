@@ -186,8 +186,7 @@ public class GameManager : MonoBehaviour
         {
             overlayManager.SelectOverlay(OverlayType.Density);
         }
-
-
+        
         if (Input.GetKeyDown(KeyCode.End)) {
             temporality.timeScale = 100;
         }
@@ -331,7 +330,7 @@ public class GameManager : MonoBehaviour
             gi.StartGameInterfaces();
         }
         cursorManagement.InitializeGameCursor();
-        temporality.cycleNumber = 0;
+
         temporality.SetDate(0);
         temporality.SetTimeOfDay(20);
         temporality.SetTimeScale(1);
@@ -343,8 +342,15 @@ public class GameManager : MonoBehaviour
 
         // NEW GAME ONLY
         if (isNewGame) {
+
             // CINEMATIC
             Instantiate(library.spatioportSpawnerPrefab);
+
+            // Lock every building
+            foreach (BlockScheme scheme in library.blocks) {
+                cityManager.LockBuilding(scheme.ID);
+            }
+            timelineController.UpdateCycle(0);
         }
 
         // Ingame switch
