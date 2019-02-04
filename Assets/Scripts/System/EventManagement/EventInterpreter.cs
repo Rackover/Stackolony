@@ -30,6 +30,10 @@ public class EventInterpreter {
         }
     }
 
+    public EventInterpreter()
+    {
+        LoadActionFunctions();
+    }
 
     ////////////////////////////////////////////////
     ///
@@ -38,7 +42,6 @@ public class EventInterpreter {
     ///
     public EventManager.GameEvent MakeEvent(int id, string eventDeclaration)
     {
-        LoadActionFunctions();
         Dictionary<string, Object> context = new Dictionary<string, Object>();
         eventDeclaration = eventDeclaration.Replace(" ", "").Replace("\n", "").Replace("	", "");
 
@@ -55,7 +58,7 @@ public class EventInterpreter {
     List<System.Action> InterpretBlock(string block, Dictionary<string, Object> context, string separator, int depth=0){
 
         List<System.Action> actions = new List<System.Action>();
-        List<string> lines = new List<string>(block.Split(new[] { separator }, System.StringSplitOptions.None));
+        List<string> lines = new List<string>(block.Split(new[] { separator }, System.StringSplitOptions.RemoveEmptyEntries));
 
         foreach (string line in lines) {
 
@@ -76,7 +79,7 @@ public class EventInterpreter {
     }
 
      // Checks syntax is correct on statement
-     bool CheckSyntax(string statement)
+    bool CheckSyntax(string statement)
     {
         return
             CheckDelimiterCount(statement, '(', ')') &&
@@ -96,8 +99,9 @@ public class EventInterpreter {
     static void Throw(string info)
     {
         GameManager.instance.eventManager.interpreterError.Invoke(info);
-        Logger.Throw("Syntax error while parsing event : \n" + info);
-        throw null;
+        string msg = "Syntax error while parsing event : \n" + info;
+        Logger.Error(msg);
+        throw new System.Exception(msg);
     }
     
     // Returns an action based on the string statement
@@ -283,6 +287,7 @@ public class EventInterpreter {
     /// </summary>
     Dictionary<string, System.Action<string, Dictionary<string, Object>>> actionFunctions = new Dictionary<string, System.Action<string, Dictionary<string, Object>>>();
     void LoadActionFunctions() {
+        actionFunctions.Clear();
         actionFunctions.Add(
             "INCREASE_ENERGY_CONSUMPTION", (args, context) => {
                 Block block = null;
@@ -301,6 +306,13 @@ public class EventInterpreter {
         actionFunctions.Add(
             "INCREASE_MOOD_FOR_POPULATION", (args, context) =>{
                 Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
+                if (pop == null) {
+                    List<string> pops = new List<string>();
+                    foreach (Population existingPop in GameManager.instance.populationManager.populationTypeList) {
+                        pops.Add(existingPop.codeName);
+                    }
+                    Throw("Invalid population name :\n " + args + "\nPick one from the following : " + string.Join(", ", pops.ToArray()));
+                }
                 int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
                 int amount = System.Convert.ToInt32(GetArgument(args, "amount"));
 
@@ -310,6 +322,13 @@ public class EventInterpreter {
         actionFunctions.Add(
             "INCREASE_FOOD_CONSUMPTION_FOR_POPULATION", (args, context) =>{
                 Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
+                if (pop == null) {
+                    List<string> pops = new List<string>();
+                    foreach (Population existingPop in GameManager.instance.populationManager.populationTypeList) {
+                        pops.Add(existingPop.codeName);
+                    }
+                    Throw("Invalid population name :\n " + args + "\nPick one from the following : " + string.Join(", ", pops.ToArray()));
+                }
                 int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
                 float amount = System.Convert.ToSingle(GetArgument(args, "amount"));
 
@@ -336,6 +355,13 @@ public class EventInterpreter {
             "DECREASE_MOOD_FOR_POPULATION", (args, context) =>
             {
                 Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
+                if (pop == null) {
+                    List<string> pops = new List<string>();
+                    foreach (Population existingPop in GameManager.instance.populationManager.populationTypeList) {
+                        pops.Add(existingPop.codeName);
+                    }
+                    Throw("Invalid population name :\n " + args + "\nPick one from the following : " + string.Join(", ", pops.ToArray()));
+                }
                 int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
                 int amount = System.Convert.ToInt32(GetArgument(args, "amount"));
 
@@ -407,6 +433,13 @@ public class EventInterpreter {
         actionFunctions.Add(
             "ADD_SETTLERS_TO_NEXT_WAVE", (args, context) => {
                 Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
+                if (pop == null) {
+                    List<string> pops = new List<string>();
+                    foreach(Population existingPop in GameManager.instance.populationManager.populationTypeList) {
+                        pops.Add(existingPop.codeName);
+                    }
+                    Throw("Invalid population name :\n " + args+"\nPick one from the following : "+string.Join(", ", pops.ToArray()));
+                }
                 int amount = System.Convert.ToInt32(GetArgument(args, "amount"));
 
                 ConsequencesManager.AddSettlerBonusForNextWave(pop, amount); 
@@ -519,6 +552,11 @@ public class EventInterpreter {
        {   "RANDOM_HOUSE", (args, ctx) =>
            {
                Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
+                List<string> pops = new List<string>();
+                foreach(Population existingPop in GameManager.instance.populationManager.populationTypeList) {
+                    pops.Add(existingPop.codeName);
+                }
+                Throw("Invalid population name :\n " + args+"\nPick one from the following : "+string.Join(", ", pops.ToArray()));
                return ConsequencesManager.GetRandomHouseOf(pop);
            }
        },
