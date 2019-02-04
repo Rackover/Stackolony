@@ -71,6 +71,7 @@ public class SystemManager : MonoBehaviour {
         RefreshConsumptionModifiers();
         RefreshFlagModifiers();
         RefreshTempFlags();
+        RefreshTempFlagDestroyers();
 
         yield return StartCoroutine(OnNewMicrocycle());
         yield return null;
@@ -80,7 +81,6 @@ public class SystemManager : MonoBehaviour {
     public IEnumerator OnNewMicrocycle()
     {
         GameManager.instance.populationManager.OnNewMicrocycle();
-
         yield return StartCoroutine(UpdateHousesInformations());
         yield return StartCoroutine(RecalculateFoodConsumption());
         yield return StartCoroutine(RecalculateOccupators());
@@ -170,6 +170,27 @@ public class SystemManager : MonoBehaviour {
         }
     }
 
+    public void RefreshTempFlagDestroyers()
+    {
+        foreach (Block block in AllBlocks)
+        {
+            List<TempFlagDestroyer> newTempFlagDestroyerList = new List<TempFlagDestroyer>();
+            foreach (TempFlagDestroyer tempFlagDestroyer in block.tempFlagDestroyers)
+            {
+                tempFlagDestroyer.cyclesRemaining--;
+                if (tempFlagDestroyer.cyclesRemaining == 0)
+                {
+                    //Recreate the flag
+                    GameManager.instance.flagReader.ReadFlag(block, tempFlagDestroyer.flagInformations);
+                }
+                else
+                {
+                    newTempFlagDestroyerList.Add(tempFlagDestroyer);
+                }
+            }
+            block.tempFlagDestroyers = newTempFlagDestroyerList;
+        }
+    }
 
     //Remove 1 cycle on each notationModifier duration
     public void RefreshNotationModifiers()

@@ -28,6 +28,13 @@ public class TempFlag
     public System.Type flagType;
 }
 
+public class TempFlagDestroyer
+{
+    public System.Type flagType;
+    public int cyclesRemaining;
+    public string flagInformations;
+}
+
 public class CityManager : MonoBehaviour {
 
     public enum BuildingType { Habitation = 0, Services = 1, Occupators = 2 };
@@ -145,6 +152,16 @@ public class CityManager : MonoBehaviour {
         //Generates the flag
         GameManager.instance.flagReader.ReadFlag(block, flagInformations);
         block.tempFlags.Add(newTempFlag);
+    }
+
+    public void GenerateTempFlagDestroyer(Block block, System.Type flag, int cyclesRemaining)
+    {
+        TempFlagDestroyer newTempFlagDestroyer = new TempFlagDestroyer();
+        newTempFlagDestroyer.cyclesRemaining = cyclesRemaining;
+        newTempFlagDestroyer.flagType = flag;
+        newTempFlagDestroyer.flagInformations = FindFlag(block, flag).GetFlagDatas(); //Save the flag informations
+        Destroy(block.GetComponent(flag)); //Destroys the flag
+        block.tempFlagDestroyers.Add(newTempFlagDestroyer);
     }
 
     //Finds a house for every citizens from a defined population

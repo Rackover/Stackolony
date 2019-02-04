@@ -14,7 +14,7 @@ public class NuisanceGenerator : Flag, Flag.IFlag {
 
     public override void OnDestroy()
     {
-        GameManager.instance.systemManager.AllNuisanceGenerators.Remove(this);
+        Disable();
         base.OnDestroy();
     }
 
@@ -28,7 +28,7 @@ public class NuisanceGenerator : Flag, Flag.IFlag {
     {
         base.Disable();
         GameManager.instance.systemManager.AllNuisanceGenerators.Remove(this);
-        StartCoroutine(GameManager.instance.systemManager.RecalculateNuisance());
+        GameManager.instance.systemManager.StartCoroutine(GameManager.instance.systemManager.RecalculateNuisance());
     }
 
     public void GenerateNuisance()

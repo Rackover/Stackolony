@@ -176,19 +176,27 @@ public class GridManagement : MonoBehaviour
 
     public Vector3Int GetRandomCoordinates()
     {
-        Vector3Int coordinates = new Vector3Int(UnityEngine.Random.Range(0, gridSize.x), gridSize.y, UnityEngine.Random.Range(0, gridSize.z));
+        Vector3Int coordinates = Vector3Int.zero;
+        while(0 == 0)
+        {
+            coordinates = new Vector3Int(UnityEngine.Random.Range(0, gridSize.x), gridSize.y, UnityEngine.Random.Range(0, gridSize.z));
 
-        //Position en Y des coordonnées au sol données
-        float worldY =
-            myTerrain.SampleHeight(
-                IndexToWorldPosition(
-                    new Vector3Int(coordinates.x, 0, coordinates.z)
-                )
-            );
-        // Index de Y
-        int y = WorldPositionToIndex(new Vector3(coordinates.x, worldY + cellSize.y / 2, coordinates.y)).y;
+            //Position en Y des coordonnées au sol données
+            float worldY =
+                myTerrain.SampleHeight(
+                    IndexToWorldPosition(
+                        new Vector3Int(coordinates.x, 0, coordinates.z)
+                    )
+                );
+            // Index de Y
+            int y = WorldPositionToIndex(new Vector3(coordinates.x, worldY + cellSize.y / 2, coordinates.y)).y;
 
-        coordinates.y = y;
+            coordinates.y = y;
+            if (coordinates.y > GameManager.instance.gridManagement.minHeight)
+            {
+                break;
+            }
+        }
         return coordinates;
     }
 

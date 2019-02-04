@@ -29,6 +29,7 @@ public class Block : MonoBehaviour
     public List<ConsumptionModifier> consumptionModifiers = new List<ConsumptionModifier>();
     public List<FlagModifier> flagModifiers = new List<FlagModifier>();
     public List<TempFlag> tempFlags = new List<TempFlag>();
+    public List<TempFlagDestroyer> tempFlagDestroyers = new List<TempFlagDestroyer>();
 
     [Header("Values")]
 	public int currentPower;
