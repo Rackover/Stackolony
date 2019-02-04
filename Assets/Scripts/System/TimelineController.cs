@@ -12,16 +12,22 @@ public class TimelineController : MonoBehaviour {
     public int spikeIncrement = 3;
     public int normalIncrement = 1;
     public int randomRange = 2;
-
+    
     class CycleInformation
     {
         public List<int> unlocks = new List<int>();
         public Dictionary<Population, int> settlers = new Dictionary<Population, int>();
     }
 
+    List<KeyValuePair<Population, int>> nextCycleSettlersBonus = new List<KeyValuePair<Population, int>>();
     List<CycleInformation> cycles;
     CycleInformation currentCycle;
     int lastSpikeValue;
+
+    public void AddSettlerBonus(KeyValuePair<Population, int> settlerBonus)
+    {
+        nextCycleSettlersBonus.Add(settlerBonus);
+    }
 
     public void UpdateCycle(int cycleNumber)
     {
@@ -46,6 +52,15 @@ public class TimelineController : MonoBehaviour {
                 }
                 currentCycle.settlers[pop] += 1;
             }
+
+            foreach(KeyValuePair<Population, int> settlerBonus in nextCycleSettlersBonus) {
+                if (!currentCycle.settlers.ContainsKey(settlerBonus.Key)) {
+                    currentCycle.settlers.Add(settlerBonus.Key, 0);
+                }
+                currentCycle.settlers[settlerBonus.Key] += settlerBonus.Value;
+            }
+
+            nextCycleSettlersBonus.Clear();
 
         };
 

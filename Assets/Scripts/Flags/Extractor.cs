@@ -1,16 +1,9 @@
 ﻿using UnityEngine;
 
-public class Extractor : Flag, Flag.IFlag
+public class Extractor : Occupator
 {
-	public Occupator occupator;
+	[Header("Extractor")]
 	public Mine mine;
-
-	public  void Awake()
-	{
-		base.Awake();
-		occupator = gameObject.GetComponent<Occupator>();
-		if(occupator == null) Destroy(this);
-	}
 
 	public override void OnGridUpdate()
 	{
@@ -20,8 +13,9 @@ public class Extractor : Flag, Flag.IFlag
         newMission.position = block.gridCoordinates;
         newMission.callBack = "";
         newMission.range = 1;
-/*
+
 		Block[] blocks = GameManager.instance.missionManager.CheckAdjacentBlocks(block.gridCoordinates, newMission).ToArray();
+		GameManager.instance.missionManager.EndMission(newMission);
 
 		foreach(Block b in blocks)
 		{
@@ -35,20 +29,19 @@ public class Extractor : Flag, Flag.IFlag
 
 		if(mine == null)
 		{
-			occupator.isEnabled = false;
+			isEnabled = false;
 		}
-*/
 	}
 
     public override void OnNewMicrocycle()
     {
         if(!isEnabled) return;
-
 		if(mine != null)
 		{
-			mine.health -= occupator.affectedCitizen.Count;
+			mine.health -= 5f;
 		}
     }
 
 	public System.Type GetFlagType(){ return GetType(); }
+	public string GetFlagDatas(){ return "Extractor"; }
 }

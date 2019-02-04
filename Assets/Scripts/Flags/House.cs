@@ -9,11 +9,11 @@ public class House : Flag, Flag.IFlag
     public Population[] acceptedPop;
     public List<PopulationManager.Citizen> affectedCitizen = new List<PopulationManager.Citizen>();
     public int standingLevel = 1;
-    public int notationModifier = 0;
 
     //Variables
     public List<Occupator> occupatorsInRange = new List<Occupator>();
     public List<FoodProvider> foodProvidersInRange = new List<FoodProvider>();
+    public List<NotationModifier> notationModifiers = new List<NotationModifier>();
     public bool powered;
     public float foodReceived;
     public float distanceToGround;
@@ -27,7 +27,7 @@ public class House : Flag, Flag.IFlag
     public void UpdateHouseInformations()
     {
         foodConsumption = GetFoodConsumption();
-        if (block.currentPower >= block.scheme.consumption)
+        if (block.currentPower >= block.GetConsumption())
             powered = true;
         else
             powered = false;
@@ -91,6 +91,18 @@ public class House : Flag, Flag.IFlag
         base.OnDestroy();
     }
 
+    public override void Enable()
+    {
+        base.Enable();
+        GameManager.instance.systemManager.AllHouses.Add(this);
+    }
+
+    public override void Disable()
+    {
+        base.Disable();
+        GameManager.instance.systemManager.AllHouses.Remove(this);
+    }
+
     void CitizenInFX()
     {
         if(citizenIn == null)
@@ -114,5 +126,17 @@ public class House : Flag, Flag.IFlag
     public System.Type GetFlagType()
     {
         return GetType();
+    }
+
+    public string GetFlagDatas()
+    {
+        string profiles = "";
+        for (int i = 0; i < acceptedPop.Length; i++)
+        {
+            if (i != 0)
+                profiles += "-";
+            profiles += acceptedPop[i].codeName;
+        }
+        return "House_" + slotAmount + "_" + standingLevel + "_" + profiles;
     }
 }

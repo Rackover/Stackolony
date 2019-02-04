@@ -8,9 +8,12 @@ public class FireManager : MonoBehaviour
 
 	public static void Ignite(Block block)
 	{
-		block.AddState(State.OnFire);
-		OnFire of = (OnFire)block.states[State.OnFire];
-		of.id = currentFire++;
+		if(block != null && block.FindFlag(typeof(Spatioport)) == null)
+		{
+			block.AddState(State.OnFire);
+			OnFire of = (OnFire)block.states[State.OnFire];
+			of.id = currentFire++;
+		}
 	}
 
 	public static void Spread(OnFire fire)
@@ -24,7 +27,7 @@ public class FireManager : MonoBehaviour
 
 		foreach(Block block in blocks)
 		{
-			if(block != null)
+			if(block != null && block.FindFlag(typeof(Spatioport)) == null)
 			{
 				if(block.states.ContainsKey(State.Damaged))
 				{

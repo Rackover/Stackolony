@@ -10,7 +10,7 @@ public class PoliceStation : Flag, Flag.IFlag
 	public override void Enable()
 	{
 		base.Enable();
-		if(isEnabled) GameManager.instance.missionManager.StartMission(block.gridCoordinates, "Repress", range);
+		//if(isEnabled) GameManager.instance.missionManager.StartMission(block.gridCoordinates, "Repress", range);
 	}
 
 	public override void OnGridUpdate()
@@ -21,4 +21,5 @@ public class PoliceStation : Flag, Flag.IFlag
 	}
 
     public System.Type GetFlagType() { return GetType(); }
+    public string GetFlagDatas() { return "PoliceStation_" + range; }
 }

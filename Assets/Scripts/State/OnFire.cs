@@ -14,12 +14,7 @@ public class OnFire : StateBehavior
         // Add fire effect and play fire sound
         block.effects.Activate(GameManager.instance.library.onFireParticle);
         GameManager.instance.soundManager.Play("StartingFire");
-
-        // Refresh OnGridUpdate
-        StartCoroutine(GameManager.instance.systemManager.OnGridUpdate());
-
-        // Disactivate all flags of the block
-        block.DisableFlags();
+        block.Disable();
     }
 
     public override void OnGridUpdate()

@@ -26,13 +26,17 @@ public class Block : MonoBehaviour
     [Header("Lists")]
     public List<Flag.IFlag> activeFlags = new List<Flag.IFlag>();
 	public Dictionary<State, StateBehavior> states = new Dictionary<State, StateBehavior>();
+    public List<ConsumptionModifier> consumptionModifiers = new List<ConsumptionModifier>();
+    public List<FlagModifier> flagModifiers = new List<FlagModifier>();
+    public List<TempFlag> tempFlags = new List<TempFlag>();
 
     [Header("Values")]
 	public int currentPower;
     public int nuisance; //Nuisance received by the block
     public bool isConsideredUnpowered; //Used when updating energy system
     public bool isConsideredDisabled; //Used when updating spatioport
-    public bool isLinkedToSpatioport; 
+    public bool isLinkedToSpatioport;
+    public bool isEnabled = false;
 
     public void Awake()
     {
@@ -40,29 +44,54 @@ public class Block : MonoBehaviour
         if(boxCollider == null) boxCollider = GetComponent<BoxCollider>();
     }
 
-    //Called when block isn't in range of a spatioport
-    public void Disable()
+    public void Pack()
     {
-        RefreshStates();
-
+        Disable();
+        //Affiche un feedback pour signaler que le bloc est inactif
         if (container.closed == false)
         {
-            container.CloseContainer();   
+            container.CloseContainer();
         }
-
-        UpdatePower();
     }
 
-    //Called when block is in range of a spatioport
-    public void Enable()
+    public void UnPack()
     {
-        RefreshStates();
-
+        Enable();
+        //Affiche un feedback pour signaler que le bloc est inactif
         if (container.closed == true)
         {
             container.OpenContainer();
         }
-        
+    }
+
+    //Called when block isn't in range of a spatioport
+    public void Disable()
+    {
+        if (!isEnabled)
+        {
+            return;
+        }
+        isEnabled = false;
+        //Desactive toutes les fonctionnalités du bloc
+        DisableFlags();
+    }
+
+
+    //Called when block is in range of a spatioport
+    public void Enable()
+    {
+        if (isEnabled)
+        {
+            return;
+        }
+
+        isEnabled = true; 
+
+        //Active toutes les fonctionnalités du bloc
+        EnableFlags();
+
+        // Check if a state isn't going to disable the states
+        RefreshStates();
         UpdatePower();
     }
 
@@ -90,9 +119,9 @@ public class Block : MonoBehaviour
 
     public void RefreshStates() // Refresh the block depending on it's states
     {
-        foreach (KeyValuePair<State, StateBehavior> state in new Dictionary<State, StateBehavior>(states))
+        foreach(KeyValuePair<State, StateBehavior> state in new Dictionary<State, StateBehavior>(states))
         {
-            if(state.Value.disabler)
+            if(state.Value == null && state.Value.disabler)
             {
                 DisableFlags();
                 break;
@@ -107,6 +136,15 @@ public class Block : MonoBehaviour
         {
             states.Add(state, (StateBehavior)gameObject.AddComponent(type));
         }
+    }
+
+    public Flag.IFlag FindFlag(System.Type flag)
+    {
+        foreach(Flag.IFlag f in activeFlags)
+        {
+            if(f.GetFlagType() == flag) return f;
+        }
+        return null;
     }
 
     public void RemoveState(State state)
@@ -133,7 +171,7 @@ public class Block : MonoBehaviour
 
     public void OnNewMicroycle()
     {
-        foreach (Flag flag in activeFlags.ToArray()){ flag.OnNewCycle(); }
+        foreach (Flag flag in activeFlags.ToArray()){ flag.OnNewMicrocycle(); }
         foreach (KeyValuePair<State, StateBehavior> state in new Dictionary<State, StateBehavior>(states))
         {
             state.Value.OnNewMicrocycle();
@@ -159,32 +197,49 @@ public class Block : MonoBehaviour
         }
     }
 
+    public int GetConsumption()
+    {
+        int consumption = scheme.consumption;
+        foreach (ConsumptionModifier consumptionModifier in consumptionModifiers)
+        {
+            consumption += consumptionModifier.amount;
+        }
+        return consumption;
+    }
+
     public void LoadBlock()
     {
         GameManager.instance.systemManager.AllBlocks.Add(this);
-        if (scheme.consumption > 0)
+        if (GetConsumption() > 0)
         {
             GameManager.instance.systemManager.AllBlocksRequiringPower.Add(this);
-            UpdatePower();
         }
-
         visuals.NewVisual(scheme.model);
 
         foreach (string flag in scheme.flags)
         {
             GameManager.instance.flagReader.ReadFlag(this, flag);
         }
+
+        Enable();
     }
 
     public void UnloadBlock()
     {
+        GameManager.instance.systemManager.AllBlocks.Remove(this);
+        if (GetConsumption() > 0)
+        {
+            GameManager.instance.systemManager.AllBlocksRequiringPower.Remove(this);
+        }
         visuals.Hide();
         effects.Hide();
+
+        Disable();
     }
 
     public void UpdatePower()
 	{
-		if(currentPower >= scheme.consumption)
+		if(currentPower >= GetConsumption())
 		{
 			AddState(State.Powered);
 		}

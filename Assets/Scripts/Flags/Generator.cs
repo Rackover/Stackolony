@@ -10,22 +10,18 @@ public class Generator : Flag, Flag.IFlag
     public override void Awake()
     {
         base.Awake();
-
-        //Generate ou récupère l'objet "SystemReferences";
-        //missionManager.StartMission(myBlockLink.gridCoordinates, "EmitEnergy", -1, power);
-
-        GameManager.instance.systemManager.AllGenerators.Add(this);
     }
 
     public override void Enable()
     {
         base.Enable();
-        StartCoroutine(GameManager.instance.systemManager.RecalculatePropagation());
+        GameManager.instance.systemManager.AllGenerators.Add(this);
     }
 
     public override void Disable()
     {
         base.Disable();
+        GameManager.instance.systemManager.AllGenerators.Remove(this);
         StartCoroutine(GameManager.instance.systemManager.RecalculatePropagation());
     }
 
@@ -46,5 +42,10 @@ public class Generator : Flag, Flag.IFlag
     public System.Type GetFlagType()
     {
         return GetType();
+    }
+
+    public string GetFlagDatas()
+    {
+        return "Generator_" + power;
     }
 }

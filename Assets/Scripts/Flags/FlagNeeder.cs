@@ -19,6 +19,6 @@ public class FlagNeeder : Flag, Flag.IFlag
 		}
 		*/
 	}
-
     public System.Type GetFlagType() { return GetType(); }
+    public string GetFlagDatas() { return "FlagNeeder_" + needed + "_" + range; }
 }

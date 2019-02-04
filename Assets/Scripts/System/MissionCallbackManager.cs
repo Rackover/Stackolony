@@ -58,7 +58,7 @@ public class MissionCallbackManager : MonoBehaviour
         MissionManager.Mission myMission = mission;
         foreach (Block blocklink in myMission.blocksFound)
         {
-            for (int i = blocklink.scheme.consumption - blocklink.currentPower; i > 0; i--)
+            for (int i = blocklink.GetConsumption() - blocklink.currentPower; i > 0; i--)
             {
                 if (myMission.power > 0)
                 {
@@ -94,12 +94,15 @@ public class MissionCallbackManager : MonoBehaviour
     {
         activeCoroutinesRelatedToSpatioport++;
         MissionManager.Mission myMission = mission;
-        foreach (Block blocklink in mission.blocksFound)
+        foreach (Block b in mission.blocksFound.ToArray())
         {
-            blocklink.isConsideredDisabled = false;
-            blocklink.isLinkedToSpatioport = true;
-            blocklink.Enable();
-            yield return new WaitForEndOfFrame();
+            if(b != null)
+            {
+                b.isConsideredDisabled = false;
+                b.isLinkedToSpatioport = true;
+                b.UnPack();
+                yield return new WaitForEndOfFrame();
+            }
         }
         GameManager.instance.missionManager.EndMission(myMission);
         activeCoroutinesRelatedToSpatioport--;
@@ -141,7 +144,6 @@ public class MissionCallbackManager : MonoBehaviour
                 {
                     state.StartExtinguish();
                     break;
-                    yield return null;
                 }
             }
         }
@@ -149,7 +151,7 @@ public class MissionCallbackManager : MonoBehaviour
         yield return null;
     }
 
-    IEnumerator Repress() 
+    IEnumerator Repress()
     {
         MissionManager.Mission myMission = mission;
         for (int i = 1; i < myMission.blocksFound.Count; i++)
@@ -161,7 +163,6 @@ public class MissionCallbackManager : MonoBehaviour
                 {
                     state.StartRepress();
                     break;
-                    yield return null;
                 }
             }
         }
@@ -181,7 +182,6 @@ public class MissionCallbackManager : MonoBehaviour
                 {
                     state.StartRepair();
                     break;
-                    yield return null;
                 }
             }
         }
