@@ -115,8 +115,8 @@ public class EventInterpreter
     {
         return
             CheckDelimiterCount(statement, '(', ')') &&
-            CheckDelimiterCount(statement, '{', ']') &&
-            CheckDelimiterCount(statement, '[', '}')
+            CheckDelimiterCount(statement, '{', '}') &&
+            CheckDelimiterCount(statement, '[', ']')
         ;
     }
 
@@ -142,15 +142,15 @@ public class EventInterpreter
         System.Action action = delegate { };
 
 
+        // Chance statement
+        if (statement.StartsWith("[")) {
+            return UnpackControlStructure(statement, context, depth);
+        }
+
         // Assignation statement
         if (statement.Contains("=")) {
             Assign(statement, context);
             return delegate { };
-        }
-
-        // Chance statement
-        if (statement.StartsWith("[")) {
-            return UnpackControlStructure(statement, context, depth);
         }
 
         // XCution statement
@@ -177,9 +177,9 @@ public class EventInterpreter
         }
 
         // Chances 0-1
-        int amount = 0;
+        float amount = 0;
         try {
-            amount = System.Convert.ToInt32(explodedStatement[0].Replace("%", "")) / 100;
+            amount = System.Convert.ToSingle(explodedStatement[0].Replace("%", "")) / 100;
         }
         catch (System.Exception e) {
             Throw("Invalid probability in control structure : \n" + explodedStatement[0]);
@@ -190,7 +190,8 @@ public class EventInterpreter
 
         return delegate {
             List<System.Action> blockActions = new List<System.Action>();
-            if (Random.value <= amount) {
+            float rnd = Random.value;
+            if (rnd <= amount) {
                 blockActions = InterpretBlock(chanceStatement, context, lineSeparator + depth.ToString(), depth + 1);
             }
             else {
@@ -253,7 +254,7 @@ public class EventInterpreter
     // Get specific string argument from argument list
     static string GetArgument(string arguments, string key)
     {
-        foreach (string statement in arguments.Split(',')) {
+        foreach (string statement in arguments.Split(new char[] { ',', ')', '(' }, System.StringSplitOptions.RemoveEmptyEntries)) {
             string[] explodedStatement = statement.Split(':');
             if (explodedStatement[0] == key) {
                 try {
@@ -483,7 +484,6 @@ public class EventInterpreter
                 catch (System.Exception e) {
                     Throw("Impossible cast in " + args + "\n" + e.ToString());
                 }
-                Debug.Log(block);
                 ConsequencesManager.DestroyBlock(block);
             }
         );
@@ -573,6 +573,7 @@ public class EventInterpreter
 
        {  "RANDOM_BUILDING", (args, ctx) =>
            {
+               Debug.Log(GetArgument(args, "id"));
                int id = System.Convert.ToInt32(GetArgument(args, "id"));
                Block block = ConsequencesManager.GetRandomBuildingOfId(id);
                if (block == null) {
