@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class EventDebugWindow : MonoBehaviour {
 
     bool dragging;
+    bool isHovering = false;
     Vector2 shift = new Vector2();
 
     public Text errorText;
@@ -13,6 +14,8 @@ public class EventDebugWindow : MonoBehaviour {
     public Color badColor = Color.red;
     public InputField inputZone;
     public GameObject errorWindow;
+
+    public List<GameObject> partsToHide;
 
     void Start()
     {
@@ -27,6 +30,14 @@ public class EventDebugWindow : MonoBehaviour {
     {
         if (dragging) {
             transform.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y) + shift;
+        }
+
+        if (isHovering) {
+            if (Input.GetMouseButtonDown(1)) {
+                foreach (GameObject toHide in partsToHide) {
+                    toHide.SetActive(!toHide.activeSelf);
+                }
+            }
         }
     }
 
@@ -56,5 +67,15 @@ public class EventDebugWindow : MonoBehaviour {
         errorText.text = "OK";
         errorText.color = goodColor;
         GameManager.instance.eventManager.ReadAndExecute(inputZone.text);
+    }
+
+    public void OnPointerEnter()
+    {
+        isHovering = true;
+    }
+    
+    public void OnPointerExit()
+    {
+        isHovering = false;
     }
 }
