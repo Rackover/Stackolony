@@ -89,6 +89,15 @@ public class Block : MonoBehaviour {
         }
     }
 
+    public void UpdateNuisance(int amount)
+    {
+        nuisance += amount;
+        foreach (Flag flag in activeFlags)
+        {
+            flag.UpdateNuisanceImpact();
+        }
+    }
+
     public void ChangePower(int number) {
         currentPower = number;
         UpdatePower();

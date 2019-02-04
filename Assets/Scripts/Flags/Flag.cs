@@ -31,6 +31,11 @@ public class Flag : MonoBehaviour {
         isEnabled = false;
     }
 
+    //Met à jour la nuisance des flags
+    virtual public void UpdateNuisanceImpact()
+    {
+    }
+
     //Fonction appelée juste avant de déplacer le bloc
     virtual public void BeforeMovingBlock()
     {

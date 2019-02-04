@@ -17,8 +17,8 @@ public class CityManager : MonoBehaviour {
     [System.Serializable]
     public class MoodValues
     {
-        public int goodNotationTreshold = -5; //Above this note, house is considered "Good"
-        public int badNotationTreshold = -10; //Under this note, house is considered "Bad"
+        public int goodNotationTreshold = 0; //Above this note, house is considered "Good"
+        public int badNotationTreshold = -5; //Under this note, house is considered "Bad"
         public int wrongPopulationType = -2;
         public int noFood = -3;
         public int noOccupations = -2;
@@ -220,7 +220,7 @@ public class CityManager : MonoBehaviour {
         if (notation >= 0)
             notation += moodValues.everythingFine;
 
-        notation += house.notationModifier;
+        notation -= house.nuisanceImpact;
         return notation;
     }
     
