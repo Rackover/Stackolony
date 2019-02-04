@@ -20,9 +20,5 @@ public class FlagNeeder : Flag, Flag.IFlag
 		*/
 	}
 
-    public System.Type GetFlagType()
-    {
-        return GetType();
-    }
-
+    public System.Type GetFlagType() { return GetType(); }
 }

@@ -62,7 +62,7 @@ public class SystemManager : MonoBehaviour {
         
         foreach (Block block in AllBlocks.ToArray())
         {
-            if(block != null) block.OnNewCycle();
+            block.OnNewCycle();
         }
         
         RefreshMoodModifiers();
@@ -77,7 +77,7 @@ public class SystemManager : MonoBehaviour {
 
         foreach (Block block in AllBlocks.ToArray())
         {
-            if(block != null) block.OnNewMicroycle();
+            block.OnNewMicroycle();
         }
 
         yield return StartCoroutine(UpdateHousesInformations());
@@ -93,7 +93,7 @@ public class SystemManager : MonoBehaviour {
     //S'execute à chaques fois qu'un bloc est déplacé dans la grille
     public IEnumerator OnGridUpdate()
     {
-        foreach (Block block in AllBlocks)
+        foreach (Block block in AllBlocks.ToArray())
         {
             block.OnGridUpdate();
         }

@@ -347,9 +347,17 @@ public class FlagReader : MonoBehaviour
     #region Mine
             case "Mine":
                 Mine newMine = block.gameObject.AddComponent<Mine>();
+                newMine.health = float.Parse(flagElements[1]);
                 block.activeFlags.Add(newMine);
                 break;
-            #endregion
+    #endregion
+
+    #region Mine
+            case "Extractor":
+                Extractor newExtractor = block.gameObject.AddComponent<Extractor>();
+                block.activeFlags.Add(newExtractor);
+                break;
+    #endregion
 
     #region NuisanceGenerator
             case "NuisanceGenerator":

@@ -2,8 +2,16 @@
 
 public class Mine : Flag, Flag.IFlag
 {
-    public System.Type GetFlagType()
+    [Header("Mine")]
+    public float health;
+
+    public override void OnNewMicrocycle()
     {
-        return GetType();
+        if(health <= 0)
+        {
+            Destroy(block);
+        }
     }
+
+    public System.Type GetFlagType() { return GetType(); }
 }
