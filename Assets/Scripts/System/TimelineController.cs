@@ -53,21 +53,24 @@ public class TimelineController : MonoBehaviour {
                 currentCycle.settlers[pop] += 1;
             }
 
-            foreach(KeyValuePair<Population, int> settlerBonus in nextCycleSettlersBonus) {
-                if (!currentCycle.settlers.ContainsKey(settlerBonus.Key)) {
-                    currentCycle.settlers.Add(settlerBonus.Key, 0);
-                }
-                currentCycle.settlers[settlerBonus.Key] += settlerBonus.Value;
-            }
-
             nextCycleSettlersBonus.Clear();
 
         };
 
+        // Add bonus (from events ?)
+        foreach (KeyValuePair<Population, int> settlerBonus in nextCycleSettlersBonus) {
+            if (!currentCycle.settlers.ContainsKey(settlerBonus.Key)) {
+                currentCycle.settlers.Add(settlerBonus.Key, 0);
+            }
+            currentCycle.settlers[settlerBonus.Key] += settlerBonus.Value;
+        }
+
+        // Effective spawn
         foreach (KeyValuePair<Population, int> settler in currentCycle.settlers) {
             GameManager.instance.populationManager.SpawnCitizens(settler.Key, settler.Value);
         }
 
+        // Unlocks
         foreach(int blockId in currentCycle.unlocks) {
             GameManager.instance.cityManager.UnlockBuilding(blockId);
         }
