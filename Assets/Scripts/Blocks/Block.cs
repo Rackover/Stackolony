@@ -174,6 +174,7 @@ public class Block : MonoBehaviour
         {
             state.Value.OnNewCycle();
         }
+        TestFireRisks();
     }
 
     public void ChangePower(int number) 

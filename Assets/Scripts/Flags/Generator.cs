@@ -7,11 +7,6 @@ public class Generator : Flag, Flag.IFlag
     
     public int power;
 
-    public override void Awake()
-    {
-        base.Awake();
-    }
-
     public override void Enable()
     {
         base.Enable();
