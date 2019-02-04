@@ -68,6 +68,7 @@ MonoBehaviour:
   cinematicManager: {fileID: 0}
   bulletinsManager: {fileID: 0}
   timelineController: {fileID: 0}
+  eventManager: {fileID: 0}
   cursorDisplay: {fileID: 0}
   localization: {fileID: 0}
   displayerManager: {fileID: 0}
@@ -75,5 +76,5 @@ MonoBehaviour:
   tooltipGO: {fileID: 0}
   logger: {fileID: 0}
   overlayManager: {fileID: 0}
-  DEBUG_MODE: 0
+  DEBUG_MODE: 1
   ENABLE_LOGS: 1

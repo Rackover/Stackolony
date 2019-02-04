@@ -12,11 +12,14 @@ public class EventDebugWindow : MonoBehaviour {
     public Color goodColor = Color.green;
     public Color badColor = Color.red;
     public InputField inputZone;
+    public GameObject errorWindow;
 
     void Start()
     {
         GameManager.instance.eventManager.interpreterError += (x) => {
+            errorWindow.SetActive(true);
             errorText.text = x;
+            errorText.color = badColor;
         };
     }
 
@@ -49,7 +52,9 @@ public class EventDebugWindow : MonoBehaviour {
 
     public void Submit()
     {
-        errorText.text = "";
+        errorWindow.SetActive(true);
+        errorText.text = "OK";
+        errorText.color = goodColor;
         GameManager.instance.eventManager.ReadAndExecute(inputZone.text);
     }
 }
