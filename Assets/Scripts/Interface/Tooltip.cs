@@ -5,6 +5,16 @@ using UnityEngine.EventSystems;
 
 public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler  {
 
+    
+    public List<PublicLocalization> localizations = new List<PublicLocalization>();
+
+    [System.Serializable]
+    public class PublicLocalization
+    {
+        public string id;
+        public string category;
+    }
+
     [System.Serializable]
     public class TooltipLocalizationEntry
     {
@@ -33,6 +43,13 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
     void Awake()
     {
         isActive = false;
+        foreach(PublicLocalization pubLoc in localizations) {
+            AddLocalizedLine(
+                new TooltipLocalizationEntry(
+                    pubLoc.id, pubLoc.category, tooltipType.Neutral
+                )
+            );
+        }
     }
 
     public void ClearLines()

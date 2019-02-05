@@ -58,26 +58,43 @@ public class SystemManager : MonoBehaviour {
     //S'execute à chaques fois qu'un cycle passe
     public IEnumerator OnNewCycle()
     {
+        GameManager.instance.populationManager.OnNewCycle();
+        
         foreach (Block block in AllBlocks)
         {
             block.OnNewCycle();
         }
+        
         RefreshMoodModifiers();
-        yield return StartCoroutine(OnGridUpdate());
+        RefreshFoodModifiers();
+        RefreshNotationModifiers();
+        RefreshConsumptionModifiers();
+        RefreshFlagModifiers();
+        RefreshTempFlags();
+
+        yield return StartCoroutine(OnNewMicrocycle());
         yield return null;
     }
 
     //S'execute à chaques fois qu'un microcycle passe
     public IEnumerator OnNewMicrocycle()
     {
+        GameManager.instance.populationManager.OnNewMicrocycle();
+
         yield return StartCoroutine(UpdateHousesInformations());
-        yield return StartCoroutine(RecalculateHabitation());
+        yield return StartCoroutine(RecalculateFoodConsumption());
+        yield return StartCoroutine(RecalculateOccupators());
+        yield return StartCoroutine(UpdateHousesInformations());
+        yield return StartCoroutine(RecalculateHabitation(GameManager.instance.temporality.GetMicroCoef()));
+        yield return StartCoroutine(UpdateHousesInformations());
+        yield return StartCoroutine(RecalculateJobs());
         yield return StartCoroutine(OnGridUpdate());
     }
 
     //S'execute à chaques fois qu'un bloc est déplacé dans la grille
     public IEnumerator OnGridUpdate()
     {
+        StopAllCoroutines();
         yield return StartCoroutine(RecalculateSpatioportInfluence());
         yield return new WaitForSeconds(0.5f); //Clumsy, à changer rapidement, la propagation doit s'effectuer une fois que le spatioport a tout mis à jour
         yield return StartCoroutine(RecalculatePropagation());
@@ -91,6 +108,11 @@ public class SystemManager : MonoBehaviour {
         yield return null;
     }
 
+    public void OnCalculEnd()
+    {
+        StartCoroutine(UpdateOverlay());
+    }
+
     //Met à jour le système electrique
     public void UpdateElectricitySystem()
     {
@@ -100,9 +122,6 @@ public class SystemManager : MonoBehaviour {
     //Actualise les données de chaque maisons
     public IEnumerator UpdateHousesInformations()
     {
-        StartCoroutine(RecalculateFoodConsumption());
-        StartCoroutine(RecalculateOccupators());
-        StartCoroutine(RecalculateJobs());
         StartCoroutine(CalculateHouseInformation());
         yield return null;
     }
@@ -127,7 +146,7 @@ public class SystemManager : MonoBehaviour {
         {
             if (block.isConsideredDisabled && block.GetComponent<Spatioport>() == null)
             {
-                block.Disable();
+                block.Pack();
             }
         }
     }
@@ -135,16 +154,119 @@ public class SystemManager : MonoBehaviour {
     //Remove 1 cycle on each moodmodifiers duration
     public void RefreshMoodModifiers()
     {
-        foreach (KeyValuePair<Population, List<PopulationManager.MoodModifier>> moodModifiers in GameManager.instance.populationManager.moodModifiers)
+        foreach (KeyValuePair<Population, PopulationManager.PopulationInformation> p in GameManager.instance.populationManager.populations)
         {
-            foreach (PopulationManager.MoodModifier moodModifier in moodModifiers.Value)
+            List<MoodModifier> newMoodModifiers = new List<MoodModifier>();
+            foreach (MoodModifier moodModifier in p.Value.moodModifiers)
             {
                 moodModifier.cyclesRemaining--;
-                if (moodModifier.cyclesRemaining <= 0)
+
+                if (moodModifier.cyclesRemaining != 0)
                 {
-                    moodModifiers.Value.Remove(moodModifier);
+                    newMoodModifiers.Add(moodModifier);
                 }
             }
+            p.Value.moodModifiers = newMoodModifiers;
+        }
+    }
+
+
+    //Remove 1 cycle on each notationModifier duration
+    public void RefreshNotationModifiers()
+    {
+        foreach (House house in AllHouses)
+        {
+            List<NotationModifier> newNotationModifiers = new List<NotationModifier>();
+            foreach (NotationModifier notationModifier in house.notationModifiers)
+            {
+                notationModifier.cyclesRemaining--;
+
+                if (notationModifier.cyclesRemaining != 0)
+                {
+                    newNotationModifiers.Add(notationModifier);
+                }
+            }
+            house.notationModifiers = newNotationModifiers;
+        }
+    }
+
+
+    //Remove 1 cycle on each foodmodifiers
+    public void RefreshFoodModifiers()
+    {
+        foreach (KeyValuePair<Population, PopulationManager.PopulationInformation> p in GameManager.instance.populationManager.populations)
+        {
+            List<FoodModifier> newFoodModifierList = new List<FoodModifier>();
+            foreach (FoodModifier fm in p.Value.foodModifiers)
+            {
+                fm.cyclesRemaining--;
+                if (fm.cyclesRemaining != 0)
+                {
+                    newFoodModifierList.Add(fm);
+                }
+            }
+            p.Value.foodModifiers = newFoodModifierList;
+        }
+    }
+
+    public void RefreshConsumptionModifiers()
+    {
+        foreach (Block block in AllBlocks)
+        {
+            List<ConsumptionModifier> newConsumptionModifierList = new List<ConsumptionModifier>();
+            foreach (ConsumptionModifier consumptionModifier in block.consumptionModifiers)
+            {
+                consumptionModifier.cyclesRemaining--;
+                if (consumptionModifier.cyclesRemaining != 0)
+                {
+                    newConsumptionModifierList.Add(consumptionModifier);
+                }
+            }
+            block.consumptionModifiers = newConsumptionModifierList;
+        }
+    }
+
+    public void RefreshFlagModifiers()
+    {
+        foreach (Block block in AllBlocks)
+        {
+            List<FlagModifier> newFlagModifierList = new List<FlagModifier>();
+            foreach (FlagModifier flagModifier in block.flagModifiers)
+            {
+                flagModifier.cyclesRemaining--;
+                if (flagModifier.cyclesRemaining == 0)
+                {
+                    //Removes the flagModifier effect
+                    string invertedFlagDatas = GameManager.instance.flagReader.GetInvertedFlag(flagModifier.flagInformations);
+                    GameManager.instance.flagReader.ReadFlag(block, invertedFlagDatas);
+                } else
+                {
+                    newFlagModifierList.Add(flagModifier);
+                }
+            }
+            block.flagModifiers = newFlagModifierList;
+        }
+    }
+
+    public void RefreshTempFlags()
+    {
+        foreach (Block block in AllBlocks)
+        {
+            List<TempFlag> newTempFlagList = new List<TempFlag>();
+            foreach (TempFlag tempFlag in block.tempFlags)
+            {
+                tempFlag.cyclesRemaining--;
+                if (tempFlag.cyclesRemaining == 0)
+                {
+                    System.Type flagToRemove = tempFlag.flagType;
+                    Destroy(block.GetComponent(flagToRemove));
+                }
+                else
+                {
+                    newTempFlagList.Add(tempFlag);
+                }
+            }
+            block.tempFlags = newTempFlagList;
         }
     }
 
@@ -152,24 +274,23 @@ public class SystemManager : MonoBehaviour {
     {
         foreach (House house in AllHouses)
         {
-            if (house.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
-            {
-                house.UpdateHouseInformations();
-            }
+            house.UpdateHouseInformations();
         }
         yield return null;
     }
 
-    public IEnumerator RecalculateHabitation()
+    public IEnumerator RecalculateHabitation(float x)
     {
         StartCoroutine(ResetHabitation());
-        GameManager.instance.cityManager.HouseEveryone();
+        yield return new WaitForEndOfFrame();
+        GameManager.instance.cityManager.HouseEveryone(x);
         yield return null;
     }
 
     public IEnumerator RecalculateJobs()
     {
         StartCoroutine(ResetJobs());
+        yield return new WaitForEndOfFrame();
         foreach (House house in AllHouses)
         {
             for (int i = 0; i < house.affectedCitizen.Count; i++)
@@ -202,11 +323,8 @@ public class SystemManager : MonoBehaviour {
         StartCoroutine(ResetOccupators());
         foreach (Occupator occupator in AllOccupators)
         {
-            if (occupator.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
-            {
-                occupator.Invoke("GenerateOccupations", 0f);
-                yield return new WaitForEndOfFrame();
-            }
+            occupator.Invoke("GenerateOccupations", 0f);
+            yield return new WaitForEndOfFrame();
         }
         yield return null;
     }
@@ -216,25 +334,18 @@ public class SystemManager : MonoBehaviour {
         StartCoroutine(ResetFoodConsumption());
         foreach (FoodProvider foodProvider in AllFoodProviders)
         {
-            if (foodProvider.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
-            {
-                foodProvider.Invoke("GenerateFood", 0f);
-                yield return new WaitForEndOfFrame();
-            }
+            foodProvider.Invoke("GenerateFood", 0f);
             yield return new WaitForEndOfFrame();
         }
     }
 
     public IEnumerator RecalculatePropagation()
     {
-        StartCoroutine(ResetBlocksPower());
+        yield return StartCoroutine(ResetBlocksPower());
         foreach (Generator generator in AllGenerators)
         {
-            if (generator.gameObject.layer != LayerMask.NameToLayer("StoredBlock"))
-            {
-                generator.Invoke("GenerateEnergy", 0f);
-                yield return new WaitForEndOfFrame();
-            }
+            generator.Invoke("GenerateEnergy", 0f);
+            yield return new WaitForEndOfFrame();
         }
         yield return null;
     }

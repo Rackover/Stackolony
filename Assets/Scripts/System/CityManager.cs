@@ -1,32 +1,60 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+
+public class NotationModifier
+{
+    public float amount;
+    public int cyclesRemaining;
+}
+
+public class ConsumptionModifier
+{
+    public int amount;
+    public int cyclesRemaining;
+}
+
+public class FlagModifier
+{
+    public string flagInformations;
+    public int cyclesRemaining;
+}
+
+public class TempFlag
+{
+    public string flagInformations;
+    public int cyclesRemaining;
+    public System.Type flagType;
+}
 
 public class CityManager : MonoBehaviour {
 
     public enum BuildingType { Habitation = 0, Services = 1, Occupators = 2 };
     public string cityName = "Valenciennes";
-    public BlockState[] accidentStates = { BlockState.OnFire, BlockState.OnRiot, BlockState.Damaged };
+    public State[] accidentStates = { State.OnFire, State.OnRiot, State.Damaged };
     public Dictionary<Population, Dictionary<House, float>> topHabitations = new Dictionary<Population, Dictionary<House, float>>(); // List of the best habitations (sorted from best to worst)
+    public bool isTutorialRun = true;
 
-    //Comment fonctionne la notation d'une maison :
-    // 
+    List<int> lockedBuildings = new List<int >();
+
+
     [System.Serializable]
-    public class HouseNotation
+    public class MoodValues
     {
-        public int goodNotationTreshold = 0; //Above this note, house is considered "Good"
-        public int badNotationTreshold = -5; //Under this note, house is considered "Bad"
+        public int goodNotationTreshold = -5; //Above this note, house is considered "Good"
+        public int badNotationTreshold = -10; //Under this note, house is considered "Bad"
         public int wrongPopulationType = -2;
         public int noFood = -3;
-        public int notEnoughFood = -1;
         public int noOccupations = -2;
         public int noPower = -2;
         public int damaged = -2; //NOT TAKEN IN ACCOUNT YETTTTTTTTTTTTTTTTTTT
         public int everythingFine = +3;
+        public int noHouse = -20;
     }
 
-    public HouseNotation houseNotation;
+    public MoodValues moodValues;
+
 
     private void Start()
     {
@@ -35,20 +63,94 @@ public class CityManager : MonoBehaviour {
         }
     }
 
-    //Finds a house for every citizens (Soon it'll take a priority order into account)
-    public void HouseEveryone()
+    public void LockBuilding(int id)
     {
+        UnlockBuilding(id);
+        lockedBuildings.Add(id);
+    }
 
+    public void UnlockBuilding(int id)
+    {
+        lockedBuildings.RemoveAll(i => i==id);
+    }
+
+    public bool IsLocked(int id)
+    {
+        return lockedBuildings.Contains(id);
+    }
+
+    //Finds a house for every citizens (Soon it'll take a priority order into account)
+    public void HouseEveryone(float x)
+    {
+        GetBestHouses();
         for (int i = 0; i < GameManager.instance.populationManager.populationTypeList.Length; i++)
         {
-            HousePopulation(GameManager.instance.populationManager.populationTypeList[i]);
+            HousePopulation(GameManager.instance.populationManager.populationTypeList[i], x);
         }
     }
 
-    //Finds a house for every citizens from a defined population
-    public void HousePopulation(Population pop)
+    //Generates a notationModifier for a given house
+    public void GenerateNotationModifier(House house, float newAmount, int cyclesRemaining)
     {
-        foreach (PopulationManager.Citizen citizen in GameManager.instance.populationManager.populationCitizenList[pop])
+        NotationModifier newNotationModifier = new NotationModifier();
+        newNotationModifier.amount = newAmount;
+        newNotationModifier.cyclesRemaining = cyclesRemaining;
+        house.notationModifiers.Add(newNotationModifier);
+    }
+
+    public void GenerateConsumptionModifier(Block block, int newAmount, int cyclesRemaining)
+    {
+        ConsumptionModifier newConsumptionModifier = new ConsumptionModifier();
+        newConsumptionModifier.amount = newAmount;
+        newConsumptionModifier.cyclesRemaining = cyclesRemaining;
+        block.consumptionModifiers.Add(newConsumptionModifier);
+    }
+
+    public void GenerateFlagModifier(Block block, string flagInformations, int cyclesRemaining)
+    {
+        string[] flagElements = flagInformations.Split(new char[] { '_' }, System.StringSplitOptions.RemoveEmptyEntries);
+        bool flagFound = false;
+        foreach (Flag.IFlag flags in block.activeFlags)
+        {
+            if (flags.GetFlagType() == System.Type.GetType(flagElements[0])) {
+                flagFound = true;
+            }
+        }
+        if (!flagFound)
+        {
+            return;
+        }
+        FlagModifier newFlagModifier = new FlagModifier();
+        newFlagModifier.cyclesRemaining = cyclesRemaining;
+        newFlagModifier.flagInformations = flagInformations;
+        //Apply the flag modification
+        GameManager.instance.flagReader.ReadFlag(block, flagInformations);
+        block.flagModifiers.Add(newFlagModifier);
+    }
+
+    public void GenerateTempFlag(Block block, string flagInformations, int cyclesRemaining)
+    {
+        string[] flagElements = flagInformations.Split(new char[] { '_' }, System.StringSplitOptions.RemoveEmptyEntries);
+        foreach (Flag.IFlag flags in block.activeFlags)
+        {
+            if (flags.GetFlagType() == System.Type.GetType(flagElements[0]))
+            {
+                return;
+            }
+        }
+        TempFlag newTempFlag = new TempFlag();
+        newTempFlag.cyclesRemaining = cyclesRemaining;
+        newTempFlag.flagInformations = flagInformations;
+        newTempFlag.flagType = System.Type.GetType(flagElements[0]);
+        //Generates the flag
+        GameManager.instance.flagReader.ReadFlag(block, flagInformations);
+        block.tempFlags.Add(newTempFlag);
+    }
+
+    //Finds a house for every citizens from a defined population
+    public void HousePopulation(Population pop, float x)
+    {
+        foreach (PopulationManager.Citizen citizen in GameManager.instance.populationManager.populations[pop].citizens)
         {
             if (topHabitations[pop].Count > 0)
             {
@@ -56,10 +158,10 @@ public class CityManager : MonoBehaviour {
                 foundHouse.FillWithCitizen(citizen);
                 Logger.Debug("Citizen " + citizen.name + " of type " + citizen.type.codeName + " has been housed at the house " + foundHouse);
                 //Applique le changement d'humeur au type de population
-                GameManager.instance.populationManager.ChangePopulationMood(pop, topHabitations[pop].First().Value);
+                GameManager.instance.populationManager.ChangePopulationMood(pop, topHabitations[pop].First().Value * x);
 
                 //Si la maison est désormais remplie, on la retire de la liste des habitations pour chaque population
-                if (foundHouse.affectedCitizen.Count < foundHouse.slotAmount)
+                if (foundHouse.affectedCitizen.Count >= foundHouse.slotAmount)
                 {
                     foreach (Population popType in GameManager.instance.populationManager.populationTypeList)
                     {
@@ -70,7 +172,7 @@ public class CityManager : MonoBehaviour {
             {
                 Logger.Debug("Citizen " + citizen.name + " of type " + citizen.type.codeName + " could not find a house");
                 //Si le citoyen n'a pas pu se loger, il applique le malus d'humeur à son type de population
-                GameManager.instance.populationManager.ChangePopulationMood(pop, GameManager.instance.populationManager.moodModifierIfNoHabitation);
+                GameManager.instance.populationManager.ChangePopulationMood(pop, moodValues.noHouse * x);
             }
         }
     }
@@ -100,6 +202,41 @@ public class CityManager : MonoBehaviour {
         }
     }
 
+    public Flag.IFlag FindFlag(Block block, System.Type type)
+    {
+            for (int i = 0; i < block.activeFlags.Count; i++)
+            {
+                if (block.activeFlags[i].GetFlagType() == type)
+                {
+                    return block.activeFlags[i];
+                }
+            }
+        return null;
+    }
+
+    public Block FindRandomBlockWithFlag(System.Type type)
+    {
+        List<Block> candidates = new List<Block>();
+        foreach (Block block in GameManager.instance.systemManager.AllBlocks)
+        {
+            for (int i = 0; i < block.activeFlags.Count; i++)
+            {
+                if (block.activeFlags[i].GetFlagType() == type)
+                {
+                    candidates.Add(block);
+                }
+            }
+        }
+        int random = Random.Range(0, candidates.Count - 1);
+        Block result = candidates[random];
+        if (result != null)
+        {
+            return result;
+        }
+        return null;
+    }
+
+
     //Return an int, the bigger it is, the more attractive is the house
     public float GetHouseNotation(House house, Population populationType)
     {
@@ -108,14 +245,22 @@ public class CityManager : MonoBehaviour {
 
         //If house isn't connected to spatioport, it sucks
         if (!house.block.isLinkedToSpatioport)
+        {
             return GameManager.instance.populationManager.moodModifierIfNoHabitation;
+        }
 
         //If house is already full, it also sucks
         if (house.affectedCitizen.Count >= house.slotAmount)
+        {
             return GameManager.instance.populationManager.moodModifierIfNoHabitation;
+        }
 
 
         bool profileFound = false;
+        bool powered = false;
+        bool foodLeft = false;
+        bool jobLeft = false;
+
         foreach (Population profile in house.acceptedPop)
         {
             if (profile == populationType)
@@ -123,28 +268,27 @@ public class CityManager : MonoBehaviour {
                 profileFound = true;
             }
         }
-        if (!profileFound)
-            notation += houseNotation.wrongPopulationType;
 
-        if (!house.powered)
+        if (house.powered)
         {
-            notation += houseNotation.noFood;
+            powered = true;
         }
 
-        float foodLeft = 0;
+        float foodStock = 0;
         foreach (FoodProvider distributor in house.foodProvidersInRange)
         {
-            foodLeft += distributor.foodLeft;
+            foodStock += distributor.foodLeft;
         }
-        if (foodLeft > 0 && foodLeft <= house.foodConsumptionPerHabitant)
+        if (foodStock > 0 && foodStock >= GameManager.instance.populationManager.GetFoodConsumption(populationType))
         {
-            notation += houseNotation.notEnoughFood;
-        } else if (foodLeft <= 0)
+            foodLeft = true;
+        } else
         {
-            notation += houseNotation.noFood;
+            foodLeft = false;
         }
 
-        bool jobLeft = false;
+
+
         foreach (Occupator occupator in house.occupatorsInRange)
         {
             foreach (Population pop in occupator.acceptedPopulation)
@@ -155,26 +299,43 @@ public class CityManager : MonoBehaviour {
                 }
             }
         }
+
+        if(!profileFound)
+        {
+            notation += moodValues.wrongPopulationType;
+        }
+        if (!powered)
+        {
+            notation += moodValues.noPower;
+        }
+        if (!foodLeft)
+        {
+            notation += moodValues.noFood;
+        }
         if (!jobLeft)
         {
-            notation += houseNotation.noOccupations;
+            notation += moodValues.noOccupations;
         }
 
         if (notation >= 0)
-            notation += houseNotation.everythingFine;
+            notation += moodValues.everythingFine;
 
+        foreach (NotationModifier notationModifier in house.notationModifiers)
+        {
+            notation += notationModifier.amount;
+        }
         return notation;
     }
     
-    public void TriggerAccident(BlockState accident)
+    public void TriggerAccident(State accident)
     {
         if(GameManager.instance.systemManager.AllBlocks.Count == 0) return;
 
-        if( IsConsideredAccident( accident ) )
+        if( IsConsideredAccident(accident) )
         {
             int rand = Random.Range(0, GameManager.instance.systemManager.AllBlocks.Count);
             int blockMet = 0;
-            while( GameManager.instance.systemManager.AllBlocks[rand].states.Contains( accident ))
+            while( GameManager.instance.systemManager.AllBlocks[rand].states.ContainsKey( accident ))
             {
                 if(blockMet++ > GameManager.instance.systemManager.AllBlocks.Count) 
                 {
@@ -183,14 +344,14 @@ public class CityManager : MonoBehaviour {
                 }
                 rand = Random.Range(0, GameManager.instance.systemManager.AllBlocks.Count);
             }
-            GameManager.instance.systemManager.AllBlocks[rand].AddState( accident );
+            GameManager.instance.systemManager.AllBlocks[rand].AddState(accident);
         }
         else Logger.Debug( accident + " is not considered as a accident" );
     }
 
-    bool IsConsideredAccident(BlockState state)
+    bool IsConsideredAccident(State state)
     {
-        foreach(BlockState s in accidentStates)
+        foreach(State s in accidentStates)
         {
             if(state == s)
             {

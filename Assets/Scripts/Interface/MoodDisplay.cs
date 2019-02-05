@@ -45,7 +45,7 @@ public class MoodDisplay : MonoBehaviour {
     PopulationManager popMan;
     Localization loc;
     string moodString;
-    Citizen.Mood currentMood;
+    Bystander.Mood currentMood;
 
     private void Start()
     {
@@ -89,14 +89,14 @@ public class MoodDisplay : MonoBehaviour {
         gauge.fillAmount = moodValue;
         gauge.color = Color.Lerp(from, to, moodValue);
 
-        Action<Citizen.Mood> changeMood;
+        Action<Bystander.Mood> changeMood;
 
-        if (playerOptions.GetBool("animatedCitizens")) {
+        if (playerOptions.GetBool(Options.Option.animatedCitizens)) {
             if (preview == null) {
                 preview = GameManager.instance.displayerManager.SetRotationFeed(population.prefab, face, angle, rotationSpeed, cameraDistance, FOV, 128);
             }
             changeMood = (x) => {
-                preview.GetModel().GetComponent<Citizen>().SetEmotion(x);
+                preview.GetModel().GetComponent<Bystander>().SetEmotion(x);
                 fitter.aspectRatio = 1f;
             };
         }
@@ -113,15 +113,15 @@ public class MoodDisplay : MonoBehaviour {
 
         // Emotion based on humor
         if (moodValue <= angryThreshold) {
-            currentMood = Citizen.Mood.Angry;
+            currentMood = Bystander.Mood.Angry;
         }
 
         else if (moodValue >= happyThreshold) {
-            currentMood = Citizen.Mood.Good;
+            currentMood = Bystander.Mood.Good;
         }
 
         else {
-            currentMood = Citizen.Mood.Bad;
+            currentMood = Bystander.Mood.Bad;
         }
 
         changeMood(currentMood);
@@ -131,7 +131,7 @@ public class MoodDisplay : MonoBehaviour {
 
     void UpdateTexts()
     {
-        int inhabitants = popMan.populationCitizenList[population].Count;
+        int inhabitants = popMan.populations[population].citizens.Count;
         int homelessAmount = popMan.GetHomelessCount(population);
         amount.text = inhabitants.ToString();
         homeless.text = homelessAmount.ToString();
@@ -143,7 +143,6 @@ public class MoodDisplay : MonoBehaviour {
             homeless.color = homelessColor;
         }
 
-        float moodValue = popMan.GetAverageMood(population) / popMan.maxMood;
         string popName = loc.GetLine(population.codeName, "populationType");
 
         tooltip.ClearLines();

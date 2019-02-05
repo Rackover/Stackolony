@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class House : Flag
+public class House : Flag, Flag.IFlag
 {
     //House Datas
     public int slotAmount;
     public Population[] acceptedPop;
-    public float foodConsumptionPerHabitant;
     public List<PopulationManager.Citizen> affectedCitizen = new List<PopulationManager.Citizen>();
     public int standingLevel = 1;
 
     //Variables
     public List<Occupator> occupatorsInRange = new List<Occupator>();
     public List<FoodProvider> foodProvidersInRange = new List<FoodProvider>();
+    public List<NotationModifier> notationModifiers = new List<NotationModifier>();
     public bool powered;
     public float foodReceived;
     public float distanceToGround;
@@ -22,14 +22,26 @@ public class House : Flag
     ParticleSystem citizenIn;
     ParticleSystem citizenOut;
 
+    Light houseLight;
+
     public void UpdateHouseInformations()
     {
-        foodConsumption = foodConsumptionPerHabitant * affectedCitizen.Count;
-        if (block.currentPower >= block.scheme.consumption)
+        foodConsumption = GetFoodConsumption();
+        if (block.currentPower >= block.GetConsumption())
             powered = true;
         else
             powered = false;
         GetDistanceFromGround();
+    }
+
+    float GetFoodConsumption()
+    {
+        float fconsumption = 0;
+        foreach (PopulationManager.Citizen citizen in affectedCitizen)
+        {
+            fconsumption += (GameManager.instance.populationManager.GetFoodConsumption(citizen.type));
+        }
+        return fconsumption;
     }
 
     public void GetDistanceFromGround()
@@ -57,9 +69,8 @@ public class House : Flag
             //Ecrit sur la carte d'identité du citoyen qu'il habite ici désormais
             citizen.habitation = this;
 
+            houseLight.intensity = (affectedCitizen.Count / slotAmount) * 10;
 
-            //Fourni un travail au nouveau citoyen, s'il y en a un de disponible
-            StartCoroutine(GameManager.instance.systemManager.RecalculateJobs());
             return;
         }
     }
@@ -68,12 +79,28 @@ public class House : Flag
     {
         base.Awake();
         GameManager.instance.systemManager.AllHouses.Add(this);
+
+        houseLight = block.effects.gameObject.AddComponent<Light>();
+        houseLight.range = 1f;
+        houseLight.intensity = 0f;
     }
 
     public override void OnDestroy()
     {
         GameManager.instance.systemManager.AllHouses.Remove(this);
         base.OnDestroy();
+    }
+
+    public override void Enable()
+    {
+        base.Enable();
+        GameManager.instance.systemManager.AllHouses.Add(this);
+    }
+
+    public override void Disable()
+    {
+        base.Disable();
+        GameManager.instance.systemManager.AllHouses.Remove(this);
     }
 
     void CitizenInFX()
@@ -94,5 +121,22 @@ public class House : Flag
             citizenOut.maxParticles = 1;
         }
         citizenOut.Play();  
+    }
+
+    public System.Type GetFlagType()
+    {
+        return GetType();
+    }
+
+    public string GetFlagDatas()
+    {
+        string profiles = "";
+        for (int i = 0; i < acceptedPop.Length; i++)
+        {
+            if (i != 0)
+                profiles += "-";
+            profiles += acceptedPop[i].codeName;
+        }
+        return "House_" + slotAmount + "_" + standingLevel + "_" + profiles;
     }
 }

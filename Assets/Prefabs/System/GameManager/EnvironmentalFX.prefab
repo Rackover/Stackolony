@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1612651385213828}
+  m_IsPrefabAsset: 1
+--- !u!1 &1612651385213828
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4520427136914936}
+  - component: {fileID: 114190352063597378}
+  m_Layer: 0
+  m_Name: EnvironmentalFX
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4520427136914936
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1612651385213828}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114190352063597378
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1612651385213828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ebb1669deac8f7040bae29d6f267fc67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  refreshRate: 0.1
+  directionalLight: {fileID: 0}
+  skyboxMaterial: {fileID: 2100000, guid: 65e5c642bb192da4ba95c4d7fcb1a418, type: 2}
+  skyboxVariation:
+    serializedVersion: 2
+    key0: {r: 1, g: 0.5707547, b: 0.7082891, a: 1}
+    key1: {r: 0.9100357, g: 0.6719659, b: 0.78079665, a: 1}
+    key2: {r: 1, g: 0.92337763, b: 0.7122642, a: 0}
+    key3: {r: 0.87322, g: 0.8764588, b: 0.8773585, a: 0}
+    key4: {r: 1, g: 0.7005929, b: 0.5235849, a: 0}
+    key5: {r: 0.70237505, g: 0.6863207, b: 0.9150943, a: 0}
+    key6: {r: 0.7019608, g: 0.6862745, b: 0.91372555, a: 0}
+    key7: {r: 1, g: 0.57254905, b: 0.70980394, a: 0}
+    ctime0: 0
+    ctime1: 3084
+    ctime2: 10409
+    ctime3: 23323
+    ctime4: 32768
+    ctime5: 39321
+    ctime6: 58982
+    ctime7: 65535
+    atime0: 15420
+    atime1: 65535
+    atime2: 0
+    atime3: 0
+    atime4: 0
+    atime5: 0
+    atime6: 0
+    atime7: 0
+    m_Mode: 0
+    m_NumColorKeys: 8
+    m_NumAlphaKeys: 2

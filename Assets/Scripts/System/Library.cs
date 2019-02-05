@@ -47,4 +47,31 @@ public class Library : MonoBehaviour
 		}
 		return null;
 	}
+
+    public BlockScheme GetRandomBlock()
+    {
+        List<BlockScheme> candidates = new List<BlockScheme>();
+        foreach (BlockScheme b in blocks)
+        {
+            if (b.isBuyable == true && !GameManager.instance.cityManager.IsLocked(b.ID))
+            {
+                candidates.Add(b);
+            }
+        }
+        if (candidates.Count > 0)
+        {
+            return candidates[Random.Range(0, candidates.Count - 1)];
+        }
+        return null;
+    }
+
+    public bool BlockExists(int id)
+    {
+        foreach (BlockScheme b in blocks) {
+            if (b.ID == id) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

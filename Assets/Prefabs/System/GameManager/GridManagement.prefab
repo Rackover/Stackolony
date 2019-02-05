@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1015600714736674}
+  m_IsPrefabAsset: 1
+--- !u!1 &1015600714736674
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4180747591568158}
+  - component: {fileID: 114168815111007450}
+  m_Layer: 0
+  m_Name: GridManagement
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4180747591568158
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1015600714736674}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114168815111007450
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1015600714736674}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e6abad16811d164d9e9d7669549f06e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
+  cellSize: {x: 1.5, y: 1, z: 1.5}
+  maxHeight: 200
+  minHeight: 10
+  bridgePrefab: {fileID: 1071392935831226, guid: 557d8b2a812caf045aeee79ce3a2149e,
+    type: 2}
+  bridgeEndPrefab: {fileID: 1996916096466160, guid: 655442bdf076f7b4a82ec5f7582bce61,
+    type: 2}
+  bridgeStartPrefab: {fileID: 1146988753402014, guid: 7946d88d264faff40a74486a170fb140,
+    type: 2}
+  bridgesList: []
+  spatioportSpawnPoint: {x: 60, y: 50}
+  myTerrain: {fileID: 0}
+  gridSize: {x: 0, y: 0, z: 0}

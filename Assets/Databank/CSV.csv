@@ -1,0 +1,15 @@
+(name),Index,consumtion,sensibility,flags,IsMovable,IsDestroyable,IsBuyable,CanBuildAbove
+PoorHouse,0,1,1,House_5_1_1_worker,TRUE,TRUE,TRUE,TRUE
+AverageHouse,1,1,1,House_5_1_1_artist,TRUE,TRUE,TRUE,TRUE
+LuxiousHouse,2,1,1,House_5_1_1_military,FALSE,TRUE,TRUE,FALSE
+WindTurbine,3,0,1,Generator_10,TRUE,TRUE,TRUE,TRUE
+SolarPanel,4,0,1,Generator_15/WorkingHours_0_50,TRUE,TRUE,FALSE,TRUE
+PowerPlant,5,0,1,Generator_5/WorkingHours_0_50,TRUE,TRUE,TRUE,TRUE
+FiremanBlock,6,1,1,FiremanStation_5,TRUE,FALSE,TRUE,TRUE
+PoliceBlock,7,1,1,PoliceStation_5,TRUE,TRUE,TRUE,FALSE
+ArcadeBlock,8,2,1,,TRUE,TRUE,TRUE,TRUE
+Hospital,9,2,1,Occupator_10_scientist,TRUE,TRUE,TRUE,TRUE
+FoodCenter,10,3,1,Generator_6,FALSE,TRUE,TRUE,TRUE
+BotanicGreenhouse,11,2,1,Occupator_5_2_scientist,TRUE,TRUE,TRUE,TRUE
+Observatory,12,1,1,Occupator_10_3_scientist,TRUE,TRUE,FALSE,TRUE
+Laboratory,13,2,1,Occupator_20_1_scientist,TRUE,TRUE,TRUE,TRUE

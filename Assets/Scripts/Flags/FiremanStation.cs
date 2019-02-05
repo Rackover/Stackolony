@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FiremanStation : Flag 
+public class FiremanStation : Flag, Flag.IFlag
 {
 	[Header("Policeman")]
 	public int range;
 	public bool selecting;
 	public List<Block> targets = new List<Block>();
 	public List<Extinctor> extinctors = new List<Extinctor>();
-
+	/*
 	override public void Use()
 	{
 		selecting = true;
@@ -54,4 +54,14 @@ public class FiremanStation : Flag
 			}
 		}
 	}
+*/
+    public System.Type GetFlagType()
+    {
+        return GetType();
+    }
+
+    public string GetFlagDatas()
+    {
+        return "FiremanStation_" + range;
+    }
 }

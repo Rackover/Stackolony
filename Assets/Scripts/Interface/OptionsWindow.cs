@@ -11,6 +11,7 @@ public class OptionsWindow : MonoBehaviour {
     public GameObject checkboxExample;
     public GameObject selectExample;
     public GameObject container;
+    public GameObject parentGameObject;
     Options options;
 
 	// Use this for initialization
@@ -23,7 +24,7 @@ public class OptionsWindow : MonoBehaviour {
 
         loc.SetCategory("options");
         int count = 0;
-        foreach(KeyValuePair<string, Options.IOption> option in options.Get()) {
+        foreach(KeyValuePair<Options.Option, Options.IOption> option in options.Get()) {
 
             GameObject inst = new GameObject(); // Dummy game object - can't avoid creating it
 
@@ -37,7 +38,7 @@ public class OptionsWindow : MonoBehaviour {
                 Destroy(inst);
                 inst = Instantiate(sliderExample, transform);
                 Text[] tagAndVal = inst.GetComponentsInChildren<Text>();
-                tagAndVal[0].text = loc.GetLine(option.Key);
+                tagAndVal[0].text = loc.GetLine(option.Key.ToString());
                 tagAndVal[1].text = opt.value.ToString("n2");
 
                 Slider slider = inst.GetComponentInChildren<Slider>();
@@ -63,7 +64,7 @@ public class OptionsWindow : MonoBehaviour {
                 Destroy(inst);
                 inst = Instantiate(checkboxExample, transform);
                 Text tag = inst.GetComponentInChildren<Text>();
-                tag.text = loc.GetLine(option.Key);
+                tag.text = loc.GetLine(option.Key.ToString());
 
                 Toggle checkbox = inst.GetComponentInChildren<Toggle>();
                 checkbox.isOn = opt.value;
@@ -86,7 +87,7 @@ public class OptionsWindow : MonoBehaviour {
                 Destroy(inst);
                 inst = Instantiate(selectExample, transform);
                 Text tag = inst.GetComponentInChildren<Text>();
-                tag.text = loc.GetLine(option.Key);
+                tag.text = loc.GetLine(option.Key.ToString());
 
                 Dropdown dd = inst.GetComponentInChildren<Dropdown>();
                 foreach(object obj in opt.GetRange()) {
@@ -118,7 +119,7 @@ public class OptionsWindow : MonoBehaviour {
     public void SaveAndExit()
     {
         options.WriteAndLoadFromDisk(Paths.GetOptionsFile());
-        Destroy(this.gameObject);
+        Destroy(parentGameObject);
     }
 
 }

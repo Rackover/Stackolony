@@ -9,8 +9,10 @@ public class BuildingMenuItem : MonoBehaviour {
     public int blockId;
     bool isBeingDragged = false;
     bool concerned = false;
+    bool isLocked = false;
     GameObject draggingBuilding;
     GameObject blockPrefab;
+    GameObject padlock;
 
     RawImage ri;
     Displayer display;
@@ -21,6 +23,7 @@ public class BuildingMenuItem : MonoBehaviour {
         blockPrefab = GameManager.instance.library.GetBlockByID(blockId).model;
         ri = GetComponent<RawImage>();
         display = CreateDisplay();
+        padlock = transform.GetChild(0).gameObject;
 
         Invoke("Freeze", 0.1f);
         Invoke("SavePreview", 0.1f);
@@ -28,10 +31,25 @@ public class BuildingMenuItem : MonoBehaviour {
 
     public void SetConcerned()
     {
+        if (isLocked) {
+            return;
+        }
         concerned = true;
         display = CreateDisplay();
     }
     
+    public void Lock()
+    {
+        padlock.SetActive(true);
+        isLocked = true;
+    }
+
+    public void Unlock()
+    {
+        padlock.SetActive(false);
+        isLocked = false;
+    }
+
     Displayer CreateDisplay()
     {
         return GameManager.instance.displayerManager.SetRotationFeed(blockPrefab, ri, 45f, 2, 5, 20, 128);
@@ -60,7 +78,15 @@ public class BuildingMenuItem : MonoBehaviour {
     }
 
     void Update () {
-		if (isBeingDragged) {
+
+        // Lock check
+        Unlock();
+        if (GameManager.instance.cityManager.IsLocked(blockId)) {
+            Lock();
+        }
+
+        // Drag
+		if (isBeingDragged && !isLocked) {
             GameManager.instance.cursorManagement.isDragging = true;
             ri.enabled = false;
             draggingBuilding.transform.position = GameManager.instance.cursorManagement.posInWorld;
@@ -73,18 +99,20 @@ public class BuildingMenuItem : MonoBehaviour {
                 if (GameManager.instance.cursorManagement.cursorOnUI) {
                     return;
                 }
-
-                GameManager.instance.gridManagement.LayBlock(
-                    blockId, 
-                    new Vector2Int(
-                        GameManager.instance.cursorManagement.posInGrid.x,
-                        GameManager.instance.cursorManagement.posInGrid.z
-                    )
-                );
+                if (GameManager.instance.cursorManagement.posInGrid.y >= GameManager.instance.gridManagement.minHeight)
+                {
+                    GameManager.instance.gridManagement.LayBlock(
+                        blockId,
+                        new Vector2Int(
+                            GameManager.instance.cursorManagement.posInGrid.x,
+                            GameManager.instance.cursorManagement.posInGrid.z
+                        )
+                    );
+                }
             }
 
         }
-        else {
+        else if (!isLocked){
             ri.enabled = true;
 
             if (Input.GetButton("Select") && concerned && !GameManager.instance.cursorManagement.isDragging) {

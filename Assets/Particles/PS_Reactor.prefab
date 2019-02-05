@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4632019153883302}
   - component: {fileID: 198065665118039528}
   - component: {fileID: 199784386166098058}
-  m_Layer: 10
+  m_Layer: 14
   m_Name: PS_Reactor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53,7 +53,7 @@ ParticleSystem:
   stopAction: 0
   looping: 1
   prewarm: 1
-  playOnAwake: 1
+  playOnAwake: 0
   useUnscaledTime: 0
   autoRandomSeed: 1
   useRigidbodyForVelocity: 1
