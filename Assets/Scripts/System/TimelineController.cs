@@ -95,17 +95,17 @@ public class TimelineController : MonoBehaviour {
 
         if (GameManager.instance.cityManager.isTutorialRun) {
             string path = Paths.GetTimelineFile();
-            XmlDocument locFile = new XmlDocument();
+            XmlDocument timeFile = new XmlDocument();
 
             try {
-                locFile.Load(path);
+                timeFile.Load(path);
             }
             catch (FileNotFoundException e) {
                 Logger.Throw("Could not access timeline file at path " + path + ". Error : " + e.ToString());
                 return;
             }
 
-            XmlNodeList nodeList = locFile.SelectNodes("timeline")[0].ChildNodes;
+            XmlNodeList nodeList = timeFile.SelectNodes("timeline")[0].ChildNodes;
             foreach (XmlNode xCycle in nodeList) {
                 // Garbage node
                 if (xCycle.Name != "cycle") {

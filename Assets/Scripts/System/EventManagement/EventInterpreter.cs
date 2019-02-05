@@ -61,25 +61,26 @@ public class EventInterpreter
     ///     MAIN EVENT CREATION FUNCTION
     /// 
     ///
-    public EventManager.GameEvent MakeEvent(int id, string eventDeclaration)
+    public EventManager.GameAction MakeEvent(string eventDeclaration)
     {
         Dictionary<string, Object> context = new Dictionary<string, Object>();
         eventDeclaration = eventDeclaration.Replace(" ", "").Replace("\n", "").Replace("\r", "").Replace("	", "");
 
-        // Double separator (;;) for regular lines
         List<System.Action> actions = new List<System.Action>();
         try {
             actions = InterpretBlock(eventDeclaration, context, lineSeparator);
         }
         catch (InterpreterException e) {
+            Debug.LogWarning("Interpration failed :\n" + e.Message);
             GameManager.instance.eventManager.interpreterError.Invoke(e.Message);
+            return null;
         }
         catch(System.Exception e) {
-            Debug.LogWarning(e);
+            Debug.LogWarning("Unknown interpreter error - check your script.\n" + e.Message);
             GameManager.instance.eventManager.interpreterError.Invoke("Unknown interpreter error - check your script.\n"+e.Message);
             return null;
         }
-        return new EventManager.GameEvent(id, actions);
+        return new EventManager.GameAction(actions);
     }
     /// 
     /// 
@@ -159,9 +160,15 @@ public class EventInterpreter
     // Crashes the interpreter, throws an exception
     static void Throw(string info)
     {
-        string msg = "Syntax error while parsing event : \n" + info;
+        string msg = info;
         Logger.Error(msg);
-        GameManager.instance.eventManager.interpreterError.Invoke(msg);
+        
+        // This could be thrown anywhere - we need to be sure *everything* exists
+        if (GameManager.instance != null &&
+            GameManager.instance.eventManager != null &&
+            GameManager.instance.eventManager.interpreterError != null) {
+            GameManager.instance.eventManager.interpreterError.Invoke(msg);
+        }
         throw new InterpreterException(msg);
     }
 

@@ -76,6 +76,27 @@ public class Paths {
         return path;
     }
 
+    static public string GetEventsFolder()
+    {
+        string path = Application.streamingAssetsPath + "/events";
+        CreateDirectoryIfNotExists(path);
+        return path;
+    }
+
+    static public string GetEventsPoolFile()
+    {
+        string path = GetEventsFolder();
+        string file = "events_pool" + ".xml";
+        return path + "/" + file;
+    }
+
+    static public string GetEventsDatabaseFile()
+    {
+        string path = GetEventsFolder();
+        string file = "events_database" + ".xml";
+        return path + "/" + file;
+    }
+
     static void CreateDirectoryIfNotExists(string path)
     {
         if (!Directory.Exists(path)) {
