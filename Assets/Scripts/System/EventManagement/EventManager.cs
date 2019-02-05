@@ -78,6 +78,11 @@ public class EventManager : MonoBehaviour {
             actions = _actions;
         }
 
+        public List<GameEffect> GetGameEffects()
+        {
+            return actions;
+        }
+
         public void Execute()
         {
             foreach(GameEffect action in actions) {
