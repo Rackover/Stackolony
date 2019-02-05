@@ -95,6 +95,18 @@ public class MissionCallbackManager : MonoBehaviour
         yield return null;
     }
 
+    IEnumerator GenerateFireRisks()
+    {
+        MissionManager.Mission myMission = mission;
+        FireRiskGenerator linkedFG = GameManager.instance.gridManagement.grid[myMission.position.x, myMission.position.y, myMission.position.z].GetComponent<FireRiskGenerator>();
+        for (int i = 1; i < myMission.blocksFound.Count; i++) { //Starts at i = 1 so the block at center isn't affected
+            myMission.blocksFound[i].fireRiskPercentage += linkedFG.amountInPercent;
+        }
+        GameManager.instance.missionManager.EndMission(myMission);
+        yield return null;
+    }
+
+
     IEnumerator EmitSpatioportInfluence()
     {
         activeCoroutinesRelatedToSpatioport++;

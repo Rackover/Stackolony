@@ -23,12 +23,12 @@ public class FoodProvider: Flag, Flag.IFlag
     {
         base.Disable();
         GameManager.instance.systemManager.AllFoodProviders.Remove(this);
-        StartCoroutine(GameManager.instance.systemManager.RecalculateFoodConsumption());
+        GameManager.instance.systemManager.StartCoroutine(GameManager.instance.systemManager.RecalculateFoodConsumption());
     }
 
     public override void OnDestroy()
     {
-        GameManager.instance.systemManager.AllFoodProviders.Remove(this);
+        Disable();
         base.OnDestroy();
     }
 

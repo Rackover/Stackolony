@@ -593,7 +593,23 @@ public class FlagReader : MonoBehaviour
                     foundNuisanceGenerator.amount += int.Parse(flagElements[2]);
                 }
                 break;
-    #endregion
+            #endregion
+
+    #region FireRiskGenerator
+            case "FireRiskGenerator":
+                FireRiskGenerator foundFireRiskGenerator = block.GetComponent<FireRiskGenerator>();
+                if (foundFireRiskGenerator == null)
+                {
+                    FireRiskGenerator newFG = block.gameObject.AddComponent<FireRiskGenerator>();
+                    newFG.amountInPercent = int.Parse(flagElements[1]);
+                    block.activeFlags.Add(newFG);
+                }
+                else
+                {
+                    foundFireRiskGenerator.amountInPercent += int.Parse(flagElements[1]);
+                }
+                break;
+            #endregion
             default:
 				Logger.Warn("Warning : " + flagElements[0] + " flag is undefined. Did you forget to add it to the FlagReader ?");
 				break;

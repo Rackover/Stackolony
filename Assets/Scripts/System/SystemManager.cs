@@ -12,6 +12,7 @@ public class SystemManager : MonoBehaviour {
     public List<FoodProvider> AllFoodProviders = new List<FoodProvider>();
     public List<Spatioport> AllSpatioports = new List<Spatioport>();
     public List<NuisanceGenerator> AllNuisanceGenerators = new List<NuisanceGenerator>();
+    public List<FireRiskGenerator> AllFireRiskGenerators = new List<FireRiskGenerator>();
 
     /* FONCTIONNEMENT DU SYSTEME 
      * Système recalculé à chaque déplacement de block : 
@@ -71,6 +72,8 @@ public class SystemManager : MonoBehaviour {
         RefreshConsumptionModifiers();
         RefreshFlagModifiers();
         RefreshTempFlags();
+        RefreshTempFlagDestroyers();
+        RefreshFireRiskModifiers();
 
         yield return StartCoroutine(OnNewMicrocycle());
         yield return null;
@@ -110,6 +113,7 @@ public class SystemManager : MonoBehaviour {
         yield return StartCoroutine(RecalculatePropagation());
         yield return StartCoroutine(RecalculateNuisance());
         yield return StartCoroutine(UpdateOverlay());
+        yield return StartCoroutine(RecalculateFireRisks());
     }
 
     public IEnumerator UpdateOverlay()
@@ -180,6 +184,27 @@ public class SystemManager : MonoBehaviour {
         }
     }
 
+    public void RefreshTempFlagDestroyers()
+    {
+        foreach (Block block in AllBlocks)
+        {
+            List<TempFlagDestroyer> newTempFlagDestroyerList = new List<TempFlagDestroyer>();
+            foreach (TempFlagDestroyer tempFlagDestroyer in block.tempFlagDestroyers)
+            {
+                tempFlagDestroyer.cyclesRemaining--;
+                if (tempFlagDestroyer.cyclesRemaining == 0)
+                {
+                    //Recreate the flag
+                    GameManager.instance.flagReader.ReadFlag(block, tempFlagDestroyer.flagInformations);
+                }
+                else
+                {
+                    newTempFlagDestroyerList.Add(tempFlagDestroyer);
+                }
+            }
+            block.tempFlagDestroyers = newTempFlagDestroyerList;
+        }
+    }
 
     //Remove 1 cycle on each notationModifier duration
     public void RefreshNotationModifiers()
@@ -200,6 +225,22 @@ public class SystemManager : MonoBehaviour {
         }
     }
 
+    public void RefreshFireRiskModifiers()
+    {
+        foreach (Block block in AllBlocks)
+        {
+            List<FireRiskModifier> newFireRiskModifiers = new List<FireRiskModifier>();
+            foreach (FireRiskModifier fireRiskModifier in block.fireRiskModifiers)
+            {
+                fireRiskModifier.cyclesRemaining--;
+                if (fireRiskModifier.cyclesRemaining != 0)
+                {
+                    newFireRiskModifiers.Add(fireRiskModifier);
+                }
+            }
+            block.fireRiskModifiers = newFireRiskModifiers;
+        }
+    }
 
     //Remove 1 cycle on each foodmodifiers
     public void RefreshFoodModifiers()
@@ -285,6 +326,17 @@ public class SystemManager : MonoBehaviour {
         foreach (House house in AllHouses)
         {
             house.UpdateHouseInformations();
+        }
+        yield return null;
+    }
+
+    public IEnumerator RecalculateFireRisks()
+    {
+        StartCoroutine(ResetFireRisks());
+        yield return new WaitForEndOfFrame();
+        foreach (FireRiskGenerator fg in AllFireRiskGenerators)
+        {
+            fg.Invoke("GenerateFireRisks", 0f);
         }
         yield return null;
     }
@@ -406,6 +458,16 @@ public class SystemManager : MonoBehaviour {
         {
             block.isConsideredUnpowered = true;
             block.ChangePower(0);
+        }
+        yield return null;
+    }
+
+    IEnumerator ResetFireRisks()
+    {
+        Logger.Debug("Resetting fire risks");
+        foreach (Block block in AllBlocks)
+        {
+            block.fireRiskPercentage = 0;
         }
         yield return null;
     }

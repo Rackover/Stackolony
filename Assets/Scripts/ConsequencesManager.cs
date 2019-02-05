@@ -23,6 +23,12 @@ public class ConsequencesManager : MonoBehaviour {
         GameManager.instance.cityManager.GenerateNotationModifier(house, amount, durationInCycle);
     }
 
+    //Generates a fireRiskModifier, to change the chances of a blockbeing set on fire each cycle
+    static public void GenerateFireRiskModifier(Block block, int amountInPercent, int durationInCycle)
+    {
+        GameManager.instance.cityManager.GenerateFireRiskModifier(block, amountInPercent, durationInCycle);
+    }
+
     //Changes the energy consumption of a block
     static public void GenerateConsumptionModifier(Block block, int amount, int durationInCycle)
     {
@@ -34,7 +40,16 @@ public class ConsequencesManager : MonoBehaviour {
     {
         if (GameManager.instance.cityManager.FindFlag(block, flag) != null)
         {
-            Destroy(block.GetComponent<Flag>());
+            Destroy(block.GetComponent(flag));
+        }
+    }
+
+    //Destroys temporaly the specified flag
+    static public void DestroyFlagTemporarily(Block block, System.Type flag, int cyclesRemaining)
+    {
+        if (GameManager.instance.cityManager.FindFlag(block, flag) != null)
+        {
+            GameManager.instance.cityManager.GenerateTempFlagDestroyer(block, flag, cyclesRemaining);
         }
     }
 
@@ -70,7 +85,7 @@ public class ConsequencesManager : MonoBehaviour {
         location.y = GameManager.instance.gridManagement.gridSize.y - 1;
         for (int i = 0; i < amount; i++)
         {
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(1f);
             if (blockID < 0)
             {
                 int randomID = GameManager.instance.library.GetRandomBlock().ID;
@@ -112,6 +127,15 @@ public class ConsequencesManager : MonoBehaviour {
         GameManager.instance.gridManagement.DestroyBlock(block.gridCoordinates);
     }
 
+    static public void GenerateFlag(Block block, string flagInformation)
+    {
+        string[] flagElements = flagInformation.Split(new char[] { '_' }, System.StringSplitOptions.RemoveEmptyEntries);
+        if (GameManager.instance.cityManager.FindFlag(block, System.Type.GetType(flagElements[0])) == null)
+        {
+            GameManager.instance.flagReader.ReadFlag(block, flagInformation);
+        }
+    }
+
     //Generates a new flag, taking the informations like in flag declaration (Ex : Generator_1_3), overrides flag values if flag is already here
     static public void GenerateNewFlag(Block block, string flagInformations)
     {
@@ -123,13 +147,21 @@ public class ConsequencesManager : MonoBehaviour {
     //Modify the flag with the new settings, only if flag already exists
     static public void ModifyFlag(Block block, string flagInformations, int durationInCycle)
     {
-        GameManager.instance.cityManager.GenerateFlagModifier(block, flagInformations, durationInCycle);
+        string[] flagElements = flagInformations.Split(new char[] { '_' }, System.StringSplitOptions.RemoveEmptyEntries);
+        if (GameManager.instance.cityManager.FindFlag(block, System.Type.GetType(flagElements[0])) != null)
+        {
+            GameManager.instance.cityManager.GenerateFlagModifier(block, flagInformations, durationInCycle);
+        }
     }
 
     //Generates a flag that'll be removed after X time, only if the flag isn't already there
     static public void GenerateTempFlag(Block block, string flagInformations, int durationInCycle)
     {
-        GameManager.instance.cityManager.GenerateTempFlag(block, flagInformations, durationInCycle);
+        string[] flagElements = flagInformations.Split(new char[] { '_' }, System.StringSplitOptions.RemoveEmptyEntries);
+        if (GameManager.instance.cityManager.FindFlag(block, System.Type.GetType(flagElements[0])) == null)
+        {
+            GameManager.instance.cityManager.GenerateTempFlag(block, flagInformations, durationInCycle);
+        }
     }
 
     static public Block GetRandomBuildingOfId(int id)
@@ -163,11 +195,11 @@ public class ConsequencesManager : MonoBehaviour {
         return houses[Mathf.FloorToInt(Random.value * houses.Count)];
     }
 
+
     //TO DO
     //Randomly spawns a mine on the map
     public void SpawnMine(int amount)
     {
 
     }
-
 }
