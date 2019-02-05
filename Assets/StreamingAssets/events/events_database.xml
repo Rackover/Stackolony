@@ -42,7 +42,7 @@
 	<event id="5" population="worker" emotion="bad">
 		<choice id="1">
 			A=RANDOM_BUILDING(id:24);
-			ADD_FLAG_MODIFIER_ON_BUILDING_FOR_DURATION(building:A,flagModifier:Occupator_-3_0_0,duration:3;
+			ADD_FLAG_MODIFIER_ON_BUILDING_FOR_DURATION(building:A,flagModifier:Occupator_-3_0_0,duration:3);
 			INCREASE_MOOD_FOR_POPULATION(population:worker,duration:3,amount:2);
 		</choice>
 		<choice id="2">
@@ -164,7 +164,7 @@
 	<event id="16" population="worker" emotion="bad">
 		<choice id="1">
 		A=RANDOM_BUILDING(id:6);
-		ADD_FLAG_MODIFIER(building:A, flagModifier:Generator_2, duration:3);
+		ADD_FLAG_MODIFIER_ON_BUILDING_FOR_DURATION(building:A, flagModifier:Generator_2, duration:3);
 		INCREASE_MOOD_FOR_POPULATION(population:worker,duration:3,amount:1);
 		</choice>
 		<choice id="2">
