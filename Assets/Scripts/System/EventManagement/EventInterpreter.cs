@@ -88,7 +88,7 @@ public class EventInterpreter
 
 
 
-    List<System.Action> InterpretBlock(string block, Dictionary<string, Object> context, char separator)
+    List<System.Action> InterpretBlock(string block, Dictionary<string, Object> context, char separator, bool executeImmediatly=false)
     {
 
         List<System.Action> actions = new List<System.Action>();
@@ -133,8 +133,11 @@ public class EventInterpreter
             if (!CheckSyntax(line)) {
                 Throw(line);
             }
-            actions.Add(InterpretStatement(line, context));
-
+            System.Action action = InterpretStatement(line, context);
+            actions.Add(action);
+            if (executeImmediatly) {
+                action.Invoke();
+            }
         }
 
         return actions;
@@ -177,22 +180,22 @@ public class EventInterpreter
     // Returns an action based on the string statement
     System.Action InterpretStatement(string statement, Dictionary<string, Object> context)
     {
-        System.Action action = delegate { };
+        return delegate {
+            // Chance statement
+            if (statement.StartsWith("[")) {
+                UnpackControlStructure(statement, context).Invoke();
+                return;
+            }
 
+            // Assignation statement
+            if (statement.Contains("=")) {
+                Assign(statement, context);
+                return;
+            }
 
-        // Chance statement
-        if (statement.StartsWith("[")) {
-            return UnpackControlStructure(statement, context);
-        }
-
-        // Assignation statement
-        if (statement.Contains("=")) {
-            Assign(statement, context);
-            return delegate { };
-        }
-
-        // XCution statement
-        return ExecuteActionFunctionFromString(statement, context);
+            // XCution statement
+            ExecuteActionFunctionFromString(statement, context);
+        };
 
     }
 
@@ -230,10 +233,10 @@ public class EventInterpreter
             List<System.Action> blockActions = new List<System.Action>();
             float rnd = Random.value;
             if (rnd <= amount) {
-                blockActions = InterpretBlock(chanceStatement, context, lineSeparator);
+                blockActions = InterpretBlock(chanceStatement, context, lineSeparator, true);
             }
             else {
-                blockActions = InterpretBlock(elseStatement, context, lineSeparator);
+                blockActions = InterpretBlock(elseStatement, context, lineSeparator, true);
             }
             foreach (System.Action action in blockActions) {
                 action.Invoke();
@@ -249,6 +252,7 @@ public class EventInterpreter
             Throw(assignationStatement);
         }
         string varName = explodedStatement[0];
+        
         Object generated = ExecuteDataFunctionFromString(explodedStatement[1], context);
 
         context[varName] = generated;
@@ -264,7 +268,7 @@ public class EventInterpreter
         if (!dataFunctions.ContainsKey(funcName)) {
             Throw("Unsupported data function \"" + funcName + "\". Supported data functions: \n" + string.Join("\n",  GetDataFunctions().ToArray()));
         }
-
+        
         return dataFunctions[funcName].Invoke(content, context);
     }
 
