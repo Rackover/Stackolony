@@ -9,6 +9,7 @@ public class EventManager : MonoBehaviour {
     EventInterpreter interpreter = new EventInterpreter();
 
     public System.Action<string> interpreterError;
+    public System.Action<GameEvent> newEvent;
 
     Dictionary<int, GameEvent> events = new Dictionary<int, GameEvent>();
 
@@ -16,6 +17,7 @@ public class EventManager : MonoBehaviour {
     {
         public int id;
         public Dictionary<int, GameAction> choices;
+        int minCycle = 0;
 
         public GameEvent(int _id, Dictionary<int, GameAction>_choices)
         {
@@ -33,20 +35,48 @@ public class EventManager : MonoBehaviour {
         }
     }
 
+    public class GameEffect
+    {
+        public string intention = "";
+        public string[] parameters = new string[] { };
+        System.Action action;
+
+        public GameEffect(System.Action _action, string _intention, params string[] _parameters)
+        {
+            action = _action;
+            intention = _intention;
+            parameters = _parameters;
+        }
+
+        public string GetFormattedIntention(Localization localizer)
+        {
+            return localizer.GetLine(intention, "gameEffect", parameters);
+        }
+        
+        public System.Action GetAction()
+        {
+            return action;
+        }
+
+        public void SetAction(System.Action _action)
+        {
+            action = _action;
+        }
+    }
+
     public class GameAction
     {
-        List<System.Action> actions;
-        int minCycle = 0;
+        List<GameEffect> actions;
 
-        public GameAction(List<System.Action> _actions)
+        public GameAction(List<GameEffect> _actions)
         {
             actions = _actions;
         }
 
         public void Execute()
         {
-            foreach(System.Action action in actions) {
-                action.Invoke();
+            foreach(GameEffect action in actions) {
+                action.GetAction().Invoke();
             }
         }
     }
@@ -62,6 +92,8 @@ public class EventManager : MonoBehaviour {
             script = _script;
         }
     }
+
+    
 
     public void ReadAndExecute(string eventScript)
     {

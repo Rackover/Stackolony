@@ -50,12 +50,12 @@ public class EventInterpreter
             return new Vector3Int(x, y, z);
         }
     }
-
+    
     public EventInterpreter()
     {
         LoadActionFunctions();
     }
-
+    
     ////////////////////////////////////////////////
     ///
     ///     MAIN EVENT CREATION FUNCTION
@@ -63,12 +63,11 @@ public class EventInterpreter
     ///
     public EventManager.GameAction MakeEvent(string eventDeclaration)
     {
-        Dictionary<string, Object> context = new Dictionary<string, Object>();
         eventDeclaration = eventDeclaration.Replace(" ", "").Replace("\n", "").Replace("\r", "").Replace("	", "");
 
-        List<System.Action> actions = new List<System.Action>();
+        List<EventManager.GameEffect> actions = new List<EventManager.GameEffect>();
         try {
-            actions = InterpretBlock(eventDeclaration, context, lineSeparator);
+            actions = MakeGameEffects(eventDeclaration);
         }
         catch (InterpreterException e) {
             Debug.LogWarning("Interpration failed :\n" + e.Message);
@@ -86,12 +85,18 @@ public class EventInterpreter
     /// 
     ////////////////////////////////////////////////
 
+    List<EventManager.GameEffect> MakeGameEffects(string eventScript)
+    {
+        Dictionary<string, Object> context = new Dictionary<string, Object>();
+        List<EventManager.GameEffect> effects = InterpretBlock(eventScript, context, lineSeparator);
 
-
-    List<System.Action> InterpretBlock(string block, Dictionary<string, Object> context, char separator, bool executeImmediatly=false)
+        return effects;
+    }
+        
+    List<EventManager.GameEffect> InterpretBlock(string block, Dictionary<string, Object> context, char separator, bool executeImmediatly=false)
     {
 
-        List<System.Action> actions = new List<System.Action>();
+        List<EventManager.GameEffect> actions = new List<EventManager.GameEffect>();
 
         // Manual split to avoid splitting control blocks
         List<string> lines = new List<string>();
@@ -133,10 +138,12 @@ public class EventInterpreter
             if (!CheckSyntax(line)) {
                 Throw(line);
             }
-            System.Action action = InterpretStatement(line, context);
-            actions.Add(action);
-            if (executeImmediatly) {
-                action.Invoke();
+            List<EventManager.GameEffect> gameEffects = InterpretStatement(line, context);
+            foreach (EventManager.GameEffect effect in gameEffects) {
+                actions.Add(effect);
+                if (executeImmediatly) {
+                    effect.GetAction().Invoke();
+                }
             }
         }
 
@@ -177,30 +184,30 @@ public class EventInterpreter
 
 
     // Interprets list of statement separated by [separator]
-    // Returns an action based on the string statement
-    System.Action InterpretStatement(string statement, Dictionary<string, Object> context)
+    // Returns a list of game effects from that statement (statement could be a condition block)
+    List<EventManager.GameEffect> InterpretStatement(string statement, Dictionary<string, Object> context)
     {
-        return delegate {
-            // Chance statement
-            if (statement.StartsWith("[")) {
-                UnpackControlStructure(statement, context).Invoke();
-                return;
-            }
+        List<EventManager.GameEffect> effects = new List<EventManager.GameEffect>();
+        // Chance statement
+        if (statement.StartsWith("[")) {
+            return UnpackControlStructure(statement, context);
+        }
 
-            // Assignation statement
-            if (statement.Contains("=")) {
-                Assign(statement, context);
-                return;
-            }
+        // Assignation statement
+        if (statement.Contains("=")) {
+            effects.Add(new EventManager.GameEffect(delegate { Assign(statement, context); }, ""));
+        }
 
+        else {
             // XCution statement
-            ExecuteActionFunctionFromString(statement, context);
-        };
+            effects.Add(ExecuteActionFunctionFromString(statement, context));
+        }
 
+        return effects;
     }
 
     // Interprets inside of a control structure
-    System.Action UnpackControlStructure(string statement, Dictionary<string, Object> context)
+    List<EventManager.GameEffect> UnpackControlStructure(string statement, Dictionary<string, Object> context)
     {
         string statementInside = statement.Remove(statement.Length - 1, 1).Remove(0, 1);
 
@@ -229,19 +236,55 @@ public class EventInterpreter
         string chanceStatement = explodedStatement[1];
         string elseStatement = explodedStatement[3];
 
-        return delegate {
-            List<System.Action> blockActions = new List<System.Action>();
-            float rnd = Random.value;
-            if (rnd <= amount) {
-                blockActions = InterpretBlock(chanceStatement, context, lineSeparator, true);
+        List<EventManager.GameEffect> chanceBlock = InterpretBlock(chanceStatement, context, lineSeparator);
+        List<EventManager.GameEffect> elseBlock = InterpretBlock(elseStatement, context, lineSeparator);
+
+        // Combine chance descriptions
+        List<EventManager.GameEffect> blockEffects = new List<EventManager.GameEffect>();
+        blockEffects.Add(
+            new EventManager.GameEffect(delegate { },
+                "chance",
+                (100 * amount).ToString()
+            )
+        );
+        // Chance
+        foreach(EventManager.GameEffect fx in chanceBlock) {
+            blockEffects.Add(
+                new EventManager.GameEffect(delegate { }, fx.intention, fx.parameters)
+            );
+        }
+
+        blockEffects.Add(
+            new EventManager.GameEffect(delegate { },
+                "chance",
+                (100 * (1 - amount)).ToString()
+            )
+        );
+        // Else
+        foreach (EventManager.GameEffect fx in elseBlock) {
+            blockEffects.Add(
+                new EventManager.GameEffect(delegate { }, fx.intention, fx.parameters)
+            );
+        }
+        
+        
+        // Unique delegate that will roll the dice
+        blockEffects[0].SetAction(
+            delegate {
+                if (Random.value < amount) {
+                    foreach(EventManager.GameEffect fx in chanceBlock) {
+                        fx.GetAction().Invoke();
+                    }
+                }
+                else {
+                    foreach (EventManager.GameEffect fx in elseBlock) {
+                        fx.GetAction().Invoke();
+                    }
+                }
             }
-            else {
-                blockActions = InterpretBlock(elseStatement, context, lineSeparator, true);
-            }
-            foreach (System.Action action in blockActions) {
-                action.Invoke();
-            }
-        };
+        );
+
+        return blockEffects;
     }
 
     // Assigns data to a variable in the context
@@ -320,7 +363,7 @@ public class EventInterpreter
     }
 
     // Execute action from function 
-    System.Action ExecuteActionFunctionFromString(string statement, Dictionary<string, Object> context)
+    EventManager.GameEffect ExecuteActionFunctionFromString(string statement, Dictionary<string, Object> context)
     {
         string[] explodedStatement = ExplodeFunction(statement);
         string funcName = explodedStatement[0];
@@ -330,9 +373,14 @@ public class EventInterpreter
             Throw("Unsupported action function \"" + funcName.ToString() + "\". Supported action functions: \n" + string.Join("\n", GetActionFunctions().ToArray())+"");
         }
 
-        return delegate { actionFunctions[funcName](arguments, context); };
+        return 
+            new EventManager.GameEffect(
+                delegate { actionFunctions[funcName](arguments, context); },
+                funcName
+            )
+        ;
 
-    }
+    }   
 
     // Returns list of supported action functions
     List<string> GetActionFunctions()
