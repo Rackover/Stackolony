@@ -229,7 +229,7 @@ public class EventInterpreter
         try {
             amount = System.Convert.ToSingle(explodedStatement[0].Replace("%", "")) / 100;
         }
-        catch (System.Exception e) {
+        catch (System.Exception) {
             Throw("Invalid probability in control structure : \n" + explodedStatement[0]);
         }
 
@@ -328,7 +328,7 @@ public class EventInterpreter
         try {
             content = explodedStatement[1].Remove(explodedStatement[1].Length - 1, 1);
         }
-        catch (System.Exception e) {
+        catch (System.Exception) {
             Throw("Invalid function call :\n" + statement);
         }
 
@@ -345,7 +345,7 @@ public class EventInterpreter
                 try {
                     return explodedStatement[1];
                 }
-                catch (System.Exception e) {
+                catch (System.Exception) {
                     Throw("Invalid argument : " + statement);
                 }
             }
@@ -417,7 +417,7 @@ public class EventInterpreter
                 try {
                     block = (Block)context[GetArgument(args, "building")];
                 }
-                catch (System.Exception e) {
+                catch (System.Exception) {
                     Throw("Impossible cast in " + args + "\n");
                 }
                 int duration = System.Convert.ToInt32(GetArgument(args, "duration"));

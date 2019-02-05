@@ -339,7 +339,7 @@ public class GameManager : MonoBehaviour
         gridManagement.InitializeGridManager();
         cinematicManager.GetReferences();
         timelineController.LoadCycles();
-        eventManager.LoadEventsDatabase();
+        eventManager.LoadEvents();
 
         // NEW GAME ONLY
         if (isNewGame) {

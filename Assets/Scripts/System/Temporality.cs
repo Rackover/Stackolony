@@ -101,6 +101,7 @@ public class Temporality : MonoBehaviour {
         StartCoroutine(GameManager.instance.systemManager.OnNewCycle());
         cycleNumber++;
         GameManager.instance.timelineController.UpdateCycle(cycleNumber);
+        GameManager.instance.eventManager.Renew(cycleNumber);
     }
 
     void AddMicroCycle()
