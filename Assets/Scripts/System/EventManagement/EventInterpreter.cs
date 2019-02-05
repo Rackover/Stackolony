@@ -459,6 +459,22 @@ public class EventInterpreter
             }
         );
         actionFunctions.Add(
+            "DECREASE_FOOD_CONSUMPTION_FOR_POPULATION", (args, context) => {
+                Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
+                if (pop == null) {
+                    List<string> pops = new List<string>();
+                    foreach (Population existingPop in GameManager.instance.populationManager.populationTypeList) {
+                        pops.Add(existingPop.codeName);
+                    }
+                    Throw("Invalid population name :\n " + args + "\nPick one from the following : " + string.Join(", ", pops.ToArray()));
+                }
+                int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
+                float amount = System.Convert.ToSingle(GetArgument(args, "amount"));
+
+                ConsequencesManager.GenerateFoodConsumptionModifier(pop, -amount, duration);
+            }
+        );
+        actionFunctions.Add(
             "INCREASE_HOUSE_NOTATION", (args, context) => {
                 House house = null;
                 try {
