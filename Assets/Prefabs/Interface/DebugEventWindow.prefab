@@ -21,7 +21,6 @@ GameObject:
   - component: {fileID: 224192265633314510}
   - component: {fileID: 222589593388659464}
   - component: {fileID: 114383303261116608}
-  - component: {fileID: 114834270123403416}
   m_Layer: 5
   m_Name: ErrorText
   m_TagString: Untagged
@@ -78,6 +77,7 @@ GameObject:
   - component: {fileID: 114995505485982378}
   - component: {fileID: 114717940604335096}
   - component: {fileID: 114915266440458466}
+  - component: {fileID: 114603589596564006}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -642,6 +642,25 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: 
+--- !u!114 &114603589596564006
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1198301641207276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1679637790, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: 600
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!114 &114633863708683804
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -827,19 +846,6 @@ MonoBehaviour:
       m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
         Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   delegates: []
---- !u!114 &114834270123403416
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1007861324029724}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1741964061, guid: f70555f144d8491a825f0804e09c671c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_HorizontalFit: 2
-  m_VerticalFit: 2
 --- !u!114 &114915266440458466
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1071,7 +1077,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 73.01642, y: -69.47541}
+  m_AnchoredPosition: {x: 73.015625, y: -69.47541}
   m_SizeDelta: {x: 46.032787, y: 38.95082}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224304477825357672

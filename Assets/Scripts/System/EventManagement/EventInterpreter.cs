@@ -3,11 +3,12 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using System.Text;
 
 public class EventInterpreter
 {
 
-    public string lineSeparator = ";";
+    public char lineSeparator = ';';
 
     class InterpreterException : System.Exception
     {
@@ -68,7 +69,7 @@ public class EventInterpreter
         // Double separator (;;) for regular lines
         List<System.Action> actions = new List<System.Action>();
         try {
-            actions = InterpretBlock(eventDeclaration, context, lineSeparator + lineSeparator);
+            actions = InterpretBlock(eventDeclaration, context, lineSeparator);
         }
         catch (InterpreterException e) {
             GameManager.instance.eventManager.interpreterError.Invoke(e.Message);
@@ -86,28 +87,56 @@ public class EventInterpreter
 
 
 
-    List<System.Action> InterpretBlock(string block, Dictionary<string, Object> context, string separator, int depth = 0)
+    List<System.Action> InterpretBlock(string block, Dictionary<string, Object> context, char separator)
     {
 
         List<System.Action> actions = new List<System.Action>();
-        List<string> lines = new List<string>(block.Split(new[] { separator }, System.StringSplitOptions.RemoveEmptyEntries));
 
+        // Manual split to avoid splitting control blocks
+        List<string> lines = new List<string>();
+        StringBuilder lineBuilder = new StringBuilder();
+        bool isInsideControlStructure = false;
+
+        // Parsing
+        foreach (char character in block) {
+
+            if (isInsideControlStructure) {
+                lineBuilder.Append(character);
+                if (character == ']') {
+                    isInsideControlStructure = false;
+                }
+                continue;
+            }
+
+            if (character == '[') {
+                lineBuilder.Append(character);
+                isInsideControlStructure = true;
+                continue;
+            }
+
+            if (character == separator) {
+                // Skipping zero length lines
+                if (lineBuilder.Length > 0) {
+                    lines.Add(lineBuilder.ToString());
+                }
+                lineBuilder = new StringBuilder();
+                continue;
+            }
+
+            lineBuilder.Append(character);
+        }
+
+        // Interpretation
         foreach (string line in lines) {
 
             if (!CheckSyntax(line)) {
                 Throw(line);
             }
-            actions.Add(InterpretStatement(line, context, depth));
+            actions.Add(InterpretStatement(line, context));
 
         }
 
         return actions;
-    }
-
-    // Interprets list of statement separated by [separator]
-    List<System.Action> InterpretBlock(string block, Dictionary<string, Object> context, char separator)
-    {
-        return InterpretBlock(block, context, separator.ToString());
     }
 
     // Checks syntax is correct on statement
@@ -136,15 +165,17 @@ public class EventInterpreter
         throw new InterpreterException(msg);
     }
 
+
+    // Interprets list of statement separated by [separator]
     // Returns an action based on the string statement
-    System.Action InterpretStatement(string statement, Dictionary<string, Object> context, int depth = 0)
+    System.Action InterpretStatement(string statement, Dictionary<string, Object> context)
     {
         System.Action action = delegate { };
 
 
         // Chance statement
         if (statement.StartsWith("[")) {
-            return UnpackControlStructure(statement, context, depth);
+            return UnpackControlStructure(statement, context);
         }
 
         // Assignation statement
@@ -159,7 +190,7 @@ public class EventInterpreter
     }
 
     // Interprets inside of a control structure
-    System.Action UnpackControlStructure(string statement, Dictionary<string, Object> context, int depth = 0)
+    System.Action UnpackControlStructure(string statement, Dictionary<string, Object> context)
     {
         string statementInside = statement.Remove(statement.Length - 1, 1).Remove(0, 1);
 
@@ -192,10 +223,10 @@ public class EventInterpreter
             List<System.Action> blockActions = new List<System.Action>();
             float rnd = Random.value;
             if (rnd <= amount) {
-                blockActions = InterpretBlock(chanceStatement, context, lineSeparator + depth.ToString(), depth + 1);
+                blockActions = InterpretBlock(chanceStatement, context, lineSeparator);
             }
             else {
-                blockActions = InterpretBlock(elseStatement, context, lineSeparator + depth.ToString(), depth + 1);
+                blockActions = InterpretBlock(elseStatement, context, lineSeparator);
             }
             foreach (System.Action action in blockActions) {
                 action.Invoke();
@@ -573,7 +604,6 @@ public class EventInterpreter
 
        {  "RANDOM_BUILDING", (args, ctx) =>
            {
-               Debug.Log(GetArgument(args, "id"));
                int id = System.Convert.ToInt32(GetArgument(args, "id"));
                Block block = ConsequencesManager.GetRandomBuildingOfId(id);
                if (block == null) {
