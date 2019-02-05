@@ -11,10 +11,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14a825372d1dc3a4fa39444b146f0e78, type: 3}
   m_Name: Mine
   m_EditorClassIdentifier: 
-  isMovable: 1
-  isDestroyable: 1
-  isBuyable: 1
-  canBuildAbove: 1
+  isMovable: 0
+  isDestroyable: 0
+  isBuyable: 0
+  canBuildAbove: 0
   model: {fileID: 1006822606471232, guid: 9158385385919d24ea3cfe09f717c625, type: 2}
   ID: 10
   consumption: 0

@@ -14,6 +14,7 @@ public class SystemManager : MonoBehaviour {
     public List<NuisanceGenerator> AllNuisanceGenerators = new List<NuisanceGenerator>();
     public List<FireRiskGenerator> AllFireRiskGenerators = new List<FireRiskGenerator>();
 
+
     /* FONCTIONNEMENT DU SYSTEME 
      * Système recalculé à chaque déplacement de block : 
      *      - Spatioport influence
@@ -30,6 +31,8 @@ public class SystemManager : MonoBehaviour {
      *      - Job distribution
      *      - Mood
     */
+
+    
 
     // removes a buliding from the system entirely
     public void RemoveBuilding(GameObject target)
@@ -60,7 +63,8 @@ public class SystemManager : MonoBehaviour {
     public IEnumerator OnNewCycle()
     {
         GameManager.instance.populationManager.OnNewCycle();
-        
+        GameManager.instance.cityManager.OnNewCycle();
+
         foreach (Block block in AllBlocks.ToArray())
         {
             block.OnNewCycle();

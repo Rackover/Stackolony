@@ -11,10 +11,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14a825372d1dc3a4fa39444b146f0e78, type: 3}
   m_Name: Nest
   m_EditorClassIdentifier: 
-  isMovable: 1
-  isDestroyable: 1
-  isBuyable: 1
-  canBuildAbove: 1
+  isMovable: 0
+  isDestroyable: 0
+  isBuyable: 0
+  canBuildAbove: 0
   model: {fileID: 1045540575052308, guid: 3f49784df26cc5540976a8d10f6112ce, type: 2}
   ID: 12
   consumption: 0

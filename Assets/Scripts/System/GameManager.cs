@@ -334,6 +334,8 @@ public class GameManager : MonoBehaviour
         temporality.SetDate(0);
         temporality.SetTimeOfDay(20);
         temporality.SetTimeScale(1);
+        
+        cityManager.NewLayout();
 
         // Initialize only
         gridManagement.InitializeGridManager();

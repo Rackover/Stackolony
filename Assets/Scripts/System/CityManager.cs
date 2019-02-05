@@ -51,7 +51,11 @@ public class CityManager : MonoBehaviour {
 
     List<int> lockedBuildings = new List<int >();
 
-
+    [Header("Mines and Nests")]
+	public int mineAtStart = 3;
+	public int nestAtStart = 4;
+	public float nestSpawnChance = 0.1f;
+    
     [System.Serializable]
     public class MoodValues
     {
@@ -75,6 +79,30 @@ public class CityManager : MonoBehaviour {
             topHabitations[pop] = new Dictionary<House, float>();
         }
     }
+    
+	public void NewLayout()
+	{
+		for( int i = 0; i < mineAtStart; i++){SpawnMine();}
+		for( int i = 0; i < nestAtStart; i++){SpawnNest();}
+	}
+
+	public void SpawnMine()
+	{
+		GameManager.instance.gridManagement.SpawnBlock(10, GameManager.instance.gridManagement.GetRandomCoordinates()).GetComponent<Block>().LoadBlock();
+	}
+
+	public void SpawnNest()
+	{
+		GameManager.instance.gridManagement.SpawnBlock(12, GameManager.instance.gridManagement.GetRandomCoordinates()).GetComponent<Block>().LoadBlock();
+	}
+
+	public void OnNewCycle()
+	{
+        if(Random.Range(0f, 1f) < nestSpawnChance)
+		{
+			SpawnNest();
+		}
+	}
 
     public void LockBuilding(int id)
     {
