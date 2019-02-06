@@ -346,4 +346,11 @@
 	 <event9_1>Let's try</event9_1>
 	 <event9_2>No!</event9_2>
   </choice>
+  <populationTypeDelegate>
+	<richie>Lord {0}</richie>
+	<artist>Master {0}</artist>
+	<military>General {0}</military>
+	<scientist>Dr {0}</scientist>
+	<worker>{0}son</worker>
+  </populationTypeDelegate>
 </lines>

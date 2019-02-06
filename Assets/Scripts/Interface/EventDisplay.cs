@@ -31,6 +31,8 @@ public class EventDisplay : MonoBehaviour {
             subWindow.SetActive(true);
             InitializeButtons();
             InitializeWindow();
+            GetComponent<Image>().enabled = true;
+            GameManager.instance.Pause();
         };
     }
 
@@ -117,6 +119,8 @@ public class EventDisplay : MonoBehaviour {
                     displayer.Unstage();
                 }
                 FindObjectOfType<TooltipGO>().Disable();
+                GameManager.instance.UnPause();
+                GetComponent<Image>().enabled = false;
             });
 
             instantiatedButtons.Add(button);

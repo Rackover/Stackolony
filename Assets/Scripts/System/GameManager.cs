@@ -186,6 +186,10 @@ public class GameManager : MonoBehaviour
         {
             overlayManager.SelectOverlay(OverlayType.Density);
         }
+
+        if (Input.GetKeyDown(KeyCode.F12)) {
+            FindObjectOfType<DebugInterface>().SpawnEventDebugWindow();
+        }
         
         if (Input.GetKeyDown(KeyCode.End)) {
             temporality.timeScale = 100;
