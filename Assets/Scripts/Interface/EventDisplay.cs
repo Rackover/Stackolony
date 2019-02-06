@@ -50,6 +50,7 @@ public class EventDisplay : MonoBehaviour {
         else {
             displayer = GameManager.instance.displayerManager.SetRotationFeed(pop.prefab, preview, 180, 0, 3, 30, 512);
             displayer.GetModel().transform.GetChild(0).gameObject.GetComponent<Animator>().Play("LookAround");
+            displayer.GetModel().GetComponent<Bystander>().SetEmotion(emotion);
             preview.gameObject.GetComponent<AspectRatioFitter>().aspectRatio = 1f;
         }
 
