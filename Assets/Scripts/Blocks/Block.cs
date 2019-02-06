@@ -10,7 +10,6 @@ public enum Quality{ Low, Medium, High }
 
 public class Block : MonoBehaviour
 {
-
     [Header("Referencies")]
     public BoxCollider boxCollider;
     public Container container;
@@ -51,7 +50,7 @@ public class Block : MonoBehaviour
     {
         Disable();
         //Affiche un feedback pour signaler que le bloc est inactif
-        if (container.closed == false)
+        if(container.closed == false)
         {
             container.CloseContainer();
         }
@@ -103,11 +102,7 @@ public class Block : MonoBehaviour
     //Called when block is in range of a spatioport
     public void Enable()
     {
-        if (isEnabled)
-        {
-            return;
-        }
-
+        if(isEnabled){return;}
         isEnabled = true; 
 
         //Active toutes les fonctionnalités du bloc
