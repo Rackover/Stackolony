@@ -88,6 +88,7 @@ public class SystemManager : MonoBehaviour {
     {
         GameManager.instance.populationManager.OnNewMicrocycle();
 
+        // ToArray() is to prevent foreach errors by copying the AllBlocks array
         foreach (Block block in AllBlocks.ToArray())
         {
             if(block != null) block.OnNewMicroycle();
@@ -394,7 +395,7 @@ public class SystemManager : MonoBehaviour {
         {
             if(occupator != null)
             {
-                occupator.Invoke("GenerateOccupations", 0f);
+                occupator.GenerateOccupations();
                 yield return new WaitForEndOfFrame();
             }
         }
@@ -408,7 +409,7 @@ public class SystemManager : MonoBehaviour {
         {
             if(foodProvider != null)
             {
-                foodProvider.Invoke("GenerateFood", 0f);
+                foodProvider.GenerateFood();
                 yield return new WaitForEndOfFrame();
             }
 
@@ -422,7 +423,7 @@ public class SystemManager : MonoBehaviour {
         {
             if(generator != null)
             {
-                generator.Invoke("GenerateEnergy", 0f);
+                generator.GenerateEnergy();
                 yield return new WaitForEndOfFrame();
             }
         }
@@ -436,7 +437,7 @@ public class SystemManager : MonoBehaviour {
         {
             if(spatioport != null)
             {
-                spatioport.Invoke("OnBlockUpdate", 0f);
+                spatioport.OnBlockUpdate();
                 yield return new WaitForEndOfFrame();
             }
         }
@@ -448,7 +449,7 @@ public class SystemManager : MonoBehaviour {
         StartCoroutine(ResetNuisance());
         foreach (NuisanceGenerator nuisanceGenerator in AllNuisanceGenerators)
         {
-            nuisanceGenerator.Invoke("GenerateNuisance", 0f);
+            nuisanceGenerator.GenerateNuisance();
             yield return new WaitForEndOfFrame();
         }
         yield return null;
