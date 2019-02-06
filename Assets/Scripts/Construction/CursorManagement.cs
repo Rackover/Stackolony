@@ -552,13 +552,16 @@ public class CursorManagement : MonoBehaviour
                 }
                 else
                 {
+                    FindObjectOfType<AnimationManager>().EndElevateTower(new Vector2Int(savedPos.x, savedPos.z));
                     savedPos = _pos;
+                    FindObjectOfType<AnimationManager>().ElevateTower(savedPos);
                     GameManager.instance.soundManager.Play("Tick");
                     selectedBlock.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(_pos);
                 }
             }
         }
     }
+
     public void EndDrag(Vector3Int _pos)
     {
         if (selectedBlock != null && isDragging)

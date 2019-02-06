@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     public BulletinsManager bulletinsManager;
     public TimelineController timelineController;
     public EventManager eventManager;
+    public AnimationManager animationManager;
 
     [Space(1)]
     [Header("INTERFACE")]
@@ -130,6 +131,7 @@ public class GameManager : MonoBehaviour
         if (timelineController == null) timelineController = FindObjectOfType<TimelineController>();
         if (player == null) player = FindObjectOfType<Player>();
         if (eventManager == null) eventManager = FindObjectOfType<EventManager>();
+        if (animationManager == null) animationManager = FindObjectOfType<AnimationManager>();
         
         // INTERFACE
         if (cursorDisplay == null) cursorDisplay = FindObjectOfType<CursorDisplay>();

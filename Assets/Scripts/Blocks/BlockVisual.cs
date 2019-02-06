@@ -16,13 +16,11 @@ public class BlockVisual : MonoBehaviour
 
 	public void Hide()
 	{
-		Debug.Log(visuals);
 		visuals.SetActive(false);
 	}
 
 	public void Show()
 	{
-		Debug.Log(visuals);
 		visuals.SetActive(true);
 	}
 }

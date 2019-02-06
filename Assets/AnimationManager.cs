@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class AnimationManager : MonoBehaviour {
 
-    public float towerElevationSpeed = 2f;
-    public float towerElevationAmount = 1.2f;
+    public float towerElevationTime = 2f;
+    public float towerDelevationTime = 4f;
+    public float towerElevationAmount = 2f;
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.F))
@@ -32,7 +33,7 @@ public class AnimationManager : MonoBehaviour {
                 Block foundBlock = checkedObj.GetComponent<Block>();
                 if (foundBlock!= null)
                 {
-                    ElevateBlock(foundBlock, towerElevationAmount, towerElevationSpeed);
+                    ElevateBlock(foundBlock, towerElevationAmount, towerElevationTime);
                 }
             }
         }
@@ -49,7 +50,7 @@ public class AnimationManager : MonoBehaviour {
                 Block foundBlock = checkedObj.GetComponent<Block>();
                 if (foundBlock != null)
                 {
-                    EndElevateBlock(foundBlock, towerElevationSpeed);
+                    EndElevateBlock(foundBlock, towerDelevationTime);
                 }
             }
         }
@@ -67,7 +68,6 @@ public class AnimationManager : MonoBehaviour {
 
     IEnumerator ElevateBlockC(Block block, float elevationAmount, float time)
     {
-        Debug.Log("Elevating 2");
         GameObject visuals = block.visuals.gameObject;
         Vector3 startingPosition = block.transform.position;
         Vector3 endPosition = block.transform.position + new Vector3(0, elevationAmount, 0);
