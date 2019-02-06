@@ -30,6 +30,18 @@ public class TooltipGO : MonoBehaviour {
 
     public TooltipIcon[] tooltipIcons;
 
+    public void Disable()
+    {
+        myText.enabled = false;
+        GetComponent<Image>().enabled = false;
+    }
+
+    public void Enable()
+    {
+        myText.enabled = true;
+        GetComponent<Image>().enabled = true;
+    }
+
     public void SetText(string textToSet)
     {
         text = textToSet;

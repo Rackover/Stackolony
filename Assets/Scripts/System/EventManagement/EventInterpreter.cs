@@ -3,17 +3,43 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using System.Text;
 
-public class EventInterpreter {
+public class EventInterpreter
+{
 
-    public string lineSeparator = ";";
+    public char lineSeparator = ';';
+    List<string> argumentsDisplayOrder = new List<string> {
+        "population",
+        "duration",
+        "amount"
+    };
 
-    class ObjectPosition : Object{
+    public class InterpreterException : System.Exception
+    {
+        public InterpreterException()
+        {
+        }
+
+        public InterpreterException(string message)
+            : base(message)
+        {
+        }
+
+        public InterpreterException(string message, System.Exception inner)
+            : base(message, inner)
+        {
+        }
+    }
+
+    class ObjectPosition : Object
+    {
         public int x;
         public int y;
         public int z;
 
-        public ObjectPosition(string data){
+        public ObjectPosition(string data)
+        {
             x = System.Convert.ToInt32(data.Split(',')[0]);
             y = System.Convert.ToInt32(data.Split(',')[1]);
             z = System.Convert.ToInt32(data.Split(',')[2]);
@@ -29,100 +55,165 @@ public class EventInterpreter {
             return new Vector3Int(x, y, z);
         }
     }
-
-    public EventManager.GameEvent MakeEvent(int id, string eventDeclaration)
+    
+    public EventInterpreter()
     {
         LoadActionFunctions();
-
-        Dictionary<string, Object> context = new Dictionary<string, Object>();
-
-
-        eventDeclaration = eventDeclaration.Replace(" ", "").Replace("\n", "").Replace("	", "");
-
-        // Double separator (;;) for regular lines
-        List<System.Action> actions =  InterpretBlock(eventDeclaration, context, lineSeparator + lineSeparator);
-        return new EventManager.GameEvent(id, actions);
     }
+    
+    ////////////////////////////////////////////////
+    ///
+    ///     MAIN EVENT CREATION FUNCTION
+    /// 
+    ///
+    public EventManager.GameAction MakeEvent(string eventDeclaration, System.Action<string> errorEvent=null)
+    {
+        eventDeclaration = eventDeclaration.Replace(" ", "").Replace("\n", "").Replace("\r", "").Replace("	", "");
 
-    List<System.Action> InterpretBlock(string block, Dictionary<string, Object> context, string separator, int depth=0){
+        List<EventManager.GameEffect> actions = new List<EventManager.GameEffect>();
+        try {
+            actions = MakeGameEffects(eventDeclaration);
+        }
+        catch (InterpreterException e) {
+            Debug.LogWarning("Interpration failed :\n" + e.Message);
+            errorEvent.Invoke(e.Message);
+            return null;
+        }
+        catch(System.Exception e) {
+            Debug.LogWarning("Unknown interpreter error - check your script.\n" + e.Message);
+            errorEvent.Invoke("Unknown interpreter error - check your script.\n"+e.Message);
+            return null;
+        }
+        return new EventManager.GameAction(actions);
+    }
+    /// 
+    /// 
+    ////////////////////////////////////////////////
 
-        List<System.Action> actions = new List<System.Action>();
-        List<string> lines = new List<string>(block.Split(new[] { separator }, System.StringSplitOptions.None));
+    List<EventManager.GameEffect> MakeGameEffects(string eventScript)
+    {
+        Dictionary<string, Object> context = new Dictionary<string, Object>();
+        List<EventManager.GameEffect> effects = InterpretBlock(eventScript, context, lineSeparator);
 
+        return effects;
+    }
+        
+    List<EventManager.GameEffect> InterpretBlock(string block, Dictionary<string, Object> context, char separator, bool executeImmediatly=false)
+    {
+
+        List<EventManager.GameEffect> actions = new List<EventManager.GameEffect>();
+
+        // Manual split to avoid splitting control blocks
+        List<string> lines = new List<string>();
+        StringBuilder lineBuilder = new StringBuilder();
+        bool isInsideControlStructure = false;
+
+        // Parsing
+        foreach (char character in block) {
+
+            if (isInsideControlStructure) {
+                lineBuilder.Append(character);
+                if (character == ']') {
+                    isInsideControlStructure = false;
+                }
+                continue;
+            }
+
+            if (character == '[') {
+                lineBuilder.Append(character);
+                isInsideControlStructure = true;
+                continue;
+            }
+
+            if (character == separator) {
+                // Skipping zero length lines
+                if (lineBuilder.Length > 0) {
+                    lines.Add(lineBuilder.ToString());
+                }
+                lineBuilder = new StringBuilder();
+                continue;
+            }
+
+            lineBuilder.Append(character);
+        }
+
+        // Interpretation
         foreach (string line in lines) {
 
             if (!CheckSyntax(line)) {
                 Throw(line);
             }
-            actions.Add(InterpretStatement(line, context, depth));
-
+            List<EventManager.GameEffect> gameEffects = InterpretStatement(line, context);
+            foreach (EventManager.GameEffect effect in gameEffects) {
+                actions.Add(effect);
+                if (executeImmediatly) {
+                    effect.GetAction().Invoke();
+                }
+            }
         }
 
         return actions;
     }
 
-    // Interprets list of statement separated by [separator]
-    List<System.Action> InterpretBlock(string block, Dictionary<string, Object> context, char separator)
-    {
-        return InterpretBlock(block, context, separator.ToString());
-    }
-
-     // Checks syntax is correct on statement
-     bool CheckSyntax(string statement)
+    // Checks syntax is correct on statement
+    bool CheckSyntax(string statement)
     {
         return
             CheckDelimiterCount(statement, '(', ')') &&
-            CheckDelimiterCount(statement, '{', ']') &&
-            CheckDelimiterCount(statement, '[', '}')
+            CheckDelimiterCount(statement, '{', '}') &&
+            CheckDelimiterCount(statement, '[', ']')
         ;
     }
 
     // Checks there is as much ) than there is (
     bool CheckDelimiterCount(string statement, char blockOpener, char blockCloser)
     {
-        return statement.Count(f=>f== blockOpener) == statement.Count(f => f == blockCloser);
+        return statement.Count(f => f == blockOpener) == statement.Count(f => f == blockCloser);
     }
 
-    
+
     // Crashes the interpreter, throws an exception
     static void Throw(string info)
     {
-        Logger.Throw("Syntax error while parsing event : \n" + info);
-        throw null;
+        string msg = info;
+        Logger.Error(msg);
+        throw new InterpreterException(msg);
     }
-    
-    // Returns an action based on the string statement
-    System.Action InterpretStatement(string statement, Dictionary<string, Object> context, int depth=0)
-    {
-        System.Action action = delegate { };
 
+
+    // Interprets list of statement separated by [separator]
+    // Returns a list of game effects from that statement (statement could be a condition block)
+    List<EventManager.GameEffect> InterpretStatement(string statement, Dictionary<string, Object> context)
+    {
+        List<EventManager.GameEffect> effects = new List<EventManager.GameEffect>();
+        // Chance statement
+        if (statement.StartsWith("[")) {
+            return UnpackControlStructure(statement, context);
+        }
 
         // Assignation statement
         if (statement.Contains("=")) {
-            Assign(statement, context);
-            return delegate { };
-        }
-        
-        // Chance statement
-        if (statement.StartsWith("[")) {
-            return UnpackControlStructure(statement, context, depth);
+            effects.Add(new EventManager.GameEffect(delegate { Assign(statement, context); }, ""));
         }
 
-        // XCution statement
-        return ExecuteActionFunctionFromString(statement, context);
-        
+        else {
+            // XCution statement
+            effects.Add(ExecuteActionFunctionFromString(statement, context));
+        }
+
+        return effects;
     }
 
     // Interprets inside of a control structure
-    System.Action UnpackControlStructure(string statement, Dictionary<string, Object> context, int depth=0)
+    List<EventManager.GameEffect> UnpackControlStructure(string statement, Dictionary<string, Object> context)
     {
-        string statementInside = statement.Remove(statement.Length-1, 1).Remove(0, 1);
+        string statementInside = statement.Remove(statement.Length - 1, 1).Remove(0, 1);
 
         if (!CheckDelimiterCount(statementInside, '(', ')')) {
             Throw("Wrong parenthesis count :\n" + statement);
         }
         string[] explodedStatement = statementInside.Split(new char[] { '{', '}' }, System.StringSplitOptions.None);
-        
+
         if (explodedStatement.Length != 5) {
             Throw("Invalid control structure :\n" + statement);
         }
@@ -132,29 +223,76 @@ public class EventInterpreter {
         }
 
         // Chances 0-1
-        int amount = 0;
+        float amount = 0;
         try {
-            amount = System.Convert.ToInt32(explodedStatement[0].Replace("%", ""))/100;
+            amount = System.Convert.ToSingle(explodedStatement[0].Replace("%", "")) / 100;
         }
-        catch(System.Exception e) {
+        catch (System.Exception) {
             Throw("Invalid probability in control structure : \n" + explodedStatement[0]);
         }
 
         string chanceStatement = explodedStatement[1];
         string elseStatement = explodedStatement[3];
 
-        return delegate {
-            List<System.Action> blockActions = new List<System.Action>();
-            if (Random.value <= amount) {
-                blockActions = InterpretBlock(chanceStatement, context, lineSeparator + depth.ToString(), depth + 1);
+        List<EventManager.GameEffect> chanceBlock = InterpretBlock(chanceStatement, context, lineSeparator);
+        List<EventManager.GameEffect> elseBlock = InterpretBlock(elseStatement, context, lineSeparator);
+
+        // Combine chance descriptions
+        List<EventManager.GameEffect> blockEffects = new List<EventManager.GameEffect>();
+        blockEffects.Add(
+            new EventManager.GameEffect(delegate { },
+                "chance",
+                (100 * amount).ToString()
+            )
+        );
+        // Chance
+        foreach(EventManager.GameEffect fx in chanceBlock) {
+            blockEffects.Add(
+                new EventManager.GameEffect(delegate { }, fx.intention, fx.parameters) { ttColor = fx.ttColor }
+            );
+        }
+        if (chanceBlock.Count <= 0) {
+            blockEffects.Add(
+                new EventManager.GameEffect(delegate { }, "none")
+            );
+        }
+
+        blockEffects.Add(
+            new EventManager.GameEffect(delegate { },
+                "chance",
+                (100 * (1 - amount)).ToString()
+            )
+        );
+        // Else
+        foreach (EventManager.GameEffect fx in elseBlock) {
+            blockEffects.Add(
+                new EventManager.GameEffect(delegate { }, fx.intention, fx.parameters) { ttColor = fx.ttColor}
+            );
+        }
+        if (elseBlock.Count <= 0) {
+            blockEffects.Add(
+                new EventManager.GameEffect(delegate { }, "none")
+            );
+        }
+
+
+        // Unique delegate that will roll the dice
+        blockEffects[0].SetAction(
+            delegate {
+                if (Random.value < amount) {
+                    foreach(EventManager.GameEffect fx in chanceBlock) {
+                        fx.GetAction().Invoke();
+                    }
+                }
+                else {
+                    foreach (EventManager.GameEffect fx in elseBlock) {
+                        fx.GetAction().Invoke();
+                    }
+                }
             }
-            else {
-                blockActions = InterpretBlock(elseStatement, context, lineSeparator + depth.ToString(), depth+1);
-            }
-            foreach(System.Action action in blockActions) {
-                action.Invoke();
-            }
-        };
+        );
+
+        return blockEffects;
     }
 
     // Assigns data to a variable in the context
@@ -165,117 +303,186 @@ public class EventInterpreter {
             Throw(assignationStatement);
         }
         string varName = explodedStatement[0];
+        
         Object generated = ExecuteDataFunctionFromString(explodedStatement[1], context);
 
         context[varName] = generated;
     }
 
-     // Fetches data from a function taken from a statement
-     Object ExecuteDataFunctionFromString(string statement, Dictionary<string, Object>  context)
-     {
-         string[] explodedStatement = ExplodeFunction(statement);
-         string funcName = explodedStatement[0];
-         string content = explodedStatement[1];
-        
-         if (!dataFunctions.ContainsKey(funcName)) {
-             Throw("Unsupported action function " + funcName + ". Supported action functions \n :" + GetDataFunctions());
-         }
+    // Fetches data from a function taken from a statement
+    Object ExecuteDataFunctionFromString(string statement, Dictionary<string, Object> context)
+    {
+        string[] explodedStatement = ExplodeFunction(statement);
+        string funcName = explodedStatement[0];
+        string content = explodedStatement[1];
 
-         return dataFunctions[funcName].Invoke(content, context);
+        if (!dataFunctions.ContainsKey(funcName)) {
+            Throw("Unsupported data function \"" + funcName + "\". Supported data functions: \n" + string.Join("\n",  GetDataFunctions().ToArray()));
+        }
+        
+        return dataFunctions[funcName].Invoke(content, context);
     }
 
-  
-     // Returns function name and string content
-     string[] ExplodeFunction(string statement)
-     {
-         if (!CheckDelimiterCount(statement, '(', ')')) {
-             Throw(statement);
-         }
-         string[] explodedStatement = statement.Split('(');
-         string functionName = explodedStatement[0].ToUpper();
-         string content = explodedStatement[1].Remove(explodedStatement[1].Length - 1, 1);
 
-         return new string[] { functionName, content };
-     }
+    // Returns function name and string content
+    string[] ExplodeFunction(string statement)
+    {
+        if (!CheckDelimiterCount(statement, '(', ')')) {
+            Throw(statement);
+        }
+        string[] explodedStatement = statement.Split('(');
+        string functionName = explodedStatement[0].ToUpper();
+        string content = "";
+        try {
+            content = explodedStatement[1].Remove(explodedStatement[1].Length - 1, 1);
+        }
+        catch (System.Exception) {
+            Throw("Invalid function call :\n" + statement);
+        }
 
-     
+        return new string[] { functionName, content };
+    }
+
+
     // Get specific string argument from argument list
     static string GetArgument(string arguments, string key)
     {
-         foreach(string statement in arguments.Split(',')) {
-             string[] explodedStatement = statement.Split(':');
-             if (explodedStatement[0] == key) {
+        foreach (string statement in arguments.Split(new char[] { ',', ')', '(' }, System.StringSplitOptions.RemoveEmptyEntries)) {
+            string[] explodedStatement = statement.Split(':');
+            if (explodedStatement[0] == key) {
                 try {
                     return explodedStatement[1];
                 }
-                catch(System.Exception e) {
+                catch (System.Exception) {
                     Throw("Invalid argument : " + statement);
                 }
-             }
-         }
-         Throw("Missing argument \"" + key + "\" in args \"" + arguments + "\"");
-         return "";
-     }
+            }
+        }
+        Throw("Missing argument \"" + key + "\" in args \"" + arguments + "\"");
+        return "";
+    }
 
-     // Add an argument to an argument list
-     static string AddArgument(string arguments, string argument)
+    // Add an argument to an argument list
+    static string AddArgument(string arguments, string argument)
     {
         string[] args = arguments.Split(',');
         args[args.Length] = argument;
         return string.Join(",", args);
     }
-   
-     // Execute action from function 
-     System.Action ExecuteActionFunctionFromString(string statement, Dictionary<string, Object> context)
-     {
-         string[] explodedStatement = ExplodeFunction(statement);
-         string funcName = explodedStatement[0];
-         string arguments = explodedStatement[1];
 
-        
-         if (!actionFunctions.ContainsKey(funcName)) {
-             Throw("Unsupported action function " + funcName + ". Supported action functions \n :"+GetActionFunctions());
-         }
+    // Execute action from function 
+    EventManager.GameEffect ExecuteActionFunctionFromString(string statement, Dictionary<string, Object> context)
+    {
+        string[] explodedStatement = ExplodeFunction(statement);
+        string funcName = explodedStatement[0];
+        string arguments = explodedStatement[1];
 
-         return delegate { actionFunctions[funcName](arguments, context); };
-         
-     }
-     
-     // Returns list of supported action functions
-     List<string> GetActionFunctions()
-     {
-         List<string> funcs = new List<string>();
-         foreach(KeyValuePair<string, System.Action<string, Dictionary<string, Object>>> function in actionFunctions) {
-             funcs.Add(function.Key);
-         }
-         return funcs;
-     }
- 
+        if (!actionFunctions.ContainsKey(funcName)) {
+            Throw("Unsupported action function \"" + funcName.ToString() + "\". Supported action functions: \n" + string.Join("\n", GetActionFunctions().ToArray())+"");
+        }
+
+        string[] locArguments = FormatArguments(arguments.Split(','));
+
+
+        return 
+            new EventManager.GameEffect(
+                delegate { actionFunctions[funcName](arguments, context); },
+                funcName,
+                locArguments
+            ) { ttColor = GetDataFunctionPreviewColor(funcName) }
+        ;
+
+    }   
+
+    Tooltip.tooltipType GetDataFunctionPreviewColor(string functionName)
+    {
+        switch (functionName) {
+            default:
+                return Tooltip.tooltipType.Neutral;
+
+            case "INCREASE_ENERGY_CONSUMPTION_FOR_BUILDING":
+            case "INCREASE_FOOD_CONSUMPTION_FOR_POPULATION":
+            case "DECREASE_MOOD_FOR_POPULATION":
+            case "DESTROY_BUILDING":
+                return Tooltip.tooltipType.Negative;
+
+            case "INCREASE_MOOD_FOR_POPULATION":
+            case "DECREASE_FOOD_CONSUMPTION_FOR_POPULATION":
+            case "INCREASE_HOUSE_NOTATION":
+                return Tooltip.tooltipType.Positive;
+        }
+    }
+
+    string[] FormatArguments(string[] arguments)
+    {
+        Localization loc = GameManager.instance.localization;
+        Dictionary<string, string> correspondance = new Dictionary<string, string>();
+
+        foreach (string paramName in argumentsDisplayOrder) {
+            correspondance[paramName] = string.Empty;
+        }
+
+        foreach (string arg in arguments) {
+            string paramName = arg.Split(':')[0];
+            string paramValue = arg.Split(':')[1];
+            string convertedArg = "";
+
+            bool skip = false;
+            switch(paramName){
+                case "population": convertedArg = loc.GetLineFromCategory("populationType", paramValue); break;
+                case "amount": convertedArg = System.Convert.ToSingle(paramValue).ToString("+0;-#"); break;
+                case "duration": convertedArg = System.Convert.ToSingle(paramValue).ToString("+0;-#"); break;
+                default:skip = true;break;
+            }
+
+            if (skip) continue;
+
+            correspondance[paramName] = convertedArg;
+        }
+
+        List<string> formatted = new List<string>();
+        foreach (string paramName in argumentsDisplayOrder) {
+            formatted.Add(correspondance[paramName]);
+        }
+
+        return formatted.ToArray();
+    }
+
+    // Returns list of supported action functions
+    List<string> GetActionFunctions()
+    {
+        List<string> funcs = new List<string>();
+        foreach (KeyValuePair<string, System.Action<string, Dictionary<string, Object>>> function in actionFunctions) {
+            funcs.Add(function.Key.ToString());
+        }
+        return funcs;
+    }
+
     // Returns list of supported data functions
-     List<string> GetDataFunctions()
-     {
-         List<string> funcs = new List<string>();
-         foreach (KeyValuePair<string, System.Func<string, Dictionary<string, Object>, Object>> function in dataFunctions) {
-             funcs.Add(function.Key);
-         }
-         return funcs;
-     }
-
-
+    List<string> GetDataFunctions()
+    {
+        List<string> funcs = new List<string>();
+        foreach (KeyValuePair<string, System.Func<string, Dictionary<string, Object>, Object>> function in dataFunctions) {
+            funcs.Add(function.Key);
+        }
+        return funcs;
+    }
 
     /// <summary>
     /// ACTION FUNCTIONS
     /// </summary>
     Dictionary<string, System.Action<string, Dictionary<string, Object>>> actionFunctions = new Dictionary<string, System.Action<string, Dictionary<string, Object>>>();
-    void LoadActionFunctions() {
+    void LoadActionFunctions()
+    {
+        actionFunctions.Clear();
         actionFunctions.Add(
-            "INCREASE_ENERGY_CONSUMPTION", (args, context) => {
+            "INCREASE_ENERGY_CONSUMPTION_FOR_BUILDING", (args, context) => {
                 Block block = null;
                 try {
                     block = (Block)context[GetArgument(args, "building")];
                 }
-                catch (System.Exception e) {
-                    Throw("Impossible cast in " + args + "\n" + e.ToString());
+                catch (System.Exception) {
+                    Throw("Impossible cast in " + args + "\n");
                 }
                 int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
                 int amount = System.Convert.ToInt32(GetArgument(args, "amount"));
@@ -284,8 +491,15 @@ public class EventInterpreter {
             }
         );
         actionFunctions.Add(
-            "INCREASE_MOOD_FOR_POPULATION", (args, context) =>{
+            "INCREASE_MOOD_FOR_POPULATION", (args, context) => {
                 Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
+                if (pop == null) {
+                    List<string> pops = new List<string>();
+                    foreach (Population existingPop in GameManager.instance.populationManager.populationTypeList) {
+                        pops.Add(existingPop.codeName);
+                    }
+                    Throw("Invalid population name :\n " + args + "\nPick one from the following : " + string.Join(", ", pops.ToArray()));
+                }
                 int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
                 int amount = System.Convert.ToInt32(GetArgument(args, "amount"));
 
@@ -293,8 +507,15 @@ public class EventInterpreter {
             }
         );
         actionFunctions.Add(
-            "INCREASE_FOOD_CONSUMPTION_FOR_POPULATION", (args, context) =>{
+            "INCREASE_FOOD_CONSUMPTION_FOR_POPULATION", (args, context) => {
                 Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
+                if (pop == null) {
+                    List<string> pops = new List<string>();
+                    foreach (Population existingPop in GameManager.instance.populationManager.populationTypeList) {
+                        pops.Add(existingPop.codeName);
+                    }
+                    Throw("Invalid population name :\n " + args + "\nPick one from the following : " + string.Join(", ", pops.ToArray()));
+                }
                 int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
                 float amount = System.Convert.ToSingle(GetArgument(args, "amount"));
 
@@ -302,8 +523,23 @@ public class EventInterpreter {
             }
         );
         actionFunctions.Add(
-            "INCREASE_HOUSE_NOTATION", (args, context) =>
-            {
+            "DECREASE_FOOD_CONSUMPTION_FOR_POPULATION", (args, context) => {
+                Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
+                if (pop == null) {
+                    List<string> pops = new List<string>();
+                    foreach (Population existingPop in GameManager.instance.populationManager.populationTypeList) {
+                        pops.Add(existingPop.codeName);
+                    }
+                    Throw("Invalid population name :\n " + args + "\nPick one from the following : " + string.Join(", ", pops.ToArray()));
+                }
+                int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
+                float amount = System.Convert.ToSingle(GetArgument(args, "amount"));
+
+                ConsequencesManager.GenerateFoodConsumptionModifier(pop, -amount, duration);
+            }
+        );
+        actionFunctions.Add(
+            "INCREASE_HOUSE_NOTATION", (args, context) => {
                 House house = null;
                 try {
                     house = (House)context[GetArgument(args, "house")];
@@ -318,9 +554,15 @@ public class EventInterpreter {
             }
         );
         actionFunctions.Add(
-            "DECREASE_MOOD_FOR_POPULATION", (args, context) =>
-            {
+            "DECREASE_MOOD_FOR_POPULATION", (args, context) => {
                 Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
+                if (pop == null) {
+                    List<string> pops = new List<string>();
+                    foreach (Population existingPop in GameManager.instance.populationManager.populationTypeList) {
+                        pops.Add(existingPop.codeName);
+                    }
+                    Throw("Invalid population name :\n " + args + "\nPick one from the following : " + string.Join(", ", pops.ToArray()));
+                }
                 int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
                 int amount = System.Convert.ToInt32(GetArgument(args, "amount"));
 
@@ -374,8 +616,7 @@ public class EventInterpreter {
             }
         );
         actionFunctions.Add(
-            "ADD_STATE_ON_BUILDING", (args, context) =>
-            {
+            "ADD_STATE_ON_BUILDING", (args, context) => {
                 Block block = null;
                 try {
                     block = (Block)context[GetArgument(args, "building")];
@@ -392,9 +633,16 @@ public class EventInterpreter {
         actionFunctions.Add(
             "ADD_SETTLERS_TO_NEXT_WAVE", (args, context) => {
                 Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
+                if (pop == null) {
+                    List<string> pops = new List<string>();
+                    foreach (Population existingPop in GameManager.instance.populationManager.populationTypeList) {
+                        pops.Add(existingPop.codeName);
+                    }
+                    Throw("Invalid population name :\n " + args + "\nPick one from the following : " + string.Join(", ", pops.ToArray()));
+                }
                 int amount = System.Convert.ToInt32(GetArgument(args, "amount"));
 
-                ConsequencesManager.AddSettlerBonusForNextWave(pop, amount); 
+                ConsequencesManager.AddSettlerBonusForNextWave(pop, amount);
             }
         );
         actionFunctions.Add(
@@ -406,7 +654,6 @@ public class EventInterpreter {
                 catch (System.Exception e) {
                     Throw("Impossible cast in " + args + "\n" + e.ToString());
                 }
-
                 ConsequencesManager.DestroyBlock(block);
             }
         );
@@ -466,9 +713,8 @@ public class EventInterpreter {
                 catch (System.Exception e) {
                     Throw("Impossible cast in " + args + "\n" + e.ToString());
                 }
-                int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
                 string flag = GetArgument(args, "flag");
-                
+
                 ConsequencesManager.DestroyFlag(block, System.Type.GetType(flag));
             }
         );
@@ -488,6 +734,17 @@ public class EventInterpreter {
                 //ConsequencesManager.TempDestroyFlag(block, FlagReader.Get flag, duration);
             }
         );
+        actionFunctions.Add(
+            "GAME_OVER", (args, context) => {
+                GameManager.instance.ExitToMenu();
+            }
+        );
+        actionFunctions.Add(
+            "TRIGGER_EVENT", (args, context) => {
+                int eventId = System.Convert.ToInt32(GetArgument(args, "id"));
+                GameManager.instance.eventManager.TriggerEvent(eventId);
+            }
+        );
     }
 
     /// <summary>
@@ -495,22 +752,41 @@ public class EventInterpreter {
     /// </summary>
     Dictionary<string, System.Func<string, Dictionary<string, Object>, Object>> dataFunctions = new Dictionary<string, System.Func<string, Dictionary<string, Object>, Object>>() {
 
-       {  "RANDOM_BUILDING", (args, ctx) => 
+       {  "RANDOM_BUILDING", (args, ctx) =>
            {
                int id = System.Convert.ToInt32(GetArgument(args, "id"));
-               return ConsequencesManager.GetRandomBuildingOfId(id);
+               Block block = ConsequencesManager.GetRandomBuildingOfId(id);
+               if (block == null) {
+                   Throw("Could not find any building of ID "+id.ToString());
+               }
+               return block;
            }
        },
        {   "RANDOM_HOUSE", (args, ctx) =>
            {
                Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
-               return ConsequencesManager.GetRandomHouseOf(pop);
+               if (pop == null){
+                    List<string> pops = new List<string>();
+                    foreach(Population existingPop in GameManager.instance.populationManager.populationTypeList) {
+                        pops.Add(existingPop.codeName);
+                    }
+                    Throw("Invalid population name :\n " + args+"\nPick one from the following : "+string.Join(", ", pops.ToArray()));
+                }
+               House house = ConsequencesManager.GetRandomHouseOf(pop);
+               if (house == null) {
+                   Throw("Could not find house belonging to pop "+pop.codeName);
+               }
+               return house;
            }
        },
        {   "SCHEME", (args, ctx) =>
            {
                int id = System.Convert.ToInt32(GetArgument(args, "id"));
-               return GameManager.instance.library.GetBlockByID(id);
+               BlockScheme scheme = GameManager.instance.library.GetBlockByID(id);
+               if (scheme == null) {
+                   Throw("Invalid scheme id :"+id.ToString());
+               }
+               return scheme;
            }
        },
        {   "BUILDING_FROM_HOUSE", (args, ctx) =>

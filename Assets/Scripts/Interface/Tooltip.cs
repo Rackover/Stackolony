@@ -96,15 +96,15 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
 
     public void Update()
     {
-        if (isActive)
-        {
+        if (isActive) {
+            tooltipGO.Enable();
             tooltipGO.transform.position = Input.mousePosition + new Vector3(tooltipGO.shift.x, tooltipGO.shift.y, 0);
         }
     }
 
     public void OnPointerExit(PointerEventData pointerEventData)
     {
-        tooltipGO.transform.position = new Vector3(-1000, -1000, -1000);
+        tooltipGO.Disable();
         isActive = false;
     }
 }

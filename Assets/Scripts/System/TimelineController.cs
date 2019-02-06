@@ -53,26 +53,39 @@ public class TimelineController : MonoBehaviour {
                 currentCycle.settlers[pop] += 1;
             }
 
-            foreach(KeyValuePair<Population, int> settlerBonus in nextCycleSettlersBonus) {
-                if (!currentCycle.settlers.ContainsKey(settlerBonus.Key)) {
-                    currentCycle.settlers.Add(settlerBonus.Key, 0);
-                }
-                currentCycle.settlers[settlerBonus.Key] += settlerBonus.Value;
-            }
-
             nextCycleSettlersBonus.Clear();
 
         };
 
+        // Add bonus (from events ?)
+        foreach (KeyValuePair<Population, int> settlerBonus in nextCycleSettlersBonus) {
+            if (!currentCycle.settlers.ContainsKey(settlerBonus.Key)) {
+                currentCycle.settlers.Add(settlerBonus.Key, 0);
+            }
+            currentCycle.settlers[settlerBonus.Key] += settlerBonus.Value;
+        }
+
+        // Effective spawn
+        SpawnCitizens();
+
+        // Unlocks
+        CheckUnlocks();
+
+        Logger.Debug("New cycle, spawning " + currentCycle.settlers.Count.ToString() + " citizens and unlocking " + currentCycle.unlocks.Count.ToString() + " buildings");
+    }
+
+    public void SpawnCitizens()
+    {
         foreach (KeyValuePair<Population, int> settler in currentCycle.settlers) {
             GameManager.instance.populationManager.SpawnCitizens(settler.Key, settler.Value);
         }
-
-        foreach(int blockId in currentCycle.unlocks) {
+    }
+    
+    public void CheckUnlocks()
+    {
+        foreach (int blockId in currentCycle.unlocks) {
             GameManager.instance.cityManager.UnlockBuilding(blockId);
         }
-
-        Logger.Debug("New cycle, spawning " + currentCycle.settlers.Count.ToString() + " citizens and unlocking " + currentCycle.unlocks.Count.ToString() + " buildings");
     }
 
     public void LoadCycles()
@@ -82,17 +95,17 @@ public class TimelineController : MonoBehaviour {
 
         if (GameManager.instance.cityManager.isTutorialRun) {
             string path = Paths.GetTimelineFile();
-            XmlDocument locFile = new XmlDocument();
+            XmlDocument timeFile = new XmlDocument();
 
             try {
-                locFile.Load(path);
+                timeFile.Load(path);
             }
             catch (FileNotFoundException e) {
                 Logger.Throw("Could not access timeline file at path " + path + ". Error : " + e.ToString());
                 return;
             }
 
-            XmlNodeList nodeList = locFile.SelectNodes("timeline")[0].ChildNodes;
+            XmlNodeList nodeList = timeFile.SelectNodes("timeline")[0].ChildNodes;
             foreach (XmlNode xCycle in nodeList) {
                 // Garbage node
                 if (xCycle.Name != "cycle") {
@@ -131,7 +144,6 @@ public class TimelineController : MonoBehaviour {
                         if (!GameManager.instance.library.BlockExists(id)) {
                             continue;
                         }
-
                         cycle.unlocks.Add(id);
                     }
                     break;

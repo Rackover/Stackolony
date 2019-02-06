@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour
     public CinematicManager cinematicManager;
     public BulletinsManager bulletinsManager;
     public TimelineController timelineController;
+    public EventManager eventManager;
 
     [Space(1)]
     [Header("INTERFACE")]
@@ -62,7 +63,7 @@ public class GameManager : MonoBehaviour
             Destroy(this.gameObject);
             return;
         }
-
+        
         SceneManager.sceneLoaded += delegate { FindAllReferences(); };
         SceneManager.sceneLoaded += delegate {
             if (menuSceneName != SceneManager.GetActiveScene().name) {
@@ -77,6 +78,11 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         if (DEBUG_MODE) {
+            foreach(UnityEngine.UI.InputField i in FindObjectsOfType<UnityEngine.UI.InputField>()) {
+                if (i.isFocused) {
+                    return;
+                }
+            }
             if (IsInGame()) {
                 CheckDebugGameInputs();
             }
@@ -123,7 +129,8 @@ public class GameManager : MonoBehaviour
         if (overlayManager == null) overlayManager = FindObjectOfType<OverlayManager>();
         if (timelineController == null) timelineController = FindObjectOfType<TimelineController>();
         if (player == null) player = FindObjectOfType<Player>();
-
+        if (eventManager == null) eventManager = FindObjectOfType<EventManager>();
+        
         // INTERFACE
         if (cursorDisplay == null) cursorDisplay = FindObjectOfType<CursorDisplay>();
         if (localization == null) localization = FindObjectOfType<Localization>();
@@ -180,7 +187,10 @@ public class GameManager : MonoBehaviour
             overlayManager.SelectOverlay(OverlayType.Density);
         }
 
-
+        if (Input.GetKeyDown(KeyCode.F12)) {
+            FindObjectOfType<DebugInterface>().SpawnEventDebugWindow();
+        }
+        
         if (Input.GetKeyDown(KeyCode.End)) {
             temporality.timeScale = 100;
         }
@@ -197,7 +207,11 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P)) {
             temporality.PauseTime();
         }
-        
+
+        if (Input.GetKeyDown(KeyCode.Delete)) {
+            eventManager.TriggerEvent(9);
+        }
+
         // Pause
         if (Input.GetKeyDown(KeyCode.Escape) && IsInGame() && FindObjectsOfType<PauseWindow>().Length <= 0) {
             FindObjectOfType<Interface>().SpawnPauseWindow();
@@ -281,6 +295,10 @@ public class GameManager : MonoBehaviour
         {
             temporality.AddCycle();
         }
+
+        if (Input.GetKeyDown(KeyCode.K)) {
+            eventManager.LoadEvents();
+        }
         
         if (Input.GetKeyDown(KeyCode.B)) 
         {
@@ -330,7 +348,7 @@ public class GameManager : MonoBehaviour
             gi.StartGameInterfaces();
         }
         cursorManagement.InitializeGameCursor();
-        temporality.cycleNumber = 0;
+
         temporality.SetDate(0);
         temporality.SetTimeOfDay(20);
         temporality.SetTimeScale(1);
@@ -341,13 +359,21 @@ public class GameManager : MonoBehaviour
         gridManagement.InitializeGridManager();
         cinematicManager.GetReferences();
         timelineController.LoadCycles();
+        DifferStart(delegate { eventManager.LoadEvents(); });
 
         cityManager.GenerateEnvironmentBlocks();
 
         // NEW GAME ONLY
         if (isNewGame) {
+
             // CINEMATIC
             Instantiate(library.spatioportSpawnerPrefab);
+
+            // Lock every building
+            foreach (BlockScheme scheme in library.blocks) {
+                cityManager.LockBuilding(scheme.ID);
+            }
+            timelineController.UpdateCycle(0);
         }
 
         // Ingame switch
@@ -373,6 +399,17 @@ public class GameManager : MonoBehaviour
         inGame = false;
     }
 
+    void DifferStart(System.Action action)
+    {
+        StartCoroutine(ExecuteAfterFrame(action));
+    }
+
+    IEnumerator ExecuteAfterFrame(System.Action action)
+    {
+        yield return new WaitForEndOfFrame();
+        action.Invoke();
+        yield return true;
+    }
 
     public void NewGame()
     {

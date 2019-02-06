@@ -172,7 +172,7 @@ public class ConsequencesManager : MonoBehaviour {
                 concerned.Add(block);
             }
         }
-        if (concerned.Count > 0) {
+        if (concerned.Count < 1) {
             return null;
         }
 
@@ -188,7 +188,7 @@ public class ConsequencesManager : MonoBehaviour {
             }
         }
 
-        if (houses.Count > 0) {
+        if (houses.Count < 1) {
             return null;
         }
 

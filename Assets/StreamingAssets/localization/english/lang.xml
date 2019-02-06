@@ -216,13 +216,16 @@
   </populationType>
   <stats>
     <percentage>{0}%</percentage>
-    <moodvalue>{0} are {1}</moodvalue>
+    <moodValue>{0} are {1}</moodValue>
     <gauge>{0}/{1}</gauge>
     <completion>{0} out of {1}</completion>
-    <mood>angry</mood>
+	<cycles>{0} cycles</cycles>
+  </stats>
+  <mood>
+	<angry>angry</angry>
     <bad>unhappy</bad>
     <good>happy</good>
-  </stats>
+  </mood>
   <eventTitle>
     <event1>Dire need</event1>
     <event2>Boring house</event2>
@@ -319,4 +322,35 @@
     <ok>OK</ok>
     <confirm>Confirm</confirm>
   </generalUI>
+  <scriptAction>
+	<none>Nothing happens</none>
+	<chance>{0}% chances of</chance>
+	<INCREASE_ENERGY_CONSUMPTION_FOR_BUILDING>A building consumes more energy!</INCREASE_ENERGY_CONSUMPTION_FOR_BUILDING>
+	<INCREASE_MOOD_FOR_POPULATION>{0}s mood increase!</INCREASE_MOOD_FOR_POPULATION>
+	<INCREASE_FOOD_CONSUMPTION_FOR_POPULATION>{0} consumes more food</INCREASE_FOOD_CONSUMPTION_FOR_POPULATION>
+	<INCREASE_HOUSE_NOTATION></INCREASE_HOUSE_NOTATION>
+	<DECREASE_MOOD_FOR_POPULATION></DECREASE_MOOD_FOR_POPULATION>
+	<ADD_FLAG_MODIFIER_ON_BUILDING_FOR_DURATION></ADD_FLAG_MODIFIER_ON_BUILDING_FOR_DURATION>
+	<ADD_FLAG_ON_BUILDING_FOR_DURATION></ADD_FLAG_ON_BUILDING_FOR_DURATION>
+	<ADD_FLAG_ON_BUILDING></ADD_FLAG_ON_BUILDING>
+	<ADD_STATE_ON_BUILDING></ADD_STATE_ON_BUILDING>
+	<ADD_SETTLERS_TO_NEXT_WAVE></ADD_SETTLERS_TO_NEXT_WAVE>
+	<DESTROY_BUILDING>Destroys a building</DESTROY_BUILDING>
+	<CHANGE_BUILDING_SCHEME></CHANGE_BUILDING_SCHEME>
+	<LAY_MULTIPLE_SCHEME_ON_POSITION></LAY_MULTIPLE_SCHEME_ON_POSITION>
+	<LAY_SCHEME_ON_POSITION></LAY_SCHEME_ON_POSITION>
+	<REMOVE_FLAG_FROM_BUILDING></REMOVE_FLAG_FROM_BUILDING>
+	<REMOVE_FLAG_FROM_BUILDING_FOR_DURATION></REMOVE_FLAG_FROM_BUILDING_FOR_DURATION>
+  </scriptAction>
+  <choice>
+	 <event9_1>Let's try</event9_1>
+	 <event9_2>No!</event9_2>
+  </choice>
+  <populationTypeDelegate>
+	<richie>Lord {0}</richie>
+	<artist>Master {0}</artist>
+	<military>General {0}</military>
+	<scientist>Dr {0}</scientist>
+	<worker>{0}son</worker>
+  </populationTypeDelegate>
 </lines>

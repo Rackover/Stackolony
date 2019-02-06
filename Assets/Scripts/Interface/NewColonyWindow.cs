@@ -48,16 +48,16 @@ public class NewColonyWindow : MonoBehaviour {
     public void CreateColony()
     {
         if (cityName.text.Length <= 0) {
-            errorText.text = GameManager.instance.localization.GetLine("cityNameTooShort", "newColony");
+            errorText.text = GameManager.instance.localization.GetLineFromCategory("newColony", "cityNameTooShort");
         }
         else if (governorName.text.Length <= 0) {
-            errorText.text = GameManager.instance.localization.GetLine("governorNameTooShort", "newColony");
+            errorText.text = GameManager.instance.localization.GetLineFromCategory("newColony", "governorNameTooShort");
         }
         else if (cityName.text.Length > maxCityNameLength) {
-            errorText.text = GameManager.instance.localization.GetLine("cityNameTooLong", "newColony");
+            errorText.text = GameManager.instance.localization.GetLineFromCategory("newColony", "cityNameTooLong");
         }
         else if (governorName.text.Length > maxGovernorNameLength) {
-            errorText.text = GameManager.instance.localization.GetLine("governorNameTooLong", "newColony");
+            errorText.text = GameManager.instance.localization.GetLineFromCategory("newColony", "governorNameTooLong");
         }
         else {
             DestroyWindow();
