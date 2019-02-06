@@ -13,7 +13,6 @@ public class Extractor : Occupator
         newMission.position = block.gridCoordinates;
         newMission.callBack = "";
         newMission.range = 1;
-
 		Block[] blocks = GameManager.instance.missionManager.CheckAdjacentBlocks(block.gridCoordinates, newMission).ToArray();
 		GameManager.instance.missionManager.EndMission(newMission);
 

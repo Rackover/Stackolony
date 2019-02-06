@@ -5,7 +5,7 @@ using UnityEngine;
 public class Damaged : StateBehavior 
 {
     [Header("Damaged")]
-    public bool beingRepaired = false;
+    public bool isBeingRepaired = false;
     public int microcycleCount = 0;
     public int lastFireId = 0;
 
@@ -33,10 +33,10 @@ public class Damaged : StateBehavior
 
     public void StartRepair()
     {
-        if(!beingRepaired)
+        if(!isBeingRepaired)
         {
             microcycleCount = 0;
-            beingRepaired = true;
+            isBeingRepaired = true;
             if(block != null) { block.effects.Activate( GameManager.instance.library.repairParticle); }
         }
     }
@@ -44,7 +44,7 @@ public class Damaged : StateBehavior
     public void CancelRepair()
     {
         microcycleCount = 0;
-        beingRepaired = false;
+        isBeingRepaired = false;
         if(block != null) { block.effects.Desactivate(GameManager.instance.library.repairParticle); }
     }
 

@@ -3,7 +3,7 @@
 public class OnFire : StateBehavior 
 {
     [Header("On fire")]
-    public bool beingExtinguished = false;
+    public bool isBeingExtinguished = false;
     public int id;
 
     public override void Start()
@@ -25,16 +25,16 @@ public class OnFire : StateBehavior
 
     public void StartExtinguish()
     {
-        if(!beingExtinguished)
+        if(!isBeingExtinguished)
         {
-            beingExtinguished = true;
+            isBeingExtinguished = true;
             if(block != null) block.effects.Activate(GameManager.instance.library.extinguishParticle);
         }
     }
     
     public void CancelExtinguish()
     {
-        beingExtinguished = false;
+        isBeingExtinguished = false;
 
         if(block != null) block.effects.Desactivate(GameManager.instance.library.extinguishParticle);
     }
@@ -42,7 +42,7 @@ public class OnFire : StateBehavior
     public override void OnNewMicrocycle()
     {
         base.OnNewMicrocycle();
-        if(!beingExtinguished)
+        if(!isBeingExtinguished)
         {
             Spread();
         }

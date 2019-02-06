@@ -52,8 +52,8 @@ public class CityManager : MonoBehaviour {
     List<int> lockedBuildings = new List<int >();
 
     [Header("Mines and Nests")]
-	public int mineAtStart = 3;
-	public int nestAtStart = 4;
+	public int minesAtStart = 3;
+	public int nestsAtStart = 4;
 	public float nestSpawnChance = 0.1f;
     
     [System.Serializable]
@@ -80,10 +80,10 @@ public class CityManager : MonoBehaviour {
         }
     }
     
-	public void NewLayout()
+	public void GenerateEnvironmentBlocks()
 	{
-		for( int i = 0; i < mineAtStart; i++){SpawnMine();}
-		for( int i = 0; i < nestAtStart; i++){SpawnNest();}
+		for( int i = 0; i < minesAtStart; i++){SpawnMine();}
+		for( int i = 0; i < nestsAtStart; i++){SpawnNest();}
 	}
 
 	public void SpawnMine()

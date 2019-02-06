@@ -3,7 +3,7 @@
 public class OnRiot : StateBehavior 
 {
     [Header("On riot")]
-    public bool beingRepressed = false;
+    public bool isBeingRepressed = false;
     int microcycleCount = 0;
 
     public override void Start()
@@ -25,21 +25,26 @@ public class OnRiot : StateBehavior
     public override void OnNewMicrocycle()
     {
         base.OnNewMicrocycle();
-        if( microcycleCount++ > 1 ) FinishRepress();
+        microcycleCount++;
+        
+        if( microcycleCount > 1 ) 
+        {
+            FinishRepress();
+        }
     }
 
     public override void OnNewCycle()
     {
         base.OnNewCycle();
-        if(!beingRepressed){ block.Destroy(); }
+        if(!isBeingRepressed){ block.Destroy(); }
     }
 
     public void StartRepress()
     {
-        if(!beingRepressed)
+        if(!isBeingRepressed)
         {
             microcycleCount = 0;
-            beingRepressed = true;
+            isBeingRepressed = true;
             if(block != null) block.effects.Activate(GameManager.instance.library.repressParticle);
         }
     }
@@ -53,7 +58,7 @@ public class OnRiot : StateBehavior
     void CancelRepress()
     {
         microcycleCount = 0;
-        beingRepressed = false;
+        isBeingRepressed = false;
         if(block != null) block.effects.Desactivate(GameManager.instance.library.repressParticle);
     }
 

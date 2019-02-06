@@ -157,7 +157,7 @@ public class MissionCallbackManager : MonoBehaviour
             {
                 OnFire state = myMission.blocksFound[i].states[State.OnFire] as OnFire;
 
-                if(!state.beingExtinguished)
+                if(!state.isBeingExtinguished)
                 {
                     state.StartExtinguish();
                     break;
@@ -176,7 +176,7 @@ public class MissionCallbackManager : MonoBehaviour
             if(myMission.blocksFound[i].states.ContainsKey(State.OnRiot))
             {
                 OnRiot state = myMission.blocksFound[i].states[State.OnRiot] as OnRiot;
-                if(!state.beingRepressed)
+                if(!state.isBeingRepressed)
                 {
                     state.StartRepress();
                     break;
@@ -195,7 +195,7 @@ public class MissionCallbackManager : MonoBehaviour
             if(myMission.blocksFound[i].states.ContainsKey(State.Damaged))
             {
                 Damaged state = myMission.blocksFound[i].states[State.Damaged] as Damaged;
-                if(!state.beingRepaired)
+                if(!state.isBeingRepaired)
                 {
                     state.StartRepair();
                     break;
