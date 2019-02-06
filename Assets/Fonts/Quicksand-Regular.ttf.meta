@@ -3,15 +3,16 @@ guid: 014612182f8c2f84288f3c9355d7d43f
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
-  fontSize: 16
-  forceTextureCase: -2
+  fontSize: 48
+  forceTextureCase: -1
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
   fontName: Quicksand
   fontNames:
   - Quicksand
-  fallbackFontReferences: []
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: a08bbc953edb4ae4a8929030a7c858da, type: 3}
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1
