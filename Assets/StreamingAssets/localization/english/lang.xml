@@ -258,13 +258,15 @@
   </populationType>
   <stats>
     <percentage>{0}%</percentage>
-    <moodvalue>{0} are {1}</moodvalue>
+    <moodValue>{0} are {1}</moodValue>
     <gauge>{0}/{1}</gauge>
     <completion>{0} out of {1}</completion>
-    <mood>angry</mood>
+  </stats>
+<mood>
+	<angry>angry</angry>
     <bad>unhappy</bad>
     <good>happy</good>
-  </stats>
+</mood>
   <eventTitle>
     <event1>Dire need</event1>
     <event2>Boring house</event2>
