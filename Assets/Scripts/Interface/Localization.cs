@@ -137,7 +137,7 @@ public class Localization : MonoBehaviour {
         currentCategory = category;
     }
 
-    public string GetLine(string id, string category, params string[] values)
+    public string GetLineFromCategory(string category, string id, params string[] values)
     {
         SetCategory(category);
         return GetLine(id, values);

@@ -64,7 +64,7 @@ public class MoodDisplay : MonoBehaviour {
                     new Notifications.Notification(
                         "newPeople",
                         notificationColor,
-                        new string[] { amount.ToString(), loc.GetLine(popType.codeName, "populationType") }
+                        new string[] { amount.ToString(), loc.GetLineFromCategory("populationType", popType.codeName) }
                     )
                 );
 
@@ -125,7 +125,7 @@ public class MoodDisplay : MonoBehaviour {
         }
 
         changeMood(currentMood);
-        moodString = loc.GetLine(currentMood.ToString().ToLower(), "mood");
+        moodString = loc.GetLineFromCategory("mood", currentMood.ToString().ToLower());
 
     }
 
@@ -143,7 +143,7 @@ public class MoodDisplay : MonoBehaviour {
             homeless.color = homelessColor;
         }
 
-        string popName = loc.GetLine(population.codeName, "populationType");
+        string popName = loc.GetLineFromCategory("populationType", population.codeName);
 
         tooltip.ClearLines();
         tooltip.AddLocalizedLine(new Localization.Line("populationType", population.codeName));

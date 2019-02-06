@@ -436,7 +436,7 @@ public class EventInterpreter
 
             bool skip = false;
             switch(paramName){
-                case "population": convertedArg = loc.GetLine(paramValue, "populationType"); break;
+                case "population": convertedArg = loc.GetLineFromCategory("populationType", paramValue); break;
                 case "amount": convertedArg = System.Convert.ToSingle(paramValue).ToString("+0;-#"); break;
                 case "duration": convertedArg = System.Convert.ToSingle(paramValue).ToString("+0;-#"); break;
                 default:skip = true;break;

@@ -57,7 +57,7 @@ public class EventManager : MonoBehaviour {
 
         public string GetFormattedIntention(Localization localizer)
         {
-            return localizer.GetLine(intention, "gameEffect", parameters);
+            return localizer.GetLineFromCategory("gameEffect", intention, parameters);
         }
         
         public System.Action GetAction()
