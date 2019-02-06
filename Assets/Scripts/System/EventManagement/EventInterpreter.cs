@@ -15,7 +15,7 @@ public class EventInterpreter
         "amount"
     };
 
-    class InterpreterException : System.Exception
+    public class InterpreterException : System.Exception
     {
         public InterpreterException()
         {

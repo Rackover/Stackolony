@@ -146,7 +146,15 @@ public class EventManager : MonoBehaviour {
     {
         GameAction action = interpreter.MakeEvent(eventScript, GameManager.instance.eventManager.interpreterError);
         if (action != null) {
-            action.Execute();
+            try {
+                action.Execute();
+            }
+            catch (EventInterpreter.InterpreterException e) {
+                GameManager.instance.eventManager.interpreterError.Invoke(e.Message);
+            }
+            catch (System.Exception e) {
+                GameManager.instance.eventManager.interpreterError.Invoke("Unknown interpreter error - check your script.\n" + e.Message);
+            }
         }
     }
 
