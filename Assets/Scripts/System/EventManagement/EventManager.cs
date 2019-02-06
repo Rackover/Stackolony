@@ -134,7 +134,7 @@ public class EventManager : MonoBehaviour {
                 return;
             }
 
-            newEvent.Invoke(events[pick.eventId]);
+            TriggerEvent(pick.eventId);
             eventsPool = newList;
             chances = 0f;
         }
