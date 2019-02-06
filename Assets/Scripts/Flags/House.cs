@@ -14,6 +14,7 @@ public class House : Flag, Flag.IFlag
     //Variables
     public List<Occupator> occupatorsInRange = new List<Occupator>();
     public List<FoodProvider> foodProvidersInRange = new List<FoodProvider>();
+    public List<NotationModifier> notationModifiers = new List<NotationModifier>();
     public bool powered;
     public float foodReceived;
     public float distanceToGround;
@@ -22,11 +23,13 @@ public class House : Flag, Flag.IFlag
     ParticleSystem citizenIn;
     ParticleSystem citizenOut;
 
+    Light houseLight;
+
     public void UpdateHouseInformations()
     {
         nuisanceImpact = block.nuisance * block.scheme.sensibility;
         foodConsumption = GetFoodConsumption();
-        if (block.currentPower >= block.scheme.consumption)
+        if (block.currentPower >= block.GetConsumption())
             powered = true;
         else
             powered = false;
@@ -73,6 +76,8 @@ public class House : Flag, Flag.IFlag
             //Ecrit sur la carte d'identité du citoyen qu'il habite ici désormais
             citizen.habitation = this;
 
+            houseLight.intensity = (affectedCitizen.Count / slotAmount) * 10;
+
             return;
         }
     }
@@ -81,12 +86,28 @@ public class House : Flag, Flag.IFlag
     {
         base.Awake();
         GameManager.instance.systemManager.AllHouses.Add(this);
+
+        houseLight = block.effects.gameObject.AddComponent<Light>();
+        houseLight.range = 1f;
+        houseLight.intensity = 0f;
     }
 
     public override void OnDestroy()
     {
         GameManager.instance.systemManager.AllHouses.Remove(this);
         base.OnDestroy();
+    }
+
+    public override void Enable()
+    {
+        base.Enable();
+        GameManager.instance.systemManager.AllHouses.Add(this);
+    }
+
+    public override void Disable()
+    {
+        base.Disable();
+        GameManager.instance.systemManager.AllHouses.Remove(this);
     }
 
     void CitizenInFX()
@@ -112,5 +133,17 @@ public class House : Flag, Flag.IFlag
     public System.Type GetFlagType()
     {
         return GetType();
+    }
+
+    public string GetFlagDatas()
+    {
+        string profiles = "";
+        for (int i = 0; i < acceptedPop.Length; i++)
+        {
+            if (i != 0)
+                profiles += "-";
+            profiles += acceptedPop[i].codeName;
+        }
+        return "House_" + slotAmount + "_" + standingLevel + "_" + profiles;
     }
 }

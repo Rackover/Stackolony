@@ -17,10 +17,15 @@ public class PoliceStation : Flag, Flag.IFlag
         return GetType();
     }
 
+
     override public void UpdateNuisanceImpact()
     {
         range += nuisanceImpact;
         nuisanceImpact = block.nuisance * block.scheme.sensibility;
         range -= nuisanceImpact;
+
+    public string GetFlagDatas()
+    {
+        return "PoliceStation_" + range;
     }
 }

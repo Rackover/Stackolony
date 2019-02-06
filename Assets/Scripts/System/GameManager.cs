@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     bool inGame = false;
     bool isLoading = false;
     bool isPaused = false;
+    bool isNewGame = true;
 
     // Used for pausing
     float oldTimescale = 0f;
@@ -31,6 +32,7 @@ public class GameManager : MonoBehaviour
     public SaveManager saveManager;
     public CinematicManager cinematicManager;
     public BulletinsManager bulletinsManager;
+    public TimelineController timelineController;
 
     [Space(1)]
     [Header("INTERFACE")]
@@ -54,31 +56,32 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         if (instance == null) {
-            DontDestroyOnLoad(this);
             instance = this;
         }
         else {
-            DestroyImmediate(this.gameObject);
+            Destroy(this.gameObject);
             return;
         }
 
         SceneManager.sceneLoaded += delegate { FindAllReferences(); };
-        FindAllReferences();
-    }
-
-    private void Start()
-    {
-        if (menuSceneName != SceneManager.GetActiveScene().name) {
-            StartGame();
-        }
-        else {
-            EndGame();
-        }
+        SceneManager.sceneLoaded += delegate {
+            if (menuSceneName != SceneManager.GetActiveScene().name) {
+                StartGame();
+            }
+            else {
+                EndGame();
+            }
+        };
     }
 
     void Update()
     {
-        CheckInputs();
+        if (DEBUG_MODE) {
+            if (IsInGame()) {
+                CheckDebugGameInputs();
+            }
+            CheckDebugInputs();
+        }
     }
 
 
@@ -103,36 +106,43 @@ public class GameManager : MonoBehaviour
     void FindAllReferences()
     {
         // SYSTEM
-        if (temporality == null) temporality = GetComponentInChildren<Temporality>();
-        if (flagReader == null) flagReader = GetComponentInChildren<FlagReader>();
-        if (library == null) library = GetComponentInChildren<Library>();
-        if (soundManager == null) soundManager = GetComponentInChildren<SoundManager>();
-        if (systemManager == null) systemManager = GetComponentInChildren<SystemManager>();
-        if (missionCallbackManager == null) missionCallbackManager = GetComponentInChildren<MissionCallbackManager>();
-        if (missionManager == null) missionManager = GetComponentInChildren<MissionManager>();
-        if (cursorManagement == null) cursorManagement = GetComponentInChildren<CursorManagement>();
-        if (gridManagement == null) gridManagement = GetComponentInChildren<GridManagement>();
-        if (populationManager == null) populationManager = GetComponentInChildren<PopulationManager>();
-        if (saveManager == null) saveManager = GetComponentInChildren<SaveManager>();
-        if (cinematicManager == null) cinematicManager = GetComponentInChildren<CinematicManager>();
-        if (cityManager == null) cityManager = GetComponentInChildren<CityManager>();
-        if (bulletinsManager == null) bulletinsManager = GetComponentInChildren<BulletinsManager>();
+        if (temporality == null) temporality = FindObjectOfType<Temporality>();
+        if (flagReader == null) flagReader = FindObjectOfType<FlagReader>();
+        if (library == null) library = FindObjectOfType<Library>();
+        if (soundManager == null) soundManager = FindObjectOfType<SoundManager>();
+        if (systemManager == null) systemManager = FindObjectOfType<SystemManager>();
+        if (missionCallbackManager == null) missionCallbackManager = FindObjectOfType<MissionCallbackManager>();
+        if (missionManager == null) missionManager = FindObjectOfType<MissionManager>();
+        if (cursorManagement == null) cursorManagement = FindObjectOfType<CursorManagement>();
+        if (gridManagement == null) gridManagement = FindObjectOfType<GridManagement>();
+        if (populationManager == null) populationManager = FindObjectOfType<PopulationManager>();
+        if (saveManager == null) saveManager = FindObjectOfType<SaveManager>();
+        if (cinematicManager == null) cinematicManager = FindObjectOfType<CinematicManager>();
+        if (cityManager == null) cityManager = FindObjectOfType<CityManager>();
+        if (bulletinsManager == null) bulletinsManager = FindObjectOfType<BulletinsManager>();
+        if (overlayManager == null) overlayManager = FindObjectOfType<OverlayManager>();
+        if (timelineController == null) timelineController = FindObjectOfType<TimelineController>();
+        if (player == null) player = FindObjectOfType<Player>();
 
         // INTERFACE
         if (cursorDisplay == null) cursorDisplay = FindObjectOfType<CursorDisplay>();
-        if (localization == null) localization = GetComponentInChildren<Localization>();
-        if (displayerManager == null) displayerManager = GetComponentInChildren<DisplayerManager>();
+        if (localization == null) localization = FindObjectOfType<Localization>();
+        if (displayerManager == null) displayerManager = FindObjectOfType<DisplayerManager>();
 
         // INTERFACE - INGAME
         if (temporalityInterface == null) temporalityInterface = FindObjectOfType<TemporalityInterface>();
         if (tooltipGO == null) tooltipGO = FindObjectOfType<TooltipGO>();
 
         // DEBUG
-        if (logger == null) logger = GetComponentInChildren<Logger>();
-        if (overlayManager == null) overlayManager = FindObjectOfType<OverlayManager>();
+        if (logger == null) logger = FindObjectOfType<Logger>();
     }
 
-    void CheckInputs()
+    void CheckDebugInputs()
+    {
+
+    }
+
+    void CheckDebugGameInputs()
     {
 		
         if (Input.GetKeyDown(KeyCode.F1))
@@ -169,6 +179,12 @@ public class GameManager : MonoBehaviour
         {
             overlayManager.SelectOverlay(OverlayType.Density);
         }
+
+
+        if (Input.GetKeyDown(KeyCode.End)) {
+            temporality.timeScale = 100;
+        }
+
 
         if (Input.GetKeyDown(KeyCode.N)) { 
             Notifications.Notification not = new Notifications.Notification(
@@ -219,31 +235,31 @@ public class GameManager : MonoBehaviour
                 {
                     if(Input.GetKey(KeyCode.F))
                     {
-                        if (!block.states.Contains(BlockState.OnFire))
-                            block.AddState(BlockState.OnFire);
+                        if (!block.states.ContainsKey(State.OnFire))
+                            block.AddState(State.OnFire);
                         else
-                            block.RemoveState(BlockState.OnFire);     
+                            block.RemoveState(State.OnFire);     
                     }
 
                     if(Input.GetKey(KeyCode.R))
                     {
-                        if (!block.states.Contains(BlockState.OnRiot))
-                            block.AddState(BlockState.OnRiot);
+                        if (!block.states.ContainsKey(State.OnRiot))
+                            block.AddState(State.OnRiot);
                         else
-                            block.RemoveState(BlockState.OnRiot);     
+                            block.RemoveState(State.OnRiot);     
                     }
 
                     if(Input.GetKey(KeyCode.D))
                     {
-                        if (!block.states.Contains(BlockState.Damaged))
-                            block.AddState(BlockState.Damaged);
+                        if (!block.states.ContainsKey(State.Damaged))
+                            block.AddState(State.Damaged);
                         else
-                            block.RemoveState(BlockState.Damaged);     
+                            block.RemoveState(State.Damaged);     
                     }
                 }
             }
         }
-
+        
         // Saves the game
         if (Input.GetKeyDown(KeyCode.M)) {
             StartCoroutine(saveManager.WriteSaveData(
@@ -299,9 +315,8 @@ public class GameManager : MonoBehaviour
     }
 
     // Interface functions
-    public void StartGame(bool newGame = true)
+    void StartGame()
     {
-        
         // Initialize and shut down
         GameInterfaces gi = FindObjectOfType<GameInterfaces>();
         if (gi != null) {
@@ -317,10 +332,10 @@ public class GameManager : MonoBehaviour
         // Initialize only
         gridManagement.InitializeGridManager();
         cinematicManager.GetReferences();
+        timelineController.LoadCycles();
 
         // NEW GAME ONLY
-        if(newGame)
-        {
+        if (isNewGame) {
             // CINEMATIC
             Instantiate(library.spatioportSpawnerPrefab);
         }
@@ -329,7 +344,7 @@ public class GameManager : MonoBehaviour
         inGame = true;
     }
 
-    public void EndGame()
+    void EndGame()
     {
         // Initialize and shut down
         GameInterfaces gi = FindObjectOfType<GameInterfaces>();
@@ -341,6 +356,9 @@ public class GameManager : MonoBehaviour
         temporality.SetTimeOfDay(20);
         temporality.SetTimeScale(2);
 
+        // Shut down only
+        displayerManager.UnstageAll();
+
         // Ingame switch
         inGame = false;
     }
@@ -348,15 +366,16 @@ public class GameManager : MonoBehaviour
 
     public void NewGame()
     {
-        StartCoroutine(LoadGameScene(delegate { StartGame(); }));
+        isNewGame = true;
+        StartCoroutine(LoadGameScene(delegate { }));
     }
 
     public void Load()
     {
+        isNewGame = false;
         StartCoroutine(
             LoadGameScene(
                 delegate {
-                    StartGame(false);
                     saveManager.StartCoroutine(
                         saveManager.ReadSaveData(
                             cityManager.cityName,
@@ -375,7 +394,6 @@ public class GameManager : MonoBehaviour
 
     public void ExitToMenu()
     {
-        EndGame();
         SceneManager.LoadScene(menuSceneName);
     }
 

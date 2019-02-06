@@ -12,7 +12,19 @@ public class FoodProvider: Flag, Flag.IFlag
     public override void Awake()
     {
         base.Awake();
+    }
+
+    public override void Enable()
+    {
+        base.Enable();
         GameManager.instance.systemManager.AllFoodProviders.Add(this);
+    }
+
+    public override void Disable()
+    {
+        base.Disable();
+        GameManager.instance.systemManager.AllFoodProviders.Remove(this);
+        StartCoroutine(GameManager.instance.systemManager.RecalculateFoodConsumption());
     }
 
     public override void OnDestroy()
@@ -39,5 +51,10 @@ public class FoodProvider: Flag, Flag.IFlag
     public System.Type GetFlagType()
     {
         return GetType();
+    }
+
+    public string GetFlagDatas()
+    {
+        return "FoodProvider_" + range + "_" + foodTotal;
     }
 }

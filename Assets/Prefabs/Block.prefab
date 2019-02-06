@@ -89,13 +89,14 @@ GameObject:
   - component: {fileID: 4959767725213148}
   - component: {fileID: 33114626403890112}
   - component: {fileID: 23315564942930242}
+  - component: {fileID: 114690044833248856}
   m_Layer: 0
   m_Name: OverlayVisuals
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1194708815902200
 GameObject:
   m_ObjectHideFlags: 0
@@ -583,7 +584,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1047592790041198}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 90.81207, y: 9.998169, z: 80.341866}
+  m_LocalPosition: {x: 90.81207, y: 11.228, z: 80.341866}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4959767725213148}
@@ -817,7 +818,7 @@ MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1837011771237226}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -992,7 +993,7 @@ MeshRenderer:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1169141564330138}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -1379,11 +1380,10 @@ MonoBehaviour:
   scheme: {fileID: 0}
   visuals: {fileID: 114355198070202752}
   effects: {fileID: 114997362344976536}
-  overlayVisuals: {fileID: 1169141564330138}
+  overlayVisuals: {fileID: 114690044833248856}
   bridge: {fileID: 0}
   gridCoordinates: {x: 0, y: 0, z: 0}
   positionInTower: 0
-  activeFlags: []
   states: 
   currentPower: 0
   nuisance: 0
@@ -1402,6 +1402,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 95682179392488846}
+--- !u!114 &114690044833248856
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1169141564330138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae4e77dd278623d4fb16c5440d9211fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshRenderers:
+  - {fileID: 23315564942930242}
+  - {fileID: 23116510594367690}
+  blockVisual: {fileID: 114355198070202752}
+  blockFx: {fileID: 114997362344976536}
 --- !u!114 &114997362344976536
 MonoBehaviour:
   m_ObjectHideFlags: 1

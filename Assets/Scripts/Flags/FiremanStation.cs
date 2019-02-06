@@ -9,7 +9,7 @@ public class FiremanStation : Flag, Flag.IFlag
 	public bool selecting;
 	public List<Block> targets = new List<Block>();
 	public List<Extinctor> extinctors = new List<Extinctor>();
-    public int nuisanceImpact;
+   public int nuisanceImpact;
 
     override public void Use()
 	{
@@ -62,9 +62,14 @@ public class FiremanStation : Flag, Flag.IFlag
 			}
 		}
 	}
-
+*/
     public System.Type GetFlagType()
     {
         return GetType();
+    }
+
+    public string GetFlagDatas()
+    {
+        return "FiremanStation_" + range;
     }
 }

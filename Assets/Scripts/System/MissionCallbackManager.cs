@@ -58,7 +58,7 @@ public class MissionCallbackManager : MonoBehaviour
         MissionManager.Mission myMission = mission;
         foreach (Block blocklink in myMission.blocksFound)
         {
-            for (int i = blocklink.scheme.consumption - blocklink.currentPower; i > 0; i--)
+            for (int i = blocklink.GetConsumption() - blocklink.currentPower; i > 0; i--)
             {
                 if (myMission.power > 0)
                 {
@@ -98,7 +98,7 @@ public class MissionCallbackManager : MonoBehaviour
         {
             blocklink.isConsideredDisabled = false;
             blocklink.isLinkedToSpatioport = true;
-            blocklink.Enable();
+            blocklink.UnPack();
             yield return new WaitForEndOfFrame();
         }
         GameManager.instance.missionManager.EndMission(myMission);
@@ -133,7 +133,7 @@ public class MissionCallbackManager : MonoBehaviour
         MissionManager.Mission myMission = mission;
         for (int i = 1; i < myMission.blocksFound.Count; i++)
         {
-            myMission.blocksFound[i].AddState(BlockState.OnFire);
+            myMission.blocksFound[i].AddState(State.OnFire);
         }
         GameManager.instance.missionManager.EndMission(myMission);
         yield return null;

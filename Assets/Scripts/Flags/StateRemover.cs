@@ -12,4 +12,9 @@ public class StateRemover : Flag, Flag.IFlag
     {
         return GetType();
     }
+
+    public string GetFlagDatas()
+    {
+        return "StateRemover_" + range;
+    }
 }

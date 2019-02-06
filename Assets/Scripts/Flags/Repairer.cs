@@ -19,4 +19,9 @@ public class Repairer : Flag, Flag.IFlag
     {
         return GetType();
     }
+
+    public string GetFlagDatas()
+    {
+        return "Repairer_" + range;
+    }
 }

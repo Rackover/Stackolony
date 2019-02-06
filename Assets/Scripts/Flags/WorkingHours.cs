@@ -39,4 +39,9 @@ public class WorkingHours : Flag, Flag.IFlag
     {
         return GetType();
     }
+
+    public string GetFlagDatas()
+    {
+        return "WorkingHours_" + startHour + "_" + endHour;
+    }
 }

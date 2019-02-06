@@ -62,6 +62,20 @@ public class Paths {
         return path;
     }
 
+    static public string GetTimelineFile()
+    {
+        string path = GetTimelineFolder();
+        string file = "timeline" + ".xml";
+        return path + "/" + file;
+    }
+
+    static public string GetTimelineFolder()
+    {
+        string path = Application.streamingAssetsPath + "/timeline";
+        CreateDirectoryIfNotExists(path);
+        return path;
+    }
+
     static void CreateDirectoryIfNotExists(string path)
     {
         if (!Directory.Exists(path)) {

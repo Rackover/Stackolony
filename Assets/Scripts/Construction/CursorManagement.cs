@@ -27,6 +27,7 @@ public class CursorManagement : MonoBehaviour
     public Block selectedBlock; //Le block selectionné par le joueur
     public int projectorHeight = 10;
     public GameObject myProjector;
+    public Projector myProjectorComponent;
     [Space(5)]
     
     [Header("=== DEBUG ===")]
@@ -35,7 +36,6 @@ public class CursorManagement : MonoBehaviour
     public bool isDragging;
 
     [HideInInspector] public bool cursorOnUI = false;
-    [HideInInspector] public Vector3 sPosition;float dragDelay = 1f;
     float timer;
     private Vector3Int savedPos;
 
@@ -43,8 +43,6 @@ public class CursorManagement : MonoBehaviour
     private List<GameObject> permanentHighlighter = new List<GameObject>(); 
     private GameObject hoveredBlock;
     private GameObject stackSelector; //La petite fléche qui se met au pied de la tour qu'on selectionne
-    Terrain terr; //Terrain principal sur lequel le joueur pourra placer des blocs
-    Vector2Int heightmapSize;
     [System.NonSerialized] public bool canSwitchTools = true;
 
     public void InitializeGameCursor()
@@ -54,17 +52,14 @@ public class CursorManagement : MonoBehaviour
         myProjector = Instantiate(projectorPrefab);
         myProjector.name = "Projector";
         float cellMedianSize = (GameManager.instance.gridManagement.cellSize.x + GameManager.instance.gridManagement.cellSize.z) / 2;
-        myProjector.GetComponent<Projector>().orthographicSize = 2.5f * cellMedianSize; //On adapte la taille du projecteur (qui projette la grille au sol) à la taille des cellules
-        myProjector.GetComponent<Projector>().enabled = false;
+        myProjectorComponent = myProjector.GetComponent<Projector>();
+        myProjectorComponent.orthographicSize = 2.5f * cellMedianSize; //On adapte la taille du projecteur (qui projette la grille au sol) à la taille des cellules
+        myProjectorComponent.enabled = false;
 
         //Instantie la fleche qui indique la tour selectionnée par le joueur
         stackSelector = Instantiate(stackSelectorPrefab);
         stackSelector.name = "Stack_Selector";
         stackSelector.SetActive(false);
-
-        //Recupere le terrain et ses dimensions
-        terr = Terrain.activeTerrain;
-        heightmapSize = new Vector2Int(terr.terrainData.heightmapWidth, terr.terrainData.heightmapHeight);
     }
     public void KillGameCursor()
     {
@@ -124,7 +119,7 @@ public class CursorManagement : MonoBehaviour
         }
         else // If the mouse is pointing at nothing
         {
-            myProjector.GetComponent<Projector>().enabled = false;
+            myProjectorComponent.enabled = false;
             stackSelector.SetActive(false);
         }
         transform.position = hit.point;
@@ -161,10 +156,10 @@ public class CursorManagement : MonoBehaviour
     {
         if (cursorOnUI)
         {
-            myProjector.GetComponent<Projector>().enabled = false;
+            myProjectorComponent.enabled = false;
         } else
         {
-            myProjector.GetComponent<Projector>().enabled = true;
+            myProjectorComponent.enabled = true;
         }
         //Met à jour la position du projecteur
         myProjector.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(posInGrid) + new Vector3(0, projectorHeight, 0);
@@ -535,7 +530,6 @@ public class CursorManagement : MonoBehaviour
         {
             selectedBlock = _block;
             selectedBlock.StopAllCoroutines();
-            sPosition = selectedBlock.transform.position;
             savedPos = selectedBlock.gridCoordinates;
             if (selectedBlock.transform.Find("Bridge") != null) {
                 GameManager.instance.gridManagement.DestroyBridge(selectedBlock.transform.Find("Bridge").gameObject);
@@ -567,9 +561,9 @@ public class CursorManagement : MonoBehaviour
 
     public void EndDrag(Vector3Int _pos)
     {
-        if(selectedBlock != null && isDragging)
+        if (selectedBlock != null && isDragging)
         {
-            if (_pos.y <= GameManager.instance.gridManagement.minHeight)
+            if (_pos.y < GameManager.instance.gridManagement.minHeight)
             {
                 CancelDrag();
                 return;
@@ -605,7 +599,7 @@ public class CursorManagement : MonoBehaviour
             }
         }
         if(selectedBlock != null)
-        {         
+        {        
             selectedBlock.CallFlags("OnBlockUpdate");
             selectedBlock.boxCollider.enabled = true;
             selectedBlock = null; 
@@ -617,7 +611,13 @@ public class CursorManagement : MonoBehaviour
     {
         if(selectedBlock != null && isDragging)
         {
-            selectedBlock.transform.position = sPosition;
+            if (selectedBlock.GetComponent<Block>() != null)
+            {
+                selectedBlock.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(selectedBlock.gridCoordinates);
+            } else
+            {
+                Destroy(selectedBlock);
+            }
             selectedBlock.boxCollider.enabled = true;
             selectedBlock = null;
             isDragging = false;

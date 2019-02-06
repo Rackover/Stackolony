@@ -123,7 +123,7 @@ public class SaveManager : MonoBehaviour {
 
         // Step 2 - Main grid
         Logger.Debug("Reading grid...");
-        Vector3Int gridSize = reader.ReadVector3UInt8();
+        diskSaveData.gridSize = reader.ReadVector3UInt8();
         diskSaveData.blockGrid = new Dictionary<Vector3Int, BlockSaveData>();
         int count = reader.ReadUInt16();
         for (int i = 0; i < count; i++) {
@@ -303,10 +303,12 @@ public class SaveManager : MonoBehaviour {
                         blockData.id = blockLink.scheme.ID;
                         blockData.states = new List<int>();
 
-                        foreach (BlockState state in blockLink.states) 
+                        
+                        foreach (KeyValuePair<State, StateBehavior> state in blockLink.states) 
                         {
-                            blockData.states.Add((int)state);
+                            blockData.states.Add((int)state.Key);
                         }
+    
                         blockGrid[coords] = blockData;
                     }
                 }
