@@ -41,8 +41,7 @@ public class Spatioport : Flag, Flag.IFlag {
 
     public override void OnDestroy()
     {
-        Disable();
-        base.OnDestroy();
+        
     }
 
     public System.Type GetFlagType()
