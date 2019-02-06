@@ -741,6 +741,17 @@ public class EventInterpreter
                 //ConsequencesManager.TempDestroyFlag(block, FlagReader.Get flag, duration);
             }
         );
+        actionFunctions.Add(
+            "GAME_OVER", (args, context) => {
+                GameManager.instance.ExitToMenu();
+            }
+        );
+        actionFunctions.Add(
+            "TRIGGER_EVENT", (args, context) => {
+                int eventId = System.Convert.ToInt32(GetArgument(args, "id"));
+                GameManager.instance.eventManager.TriggerEvent(eventId);
+            }
+        );
     }
 
     /// <summary>
