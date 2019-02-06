@@ -22,8 +22,9 @@ public class AnimationManager : MonoBehaviour {
         }
     }
 
-    public void ElevateTower(Vector3Int coordinates)
+    public void ElevateTower(Vector3Int coordinates, float time = -1)
     {
+        if (time < 0) { time = towerElevationTime; }
         GridManagement gridManager = GameManager.instance.gridManagement;
         for (int i = coordinates.y; i < gridManager.gridSize.y; i++)
         {
@@ -33,14 +34,15 @@ public class AnimationManager : MonoBehaviour {
                 Block foundBlock = checkedObj.GetComponent<Block>();
                 if (foundBlock!= null)
                 {
-                    ElevateBlock(foundBlock, towerElevationAmount, towerElevationTime);
+                    ElevateBlock(foundBlock, towerElevationAmount, time);
                 }
             }
         }
     }
 
-    public void EndElevateTower(Vector2Int coordinates)
+    public void EndElevateTower(Vector2Int coordinates, float time = -1)
     {
+        if (time < 0) { time = towerDelevationTime; }
         GridManagement gridManager = GameManager.instance.gridManagement;
         for (int i = 0; i < gridManager.gridSize.y; i++)
         {
@@ -50,7 +52,7 @@ public class AnimationManager : MonoBehaviour {
                 Block foundBlock = checkedObj.GetComponent<Block>();
                 if (foundBlock != null)
                 {
-                    EndElevateBlock(foundBlock, towerDelevationTime);
+                    EndElevateBlock(foundBlock, time);
                 }
             }
         }

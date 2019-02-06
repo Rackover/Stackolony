@@ -44,7 +44,7 @@ public class ConsequencesManager : MonoBehaviour {
         }
     }
 
-    //Destroys temporaly the specified flag
+    //Destroys temporaly the specified flag  
     static public void DestroyFlagTemporarily(Block block, System.Type flag, int cyclesRemaining)
     {
         if (GameManager.instance.cityManager.FindFlag(block, flag) != null)
@@ -195,11 +195,15 @@ public class ConsequencesManager : MonoBehaviour {
         return houses[Mathf.FloorToInt(Random.value * houses.Count)];
     }
 
-
-    //TO DO
-    //Randomly spawns a mine on the map
-    public void SpawnMine(int amount)
+    static public void ConvertBlock(Block block, BlockScheme newBlock)
     {
+        Vector3Int coord = block.gridCoordinates;
+        block.Destroy();
+        GameManager.instance.gridManagement.SpawnBlock(newBlock.ID, coord);
+    }
 
+    static void SpawnMine(int amount)
+    {
+        for(int i = 0; i < amount; i++) GameManager.instance.cityManager.SpawnMine();
     }
 }

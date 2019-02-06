@@ -612,10 +612,8 @@ public class EventInterpreter
                 catch (System.Exception e) {
                     Throw("Impossible cast in " + args + "\n" + e.ToString());
                 }
-                string flag = GetArgument(args, "flag");
-
-                // TODO
-                //ConsequencesManager.GenerateFlag(block, flag);
+                string flag = GetArgument(args, "flag"); 
+                ConsequencesManager.GenerateFlag(block, flag);
             }
         );
         actionFunctions.Add(
@@ -680,9 +678,7 @@ public class EventInterpreter
 
                 int id = System.Convert.ToInt32(GetArgument(args, "id"));
                 BlockScheme into = GameManager.instance.library.GetBlockByID(id);
-
-                // TODO
-                // ConsequencesManager.ConvertBlock(block, into);
+                ConsequencesManager.ConvertBlock(block, into);
             }
         );
         actionFunctions.Add(
@@ -732,9 +728,7 @@ public class EventInterpreter
                 }
                 int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
                 string flag = GetArgument(args, "flag");
-
-                // TODO
-                //ConsequencesManager.TempDestroyFlag(block, FlagReader.Get flag, duration);
+                ConsequencesManager.DestroyFlagTemporarily(block, System.Type.GetType(flag), duration);
             }
         );
         actionFunctions.Add(
@@ -835,8 +829,5 @@ public class EventInterpreter
                return block.scheme;
            }
        }
-
     };
-
-
 }

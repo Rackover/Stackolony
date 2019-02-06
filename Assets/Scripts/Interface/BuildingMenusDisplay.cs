@@ -56,6 +56,15 @@ public class BuildingMenusDisplay : MonoBehaviour {
                     string name = flag[0];
                     flag.Remove(name);
                     string[] parameters = flag.ToArray();
+
+                    for(int i = 0; i < parameters.Length; i++)
+                    {
+                        if(GameManager.instance.populationManager.GetPopulationByCodename(parameters[i]) != null)
+                        {   
+                            parameters[i] = GameManager.instance.localization.GetLineFromCategory("populationType", parameters[i]);
+                        }
+                    }
+
                     tt.AddLocalizedLine(new Tooltip.TooltipLocalizationEntry(
                         name.ToLower(), "flagParameter", FlagReader.IsPositive(name) ? Tooltip.tooltipType.Positive : Tooltip.tooltipType.Negative, parameters
                     ));

@@ -50,7 +50,7 @@ public class Flag : MonoBehaviour {
     //Fonction appelée avant de détruire le bloc
     virtual public void OnDestroy()
     {
-        //block.activeFlags.Remove((IFlag)this);
+        block.activeFlags.Remove((IFlag)this);
     }
 
     //Fonction appelée à chaque début de cycle
