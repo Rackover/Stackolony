@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PoliceStation : Flag, Flag.IFlag
 {
+    [Header("Police Behavior")]
 	public int range;
     public int nuisanceImpact;
 
@@ -12,10 +13,14 @@ public class PoliceStation : Flag, Flag.IFlag
         base.Awake();
     }
 
-    public System.Type GetFlagType()
-    {
-        return GetType();
-    }
+	public override void OnGridUpdate()
+	{
+		base.OnGridUpdate();
+		if(!isEnabled) return;
+		GameManager.instance.missionManager.StartMission(block.gridCoordinates, "Repress", range);
+	}
+  
+    public System.Type GetFlagType() { return GetType(); }
 
 
     override public void UpdateNuisanceImpact()

@@ -94,7 +94,7 @@ public class House : Flag, Flag.IFlag
 
     public override void OnDestroy()
     {
-        GameManager.instance.systemManager.AllHouses.Remove(this);
+        Disable();
         base.OnDestroy();
     }
 

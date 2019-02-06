@@ -9,6 +9,7 @@ public class Library : MonoBehaviour
 	public GameObject extinctorPrefab;
     public GameObject spatioportSpawnerPrefab;
     public GameObject disabledBlockPrefab;
+	public GameObject ruinPrefab;
 
 	[Space(1)][Header("Blocks")]
 	public BlockScheme[] blocks;
@@ -28,6 +29,9 @@ public class Library : MonoBehaviour
 	public GameObject onFireParticle;
 	public GameObject onRiotParticle;
 	public GameObject damagedParticle;
+	public GameObject extinguishParticle;
+	public GameObject repressParticle;
+	public GameObject repairParticle;
 	
 	[Header("Building")]
     public List<Sprite> buildingsIcons = new List<Sprite>();

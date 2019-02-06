@@ -1,14 +1,23 @@
 ﻿using UnityEngine;
 
 public class Nest : Flag, Flag.IFlag
-{
-    public System.Type GetFlagType()
+{    
+    [Header("Nest")]
+    public float health = 100f;
+
+    public override void OnNewMicrocycle()
     {
-        return GetType();
+        if(health <= 0)
+        {
+            block.Destroy();
+        }
     }
 
-    public string GetFlagDatas()
+    public override void OnNewCycle()
     {
-        return "Nest";
+        health += 10f;
     }
+
+    public System.Type GetFlagType() { return GetType(); }
+    public string GetFlagDatas(){ return "Nest"; }
 }

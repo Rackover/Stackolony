@@ -58,6 +58,7 @@ MonoBehaviour:
   spatioportSpawnerPrefab: {fileID: 1863592346692030, guid: 05e73553118545e4e99b71ce4b0f2534,
     type: 2}
   disabledBlockPrefab: {fileID: 0}
+  ruinPrefab: {fileID: 1593024420063624, guid: 6a64cf12c7012c84d9130d421d38118b, type: 2}
   blocks:
   - {fileID: 11400000, guid: b7fd27253a34688459ab7ada3dab8486, type: 2}
   - {fileID: 11400000, guid: 296389d451a99b4459868887eb39ba98, type: 2}
@@ -68,6 +69,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c11e97e7f91c99741b1129353b9b8aa9, type: 2}
   - {fileID: 11400000, guid: c89624ea9b43f42468c295920b6d19cf, type: 2}
   - {fileID: 11400000, guid: 4ddcd1206553745469c4f988663339d3, type: 2}
+  - {fileID: 11400000, guid: 8ca2207c398ea574ea6788523873b358, type: 2}
+  - {fileID: 11400000, guid: 16ed11e22f5d37d419ee189654973721, type: 2}
+  - {fileID: 11400000, guid: 5288e0c7fc596c2428e5dd2aa03b8447, type: 2}
+  - {fileID: 11400000, guid: 080ff087c39c2e840a7419dd58024208, type: 2}
+  - {fileID: 11400000, guid: 7603f2e68e632e54684d1bdda824f88a, type: 2}
   blockContainerColors:
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 0.42352945, g: 0.6156863, b: 0.9686275, a: 1}
@@ -127,6 +133,12 @@ MonoBehaviour:
   onRiotParticle: {fileID: 1278992186517358, guid: 869a1a98069845348b6aaae2bcf17c66,
     type: 2}
   damagedParticle: {fileID: 1943145316284874, guid: 8f2db58443c89a346aef2a5762562d14,
+    type: 2}
+  extinguishParticle: {fileID: 1057743280367826, guid: 29c6d81a269108c4c8167ca45e2aefbe,
+    type: 2}
+  repressParticle: {fileID: 1619047670876896, guid: cc0614e432cd36e4bb64944c483d56f2,
+    type: 2}
+  repairParticle: {fileID: 1265812207320648, guid: 17785de2569fed64aad26ce8e15bb5f0,
     type: 2}
   buildingsIcons:
   - {fileID: 21300000, guid: 15e2ba685d2ee3143a34ccaebc18bd58, type: 3}

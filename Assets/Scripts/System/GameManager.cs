@@ -236,7 +236,7 @@ public class GameManager : MonoBehaviour
                     if(Input.GetKey(KeyCode.F))
                     {
                         if (!block.states.ContainsKey(State.OnFire))
-                            block.AddState(State.OnFire);
+                            FireManager.Ignite(block);
                         else
                             block.RemoveState(State.OnFire);     
                     }
@@ -277,8 +277,14 @@ public class GameManager : MonoBehaviour
         }
         
         // Goes forward in time by 1 cycle
-        if (Input.GetKeyDown(KeyCode.C)) {
+        if (Input.GetKeyDown(KeyCode.C)) 
+        {
             temporality.AddCycle();
+        }
+        
+        if (Input.GetKeyDown(KeyCode.B)) 
+        {
+            temporality.AddMicroCycle();
         }
     }
 
@@ -328,11 +334,15 @@ public class GameManager : MonoBehaviour
         temporality.SetDate(0);
         temporality.SetTimeOfDay(20);
         temporality.SetTimeScale(1);
+        
+        
 
         // Initialize only
         gridManagement.InitializeGridManager();
         cinematicManager.GetReferences();
         timelineController.LoadCycles();
+
+        cityManager.GenerateEnvironmentBlocks();
 
         // NEW GAME ONLY
         if (isNewGame) {

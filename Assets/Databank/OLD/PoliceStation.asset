@@ -11,14 +11,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14a825372d1dc3a4fa39444b146f0e78, type: 3}
   m_Name: PoliceStation
   m_EditorClassIdentifier: 
-  link: {fileID: 0}
-  title: Police Station
-  description: Stops any riot in a range of 5.
-  model: {fileID: 1215608635340068, guid: 8d460a778fa8f444d895aae4a63a36d5, type: 2}
-  icon: {fileID: 21300000, guid: c7c8605700d7ec04e841c209564ce407, type: 3}
+  isMovable: 1
+  isDestroyable: 1
+  isBuyable: 1
+  canBuildAbove: 1
+  model: {fileID: 1767130253757384, guid: 725c1942f2f39fc45a2df45fb6ecd70e, type: 2}
   ID: 5
-  level: 1
-  complexity: 1
   consumption: 1
+  sensibility: 1
   flags:
   - PoliceStation_5

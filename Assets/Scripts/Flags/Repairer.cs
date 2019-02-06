@@ -15,13 +15,19 @@ public class Repairer : Flag, Flag.IFlag
         range -= nuisanceImpact;
     }
 
-    public System.Type GetFlagType()
-    {
-        return GetType();
-    }
+	public override void Enable()
+	{
+		base.Enable();
+		if(isEnabled) GameManager.instance.missionManager.StartMission(block.gridCoordinates, "Repair", range);
+	}
 
-    public string GetFlagDatas()
-    {
-        return "Repairer_" + range;
-    }
+	public override void OnGridUpdate()
+	{
+		base.OnGridUpdate();
+		if(!isEnabled) return;
+		if(isEnabled) GameManager.instance.missionManager.StartMission(block.gridCoordinates, "Repair", range);
+	}
+
+    public System.Type GetFlagType(){ return GetType(); }
+    public string GetFlagDatas(){ return "Repairer_" + range; }
 }

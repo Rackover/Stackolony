@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Flag : MonoBehaviour {
 
-    [Header("References")]
+    [Header("Flag")]
     public Block block;
     public bool isEnabled = true;
 
@@ -50,11 +50,19 @@ public class Flag : MonoBehaviour {
     //Fonction appelée avant de détruire le bloc
     virtual public void OnDestroy()
     {
+        //block.activeFlags.Remove((IFlag)this);
     }
 
     //Fonction appelée à chaque début de cycle
     virtual public void OnNewCycle()
     {
+        if(!isEnabled) return;
+    }
+
+    //Fonction appelée à chaque début de cycle
+    virtual public void OnNewMicrocycle()
+    {
+        if(!isEnabled) return;
     }
 
     //Fonction appelée quand la nuit commence
@@ -70,9 +78,21 @@ public class Flag : MonoBehaviour {
     //Fonction appelée quand la position du bloc se met à jour
     virtual public void OnBlockUpdate()
     {
+
     }
 
-    virtual public void UpdateFlag()
+    //Fonction appelée quand la position du bloc se met à jour
+    virtual public void OnGridUpdate()
+    {
+        
+    }
+
+    virtual public void OnBlockDestroy()
+    {
+        
+    }
+
+    virtual public void Update()
     {
         if(!isEnabled) return;
     }

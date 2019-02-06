@@ -29,10 +29,13 @@ public class Block : MonoBehaviour
     public List<ConsumptionModifier> consumptionModifiers = new List<ConsumptionModifier>();
     public List<FlagModifier> flagModifiers = new List<FlagModifier>();
     public List<TempFlag> tempFlags = new List<TempFlag>();
+    public List<TempFlagDestroyer> tempFlagDestroyers = new List<TempFlagDestroyer>();
+    public List<FireRiskModifier> fireRiskModifiers = new List<FireRiskModifier>();
 
     [Header("Values")]
 	public int currentPower;
     public int nuisance; //Nuisance received by the block
+    public int fireRiskPercentage; //Fire risk in percent
     public bool isConsideredUnpowered; //Used when updating energy system
     public bool isConsideredDisabled; //Used when updating spatioport
     public bool isLinkedToSpatioport;
@@ -44,11 +47,6 @@ public class Block : MonoBehaviour
         if(boxCollider == null) boxCollider = GetComponent<BoxCollider>();
     }
 
-    public void Update()
-    {
-        UpdateFlags();
-    }
-
     public void Pack()
     {
         Disable();
@@ -57,6 +55,8 @@ public class Block : MonoBehaviour
         {
             container.CloseContainer();
         }
+
+        ToggleVisuals(false);
     }
 
     public void UnPack()
@@ -67,6 +67,8 @@ public class Block : MonoBehaviour
         {
             container.OpenContainer();
         }
+
+        ToggleVisuals(true);
     }
 
     //Called when block isn't in range of a spatioport
@@ -81,6 +83,22 @@ public class Block : MonoBehaviour
         DisableFlags();
     }
 
+    public void TestFireRisks()
+    {
+        if (!scheme.fireProof) {
+            int totalFireChances = fireRiskPercentage;
+            foreach (FireRiskModifier fireRiskModifier in fireRiskModifiers)
+            {
+                totalFireChances += fireRiskModifier.amountInPercent;
+            }
+            int random = UnityEngine.Random.Range(0, 100);
+            if (totalFireChances > random)
+            {
+                //Set block in fire
+                AddState(State.OnFire);
+            }
+        }
+    } 
 
     //Called when block is in range of a spatioport
     public void Enable()
@@ -97,29 +115,36 @@ public class Block : MonoBehaviour
 
         // Check if a state isn't going to disable the states
         RefreshStates();
+        UpdatePower();
+    }
+
+    public void OnGridUpdate()
+    {
+        foreach (Flag flag in activeFlags)
+        {
+            flag.OnGridUpdate(); 
+        }
+        foreach (KeyValuePair<State, StateBehavior> state in new Dictionary<State, StateBehavior>(states))
+        {
+            state.Value.OnGridUpdate();
+        }
+    }     
+
+    public void EnableFlags() // Enable all flags of this block
+    {
+        foreach (Flag flag in activeFlags) { flag.Enable(); }
     }
 
     public void DisableFlags() // Disable all flags of this block
     {
-        foreach (Flag flag in activeFlags)
-        {
-            flag.Disable(); 
-        }
-    }
-
-    public void EnableFlags() // Enable all flags of this block
-    {
-        foreach (Flag flag in activeFlags)
-        {
-            flag.Enable(); 
-        }
+        foreach (Flag flag in activeFlags) { flag.Disable(); }
     }
 
     public void RefreshStates() // Refresh the block depending on it's states
     {
-        foreach (KeyValuePair<State, StateBehavior> state in new Dictionary<State, StateBehavior>(states))
+        foreach(KeyValuePair<State, StateBehavior> state in new Dictionary<State, StateBehavior>(states))
         {
-            if(state.Value.disabler)
+            if(state.Value == null && state.Value.disabler)
             {
                 DisableFlags();
                 break;
@@ -134,6 +159,15 @@ public class Block : MonoBehaviour
         {
             states.Add(state, (StateBehavior)gameObject.AddComponent(type));
         }
+    }
+
+    public Flag.IFlag FindFlag(System.Type flag)
+    {
+        foreach(Flag.IFlag f in activeFlags)
+        {
+            if(f.GetFlagType() == flag) return f;
+        }
+        return null;
     }
 
     public void RemoveState(State state)
@@ -151,12 +185,21 @@ public class Block : MonoBehaviour
 
     public void OnNewCycle()
     {
-        // The .ToArray() is used to make a copy of the array to prevent errors
         foreach (Flag flag in activeFlags.ToArray()){ flag.OnNewCycle(); }
         foreach (KeyValuePair<State, StateBehavior> state in new Dictionary<State, StateBehavior>(states))
         {
             state.Value.OnNewCycle();
         }
+    }
+
+    public void OnNewMicroycle()
+    {
+        foreach (Flag flag in activeFlags.ToArray()){ flag.OnNewMicrocycle(); }
+        foreach (KeyValuePair<State, StateBehavior> state in new Dictionary<State, StateBehavior>(states))
+        {
+            state.Value.OnNewMicrocycle();
+        }
+        TestFireRisks();
     }
 
     public void UpdateNuisance(int amount)
@@ -211,6 +254,7 @@ public class Block : MonoBehaviour
         }
 
         Enable();
+        UpdateName();
     }
 
     public void UnloadBlock()
@@ -264,14 +308,6 @@ public class Block : MonoBehaviour
         }
     }
 
-    public void UpdateFlags()
-    {
-        foreach (Flag flag in activeFlags)
-        {
-            flag.UpdateFlag();
-        }
-    }
-
     public void MoveToMyPosition() //Deplace le bloc à sa position supposée
     {
         //Déplace aussi le pont qui lui est attaché s'il y en a un
@@ -304,7 +340,7 @@ public class Block : MonoBehaviour
 
     public void UpdateName()
     {
-        gameObject.name = "BlockScheme[" + gridCoordinates.x + ";" + gridCoordinates.y + ";" + gridCoordinates.z + "]";
+        gameObject.name = scheme.name + "[" + gridCoordinates.x + ";" + gridCoordinates.y + ";" + gridCoordinates.z + "]";
     }
 
     /// <summary>
