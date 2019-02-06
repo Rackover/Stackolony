@@ -34,6 +34,7 @@ public class AnimationManager : MonoBehaviour {
                 Block foundBlock = checkedObj.GetComponent<Block>();
                 if (foundBlock!= null)
                 {
+                    if (!foundBlock.scheme.isMovable) { return; }
                     ElevateBlock(foundBlock, towerElevationAmount, time);
                 }
             }

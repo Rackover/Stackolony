@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 using System;
 using System.IO;
-
+#if (UNITY_EDITOR) 
 public class BlockReader : EditorWindow 
 {
 	Vector2 scroll;
@@ -129,3 +129,4 @@ public class BlockReader : EditorWindow
 		}
 	}
 }
+#endif

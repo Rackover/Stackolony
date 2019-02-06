@@ -330,7 +330,16 @@ public class Block : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(gridCoordinates);
+       // checkForCollisions = false;
         yield return null;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Decor")
+        {
+            Destroy(other.gameObject);
+        }
     }
 
     public void UpdateName()
