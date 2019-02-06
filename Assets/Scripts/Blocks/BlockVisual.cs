@@ -9,6 +9,7 @@ public class BlockVisual : MonoBehaviour
 
 	public void NewVisual(GameObject obj)
 	{
+		if(visuals != null) Destroy(visuals);
 		visuals = Instantiate(obj, transform.position, Quaternion.identity, transform);
 		visuals.name = "Model";
 	}

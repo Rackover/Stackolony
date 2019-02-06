@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class StateBehavior : MonoBehaviour 
 {
-
 	[HideInInspector] public Block block; // Reference to the linked block
 	[HideInInspector] public bool disabler = false;	// Determine if this state disable all flags or not
 
@@ -36,5 +35,9 @@ public class StateBehavior : MonoBehaviour
 	virtual public void OnNewCycle() {}
 
 	// When a new Microcycle start
-	virtual public void OnNewMicrocycle() {}
+	virtual public void OnNewMicrocycle() {
+
+	}
+
+	virtual public void OnGridUpdate() {}
 }

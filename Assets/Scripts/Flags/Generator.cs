@@ -7,11 +7,6 @@ public class Generator : Flag, Flag.IFlag
     
     public int power;
 
-    public override void Awake()
-    {
-        base.Awake();
-    }
-
     public override void Enable()
     {
         base.Enable();
@@ -22,7 +17,7 @@ public class Generator : Flag, Flag.IFlag
     {
         base.Disable();
         GameManager.instance.systemManager.AllGenerators.Remove(this);
-        StartCoroutine(GameManager.instance.systemManager.RecalculatePropagation());
+        GameManager.instance.systemManager.StartCoroutine(GameManager.instance.systemManager.RecalculatePropagation());
     }
 
     public void GenerateEnergy()
@@ -33,9 +28,10 @@ public class Generator : Flag, Flag.IFlag
         }
     }
 
+
     public override void OnDestroy()
     {
-        GameManager.instance.systemManager.AllGenerators.Remove(this);
+        Disable();
         base.OnDestroy();
     }
 

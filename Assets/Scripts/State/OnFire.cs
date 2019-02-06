@@ -2,6 +2,10 @@
 
 public class OnFire : StateBehavior 
 {
+    [Header("On fire")]
+    public bool isBeingExtinguished = false;
+    public int id;
+
     public override void Start()
     {
         disabler = true;
@@ -10,28 +14,65 @@ public class OnFire : StateBehavior
         // Add fire effect and play fire sound
         block.effects.Activate(GameManager.instance.library.onFireParticle);
         GameManager.instance.soundManager.Play("StartingFire");
-
-        // Disactivate all flags of the block
-        block.DisableFlags();
+        block.Disable();
     }
 
-    public override void OnNewCycle()
+    public override void OnGridUpdate()
     {
-        base.OnNewCycle();
-        GameManager.instance.missionManager.StartMission(block.gridCoordinates, "Ignite", 1);
-        Remove();
+        base.OnGridUpdate();
+        CancelExtinguish();
     }
 
+    public void StartExtinguish()
+    {
+        if(!isBeingExtinguished)
+        {
+            isBeingExtinguished = true;
+            if(block != null) block.effects.Activate(GameManager.instance.library.extinguishParticle);
+        }
+    }
+    
+    public void CancelExtinguish()
+    {
+        isBeingExtinguished = false;
+        if(block != null) block.effects.Desactivate(GameManager.instance.library.extinguishParticle);
+    }
+
+    public override void OnNewMicrocycle()
+    {
+        if(!isBeingExtinguished)
+        {
+            Spread();
+        }
+        else 
+        {
+            block.Enable();
+            Remove();
+        }
+    }
+
+    public void Spread()
+    {
+        Debug.Log(block);
+        block = GetComponent<Block>();
+        FireManager.Spread(this);
+
+        if(block.states.ContainsKey(State.Damaged))
+        {
+            block.Destroy();
+        }
+        else
+        {
+            block.AddState(State.Damaged);
+            Remove();
+        }
+    }
 
     public override void Remove()
     {
-        block.AddState(State.Damaged);
-
+        block.effects.Desactivate(GameManager.instance.library.extinguishParticle);
         block.effects.Desactivate(GameManager.instance.library.onFireParticle);
         GameManager.instance.soundManager.Play("StoppingFire");
-
-        block.EnableFlags();
-
         base.Remove();
     }
 }

@@ -9,6 +9,7 @@ public class House : Flag, Flag.IFlag
     public Population[] acceptedPop;
     public List<PopulationManager.Citizen> affectedCitizen = new List<PopulationManager.Citizen>();
     public int standingLevel = 1;
+    public float nuisanceImpact = 0; //Notation losse of a house caused by nuisance
 
     //Variables
     public List<Occupator> occupatorsInRange = new List<Occupator>();
@@ -26,6 +27,7 @@ public class House : Flag, Flag.IFlag
 
     public void UpdateHouseInformations()
     {
+        nuisanceImpact = block.nuisance * block.scheme.sensibility;
         foodConsumption = GetFoodConsumption();
         if (block.currentPower >= block.GetConsumption())
             powered = true;
@@ -42,6 +44,11 @@ public class House : Flag, Flag.IFlag
             fconsumption += (GameManager.instance.populationManager.GetFoodConsumption(citizen.type));
         }
         return fconsumption;
+    }
+
+    override public void UpdateNuisanceImpact()
+    {
+        nuisanceImpact = block.nuisance * block.scheme.sensibility;
     }
 
     public void GetDistanceFromGround()
@@ -87,7 +94,7 @@ public class House : Flag, Flag.IFlag
 
     public override void OnDestroy()
     {
-        GameManager.instance.systemManager.AllHouses.Remove(this);
+        Disable();
         base.OnDestroy();
     }
 

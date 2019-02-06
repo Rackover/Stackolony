@@ -11,18 +11,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14a825372d1dc3a4fa39444b146f0e78, type: 3}
   m_Name: Spatioport
   m_EditorClassIdentifier: 
-  link: {fileID: 0}
   isMovable: 1
   isDestroyable: 0
-  isStorable: 0
   isBuyable: 0
-  title: Spatioport
-  description: This needs a proper description
+  canBuildAbove: 1
+  relyOnSpatioport: 1
+  fireProof: 1
   model: {fileID: 1827226455220510, guid: eaf30ab9bc78d6f408473b34f39bc8f5, type: 2}
-  icon: {fileID: 21300000, guid: a02562d9c883e2a43b53ef0a9ea2ab2e, type: 3}
   ID: 0
-  level: 1
-  complexity: 1
   consumption: 0
+  sensibility: 1
   flags:
   - Spatioport

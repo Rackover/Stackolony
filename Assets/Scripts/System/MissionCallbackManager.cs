@@ -43,11 +43,16 @@ public class MissionCallbackManager : MonoBehaviour
     {
         MissionManager.Mission myMission = mission;
         Occupator linkedOccupator = GameManager.instance.gridManagement.grid[myMission.position.x, myMission.position.y, myMission.position.z].GetComponent<Occupator>();
-        foreach (Block blocklink in myMission.blocksFound)
+
+        lock(myMission.blocksFound)
         {
-            House house = blocklink.GetComponent<House>();
-            house.occupatorsInRange.Add(linkedOccupator);
+            foreach (Block blocklink in myMission.blocksFound)
+            {
+                House house = blocklink.GetComponent<House>();
+                house.occupatorsInRange.Add(linkedOccupator);
+            }
         }
+
         GameManager.instance.missionManager.EndMission(myMission);
         yield return null;
     }
@@ -90,16 +95,31 @@ public class MissionCallbackManager : MonoBehaviour
         yield return null;
     }
 
+    IEnumerator GenerateFireRisks()
+    {
+        MissionManager.Mission myMission = mission;
+        FireRiskGenerator linkedFG = GameManager.instance.gridManagement.grid[myMission.position.x, myMission.position.y, myMission.position.z].GetComponent<FireRiskGenerator>();
+        for (int i = 1; i < myMission.blocksFound.Count; i++) { //Starts at i = 1 so the block at center isn't affected
+            myMission.blocksFound[i].fireRiskPercentage += linkedFG.amountInPercent;
+        }
+        GameManager.instance.missionManager.EndMission(myMission);
+        yield return null;
+    }
+
+
     IEnumerator EmitSpatioportInfluence()
     {
         activeCoroutinesRelatedToSpatioport++;
         MissionManager.Mission myMission = mission;
-        foreach (Block blocklink in mission.blocksFound)
+        foreach (Block b in mission.blocksFound.ToArray())
         {
-            blocklink.isConsideredDisabled = false;
-            blocklink.isLinkedToSpatioport = true;
-            blocklink.UnPack();
-            yield return new WaitForEndOfFrame();
+            if(b != null)
+            {
+                b.isConsideredDisabled = false;
+                b.isLinkedToSpatioport = true;
+                b.UnPack();
+                yield return new WaitForEndOfFrame();
+            }
         }
         GameManager.instance.missionManager.EndMission(myMission);
         activeCoroutinesRelatedToSpatioport--;
@@ -122,18 +142,65 @@ public class MissionCallbackManager : MonoBehaviour
         {
             int distanceToCenter = myMission.blockDistanceToCenter[i] + 1;
             if (distanceToCenter > linkedGenerator.amount) distanceToCenter = linkedGenerator.amount; //In case the range is
-            myMission.blocksFound[i].nuisance += linkedGenerator.amount - myMission.blockDistanceToCenter[i] + 1; //+1 because the first block doesn't count
+            myMission.blocksFound[i].UpdateNuisance(linkedGenerator.amount - myMission.blockDistanceToCenter[i] + 1); //+1 because the first block doesn't count
         }
         GameManager.instance.missionManager.EndMission(myMission);
         yield return null;
     }
 
-    IEnumerator Ignite() 
+    IEnumerator Extinguish() 
     {
         MissionManager.Mission myMission = mission;
         for (int i = 1; i < myMission.blocksFound.Count; i++)
         {
-            myMission.blocksFound[i].AddState(State.OnFire);
+            if(myMission.blocksFound[i].states.ContainsKey(State.OnFire))
+            {
+                OnFire state = myMission.blocksFound[i].states[State.OnFire] as OnFire;
+
+                if(!state.isBeingExtinguished)
+                {
+                    state.StartExtinguish();
+                    break;
+                }
+            }
+        }
+        GameManager.instance.missionManager.EndMission(myMission);
+        yield return null;
+    }
+
+    IEnumerator Repress()
+    {
+        MissionManager.Mission myMission = mission;
+        for (int i = 1; i < myMission.blocksFound.Count; i++)
+        {
+            if(myMission.blocksFound[i].states.ContainsKey(State.OnRiot))
+            {
+                OnRiot state = myMission.blocksFound[i].states[State.OnRiot] as OnRiot;
+                if(!state.isBeingRepressed)
+                {
+                    state.StartRepress();
+                    break;
+                }
+            }
+        }
+        GameManager.instance.missionManager.EndMission(myMission);
+        yield return null;
+    }
+
+    IEnumerator Repair() 
+    {
+        MissionManager.Mission myMission = mission;
+        for (int i = 1; i < myMission.blocksFound.Count; i++)
+        {
+            if(myMission.blocksFound[i].states.ContainsKey(State.Damaged))
+            {
+                Damaged state = myMission.blocksFound[i].states[State.Damaged] as Damaged;
+                if(!state.isBeingRepaired)
+                {
+                    state.StartRepair();
+                    break;
+                }
+            }
         }
         GameManager.instance.missionManager.EndMission(myMission);
         yield return null;

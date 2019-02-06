@@ -212,7 +212,7 @@ public class MissionManager : MonoBehaviour {
             if (myMission.blocksFound.Count > 0)
             {
                 GameManager.instance.missionCallbackManager.mission = myMission;
-                GameManager.instance.missionCallbackManager.StartCoroutine(callback);
+                if(callback != "") GameManager.instance.missionCallbackManager.StartCoroutine(callback);
             }
             else
             {
@@ -223,7 +223,7 @@ public class MissionManager : MonoBehaviour {
     }
 
     //Renvoit une liste des blockLink adjacents à une position
-    List<Block> CheckAdjacentBlocks(Vector3Int position, Mission myMission)
+    public List<Block> CheckAdjacentBlocks(Vector3Int position, Mission myMission)
     {
         List<Block> blocksFound = new List<Block>();
 
@@ -277,7 +277,6 @@ public class MissionManager : MonoBehaviour {
 
         return blocksFound;
     }
-
 
     //Renvoit un blockLink à une position donnée, si "onlyBridges" est à true, alors le systeme ne renverra que les blocs aux extrémités des ponts
     Block CheckBlock(Vector3Int initialPos, Vector3Int position, Mission myMission, bool onlyBridges)

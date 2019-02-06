@@ -12,6 +12,8 @@ public class SystemManager : MonoBehaviour {
     public List<FoodProvider> AllFoodProviders = new List<FoodProvider>();
     public List<Spatioport> AllSpatioports = new List<Spatioport>();
     public List<NuisanceGenerator> AllNuisanceGenerators = new List<NuisanceGenerator>();
+    public List<FireRiskGenerator> AllFireRiskGenerators = new List<FireRiskGenerator>();
+
 
     /* FONCTIONNEMENT DU SYSTEME 
      * Système recalculé à chaque déplacement de block : 
@@ -29,6 +31,8 @@ public class SystemManager : MonoBehaviour {
      *      - Job distribution
      *      - Mood
     */
+
+    
 
     // removes a buliding from the system entirely
     public void RemoveBuilding(GameObject target)
@@ -59,8 +63,9 @@ public class SystemManager : MonoBehaviour {
     public IEnumerator OnNewCycle()
     {
         GameManager.instance.populationManager.OnNewCycle();
-        
-        foreach (Block block in AllBlocks)
+        GameManager.instance.cityManager.OnNewCycle();
+
+        foreach (Block block in AllBlocks.ToArray())
         {
             block.OnNewCycle();
         }
@@ -71,6 +76,8 @@ public class SystemManager : MonoBehaviour {
         RefreshConsumptionModifiers();
         RefreshFlagModifiers();
         RefreshTempFlags();
+        RefreshTempFlagDestroyers();
+        RefreshFireRiskModifiers();
 
         yield return StartCoroutine(OnNewMicrocycle());
         yield return null;
@@ -80,6 +87,12 @@ public class SystemManager : MonoBehaviour {
     public IEnumerator OnNewMicrocycle()
     {
         GameManager.instance.populationManager.OnNewMicrocycle();
+
+        // ToArray() is to prevent foreach errors by copying the AllBlocks array
+        foreach (Block block in AllBlocks.ToArray())
+        {
+            if(block != null) block.OnNewMicroycle();
+        }
 
         yield return StartCoroutine(UpdateHousesInformations());
         yield return StartCoroutine(RecalculateFoodConsumption());
@@ -94,12 +107,18 @@ public class SystemManager : MonoBehaviour {
     //S'execute à chaques fois qu'un bloc est déplacé dans la grille
     public IEnumerator OnGridUpdate()
     {
+        foreach (Block block in AllBlocks.ToArray())
+        {
+            if(block != null) block.OnGridUpdate();
+        }
+
         StopAllCoroutines();
         yield return StartCoroutine(RecalculateSpatioportInfluence());
         yield return new WaitForSeconds(0.5f); //Clumsy, à changer rapidement, la propagation doit s'effectuer une fois que le spatioport a tout mis à jour
         yield return StartCoroutine(RecalculatePropagation());
         yield return StartCoroutine(RecalculateNuisance());
         yield return StartCoroutine(UpdateOverlay());
+        yield return StartCoroutine(RecalculateFireRisks());
     }
 
     public IEnumerator UpdateOverlay()
@@ -144,7 +163,7 @@ public class SystemManager : MonoBehaviour {
     {
         foreach (Block block in AllBlocks)
         {
-            if (block.isConsideredDisabled && block.GetComponent<Spatioport>() == null)
+            if (block.isConsideredDisabled && block.GetComponent<Spatioport>() == null && block.scheme.relyOnSpatioport)
             {
                 block.Pack();
             }
@@ -170,6 +189,27 @@ public class SystemManager : MonoBehaviour {
         }
     }
 
+    public void RefreshTempFlagDestroyers()
+    {
+        foreach (Block block in AllBlocks)
+        {
+            List<TempFlagDestroyer> newTempFlagDestroyerList = new List<TempFlagDestroyer>();
+            foreach (TempFlagDestroyer tempFlagDestroyer in block.tempFlagDestroyers)
+            {
+                tempFlagDestroyer.cyclesRemaining--;
+                if (tempFlagDestroyer.cyclesRemaining == 0)
+                {
+                    //Recreate the flag
+                    GameManager.instance.flagReader.ReadFlag(block, tempFlagDestroyer.flagInformations);
+                }
+                else
+                {
+                    newTempFlagDestroyerList.Add(tempFlagDestroyer);
+                }
+            }
+            block.tempFlagDestroyers = newTempFlagDestroyerList;
+        }
+    }
 
     //Remove 1 cycle on each notationModifier duration
     public void RefreshNotationModifiers()
@@ -190,6 +230,22 @@ public class SystemManager : MonoBehaviour {
         }
     }
 
+    public void RefreshFireRiskModifiers()
+    {
+        foreach (Block block in AllBlocks)
+        {
+            List<FireRiskModifier> newFireRiskModifiers = new List<FireRiskModifier>();
+            foreach (FireRiskModifier fireRiskModifier in block.fireRiskModifiers)
+            {
+                fireRiskModifier.cyclesRemaining--;
+                if (fireRiskModifier.cyclesRemaining != 0)
+                {
+                    newFireRiskModifiers.Add(fireRiskModifier);
+                }
+            }
+            block.fireRiskModifiers = newFireRiskModifiers;
+        }
+    }
 
     //Remove 1 cycle on each foodmodifiers
     public void RefreshFoodModifiers()
@@ -279,6 +335,17 @@ public class SystemManager : MonoBehaviour {
         yield return null;
     }
 
+    public IEnumerator RecalculateFireRisks()
+    {
+        StartCoroutine(ResetFireRisks());
+        yield return new WaitForEndOfFrame();
+        foreach (FireRiskGenerator fg in AllFireRiskGenerators)
+        {
+            fg.Invoke("GenerateFireRisks", 0f);
+        }
+        yield return null;
+    }
+
     public IEnumerator RecalculateHabitation(float x)
     {
         StartCoroutine(ResetHabitation());
@@ -297,17 +364,20 @@ public class SystemManager : MonoBehaviour {
             {
                 if (house.affectedCitizen[i].jobless == true)
                 {
-                    foreach (Occupator occupator in house.occupatorsInRange)
+                    foreach (Occupator occupator in house.occupatorsInRange.ToArray())
                     {
-                        if (occupator.affectedCitizen.Count < occupator.slots && !occupator.affectedCitizen.Contains(house.affectedCitizen[i]))
+                        if(occupator != null)
                         {
-                            foreach (Population acceptedPop in occupator.acceptedPopulation)
+                            if (occupator.affectedCitizen.Count < occupator.slots && !occupator.affectedCitizen.Contains(house.affectedCitizen[i]))
                             {
-                                if (house.affectedCitizen[i].type == acceptedPop)
+                                foreach (Population acceptedPop in occupator.acceptedPopulation)
                                 {
-                                    occupator.affectedCitizen.Add(house.affectedCitizen[i]);
-                                    house.affectedCitizen[i].jobless = false;
-                                    yield return null;
+                                    if (house.affectedCitizen[i].type == acceptedPop)
+                                    {
+                                        occupator.affectedCitizen.Add(house.affectedCitizen[i]);
+                                        house.affectedCitizen[i].jobless = false;
+                                        yield return null;
+                                    }
                                 }
                             }
                         }
@@ -321,10 +391,13 @@ public class SystemManager : MonoBehaviour {
     public IEnumerator RecalculateOccupators()
     {
         StartCoroutine(ResetOccupators());
-        foreach (Occupator occupator in AllOccupators)
+        foreach (Occupator occupator in AllOccupators.ToArray())
         {
-            occupator.Invoke("GenerateOccupations", 0f);
-            yield return new WaitForEndOfFrame();
+            if(occupator != null)
+            {
+                occupator.GenerateOccupations();
+                yield return new WaitForEndOfFrame();
+            }
         }
         yield return null;
     }
@@ -332,20 +405,27 @@ public class SystemManager : MonoBehaviour {
     public IEnumerator RecalculateFoodConsumption()
     {
         StartCoroutine(ResetFoodConsumption());
-        foreach (FoodProvider foodProvider in AllFoodProviders)
+        foreach (FoodProvider foodProvider in AllFoodProviders.ToArray())
         {
-            foodProvider.Invoke("GenerateFood", 0f);
-            yield return new WaitForEndOfFrame();
+            if(foodProvider != null)
+            {
+                foodProvider.GenerateFood();
+                yield return new WaitForEndOfFrame();
+            }
+
         }
     }
 
     public IEnumerator RecalculatePropagation()
     {
         yield return StartCoroutine(ResetBlocksPower());
-        foreach (Generator generator in AllGenerators)
+        foreach (Generator generator in AllGenerators.ToArray())
         {
-            generator.Invoke("GenerateEnergy", 0f);
-            yield return new WaitForEndOfFrame();
+            if(generator != null)
+            {
+                generator.GenerateEnergy();
+                yield return new WaitForEndOfFrame();
+            }
         }
         yield return null;
     }
@@ -353,10 +433,13 @@ public class SystemManager : MonoBehaviour {
     public IEnumerator RecalculateSpatioportInfluence()
     {
         StartCoroutine(ResetSpatioportInfluence());
-        foreach (Spatioport spatioport in AllSpatioports)
+        foreach (Spatioport spatioport in AllSpatioports.ToArray())
         {
-            spatioport.Invoke("OnBlockUpdate", 0f);
-            yield return new WaitForEndOfFrame();
+            if(spatioport != null)
+            {
+                spatioport.OnBlockUpdate();
+                yield return new WaitForEndOfFrame();
+            }
         }
         yield return null;
     }
@@ -366,7 +449,7 @@ public class SystemManager : MonoBehaviour {
         StartCoroutine(ResetNuisance());
         foreach (NuisanceGenerator nuisanceGenerator in AllNuisanceGenerators)
         {
-            nuisanceGenerator.Invoke("GenerateNuisance", 0f);
+            nuisanceGenerator.GenerateNuisance();
             yield return new WaitForEndOfFrame();
         }
         yield return null;
@@ -380,6 +463,16 @@ public class SystemManager : MonoBehaviour {
         {
             block.isConsideredUnpowered = true;
             block.ChangePower(0);
+        }
+        yield return null;
+    }
+
+    IEnumerator ResetFireRisks()
+    {
+        Logger.Debug("Resetting fire risks");
+        foreach (Block block in AllBlocks)
+        {
+            block.fireRiskPercentage = 0;
         }
         yield return null;
     }
