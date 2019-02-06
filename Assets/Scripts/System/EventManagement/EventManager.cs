@@ -142,7 +142,10 @@ public class EventManager : MonoBehaviour {
 
     public void ReadAndExecute(string eventScript)
     {
-        interpreter.MakeEvent(eventScript).Execute();
+        GameAction action = interpreter.MakeEvent(eventScript);
+        if (action != null) {
+            action.Execute();
+        }
     }
     
     public void TriggerEvent(int id)
