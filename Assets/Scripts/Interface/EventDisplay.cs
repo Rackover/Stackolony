@@ -68,9 +68,11 @@ public class EventDisplay : MonoBehaviour {
             Text txt = button.GetComponentInChildren<Text>();
             Tooltip tt = button.GetComponentInChildren<Tooltip>();
 
-            txt.text = loc.GetLine(gameAction.Key + ":" + gameEvent.id, "choice");
+            txt.text = loc.GetLine("event"+gameEvent.id + "_" + gameAction.Key, "choice");
             tt.isFirstLineBold = false;
-            foreach (EventManager.GameEffect action in gameAction.Value.GetGameEffects()) {
+
+            List<EventManager.GameEffect> fxs = gameAction.Value.GetGameEffects();
+            foreach (EventManager.GameEffect action in fxs) {
                 if (action.intention.Length <= 0) {
                     continue;
                 }
@@ -83,9 +85,22 @@ public class EventDisplay : MonoBehaviour {
                     )
                 );
             }
+            if (fxs.Count <= 0) {
+                tt.AddLocalizedLine(
+                    new Localization.Line(
+                        "scriptAction",
+                        "none"
+                    )
+                );
+            }
 
             buttonComponent.onClick.AddListener(delegate {
-                gameEvent.ExecuteChoice(gameAction.Key);
+                try {
+                    gameEvent.ExecuteChoice(gameAction.Key);
+                }
+                catch (System.Exception e) {
+                    Logger.Error("Skipped event error : " + e.Message + ". This should NOT happen. Check the event syntax on.");
+                }
                 subWindow.SetActive(false);
                 if (GameManager.instance.player.options.GetBool(Options.Option.animatedCitizens)) {
                     displayer.Unstage();

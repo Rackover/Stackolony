@@ -205,7 +205,7 @@ public class GameManager : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.Delete)) {
-            eventManager.TriggerEvent(1);
+            eventManager.TriggerEvent(9);
         }
 
         // Pause

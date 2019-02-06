@@ -258,6 +258,11 @@ public class EventInterpreter
                 new EventManager.GameEffect(delegate { }, fx.intention, fx.parameters) { ttColor = fx.ttColor }
             );
         }
+        if (chanceBlock.Count <= 0) {
+            blockEffects.Add(
+                new EventManager.GameEffect(delegate { }, "none")
+            );
+        }
 
         blockEffects.Add(
             new EventManager.GameEffect(delegate { },
@@ -271,8 +276,13 @@ public class EventInterpreter
                 new EventManager.GameEffect(delegate { }, fx.intention, fx.parameters) { ttColor = fx.ttColor}
             );
         }
-        
-        
+        if (elseBlock.Count <= 0) {
+            blockEffects.Add(
+                new EventManager.GameEffect(delegate { }, "none")
+            );
+        }
+
+
         // Unique delegate that will roll the dice
         blockEffects[0].SetAction(
             delegate {
