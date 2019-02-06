@@ -29,6 +29,8 @@ public class GridManagement : MonoBehaviour
     public Vector3Int gridSize; //Nombre de cases sur le terrain
     private GameObject gridGameObject; //GameObject contenant la grille
 
+    public List<Vector2Int> buildablePositions = new List<Vector2Int>(); // List des positions disponible pour poser des block par rapport au terrain
+
     
     public enum blockType{ FREE = 0, BRIDGE = 1}
 
@@ -46,6 +48,26 @@ public class GridManagement : MonoBehaviour
         gridSize.z = Mathf.RoundToInt(myTerrain.terrainData.size.z / cellSize.z);
         gridSize.y = maxHeight;
         GenerateGrid();
+        GenerateBuildablePositions();
+    }
+
+    private void GenerateBuildablePositions()
+    {
+        for(int x = 0; x < grid.GetLength(0); x++)
+        {
+            for(int z = 0; z < grid.GetLength(2); z++)
+            {
+                if(myTerrain.SampleHeight(IndexToWorldPosition(new Vector3Int(x, 0, z))) > minHeight)
+                {
+                    buildablePositions.Add(new Vector2Int(x, z));
+                }
+            }
+        }
+    }
+
+    public Vector2Int GetRandomCoordinates()
+    {
+        return buildablePositions[Mathf.FloorToInt(buildablePositions.Count*UnityEngine.Random.value)];
     }
 
     private void GenerateGrid() //Fonction pour générer la grille sur le terrain
@@ -162,27 +184,6 @@ public class GridManagement : MonoBehaviour
                 (int)Mathf.Round((position.z - cellSize.z / 2) / cellSize.z)
         );
         return output;
-    }
-
-    public Vector3Int GetRandomCoordinates()
-    {
-        Vector3Int coordinates = Vector3Int.zero;
-        while(true)
-        {
-            coordinates = new Vector3Int(UnityEngine.Random.Range(0, gridSize.x), gridSize.y, UnityEngine.Random.Range(0, gridSize.z));
-
-            //Position en Y des coordonnées au sol données
-            float worldY = myTerrain.SampleHeight(IndexToWorldPosition(new Vector3Int(coordinates.x, 0, coordinates.z)));
-            // Index de Y
-            int y = WorldPositionToIndex(new Vector3(coordinates.x, worldY + cellSize.y / 2, coordinates.y)).y;
-
-            coordinates.y = y;
-            if(coordinates.y > GameManager.instance.gridManagement.minHeight)
-            {
-                if(grid[coordinates.x, coordinates.y, coordinates.z] == null) break;
-            }
-        }
-        return coordinates;
     }
 
     //Update a block so he touch the ground or the first block encountered (Like if gravity was applied to it)

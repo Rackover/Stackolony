@@ -72,15 +72,15 @@ public class ConsequencesManager : MonoBehaviour {
     //Spawn a X blocks at a random location, choose a random block if no blockID is specified
     static public void SpawnBlocksAtRandomLocation(int amount, int blockID = -1)
     {
-        Vector3Int location = GameManager.instance.gridManagement.GetRandomCoordinates();
+        Vector2Int location = GameManager.instance.gridManagement.GetRandomCoordinates();
         GameManager.instance.StartCoroutine(SpawnBlocksAtLocationC(amount, blockID, location));
     }
 
-    static public void SpawnBlocksAtLocation(int amount, int blockID, Vector3Int location)
+    static public void SpawnBlocksAtLocation(int amount, int blockID, Vector2Int location)
     {
         GameManager.instance.StartCoroutine(SpawnBlocksAtLocationC(amount, blockID, location));
     }
-    static IEnumerator SpawnBlocksAtLocationC(int amount, int blockID, Vector3Int location)
+    static IEnumerator SpawnBlocksAtLocationC(int amount, int blockID, Vector2Int location)
     {
         location.y = GameManager.instance.gridManagement.gridSize.y - 1;
         for (int i = 0; i < amount; i++)
@@ -89,11 +89,11 @@ public class ConsequencesManager : MonoBehaviour {
             if (blockID < 0)
             {
                 int randomID = GameManager.instance.library.GetRandomBlock().ID;
-                GameManager.instance.gridManagement.LayBlock(randomID, new Vector2Int(location.x, location.z));
+                GameManager.instance.gridManagement.LayBlock(randomID, new Vector2Int(location.x, location.y));
             }
             else
             {
-                GameManager.instance.gridManagement.LayBlock(blockID, new Vector2Int(location.x, location.z));
+                GameManager.instance.gridManagement.LayBlock(blockID, new Vector2Int(location.x, location.y));
             }
         }
         yield return null;

@@ -276,7 +276,6 @@ public class Block : MonoBehaviour
 
     public void ToggleVisuals(bool on)
     {
-        Debug.Log(on);
         if(visuals != null && effects != null) 
         {
             if (!on) 

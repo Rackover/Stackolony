@@ -448,7 +448,7 @@ public class EventInterpreter {
                 int amount = System.Convert.ToInt32(GetArgument(args, "amount"));
                 Vector3Int position = new ObjectPosition(GetArgument(args, "position")).ToVector3Int();
 
-                ConsequencesManager.SpawnBlocksAtLocation(amount, scheme.ID, position);
+                ConsequencesManager.SpawnBlocksAtLocation(amount, scheme.ID, new Vector2Int(position.x, position.z));
             }
         );
         actionFunctions.Add(
