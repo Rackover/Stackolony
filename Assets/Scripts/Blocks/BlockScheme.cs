@@ -24,7 +24,7 @@ public class BlockScheme : ScriptableObject
 	[Tooltip("Power usage of the block")]
 	public int consumption = 1;
 	[Tooltip("Sensibility of the block towards Nuisance")]
-	public float sensibility = 1;
+	public int sensibility = 1;
 
 	[Header("Tags")]
 

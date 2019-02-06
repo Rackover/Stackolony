@@ -122,7 +122,7 @@ public class MissionCallbackManager : MonoBehaviour
         {
             int distanceToCenter = myMission.blockDistanceToCenter[i] + 1;
             if (distanceToCenter > linkedGenerator.amount) distanceToCenter = linkedGenerator.amount; //In case the range is
-            myMission.blocksFound[i].nuisance += linkedGenerator.amount - myMission.blockDistanceToCenter[i] + 1; //+1 because the first block doesn't count
+            myMission.blocksFound[i].UpdateNuisance(linkedGenerator.amount - myMission.blockDistanceToCenter[i] + 1); //+1 because the first block doesn't count
         }
         GameManager.instance.missionManager.EndMission(myMission);
         yield return null;

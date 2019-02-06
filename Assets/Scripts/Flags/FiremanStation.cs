@@ -4,18 +4,26 @@ using UnityEngine;
 
 public class FiremanStation : Flag, Flag.IFlag
 {
-	[Header("Policeman")]
+	[Header("FiremanStation")]
 	public int range;
 	public bool selecting;
 	public List<Block> targets = new List<Block>();
 	public List<Extinctor> extinctors = new List<Extinctor>();
-	/*
-	override public void Use()
+   public int nuisanceImpact;
+
+    override public void Use()
 	{
 		selecting = true;
 	}
 
-	override public void OnNewCycle()
+    override public void UpdateNuisanceImpact()
+    {
+        range += nuisanceImpact;
+        nuisanceImpact = block.nuisance * block.scheme.sensibility;
+        range -= nuisanceImpact;
+    }
+
+    override public void OnNewCycle()
 	{
 		foreach(Block target in targets)
 		{
