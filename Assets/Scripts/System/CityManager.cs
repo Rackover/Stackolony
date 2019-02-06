@@ -88,12 +88,12 @@ public class CityManager : MonoBehaviour {
 
 	public void SpawnMine()
 	{
-		GameManager.instance.gridManagement.SpawnBlock(10, GameManager.instance.gridManagement.GetRandomCoordinates()).GetComponent<Block>().LoadBlock();
+		GameManager.instance.gridManagement.SpawnBlock(10, GameManager.instance.gridManagement.GetRandomCoordinates());
 	}
 
 	public void SpawnNest()
 	{
-		GameManager.instance.gridManagement.SpawnBlock(12, GameManager.instance.gridManagement.GetRandomCoordinates()).GetComponent<Block>().LoadBlock();
+		GameManager.instance.gridManagement.SpawnBlock(12, GameManager.instance.gridManagement.GetRandomCoordinates());
 	}
 
 	public void OnNewCycle()

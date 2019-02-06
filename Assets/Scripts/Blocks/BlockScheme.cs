@@ -11,6 +11,8 @@ public class BlockScheme : ScriptableObject
     public bool isDestroyable = true;
     public bool isBuyable = true;
     public bool canBuildAbove = true;
+	public bool relyOnSpatioport = true;
+	public bool fireProof = false;
 
 	[Header("Datas")]
 

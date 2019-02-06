@@ -13,7 +13,7 @@ public class Damaged : StateBehavior
     {
         disabler = true;
         base.Start();
-
+        block.RemoveState(State.Unpowered);
         block.effects.Activate(GameManager.instance.library.damagedParticle);
         block.visuals.NewVisual(GameManager.instance.library.ruinPrefab);
         block.Disable();

@@ -35,7 +35,9 @@ public class StateBehavior : MonoBehaviour
 	virtual public void OnNewCycle() {}
 
 	// When a new Microcycle start
-	virtual public void OnNewMicrocycle() {}
+	virtual public void OnNewMicrocycle() {
+
+	}
 
 	virtual public void OnGridUpdate() {}
 }

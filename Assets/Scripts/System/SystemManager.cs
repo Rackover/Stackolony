@@ -162,7 +162,7 @@ public class SystemManager : MonoBehaviour {
     {
         foreach (Block block in AllBlocks)
         {
-            if (block.isConsideredDisabled && block.GetComponent<Spatioport>() == null)
+            if (block.isConsideredDisabled && block.GetComponent<Spatioport>() == null && block.scheme.relyOnSpatioport)
             {
                 block.Pack();
             }

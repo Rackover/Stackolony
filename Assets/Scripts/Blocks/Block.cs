@@ -55,6 +55,8 @@ public class Block : MonoBehaviour
         {
             container.CloseContainer();
         }
+
+        ToggleVisuals(false);
     }
 
     public void UnPack()
@@ -65,6 +67,8 @@ public class Block : MonoBehaviour
         {
             container.OpenContainer();
         }
+
+        ToggleVisuals(true);
     }
 
     //Called when block isn't in range of a spatioport
@@ -81,16 +85,18 @@ public class Block : MonoBehaviour
 
     public void TestFireRisks()
     {
-        int totalFireChances = fireRiskPercentage;
-        foreach (FireRiskModifier fireRiskModifier in fireRiskModifiers)
-        {
-            totalFireChances += fireRiskModifier.amountInPercent;
-        }
-        int random = UnityEngine.Random.Range(0, 100);
-        if (totalFireChances >= random)
-        {
-            //Set block in fire
-            AddState(State.OnFire);
+        if (!scheme.fireProof) {
+            int totalFireChances = fireRiskPercentage;
+            foreach (FireRiskModifier fireRiskModifier in fireRiskModifiers)
+            {
+                totalFireChances += fireRiskModifier.amountInPercent;
+            }
+            int random = UnityEngine.Random.Range(0, 100);
+            if (totalFireChances > random)
+            {
+                //Set block in fire
+                AddState(State.OnFire);
+            }
         }
     } 
 
@@ -182,7 +188,7 @@ public class Block : MonoBehaviour
         foreach (Flag flag in activeFlags.ToArray()){ flag.OnNewCycle(); }
         foreach (KeyValuePair<State, StateBehavior> state in new Dictionary<State, StateBehavior>(states))
         {
-            state.Value.OnNewMicrocycle();
+            state.Value.OnNewCycle();
         }
     }
 
@@ -240,6 +246,7 @@ public class Block : MonoBehaviour
         }
 
         Enable();
+        UpdateName();
     }
 
     public void UnloadBlock()
@@ -269,6 +276,7 @@ public class Block : MonoBehaviour
 
     public void ToggleVisuals(bool on)
     {
+        Debug.Log(on);
         if(visuals != null && effects != null) 
         {
             if (!on) 
@@ -325,7 +333,7 @@ public class Block : MonoBehaviour
 
     public void UpdateName()
     {
-        gameObject.name = "BlockScheme[" + gridCoordinates.x + ";" + gridCoordinates.y + ";" + gridCoordinates.z + "]";
+        gameObject.name = scheme.name + "[" + gridCoordinates.x + ";" + gridCoordinates.y + ";" + gridCoordinates.z + "]";
     }
 
     /// <summary>

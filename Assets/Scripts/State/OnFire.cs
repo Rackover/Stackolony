@@ -35,13 +35,11 @@ public class OnFire : StateBehavior
     public void CancelExtinguish()
     {
         isBeingExtinguished = false;
-
         if(block != null) block.effects.Desactivate(GameManager.instance.library.extinguishParticle);
     }
 
     public override void OnNewMicrocycle()
     {
-        base.OnNewMicrocycle();
         if(!isBeingExtinguished)
         {
             Spread();
@@ -55,6 +53,7 @@ public class OnFire : StateBehavior
 
     public void Spread()
     {
+        Debug.Log(block);
         block = GetComponent<Block>();
         FireManager.Spread(this);
 
