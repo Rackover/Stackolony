@@ -15,6 +15,7 @@ public class EventDisplay : MonoBehaviour {
     public Color goodColor = Color.green;
     public Color badColor = Color.red;
 
+    public Text advisorName;
     public Text title;
     public Text description;
     public RawImage preview;
@@ -50,8 +51,17 @@ public class EventDisplay : MonoBehaviour {
             preview.gameObject.GetComponent<AspectRatioFitter>().aspectRatio = 1f;
         }
 
-        title.text = loc.GetLine("event" + gameEvent.id, "eventTitle");
-        description.text = loc.GetLine("event" + gameEvent.id, "eventDescription");
+        // ADvisor name
+        PopulationManager popMan = GameManager.instance.populationManager;
+        string name = popMan.GetRandomName();
+        if (popMan.populations[pop].citizens.Count > 0) {
+            name = popMan.populations[pop].citizens[Mathf.FloorToInt(popMan.populations[pop].citizens.Count * Random.value)].name;
+        }
+        loc.SetCategory("populationTypeDelegate");
+        advisorName.text = loc.GetLine(pop.codeName, name);
+
+        title.text = loc.GetLineFromCategory("eventTitle", "event" + gameEvent.id);
+        description.text = loc.GetLineFromCategory("eventDescription", "event" + gameEvent.id);
     }
 
     public void InitializeButtons()
@@ -68,7 +78,7 @@ public class EventDisplay : MonoBehaviour {
             Text txt = button.GetComponentInChildren<Text>();
             Tooltip tt = button.GetComponentInChildren<Tooltip>();
 
-            txt.text = loc.GetLine("event"+gameEvent.id + "_" + gameAction.Key, "choice");
+            txt.text = loc.GetLineFromCategory("choice", "event" +gameEvent.id + "_" + gameAction.Key);
             tt.isFirstLineBold = false;
 
             List<EventManager.GameEffect> fxs = gameAction.Value.GetGameEffects();
@@ -94,6 +104,7 @@ public class EventDisplay : MonoBehaviour {
                 );
             }
 
+            // On choice click
             buttonComponent.onClick.AddListener(delegate {
                 try {
                     gameEvent.ExecuteChoice(gameAction.Key);
