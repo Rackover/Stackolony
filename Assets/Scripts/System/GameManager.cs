@@ -210,7 +210,7 @@ public class GameManager : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.Delete)) {
-            eventManager.TriggerEvent(9);
+            eventManager.TriggerEvent(1000);
         }
 
         // Pause
