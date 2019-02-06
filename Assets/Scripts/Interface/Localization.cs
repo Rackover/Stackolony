@@ -151,7 +151,12 @@ public class Localization : MonoBehaviour {
         }
         catch(KeyNotFoundException e) {
             Logger.Error("Could not load line "+ currentCategory+":"+ id);
-            return "[LOC:" + currentCategory + "=>" + id+"]";
+            return "[LOC:" + currentCategory + ":" + id+"]";
+        }
+        catch(FormatException fe)
+        {
+            Logger.Error("Line : " + id + " in " + currentCategory + " category has too much parameters.");
+            return "[LOC:" + currentCategory + ":" + id+"] TOO MUCH PARAMS";
         }
     }
 
