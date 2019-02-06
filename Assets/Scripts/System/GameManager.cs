@@ -335,12 +335,14 @@ public class GameManager : MonoBehaviour
         temporality.SetTimeOfDay(20);
         temporality.SetTimeScale(1);
         
-        cityManager.GenerateEnvironmentBlocks();
+        
 
         // Initialize only
         gridManagement.InitializeGridManager();
         cinematicManager.GetReferences();
         timelineController.LoadCycles();
+
+        cityManager.GenerateEnvironmentBlocks();
 
         // NEW GAME ONLY
         if (isNewGame) {

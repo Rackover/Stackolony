@@ -34,27 +34,17 @@ public class GridManagement : MonoBehaviour
 
     private void Start()
     {
-        gameManager = FindObjectOfType<GameManager>();
-
-        if (!gameManager.IsInGame()) {
-            return;
-        }
-
-        InitializeGridManager();
+        if (!gameManager.IsInGame()){return;}
     }
 
     public void InitializeGridManager()
     {
-        //Recuperation du terrain
-        if (myTerrain == null) {
-            myTerrain = FindObjectOfType<Terrain>();
-        }
-
+        gameManager = FindObjectOfType<GameManager>();
+        myTerrain = FindObjectOfType<Terrain>();
         //Initialisation des variables statiques
         gridSize.x = Mathf.RoundToInt(myTerrain.terrainData.size.x / cellSize.x);
         gridSize.z = Mathf.RoundToInt(myTerrain.terrainData.size.z / cellSize.z);
         gridSize.y = maxHeight;
-
         GenerateGrid();
     }
 
@@ -177,24 +167,19 @@ public class GridManagement : MonoBehaviour
     public Vector3Int GetRandomCoordinates()
     {
         Vector3Int coordinates = Vector3Int.zero;
-        while(0 == 0)
+        while(true)
         {
             coordinates = new Vector3Int(UnityEngine.Random.Range(0, gridSize.x), gridSize.y, UnityEngine.Random.Range(0, gridSize.z));
 
             //Position en Y des coordonnées au sol données
-            float worldY =
-                myTerrain.SampleHeight(
-                    IndexToWorldPosition(
-                        new Vector3Int(coordinates.x, 0, coordinates.z)
-                    )
-                );
+            float worldY = myTerrain.SampleHeight(IndexToWorldPosition(new Vector3Int(coordinates.x, 0, coordinates.z)));
             // Index de Y
             int y = WorldPositionToIndex(new Vector3(coordinates.x, worldY + cellSize.y / 2, coordinates.y)).y;
 
             coordinates.y = y;
-            if (coordinates.y > GameManager.instance.gridManagement.minHeight)
+            if(coordinates.y > GameManager.instance.gridManagement.minHeight)
             {
-                break;
+                if(grid[coordinates.x, coordinates.y, coordinates.z] == null) break;
             }
         }
         return coordinates;
