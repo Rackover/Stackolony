@@ -28,6 +28,7 @@ public class PoliceStation : Flag, Flag.IFlag
         range += nuisanceImpact;
         nuisanceImpact = block.nuisance * block.scheme.sensibility;
         range -= nuisanceImpact;
+    }
 
     public string GetFlagDatas()
     {

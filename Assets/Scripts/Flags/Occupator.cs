@@ -24,9 +24,10 @@ public class Occupator : Flag, Flag.IFlag
     override public void UpdateNuisanceImpact()
     {
         slots += nuisanceImpact;
-        nuisanceImpact = Mathf.FloorToInt(slots * (block.nuisance * block.scheme.sensibility * 10)/100);
+        nuisanceImpact = Mathf.FloorToInt(slots * (block.nuisance * block.scheme.sensibility * 10) / 100);
         slots -= nuisanceImpact;
-        
+    }
+
     public override void Enable()
     {
         base.Enable();
