@@ -347,7 +347,7 @@ public class GameManager : MonoBehaviour
         gridManagement.InitializeGridManager();
         cinematicManager.GetReferences();
         timelineController.LoadCycles();
-        DifferStart(delegate { eventManager.LoadEvents(); }, 1f);
+        DifferStart(delegate { eventManager.LoadEvents(); });
 
         // NEW GAME ONLY
         if (isNewGame) {
@@ -385,14 +385,14 @@ public class GameManager : MonoBehaviour
         inGame = false;
     }
 
-    void DifferStart(System.Action action, float seconds)
+    void DifferStart(System.Action action)
     {
-        StartCoroutine(ExecuteInSeconds(action, seconds));
+        StartCoroutine(ExecuteAfterFrame(action));
     }
 
-    IEnumerator ExecuteInSeconds(System.Action action, float seconds)
+    IEnumerator ExecuteAfterFrame(System.Action action)
     {
-        yield return new WaitForSeconds(seconds);
+        yield return new WaitForEndOfFrame();
         action.Invoke();
         yield return true;
     }
