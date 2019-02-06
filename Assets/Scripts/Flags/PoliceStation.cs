@@ -6,6 +6,12 @@ public class PoliceStation : Flag, Flag.IFlag
 {
     [Header("Police Behavior")]
 	public int range;
+    public int nuisanceImpact;
+
+    public override void Awake()
+    {
+        base.Awake();
+    }
 
 	public override void OnGridUpdate()
 	{
@@ -13,7 +19,18 @@ public class PoliceStation : Flag, Flag.IFlag
 		if(!isEnabled) return;
 		GameManager.instance.missionManager.StartMission(block.gridCoordinates, "Repress", range);
 	}
-
+  
     public System.Type GetFlagType() { return GetType(); }
-    public string GetFlagDatas() { return "PoliceStation_" + range; }
+
+
+    override public void UpdateNuisanceImpact()
+    {
+        range += nuisanceImpact;
+        nuisanceImpact = block.nuisance * block.scheme.sensibility;
+        range -= nuisanceImpact;
+
+    public string GetFlagDatas()
+    {
+        return "PoliceStation_" + range;
+    }
 }

@@ -28,6 +28,7 @@ public class Generator : Flag, Flag.IFlag
         }
     }
 
+
     public override void OnDestroy()
     {
         Disable();
