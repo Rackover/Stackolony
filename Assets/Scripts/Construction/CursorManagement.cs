@@ -44,6 +44,7 @@ public class CursorManagement : MonoBehaviour
     private GameObject hoveredBlock;
     private GameObject stackSelector; //La petite fléche qui se met au pied de la tour qu'on selectionne
     [System.NonSerialized] public bool canSwitchTools = true;
+    public bool draggingNewBlock = false;
 
     public void InitializeGameCursor()
     {
@@ -540,11 +541,11 @@ public class CursorManagement : MonoBehaviour
 
     public void DuringDrag(Vector3Int _pos)
     {
-        if(selectedBlock != null)
+        if (selectedBlock != null)
         {
-            if(_pos != savedPos)
+            if (_pos != savedPos)
             {
-                if(!isDragging) 
+                if (!isDragging)
                 {
                     isDragging = true;
                     selectedBlock.GetComponent<Collider>().enabled = false;
@@ -558,7 +559,6 @@ public class CursorManagement : MonoBehaviour
             }
         }
     }
-
     public void EndDrag(Vector3Int _pos)
     {
         if (selectedBlock != null && isDragging)
@@ -609,14 +609,19 @@ public class CursorManagement : MonoBehaviour
 
     public void CancelDrag()
     {
-        if(selectedBlock != null && isDragging)
+        if (selectedBlock != null && isDragging)
         {
+            if (draggingNewBlock == true)
+            {
+                GameManager.instance.gridManagement.DestroyBlock(selectedBlock.gridCoordinates);
+            }
+            draggingNewBlock = false;
             if (selectedBlock.GetComponent<Block>() != null)
             {
                 selectedBlock.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(selectedBlock.gridCoordinates);
             } else
             {
-                Destroy(selectedBlock);
+                GameManager.instance.gridManagement.DestroyBlock(selectedBlock.gridCoordinates);
             }
             selectedBlock.boxCollider.enabled = true;
             selectedBlock = null;
