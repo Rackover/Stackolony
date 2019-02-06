@@ -10,7 +10,7 @@ public class BuildingMenuItem : MonoBehaviour {
     bool isBeingDragged = false;
     bool concerned = false;
     bool isLocked = false;
-    GameObject draggingBuilding;
+    Block draggingBuilding;
     GameObject blockPrefab;
     GameObject padlock;
 
@@ -87,40 +87,21 @@ public class BuildingMenuItem : MonoBehaviour {
 
         // Drag
 		if (isBeingDragged && !isLocked) {
-            GameManager.instance.cursorManagement.isDragging = true;
+            GameManager.instance.cursorManagement.selectedBlock = draggingBuilding;
+            GameManager.instance.cursorManagement.draggingNewBlock = true;
+            GameManager.instance.cursorManagement.StartDrag(draggingBuilding);
+
+            isBeingDragged = false;
+            draggingBuilding = null;
             ri.enabled = false;
-            draggingBuilding.transform.position = GameManager.instance.cursorManagement.posInWorld;
-
-            if (Input.GetButtonUp("Select")) {
-                isBeingDragged = false;
-                GameManager.instance.cursorManagement.isDragging = false;
-                Destroy(draggingBuilding);
-
-                if (GameManager.instance.cursorManagement.cursorOnUI) {
-                    return;
-                }
-                if (GameManager.instance.cursorManagement.posInGrid.y >= GameManager.instance.gridManagement.minHeight)
-                {
-                    GameManager.instance.gridManagement.LayBlock(
-                        blockId,
-                        new Vector2Int(
-                            GameManager.instance.cursorManagement.posInGrid.x,
-                            GameManager.instance.cursorManagement.posInGrid.z
-                        )
-                    );
-                }
-            }
-
         }
         else if (!isLocked){
             ri.enabled = true;
 
             if (Input.GetButton("Select") && concerned && !GameManager.instance.cursorManagement.isDragging) {
-                GameManager.instance.cursorManagement.isDragging = true;
                 isBeingDragged = true;
                 if (draggingBuilding == null) {
-                    draggingBuilding = new GameObject("fakeBuildingPreview");
-                    Instantiate(blockPrefab, draggingBuilding.transform).transform.position = new Vector3();
+                    draggingBuilding = GameManager.instance.gridManagement.LayBlock(blockId, new Vector2Int(0, 0));
                 }
             }
         }

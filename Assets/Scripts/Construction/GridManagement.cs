@@ -234,10 +234,12 @@ public class GridManagement : MonoBehaviour
     /// </summary>
     /// <param name="blockId"></param>
     /// <param name="coordinates"></param>
-    public void LayBlock(int blockId, Vector2Int coordinates)
+    public Block LayBlock(int blockId, Vector2Int coordinates)
     {
         GameObject newBlock = SpawnBlock(blockId, new Vector3Int(coordinates.x,gridSize.y-1,coordinates.y));
-        LayBlock(newBlock.GetComponent<Block>(), coordinates);
+        Block b = newBlock.GetComponent<Block>();
+        LayBlock(b, coordinates);
+        return b;
     }
 
     public GameObject SpawnBlock(int blockId, Vector3Int coordinates)
