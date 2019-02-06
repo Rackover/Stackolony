@@ -552,9 +552,9 @@ public class CursorManagement : MonoBehaviour
                 }
                 else
                 {
-                    FindObjectOfType<AnimationManager>().EndElevateTower(new Vector2Int(savedPos.x, savedPos.z));
+                    GameManager.instance.animationManager.EndElevateTower(new Vector2Int(savedPos.x, savedPos.z));
                     savedPos = _pos;
-                    FindObjectOfType<AnimationManager>().ElevateTower(savedPos);
+                    GameManager.instance.animationManager.ElevateTower(savedPos);
                     GameManager.instance.soundManager.Play("Tick");
                     selectedBlock.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(_pos);
                 }
@@ -593,7 +593,15 @@ public class CursorManagement : MonoBehaviour
                 GameManager.instance.gridManagement.UpdateBlocks(selectedBlock.gridCoordinates);
 
                 // Fait tomber le bloc au sol
-                GameManager.instance.gridManagement.LayBlock(selectedBlock, new Vector2Int(_pos.x,_pos.z));
+                if (GameManager.instance.gridManagement.grid[_pos.x, _pos.y, _pos.z] != null)
+                {
+                    GameManager.instance.gridManagement.InsertBlockAtPosition(selectedBlock, _pos);
+                    GameManager.instance.animationManager.EndElevateTower(new Vector2Int(_pos.x, _pos.z),0);
+                }
+                else
+                {
+                    GameManager.instance.gridManagement.LayBlock(selectedBlock, new Vector2Int(_pos.x, _pos.z));
+                }
             } 
             else
             {
@@ -614,6 +622,7 @@ public class CursorManagement : MonoBehaviour
     {
         if (selectedBlock != null && isDragging)
         {
+            GameManager.instance.animationManager.EndElevateTower(new Vector2Int(savedPos.x, savedPos.z), 0);
             if (draggingNewBlock == true)
             {
                 GameManager.instance.gridManagement.DestroyBlock(selectedBlock.gridCoordinates);
