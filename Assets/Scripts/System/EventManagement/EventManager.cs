@@ -136,6 +136,7 @@ public class EventManager : MonoBehaviour {
 
             newEvent.Invoke(events[pick.eventId]);
             eventsPool = newList;
+            chances = 0f;
         }
         else {
             chances += chanceIncreasePerCycle;
