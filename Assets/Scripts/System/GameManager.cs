@@ -354,15 +354,14 @@ public class GameManager : MonoBehaviour
 
         temporality.SetDate(0);
         temporality.SetTimeOfDay(20);
-        temporality.SetTimeScale(1);
-        
-        
+        temporality.SetTimeScale(1);        
 
         // Initialize only
         gridManagement.InitializeGridManager();
         cinematicManager.GetReferences();
         timelineController.LoadCycles();
         DifferStart(delegate { eventManager.LoadEvents(); });
+        systemManager.ClearSystem();
 
         cityManager.GenerateEnvironmentBlocks();
 
@@ -394,6 +393,15 @@ public class GameManager : MonoBehaviour
         cursorManagement.KillGameCursor();
         temporality.SetTimeOfDay(20);
         temporality.SetTimeScale(2);
+
+        // Clear events
+        eventManager.newEvent = null;
+        populationManager.CitizenArrival = null;
+        cursorManagement.CursorError = null;
+
+        // Remove gameevents and citizens
+        populationManager.citizenList.Clear();
+        eventManager.ResetChances();
 
         // Shut down only
         displayerManager.UnstageAll();

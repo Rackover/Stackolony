@@ -50,7 +50,7 @@ public class PopulationManager : MonoBehaviour
 	public float chanceDec = 0.02f;
 
 
-    public event System.Action<int, Population> CitizenArrival;
+    public System.Action<int, Population> CitizenArrival;
     //public Dictionary<Population, List<MoodModifier>> moodModifiers = new Dictionary<Population, List<MoodModifier>>(); //List of every active moodmodifiers for every population
     //private Dictionary<Population, float> averageMoods = new Dictionary<Population, float>();  // average moods between 0 and 1
     List<string> names;

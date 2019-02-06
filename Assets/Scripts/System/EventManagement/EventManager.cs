@@ -36,7 +36,7 @@ public class EventManager : MonoBehaviour {
 
         public void ExecuteChoice(int choice)
         {
-            if (choice >= choices.Count) {
+            if (choice > choices.Count) {
                 return;
             }
 
@@ -90,7 +90,7 @@ public class EventManager : MonoBehaviour {
 
         public void Execute()
         {
-            foreach(GameEffect action in actions) {
+            foreach (GameEffect action in actions) {
                 action.GetAction().Invoke();
             }
         }
@@ -113,6 +113,11 @@ public class EventManager : MonoBehaviour {
         public int minCycle;
         public int eventId;
         public float time;
+    }
+
+    public void ResetChances()
+    {
+        chances = 0f;
     }
 
     public void Renew(int currentCycle)

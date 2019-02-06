@@ -9,7 +9,7 @@ public class CursorManagement : MonoBehaviour
 {
     public enum cursorMode { Default, Build, Delete, Bridge, Move }; //Chaque mode du curseur
 
-    public event Action<string> CursorError;
+    public Action<string> CursorError;
 
     [Header("=== REFERENCIES ===")]
     [Header("Prefabs")]

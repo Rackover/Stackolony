@@ -385,7 +385,8 @@ public class EventInterpreter
 
         return 
             new EventManager.GameEffect(
-                delegate { actionFunctions[funcName](arguments, context); },
+                delegate {
+                    actionFunctions[funcName](arguments, context); },
                 funcName,
                 locArguments
             ) { ttColor = GetDataFunctionPreviewColor(funcName) }

@@ -45,6 +45,16 @@ public class SystemManager : MonoBehaviour {
         AllSpatioports.RemoveAll(o => o.gameObject == target);
     }
 
+    public void ClearSystem()
+    {
+        AllGenerators.Clear();
+        AllBlocksRequiringPower.Clear();
+        AllBlocks.Clear();
+        AllHouses.Clear();
+        AllSpatioports.Clear();
+        AllFoodProviders.Clear();
+    }
+
     //Met à jour tout le système (Only on load)
     public void UpdateSystem()
     {
