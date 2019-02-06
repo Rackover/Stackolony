@@ -376,13 +376,12 @@ public class EventInterpreter
         string[] explodedStatement = ExplodeFunction(statement);
         string funcName = explodedStatement[0];
         string arguments = explodedStatement[1];
-
+        
         if (!actionFunctions.ContainsKey(funcName)) {
             Throw("Unsupported action function \"" + funcName.ToString() + "\". Supported action functions: \n" + string.Join("\n", GetActionFunctions().ToArray())+"");
         }
 
         string[] locArguments = FormatArguments(arguments.Split(','));
-
 
         return 
             new EventManager.GameEffect(
@@ -421,8 +420,11 @@ public class EventInterpreter
         foreach (string paramName in argumentsDisplayOrder) {
             correspondance[paramName] = string.Empty;
         }
-
+        
         foreach (string arg in arguments) {
+            if (arg.Length <= 0) {
+                continue;
+            }
             string paramName = arg.Split(':')[0];
             string paramValue = arg.Split(':')[1];
             string convertedArg = "";

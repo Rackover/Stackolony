@@ -308,4 +308,9 @@
 		ADD_STATE_ON_BUILDING(building:F,state:damaged);
 		</choice>
 	</event>
+	<event id="1000" population="richie" emotion="tired">
+		<choice id="1">
+		GAME_OVER();
+		</choice>
+	</event>
 </eventsDatabase>	

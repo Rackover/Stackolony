@@ -173,7 +173,7 @@
     <bulletin40>A team is preparing</bulletin40>
   </bulletinSubtitle>
   <BulletinText>
-    <bulletin1>Corriger tous les bulletins en anglais-Loan PREVOND</bulletin1>
+    <bulletin1>2019-02-06T00:00:00Corriger tous les bulletins en anglais-Loan PREVOND</bulletin1>
     <bulletin2>Tomorrow, the entire Ho'gonu star system celebrates the 13th commemoration away from their native system! The construction company "Interblok" offers pink buildings to neighbors.</bulletin2>
     <bulletin3>The colony "Ijhin Ksalfa" has just elected its third president, Brust Bracoct. The Senuth community all over the empire is looking forward to seeing one of their more in high positions.</bulletin3>
     <bulletin4>Comet Teklo3 will cross the empire territory from the Versona system to Istafel, resulting in a significant traffic slowdown.</bulletin4>
@@ -185,7 +185,7 @@
     <bulletin10>The famous T27 carrier, containing more than 1 billion settlers and more than 20 million buildings, was hit by space debris, the shock may hit the neighboring planets.</bulletin10>
     <bulletin11>In the Enu'aj Teligg colony of the Ho'gonu star system, Senuths strike. No change in the colony.</bulletin11>
     <bulletin12>The Stello project, which was claimed to be revolutionary, was aborted. The decision was made at the top of the spacepole. The risks of failure were far too big.</bulletin12>
-    <bulletin13>The ambassador and founder of Colony 3 rests on the planet he has served for a century. Here are the last words of the ambassador: "Stack blocks,</bulletin13>
+    <bulletin13>The ambassador and founder of Colony 3 rests on the planet he has served for a century. Here are the last words of the ambassador: "Stack blocks, </bulletin13>
     <bulletin14>The Tchekek Empire claims a stellar system that is part of the US territory. The authorities react by populating the system.</bulletin14>
     <bulletin15>A collaborative project between covridians and Kavgas gives birth to a revolutionary military technology. The Kavga Army is eager to try this new weapon. The rest of the population is more afraid of the consequences than other things.</bulletin15>
     <bulletin16>The death of a star has given birth to a black hole. More than 20 ships have been absorbed by the hole, and the traffic within the territory of the US reaches the red level, and is therefore blocked.</bulletin16>
@@ -261,12 +261,10 @@
     <moodvalue>{0} are {1}</moodvalue>
     <gauge>{0}/{1}</gauge>
     <completion>{0} out of {1}</completion>
-  </stats>
-  <mood>
-    <angry>angry</angry>
+    <mood>angry</mood>
     <bad>unhappy</bad>
     <good>happy</good>
-  </mood>
+  </stats>
   <eventTitle>
     <event1>Dire need</event1>
     <event2>Boring house</event2>
@@ -305,6 +303,7 @@
     <event35>Tutorial 9 : Repairer</event35>
     <event36>Tutorial 10 : Senuths</event36>
     <event37>Tutorial 11 : Stand on its own feet</event37>
+    <event1000>Revolution! Revolution!</event1000>
   </eventTitle>
   <eventDescription>
     <event1>Can we have a cotton candy machine installed in the Relaxing lounge or that one small request is asking too much? It will obviously be specially made for us and not for other breeds because they do not need it. Our well-being must be your priority.</event1>
@@ -340,10 +339,11 @@
     <event31>Hello, spaceport here. Buildings need electricity to operate. As for the settlers, they need food. We can provide some electricity and some food from the spaceport, but not enough for the next comers. The kavga are a warrior race that will not like not having enough food. Please order a food distributor and a fire station so that they can exercise their ... Work. They will be able to live in average homes.</event31>
     <event32>Kavga: Good morning! We need access to the nests of critters that populate this planet. This is probably a source of danger, we will take care of it! The nests of critters regenerate little by little and the more we are on these nests, the more the nest will lose creatures! Yaah !! Hum ... End of communication.</event32>
     <event33>Hello, spaceport here. Earis are on their way to our colony. It is a peaceful breed, for whom art takes precedence over everything, they generally like working at height, it allows them to better see the landscape. In addition, they appreciate the accommodations without any comfort. Please order a low dwelling and a workshop.</event33>
-    <event34>Krowsers: Hmm ... Hello ... The Earis have arrived and are very happy to be here ... They ... are having a party and I'm afraid it's going to get out of hand ... Can you ... Could you put a police building and a fire brigade? In case ... Thank you ... I do not want my family living in a dilapidated place ... And then you will not have to deal with them, these buildings handle the problems that are within their range. Th...Thank you.</event34>
-    <event35>Kavga: Greetings! The Earis have put everything upside down! Fortunately you have placed buildings to block their enthusiasm. Otherwise, we would have solved that ourselves. We should now fix their nonsense with a repair building in range. End of transmission.</event35>
+    <event34>Hmm ... Hello ... The Earis have arrived and are very happy to be here ... They ... are having a party and I'm afraid it's going to get out of hand ... Can you ... Could you put a police building and a fire brigade? In case ... Thank you ... I do not want my family living in a dilapidated place ... And then you will not have to deal with them, these buildings handle the problems that are within their range. Th...Thank you.</event34>
+    <event35>Greetings! The Earis have put everything upside down! Fortunately you have placed buildings to block their enthusiasm. Otherwise, we would have solved that ourselves. We should now fix their nonsense with a repair building in range. End of transmission.</event35>
     <event36>Hello, spaceport here. Senuths are about to arrive. It is a race formerly very developed and very rich. You must order a high dwelling and ... A lounge. These people do not really like work, being used to idleness.</event36>
     <event37>Here we go, try to survive as long as possible !</event37>
+    <event1000>Sir, I'm afraid you may have upset the settlers. Much. So much that I fear you won't find anyone to follow your words anymore. The population is tired and angry. It's time for you to leave the place - we hope the Space Union will send another governor soon. I wish you the best of luck in your next enterprise - may it end up better for you!</event1000>
   </eventDescription>
   <newColony>
     <cityNameTooShort>City name is too short</cityNameTooShort>
@@ -378,9 +378,9 @@
     <DECREASE_FOOD_CONSUMPTION_FOR_POPULATION>{0} consumes {2} less food during {1} cycles!</DECREASE_FOOD_CONSUMPTION_FOR_POPULATION>
     <INCREASE_HOUSE_NOTATION>Increase the notation of a house by {2} during {1} cycles!</INCREASE_HOUSE_NOTATION>
     <DECREASE_MOOD_FOR_POPULATION>{0}s mood decrease by {2} during {1} cycles!</DECREASE_MOOD_FOR_POPULATION>
-    <ADD_FLAG_MODIFIER_ON_BUILDING_FOR_DURATION>Add a new function to a building during {2}!</ADD_FLAG_MODIFIER_ON_BUILDING_FOR_DURATION>
-    <ADD_FLAG_ON_BUILDING_FOR_DURATION>Add a new function to a building during {2}!</ADD_FLAG_ON_BUILDING_FOR_DURATION>
-    <ADD_FLAG_ON_BUILDING>Add a new function to a building during {2}!</ADD_FLAG_ON_BUILDING>
+    <ADD_FLAG_MODIFIER_ON_BUILDING_FOR_DURATION>Modifies a building temporarily</ADD_FLAG_MODIFIER_ON_BUILDING_FOR_DURATION>
+    <ADD_FLAG_ON_BUILDING_FOR_DURATION>Modifies a building temporarily</ADD_FLAG_ON_BUILDING_FOR_DURATION>
+    <ADD_FLAG_ON_BUILDING>Modifies a building temporarily</ADD_FLAG_ON_BUILDING>
     <ADD_STATE_ON_BUILDING>A building will change state!</ADD_STATE_ON_BUILDING>
     <ADD_SETTLERS_TO_NEXT_WAVE>{2} {0}s will arrive at the next cycle!</ADD_SETTLERS_TO_NEXT_WAVE>
     <DESTROY_BUILDING>Destroys a building!</DESTROY_BUILDING>
@@ -389,31 +389,33 @@
     <LAY_SCHEME_ON_POSITION>A building will fall on the city!</LAY_SCHEME_ON_POSITION>
     <REMOVE_FLAG_FROM_BUILDING>A building will lose a function!</REMOVE_FLAG_FROM_BUILDING>
     <REMOVE_FLAG_FROM_BUILDING_FOR_DURATION>A building will lose a function during {1} cycles!</REMOVE_FLAG_FROM_BUILDING_FOR_DURATION>
-    <GAME_OVER>The game is over...</GAME_OVER>
+    <GAME_OVER>You better run fast</GAME_OVER>
+    <TRIGGER_EVENT>Another event occurs</TRIGGER_EVENT>
     <none>Nothing happens</none>
     <chance>{0}% chances of</chance>
   </scriptAction>
   <choice>
+    <event1000_1>Run!</event1000_1>
     <event1_1>Let's try...</event1_1>
     <event1_2>No!</event1_2>
     <event2_1>If you want!</event2_1>
-    <event2_2>Don't touch the building.</event2_2>
+    <event2_2>Don't touch!</event2_2>
     <event3_1>Yeah eat more!</event3_1>
-    <event3_2>The food is important, sorry.</event3_2>
+    <event3_2>The food is important.</event3_2>
     <event4_1>Do that, Doc' !</event4_1>
     <event4_2>No thanks.</event4_2>
-    <event5_1>Your health is my priority.</event5_1>
+    <event5_1>Your health is important.</event5_1>
     <event5_2>It's only sand...</event5_2>
     <event6_1>It can be funny!</event6_1>
     <event6_2>Out of my sight!</event6_2>
     <event7_1>Why not.</event7_1>
-    <event7_2>I don't think it's necessary.</event7_2>
+    <event7_2>It's not necessary.</event7_2>
     <event8_1>Of course yes!</event8_1>
     <event8_2>No, sorry.</event8_2>
     <event9_1>Be careful to you!</event9_1>
     <event9_2>Euh...No?</event9_2>
     <event10_1>Ok.</event10_1>
-    <event10_2>Don't touch the buildings!</event10_2>
+    <event10_2>Don't touch!</event10_2>
     <event11_1>Kill those bugs!</event11_1>
     <event11_2>Drop this flamethrower...</event11_2>
     <event12_1>Of course.</event12_1>
@@ -427,7 +429,7 @@
     <event16_1>Yes you can.</event16_1>
     <event16_2>Don't touch anything!</event16_2>
     <event17_1>The sky is not a limit!</event17_1>
-    <event17_2>Have you other stupid ideas?</event17_2>
+    <event17_2>Are you stupid?</event17_2>
     <event18_1>Go work in calm.</event18_1>
     <event18_2>No, i'm sorry.</event18_2>
     <event19_1>I love weapons, yes!</event19_1>
@@ -436,16 +438,16 @@
     <event20_2>You talkin' to me?</event20_2>
     <event21_1>I'll see what I can do.</event21_1>
     <event21_2>I can't, sorry!</event21_2>
-    <event22_1>Place your bets, no more bets!</event22_1>
+    <event22_1>Place your bets!</event22_1>
     <event22_2>Or what, Sir Annoying?</event22_2>
     <event23_1>Let's cook!</event23_1>
-    <event23_2>I don't know why but it's bad.</event23_2>
+    <event23_2>It's bad!</event23_2>
     <event24_1>I like muscles.</event24_1>
     <event24_2>No don't do that.</event24_2>
-    <event25_1>Go watch Battle Royal yes...</event25_1>
+    <event25_1>Go watch Battle Royal.</event25_1>
     <event25_2>No, no and no!</event25_2>
-    <event26_1>4dzadazd</event26_1>
-    <event26_2>dzadada8</event26_2>
+    <event26_1>Lasers? Mmh ok...</event26_1>
+    <event26_2>No, please!</event26_2>
   </choice>
   <populationTypeDelegate>
     <richie>Lord {0}</richie>

@@ -14,6 +14,7 @@ public class EventManager : MonoBehaviour {
 
     public System.Action<GameEvent> newEvent;
     public float chanceIncreasePerCycle = 0.33f;
+    public float gameOverThreshold = 0.25f;
 
     Dictionary<int, GameEvent> events = new Dictionary<int, GameEvent>();
     List<EventMarker> eventsPool = new List<EventMarker>();
@@ -116,6 +117,18 @@ public class EventManager : MonoBehaviour {
 
     public void Renew(int currentCycle)
     {
+        // Game Over
+        float average = 0f;
+        foreach(Population pop in GameManager.instance.populationManager.populationTypeList) {
+            average += GameManager.instance.populationManager.GetAverageMood(pop);
+        }
+        average /= GameManager.instance.populationManager.populationTypeList.Length;
+
+        if (average < gameOverThreshold) {
+            TriggerEvent(1000);
+        }
+
+        // Random event per day
         if (Random.value < chances) {
             EventMarker pick = null;
             List<EventMarker> newList = new List<EventMarker>();

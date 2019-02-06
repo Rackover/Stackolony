@@ -1384,12 +1384,13 @@ MonoBehaviour:
   bridge: {fileID: 0}
   gridCoordinates: {x: 0, y: 0, z: 0}
   positionInTower: 0
-  states: 
   currentPower: 0
   nuisance: 0
+  fireRiskPercentage: 0
   isConsideredUnpowered: 0
   isConsideredDisabled: 0
   isLinkedToSpatioport: 0
+  isEnabled: 0
 --- !u!114 &114355198070202752
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1416,8 +1417,7 @@ MonoBehaviour:
   meshRenderers:
   - {fileID: 23315564942930242}
   - {fileID: 23116510594367690}
-  blockVisual: {fileID: 114355198070202752}
-  blockFx: {fileID: 114997362344976536}
+  block: {fileID: 114079967865632792}
 --- !u!114 &114997362344976536
 MonoBehaviour:
   m_ObjectHideFlags: 1

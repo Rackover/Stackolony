@@ -153,6 +153,31 @@ public class GridManagement : MonoBehaviour
         }
     }
 
+    public void InsertBlockAtPosition(Block block, Vector3Int coordinates)
+    {
+        if (grid[coordinates.x, coordinates.y, coordinates.z] != null)
+        {
+            for (int i = maxHeight-1; i >= coordinates.y; i--)
+            {
+                if (grid[coordinates.x, i, coordinates.z] != null)
+                {
+                    if (GetSlotType(new Vector3Int(coordinates.x, i+1, coordinates.z)) == GridManagement.blockType.FREE)
+                    {
+                        MoveBlock(grid[coordinates.x, i, coordinates.z], new Vector3Int(coordinates.x, i + 1, coordinates.z));
+                    }
+                    else
+                    {
+                        grid[coordinates.x, i +1, coordinates.z] = null;
+                        Logger.Error("An error happened while moving blocks down the grid from " + coordinates + " to " + (new Vector3Int(coordinates.x, i + 1, coordinates.z)));
+                        return;
+                    }
+                }
+            }
+        }
+        MoveBlock(block.gameObject, coordinates);
+        UpdateGridSystems();
+    }
+
 
     /// <summary>
     /// Safe function to move a block around.
@@ -234,10 +259,12 @@ public class GridManagement : MonoBehaviour
     /// </summary>
     /// <param name="blockId"></param>
     /// <param name="coordinates"></param>
-    public void LayBlock(int blockId, Vector2Int coordinates)
+    public Block LayBlock(int blockId, Vector2Int coordinates)
     {
         GameObject newBlock = SpawnBlock(blockId, new Vector3Int(coordinates.x,gridSize.y-1,coordinates.y));
-        LayBlock(newBlock.GetComponent<Block>(), coordinates);
+        Block b = newBlock.GetComponent<Block>();
+        LayBlock(b, coordinates);
+        return b;
     }
 
     public GameObject SpawnBlock(int blockId, Vector3Int coordinates)
