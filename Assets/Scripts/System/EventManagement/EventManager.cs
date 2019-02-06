@@ -22,6 +22,7 @@ public class EventManager : MonoBehaviour {
         public int id;
         public Dictionary<int, GameAction> choices;
         public Population instigator;
+        public Bystander.Mood mood;
         
         public GameEvent(int _id, Dictionary<int, GameAction>_choices, Population _instigator=null)
         {
@@ -42,6 +43,7 @@ public class EventManager : MonoBehaviour {
 
     public class GameEffect
     {
+        public Tooltip.tooltipType ttColor = Tooltip.tooltipType.Neutral;
         public string intention = "";
         public string[] parameters = new string[] { };
         System.Action action;
@@ -143,6 +145,11 @@ public class EventManager : MonoBehaviour {
         interpreter.MakeEvent(eventScript).Execute();
     }
     
+    public void TriggerEvent(int id)
+    {
+        newEvent.Invoke(events[id]);
+    }
+
     public void LoadEvents()
     {
         LoadEventsDatabase();
@@ -151,6 +158,7 @@ public class EventManager : MonoBehaviour {
 
     void LoadEventsDatabase()
     {
+        events = new Dictionary<int, GameEvent>();
         string path = Paths.GetEventsDatabaseFile();
         XmlDocument eventsDbFile = new XmlDocument();
 
@@ -191,10 +199,12 @@ public class EventManager : MonoBehaviour {
             return null;
         }
 
-        // Ignoring pop if not specified
+        // Ignoring pop and mood if not specified
         Population pop = null;
+        Bystander.Mood mood;
         try {
             pop = GameManager.instance.populationManager.GetPopulationByCodename(xEvent.Attributes["population"].Value);
+            mood = (Bystander.Mood)System.Enum.Parse(typeof(Bystander.Mood), xEvent.Attributes["emotion"].Value);
         }
         catch (System.Exception) { };
         
@@ -225,6 +235,7 @@ public class EventManager : MonoBehaviour {
     void LoadEventsPool()
     {
         // XML Loading
+        eventsPool = new List<EventMarker>();
         string path = Paths.GetEventsPoolFile();
         XmlDocument poolFile = new XmlDocument();
         try {
@@ -249,7 +260,7 @@ public class EventManager : MonoBehaviour {
                 EventMarker marker = new EventMarker() {
                     eventId = System.Convert.ToInt32(xEventMarker.InnerText),
                     time = System.Convert.ToSingle(xEventMarker.Attributes["time"].Value),
-                    minCycle = System.Convert.ToInt32(pool.Attributes["minCycle"])
+                    minCycle = System.Convert.ToInt32(pool.Attributes["minCycle"].Value)
                 };
 
                 eventsPool.Add(marker);

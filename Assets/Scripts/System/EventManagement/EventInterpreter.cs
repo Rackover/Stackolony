@@ -9,6 +9,11 @@ public class EventInterpreter
 {
 
     public char lineSeparator = ';';
+    List<string> argumentsDisplayOrder = new List<string> {
+        "population",
+        "duration",
+        "amount"
+    };
 
     class InterpreterException : System.Exception
     {
@@ -250,7 +255,7 @@ public class EventInterpreter
         // Chance
         foreach(EventManager.GameEffect fx in chanceBlock) {
             blockEffects.Add(
-                new EventManager.GameEffect(delegate { }, fx.intention, fx.parameters)
+                new EventManager.GameEffect(delegate { }, fx.intention, fx.parameters) { ttColor = fx.ttColor }
             );
         }
 
@@ -263,7 +268,7 @@ public class EventInterpreter
         // Else
         foreach (EventManager.GameEffect fx in elseBlock) {
             blockEffects.Add(
-                new EventManager.GameEffect(delegate { }, fx.intention, fx.parameters)
+                new EventManager.GameEffect(delegate { }, fx.intention, fx.parameters) { ttColor = fx.ttColor}
             );
         }
         
@@ -373,14 +378,72 @@ public class EventInterpreter
             Throw("Unsupported action function \"" + funcName.ToString() + "\". Supported action functions: \n" + string.Join("\n", GetActionFunctions().ToArray())+"");
         }
 
+        string[] locArguments = FormatArguments(arguments.Split(','));
+
+
         return 
             new EventManager.GameEffect(
                 delegate { actionFunctions[funcName](arguments, context); },
-                funcName
-            )
+                funcName,
+                locArguments
+            ) { ttColor = GetDataFunctionPreviewColor(funcName) }
         ;
 
     }   
+
+    Tooltip.tooltipType GetDataFunctionPreviewColor(string functionName)
+    {
+        switch (functionName) {
+            default:
+                return Tooltip.tooltipType.Neutral;
+
+            case "INCREASE_ENERGY_CONSUMPTION_FOR_BUILDING":
+            case "INCREASE_FOOD_CONSUMPTION_FOR_POPULATION":
+            case "DECREASE_MOOD_FOR_POPULATION":
+            case "DESTROY_BUILDING":
+                return Tooltip.tooltipType.Negative;
+
+            case "INCREASE_MOOD_FOR_POPULATION":
+            case "DECREASE_FOOD_CONSUMPTION_FOR_POPULATION":
+            case "INCREASE_HOUSE_NOTATION":
+                return Tooltip.tooltipType.Positive;
+        }
+    }
+
+    string[] FormatArguments(string[] arguments)
+    {
+        Localization loc = GameManager.instance.localization;
+        Dictionary<string, string> correspondance = new Dictionary<string, string>();
+
+        foreach (string paramName in argumentsDisplayOrder) {
+            correspondance[paramName] = string.Empty;
+        }
+
+        foreach (string arg in arguments) {
+            string paramName = arg.Split(':')[0];
+            string paramValue = arg.Split(':')[1];
+            string convertedArg = "";
+
+            bool skip = false;
+            switch(paramName){
+                case "population": convertedArg = loc.GetLine(paramValue, "populationType"); break;
+                case "amount": convertedArg = System.Convert.ToSingle(paramValue).ToString("+0;-#"); break;
+                case "duration": convertedArg = System.Convert.ToSingle(paramValue).ToString("+0;-#"); break;
+                default:skip = true;break;
+            }
+
+            if (skip) continue;
+
+            correspondance[paramName] = convertedArg;
+        }
+
+        List<string> formatted = new List<string>();
+        foreach (string paramName in argumentsDisplayOrder) {
+            formatted.Add(correspondance[paramName]);
+        }
+
+        return formatted.ToArray();
+    }
 
     // Returns list of supported action functions
     List<string> GetActionFunctions()
@@ -401,8 +464,6 @@ public class EventInterpreter
         }
         return funcs;
     }
-
-
 
     /// <summary>
     /// ACTION FUNCTIONS
