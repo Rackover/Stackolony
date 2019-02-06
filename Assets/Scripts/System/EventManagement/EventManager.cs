@@ -10,6 +10,8 @@ public class EventManager : MonoBehaviour {
     EventInterpreter interpreter = new EventInterpreter();
 
     public System.Action<string> interpreterError;
+    public System.Action<string> checkError;
+
     public System.Action<GameEvent> newEvent;
     public float chanceIncreasePerCycle = 0.33f;
 
@@ -142,10 +144,15 @@ public class EventManager : MonoBehaviour {
 
     public void ReadAndExecute(string eventScript)
     {
-        GameAction action = interpreter.MakeEvent(eventScript);
+        GameAction action = interpreter.MakeEvent(eventScript, GameManager.instance.eventManager.interpreterError);
         if (action != null) {
             action.Execute();
         }
+    }
+
+    public void CheckSyntax(string eventScript)
+    {
+        interpreter.MakeEvent(eventScript, checkError);
     }
     
     public void TriggerEvent(int id)

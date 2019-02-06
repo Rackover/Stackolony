@@ -10,6 +10,7 @@ public class EventDebugWindow : MonoBehaviour {
     Vector2 shift = new Vector2();
 
     public Text errorText;
+    public Text checkText;
     public Color goodColor = Color.green;
     public Color badColor = Color.red;
     public InputField inputZone;
@@ -24,6 +25,12 @@ public class EventDebugWindow : MonoBehaviour {
             errorText.text = x;
             errorText.color = badColor;
         };
+        GameManager.instance.eventManager.checkError += (x) => {
+            checkText.text = x;
+        };
+        inputZone.onValueChanged.AddListener(delegate {
+            Check();
+        });
     }
 
     public void Update()
@@ -67,6 +74,12 @@ public class EventDebugWindow : MonoBehaviour {
         errorText.text = "OK";
         errorText.color = goodColor;
         GameManager.instance.eventManager.ReadAndExecute(inputZone.text);
+    }
+
+    public void Check()
+    {
+        checkText.text = "...";
+        GameManager.instance.eventManager.CheckSyntax(inputZone.text);
     }
 
     public void OnPointerEnter()
