@@ -194,8 +194,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.End)) {
             temporality.timeScale = 100;
         }
-
-
+        
         if (Input.GetKeyDown(KeyCode.N)) { 
             Notifications.Notification not = new Notifications.Notification(
                 new string[] { "cannotBuild", "notLinked", "newPeople" }[Mathf.FloorToInt(Random.value * 3)], 
@@ -221,12 +220,14 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.V)) {
             FindObjectOfType<CameraController>().ResetPosition();
         }
-/*
-        // Spawns and inhabits citizen
-        if (Input.GetKeyDown(KeyCode.B)) {
-            populationManager.AutoHouseCitizen(populationManager.SpawnCitizen(populationManager.populationTypeList[0]));
+
+        // Unlock all
+        if (Input.GetKeyDown(KeyCode.T)) {
+            foreach(BlockScheme s in library.blocks) {
+                cityManager.UnlockBuilding(s.ID);
+            }
         }
-*/
+
         // Spawns 5  cit
         if (Input.GetKeyDown(KeyCode.U)) {
             populationManager.SpawnCitizens(populationManager.populationTypeList[Mathf.FloorToInt(populationManager.populationTypeList.Length*Random.value)], 5);
