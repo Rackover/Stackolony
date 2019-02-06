@@ -9,17 +9,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 14a825372d1dc3a4fa39444b146f0e78, type: 3}
-  m_Name: Block_Workshop
+  m_Name: Block_Spatioport
   m_EditorClassIdentifier: 
   isMovable: 1
-  isDestroyable: 1
-  isBuyable: 1
-  canBuildAbove: 1
-  relyOnSpatioport: 1
-  fireProof: 0
-  model: {fileID: 1949296998759218, guid: e8fb5ceb5cec52f48a3cbd7c5549ddaf, type: 2}
-  ID: 21
-  consumption: 3
-  sensibility: 1
+  isDestroyable: 0
+  isBuyable: 0
+  canBuildAbove: 0
+  relyOnSpatioport: 0
+  fireProof: 1
+  model: {fileID: 1843137411438910, guid: e4b51f29bd59f0e4192417e735c59a31, type: 2}
+  ID: 0
+  consumption: 0
+  sensibility: 0
   flags:
-  - Occupator_2_1_artist
+  - Spatioport
