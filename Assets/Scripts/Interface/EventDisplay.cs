@@ -75,13 +75,11 @@ public class EventDisplay : MonoBehaviour {
                     continue;
                 }
                 tt.AddLocalizedLine(
-                    new Localization.Line(
-                        new Tooltip.TooltipLocalizationEntry(
-                            action.intention, 
-                            "scriptAction",
-                            action.ttColor, 
-                            action.parameters
-                        )
+                    new Tooltip.TooltipLocalizationEntry(
+                        action.intention, 
+                        "scriptAction",
+                        action.ttColor, 
+                        action.parameters
                     )
                 );
             }
@@ -92,6 +90,7 @@ public class EventDisplay : MonoBehaviour {
                 if (GameManager.instance.player.options.GetBool(Options.Option.animatedCitizens)) {
                     displayer.Unstage();
                 }
+                FindObjectOfType<TooltipGO>().Disable();
             });
 
             instantiatedButtons.Add(button);
