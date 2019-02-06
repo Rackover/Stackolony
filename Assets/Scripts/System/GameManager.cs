@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
             Destroy(this.gameObject);
             return;
         }
-
+        
         SceneManager.sceneLoaded += delegate { FindAllReferences(); };
         SceneManager.sceneLoaded += delegate {
             if (menuSceneName != SceneManager.GetActiveScene().name) {
@@ -203,7 +203,11 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.P)) {
             temporality.PauseTime();
         }
-        
+
+        if (Input.GetKeyDown(KeyCode.Delete)) {
+            eventManager.TriggerEvent(1);
+        }
+
         // Pause
         if (Input.GetKeyDown(KeyCode.Escape) && IsInGame() && FindObjectsOfType<PauseWindow>().Length <= 0) {
             FindObjectOfType<Interface>().SpawnPauseWindow();
@@ -285,6 +289,10 @@ public class GameManager : MonoBehaviour
         // Goes forward in time by 1 cycle
         if (Input.GetKeyDown(KeyCode.C)) {
             temporality.AddCycle();
+        }
+
+        if (Input.GetKeyDown(KeyCode.K)) {
+            eventManager.LoadEvents();
         }
     }
 
