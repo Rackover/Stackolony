@@ -7,21 +7,6 @@ public class AnimationManager : MonoBehaviour {
     public float towerElevationTime = 2f;
     public float towerDelevationTime = 4f;
     public float towerElevationAmount = 2f;
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            Debug.Log("Elevating");
-            ElevateTower(GameManager.instance.cursorManagement.posInGrid);
-        }
-
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            Debug.Log("Delevating");
-            EndElevateTower(new Vector2Int(GameManager.instance.cursorManagement.posInGrid.x, GameManager.instance.cursorManagement.posInGrid.z));
-        }
-    }
-
     public void ElevateTower(Vector3Int coordinates, float time = -1)
     {
         if (time < 0) { time = towerElevationTime; }

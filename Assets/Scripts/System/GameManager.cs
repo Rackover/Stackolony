@@ -292,7 +292,16 @@ public class GameManager : MonoBehaviour
                 )
             ));
         }
-        
+
+
+        if (Input.GetKeyDown(KeyCode.F)) {
+            animationManager.ElevateTower(cursorManagement.posInGrid);
+        }
+
+        if (Input.GetKeyDown(KeyCode.G)) {
+            animationManager.EndElevateTower(new Vector2Int(cursorManagement.posInGrid.x, cursorManagement.posInGrid.z));
+        }
+
         // Goes forward in time by 1 cycle
         if (Input.GetKeyDown(KeyCode.C)) 
         {
