@@ -308,6 +308,50 @@
 		ADD_STATE_ON_BUILDING(building:F,state:damaged);
 		</choice>
 	</event>
+	<event id="2000" population="kavga" emotion="good">
+		<choice id="1">
+		</choice>
+	</event>
+	<event id="2001" population="kavga" emotion="good">
+		<choice id="1">
+		</choice>
+	</event>
+	<event id="2002" population="kavga" emotion="good">
+		<choice id="1">
+		</choice>
+	</event>
+	<event id="2003" population="kavga" emotion="good">
+		<choice id="1">
+		</choice>
+	</event>
+	<event id="2004" population="kavga" emotion="good">
+		<choice id="1">
+		</choice>
+	</event>
+	<event id="2005" population="kavga" emotion="good">
+		<choice id="1">
+		</choice>
+	</event>
+	<event id="2006" population="kavga" emotion="good">
+		<choice id="1">
+		</choice>
+	</event>
+	<event id="2007" population="kavga" emotion="good">
+		<choice id="1">
+		</choice>
+	</event>
+	<event id="2008" population="kavga" emotion="good">
+		<choice id="1">
+		</choice>
+	</event>
+	<event id="2009" population="kavga" emotion="good">
+		<choice id="1">
+		</choice>
+	</event>
+	<event id="2010" population="kavga" emotion="good">
+		<choice id="1">
+		</choice>
+	</event>
 	<event id="1000" population="richie" emotion="tired">
 		<choice id="1">
 		GAME_OVER();
