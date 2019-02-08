@@ -170,9 +170,11 @@ public class EventManager : MonoBehaviour {
             }
             catch (EventInterpreter.InterpreterException e) {
                 GameManager.instance.eventManager.interpreterError.Invoke(e.Message);
+                Debug.LogWarning(e);
             }
             catch (System.Exception e) {
                 GameManager.instance.eventManager.interpreterError.Invoke("Unknown interpreter error - check your script.\n" + e.Message);
+                Debug.LogWarning(e);
             }
         }
     }
@@ -184,7 +186,21 @@ public class EventManager : MonoBehaviour {
     
     public void TriggerEvent(int id)
     {
+        StartCoroutine(WaitForEventAndTrigger(id));
+    }
+
+    public void TriggerEventImmediatly(int id)
+    {
         newEvent.Invoke(events[id]);
+    }
+
+    IEnumerator WaitForEventAndTrigger(int id)
+    {
+        while (!events.ContainsKey(id)) {
+            yield return null;
+        }
+        TriggerEventImmediatly(id);
+        yield return true;
     }
 
     public void LoadEvents()
