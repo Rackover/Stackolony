@@ -22,8 +22,6 @@ public class Achievements
 
 		public bool IsActive()
 		{
-			Debug.Log(mValue + " " + mActivationRule + " " + mActivationValue);
-
 			switch(mActivationRule)
 			{
 				case GREATER: return mValue > mActivationValue;
@@ -73,7 +71,6 @@ public class Achievements
 					if(GetProperty(entry.Value.mProperties[i]).IsActive()) 
 					{
 						aProps++;
-						Debug.Log("ACTIF");
 					}
 				}
 
@@ -81,7 +78,10 @@ public class Achievements
 				{
 					// THE ACHIEVEMENT IS UNLOCKED
 					entry.Value.mUnlock = true;
-					Debug.Log(entry.Value.mName + " unlocked, well done.");
+
+					string name = GameManager.instance.localization.GetLineFromCategory("achievementName", "achievement" + (entry.Value.id).ToString());
+					string description = GameManager.instance.localization.GetLineFromCategory("achievementDescription", "achievement" + (entry.Value.id).ToString());
+					//Debug.Log(entry.Value.id + " " + name + " unlocked! " + description);
 					// g_SteamAchievements->SetAchievement(entry.value.name); // Trigger steam achievement
 				}
 			}

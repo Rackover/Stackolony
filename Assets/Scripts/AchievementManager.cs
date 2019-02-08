@@ -11,19 +11,18 @@ public class AchievementManager : MonoBehaviour
 	void Start()
 	{
 		LoadProperties();
-		achievements.DefineAchievement("Installez-vous", 0, new string[] {"cyclePassed_GREATEROREQUAL_10"});
 	}
 
 	void LoadProperties()
 	{
 		XmlDocument properties = new XmlDocument();
-		properties.Load(Application.dataPath + "/Achievements.xml");
+		properties.Load(Application.dataPath + "/StreamingAssets/Achievements.xml");
 		XmlNodeList nodeList = properties.SelectNodes("property")[0].ChildNodes;
-		foreach (XmlNode node in nodeList) 
+		for(int i = 0; i < nodeList.Count; i++)
 		{
-			string[] propertyParams = node.InnerText.Split(new char[]{'_'}, System.StringSplitOptions.RemoveEmptyEntries);
-			Debug.Log(propertyParams[1]);
-			achievements.DefineProperty(propertyParams[0], node.InnerText, 0, propertyParams[1], int.Parse(propertyParams[2]));
-        }
+			string[] propertyParams = nodeList[i].InnerText.Split(new char[]{'_'}, System.StringSplitOptions.RemoveEmptyEntries);
+			achievements.DefineProperty(propertyParams[0], nodeList[i].InnerText, 0, propertyParams[1], int.Parse(propertyParams[2]));
+			achievements.DefineAchievement(nodeList[i].InnerText, int.Parse(nodeList[i].Name.Replace("property", "")), new string[] {nodeList[i].InnerText});
+		}
 	}
 }
