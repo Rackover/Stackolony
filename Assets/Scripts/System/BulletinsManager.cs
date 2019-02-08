@@ -58,7 +58,8 @@ public class BulletinsManager : MonoBehaviour {
         bulletinList = newList;
 
         if (currentBulletin.eventId > 0) {
-            //TriggerEvent(eventId);
+            GameManager.instance.eventManager.TriggerEvent(currentBulletin.eventId);
+            GameManager.instance.eventManager.ResetChances();
         }
     }
 
