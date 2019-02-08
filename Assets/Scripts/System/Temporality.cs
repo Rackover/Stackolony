@@ -102,6 +102,8 @@ public class Temporality : MonoBehaviour {
         cycleNumber++;
         GameManager.instance.timelineController.UpdateCycle(cycleNumber);
         GameManager.instance.eventManager.Renew(cycleNumber);
+
+        AchievementManager.achievements.AddToValue("cyclePassed");
     }
 
     public void AddMicroCycle()
