@@ -179,7 +179,7 @@ public class EventManager : MonoBehaviour {
 
     public void CheckSyntax(string eventScript)
     {
-        interpreter.MakeEvent(eventScript, checkError);
+        interpreter.MakeEvent(eventScript, checkError, true);
     }
     
     public void TriggerEvent(int id)

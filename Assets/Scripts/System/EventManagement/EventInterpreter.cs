@@ -66,7 +66,7 @@ public class EventInterpreter
     ///     MAIN EVENT CREATION FUNCTION
     /// 
     ///
-    public EventManager.GameAction MakeEvent(string eventDeclaration, System.Action<string> errorEvent=null)
+    public EventManager.GameAction MakeEvent(string eventDeclaration, System.Action<string> errorEvent=null, bool noLogging=false)
     {
         eventDeclaration = eventDeclaration.Replace(" ", "").Replace("\n", "").Replace("\r", "").Replace("	", "");
 
@@ -75,13 +75,13 @@ public class EventInterpreter
             actions = MakeGameEffects(eventDeclaration);
         }
         catch (InterpreterException e) {
-            Debug.LogWarning("Interpration failed :\n" + e.Message);
+            if (!noLogging) Debug.LogWarning("Interpration failed :\n" + e.Message);
             errorEvent.Invoke(e.Message);
             return null;
         }
         catch(System.Exception e) {
-            Debug.LogWarning("Unknown interpreter error - check your script.\n" + e.Message);
-            errorEvent.Invoke("Unknown interpreter error - check your script.\n"+e.Message);
+            if (!noLogging) Debug.LogWarning("Unknown interpreter error - check your script.\n" + e.Message);
+            errorEvent.Invoke("Unknown interpreter error - check your script.\n" + e.Message);
             return null;
         }
         return new EventManager.GameAction(actions);
