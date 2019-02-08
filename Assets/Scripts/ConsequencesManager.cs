@@ -82,7 +82,6 @@ public class ConsequencesManager : MonoBehaviour {
     }
     static IEnumerator SpawnBlocksAtLocationC(int amount, int blockID, Vector2Int location)
     {
-        location.y = GameManager.instance.gridManagement.gridSize.y - 1;
         for (int i = 0; i < amount; i++)
         {
             yield return new WaitForSeconds(1f);
@@ -91,8 +90,7 @@ public class ConsequencesManager : MonoBehaviour {
                 int randomID = GameManager.instance.library.GetRandomBlock().ID;
                 GameManager.instance.gridManagement.LayBlock(randomID, new Vector2Int(location.x, location.y));
             }
-            else
-            {
+            else {
                 GameManager.instance.gridManagement.LayBlock(blockID, new Vector2Int(location.x, location.y));
             }
         }
