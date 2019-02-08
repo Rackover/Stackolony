@@ -370,7 +370,6 @@ public class GameManager : MonoBehaviour
         cinematicManager.GetReferences();
         timelineController.LoadCycles();
         DifferStart(delegate { eventManager.LoadEvents(); });
-        systemManager.ClearSystem();
 
         cityManager.GenerateEnvironmentBlocks();
 
@@ -407,6 +406,9 @@ public class GameManager : MonoBehaviour
         eventManager.newEvent = null;
         populationManager.CitizenArrival = null;
         cursorManagement.CursorError = null;
+
+        // Clear system
+        systemManager.ClearSystem();
 
         // Remove gameevents and citizens
         populationManager.citizenList.Clear();
