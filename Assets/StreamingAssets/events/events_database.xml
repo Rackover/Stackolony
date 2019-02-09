@@ -287,16 +287,16 @@
 		D=RANDOM_BUILDING(id:3);
 		E=RANDOM_BUILDING(id:7); 
 		F=RANDOM_BUILDING(id:11);
-		BA=POSITION_FROM_BUILDING(building:B);
-		BE=POSITION_FROM_BUILDING(building:C);
-		BI=POSITION_FROM_BUILDING(building:D);
-		BO=POSITION_FROM_BUILDING(building:E);
-		BU=POSITION_FROM_BUILDING(building:F);
-		LAY_SCHEME_ON_POSITION(scheme:A,position:BA);
-		LAY_SCHEME_ON_POSITION(scheme:A,position:BE);
-		LAY_SCHEME_ON_POSITION(scheme:A,position:BI);
-		LAY_SCHEME_ON_POSITION(scheme:A,position:BO);
-		LAY_SCHEME_ON_POSITION(scheme:A,position:BU);
+		I=RANDOM_POSITION();
+		J=RANDOM_POSITION();
+		K=RANDOM_POSITION();
+		L=RANDOM_POSITION();
+		M=RANDOM_POSITION();
+		LAY_SCHEME_ON_POSITION(scheme:A,position:I);
+		LAY_SCHEME_ON_POSITION(scheme:A,position:J);
+		LAY_SCHEME_ON_POSITION(scheme:A,position:K);
+		LAY_SCHEME_ON_POSITION(scheme:A,position:L);
+		LAY_SCHEME_ON_POSITION(scheme:A,position:M);
 		INCREASE_MOOD_FOR_POPULATION(population:scientist,duration:5,amount:3);
 		DECREASE_MOOD_FOR_POPULATION(population:artist,duration:5,amount:2);
 		</choice>
@@ -306,6 +306,50 @@
 		ADD_STATE_ON_BUILDING(building:D,state:damaged);
 		ADD_STATE_ON_BUILDING(building:E,state:damaged);
 		ADD_STATE_ON_BUILDING(building:F,state:damaged);
+		</choice>
+	</event>
+	<event id="2000" population="kavga" emotion="good">
+		<choice id="1">
+		</choice>
+	</event>
+	<event id="2001" population="kavga" emotion="good">
+		<choice id="1">
+		</choice>
+	</event>
+	<event id="2002" population="kavga" emotion="good">
+		<choice id="1">
+		</choice>
+	</event>
+	<event id="2003" population="kavga" emotion="good">
+		<choice id="1">
+		</choice>
+	</event>
+	<event id="2004" population="kavga" emotion="good">
+		<choice id="1">
+		</choice>
+	</event>
+	<event id="2005" population="kavga" emotion="good">
+		<choice id="1">
+		</choice>
+	</event>
+	<event id="2006" population="kavga" emotion="good">
+		<choice id="1">
+		</choice>
+	</event>
+	<event id="2007" population="kavga" emotion="good">
+		<choice id="1">
+		</choice>
+	</event>
+	<event id="2008" population="kavga" emotion="good">
+		<choice id="1">
+		</choice>
+	</event>
+	<event id="2009" population="kavga" emotion="good">
+		<choice id="1">
+		</choice>
+	</event>
+	<event id="2010" population="kavga" emotion="good">
+		<choice id="1">
 		</choice>
 	</event>
 	<event id="1000" population="richie" emotion="tired">
