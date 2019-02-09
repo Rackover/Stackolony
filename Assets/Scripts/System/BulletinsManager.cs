@@ -19,12 +19,6 @@ public class BulletinsManager : MonoBehaviour {
         public int eventId = 0;
         public int minCycle = 0;
 
-        public Bulletin(int _id, int _minCycle, int _eventId)
-        {
-            id = _id;
-            eventId = _eventId;
-        }
-
         public Bulletin(int _id, int _minCycle)
         {
             id = _id;
@@ -56,11 +50,6 @@ public class BulletinsManager : MonoBehaviour {
 
         currentBulletin = pick;
         bulletinList = newList;
-
-        if (currentBulletin.eventId > 0) {
-            GameManager.instance.eventManager.TriggerEvent(currentBulletin.eventId);
-            GameManager.instance.eventManager.ResetChances();
-        }
     }
 
     void LoadBulletins()
@@ -92,13 +81,6 @@ public class BulletinsManager : MonoBehaviour {
                     int.Parse(xBulletin.Attributes["id"].Value),
                     int.Parse(pool.Attributes["minCycle"].Value)
                 );
-                try { 
-                    bulletin.eventId = int.Parse(xBulletin.Attributes["eventId"].Value);
-                }
-                catch(Exception e) {
-                    // Ignore - this is the safest way to check if an XML tag has an attribute
-                    // when not using text readers
-                }
 
                 bulletinList.Add(bulletin);
             }
