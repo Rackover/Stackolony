@@ -215,7 +215,7 @@ public class EventManager : MonoBehaviour {
 
     IEnumerator WaitForEventAndTrigger(int id)
     {
-        while (!events.ContainsKey(id)) {
+        while (!events.ContainsKey(id) || GameManager.instance.cinematicManager.IsInCinematic()) {
             yield return null;
         }
         TriggerEventImmediatly(id);
