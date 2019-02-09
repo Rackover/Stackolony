@@ -34,10 +34,6 @@ public class GridManagement : MonoBehaviour
     
     public enum blockType{ FREE = 0, BRIDGE = 1}
 
-    private void Start()
-    {
-        if (!gameManager.IsInGame()){return;}
-    }
 
     public void InitializeGridManager()
     {

@@ -286,7 +286,16 @@ public class MissionManager : MonoBehaviour {
         //Verifie que la position n'a jamais été explorée auparavant
         if (!myMission.exploredPositions.Contains(position))
         {
-            GameObject blockFound = GameManager.instance.gridManagement.grid[position.x, position.y, position.z];
+            GameObject blockFound;
+            try {
+                blockFound = GameManager.instance.gridManagement.grid[position.x, position.y, position.z];
+            }
+            catch(System.IndexOutOfRangeException e) {
+                Debug.LogWarning("ERROR in Checkblock => mission exploration" + e.Message);
+                Debug.LogWarning(e);
+                return null;
+            }
+
             if (blockFound != null)
             {
                 //Si l'objet trouvé est un pont, récupère le bloc à l'extrémité de ce pont
