@@ -26,7 +26,6 @@ public class SpatioportSpawner : MonoBehaviour {
         GetCoordinates();
 
         if (!cineMan.areCinematicsEnabled) {
-            print("Spawning block on "+ coordinates);
             GameManager.instance.gridManagement.SpawnBlock(spatioportID, coordinates);
             DestroyImmediate(gameObject);
             return;
