@@ -32,8 +32,11 @@ public class WorkingHours : Flag, Flag.IFlag
 
     public void StartWork() {
         foreach (Flag flags in gameObject.GetComponents<Flag>()) {
-			if (flags != this)
-			flags.Enable();
+        if (flags != this)
+            if (!flags.isEnabled)
+            {
+                flags.Enable();
+            }
 		}
 		hasStarted = true;
 	}
@@ -41,8 +44,11 @@ public class WorkingHours : Flag, Flag.IFlag
 	public void EndWork() {
         foreach (Flag flags in gameObject.GetComponents<Flag>()) {
 			if (flags != this)
-			flags.Disable();
-		}
+            if (flags.isEnabled)
+            {
+                flags.Disable();
+            }
+        }
 		hasStarted = false;
 	}
 
