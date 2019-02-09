@@ -552,9 +552,7 @@ public class CursorManagement : MonoBehaviour
                 }
                 else
                 {
-                    GameManager.instance.animationManager.EndElevateTower(new Vector2Int(savedPos.x, savedPos.z));
                     savedPos = _pos;
-                    GameManager.instance.animationManager.ElevateTower(savedPos);
                     GameManager.instance.soundManager.Play("Tick");
                     selectedBlock.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(_pos);
                 }
