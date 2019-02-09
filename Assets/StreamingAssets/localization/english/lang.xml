@@ -28,65 +28,61 @@
   </hud>
   <blockName>
     <block0>Spatioport</block0>
-    <block1>Fireman Station</block1>
-    <block2>Observatory</block2>
-    <block3>Power Plant</block3>
-    <block4>Wind Turbine</block4>
-    <block5>Police Station</block5>
-    <block6>Casino</block6>
-    <block7>Poor House</block7>
-    <block8>Food Distributor</block8>
-    <block9>StellarPanel</block9>
-    <block10>Nuclear plant</block10>
-    <block11>repaircraft</block11>
-    <block12>arcade zone</block12>
-    <block13>Heal Center</block13>
-    <block14>Laboratory</block14>
-    <block15>Botanical GreenHouse</block15>
-    <block16>Workshop</block16>
-    <block17>Theatre</block17>
-    <block18>Architecture School</block18>
-    <block19>Factory</block19>
-    <block20>Manufactory</block20>
-    <block21>Armory</block21>
-    <block22>Art Gallery</block22>
-    <block23>Capture shelter</block23>
-    <block24>Relaxing Lounge</block24>
-    <block25>Bastion</block25>
-    <block26>Barrack</block26>
-    <block27>Average House</block27>
-    <block28>Luxurious House</block28>
+    <block1>PoorHouse</block1>
+    <block2>AverageHouse</block2>
+    <block3>LuxuriousHouse</block3>
+    <block4>WindTurbine</block4>
+    <block5>SolarPanel</block5>
+    <block6>PowerPlant</block6>
+    <block7>FiremanStation</block7>
+    <block8>PoliceStation</block8>
+    <block9>ArcadeBlock</block9>
+    <block10>Hospital</block10>
+    <block11>FoodCenter</block11>
+    <block12>BotanicalGreenHouse</block12>
+    <block13>Laboratory</block13>
+    <block14>Observatory</block14>
+    <block15>Barrack</block15>
+    <block16>Bastion</block16>
+    <block17>Captureshelter</block17>
+    <block18>RelaxingLounge</block18>
+    <block19>Casino</block19>
+    <block20>Theatre</block20>
+    <block21>Workshop</block21>
+    <block22>ArtGallery</block22>
+    <block23>ArchitectureSchool</block23>
+    <block24>Manufactory</block24>
+    <block25>Factory</block25>
+    <block26>Armory</block26>
   </blockName>
   <blockDescription>
     <block0>Center of the city, all block should be connected to it</block0>
-    <block1>This building ensure the order by stopping fires</block1>
-    <block2>Seeking for science in the stars</block2>
-    <block3>Produce some power for colons</block3>
+    <block1>A simple house</block1>
+    <block2>A modest House</block2>
+    <block3>A luxurious house</block3>
     <block4>Produce some power by night</block4>
-    <block5>This Building ensure the order by stopping riots</block5>
-    <block6>A place to enjoy being rich from birth</block6>
-    <block7>A simple house</block7>
-    <block8>Brings food to some colons</block8>
-    <block9>Produce some power by day</block9>
-    <block10>Produce a lot of energy</block10>
-    <block11>Repair the damaged Blocks</block11>
-    <block12>The best distraction in town</block12>
-    <block13>Ensure good health to tje colons</block13>
-    <block14>Laboratory</block14>
-    <block15>Nature is essential for everyone</block15>
-    <block16>Art comes from here</block16>
-    <block17>Stories everyday</block17>
-    <block18>Designing the blocks of the futur</block18>
-    <block19>They produce something, but what?</block19>
-    <block20>The secret of the S.U Industry</block20>
-    <block21>The S.U Army forges</block21>
+    <block5>Produce some power by day</block5>
+    <block6>Produce some power for colons</block6>
+    <block7>This building ensure the order by stopping fires</block7>
+    <block8>This building ensure the order by stopping riots</block8>
+    <block9>The best distraction in town</block9>
+    <block10>Ensure good health to the colons</block10>
+    <block11>Brings food to some colons</block11>
+    <block12>Nature is essential for everyone</block12>
+    <block13>Laboratory</block13>
+    <block14>Seeking for science in the stars</block14>
+    <block15>Troop Headquarter</block15>
+    <block16>A heavy Military base</block16>
+    <block17>Study the alien lifeforms</block17>
+    <block18>Peace of mind needs some calm</block18>
+    <block19>A place to enjoy being rich from birth</block19>
+    <block20>Stories everyday</block20>
+    <block21>Art comes from here</block21>
     <block22>Earis favorite place to go</block22>
-    <block23>Study the alien lifeforms</block23>
-    <block24>Peace of mind needs some calm</block24>
-    <block25>A heavy Military base</block25>
-    <block26>Troop Headquarter</block26>
-    <block27>A modest House</block27>
-    <block28>A luxurious house</block28>
+    <block23>Designing the blocks of the futur</block23>
+    <block24>The secret of the S.U Industry</block24>
+    <block25>They produce something, but what?</block25>
+    <block26>The S.U Army forges</block26>
   </blockDescription>
   <bulletinTitle>
     <bulletin1>Royal children</bulletin1>
@@ -172,8 +168,8 @@
     <bulletin39>Creatures from Planet-Kavga</bulletin39>
     <bulletin40>A team is preparing</bulletin40>
   </bulletinSubtitle>
-  <BulletinText>
-    <bulletin1>2019-02-06T00:00:00Corriger tous les bulletins en anglais-Loan PREVOND</bulletin1>
+  <bulletinText>
+    <bulletin1>2019-02-09T00:00:00Corriger tous les bulletins en anglais-Loan PREVONDThe queen of Krowsers has just given birth to a thousand larvae. Some of the inhabitants Krowsers in the spacepole will soon be dislodged.</bulletin1>
     <bulletin2>Tomorrow, the entire Ho'gonu star system celebrates the 13th commemoration away from their native system! The construction company "Interblok" offers pink buildings to neighbors.</bulletin2>
     <bulletin3>The colony "Ijhin Ksalfa" has just elected its third president, Brust Bracoct. The Senuth community all over the empire is looking forward to seeing one of their more in high positions.</bulletin3>
     <bulletin4>Comet Teklo3 will cross the empire territory from the Versona system to Istafel, resulting in a significant traffic slowdown.</bulletin4>
@@ -185,7 +181,7 @@
     <bulletin10>The famous T27 carrier, containing more than 1 billion settlers and more than 20 million buildings, was hit by space debris, the shock may hit the neighboring planets.</bulletin10>
     <bulletin11>In the Enu'aj Teligg colony of the Ho'gonu star system, Senuths strike. No change in the colony.</bulletin11>
     <bulletin12>The Stello project, which was claimed to be revolutionary, was aborted. The decision was made at the top of the spacepole. The risks of failure were far too big.</bulletin12>
-    <bulletin13>The ambassador and founder of Colony 3 rests on the planet he has served for a century. Here are the last words of the ambassador: "Stack blocks, </bulletin13>
+    <bulletin13>The ambassador and founder of Colony 3 rests on the planet he has served for a century. Here are the last words of the ambassador: "Stack blocks, manage stupid people, it's over for me, Good bye!" A poignant testimony.</bulletin13>
     <bulletin14>The Tchekek Empire claims a stellar system that is part of the US territory. The authorities react by populating the system.</bulletin14>
     <bulletin15>A collaborative project between covridians and Kavgas gives birth to a revolutionary military technology. The Kavga Army is eager to try this new weapon. The rest of the population is more afraid of the consequences than other things.</bulletin15>
     <bulletin16>The death of a star has given birth to a black hole. More than 20 ships have been absorbed by the hole, and the traffic within the territory of the US reaches the red level, and is therefore blocked.</bulletin16>
@@ -213,7 +209,7 @@
     <bulletin38>Senuthia, the home planet of the Senuths, contained incredible technology, allowing the Senuths to do nothing themselves. An expedition is preparing to go get this technology, in our native system now without star.</bulletin38>
     <bulletin39>Evil creatures have just come out of the original star system. The ancient planet Kavga, ingeniously called "Planet-Kavga" by these inhabitants, seems to be the point of departure. Testimony of a Kavga: "Well what do you think? That we come from a cute and welcoming planet?"</bulletin39>
     <bulletin40>Explorers want to return to the original star system, where we all come from. They want to go back to our respective planets to understand why our star suddenly went out. More than 350,000 batteries are planned to power the team's lamps.</bulletin40>
-  </BulletinText>
+  </bulletinText>
   <flagName>
     <generator>Power generator</generator>
     <house>Habitation</house>
@@ -228,11 +224,11 @@
     <generator>Generates {0} power</generator>
     <house>Houses {0} {3}s</house>
     <occupator>Employs {0} {2}s at a range of {1}</occupator>
-    <nuisance>TODO nuisance</nuisance>
+    <nuisance>Generate {0} nuisance at a range of {1}</nuisance>
     <fireman>Puts out fires at a range of {0}</fireman>
-    <workingHours>TODO working hours</workingHours>
+    <workingHours>The building has opening hours</workingHours>
     <police>Prevents riots at a range of {0}</police>
-    <flagNeeder>TODO flag needer</flagNeeder>
+    <flagNeeder>The building need something to work</flagNeeder>
   </flagParameter>
   <state>
     <onFire>Burning</onFire>
@@ -261,12 +257,9 @@
     <moodValue>{0} are {1}</moodValue>
     <gauge>{0}/{1}</gauge>
     <completion>{0} out of {1}</completion>
-  </stats>
-<mood>
-	<angry>angry</angry>
     <bad>unhappy</bad>
     <good>happy</good>
-</mood>
+  </stats>
   <eventTitle>
     <event1>Dire need</event1>
     <event2>Boring house</event2>
@@ -294,17 +287,17 @@
     <event24>Weight Loss</event24>
     <event25>Available brain time</event25>
     <event26>Fount of knowledge</event26>
-    <event27>Tutorial 1 : New start</event27>
-    <event28>Tutorial 2 : Bridge</event28>
-    <event29>Tutorial 3 : Krowsers</event29>
-    <event30>Tutorial 4 : Electricity</event30>
-    <event31>Tutorial 5 : Food</event31>
-    <event32>Tutorial 6 : Kavga</event32>
-    <event33>Tutorial 7 : Earis</event33>
-    <event34>Tutorial 8 : Services</event34>
-    <event35>Tutorial 9 : Repairer</event35>
-    <event36>Tutorial 10 : Senuths</event36>
-    <event37>Tutorial 11 : Stand on its own feet</event37>
+    <event2000>Tutorial 1 : New start</event2000>
+    <event2001>Tutorial 2 : Bridge</event2001>
+    <event2002>Tutorial 3 : Krowsers</event2002>
+    <event2003>Tutorial 4 : Electricity</event2003>
+    <event2004>Tutorial 5 : Food</event2004>
+    <event2005>Tutorial 6 : Kavga</event2005>
+    <event2006>Tutorial 7 : Earis</event2006>
+    <event2007>Tutorial 8 : Services</event2007>
+    <event2008>Tutorial 9 : Repairer</event2008>
+    <event2009>Tutorial 10 : Senuths</event2009>
+    <event2010>Tutorial 11 : Stand on its own feet</event2010>
     <event1000>Revolution! Revolution!</event1000>
   </eventTitle>
   <eventDescription>
@@ -334,18 +327,18 @@
     <event24>Greeting ! We are going to start a period of weight loss, we are going to be on the teeth, but we will not use them! The food is outlawed! You agree ? End of communication!</event24>
     <event25>We think that one television per room in all high houses would be the least. We like shows where 100 Kavgas have to fight until there is only one left. So please provide us these televisions. For each home.</event25>
     <event26>Hello haha ​​!! We want to test a new mode of communication based on laser! So, it's a little dangerous, but hey! These are only small "Nucleoexplonapalmocute" type lasers! With your agreement, we can test this laser to the sky, to communicate with the transport vessels of buildings ... Otherwise we will do it in the city! No worries do not worry!</event26>
-    <event27>Hello, spaceport here. We will receive our first settlers tomorrow. These are covridians, a breed that particularly appreciates science. So they need a house and a laboratory, so they can work here. You will find these buildings at the bottom left of your management screen, you can place them by clicking and depositing directly on the field. You can place a high house under the spaceport to connect it. Then place a laboratory underneath him too.</event27>
-    <event28>Hello, spaceport here. To connect the buildings to each other, other than the ones on top of each other, you can connect them with bridges. Hold the [SHIFT] key to bridge two buildings at the same height. Buildings connected by bridges are considered adjacent, regardless of the distance between them.</event28>
-    <event29>Hello, spaceport here. We will soon receive Krowsers. It is a race loving to work in galleries. They would need a factory to work in the mine. In addition, they do not necessarily appreciate luxury housing, an average home will be perfect for them. Place the factory so that it is adjacent to the mine and the average home not far from it. For these buildings to work, they need energy. They must be connected to your city.</event29>
-    <event30>Hel ... Hello ... We apologize, but for us to work, we would need access to the mine from the factory. The factory must be connected to the mine by a bridge. In addition ... Our buildings need a lot of electricity and the spaceport does not provide enough ... Can you put a plant to generate more? Thank you ... And sorry for the inconvenience!</event30>
-    <event31>Hello, spaceport here. Buildings need electricity to operate. As for the settlers, they need food. We can provide some electricity and some food from the spaceport, but not enough for the next comers. The kavga are a warrior race that will not like not having enough food. Please order a food distributor and a fire station so that they can exercise their ... Work. They will be able to live in average homes.</event31>
-    <event32>Kavga: Good morning! We need access to the nests of critters that populate this planet. This is probably a source of danger, we will take care of it! The nests of critters regenerate little by little and the more we are on these nests, the more the nest will lose creatures! Yaah !! Hum ... End of communication.</event32>
-    <event33>Hello, spaceport here. Earis are on their way to our colony. It is a peaceful breed, for whom art takes precedence over everything, they generally like working at height, it allows them to better see the landscape. In addition, they appreciate the accommodations without any comfort. Please order a low dwelling and a workshop.</event33>
-    <event34>Hmm ... Hello ... The Earis have arrived and are very happy to be here ... They ... are having a party and I'm afraid it's going to get out of hand ... Can you ... Could you put a police building and a fire brigade? In case ... Thank you ... I do not want my family living in a dilapidated place ... And then you will not have to deal with them, these buildings handle the problems that are within their range. Th...Thank you.</event34>
-    <event35>Greetings! The Earis have put everything upside down! Fortunately you have placed buildings to block their enthusiasm. Otherwise, we would have solved that ourselves. We should now fix their nonsense with a repair building in range. End of transmission.</event35>
-    <event36>Hello, spaceport here. Senuths are about to arrive. It is a race formerly very developed and very rich. You must order a high dwelling and ... A lounge. These people do not really like work, being used to idleness.</event36>
-    <event37>Here we go, try to survive as long as possible !</event37>
-    <event1000>Sir, I'm afraid you may have upset the settlers. Much. So much that I fear you won't find anyone to follow your words anymore. The population is tired and angry. It's time for you to leave the place - we hope the Space Union will send another governor soon. I wish you the best of luck in your next enterprise - may it end up better for you!</event1000>
+    <event2000>Hello, spaceport here. We will receive our first settlers tomorrow. These are covridians, a breed that particularly appreciates science. So they need a house and a laboratory, so they can work here. You will find these buildings at the bottom left of your management screen, you can place them by clicking and depositing directly on the field. You can place a high house under the spaceport to connect it. Then place a laboratory underneath him too.</event2000>
+    <event2001>Hello, spaceport here. To connect the buildings to each other, other than the ones on top of each other, you can connect them with bridges. Hold the [SHIFT] key to bridge two buildings at the same height. Buildings connected by bridges are considered adjacent, regardless of the distance between them.</event2001>
+    <event2002>Hello, spaceport here. We will soon receive Krowsers. It is a race loving to work in galleries. They would need a factory to work in the mine. In addition, they do not necessarily appreciate luxury housing, an average home will be perfect for them. Place the factory so that it is adjacent to the mine and the average home not far from it. For these buildings to work, they need energy. They must be connected to your city.</event2002>
+    <event2003>Hel ... Hello ... We apologize, but for us to work, we would need access to the mine from the factory. The factory must be connected to the mine by a bridge. In addition ... Our buildings need a lot of electricity and the spaceport does not provide enough ... Can you put a plant to generate more? Thank you ... And sorry for the inconvenience!</event2003>
+    <event2004>Hello, spaceport here. Buildings need electricity to operate. As for the settlers, they need food. We can provide some electricity and some food from the spaceport, but not enough for the next comers. The kavga are a warrior race that will not like not having enough food. Please order a food distributor and a fire station so that they can exercise their ... Work. They will be able to live in average homes.</event2004>
+    <event2005>Good morning! We need access to the nests of critters that populate this planet. This is probably a source of danger, we will take care of it! The nests of critters regenerate little by little and the more we are on these nests, the more the nest will lose creatures! Yaah !! Hum ... End of communication.</event2005>
+    <event2006>Hello, spaceport here. Earis are on their way to our colony. It is a peaceful breed, for whom art takes precedence over everything, they generally like working at height, it allows them to better see the landscape. In addition, they appreciate the accommodations without any comfort. Please order a low dwelling and a workshop.</event2006>
+    <event2007>Hmm ... Hello ... The Earis have arrived and are very happy to be here ... They ... are having a party and I'm afraid it's going to get out of hand ... Can you ... Could you put a police building and a fire brigade? In case ... Thank you ... I do not want my family living in a dilapidated place ... And then you will not have to deal with them, these buildings handle the problems that are within their range. Th...Thank you.</event2007>
+    <event2008>Greetings! The Earis have put everything upside down! Fortunately you have placed buildings to block their enthusiasm. Otherwise, we would have solved that ourselves. We should now fix their nonsense with a repair building in range. End of transmission.</event2008>
+    <event2009>Hello, spaceport here. Senuths are about to arrive. It is a race formerly very developed and very rich. You must order a high dwelling and ... A lounge. These people do not really like work, being used to idleness.</event2009>
+    <event2010>Here we go, try to survive as long as possible !</event2010>
+    <event1000>$PLAYERNAME, I'm afraid you may have upset the settlers. Much. So much that I fear you won't find anyone to follow your words anymore. The population is tired and angry. It's time for you to leave $CITYNAME - we hope the Space Union will send another governor soon. I wish you the best of luck in your next enterprise - may it end up better for you!</event1000>
   </eventDescription>
   <newColony>
     <cityNameTooShort>City name is too short</cityNameTooShort>
@@ -371,7 +364,7 @@
     <foodConsumption>Food Consumption</foodConsumption>
     <power>Power</power>
     <fireRisk>Fire Risk</fireRisk>
-    <default>Default</default>
+    <default>No Overlay</default>
   </overlay>
   <scriptAction>
     <INCREASE_ENERGY_CONSUMPTION_FOR_BUILDING>A building consumes {2} energy during {1} cycles!</INCREASE_ENERGY_CONSUMPTION_FOR_BUILDING>
@@ -450,6 +443,17 @@
     <event25_2>No, no and no!</event25_2>
     <event26_1>Lasers? Mmh ok...</event26_1>
     <event26_2>No, please!</event26_2>
+    <event2000_1>Understood.</event2000_1>
+    <event2001_1>Ok</event2001_1>
+    <event2002_1>Understood!</event2002_1>
+    <event2003_1>Sure.</event2003_1>
+    <event2004_1>Ok</event2004_1>
+    <event2005_1>Sure.</event2005_1>
+    <event2006_1>Ok!</event2006_1>
+    <event2007_1>Understood</event2007_1>
+    <event2008_1>Ok</event2008_1>
+    <event2009_1>O...Ok!</event2009_1>
+    <event2010_1>Thanks for everything!</event2010_1>
   </choice>
   <populationTypeDelegate>
     <richie>Lord {0}</richie>
