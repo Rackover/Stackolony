@@ -25,7 +25,6 @@ public class WorkingHours : Flag, Flag.IFlag
 
     public void OnDisable()
     {
-        Debug.Log("Disabling");
         StartWork();
     }
 

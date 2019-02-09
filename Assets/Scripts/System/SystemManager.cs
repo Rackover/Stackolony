@@ -138,7 +138,7 @@ public class SystemManager : MonoBehaviour {
             if(block != null) block.OnGridUpdate();
         }
         yield return StartCoroutine(RecalculateSpatioportInfluence());
-        yield return new WaitForSeconds(0.1f); //Clumsy, à changer rapidement, la propagation doit s'effectuer une fois que le spatioport a tout mis à jour
+        yield return new WaitForSeconds(0.5f); //Clumsy, à changer rapidement, la propagation doit s'effectuer une fois que le spatioport a tout mis à jour
         yield return StartCoroutine(RecalculatePropagation());
         yield return StartCoroutine(RecalculateNuisance());
         yield return StartCoroutine(UpdateOverlay());
@@ -174,12 +174,8 @@ public class SystemManager : MonoBehaviour {
     //Si un block qui requiert du courant n'a pas croisé d'explorer, alors on l'eteint. Sinon on l'allume || Lancé automatiquement à la fin des calculs liés au power
     public void UpdateBlocksRequiringPower()
     {
-        foreach (Block block in AllBlocksRequiringPower)
+        foreach (Block block in AllBlocks)
         {
-            if (block.isConsideredUnpowered == true)
-            {
-                block.ChangePower(0);
-            }
             block.UpdatePower();
         }
     }
@@ -486,8 +482,7 @@ public class SystemManager : MonoBehaviour {
         Logger.Debug("Resetting block power ");
         foreach (Block block in AllBlocksRequiringPower)
         {
-            block.isConsideredUnpowered = true;
-            block.currentPower = 0;
+            block.hiddenPower = 0;
         }
         yield return null;
     }

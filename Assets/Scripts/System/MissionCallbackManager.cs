@@ -13,7 +13,11 @@ public class MissionCallbackManager : MonoBehaviour
 
     public void Reset()
     {
+
         StopAllCoroutines();
+        GameManager.instance.systemManager.UpdateBlocksRequiringPower();
+        GameManager.instance.systemManager.UpdateBlocksDisabled();
+        GameManager.instance.systemManager.OnCalculEnd();
         activeCoroutinesRelatedToEnergy = 0;
         activeCoroutinesRelatedToSpatioport = 0;
         mission = null;
@@ -67,13 +71,14 @@ public class MissionCallbackManager : MonoBehaviour
         GameManager.instance.missionManager.EndMission(myMission);
         yield return null;
     }
+
     IEnumerator EmitEnergy()
     {
         activeCoroutinesRelatedToEnergy++;
         MissionManager.Mission myMission = mission;
-        foreach (Block blocklink in myMission.blocksFound)
+        foreach (Block blocklink in myMission.blocksFound.ToArray())
         {
-            for (int i = blocklink.GetConsumption() - blocklink.currentPower; i > 0; i--)
+            for (int i = blocklink.GetConsumption() - blocklink.hiddenPower; i > 0; i--)
             {
                 if (myMission.power > 0)
                 {
@@ -96,7 +101,13 @@ public class MissionCallbackManager : MonoBehaviour
         }
         GameManager.instance.missionManager.EndMission(myMission);
         activeCoroutinesRelatedToEnergy--;
-        yield return new WaitForSeconds(1f);
+        
+        StartCoroutine(EnergyEndVerification());
+        yield return null;
+    }
+
+    IEnumerator EnergyEndVerification()
+    {
         if (GameManager.instance.systemManager != null && activeCoroutinesRelatedToEnergy <= 0)
         {
             GameManager.instance.systemManager.UpdateBlocksRequiringPower();
