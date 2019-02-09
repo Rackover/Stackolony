@@ -6,19 +6,30 @@ public class WorkingHours : Flag, Flag.IFlag
 {
 	public float startHour;
 	public float endHour;
+    public System.Type affectedFlag;
 	public bool hasStarted;
 
-    public void Update()
+    public override void Update()
     {
-        if (GameManager.instance.temporality.GetCurrentCycleProgression() > startHour && hasStarted == false)
+        base.Update();
+        if (isEnabled)
         {
-            StartWork();
-        }
-        else if (GameManager.instance.temporality.GetCurrentCycleProgression() > endHour && hasStarted == true)
-        {
-            EndWork();
+            if (GameManager.instance.temporality.GetCurrentCycleProgression() > startHour && hasStarted == false)
+            {
+                StartWork();
+            }
+            else if (GameManager.instance.temporality.GetCurrentCycleProgression() > endHour && hasStarted == true)
+            {
+                EndWork();
+            }
         }
     }
+
+    public void OnDisable()
+    {
+        StartWork();
+    }
+
     public void StartWork() {
         foreach (Flag flags in gameObject.GetComponents<Flag>()) {
 			if (flags != this)
