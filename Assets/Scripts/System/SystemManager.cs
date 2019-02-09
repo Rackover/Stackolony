@@ -374,8 +374,6 @@ public class SystemManager : MonoBehaviour {
 
     public IEnumerator RecalculateHabitation(float x)
     {
-        StartCoroutine(ResetHabitation());
-        yield return new WaitForEndOfFrame();
         GameManager.instance.cityManager.HouseEveryone(x);
         yield return null;
     }
@@ -500,20 +498,6 @@ public class SystemManager : MonoBehaviour {
         foreach (Block block in AllBlocks)
         {
             block.fireRiskPercentage = 0;
-        }
-        yield return null;
-    }
-
-    IEnumerator ResetHabitation()
-    {
-        Logger.Debug("Resetting citizens habitations");
-        foreach (House house in AllHouses)
-        {
-            house.affectedCitizen.Clear();
-        }
-        foreach (PopulationManager.Citizen citizen in GameManager.instance.populationManager.citizenList)
-        {
-            citizen.habitation = null;
         }
         yield return null;
     }
