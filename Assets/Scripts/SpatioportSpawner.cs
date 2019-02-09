@@ -23,13 +23,14 @@ public class SpatioportSpawner : MonoBehaviour {
     private void Start()
     {
         cineMan = GameManager.instance.cinematicManager;
+        GetCoordinates();
+
         if (!cineMan.areCinematicsEnabled) {
+            print("Spawning block on "+ coordinates);
             GameManager.instance.gridManagement.SpawnBlock(spatioportID, coordinates);
-            Destroy(gameObject);
+            DestroyImmediate(gameObject);
             return;
         }
-
-        GetCoordinates();
 
         camController = FindObjectOfType<CameraController>();
         cameraShake = cineMan.gameObject.GetComponent<CameraShake>();
