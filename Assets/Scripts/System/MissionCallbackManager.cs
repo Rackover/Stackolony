@@ -1,15 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class MissionCallbackManager : MonoBehaviour 
 {
     public GameObject prefabRemoving;
     public GameObject prefabEmitting;
     public MissionManager.Mission mission;
-    public int activeCoroutinesRelatedToPower;
     public int activeCoroutinesRelatedToSpatioport;
-    
+    public int activeCoroutinesRelatedToEnergy;
+
+    public void Reset()
+    {
+        StopAllCoroutines();
+        activeCoroutinesRelatedToEnergy = 0;
+        activeCoroutinesRelatedToSpatioport = 0;
+        mission = null;
+        foreach (MissionManager.Mission mission in GameManager.instance.missionManager.missionList)
+        {
+            GameManager.instance.missionManager.EndMission(mission);
+        }
+    }
 
     IEnumerator DistributeFood()
     {
@@ -35,7 +47,6 @@ public class MissionCallbackManager : MonoBehaviour
         }
         foodProvider.foodLeft = foodLeft;
         GameManager.instance.missionManager.EndMission(myMission);
-        activeCoroutinesRelatedToPower--;
         yield return null;
     }
 
@@ -56,10 +67,9 @@ public class MissionCallbackManager : MonoBehaviour
         GameManager.instance.missionManager.EndMission(myMission);
         yield return null;
     }
-
     IEnumerator EmitEnergy()
     {
-        activeCoroutinesRelatedToPower++;
+        activeCoroutinesRelatedToEnergy++;
         MissionManager.Mission myMission = mission;
         foreach (Block blocklink in myMission.blocksFound)
         {
@@ -68,9 +78,11 @@ public class MissionCallbackManager : MonoBehaviour
                 if (myMission.power > 0)
                 {
                     GameObject energyFeedback = Instantiate(prefabEmitting);
-                    if (!GameManager.instance.DEBUG_MODE) {
+                    if (!GameManager.instance.DEBUG_MODE)
+                    {
                         prefabEmitting.GetComponent<MeshRenderer>().enabled = false;
-                        foreach(MeshRenderer mesh in prefabEmitting.GetComponentsInChildren<MeshRenderer>()) {
+                        foreach (MeshRenderer mesh in prefabEmitting.GetComponentsInChildren<MeshRenderer>())
+                        {
                             mesh.enabled = false;
                         }
                     }
@@ -83,14 +95,12 @@ public class MissionCallbackManager : MonoBehaviour
             }
         }
         GameManager.instance.missionManager.EndMission(myMission);
-        activeCoroutinesRelatedToPower--;
-        if (activeCoroutinesRelatedToPower <= 0)
+        activeCoroutinesRelatedToEnergy--;
+        yield return new WaitForSeconds(1f);
+        if (GameManager.instance.systemManager != null && activeCoroutinesRelatedToEnergy <= 0)
         {
-            if (GameManager.instance.systemManager != null)
-            {
-                GameManager.instance.systemManager.UpdateBlocksRequiringPower();
-                GameManager.instance.systemManager.OnCalculEnd();
-            }
+            GameManager.instance.systemManager.UpdateBlocksRequiringPower();
+            GameManager.instance.systemManager.OnCalculEnd();
         }
         yield return null;
     }

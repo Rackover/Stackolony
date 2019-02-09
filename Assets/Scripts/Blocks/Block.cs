@@ -208,7 +208,6 @@ public class Block : MonoBehaviour
 
     public void ChangePower(int number) {
         currentPower = number;
-        UpdatePower();
         if (currentPower > 0) 
         {
             isConsideredUnpowered = false;
@@ -218,7 +217,6 @@ public class Block : MonoBehaviour
     public void AddPower(int number) 
     {
         currentPower += number;
-        UpdatePower();
         if (currentPower > 0) {
             isConsideredUnpowered = false;
         }
@@ -290,7 +288,6 @@ public class Block : MonoBehaviour
             {
                 visuals.Show();
                 effects.Show();
-                UpdatePower();
             }
         }
     }

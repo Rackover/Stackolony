@@ -9,9 +9,8 @@ public class WorkingHours : Flag, Flag.IFlag
     public System.Type affectedFlag;
 	public bool hasStarted;
 
-    public override void Update()
+    public void Update()
     {
-        base.Update();
         if (isEnabled)
         {
             if (GameManager.instance.temporality.GetCurrentCycleProgression() > startHour && hasStarted == false)
