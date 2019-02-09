@@ -6,7 +6,6 @@ public class WorkingHours : Flag, Flag.IFlag
 {
 	public float startHour;
 	public float endHour;
-    public System.Type affectedFlag;
 	public bool hasStarted;
 
     public void Update()
@@ -26,18 +25,20 @@ public class WorkingHours : Flag, Flag.IFlag
 
     public void OnDisable()
     {
+        Debug.Log("Disabling");
         StartWork();
     }
 
     public void StartWork() {
         foreach (Flag flags in gameObject.GetComponents<Flag>()) {
-        if (flags != this)
+            if (flags != this)
             if (!flags.isEnabled)
             {
-                flags.Enable();
-            }
+                    Debug.Log("Enabling flag");
+                    flags.Enable();
+                    hasStarted = true;
+                }
 		}
-		hasStarted = true;
 	}
 
 	public void EndWork() {
@@ -45,10 +46,11 @@ public class WorkingHours : Flag, Flag.IFlag
 			if (flags != this)
             if (flags.isEnabled)
             {
-                flags.Disable();
-            }
+                    Debug.Log("Disabling flag");
+                    flags.Disable();
+                    hasStarted = false;
+                }
         }
-		hasStarted = false;
 	}
 
     public System.Type GetFlagType()

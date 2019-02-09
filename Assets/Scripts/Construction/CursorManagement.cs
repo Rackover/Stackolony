@@ -244,6 +244,19 @@ public class CursorManagement : MonoBehaviour
                     Block selectedBlock = hit.transform.gameObject.GetComponent<Block>();
                     StartDrag(selectedBlock);
                     break;
+                case cursorMode.Bridge:
+                    GameObject selectedObj = hit.transform.gameObject;
+                    if (selectedObj != null)
+                    {
+                        if (selectedObj.transform.parent != null)
+                        {
+                            if (selectedObj.transform.parent.GetComponent<BridgeInfo>() != null)
+                            {
+                                GameManager.instance.gridManagement.DestroyBridge(selectedObj.transform.parent.gameObject);
+                            }
+                        }
+                    }
+                    break;
             }
         }
 
@@ -262,7 +275,7 @@ public class CursorManagement : MonoBehaviour
                     break;
             }
         }  
-
+    
         // Left Mouse up 
         if (Input.GetButtonUp("Select")) {
             switch (selectedMode) {

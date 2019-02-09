@@ -283,6 +283,11 @@ public class MissionManager : MonoBehaviour {
     {
         Block output = null;
 
+        //verifie que la position se trouve dans la grille
+        if (position.x < 0 || position.x > GameManager.instance.gridManagement.grid.GetLength(0)-1) { return null; }
+        if (position.y < 0 || position.x > GameManager.instance.gridManagement.grid.GetLength(1) - 1) { return null; }
+        if (position.z < 0 || position.x > GameManager.instance.gridManagement.grid.GetLength(2) - 1) { return null; }
+
         //Verifie que la position n'a jamais été explorée auparavant
         if (!myMission.exploredPositions.Contains(position))
         {

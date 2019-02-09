@@ -138,7 +138,7 @@ public class SystemManager : MonoBehaviour {
             if(block != null) block.OnGridUpdate();
         }
         yield return StartCoroutine(RecalculateSpatioportInfluence());
-        yield return new WaitForSeconds(0.5f); //Clumsy, à changer rapidement, la propagation doit s'effectuer une fois que le spatioport a tout mis à jour
+        yield return new WaitForSeconds(0.1f); //Clumsy, à changer rapidement, la propagation doit s'effectuer une fois que le spatioport a tout mis à jour
         yield return StartCoroutine(RecalculatePropagation());
         yield return StartCoroutine(RecalculateNuisance());
         yield return StartCoroutine(UpdateOverlay());

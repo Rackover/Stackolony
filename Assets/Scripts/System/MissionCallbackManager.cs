@@ -17,7 +17,7 @@ public class MissionCallbackManager : MonoBehaviour
         activeCoroutinesRelatedToEnergy = 0;
         activeCoroutinesRelatedToSpatioport = 0;
         mission = null;
-        foreach (MissionManager.Mission mission in GameManager.instance.missionManager.missionList)
+        foreach (MissionManager.Mission mission in GameManager.instance.missionManager.missionList.ToArray())
         {
             GameManager.instance.missionManager.EndMission(mission);
         }

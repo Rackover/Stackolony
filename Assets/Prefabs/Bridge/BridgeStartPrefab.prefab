@@ -19,6 +19,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4646884375361858}
+  - component: {fileID: 65025676378241394}
   m_Layer: 14
   m_Name: BridgeStartPrefab
   m_TagString: Untagged
@@ -111,7 +112,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1146988753402014}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 16.344, y: 10.581, z: 9.561329}
+  m_LocalPosition: {x: 19.885155, y: 10.492, z: 10.953285}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4935680282965806}
@@ -259,6 +260,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1397555030901660}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &65025676378241394
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1146988753402014}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.874815, z: 0.21734428}
+  m_Center: {x: 0, y: -0.20737267, z: 0.6266241}
 --- !u!65 &65278204355688472
 BoxCollider:
   m_ObjectHideFlags: 1
