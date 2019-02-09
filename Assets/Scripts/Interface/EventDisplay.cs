@@ -36,6 +36,13 @@ public class EventDisplay : MonoBehaviour {
         };
     }
 
+    private void Update()
+    {
+        if (dragging) {
+            transform.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y) + shift;
+        }
+    }
+
     public void InitializeWindow()
     {
         Population pop = gameEvent.instigator;
