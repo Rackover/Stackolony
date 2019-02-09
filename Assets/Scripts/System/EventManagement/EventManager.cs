@@ -210,7 +210,9 @@ public class EventManager : MonoBehaviour {
 
     public void TriggerEventImmediatly(int id)
     {
-        newEvent.Invoke(events[id]);
+        if (!GameManager.instance.DISABLE_EVENTS) {
+            newEvent.Invoke(events[id]);
+        }
     }
 
     IEnumerator WaitForEventAndTrigger(int id)

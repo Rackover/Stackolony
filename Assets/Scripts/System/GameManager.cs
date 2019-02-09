@@ -52,6 +52,7 @@ public class GameManager : MonoBehaviour
     public OverlayManager overlayManager;
     public bool DEBUG_MODE = false;
     public bool ENABLE_LOGS = true;
+    public bool DISABLE_EVENTS = false;
 
     public static GameManager instance;
 
