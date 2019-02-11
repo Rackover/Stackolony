@@ -23,7 +23,7 @@ public class MissionManager : MonoBehaviour {
     [System.Serializable]
     public class Mission
     {
-        public List<Coroutine> activeExplorers; //Liste de toutes les listes d'explorers actifs, il y a une liste d'explorers pour chaque mission.
+        public int activeExplorers; //Liste de toutes les listes d'explorers actifs, il y a une liste d'explorers pour chaque mission.
         public List<Vector3Int> exploredPositions;
         public List<Block> blocksFound;      //Tableau de chaque block trouvé par les explorers, il y en a un pour chaque mission.
         public List<int> blockDistanceToCenter; //Tableau paralléle au tableau blocksFound, indiquant la distance de chaque bloc par rapport au point de départ de la mission
@@ -43,7 +43,6 @@ public class MissionManager : MonoBehaviour {
     public Mission PrepareNewMission()
     {
         Mission newMission = new Mission();
-        newMission.activeExplorers = new List<Coroutine>();
         newMission.blocksFound = new List<Block>();
         newMission.blockDistanceToCenter = new List<int>();
         newMission.exploredPositions = new List<Vector3Int>();
@@ -72,7 +71,7 @@ public class MissionManager : MonoBehaviour {
     public IEnumerator StartMissionCoroutine(Mission mission)
     {
         //Genere le premier explorer de la mission
-        mission.activeExplorers.Add(StartCoroutine(SpawnExplorer(mission.position, mission.callBack, mission, mission.range, mission.power, 0)));
+        StartCoroutine(SpawnExplorer(mission.position, mission.callBack, mission, mission.range, mission.power, 0));
         yield return null;
     }
 
@@ -90,6 +89,7 @@ public class MissionManager : MonoBehaviour {
     //Genere un explorer qui va vérifier les 6 directions possible, et envoyer un autre explorer pour explorer chaque chemin trouvé.
     IEnumerator SpawnExplorer(Vector3Int position, string callback, Mission myMission, int range, int power, int explorerID)
     {
+        myMission.activeExplorers++;
         //Delai (à augmenter pour réduire le lag mais augmenter le temps de calcul)
         yield return new WaitForEndOfFrame();
 
@@ -136,7 +136,9 @@ public class MissionManager : MonoBehaviour {
         List<Block> AdjacentBlocks = CheckAdjacentBlocks(position, myMission);
 
         //L'explorer prend sa retraite
-        myMission.activeExplorers.RemoveAt(0);
+        if (myMission.activeExplorers > 0) {
+            myMission.activeExplorers--;
+        }
         if (explorerVisuals != null)
         {
             Destroy(explorerVisuals,1);
@@ -150,11 +152,11 @@ public class MissionManager : MonoBehaviour {
                 for (int i = 0; i < AdjacentBlocks.Count; i++)
                 {
                     //Forme l'explorer relai qui transportera ses informations
-                    int newExplorerID = myMission.activeExplorers.Count;
+                    int newExplorerID = myMission.activeExplorers;
                     
                     if (range > 0)
                     {
-                        myMission.activeExplorers.Add(StartCoroutine(SpawnExplorer(AdjacentBlocks[i].gridCoordinates, callback, myMission, range-1, power, newExplorerID)));
+                        StartCoroutine(SpawnExplorer(AdjacentBlocks[i].gridCoordinates, callback, myMission, range - 1, power, newExplorerID));
                     }
                 }
             }
@@ -171,8 +173,8 @@ public class MissionManager : MonoBehaviour {
                     for (int i = 0; i < AdjacentBlocks.Count; i++)
                     {
                         //Forme l'explorer relai qui transportera ses informations
-                        int newExplorerID = myMission.activeExplorers.Count;
-                        myMission.activeExplorers.Add(StartCoroutine(SpawnExplorer(AdjacentBlocks[i].gridCoordinates, callback, myMission, range, power, newExplorerID)));
+                        int newExplorerID = myMission.activeExplorers;
+                        StartCoroutine(SpawnExplorer(AdjacentBlocks[i].gridCoordinates, callback, myMission, range, power, newExplorerID));
                     }
                 } else if (myMission.flagToFind != null)
                 {
@@ -183,9 +185,9 @@ public class MissionManager : MonoBehaviour {
                             if (flag.GetType() == myMission.flagToFind)
                             {
                                 //Forme l'explorer relai qui transportera ses informations
-                                int newExplorerID = myMission.activeExplorers.Count;
+                                int newExplorerID = myMission.activeExplorers;
                                 if (range > 0)
-                                myMission.activeExplorers.Add(StartCoroutine(SpawnExplorer(foundBlock.gridCoordinates, callback, myMission, range-1, power, newExplorerID)));
+                                StartCoroutine(SpawnExplorer(foundBlock.gridCoordinates, callback, myMission, range-1, power, newExplorerID));
                             }
                         }
                     }
@@ -194,21 +196,17 @@ public class MissionManager : MonoBehaviour {
                     for (int i = 0; i < AdjacentBlocks.Count; i++)
                     {
                         //Forme l'explorer relai qui transportera ses informations
-                        int newExplorerID = myMission.activeExplorers.Count;
-                        myMission.activeExplorers.Add(StartCoroutine(SpawnExplorer(AdjacentBlocks[i].gridCoordinates, callback, myMission, range, power, newExplorerID)));
+                        int newExplorerID = myMission.activeExplorers;
+                        StartCoroutine(SpawnExplorer(AdjacentBlocks[i].gridCoordinates, callback, myMission, range, power, newExplorerID));
                     }
                 }
             }
         }
 
         //S'il n'y a plus aucun explorer actif, on termine la mission
-        myMission.explorerCount = myMission.activeExplorers.Count;
-        if (myMission.activeExplorers.Count == 0)
+        myMission.explorerCount = myMission.activeExplorers;
+        if (myMission.activeExplorers == 0)
         {
-            foreach (Coroutine c in myMission.activeExplorers)
-            {
-                StopCoroutine(c);
-            }
             if (myMission.blocksFound.Count > 0)
             {
                 GameManager.instance.missionCallbackManager.mission = myMission;

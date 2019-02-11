@@ -95,7 +95,6 @@ public class MissionCallbackManager : MonoBehaviour
                     Destroy(energyFeedback, 2);
                     blocklink.AddPower(1);
                     myMission.power--;
-                    yield return new WaitForEndOfFrame();
                 }
             }
         }
@@ -108,6 +107,7 @@ public class MissionCallbackManager : MonoBehaviour
 
     IEnumerator EnergyEndVerification()
     {
+        yield return new WaitForSeconds(1f);
         if (GameManager.instance.systemManager != null && activeCoroutinesRelatedToEnergy <= 0)
         {
             GameManager.instance.systemManager.UpdateBlocksRequiringPower();
@@ -139,7 +139,6 @@ public class MissionCallbackManager : MonoBehaviour
                 b.isConsideredDisabled = false;
                 b.isLinkedToSpatioport = true;
                 b.UnPack();
-                yield return new WaitForEndOfFrame();
             }
         }
         GameManager.instance.missionManager.EndMission(myMission);
