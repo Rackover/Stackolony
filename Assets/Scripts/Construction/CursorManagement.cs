@@ -31,6 +31,8 @@ public class CursorManagement : MonoBehaviour
     public float dragSpeed = 15f;
     private float dragDistance;
     public float dragTreshold = 10;
+    public float blockFallingSpeed = 1;
+    public float blockRisingSpeed = 3;
     private Vector2 initialDragPos;
     [Space(5)]
     

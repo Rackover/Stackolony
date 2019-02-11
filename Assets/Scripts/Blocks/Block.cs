@@ -316,25 +316,44 @@ public class Block : MonoBehaviour
             if (bridgeInfo != null)
                 GameManager.instance.gridManagement.UpdateBridgePosition(bridgeInfo, gridCoordinates.y);
         }
-        StartCoroutine(MoveToPosition());
+        float time = 0;
+        Vector3Int actualPos = GameManager.instance.gridManagement.WorldPositionToIndex(transform.position);
+        if (actualPos.x == gridCoordinates.x && actualPos.z == gridCoordinates.z)
+        {
+            if (actualPos.y > gridCoordinates.y)
+            {
+                time = 1/GameManager.instance.cursorManagement.blockFallingSpeed;
+            } else
+            {
+                time = 1/GameManager.instance.cursorManagement.blockRisingSpeed;
+            }
+        }
+        StartCoroutine(MoveToPosition(time));
     }
 
     private IEnumerator MoveToPosition(float time = 0) //Coroutine pour déplacer le cube vers sa position
     {
         float elapsedTime = 0;
         Vector3 startingPos = transform.position;
+        transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(gridCoordinates);
         while (elapsedTime < time)
         {
-            transform.position = Vector3.Lerp(
-                startingPos,
-                GameManager.instance.gridManagement.IndexToWorldPosition(gridCoordinates),
-                elapsedTime / time
-            );
+            foreach (Transform child in transform)
+            {
+                child.transform.position = Vector3.Lerp(
+                    startingPos,
+                    GameManager.instance.gridManagement.IndexToWorldPosition(gridCoordinates),
+                    elapsedTime / time
+                );
+            }
             elapsedTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
-        transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(gridCoordinates);
-       // checkForCollisions = false;
+        foreach (Transform child in transform)
+        {
+            child.transform.position = transform.position;
+        }
+        // checkForCollisions = false;
         yield return null;
     }
 
