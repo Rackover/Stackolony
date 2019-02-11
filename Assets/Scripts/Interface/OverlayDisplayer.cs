@@ -75,7 +75,6 @@ public class OverlayDisplayer : MonoBehaviour {
     {
         animator.Play("Unfold");
         isFolded = false;
-        Reset();
     }
 
     public void Fold()
