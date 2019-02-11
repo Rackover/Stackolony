@@ -13,6 +13,10 @@ public class OverlayManager : MonoBehaviour
     public Dictionary<OverlayType, IOverlay> overlays = new Dictionary<OverlayType, IOverlay>();
     public OverlayType activeOverlay;
 
+    [Header("Color settings")]
+    public Color OverlaySelectedColor;
+    public Color OverlayUnselectedColor;
+
     [System.Serializable]
     public class OverlayDatas
     {
