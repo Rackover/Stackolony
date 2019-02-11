@@ -12,6 +12,7 @@ using UnityEditor;
 public class Logger : MonoBehaviour
 {
     StringBuilder builder = new StringBuilder();
+    public type level;
     public string logFile = "stackolony.log";
     public string locale = "fr-FR";
     public int callerLength = 18;
@@ -51,6 +52,14 @@ public class Logger : MonoBehaviour
 
         // Get informations from stackframe
         Logger loggerInstance = FindObjectOfType<Logger>();
+        if (loggerInstance == null) {
+            return;
+        }
+
+        // Wrong level
+        if (loggerInstance.level > type) {
+            return;
+        }
 
         string caller = "";
 
@@ -59,10 +68,15 @@ public class Logger : MonoBehaviour
             StackFrame sf = new StackFrame(2, true);
             string file = sf.GetFileName().Replace(Application.dataPath.Replace("/", "\\") + "\\Scripts\\", "");
             string method = sf.GetMethod().Name;
-            caller =
-                file.Substring(0, Mathf.Min(file.Length, loggerInstance.callerLength)).PadRight(loggerInstance.callerLength)
-                + "=>"
-                + method.Substring(0, Mathf.Min(method.Length, loggerInstance.methodLength)).PadRight(loggerInstance.methodLength);
+            try {
+                caller =
+                    file.Substring(0, Mathf.Min(file.Length, loggerInstance.callerLength)).PadRight(loggerInstance.callerLength)
+                    + "=>"
+                    + method.Substring(0, Mathf.Min(method.Length, loggerInstance.methodLength)).PadRight(loggerInstance.methodLength);
+            }
+            catch (NullReferenceException) {
+                caller = "???";
+            }
         }
 
         // Debug line formatting

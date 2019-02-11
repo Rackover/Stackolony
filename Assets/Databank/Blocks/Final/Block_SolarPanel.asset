@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14a825372d1dc3a4fa39444b146f0e78, type: 3}
+  m_Name: Block_SolarPanel
+  m_EditorClassIdentifier: 
+  isMovable: 1
+  isDestroyable: 1
+  isBuyable: 1
+  canBuildAbove: 1
+  relyOnSpatioport: 1
+  fireProof: 0
+  model: {fileID: 1279266976626444, guid: 67bd21afca4922249bf3c1965c42608a, type: 2}
+  ID: 5
+  consumption: 0
+  sensibility: 1
+  flags:
+  - Generator_15
+  - WorkingHours_0_50

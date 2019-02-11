@@ -25,7 +25,9 @@ public class Spatioport : Flag, Flag.IFlag {
     {
         base.Disable();
         GameManager.instance.systemManager.AllSpatioports.Remove(this);
-        GameManager.instance.systemManager.StartCoroutine(GameManager.instance.systemManager.RecalculateSpatioportInfluence());
+        GameManager.instance.systemManager.StartCoroutine(
+            GameManager.instance.systemManager.RecalculateSpatioportInfluence()
+        );
     }
 
     public override void OnBlockUpdate()
@@ -39,8 +41,7 @@ public class Spatioport : Flag, Flag.IFlag {
 
     public override void OnDestroy()
     {
-        Disable();
-        base.OnDestroy();
+        
     }
 
     public System.Type GetFlagType()

@@ -34,10 +34,6 @@ public class GridManagement : MonoBehaviour
     
     public enum blockType{ FREE = 0, BRIDGE = 1}
 
-    private void Start()
-    {
-        if (!gameManager.IsInGame()){return;}
-    }
 
     public void InitializeGridManager()
     {
@@ -153,6 +149,31 @@ public class GridManagement : MonoBehaviour
         }
     }
 
+    public void InsertBlockAtPosition(Block block, Vector3Int coordinates)
+    {
+        if (grid[coordinates.x, coordinates.y, coordinates.z] != null)
+        {
+            for (int i = maxHeight-1; i >= coordinates.y; i--)
+            {
+                if (grid[coordinates.x, i, coordinates.z] != null)
+                {
+                    if (GetSlotType(new Vector3Int(coordinates.x, i+1, coordinates.z)) == GridManagement.blockType.FREE)
+                    {
+                        MoveBlock(grid[coordinates.x, i, coordinates.z], new Vector3Int(coordinates.x, i + 1, coordinates.z));
+                    }
+                    else
+                    {
+                        grid[coordinates.x, i +1, coordinates.z] = null;
+                        Logger.Error("An error happened while moving blocks down the grid from " + coordinates + " to " + (new Vector3Int(coordinates.x, i + 1, coordinates.z)));
+                        return;
+                    }
+                }
+            }
+        }
+        MoveBlock(block.gameObject, coordinates);
+        UpdateGridSystems();
+    }
+
 
     /// <summary>
     /// Safe function to move a block around.
@@ -234,10 +255,12 @@ public class GridManagement : MonoBehaviour
     /// </summary>
     /// <param name="blockId"></param>
     /// <param name="coordinates"></param>
-    public void LayBlock(int blockId, Vector2Int coordinates)
+    public Block LayBlock(int blockId, Vector2Int coordinates)
     {
         GameObject newBlock = SpawnBlock(blockId, new Vector3Int(coordinates.x,gridSize.y-1,coordinates.y));
-        LayBlock(newBlock.GetComponent<Block>(), coordinates);
+        Block b = newBlock.GetComponent<Block>();
+        LayBlock(b, coordinates);
+        return b;
     }
 
     public GameObject SpawnBlock(int blockId, Vector3Int coordinates)
@@ -423,9 +446,9 @@ public class GridManagement : MonoBehaviour
             else if (i == bridgeLength + 2) {
                 newBridgePart = Instantiate(bridgeEndPrefab, parentBridgeGameObject.transform);
                 newBridgePart.transform.localPosition = new Vector3(
-                    (((cellSize.x - 1) / 2) * direction.x) + (cellSize.x * (i - 2)) * direction.x + (0.5f * direction.x), 
+                    (((cellSize.x - 1) / 2) * direction.x) + (cellSize.x * (i - 2)) * direction.x, 
                     0, 
-                    (((cellSize.z - 1) / 2) * direction.y) + (cellSize.z * (i - 2)) * direction.y + (0.5f * direction.y)
+                    (((cellSize.z - 1) / 2) * direction.y) + (cellSize.z * (i - 2)) * direction.y
                 );
                 newBridgePart.transform.localRotation = firstBridgePart.transform.localRotation;
             }
@@ -434,9 +457,9 @@ public class GridManagement : MonoBehaviour
             else {
                 newBridgePart = Instantiate(bridgePrefab, parentBridgeGameObject.transform);
                 newBridgePart.transform.localPosition = new Vector3(
-                    (((cellSize.x - 1) / 2) * direction.x) + (cellSize.x * (i - 2)) * direction.x + (0.5f * direction.x), 
+                    (((cellSize.x - 1) / 2) * direction.x) + (cellSize.x * (i - 2)) * direction.x, 
                     0, 
-                    (((cellSize.z - 1) / 2) * direction.y) + (cellSize.z * (i - 2)) * direction.y + (0.5f * direction.y)
+                    (((cellSize.z - 1) / 2) * direction.y) + (cellSize.z * (i - 2)) * direction.y
                 );
                 newBridgePart.transform.localRotation = firstBridgePart.transform.localRotation;
             }
@@ -450,6 +473,7 @@ public class GridManagement : MonoBehaviour
             blockA.gridCoordinates.x
         ] = blockB.gridCoordinates;
 
+        GameManager.instance.achievementManager.achiever.AddToValue("bridgeCount");
         //Joue le son
         GameManager.instance.soundManager.Play("CreateBridge");
 
@@ -485,6 +509,9 @@ public class GridManagement : MonoBehaviour
         }
         GameManager.instance.soundManager.Play("DestroyBlock");
         Destroy(bridgeObject);
+
+        GameManager.instance.achievementManager.achiever.AddToValue("bridgeCount", -1);
+
         //Update the system
         UpdateGridSystems();
     }

@@ -37,9 +37,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4320883887219790}
   - component: {fileID: 205816532301938180}
+  - component: {fileID: 65918865484542750}
+  - component: {fileID: 54762632511554858}
   m_Layer: 0
   m_Name: SM_Tree_Pine_Large_01
-  m_TagString: Untagged
+  m_TagString: Decor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -67,9 +69,9 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1858709007138160}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.93617994, y: 0.099929996, z: 0.75658995}
+  m_LocalScale: {x: 0.0041131875, y: 0.0041131875, z: 0.0041131875}
   m_Children:
   - {fileID: 4433853144909754}
   - {fileID: 4330190805953166}
@@ -188,6 +190,33 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1891816287853304}
   m_Mesh: {fileID: 4300000, guid: 83062bc3973f3424db5d81035d871d0c, type: 3}
+--- !u!54 &54762632511554858
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1858709007138160}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &65918865484542750
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1858709007138160}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.9637793, y: 0.42492104, z: 1.9568981}
+  m_Center: {x: 0.1450873, y: 0.29339972, z: -0.09169524}
 --- !u!205 &205816532301938180
 LODGroup:
   m_ObjectHideFlags: 1

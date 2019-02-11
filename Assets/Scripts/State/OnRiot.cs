@@ -51,6 +51,7 @@ public class OnRiot : StateBehavior
 
     void FinishRepress()
     {
+        GameManager.instance.achievementManager.achiever.AddToValue("stoppedRiotCount");
         if(block != null) block.effects.Desactivate(GameManager.instance.library.repressParticle);
         Remove();
     }

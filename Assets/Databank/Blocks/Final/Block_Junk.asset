@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14a825372d1dc3a4fa39444b146f0e78, type: 3}
+  m_Name: Block_Junk
+  m_EditorClassIdentifier: 
+  isMovable: 0
+  isDestroyable: 1
+  isBuyable: 0
+  canBuildAbove: 0
+  relyOnSpatioport: 1
+  fireProof: 0
+  model: {fileID: 1593024420063624, guid: 6a64cf12c7012c84d9130d421d38118b, type: 2}
+  ID: 27
+  consumption: 0
+  sensibility: 1
+  flags: []

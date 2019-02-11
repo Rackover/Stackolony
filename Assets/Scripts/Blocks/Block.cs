@@ -10,7 +10,6 @@ public enum Quality{ Low, Medium, High }
 
 public class Block : MonoBehaviour
 {
-
     [Header("Referencies")]
     public BoxCollider boxCollider;
     public Container container;
@@ -34,6 +33,7 @@ public class Block : MonoBehaviour
 
     [Header("Values")]
 	public int currentPower;
+    public int hiddenPower;
     public int nuisance; //Nuisance received by the block
     public int fireRiskPercentage; //Fire risk in percent
     public bool isConsideredUnpowered; //Used when updating energy system
@@ -51,7 +51,7 @@ public class Block : MonoBehaviour
     {
         Disable();
         //Affiche un feedback pour signaler que le bloc est inactif
-        if (container.closed == false)
+        if(container.closed == false)
         {
             container.CloseContainer();
         }
@@ -103,11 +103,7 @@ public class Block : MonoBehaviour
     //Called when block is in range of a spatioport
     public void Enable()
     {
-        if (isEnabled)
-        {
-            return;
-        }
-
+        if(isEnabled){return;}
         isEnabled = true; 
 
         //Active toutes les fonctionnalités du bloc
@@ -212,21 +208,12 @@ public class Block : MonoBehaviour
     }
 
     public void ChangePower(int number) {
-        currentPower = number;
-        UpdatePower();
-        if (currentPower > 0) 
-        {
-            isConsideredUnpowered = false;
-        }
+        hiddenPower = number;
     }
 
     public void AddPower(int number) 
     {
-        currentPower += number;
-        UpdatePower();
-        if (currentPower > 0) {
-            isConsideredUnpowered = false;
-        }
+        hiddenPower += number;
     }
 
     public int GetConsumption()
@@ -272,6 +259,7 @@ public class Block : MonoBehaviour
 
     public void UpdatePower()
 	{
+        currentPower = hiddenPower;
 		if(currentPower >= GetConsumption())
 		{
 			AddState(State.Powered);
@@ -295,7 +283,6 @@ public class Block : MonoBehaviour
             {
                 visuals.Show();
                 effects.Show();
-                UpdatePower();
             }
         }
     }
@@ -335,7 +322,16 @@ public class Block : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(gridCoordinates);
+       // checkForCollisions = false;
         yield return null;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Decor")
+        {
+            Destroy(other.gameObject);
+        }
     }
 
     public void UpdateName()

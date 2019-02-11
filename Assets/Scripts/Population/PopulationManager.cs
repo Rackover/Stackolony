@@ -16,6 +16,7 @@ public class FoodModifier
 
 public class PopulationManager : MonoBehaviour 
 {
+    [System.Serializable]
     public class Citizen
     {
         public string name;
@@ -50,7 +51,7 @@ public class PopulationManager : MonoBehaviour
 	public float chanceDec = 0.02f;
 
 
-    public event System.Action<int, Population> CitizenArrival;
+    public System.Action<int, Population> CitizenArrival;
     //public Dictionary<Population, List<MoodModifier>> moodModifiers = new Dictionary<Population, List<MoodModifier>>(); //List of every active moodmodifiers for every population
     //private Dictionary<Population, float> averageMoods = new Dictionary<Population, float>();  // average moods between 0 and 1
     List<string> names;
@@ -120,7 +121,7 @@ public class PopulationManager : MonoBehaviour
 			}
 			else
 			{
-				GameManager.instance.systemManager.AllBlocks[Random.Range(0, GameManager.instance.systemManager.AllBlocks.Count)].AddState(State.OnRiot);
+				GameManager.instance.cityManager.TriggerAccident(State.OnRiot);
 			}
 		}
 	}
@@ -254,6 +255,8 @@ public class PopulationManager : MonoBehaviour
 
         float newValue = populations[type].averageMood;
         Logger.Debug("Population " + type.codeName + " mood has been changed from " + oldValue + " to " + newValue);
+
+        GameManager.instance.achievementManager.achiever.SetValue(type.codeName + "Mood", (int)populations[type].averageMood);
     }
 
     public float GetAverageMood(Population type)
@@ -310,6 +313,11 @@ public class PopulationManager : MonoBehaviour
         newCitizen.type = type;
         citizenList.Add(newCitizen);
         populations[type].citizens.Add(newCitizen);
+
+
+        GameManager.instance.achievementManager.achiever.AddToValue("settlerCount");
+        GameManager.instance.achievementManager.achiever.AddToValue(type.codeName + "Count");
+
         return newCitizen;
     }
 

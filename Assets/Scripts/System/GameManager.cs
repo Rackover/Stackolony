@@ -34,6 +34,8 @@ public class GameManager : MonoBehaviour
     public BulletinsManager bulletinsManager;
     public TimelineController timelineController;
     public EventManager eventManager;
+    public AnimationManager animationManager;
+    public AchievementManager achievementManager;
 
     [Space(1)]
     [Header("INTERFACE")]
@@ -51,6 +53,7 @@ public class GameManager : MonoBehaviour
     public OverlayManager overlayManager;
     public bool DEBUG_MODE = false;
     public bool ENABLE_LOGS = true;
+    public bool DISABLE_EVENTS = false;
 
     public static GameManager instance;
 
@@ -130,6 +133,8 @@ public class GameManager : MonoBehaviour
         if (timelineController == null) timelineController = FindObjectOfType<TimelineController>();
         if (player == null) player = FindObjectOfType<Player>();
         if (eventManager == null) eventManager = FindObjectOfType<EventManager>();
+        if (animationManager == null) animationManager = FindObjectOfType<AnimationManager>();
+        if (achievementManager == null) achievementManager = FindObjectOfType<AchievementManager>();
         
         // INTERFACE
         if (cursorDisplay == null) cursorDisplay = FindObjectOfType<CursorDisplay>();
@@ -194,8 +199,7 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.End)) {
             temporality.timeScale = 100;
         }
-
-
+        
         if (Input.GetKeyDown(KeyCode.N)) { 
             Notifications.Notification not = new Notifications.Notification(
                 new string[] { "cannotBuild", "notLinked", "newPeople" }[Mathf.FloorToInt(Random.value * 3)], 
@@ -209,7 +213,7 @@ public class GameManager : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.Delete)) {
-            eventManager.TriggerEvent(9);
+            eventManager.TriggerEvent(1000);
         }
 
         // Pause
@@ -221,12 +225,14 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.V)) {
             FindObjectOfType<CameraController>().ResetPosition();
         }
-/*
-        // Spawns and inhabits citizen
-        if (Input.GetKeyDown(KeyCode.B)) {
-            populationManager.AutoHouseCitizen(populationManager.SpawnCitizen(populationManager.populationTypeList[0]));
+
+        // Unlock all
+        if (Input.GetKeyDown(KeyCode.T)) {
+            foreach(BlockScheme s in library.blocks) {
+                cityManager.UnlockBuilding(s.ID);
+            }
         }
-*/
+
         // Spawns 5  cit
         if (Input.GetKeyDown(KeyCode.U)) {
             populationManager.SpawnCitizens(populationManager.populationTypeList[Mathf.FloorToInt(populationManager.populationTypeList.Length*Random.value)], 5);
@@ -289,7 +295,16 @@ public class GameManager : MonoBehaviour
                 )
             ));
         }
-        
+
+
+        if (Input.GetKeyDown(KeyCode.F)) {
+            animationManager.ElevateTower(cursorManagement.posInGrid);
+        }
+
+        if (Input.GetKeyDown(KeyCode.G)) {
+            animationManager.EndElevateTower(new Vector2Int(cursorManagement.posInGrid.x, cursorManagement.posInGrid.z));
+        }
+
         // Goes forward in time by 1 cycle
         if (Input.GetKeyDown(KeyCode.C)) 
         {
@@ -351,9 +366,7 @@ public class GameManager : MonoBehaviour
 
         temporality.SetDate(0);
         temporality.SetTimeOfDay(20);
-        temporality.SetTimeScale(1);
-        
-        
+        temporality.SetTimeScale(1);        
 
         // Initialize only
         gridManagement.InitializeGridManager();
@@ -391,6 +404,18 @@ public class GameManager : MonoBehaviour
         cursorManagement.KillGameCursor();
         temporality.SetTimeOfDay(20);
         temporality.SetTimeScale(2);
+
+        // Clear events
+        eventManager.newEvent = null;
+        populationManager.CitizenArrival = null;
+        cursorManagement.CursorError = null;
+
+        // Clear system
+        systemManager.ClearSystem();
+
+        // Remove gameevents and citizens
+        populationManager.citizenList.Clear();
+        eventManager.ResetChances();
 
         // Shut down only
         displayerManager.UnstageAll();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class TooltipGO : MonoBehaviour {
 
@@ -9,7 +10,7 @@ public class TooltipGO : MonoBehaviour {
     public enum alignmentOptionsVertical { TOP, BOTTOM };
 
     [Header("=== REFERENCES ===")]
-    public Text myText;
+    public TextMeshProUGUI myText;
     public RectTransform myRectTransform;
     public RectTransform myCanvasTransform;
 
@@ -101,14 +102,14 @@ public class TooltipGO : MonoBehaviour {
             case alignmentOptionsHorizontal.RIGHT:
                 if (alignmentY == alignmentOptionsVertical.TOP)
                 {
-                    myText.alignment = TextAnchor.UpperRight;
+                   // myText.alignment = (TextAlignmentOptions) TextAnchor.UpperRight;
                     parentT.anchorMin = new Vector2(0.5f, 1);
                     parentT.anchorMax = new Vector2(0.5f, 1);
                     parentT.pivot = new Vector2(0.5f, 1);
                     myRectTransform.pivot = new Vector2(1, 1);
                 } else
                 {
-                    myText.alignment = TextAnchor.LowerRight;
+                  //  myText.alignment = (TextAlignmentOptions)TextAnchor.LowerRight;
                     parentT.anchorMin = new Vector2(0.5f, 0);
                     parentT.anchorMax = new Vector2(0.5f, 0);
                     parentT.pivot = new Vector2(0.5f, 0);
@@ -120,7 +121,7 @@ public class TooltipGO : MonoBehaviour {
                 myRectTransform.pivot = new Vector2(0, 0);
                 if (alignmentY == alignmentOptionsVertical.TOP)
                 {
-                    myText.alignment = TextAnchor.UpperLeft;
+                    //myText.alignment = (TextAlignmentOptions)TextAnchor.UpperLeft;
                     parentT.anchorMin = new Vector2(0.5f, 1);
                     parentT.anchorMax = new Vector2(0.5f, 1);
                     parentT.pivot = new Vector2(0.5f, 1);
@@ -128,7 +129,7 @@ public class TooltipGO : MonoBehaviour {
                 }
                 else
                 {
-                    myText.alignment = TextAnchor.LowerLeft;
+                   // myText.alignment = (TextAlignmentOptions)TextAnchor.LowerLeft;
                     parentT.anchorMin = new Vector2(0.5f, 0);
                     parentT.anchorMax = new Vector2(0.5f, 0);
                     parentT.pivot = new Vector2(0.5f, 0);

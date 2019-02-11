@@ -20,7 +20,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4569060617217588}
   - component: {fileID: 114764285109040522}
-  - component: {fileID: 114656185118480674}
   m_Layer: 0
   m_Name: CityManagement
   m_TagString: Untagged
@@ -41,22 +40,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114656185118480674
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1526610025343746}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f40f7adde7b837147b3a4c8aec525792, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mineAtStart: 3
-  nestAtStart: 4
-  nestSpawnChance: 0.1
-  mines: []
-  nests: []
 --- !u!114 &114764285109040522
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -71,8 +54,8 @@ MonoBehaviour:
   cityName: Valenciennes
   accidentStates: 010000000200000003000000
   isTutorialRun: 1
-  mineAtStart: 3
-  nestAtStart: 4
+  minesAtStart: 3
+  nestsAtStart: 4
   nestSpawnChance: 0.1
   moodValues:
     goodNotationTreshold: -5

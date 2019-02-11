@@ -44,7 +44,7 @@ public class ConsequencesManager : MonoBehaviour {
         }
     }
 
-    //Destroys temporaly the specified flag
+    //Destroys temporaly the specified flag  
     static public void DestroyFlagTemporarily(Block block, System.Type flag, int cyclesRemaining)
     {
         if (GameManager.instance.cityManager.FindFlag(block, flag) != null)
@@ -82,7 +82,6 @@ public class ConsequencesManager : MonoBehaviour {
     }
     static IEnumerator SpawnBlocksAtLocationC(int amount, int blockID, Vector2Int location)
     {
-        location.y = GameManager.instance.gridManagement.gridSize.y - 1;
         for (int i = 0; i < amount; i++)
         {
             yield return new WaitForSeconds(1f);
@@ -91,8 +90,7 @@ public class ConsequencesManager : MonoBehaviour {
                 int randomID = GameManager.instance.library.GetRandomBlock().ID;
                 GameManager.instance.gridManagement.LayBlock(randomID, new Vector2Int(location.x, location.y));
             }
-            else
-            {
+            else {
                 GameManager.instance.gridManagement.LayBlock(blockID, new Vector2Int(location.x, location.y));
             }
         }
@@ -195,11 +193,15 @@ public class ConsequencesManager : MonoBehaviour {
         return houses[Mathf.FloorToInt(Random.value * houses.Count)];
     }
 
-
-    //TO DO
-    //Randomly spawns a mine on the map
-    public void SpawnMine(int amount)
+    static public void ConvertBlock(Block block, BlockScheme newBlock)
     {
+        Vector3Int coord = block.gridCoordinates;
+        block.Destroy();
+        GameManager.instance.gridManagement.SpawnBlock(newBlock.ID, coord);
+    }
 
+    static void SpawnMine(int amount)
+    {
+        for(int i = 0; i < amount; i++) GameManager.instance.cityManager.SpawnMine();
     }
 }

@@ -14,10 +14,13 @@ public class EventManager : MonoBehaviour {
 
     public System.Action<GameEvent> newEvent;
     public float chanceIncreasePerCycle = 0.33f;
+    public float gameOverThreshold = 0.25f;
 
     Dictionary<int, GameEvent> events = new Dictionary<int, GameEvent>();
     List<EventMarker> eventsPool = new List<EventMarker>();
     float chances = 0f;
+    int nextEvent = 0;
+    bool triggerEventWhenPossible = false;
 
     public class GameEvent
     {
@@ -35,7 +38,7 @@ public class EventManager : MonoBehaviour {
 
         public void ExecuteChoice(int choice)
         {
-            if (choice >= choices.Count) {
+            if (choice > choices.Count) {
                 return;
             }
 
@@ -89,7 +92,7 @@ public class EventManager : MonoBehaviour {
 
         public void Execute()
         {
-            foreach(GameEffect action in actions) {
+            foreach (GameEffect action in actions) {
                 action.GetAction().Invoke();
             }
         }
@@ -114,8 +117,41 @@ public class EventManager : MonoBehaviour {
         public float time;
     }
 
+    public void ResetChances()
+    {
+        chances = 0f;
+    }
+
+    private void Update()
+    {
+        if (triggerEventWhenPossible) {
+            float timeOfDay = GameManager.instance.temporality.GetCurrentCycleProgression();
+            foreach(EventMarker marker in eventsPool) {
+                if (marker.eventId == nextEvent) {
+                    if (timeOfDay  > marker.time) {
+                        TriggerEvent(nextEvent);
+                        triggerEventWhenPossible = false;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
     public void Renew(int currentCycle)
     {
+        // Game Over
+        float average = 0f;
+        foreach(Population pop in GameManager.instance.populationManager.populationTypeList) {
+            average += GameManager.instance.populationManager.GetAverageMood(pop);
+        }
+        average /= GameManager.instance.populationManager.populationTypeList.Length;
+
+        if (average < gameOverThreshold) {
+            TriggerEvent(1000);
+        }
+
+        // Random event per day
         if (Random.value < chances) {
             EventMarker pick = null;
             List<EventMarker> newList = new List<EventMarker>();
@@ -134,8 +170,10 @@ public class EventManager : MonoBehaviour {
                 return;
             }
 
-            newEvent.Invoke(events[pick.eventId]);
+            triggerEventWhenPossible = true;
+            nextEvent = pick.eventId;
             eventsPool = newList;
+            chances = 0f;
         }
         else {
             chances += chanceIncreasePerCycle;
@@ -151,21 +189,39 @@ public class EventManager : MonoBehaviour {
             }
             catch (EventInterpreter.InterpreterException e) {
                 GameManager.instance.eventManager.interpreterError.Invoke(e.Message);
+                Debug.LogWarning(e);
             }
             catch (System.Exception e) {
                 GameManager.instance.eventManager.interpreterError.Invoke("Unknown interpreter error - check your script.\n" + e.Message);
+                Debug.LogWarning(e);
             }
         }
     }
 
     public void CheckSyntax(string eventScript)
     {
-        interpreter.MakeEvent(eventScript, checkError);
+        interpreter.MakeEvent(eventScript, checkError, true);
     }
     
     public void TriggerEvent(int id)
     {
-        newEvent.Invoke(events[id]);
+        StartCoroutine(WaitForEventAndTrigger(id));
+    }
+
+    public void TriggerEventImmediatly(int id)
+    {
+        if (!GameManager.instance.DISABLE_EVENTS) {
+            newEvent.Invoke(events[id]);
+        }
+    }
+
+    IEnumerator WaitForEventAndTrigger(int id)
+    {
+        while (!events.ContainsKey(id) || GameManager.instance.cinematicManager.IsInCinematic()) {
+            yield return null;
+        }
+        TriggerEventImmediatly(id);
+        yield return true;
     }
 
     public void LoadEvents()

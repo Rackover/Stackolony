@@ -100,8 +100,6 @@ public class Container : MonoBehaviour
     {
         closed = false;
         cColor = oColor;
-        
-        linkedBlock.ToggleVisuals(true);
         GameManager.instance.soundManager.Play("OpenContainer");
         myAnimator.SetBool("Closed", closed);
     }
@@ -111,10 +109,7 @@ public class Container : MonoBehaviour
         closed = true;
         cColor = oColor;
         if(containerMat != null) containerMat.color = cColor;
-
         visual.SetActive(true);
-
-        linkedBlock.ToggleVisuals(false);
         myAnimator.SetBool("Closed", closed);
     }
 }

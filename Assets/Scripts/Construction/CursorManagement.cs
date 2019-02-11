@@ -9,7 +9,7 @@ public class CursorManagement : MonoBehaviour
 {
     public enum cursorMode { Default, Build, Delete, Bridge, Move }; //Chaque mode du curseur
 
-    public event Action<string> CursorError;
+    public Action<string> CursorError;
 
     [Header("=== REFERENCIES ===")]
     [Header("Prefabs")]
@@ -28,6 +28,8 @@ public class CursorManagement : MonoBehaviour
     public int projectorHeight = 10;
     public GameObject myProjector;
     public Projector myProjectorComponent;
+    public float dragDelay = 0.2f;
+    private float dragCD;
     [Space(5)]
     
     [Header("=== DEBUG ===")]
@@ -44,6 +46,7 @@ public class CursorManagement : MonoBehaviour
     private GameObject hoveredBlock;
     private GameObject stackSelector; //La petite fléche qui se met au pied de la tour qu'on selectionne
     [System.NonSerialized] public bool canSwitchTools = true;
+    public bool draggingNewBlock = false;
 
     public void InitializeGameCursor()
     {
@@ -239,9 +242,18 @@ public class CursorManagement : MonoBehaviour
         if(Input.GetButtonDown("Select"))
         {
             switch (selectedMode) {
-                case cursorMode.Move:
-                    Block selectedBlock = hit.transform.gameObject.GetComponent<Block>();
-                    StartDrag(selectedBlock);
+                case cursorMode.Bridge:
+                    GameObject selectedObj = hit.transform.gameObject;
+                    if (selectedObj != null)
+                    {
+                        if (selectedObj.transform.parent != null)
+                        {
+                            if (selectedObj.transform.parent.GetComponent<BridgeInfo>() != null)
+                            {
+                                GameManager.instance.gridManagement.DestroyBridge(selectedObj.transform.parent.gameObject);
+                            }
+                        }
+                    }
                     break;
             }
         }
@@ -251,6 +263,15 @@ public class CursorManagement : MonoBehaviour
             switch (selectedMode) 
             {
                 case cursorMode.Move:
+                    if (dragCD >= dragDelay && selectedBlock == null)
+                    {
+                        Block selectedBlock = hit.transform.gameObject.GetComponent<Block>();
+                        StartDrag(selectedBlock);
+                    }
+                    else
+                    {
+                        dragCD += Time.deltaTime;
+                    }
                     DuringDrag(posInGrid);
                     break;
 
@@ -261,9 +282,10 @@ public class CursorManagement : MonoBehaviour
                     break;
             }
         }  
-
+    
         // Left Mouse up 
         if (Input.GetButtonUp("Select")) {
+            dragCD = 0;
             switch (selectedMode) {
                 case cursorMode.Move:
                     EndDrag(posInGrid);
@@ -540,11 +562,11 @@ public class CursorManagement : MonoBehaviour
 
     public void DuringDrag(Vector3Int _pos)
     {
-        if(selectedBlock != null)
+        if (selectedBlock != null)
         {
-            if(_pos != savedPos)
+            if (_pos != savedPos)
             {
-                if(!isDragging) 
+                if (!isDragging)
                 {
                     isDragging = true;
                     selectedBlock.GetComponent<Collider>().enabled = false;
@@ -590,7 +612,15 @@ public class CursorManagement : MonoBehaviour
                 GameManager.instance.gridManagement.UpdateBlocks(selectedBlock.gridCoordinates);
 
                 // Fait tomber le bloc au sol
-                GameManager.instance.gridManagement.LayBlock(selectedBlock, new Vector2Int(_pos.x,_pos.z));
+                if (GameManager.instance.gridManagement.grid[_pos.x, _pos.y, _pos.z] != null)
+                {
+                    GameManager.instance.gridManagement.InsertBlockAtPosition(selectedBlock, _pos);
+                    GameManager.instance.animationManager.EndElevateTower(new Vector2Int(_pos.x, _pos.z),0);
+                }
+                else
+                {
+                    GameManager.instance.gridManagement.LayBlock(selectedBlock, new Vector2Int(_pos.x, _pos.z));
+                }
             } 
             else
             {
@@ -609,14 +639,20 @@ public class CursorManagement : MonoBehaviour
 
     public void CancelDrag()
     {
-        if(selectedBlock != null && isDragging)
+        if (selectedBlock != null && isDragging)
         {
+            GameManager.instance.animationManager.EndElevateTower(new Vector2Int(savedPos.x, savedPos.z), 0);
+            if (draggingNewBlock == true)
+            {
+                GameManager.instance.gridManagement.DestroyBlock(selectedBlock.gridCoordinates);
+            }
+            draggingNewBlock = false;
             if (selectedBlock.GetComponent<Block>() != null)
             {
                 selectedBlock.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(selectedBlock.gridCoordinates);
             } else
             {
-                Destroy(selectedBlock);
+                GameManager.instance.gridManagement.DestroyBlock(selectedBlock.gridCoordinates);
             }
             selectedBlock.boxCollider.enabled = true;
             selectedBlock = null;

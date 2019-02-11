@@ -7,6 +7,7 @@ public class CameraController : MonoBehaviour {
     [Header("=== REFERENCIES ===")] [Space(1)]
     [Header("Camera")] [Space(1)]
     public GameObject cameraModel;
+    public GameObject editorOnlyDummy;
     GameObject cameraInstance;
     [Header("Transforms")] [Space(1)]
     public Transform camCenter;                 // Center of the camera (Used for Lookat + movement)
@@ -44,17 +45,20 @@ public class CameraController : MonoBehaviour {
     Vector3 lastMousePosition;
     bool isFrozen = false;
 
-    void Start()
+    void Awake()
     {
         startPosition = transform.position;
 
         // Spawning camera
         cameraInstance = Instantiate(cameraModel);
         camTransform = cameraInstance.transform;
+
         cameraInstance.GetComponent<Camera>().targetDisplay = 0;
-        camTransform.rotation = Camera.main.gameObject.transform.rotation;
-        camTransform.position = Camera.main.gameObject.transform.position;
-        DestroyImmediate(Camera.main.gameObject);
+        cameraInstance.transform.GetChild(0).GetComponent<Camera>().targetDisplay = 0;
+
+        camTransform.rotation = editorOnlyDummy.transform.rotation;
+        camTransform.position = editorOnlyDummy.transform.position;
+        DestroyImmediate(editorOnlyDummy);
         cameraInstance.tag = "MainCamera";
 
         // creating two dummies for the camera lerping
@@ -100,6 +104,10 @@ public class CameraController : MonoBehaviour {
         CatchUpCameraObjective();
     }
 
+    public void SetCameraPositionAndRotation(Vector3 p, Quaternion r)
+    {
+        cameraInstance.transform.SetPositionAndRotation(p, r);
+    }
 
     public void FreezeCameraPosition()
     {
