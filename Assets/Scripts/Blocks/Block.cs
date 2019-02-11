@@ -47,6 +47,17 @@ public class Block : MonoBehaviour
         if(boxCollider == null) boxCollider = GetComponent<BoxCollider>();
     }
 
+    public void UpdateTooltip()
+    {
+        // Tooltip generation
+        Tooltip tt = GetComponent<Tooltip>();
+        tt.ClearLines();
+        List<Tooltip.TooltipLocalizationEntry> entries = Tooltip.GetBuildingTooltip(this);
+        foreach (Tooltip.TooltipLocalizationEntry entry in entries) {
+            tt.AddLocalizedLine(entry);
+        }
+    }
+
     public void Pack()
     {
         Disable();
