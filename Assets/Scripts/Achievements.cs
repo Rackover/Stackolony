@@ -22,11 +22,11 @@ public class Achievements
 		{
 			switch(rule)
 			{
-				case ">": return currentValue > activationValue;
-				case ">=": return currentValue >= activationValue;
-				case "<": return currentValue < activationValue;
-				case "<=": return currentValue <= activationValue;
-				case "==": return currentValue == activationValue;
+				case "GREATER_THAN": return currentValue > activationValue;
+				case "GREATER_OR_EQUAL_THAN": return currentValue >= activationValue;
+				case "LESS_THAN": return currentValue < activationValue;
+				case "LESS_OR_EQUAL_THAN": return currentValue <= activationValue;
+				case "EQUAL": return currentValue == activationValue;
 				default: return false;
 			}
 		}
@@ -59,7 +59,7 @@ public class Achievements
 			{
 				achievement.unlocked = true;
 				Debug.Log("Achievement_" + achievement.id + " : " + achievement.name + ", unlocked !");
-				AchievementManager.unlockedAchievements.Add(achievement.id); // Add the achievement ID to the player save
+				GameManager.instance.achievementManager.unlockedAchievements.Add(achievement.id); // Add the achievement ID to the player save
 				// g_SteamAchievements->SetAchievement(entry.value.name); // Trigger steam achievement	
 			}
 		}
