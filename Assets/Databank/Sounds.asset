@@ -23,7 +23,7 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 7beaed71ae95d8f42be291c0be6e90cc, type: 3}
   - name: Music
     clips:
-    - {fileID: 8300000, guid: 59d725638fc69e74fadca7c5b3140659, type: 3}
+    - {fileID: 8300000, guid: e154db77e002ea04db91378904999359, type: 3}
   - name: IncreaseSpeed
     clips:
     - {fileID: 8300000, guid: bd12c141a632e2141a290527822fa459, type: 3}
@@ -78,3 +78,9 @@ MonoBehaviour:
   - name: Death
     clips:
     - {fileID: 8300000, guid: 1d1a9416890bdc24eaeaf43ca65448e5, type: 3}
+  - name: BulletinPop
+    clips:
+    - {fileID: 8300000, guid: a47824e1fbbc92647abb415925bb0c56, type: 3}
+  - name: Shift
+    clips:
+    - {fileID: 8300000, guid: 67b206ac113420c4da3695628f45a81a, type: 3}

@@ -131,10 +131,16 @@ public class CursorManagement : MonoBehaviour
     private void UpdateTool()
     {
         // Move mode by default unless the bridge key is pressed
-        if (Input.GetButton("Bridge")) {
-            if (selectedMode != cursorMode.Bridge) SwitchMode(cursorMode.Bridge);
+        if (Input.GetButton("Bridge")) 
+        {
+            if (selectedMode != cursorMode.Bridge) 
+            {
+                GameManager.instance.soundManager.Play("Shift");
+                SwitchMode(cursorMode.Bridge);
+            }
         }
-        else {
+        else 
+        {
             if (selectedMode != cursorMode.Move) SwitchMode(cursorMode.Move);
         }
     }
