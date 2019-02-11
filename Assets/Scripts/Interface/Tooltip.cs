@@ -66,6 +66,16 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
     {
         locs.Add(new TooltipLocalizationEntry(line.id, line.category, type, line.values));
     }
+    
+    void OnMouseEnter()
+    {
+        OnPointerEnter(new PointerEventData(FindObjectOfType<EventSystem>()));
+    }
+
+    void OnMouseExit()
+    {
+        OnPointerExit(new PointerEventData(FindObjectOfType<EventSystem>()));
+    }
 
     public void OnPointerEnter(PointerEventData pointerEventData)
     {
