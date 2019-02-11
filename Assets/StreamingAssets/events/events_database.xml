@@ -98,7 +98,7 @@
 	</event>
 	<event id="10" population="artist" emotion="jaded">
 		<choice id="1">
-			A=RANDOM_BUILDING(id=24);
+			A=RANDOM_BUILDING(id:24);
 			B=SCHEME(id:22);
 			CHANGE_BUILDING_SCHEME(building:A,scheme:B);
 		</choice>
