@@ -59,7 +59,7 @@ public class Achievements
 
 				string achievementName = GameManager.instance.localization.GetLineFromCategory("achievementName", "achievement" + achievement.id);
 
-				Debug.Log("Achievement_" + achievement.id + " : " + achievementName + " unlocked !");
+				Logger.Debug("Achievement_" + achievement.id + " : " + achievementName + " unlocked !");
 				GameManager.instance.achievementManager.unlockedAchievements.Add(achievement.id); // Add the achievement ID to the player save
 				// g_SteamAchievements->SetAchievement(entry.value.name); // Trigger steam achievement	
 			}
