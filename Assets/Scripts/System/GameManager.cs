@@ -54,6 +54,7 @@ public class GameManager : MonoBehaviour
     public bool DEBUG_MODE = false;
     public bool ENABLE_LOGS = true;
     public bool DISABLE_EVENTS = false;
+    public bool DISABLE_GAME_OVER = false;
 
     public static GameManager instance;
 
@@ -318,6 +319,10 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.B)) 
         {
             temporality.AddMicroCycle();
+        }
+
+        if (Input.GetKeyDown(KeyCode.W)) {
+            populationManager.GenerateMoodModifier(populationManager.populationTypeList[0], 100, 10, 1000);
         }
     }
 

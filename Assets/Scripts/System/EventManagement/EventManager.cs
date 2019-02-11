@@ -21,6 +21,7 @@ public class EventManager : MonoBehaviour {
     float chances = 0f;
     int nextEvent = 0;
     bool triggerEventWhenPossible = false;
+    float triggerTime = 0f;
 
     public class GameEvent
     {
@@ -41,7 +42,7 @@ public class EventManager : MonoBehaviour {
             if (choice > choices.Count) {
                 return;
             }
-
+            
             choices[choice].Execute();
         }
     }
@@ -126,14 +127,10 @@ public class EventManager : MonoBehaviour {
     {
         if (triggerEventWhenPossible) {
             float timeOfDay = GameManager.instance.temporality.GetCurrentCycleProgression();
-            foreach(EventMarker marker in eventsPool) {
-                if (marker.eventId == nextEvent) {
-                    if (timeOfDay  > marker.time) {
-                        TriggerEvent(nextEvent);
-                        triggerEventWhenPossible = false;
-                        return;
-                    }
-                }
+            if (timeOfDay  > triggerTime) {
+                TriggerEvent(nextEvent);
+                triggerEventWhenPossible = false;
+                return;
             }
         }
     }
@@ -152,7 +149,8 @@ public class EventManager : MonoBehaviour {
         }
 
         // Random event per day
-        if (Random.value < chances) {
+        float random = Random.value;
+        if (random < chances) {
             EventMarker pick = null;
             List<EventMarker> newList = new List<EventMarker>();
             foreach (EventMarker candidate in eventsPool) {
@@ -169,8 +167,9 @@ public class EventManager : MonoBehaviour {
                 LoadEventsPool();
                 return;
             }
-
+            
             triggerEventWhenPossible = true;
+            triggerTime = pick.time;
             nextEvent = pick.eventId;
             eventsPool = newList;
             chances = 0f;
@@ -205,6 +204,9 @@ public class EventManager : MonoBehaviour {
     
     public void TriggerEvent(int id)
     {
+        if (id == 1000 && GameManager.instance.DISABLE_GAME_OVER) {
+            return;
+        }
         StartCoroutine(WaitForEventAndTrigger(id));
     }
 
@@ -285,7 +287,8 @@ public class EventManager : MonoBehaviour {
         foreach(XmlNode xChoice in xEvent.ChildNodes) {
             Choice choice = ReadXChoice(xChoice);
             if (choice != null) {
-                choices.Add(choice.id, interpreter.MakeEvent(choice.script));
+                // Making even and injecting the event id in it
+                choices.Add(choice.id, interpreter.MakeEvent("DECLARE_EVENT(id:"+id.ToString()+");"+choice.script));
             }
         }
 

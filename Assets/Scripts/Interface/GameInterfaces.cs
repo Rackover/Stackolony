@@ -6,6 +6,7 @@ public class GameInterfaces : MonoBehaviour {
 
     TemporalityInterface temporalityInterface;
     BulletinDisplay bulletinDisplay;
+    TooltipGO tooltipController;
     MoodsDisplay moodsDisplay;
     List<Coroutine> routines = new List<Coroutine>();
 
@@ -14,6 +15,7 @@ public class GameInterfaces : MonoBehaviour {
         temporalityInterface = GetComponentInChildren<TemporalityInterface>();
         bulletinDisplay = GetComponentInChildren<BulletinDisplay>();
         moodsDisplay = GetComponentInChildren<MoodsDisplay>();
+        tooltipController = GetComponentInChildren<TooltipGO>();
     }
 
     public void StartGameInterfaces()
@@ -21,6 +23,7 @@ public class GameInterfaces : MonoBehaviour {
         routines.Add(StartCoroutine(temporalityInterface.UpdateInterface()));
         routines.Add(StartCoroutine(moodsDisplay.UpdateInterface()));
         routines.Add(StartCoroutine(bulletinDisplay.RefreshBulletin()));
+        routines.Add(StartCoroutine(tooltipController.RefreshBuildingTooltips()));
     }
 
     public void StopGameInterfaces()

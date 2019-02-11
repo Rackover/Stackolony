@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4517864213787716}
   - component: {fileID: 65222403905997784}
   - component: {fileID: 114079967865632792}
+  - component: {fileID: 114582348929745222}
   m_Layer: 10
   m_Name: Block
   m_TagString: Untagged
@@ -1385,6 +1386,7 @@ MonoBehaviour:
   gridCoordinates: {x: 0, y: 0, z: 0}
   positionInTower: 0
   currentPower: 0
+  hiddenPower: 0
   nuisance: 0
   fireRiskPercentage: 0
   isConsideredUnpowered: 0
@@ -1403,6 +1405,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 95682179392488846}
+--- !u!114 &114582348929745222
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1047592790041198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e7a6758f1c20be4f902e41093d625fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localizations: []
+  isFirstLineBold: 1
+  colors:
+  - {r: 0, g: 0, b: 0, a: 1}
+  - {r: 0, g: 0.5, b: 0, a: 1}
+  - {r: 0.5, g: 0, b: 0, a: 1}
 --- !u!114 &114690044833248856
 MonoBehaviour:
   m_ObjectHideFlags: 1

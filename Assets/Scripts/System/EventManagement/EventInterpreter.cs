@@ -14,6 +14,7 @@ public class EventInterpreter
         "duration",
         "amount"
     };
+    public List<char> skippers = new List<char>() { '_' };
 
     public class InterpreterException : System.Exception
     {
@@ -52,6 +53,21 @@ public class EventInterpreter
         public Vector3Int ToVector3Int()
         {
             return new Vector3Int(x, y, z);
+        }
+    }
+
+    class ObjectInteger : Object
+    {
+        public int value;
+
+        public ObjectInteger(int _value)
+        {
+            value = _value;
+        }
+
+        public int ToInt()
+        {
+            return value;
         }
     }
     
@@ -142,6 +158,12 @@ public class EventInterpreter
             if (!CheckSyntax(line)) {
                 Throw(line);
             }
+
+            // Contains skipper char - don't read line
+            if (skippers.Contains(line[0])) {
+                continue;
+            }
+
             List<EventManager.GameEffect> gameEffects = InterpretStatement(line, context);
             foreach (EventManager.GameEffect effect in gameEffects) {
                 actions.Add(effect);
@@ -185,6 +207,7 @@ public class EventInterpreter
     List<EventManager.GameEffect> InterpretStatement(string statement, Dictionary<string, Object> context)
     {
         List<EventManager.GameEffect> effects = new List<EventManager.GameEffect>();
+
         // Chance statement
         if (statement.StartsWith("[")) {
             return UnpackControlStructure(statement, context);
@@ -385,7 +408,8 @@ public class EventInterpreter
         return 
             new EventManager.GameEffect(
                 delegate {
-                    actionFunctions[funcName](arguments, context); },
+                    actionFunctions[funcName](arguments, context);
+                },
                 funcName,
                 locArguments
             ) { ttColor = GetDataFunctionPreviewColor(funcName) }
@@ -505,7 +529,9 @@ public class EventInterpreter
                 int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
                 int amount = System.Convert.ToInt32(GetArgument(args, "amount"));
 
-                ConsequencesManager.GenerateMoodModifier(pop, amount, duration);
+                int eventId = ((ObjectInteger)context["_EVENT_ID"]).ToInt();
+
+                ConsequencesManager.GenerateMoodModifier(pop, amount, duration, eventId);
             }
         );
         actionFunctions.Add(
@@ -568,7 +594,9 @@ public class EventInterpreter
                 int duration = System.Convert.ToInt32(GetArgument(args, "duration"));
                 int amount = System.Convert.ToInt32(GetArgument(args, "amount"));
 
-                ConsequencesManager.GenerateMoodModifier(pop, -amount, duration);
+                int eventId = ((ObjectInteger)context["_EVENT_ID"]).ToInt();
+
+                ConsequencesManager.GenerateMoodModifier(pop, -amount, duration, eventId);
 
             }
         );
@@ -739,6 +767,12 @@ public class EventInterpreter
             "TRIGGER_EVENT", (args, context) => {
                 int eventId = System.Convert.ToInt32(GetArgument(args, "id"));
                 GameManager.instance.eventManager.TriggerEvent(eventId);
+            }
+        );
+        actionFunctions.Add(
+            "DECLARE_EVENT", (args, context) => {
+                int eventId = System.Convert.ToInt32(GetArgument(args, "id"));
+                context["_EVENT_ID"] = new ObjectInteger(eventId);
             }
         );
     }

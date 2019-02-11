@@ -12,6 +12,8 @@ public class EventDisplay : MonoBehaviour {
     List<GameObject> instantiatedButtons = new List<GameObject>();
     Displayer displayer;
 
+    public List<string> skippedActions = new List<string>() { "DECLARE_EVENT" };
+
     public Color goodColor = Color.green;
     public Color badColor = Color.red;
 
@@ -92,6 +94,10 @@ public class EventDisplay : MonoBehaviour {
             tt.isFirstLineBold = false;
 
             List<EventManager.GameEffect> fxs = gameAction.Value.GetGameEffects();
+
+            // Remove untranslatable actions like DECLARE_EVENT
+            fxs.RemoveAll(o => skippedActions.Contains(o.intention));
+
             foreach (EventManager.GameEffect action in fxs) {
                 if (action.intention.Length <= 0) {
                     continue;
@@ -120,7 +126,7 @@ public class EventDisplay : MonoBehaviour {
                     gameEvent.ExecuteChoice(gameAction.Key);
                 }
                 catch (System.Exception e) {
-                    Logger.Error("Skipped event error : " + e.Message + ". This should NOT happen. Check the event syntax on.");
+                    Logger.Error("Skipped event error : " + e.ToString() + ". This should NOT happen. Check the event syntax on.");
                 }
                 subWindow.SetActive(false);
                 if (GameManager.instance.player.options.GetBool(Options.Option.animatedCitizens)) {

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MoodModifier
 {
+    public int eventId;
     public float amount;
     public int cyclesRemaining;
 }
@@ -220,11 +221,12 @@ public class PopulationManager : MonoBehaviour
     }
 
     //Generates a moodmodifier for a given population
-    public void GenerateMoodModifier(Population popType, float amount, int cyclesRemaining)
+    public void GenerateMoodModifier(Population popType, float amount, int cyclesRemaining, int eventId=0)
     {
         MoodModifier newMoodModifier = new MoodModifier();
         newMoodModifier.amount = amount;
         newMoodModifier.cyclesRemaining = cyclesRemaining;
+        newMoodModifier.eventId = eventId;
         populations[popType].moodModifiers.Add(newMoodModifier);
     }
 

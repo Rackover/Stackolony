@@ -54,7 +54,6 @@ public class OnFire : StateBehavior
 
     public void Spread()
     {
-        Debug.Log(block);
         block = GetComponent<Block>();
         FireManager.Spread(this);
 

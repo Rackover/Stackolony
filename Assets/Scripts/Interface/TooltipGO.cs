@@ -31,6 +31,15 @@ public class TooltipGO : MonoBehaviour {
 
     public TooltipIcon[] tooltipIcons;
 
+    public IEnumerator RefreshBuildingTooltips()
+    {
+        foreach (Block block in GameManager.instance.systemManager.AllBlocks) {
+            block.UpdateTooltip();
+        }
+        yield return new WaitForSeconds(FindObjectOfType<Interface>().refreshRate);
+        yield return StartCoroutine(RefreshBuildingTooltips());
+    }
+
     public void Disable()
     {
         myText.enabled = false;
