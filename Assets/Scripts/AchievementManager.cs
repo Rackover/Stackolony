@@ -6,7 +6,8 @@ using System.IO;
 
 public class AchievementManager : MonoBehaviour 
 {
-	public static Achievements achievements = new Achievements();
+	public static Achievements achiever = new Achievements();
+	public static List<int> unlockedAchievements; // TO SAVE
 
 	void Start()
 	{
@@ -15,14 +16,28 @@ public class AchievementManager : MonoBehaviour
 
 	void LoadProperties()
 	{
-		XmlDocument properties = new XmlDocument();
-		properties.Load(Application.dataPath + "/StreamingAssets/Achievements.xml");
-		XmlNodeList nodeList = properties.SelectNodes("property")[0].ChildNodes;
-		for(int i = 0; i < nodeList.Count; i++)
-		{
-			string[] propertyParams = nodeList[i].InnerText.Split(new char[]{'_'}, System.StringSplitOptions.RemoveEmptyEntries);
-			achievements.DefineProperty(propertyParams[0], nodeList[i].InnerText, 0, propertyParams[1], int.Parse(propertyParams[2]));
-			achievements.DefineAchievement(nodeList[i].InnerText, int.Parse(nodeList[i].Name.Replace("property", "")), new string[] {nodeList[i].InnerText});
+		XmlDocument achievementsData = new XmlDocument();
+		achievementsData.Load(Application.dataPath + "/StreamingAssets/Achievements.xml");
+
+		XmlNodeList achievementList = achievementsData.SelectNodes("achievements")[0].ChildNodes;
+
+		for(int i = 0; i < achievementList.Count; i++)
+		{	
+			if(!unlockedAchievements.Contains(i))
+			{
+				string aName = achievementList[i].SelectNodes("name")[0].InnerText;
+				string aDescription = achievementList[i].SelectNodes("description")[0].InnerText;
+
+				string concernedVariable = achievementList[i].SelectNodes("property")[0].SelectNodes("concernedVariable")[0].InnerText;
+				string rule = achievementList[i].SelectNodes("property")[0].SelectNodes("rule")[0].InnerText;
+				int activationValue = int.Parse(achievementList[i].SelectNodes("property")[0].SelectNodes("activationValue")[0].InnerText);
+
+				achiever.DefineAchievement(
+					aName,
+					int.Parse(achievementList[i].Name.Replace("achievement", "")),
+					achiever.DefineProperty(concernedVariable, rule, activationValue)
+				);
+			}
 		}
 	}
 }

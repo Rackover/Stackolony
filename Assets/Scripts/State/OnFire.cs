@@ -46,7 +46,7 @@ public class OnFire : StateBehavior
         }
         else 
         {
-            AchievementManager.achievements.AddToValue("extinguishedFires");
+            AchievementManager.achiever.AddToValue("extinguishedFireCount");
             block.Enable();
             Remove();
         }

@@ -1,60 +1,432 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<property>
 
-    <property1>settlerCount_GREATEROREQUAL_10</property1>
-    <property2>settlerCount_GREATEROREQUAL_30</property2>
-    <property3>settlerCount_GREATEROREQUAL_50</property3>
-    <property4>settlerCount_GREATEROREQUAL_100</property4>
-    <property5>settlerCount_GREATEROREQUAL_200</property5>
-    <property6>settlerCount_GREATEROREQUAL_500</property6>
-    <property7>settlerCount_GREATEROREQUAL_1000</property7>
+<achievements>
 
-    <property8>extinguishedFires_GREATEROREQUAL_1</property8>
-    <property9>extinguishedFires_GREATEROREQUAL_5</property9>
-    <property10>extinguishedFires_GREATEROREQUAL_10</property10>
-    <property11>extinguishedFires_GREATEROREQUAL_50</property11>
+    <achievement0>
+        <name>Get comfortable</name>
+        <description>Reach 10 settlers</description>
+        <property>
+            <concernedVariable>settlerCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>10</activationValue>
+        </property>
+    </achievement0>
+    <achievement1>
+        <name>Good little colony</name>
+        <description>Reach 30 settlers</description>
+        <property>
+            <concernedVariable>settlerCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>30</activationValue>
+        </property>
+    </achievement1>
+    <achievement2>
+        <name>Increase in housing</name>
+        <description>Reach 50 settlers</description>
+        <property>
+            <concernedVariable>settlerCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>50</activationValue>
+        </property>
+    </achievement2>
+    <achievement3>
+        <name>It's starting to do a lot!</name>
+        <description>Reach 100 settlers</description>
+        <property>
+            <concernedVariable>settlerCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>100</activationValue>
+        </property>
+    </achievement3>
+    <achievement4>
+        <name>Colony ... Rather a city yes!</name>
+        <description>Reach 200 settlers</description>
+        <property>
+            <concernedVariable>settlerCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>200</activationValue>
+        </property>
+    </achievement4>
+    <achievement5>
+        <name>Megalopolis confirmed</name>
+        <description>Reach 500 settlers</description>
+        <property>
+            <concernedVariable>settlerCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>500</activationValue>
+        </property>
+    </achievement5>
+    <achievement6>
+        <name>Thousand mouths to feed</name>
+        <description>Reach 1000 settlers</description>
+        <property>
+            <concernedVariable>settlerCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>1000</activationValue>
+        </property>
+    </achievement6>
 
-    <property12>militaryCount_GREATEROREQUAL_10</property12>
-    <property13>militaryCount_GREATEROREQUAL_50</property13>
-    <property14>militaryCount_GREATEROREQUAL_100</property14>
+    <achievement7>
+        <name>There is no smoke ...</name>
+        <description>Extinguish a fire</description>
+        <property>
+            <concernedVariable>extinguishedFireCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>1</activationValue>
+        </property>
+    </achievement7>
+    <achievement8>
+        <name>Volunteer firefighter</name>
+        <description>Extinguish 5 fire</description>
+        <property>
+            <concernedVariable>extinguishedFireCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>5</activationValue>
+        </property>
+    </achievement8>
+    <achievement9>
+        <name>Through the fire and flame</name>
+        <description>Extinguish 10 fire</description>
+        <property>
+            <concernedVariable>extinguishedFireCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>10</activationValue>
+        </property>
+    </achievement9>
+    <achievement10>
+        <name>We did well to put firefighters here!</name>
+        <description>Extinguish 50 fire</description>
+        <property>
+            <concernedVariable>extinguishedFireCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>50</activationValue>
+        </property>
+    </achievement10>
 
-    <property15>scientistCount_GREATEROREQUAL_10</property15>
-    <property16>scientistCount_GREATEROREQUAL_50</property16>
-    <property17>scientistCount_GREATEROREQUAL_100</property17>
+    <achievement11>
+        <name>Welcome to fight C... Colony</name>
+        <description>Have 10 Kavgas in the colony</description>
+        <property>
+            <concernedVariable>militaryCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>10</activationValue>
+        </property>
+    </achievement11>
+    <achievement12>
+        <name>Do not stretch the other cheek</name>
+        <description>Have 50 Kavgas in the colony</description>
+        <property>
+            <concernedVariable>militaryCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>50</activationValue>
+        </property>
+    </achievement12>
+    <achievement13>
+        <name>This room has been pacified</name>
+        <description>Have 100 Kavgas in the colony</description>
+        <property>
+            <concernedVariable>militaryCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>100</activationValue>
+        </property>
+    </achievement13>
 
-    <property18>workerCount_GREATEROREQUAL_10</property18>
-    <property19>workerCount_GREATEROREQUAL_50</property19>
-    <property20>workerCount_GREATEROREQUAL_100</property20>
+    <achievement14>
+        <name>Science in progress!</name>
+        <description>Have 10 Covridians in the colony</description>
+        <property>
+            <concernedVariable>scientistCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>10</activationValue>
+        </property>
+    </achievement14>
+    <achievement15>
+        <name>Stars, galaxies and noise in space</name>
+        <description>Have 50 Covridians in the colony</description>
+        <property>
+            <concernedVariable>scientistCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>50</activationValue>
+        </property>
+    </achievement15>
+    <achievement16>
+        <name>The question of the egg and the chicken still outstanding.</name>
+        <description>Have 100 Covridians in the colony</description>
+        <property>
+            <concernedVariable>scientistCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>100</activationValue>
+        </property>
+    </achievement16>
 
-    <property21>richieCount_GREATEROREQUAL_10</property21>
-    <property22>richieCount_GREATEROREQUAL_50</property22>
-    <property23>richieCount_GREATEROREQUAL_100</property23>
+    <achievement17>
+        <name>Work, still work</name>
+        <description>Have 10 Krowsers in the colony</description>
+        <property>
+            <concernedVariable>workerCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>10</activationValue>
+        </property>
+    </achievement17>
+    <achievement18>
+        <name>Bridges, working, sleeping</name>
+        <description>Have 50 Krowsers in the colony</description>
+        <property>
+            <concernedVariable>workerCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>50</activationValue>
+        </property>
+    </achievement18>
+    <achievement19>
+        <name>Work done! ~</name>
+        <description>Have 100 Krowsers in the colony</description>
+        <property>
+            <concernedVariable>workerCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>100</activationValue>
+        </property>
+    </achievement19>
 
-    <property24>artistCount_GREATEROREQUAL_10</property24>
-    <property25>artistCount_GREATEROREQUAL_50</property25>
-    <property26>artistCount_GREATEROREQUAL_100</property26>
+    <achievement20>
+        <name>Welcome to summer camp</name>
+        <description>Have 10 Senuths in the colony</description>
+        <property>
+            <concernedVariable>richieCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>10</activationValue>
+        </property>
+    </achievement20>
+    <achievement21>
+        <name>Idleness is health</name>
+        <description>Have 50 Senuths in the colony</description>
+        <property>
+            <concernedVariable>richieCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>50</activationValue>
+        </property>
+    </achievement21>
+    <achievement22>
+        <name>Nothing like condescension</name>
+        <description>Have 100 Senuths in the colony</description>
+        <property>
+            <concernedVariable>richieCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>100</activationValue>
+        </property>
+    </achievement22>
 
-    <property29>militaryMood_GREATEROREQUAL_100</property29>
-    <property30>workerMood_GREATEROREQUAL_100</property30>
-    <property31>richieMood_GREATEROREQUAL_100</property31>
-    <property32>scientistMood_GREATEROREQUAL_100</property32>
-    <property33>artistMood_GREATEROREQUAL_100</property33>
+    <achievement23>
+        <name>Artists misunderstood ...</name>
+        <description>Have 10 Earis in the colony</description>
+        <property>
+            <concernedVariable>artistCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>10</activationValue>
+        </property>
+    </achievement23>
+    <achievement24>
+        <name>Carrier wall sculpture</name>
+        <description>Have 50 Earis in the colony</description>
+        <property>
+            <concernedVariable>artistCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>50</activationValue>
+        </property>
+    </achievement24>
+    <achievement25>
+        <name>To be or not to be a colon</name>
+        <description>Have 100 Earis in the colony</description>
+        <property>
+            <concernedVariable>artistCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>100</activationValue>
+        </property>
+    </achievement25>
 
-    <property40>bridgeCount_GREATEROREQUAL_5</property40>
-    <property41>bridgeCount_GREATEROREQUAL_10</property41>
-    <property42>bridgeCount_GREATEROREQUAL_50</property42>
-    <property43>bridgeCount_GREATEROREQUAL_100</property43>
+    <achievement28>
+        <name>Happiness: the fight</name>
+        <description>Mood Kavga to 100</description>
+        <property>
+            <concernedVariable>militaryMood</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>100</activationValue>
+        </property>
+    </achievement28>
+    <achievement29>
+        <name>Happiness: work</name>
+        <description>Mood Krowser to 100</description>
+        <property>
+            <concernedVariable>workerMood</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>100</activationValue>
+        </property>
+    </achievement29>
+    <achievement30>
+        <name>Happiness: a good little spa</name>
+        <description>Mood Senuth to 100</description>
+        <property>
+            <concernedVariable>richieMood</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>100</activationValue>
+        </property>
+    </achievement30>
+    <achievement31>
+        <name>Happiness: Science</name>
+        <description>Mood Covridian to 100</description>
+        <property>
+            <concernedVariable>scientistMood</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>100</activationValue>
+        </property>
+    </achievement31>
+    <achievement32>
+        <name>Happiness: Create and imagine</name>
+        <description>Mood Eari to 100</description>
+        <property>
+            <concernedVariable>artistMood</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>100</activationValue>
+        </property>
+    </achievement32>
 
-    <property46>stoppedRiots_GREATEROREQUAL_1</property46>
-    <property47>stoppedRiots_GREATEROREQUAL_5</property47>
-    <property48>stoppedRiots_GREATEROREQUAL_10</property48>
-    <property49>stoppedRiots_GREATEROREQUAL_50</property49>
+    <achievement39>
+        <name>Neighborhood problem</name>
+        <description>Have 5 bridges in the colony</description>
+        <property>
+            <concernedVariable>bridgeCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>5</activationValue>
+        </property>
+    </achievement39>
+    <achievement40>
+        <name>Bridge-t Jone's Diary</name>
+        <description>Have 10 bridges in the colony</description>
+        <property>
+            <concernedVariable>bridgeCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>10</activationValue>
+        </property>
+    </achievement40>
+    <achievement41>
+        <name>Nuisance chain</name>
+        <description>Have 50 bridges in the colony</description>
+        <property>
+            <concernedVariable>bridgeCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>50</activationValue>
+        </property>
+    </achievement41>
+    <achievement42>
+        <name>It's still a lot of bridges!</name>
+        <description>Have 100 bridges in the colony</description>
+        <property>
+            <concernedVariable>bridgeCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>100</activationValue>
+        </property>
+    </achievement42>
 
-    <property50>cyclePassed_GREATEROREQUAL_10</property50>
-    <property51>cyclePassed_GREATEROREQUAL_20</property51>
-    <property52>cyclePassed_GREATEROREQUAL_50</property52>
-    <property53>cyclePassed_GREATEROREQUAL_100</property53>
-    <property54>cyclePassed_GREATEROREQUAL_150</property54>
-    <property55>cyclePassed_GREATEROREQUAL_200</property55>
+    <achievement44>
+        <name>Burns, insect !</name>
+        <description>A block burns</description>
+        <property>
+            <concernedVariable>fireCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>1</activationValue>
+        </property>
+    </achievement44>
 
-</property>
+    <achievement45>
+        <name>We are fed up !</name>
+        <description>Stop a riot</description>
+        <property>
+            <concernedVariable>stoppedRiotCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>1</activationValue>
+        </property>
+    </achievement45>
+    <achievement46>
+        <name>Home delinquency</name>
+        <description>Stop 5 riots</description>
+        <property>
+            <concernedVariable>stoppedRiotCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>5</activationValue>
+        </property>
+    </achievement46>
+    <achievement47>
+        <name>I am asking you to stop... Please...</name>
+        <description>Stop 10 riots</description>
+        <property>
+            <concernedVariable>stoppedRiotCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>10</activationValue>
+        </property>
+    </achievement47>
+    <achievement48>
+        <name>I am asking you to stop... Please...</name>
+        <description>Stop 50 riots</description>
+        <property>
+            <concernedVariable>stoppedRiotCount</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>50</activationValue>
+        </property>
+    </achievement48>
+
+    <achievement49>
+        <name>Diving in the big bath</name>
+        <description>Reach Cycle 10</description>
+        <property>
+            <concernedVariable>cyclePassed</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>10</activationValue>
+        </property>
+    </achievement49>
+    <achievement50>
+        <name>Persistent colony</name>
+        <description>Reach Cycle 20</description>
+        <property>
+            <concernedVariable>cyclePassed</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>20</activationValue>
+        </property>
+    </achievement50>
+    <achievement51>
+        <name>Lego Pro!</name>
+        <description>Reach Cycle 50</description>
+        <property>
+            <concernedVariable>cyclePassed</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>50</activationValue>
+        </property>
+    </achievement51>
+    <achievement52>
+        <name>Always higher always further always stronger!</name>
+        <description>Reach Cycle 100</description>
+        <property>
+            <concernedVariable>cyclePassed</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>100</activationValue>
+        </property>
+    </achievement52>
+    <achievement53>
+        <name>Never gonna give you up !</name>
+        <description>Reach Cycle 150</description>
+        <property>
+            <concernedVariable>cyclePassed</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>150</activationValue>
+        </property>
+    </achievement53>
+    <achievement54>
+        <name>STACKOLONY</name>
+        <description>Reach Cycle 200</description>
+        <property>
+            <concernedVariable>cyclePassed</concernedVariable>
+            <rule>>=</rule>
+            <activationValue>200</activationValue>
+        </property>
+    </achievement54>
+
+</achievements>
+
