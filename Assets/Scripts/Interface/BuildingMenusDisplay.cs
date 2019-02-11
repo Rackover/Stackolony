@@ -30,44 +30,33 @@ public class BuildingMenusDisplay : MonoBehaviour {
             GameObject mO = Instantiate(menuExample, transform);
             mO.GetComponentInChildren<Button>().gameObject.GetComponentsInChildren<Image>()[1].sprite = GameManager.instance.library.buildingsIcons[(int)menu.Key];
 
-            mO.GetComponent<RectTransform>().position = new Vector3(
-                menuExample.GetComponent<RectTransform>().position.x + offset*factor,
-                menuExample.GetComponent<RectTransform>().position.y,
-                menuExample.GetComponent<RectTransform>().position.z
+            RectTransform mRt = mO.GetComponent<RectTransform>();
+            RectTransform xRt = menuExample.GetComponent<RectTransform>();
+            mRt.position = new Vector3(
+                xRt.position.x + offset*factor,
+                xRt.position.y,
+                xRt.position.z
+            );
+
+            mO.GetComponent<BuildingMenuDisplay>().button.GetComponent<Tooltip>().AddLocalizedLine(
+                new Localization.Line("hud", "build"+menu.Key.ToString())    
             );
 
             GameObject content = mO.GetComponentInChildren<ContentSizeFitter>().gameObject;
 
             for (int i = 0; i < content.transform.childCount; i++) {
                 Destroy(content.transform.GetChild(i).gameObject);
-            } 
+            }
 
-            foreach(BlockScheme block in menu.Value) {
+            foreach (BlockScheme block in menu.Value) {
                 GameObject item = Instantiate(itemExample, content.transform).transform.GetChild(0).gameObject;
                 item.name = block.ID.ToString();
                 item.GetComponent<BuildingMenuItem>().blockId = block.ID;
 
                 Tooltip tt = item.GetComponent<Tooltip>();
-                tt.AddLocalizedLine(new Localization.Line("blockName", "block" + block.ID.ToString()));
-                tt.AddLocalizedLine(new Localization.Line("blockDescription", "block" + block.ID.ToString()));
-
-                // Flag reading to get the block bonuses and maluses
-                foreach (List<string> flag in FlagReader.GetFlags(block)) {
-                    string name = flag[0];
-                    flag.Remove(name);
-                    string[] parameters = flag.ToArray();
-
-                    for(int i = 0; i < parameters.Length; i++)
-                    {
-                        if(GameManager.instance.populationManager.GetPopulationByCodename(parameters[i]) != null)
-                        {   
-                            parameters[i] = GameManager.instance.localization.GetLineFromCategory("populationType", parameters[i]);
-                        }
-                    }
-
-                    tt.AddLocalizedLine(new Tooltip.TooltipLocalizationEntry(
-                        name.ToLower(), "flagParameter", FlagReader.IsPositive(name) ? Tooltip.tooltipType.Positive : Tooltip.tooltipType.Negative, parameters
-                    ));
+                List<Tooltip.TooltipLocalizationEntry> entries = Tooltip.GetBuildingTooltip(block);
+                foreach (Tooltip.TooltipLocalizationEntry entry in entries) {
+                    tt.AddLocalizedLine(entry);
                 }
             }
 

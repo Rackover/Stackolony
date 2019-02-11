@@ -18,6 +18,9 @@ public class TemporalityInterface : MonoBehaviour {
     {
 
         timeText.text = hours + ":" + minutes + " - " + currentCycle + "." + currentYear;
+        Tooltip tt = timeText.GetComponent<Tooltip>();
+        tt.ClearLines();
+        tt.AddLocalizedLine(new Localization.Line("hud", "temporality", currentCycle.ToString(), currentYear.ToString()));
     }
 
     private void Start()

@@ -52,7 +52,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4cf781f5fca2a543bee0a43bf8d4366, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  areCinematicsEnabled: 1
+  shaker: {fileID: 0}
+  areCinematicsEnabled: 0
 --- !u!114 &114886197700339162
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -64,6 +65,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66810f0dfb1d9a44cbf07b745c048fa4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  camTransform: {fileID: 0}
   shakeAmount: 0.7
   decreaseFactor: 1

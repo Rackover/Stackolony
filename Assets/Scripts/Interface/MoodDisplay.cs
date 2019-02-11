@@ -159,8 +159,9 @@ public class MoodDisplay : MonoBehaviour {
                 popName,
                 moodString.ToUpper()
             )
-        
         );
+        faceTooltip.AddLocalizedLine(new Localization.Line("hud", "priority"));
+        faceTooltip.AddLocalizedLine(new Localization.Line("hud", "holdDrag"));
 
         foreach (MoodModifier moodMod in popMan.populations[population].moodModifiers) {
 
