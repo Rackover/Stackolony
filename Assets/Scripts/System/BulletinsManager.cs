@@ -40,8 +40,6 @@ public class BulletinsManager : MonoBehaviour {
                 continue;
             }
             newList.Add(bulletin);
-
-            //GameManager.instance.soundManager.Play("BulletinPop");
         }
 
         if (pick == null) {
@@ -52,6 +50,7 @@ public class BulletinsManager : MonoBehaviour {
 
         currentBulletin = pick;
         bulletinList = newList;
+        GameManager.instance.soundManager.Play("BulletinPop");
 
     }
 
