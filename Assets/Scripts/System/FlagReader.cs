@@ -86,12 +86,14 @@ public class FlagReader : MonoBehaviour
         string[] rawFlags = GetRawFlags(scheme).ToArray();
 
         // Habitation
-        if (rawFlags.Contains("House")) {
+        if (rawFlags.Contains("House")) 
+        {
             return CityManager.BuildingType.Habitation;
         }
 
         // Occupators
-        if (rawFlags.Contains("Occupator")) {
+        if (rawFlags.Contains("Occupator") || rawFlags.Contains("Extractor") || rawFlags.Contains("Barrack")) 
+        {
             return CityManager.BuildingType.Occupators;
         }
 
