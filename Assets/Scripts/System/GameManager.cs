@@ -35,6 +35,7 @@ public class GameManager : MonoBehaviour
     public TimelineController timelineController;
     public EventManager eventManager;
     public AnimationManager animationManager;
+    public AchievementManager achievementManager;
 
     [Space(1)]
     [Header("INTERFACE")]
@@ -132,6 +133,7 @@ public class GameManager : MonoBehaviour
         if (player == null) player = FindObjectOfType<Player>();
         if (eventManager == null) eventManager = FindObjectOfType<EventManager>();
         if (animationManager == null) animationManager = FindObjectOfType<AnimationManager>();
+        if (achievementManager == null) achievementManager = FindObjectOfType<AchievementManager>();
         
         // INTERFACE
         if (cursorDisplay == null) cursorDisplay = FindObjectOfType<CursorDisplay>();

@@ -255,7 +255,7 @@ public class PopulationManager : MonoBehaviour
         float newValue = populations[type].averageMood;
         Logger.Debug("Population " + type.codeName + " mood has been changed from " + oldValue + " to " + newValue);
 
-        AchievementManager.achiever.SetValue(type.codeName + "Mood", (int)populations[type].averageMood);
+        GameManager.instance.achievementManager.achiever.SetValue(type.codeName + "Mood", (int)populations[type].averageMood);
     }
 
     public float GetAverageMood(Population type)
@@ -314,8 +314,8 @@ public class PopulationManager : MonoBehaviour
         populations[type].citizens.Add(newCitizen);
 
 
-        AchievementManager.achiever.AddToValue("settlerCount");
-        AchievementManager.achiever.AddToValue(type.codeName + "Count");
+        GameManager.instance.achievementManager.achiever.AddToValue("settlerCount");
+        GameManager.instance.achievementManager.achiever.AddToValue(type.codeName + "Count");
 
         return newCitizen;
     }

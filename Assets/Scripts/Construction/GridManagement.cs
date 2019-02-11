@@ -477,7 +477,7 @@ public class GridManagement : MonoBehaviour
             blockA.gridCoordinates.x
         ] = blockB.gridCoordinates;
 
-        AchievementManager.achiever.AddToValue("bridgeCount");
+        GameManager.instance.achievementManager.achiever.AddToValue("bridgeCount");
         //Joue le son
         GameManager.instance.soundManager.Play("CreateBridge");
 
@@ -514,7 +514,7 @@ public class GridManagement : MonoBehaviour
         GameManager.instance.soundManager.Play("DestroyBlock");
         Destroy(bridgeObject);
 
-        AchievementManager.achiever.AddToValue("bridgeCount", -1);
+        GameManager.instance.achievementManager.achiever.AddToValue("bridgeCount", -1);
 
         //Update the system
         UpdateGridSystems();
