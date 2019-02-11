@@ -13,6 +13,7 @@ public class BlockScheme : ScriptableObject
     public bool canBuildAbove = true;
 	public bool relyOnSpatioport = true;
 	public bool fireProof = false;
+	public bool riotProof = false;
 
 	[Header("Datas")]
 

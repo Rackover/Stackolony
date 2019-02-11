@@ -396,7 +396,7 @@ public class CityManager : MonoBehaviour {
         {
             int rand = Random.Range(0, GameManager.instance.systemManager.AllBlocks.Count);
             int blockMet = 0;
-            while( GameManager.instance.systemManager.AllBlocks[rand].states.ContainsKey( accident ))
+            while( GameManager.instance.systemManager.AllBlocks[rand].states.ContainsKey( accident ) || GameManager.instance.systemManager.AllBlocks[rand].scheme.riotProof )
             {
                 if(blockMet++ > GameManager.instance.systemManager.AllBlocks.Count) 
                 {
