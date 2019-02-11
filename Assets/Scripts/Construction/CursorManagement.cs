@@ -242,6 +242,19 @@ public class CursorManagement : MonoBehaviour
 
     void UpdateMouse(RaycastHit hit)
     {
+        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Block"))
+        {
+            if (selectedBlock == null)
+            {
+                GameManager.instance.cursorDisplay.SetIcon(GameManager.instance.cursorDisplay.mainCursorOverBlock);
+            }
+        } else
+        {
+            if (isDragging == false && selectedBlock == null)
+            {
+                GameManager.instance.cursorDisplay.ResetIcon();
+            }
+        }
         // Mouse click down
         if(Input.GetButtonDown("Select"))
         {
@@ -556,6 +569,7 @@ public class CursorManagement : MonoBehaviour
             selectedBlock = _block;
             selectedBlock.StopAllCoroutines();
             savedPos = selectedBlock.gridCoordinates;
+            GameManager.instance.cursorDisplay.SetIcon(GameManager.instance.cursorDisplay.mainCursorHold);
             if (selectedBlock.transform.Find("Bridge") != null) {
                 GameManager.instance.gridManagement.DestroyBridge(selectedBlock.transform.Find("Bridge").gameObject);
             }
@@ -590,6 +604,7 @@ public class CursorManagement : MonoBehaviour
     {
         if (selectedBlock != null && isDragging)
         {
+            GameManager.instance.cursorDisplay.ResetIcon();
             if (GameManager.instance.gridManagement.IsPlacable(_pos, true))
             {
                 //Play SFX
