@@ -204,6 +204,7 @@ public class EventManager : MonoBehaviour {
     
     public void TriggerEvent(int id)
     {
+        // ID 1000 is Game Over event
         if (id == 1000 && GameManager.instance.DISABLE_GAME_OVER) {
             return;
         }
