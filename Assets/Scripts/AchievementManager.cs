@@ -6,8 +6,8 @@ using System.IO;
 
 public class AchievementManager : MonoBehaviour 
 {
-	public static Achievements achiever = new Achievements();
-	public static List<int> unlockedAchievements; // TO SAVE
+	public Achievements achiever = new Achievements();
+	public List<int> unlockedAchievements; // TO SAVE
 
 	void Start()
 	{
@@ -28,9 +28,11 @@ public class AchievementManager : MonoBehaviour
 				string aName = achievementList[i].SelectNodes("name")[0].InnerText;
 				string aDescription = achievementList[i].SelectNodes("description")[0].InnerText;
 
-				string concernedVariable = achievementList[i].SelectNodes("property")[0].SelectNodes("concernedVariable")[0].InnerText;
-				string rule = achievementList[i].SelectNodes("property")[0].SelectNodes("rule")[0].InnerText;
-				int activationValue = int.Parse(achievementList[i].SelectNodes("property")[0].SelectNodes("activationValue")[0].InnerText);
+				XmlNode property = achievementList[i].SelectNodes("property")[0];
+
+				string concernedVariable = property.SelectNodes("concernedVariable")[0].InnerText;
+				string rule = property.SelectNodes("rule")[0].InnerText;
+				int activationValue = int.Parse(property.SelectNodes("activationValue")[0].InnerText);
 
 				achiever.DefineAchievement(
 					aName,
