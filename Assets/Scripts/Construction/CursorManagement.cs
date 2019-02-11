@@ -28,8 +28,12 @@ public class CursorManagement : MonoBehaviour
     public int projectorHeight = 10;
     public GameObject myProjector;
     public Projector myProjectorComponent;
-    public float dragDelay = 0.2f;
-    private float dragCD;
+    public float dragSpeed = 15f;
+    private float dragDistance;
+    public float dragTreshold = 10;
+    public float blockFallingSpeed = 1;
+    public float blockRisingSpeed = 3;
+    private Vector2 initialDragPos;
     [Space(5)]
     
     [Header("=== DEBUG ===")]
@@ -244,10 +248,26 @@ public class CursorManagement : MonoBehaviour
 
     void UpdateMouse(RaycastHit hit)
     {
+        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Block"))
+        {
+            if (selectedBlock == null)
+            {
+                GameManager.instance.cursorDisplay.SetIcon(GameManager.instance.cursorDisplay.mainCursorOverBlock);
+            }
+        } else
+        {
+            if (isDragging == false && selectedBlock == null)
+            {
+                GameManager.instance.cursorDisplay.ResetIcon();
+            }
+        }
         // Mouse click down
         if(Input.GetButtonDown("Select"))
         {
             switch (selectedMode) {
+                case cursorMode.Move:
+                    initialDragPos = Input.mousePosition;
+                    break;
                 case cursorMode.Bridge:
                     GameObject selectedObj = hit.transform.gameObject;
                     if (selectedObj != null)
@@ -269,14 +289,11 @@ public class CursorManagement : MonoBehaviour
             switch (selectedMode) 
             {
                 case cursorMode.Move:
-                    if (dragCD >= dragDelay && selectedBlock == null)
+                    dragDistance = Vector2.Distance(Input.mousePosition, initialDragPos);
+                    if (dragDistance >= dragTreshold && selectedBlock == null)
                     {
                         Block selectedBlock = hit.transform.gameObject.GetComponent<Block>();
                         StartDrag(selectedBlock);
-                    }
-                    else
-                    {
-                        dragCD += Time.deltaTime;
                     }
                     DuringDrag(posInGrid);
                     break;
@@ -291,7 +308,6 @@ public class CursorManagement : MonoBehaviour
     
         // Left Mouse up 
         if (Input.GetButtonUp("Select")) {
-            dragCD = 0;
             switch (selectedMode) {
                 case cursorMode.Move:
                     EndDrag(posInGrid);
@@ -559,6 +575,7 @@ public class CursorManagement : MonoBehaviour
             selectedBlock = _block;
             selectedBlock.StopAllCoroutines();
             savedPos = selectedBlock.gridCoordinates;
+            GameManager.instance.cursorDisplay.SetIcon(GameManager.instance.cursorDisplay.mainCursorHold);
             if (selectedBlock.transform.Find("Bridge") != null) {
                 GameManager.instance.gridManagement.DestroyBridge(selectedBlock.transform.Find("Bridge").gameObject);
             }
@@ -581,8 +598,10 @@ public class CursorManagement : MonoBehaviour
                 {
                     savedPos = _pos;
                     GameManager.instance.soundManager.Play("Tick");
-                    selectedBlock.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(_pos);
                 }
+            } else
+            {
+                selectedBlock.transform.position = Vector3.Lerp(selectedBlock.transform.position, GameManager.instance.gridManagement.IndexToWorldPosition(savedPos), 10*Time.deltaTime);
             }
         }
     }
@@ -591,26 +610,9 @@ public class CursorManagement : MonoBehaviour
     {
         if (selectedBlock != null && isDragging)
         {
-            if (_pos.y < GameManager.instance.gridManagement.minHeight)
+            GameManager.instance.cursorDisplay.ResetIcon();
+            if (GameManager.instance.gridManagement.IsPlacable(_pos, true))
             {
-                CancelDrag();
-                return;
-            }
-            if (GameManager.instance.gridManagement.GetSlotType(_pos) == GridManagement.blockType.FREE)
-            {
-                // Check if the blocks under the position allows to have "something above them"
-                for (int i = _pos.y; i >= 0; i--)
-                {
-                    if (GameManager.instance.gridManagement.grid[_pos.x,i,_pos.z] != null)
-                    {
-                        Block block = GameManager.instance.gridManagement.grid[_pos.x, i, _pos.z].gameObject.GetComponent<Block>();
-                        if (!block.scheme.canBuildAbove) {
-                            CursorError.Invoke("maxHeightReached");
-                            CancelDrag();
-                            return;
-                        }
-                    }
-                }
                 //Play SFX
                 GameManager.instance.soundManager.Play("BlockDrop");
 
@@ -627,38 +629,42 @@ public class CursorManagement : MonoBehaviour
                 {
                     GameManager.instance.gridManagement.LayBlock(selectedBlock, new Vector2Int(_pos.x, _pos.z));
                 }
-            } 
+                selectedBlock.LoadFlags();
+            }
             else
             {
                 CancelDrag();
                 return;
             }
         }
-        if(selectedBlock != null)
+        if (selectedBlock != null)
         {        
             selectedBlock.CallFlags("OnBlockUpdate");
             selectedBlock.boxCollider.enabled = true;
             selectedBlock = null; 
         }
         isDragging = false;
+        draggingNewBlock = false;
     }
 
     public void CancelDrag()
     {
         if (selectedBlock != null && isDragging)
         {
-            GameManager.instance.animationManager.EndElevateTower(new Vector2Int(savedPos.x, savedPos.z), 0);
             if (draggingNewBlock == true)
             {
-                GameManager.instance.gridManagement.DestroyBlock(selectedBlock.gridCoordinates);
+                GameManager.instance.gridManagement.DestroyBlock(selectedBlock);
             }
             draggingNewBlock = false;
-            if (selectedBlock.GetComponent<Block>() != null)
+            if (selectedBlock != null)
             {
-                selectedBlock.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(selectedBlock.gridCoordinates);
-            } else
-            {
-                GameManager.instance.gridManagement.DestroyBlock(selectedBlock.gridCoordinates);
+                if (GameManager.instance.gridManagement.IsPlacable(selectedBlock.gridCoordinates, false))
+                {
+                    selectedBlock.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(selectedBlock.gridCoordinates);
+                } else
+                {
+                    GameManager.instance.gridManagement.DestroyBlock(selectedBlock);
+                }
             }
             selectedBlock.boxCollider.enabled = true;
             selectedBlock = null;

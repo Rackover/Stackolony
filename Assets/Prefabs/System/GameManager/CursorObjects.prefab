@@ -169,7 +169,10 @@ MonoBehaviour:
   projectorHeight: 10
   myProjector: {fileID: 0}
   myProjectorComponent: {fileID: 0}
-  dragDelay: 0.1
+  dragSpeed: 15
+  dragTreshold: 5
+  blockFallingSpeed: 3
+  blockRisingSpeed: 15
   posInGrid: {x: 0, y: 0, z: 0}
   posInWorld: {x: 0, y: 0, z: 0}
   isDragging: 0
