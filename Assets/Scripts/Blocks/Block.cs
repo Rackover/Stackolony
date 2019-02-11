@@ -33,6 +33,7 @@ public class Block : MonoBehaviour
 
     [Header("Values")]
 	public int currentPower;
+    public int hiddenPower;
     public int nuisance; //Nuisance received by the block
     public int fireRiskPercentage; //Fire risk in percent
     public bool isConsideredUnpowered; //Used when updating energy system
@@ -207,21 +208,12 @@ public class Block : MonoBehaviour
     }
 
     public void ChangePower(int number) {
-        currentPower = number;
-        UpdatePower();
-        if (currentPower > 0) 
-        {
-            isConsideredUnpowered = false;
-        }
+        hiddenPower = number;
     }
 
     public void AddPower(int number) 
     {
-        currentPower += number;
-        UpdatePower();
-        if (currentPower > 0) {
-            isConsideredUnpowered = false;
-        }
+        hiddenPower += number;
     }
 
     public int GetConsumption()
@@ -267,6 +259,7 @@ public class Block : MonoBehaviour
 
     public void UpdatePower()
 	{
+        currentPower = hiddenPower;
 		if(currentPower >= GetConsumption())
 		{
 			AddState(State.Powered);
@@ -290,7 +283,6 @@ public class Block : MonoBehaviour
             {
                 visuals.Show();
                 effects.Show();
-                UpdatePower();
             }
         }
     }

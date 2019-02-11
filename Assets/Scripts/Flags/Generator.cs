@@ -17,7 +17,6 @@ public class Generator : Flag, Flag.IFlag
     {
         base.Disable();
         GameManager.instance.systemManager.AllGenerators.Remove(this);
-        GameManager.instance.systemManager.StartCoroutine(GameManager.instance.systemManager.RecalculatePropagation());
     }
 
     public void GenerateEnergy()

@@ -53,6 +53,7 @@ public class GameManager : MonoBehaviour
     public OverlayManager overlayManager;
     public bool DEBUG_MODE = false;
     public bool ENABLE_LOGS = true;
+    public bool DISABLE_EVENTS = false;
 
     public static GameManager instance;
 
@@ -294,7 +295,16 @@ public class GameManager : MonoBehaviour
                 )
             ));
         }
-        
+
+
+        if (Input.GetKeyDown(KeyCode.F)) {
+            animationManager.ElevateTower(cursorManagement.posInGrid);
+        }
+
+        if (Input.GetKeyDown(KeyCode.G)) {
+            animationManager.EndElevateTower(new Vector2Int(cursorManagement.posInGrid.x, cursorManagement.posInGrid.z));
+        }
+
         // Goes forward in time by 1 cycle
         if (Input.GetKeyDown(KeyCode.C)) 
         {
@@ -363,7 +373,6 @@ public class GameManager : MonoBehaviour
         cinematicManager.GetReferences();
         timelineController.LoadCycles();
         DifferStart(delegate { eventManager.LoadEvents(); });
-        systemManager.ClearSystem();
 
         cityManager.GenerateEnvironmentBlocks();
 
@@ -400,6 +409,9 @@ public class GameManager : MonoBehaviour
         eventManager.newEvent = null;
         populationManager.CitizenArrival = null;
         cursorManagement.CursorError = null;
+
+        // Clear system
+        systemManager.ClearSystem();
 
         // Remove gameevents and citizens
         populationManager.citizenList.Clear();

@@ -34,10 +34,6 @@ public class GridManagement : MonoBehaviour
     
     public enum blockType{ FREE = 0, BRIDGE = 1}
 
-    private void Start()
-    {
-        if (!gameManager.IsInGame()){return;}
-    }
 
     public void InitializeGridManager()
     {
@@ -450,9 +446,9 @@ public class GridManagement : MonoBehaviour
             else if (i == bridgeLength + 2) {
                 newBridgePart = Instantiate(bridgeEndPrefab, parentBridgeGameObject.transform);
                 newBridgePart.transform.localPosition = new Vector3(
-                    (((cellSize.x - 1) / 2) * direction.x) + (cellSize.x * (i - 2)) * direction.x + (0.5f * direction.x), 
+                    (((cellSize.x - 1) / 2) * direction.x) + (cellSize.x * (i - 2)) * direction.x, 
                     0, 
-                    (((cellSize.z - 1) / 2) * direction.y) + (cellSize.z * (i - 2)) * direction.y + (0.5f * direction.y)
+                    (((cellSize.z - 1) / 2) * direction.y) + (cellSize.z * (i - 2)) * direction.y
                 );
                 newBridgePart.transform.localRotation = firstBridgePart.transform.localRotation;
             }
@@ -461,9 +457,9 @@ public class GridManagement : MonoBehaviour
             else {
                 newBridgePart = Instantiate(bridgePrefab, parentBridgeGameObject.transform);
                 newBridgePart.transform.localPosition = new Vector3(
-                    (((cellSize.x - 1) / 2) * direction.x) + (cellSize.x * (i - 2)) * direction.x + (0.5f * direction.x), 
+                    (((cellSize.x - 1) / 2) * direction.x) + (cellSize.x * (i - 2)) * direction.x, 
                     0, 
-                    (((cellSize.z - 1) / 2) * direction.y) + (cellSize.z * (i - 2)) * direction.y + (0.5f * direction.y)
+                    (((cellSize.z - 1) / 2) * direction.y) + (cellSize.z * (i - 2)) * direction.y
                 );
                 newBridgePart.transform.localRotation = firstBridgePart.transform.localRotation;
             }

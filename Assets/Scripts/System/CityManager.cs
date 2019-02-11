@@ -123,10 +123,19 @@ public class CityManager : MonoBehaviour {
     //Finds a house for every citizens (Soon it'll take a priority order into account)
     public void HouseEveryone(float x)
     {
+        ResetHousesHabitants();
         GetBestHouses();
         for (int i = 0; i < GameManager.instance.populationManager.populationTypeList.Length; i++)
         {
             HousePopulation(GameManager.instance.populationManager.populationTypeList[i], x);
+        }
+    }
+
+    private void ResetHousesHabitants()
+    {
+        foreach (House house in GameManager.instance.systemManager.AllHouses)
+        {
+            house.affectedCitizen.Clear();
         }
     }
 
@@ -231,6 +240,7 @@ public class CityManager : MonoBehaviour {
             } else
             {
                 Logger.Debug("Citizen " + citizen.name + " of type " + citizen.type.codeName + " could not find a house");
+                citizen.habitation = null;
                 //Si le citoyen n'a pas pu se loger, il applique le malus d'humeur à son type de population
                 GameManager.instance.populationManager.ChangePopulationMood(pop, moodValues.noHouse * x);
             }
@@ -396,7 +406,7 @@ public class CityManager : MonoBehaviour {
         {
             int rand = Random.Range(0, GameManager.instance.systemManager.AllBlocks.Count);
             int blockMet = 0;
-            while( GameManager.instance.systemManager.AllBlocks[rand].states.ContainsKey( accident ))
+            while( GameManager.instance.systemManager.AllBlocks[rand].states.ContainsKey( accident ) || GameManager.instance.systemManager.AllBlocks[rand].scheme.riotProof )
             {
                 if(blockMet++ > GameManager.instance.systemManager.AllBlocks.Count) 
                 {

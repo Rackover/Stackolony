@@ -9,14 +9,16 @@ public class SpatioportSpawner : MonoBehaviour {
 
     public float cameraShakePower = 0.3f;
     public float cameraShakeDuration = 4.5f;
+    public float cameraRecoverTime = 2f;
     private GameObject shipGameObject;
-    private Camera animCam;
-    private Camera gameCam;
     public GameObject smokeParticle;
     public int spatioportID = 0;
+    public GameObject cameraDummy;
 
     CinematicManager cineMan;
-
+    CameraController camController;
+    Vector3 endPosition;
+    Quaternion endRotation;
 
     private void Start()
     {
@@ -25,23 +27,29 @@ public class SpatioportSpawner : MonoBehaviour {
 
         if (!cineMan.areCinematicsEnabled) {
             GameManager.instance.gridManagement.SpawnBlock(spatioportID, coordinates);
-            Destroy(gameObject);
+            DestroyImmediate(gameObject);
             return;
         }
 
+        camController = FindObjectOfType<CameraController>();
+        cameraShake = cineMan.gameObject.GetComponent<CameraShake>();
+
+        endPosition = Camera.main.transform.position;
+        endRotation = Camera.main.transform.rotation;
+
+        camController.FreezeCameraPosition();
+        camController.SetCameraPositionAndRotation(cameraDummy.transform.position, cameraDummy.transform.rotation);
+        cineMan.SetCinematicMode(true);
+
         GetComponent<Animator>().SetTrigger("StartAnimation");
 
-        cameraShake = cineMan.gameObject.GetComponent<CameraShake>();
         transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(coordinates);
         shipGameObject = transform.Find("Ship").gameObject;
+    }
 
-        animCam = transform.Find("AnimatorCameraPivot").transform.Find("Camera").GetComponent<Camera>();
-        animCam.tag = "Untagged";
-        animCam.targetDisplay = 0;
-
-        gameCam = Camera.main;
-        FindObjectOfType<CameraController>().FreezeCameraPosition();
-        cineMan.SwitchToCamera(animCam);
+    private void Update()
+    {
+        camController.SetCameraPositionAndRotation(cameraDummy.transform.position, cameraDummy.transform.rotation);
     }
 
     private void GetCoordinates()
@@ -72,11 +80,6 @@ public class SpatioportSpawner : MonoBehaviour {
         GameManager.instance.gridManagement.SpawnBlock(spatioportID, coordinates);
     }
 
-    private void TriggerStartAnimation()
-    {
-        GameManager.instance.cinematicManager.SetCinematicMode(true);
-    }
-
     //Fonction apellée à la fin de l'animation
     private void TriggerEndAnimation()
     {
@@ -86,9 +89,8 @@ public class SpatioportSpawner : MonoBehaviour {
 
     private void SpawnFinished()
     {
-        GameManager.instance.cinematicManager.SetCinematicMode(false);
-        cineMan.SwitchToMainCamera();
-        FindObjectOfType<CameraController>().FreeCameraPosition();
+        cineMan.SetCinematicMode(false);
+        camController.FreeCameraPosition();
         Destroy(this.gameObject);
     }
 
@@ -100,19 +102,19 @@ public class SpatioportSpawner : MonoBehaviour {
 
     private IEnumerator TransitionToMainCamera()
     {
-        yield return StartCoroutine(LerpAnimCamToGameCam(gameCam.transform.position, gameCam.transform.rotation, 2));
+        yield return StartCoroutine(LerpAnimCamToGameCam(endPosition, endRotation, cameraRecoverTime));
         SpawnFinished();
     }
 
     private IEnumerator LerpAnimCamToGameCam(Vector3 newPosition, Quaternion newRotation, float time)
     {
         float elapsedTime = 0;
-        Vector3 startingPos = animCam.transform.position;
-        Quaternion startingRot = animCam.transform.rotation;
-        while (elapsedTime < time)
+        // Correction to counter weird time flow in coroutines
+        float timeToReach = time / 3;
+        while (elapsedTime < timeToReach)
         {
-            animCam.transform.rotation = Quaternion.Slerp(startingRot, newRotation, (elapsedTime / time));
-            animCam.transform.position = Vector3.Slerp(startingPos, newPosition, (elapsedTime / time));
+            cameraDummy.transform.rotation = Quaternion.Lerp(cameraDummy.transform.rotation, newRotation, (elapsedTime / time));
+            cameraDummy.transform.position = Vector3.Lerp(cameraDummy.transform.position, newPosition, (elapsedTime / time));
             elapsedTime += Time.deltaTime;
             yield return null;
         }
@@ -120,13 +122,16 @@ public class SpatioportSpawner : MonoBehaviour {
 
     private IEnumerator ShakeCameraLerpCoroutine(float duration, float shakeEndStrength)
     {
-        cameraShake.Shake(duration);
         float elapsedTime = 0;
+        Vector3 originalPos = cameraDummy.transform.localPosition;
         while (elapsedTime < duration)
         {
-            cameraShake.shakeAmount = shakeEndStrength * elapsedTime / duration;
+            float shakeAmount = shakeEndStrength * elapsedTime / duration;
+            cameraDummy.transform.localPosition = originalPos + Random.insideUnitSphere * shakeAmount;
             elapsedTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
+        cameraDummy.transform.localPosition = originalPos;
+        yield return true;
     }
 }

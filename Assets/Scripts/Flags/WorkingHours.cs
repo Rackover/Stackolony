@@ -10,29 +10,46 @@ public class WorkingHours : Flag, Flag.IFlag
 
     public void Update()
     {
-        if (GameManager.instance.temporality.GetCurrentCycleProgression() > startHour && hasStarted == false)
+        if (isEnabled)
         {
-            StartWork();
-        }
-        else if (GameManager.instance.temporality.GetCurrentCycleProgression() > endHour && hasStarted == true)
-        {
-            EndWork();
+            if (GameManager.instance.temporality.GetCurrentCycleProgression() > startHour && hasStarted == false)
+            {
+                StartWork();
+            }
+            else if (GameManager.instance.temporality.GetCurrentCycleProgression() > endHour && hasStarted == true)
+            {
+                EndWork();
+            }
         }
     }
+
+    public void OnDisable()
+    {
+        StartWork();
+    }
+
     public void StartWork() {
         foreach (Flag flags in gameObject.GetComponents<Flag>()) {
-			if (flags != this)
-			flags.Enable();
+            if (flags != this)
+            if (!flags.isEnabled)
+            {
+                    Debug.Log("Enabling flag");
+                    flags.Enable();
+                    hasStarted = true;
+                }
 		}
-		hasStarted = true;
 	}
 
 	public void EndWork() {
         foreach (Flag flags in gameObject.GetComponents<Flag>()) {
 			if (flags != this)
-			flags.Disable();
-		}
-		hasStarted = false;
+            if (flags.isEnabled)
+            {
+                    Debug.Log("Disabling flag");
+                    flags.Disable();
+                    hasStarted = false;
+                }
+        }
 	}
 
     public System.Type GetFlagType()

@@ -16,6 +16,7 @@ public class FoodModifier
 
 public class PopulationManager : MonoBehaviour 
 {
+    [System.Serializable]
     public class Citizen
     {
         public string name;
@@ -120,7 +121,7 @@ public class PopulationManager : MonoBehaviour
 			}
 			else
 			{
-				GameManager.instance.systemManager.AllBlocks[Random.Range(0, GameManager.instance.systemManager.AllBlocks.Count)].AddState(State.OnRiot);
+				GameManager.instance.cityManager.TriggerAccident(State.OnRiot);
 			}
 		}
 	}

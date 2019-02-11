@@ -47,7 +47,6 @@ public class EventInterpreter
 
         public ObjectPosition()
         {
-
         }
 
         public Vector3Int ToVector3Int()
@@ -66,7 +65,7 @@ public class EventInterpreter
     ///     MAIN EVENT CREATION FUNCTION
     /// 
     ///
-    public EventManager.GameAction MakeEvent(string eventDeclaration, System.Action<string> errorEvent=null)
+    public EventManager.GameAction MakeEvent(string eventDeclaration, System.Action<string> errorEvent=null, bool noLogging=false)
     {
         eventDeclaration = eventDeclaration.Replace(" ", "").Replace("\n", "").Replace("\r", "").Replace("	", "");
 
@@ -75,13 +74,13 @@ public class EventInterpreter
             actions = MakeGameEffects(eventDeclaration);
         }
         catch (InterpreterException e) {
-            Debug.LogWarning("Interpration failed :\n" + e.Message);
+            if (!noLogging) Debug.LogWarning("Interpration failed :\n" + e.Message);
             errorEvent.Invoke(e.Message);
             return null;
         }
         catch(System.Exception e) {
-            Debug.LogWarning("Unknown interpreter error - check your script.\n" + e.Message);
-            errorEvent.Invoke("Unknown interpreter error - check your script.\n"+e.Message);
+            if (!noLogging) Debug.LogWarning("Unknown interpreter error - check your script.\n"+e.Message);
+            errorEvent.Invoke("Unknown interpreter error - check your script.\n" + e.Message);
             return null;
         }
         return new EventManager.GameAction(actions);
@@ -365,9 +364,9 @@ public class EventInterpreter
     // Add an argument to an argument list
     static string AddArgument(string arguments, string argument)
     {
-        string[] args = arguments.Split(',');
-        args[args.Length] = argument;
-        return string.Join(",", args);
+        List<string> args = new List<string>(arguments.Split(','));
+        args.Add(argument);
+        return string.Join(",", args.ToArray());
     }
 
     // Execute action from function 
@@ -692,14 +691,14 @@ public class EventInterpreter
                 }
 
                 int amount = System.Convert.ToInt32(GetArgument(args, "amount"));
-                Vector3Int position = new ObjectPosition(GetArgument(args, "position")).ToVector3Int();
+                Vector3Int position = ((ObjectPosition)context[GetArgument(args, "position")]).ToVector3Int();
 
                 ConsequencesManager.SpawnBlocksAtLocation(amount, scheme.ID, new Vector2Int(position.x, position.z));
             }
         );
         actionFunctions.Add(
             "LAY_SCHEME_ON_POSITION", (args, context) => {
-                AddArgument(args, "amount:1");
+                args = AddArgument(args, "amount:1");
                 actionFunctions["LAY_MULTIPLE_SCHEME_ON_POSITION"](args, context);
             }
         );
@@ -774,6 +773,18 @@ public class EventInterpreter
                    Throw("Could not find house belonging to pop "+pop.codeName);
                }
                return house;
+           }
+       },
+       {   "RANDOM_POSITION", (args, ctx) =>
+           {
+               Vector2Int coords2D = GameManager.instance.gridManagement.GetRandomCoordinates();
+               Vector3Int coords = new Vector3Int(coords2D.x, GameManager.instance.gridManagement.minHeight, coords2D.y);
+
+               return new ObjectPosition(){
+                   x = coords.x,
+                   y = coords.y,
+                   z = coords.z
+                };
            }
        },
        {   "SCHEME", (args, ctx) =>
