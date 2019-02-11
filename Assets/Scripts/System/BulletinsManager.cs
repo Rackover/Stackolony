@@ -50,6 +50,8 @@ public class BulletinsManager : MonoBehaviour {
 
         currentBulletin = pick;
         bulletinList = newList;
+
+        if(GameManager.instance.soundManager != null) GameManager.instance.soundManager.Play("BulletinPop");
     }
 
     void LoadBulletins()

@@ -40,6 +40,7 @@ public class Block : MonoBehaviour
     public bool isConsideredDisabled; //Used when updating spatioport
     public bool isLinkedToSpatioport;
     public bool isEnabled = false;
+    private bool flagLoaded = false;
 
     public void Awake()
     {
@@ -239,6 +240,12 @@ public class Block : MonoBehaviour
 
     public void LoadBlock()
     {
+        LoadVisuals();
+        LoadFlags();
+    }
+
+    public void LoadVisuals()
+    {
         GameManager.instance.systemManager.AllBlocks.Add(this);
         if (GetConsumption() > 0)
         {
@@ -246,26 +253,31 @@ public class Block : MonoBehaviour
         }
         visuals.NewVisual(scheme.model);
 
-        foreach (string flag in scheme.flags)
-        {
-            GameManager.instance.flagReader.ReadFlag(this, flag);
-        }
+        LoadFlags();
 
         Enable();
         UpdateName();
     }
 
+    public void LoadFlags()
+    {
+        if (flagLoaded == false)
+        {
+            flagLoaded = true;
+            foreach (string flag in scheme.flags)
+            {
+                GameManager.instance.flagReader.ReadFlag(this, flag);
+            }
+        }
+    }
+
     public void UnloadBlock()
     {
         GameManager.instance.systemManager.AllBlocks.Remove(this);
-        if (GetConsumption() > 0)
+        if (GameManager.instance.systemManager.AllBlocksRequiringPower.Contains(this))
         {
             GameManager.instance.systemManager.AllBlocksRequiringPower.Remove(this);
         }
-        visuals.Hide();
-        effects.Hide();
-
-        Disable();
     }
 
     public void UpdatePower()
@@ -315,7 +327,19 @@ public class Block : MonoBehaviour
             if (bridgeInfo != null)
                 GameManager.instance.gridManagement.UpdateBridgePosition(bridgeInfo, gridCoordinates.y);
         }
-        StartCoroutine(MoveToPosition());
+        float time = 0;
+        Vector3Int actualPos = GameManager.instance.gridManagement.WorldPositionToIndex(transform.position);
+        if (actualPos.x == gridCoordinates.x && actualPos.z == gridCoordinates.z)
+        {
+            if (actualPos.y > gridCoordinates.y)
+            {
+                time = 1/GameManager.instance.cursorManagement.blockFallingSpeed;
+            } else
+            {
+                time = 1/GameManager.instance.cursorManagement.blockRisingSpeed;
+            }
+        }
+        StartCoroutine(MoveToPosition(time));
     }
 
     private IEnumerator MoveToPosition(float time = 0) //Coroutine pour déplacer le cube vers sa position
@@ -333,7 +357,7 @@ public class Block : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(gridCoordinates);
-       // checkForCollisions = false;
+        // checkForCollisions = false;
         yield return null;
     }
 

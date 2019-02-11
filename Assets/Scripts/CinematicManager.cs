@@ -37,6 +37,4 @@ public class CinematicManager : MonoBehaviour {
     {
         return isInCinematic;
     }
-
-
 }

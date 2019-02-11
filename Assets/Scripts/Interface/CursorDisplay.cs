@@ -5,12 +5,18 @@ public class CursorDisplay : MonoBehaviour {
 
 	public RectTransform cursorTransform;
 	public Image cursorImage;
+    public Sprite mainCursorDefault;
+    public Sprite mainCursorOverBlock;
+    public Sprite mainCursorHold;
+    private Image imageComponent;
+
 
     Notifications notifier;
 
     private void Start()
     {
         GameManager.instance.cursorManagement.CursorError +=  (x) => DisplayUserError(x);
+        imageComponent = GetComponent<Image>();
         notifier = FindObjectOfType<Notifications>();
     }
 
@@ -20,6 +26,16 @@ public class CursorDisplay : MonoBehaviour {
         cursorTransform.position = Input.mousePosition;
         ChangeCursor(GameManager.instance.cursorManagement.selectedMode);
         transform.SetSiblingIndex(transform.parent.childCount);
+    }
+
+    public void SetIcon(Sprite icon) 
+    {
+        imageComponent.sprite = icon;
+    }
+
+    public void ResetIcon()
+    {
+        imageComponent.sprite = mainCursorDefault;
     }
     
     void DisplayUserError(string locId)

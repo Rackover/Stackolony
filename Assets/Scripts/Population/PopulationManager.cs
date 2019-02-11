@@ -316,7 +316,6 @@ public class PopulationManager : MonoBehaviour
         citizenList.Add(newCitizen);
         populations[type].citizens.Add(newCitizen);
 
-
         GameManager.instance.achievementManager.achiever.AddToValue("settlerCount");
         GameManager.instance.achievementManager.achiever.AddToValue(type.codeName + "Count");
 
@@ -330,6 +329,9 @@ public class PopulationManager : MonoBehaviour
         for (int i = 0; i < amount; i++) {
             citizens.Add(AddCitizen(type));
         }
+        
+        GameManager.instance.soundManager.Play("NewSettler");
+
         Logger.Debug("Spawned " + amount + " citizens of type " + type.codeName + " to the citizen list");
         CitizenArrival.Invoke(citizens.Count, type);
         return citizens;

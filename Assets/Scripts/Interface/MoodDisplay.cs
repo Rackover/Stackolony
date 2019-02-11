@@ -114,6 +114,7 @@ public class MoodDisplay : MonoBehaviour {
         }
 
         // Emotion based on humor
+        Bystander.Mood oldMood = currentMood;
         if (moodValue <= angryThreshold) {
             currentMood = Bystander.Mood.Angry;
         }
@@ -125,6 +126,20 @@ public class MoodDisplay : MonoBehaviour {
         else {
             currentMood = Bystander.Mood.Bad;
         }
+
+        // SOUNDS
+        if(oldMood != currentMood)
+        {
+            if(currentMood == Bystander.Mood.Good)
+            {
+                GameManager.instance.soundManager.Play("MoodUp");
+            }
+            else if(currentMood == Bystander.Mood.Angry)
+            {
+                GameManager.instance.soundManager.Play("MoodDown");
+            }
+        }
+
 
         changeMood(currentMood);
         moodString = loc.GetLineFromCategory("stats", currentMood.ToString().ToLower());
