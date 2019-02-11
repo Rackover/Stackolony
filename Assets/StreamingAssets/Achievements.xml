@@ -3,8 +3,6 @@
 <achievements>
 
     <achievement0>
-        <name>Get comfortable</name>
-        <description>Reach 10 settlers</description>
         <property>
             <concernedVariable>settlerCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -12,8 +10,6 @@
         </property>
     </achievement0>
     <achievement1>
-        <name>Good little colony</name>
-        <description>Reach 30 settlers</description>
         <property>
             <concernedVariable>settlerCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -21,8 +17,6 @@
         </property>
     </achievement1>
     <achievement2>
-        <name>Increase in housing</name>
-        <description>Reach 50 settlers</description>
         <property>
             <concernedVariable>settlerCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -30,8 +24,6 @@
         </property>
     </achievement2>
     <achievement3>
-        <name>It's starting to do a lot!</name>
-        <description>Reach 100 settlers</description>
         <property>
             <concernedVariable>settlerCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -39,8 +31,6 @@
         </property>
     </achievement3>
     <achievement4>
-        <name>Colony ... Rather a city yes!</name>
-        <description>Reach 200 settlers</description>
         <property>
             <concernedVariable>settlerCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -48,8 +38,6 @@
         </property>
     </achievement4>
     <achievement5>
-        <name>Megalopolis confirmed</name>
-        <description>Reach 500 settlers</description>
         <property>
             <concernedVariable>settlerCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -57,8 +45,6 @@
         </property>
     </achievement5>
     <achievement6>
-        <name>Thousand mouths to feed</name>
-        <description>Reach 1000 settlers</description>
         <property>
             <concernedVariable>settlerCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -67,8 +53,6 @@
     </achievement6>
 
     <achievement7>
-        <name>There is no smoke ...</name>
-        <description>Extinguish a fire</description>
         <property>
             <concernedVariable>extinguishedFireCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -76,8 +60,6 @@
         </property>
     </achievement7>
     <achievement8>
-        <name>Volunteer firefighter</name>
-        <description>Extinguish 5 fire</description>
         <property>
             <concernedVariable>extinguishedFireCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -85,8 +67,6 @@
         </property>
     </achievement8>
     <achievement9>
-        <name>Through the fire and flame</name>
-        <description>Extinguish 10 fire</description>
         <property>
             <concernedVariable>extinguishedFireCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -94,8 +74,6 @@
         </property>
     </achievement9>
     <achievement10>
-        <name>We did well to put firefighters here!</name>
-        <description>Extinguish 50 fire</description>
         <property>
             <concernedVariable>extinguishedFireCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -104,8 +82,6 @@
     </achievement10>
 
     <achievement11>
-        <name>Welcome to fight C... Colony</name>
-        <description>Have 10 Kavgas in the colony</description>
         <property>
             <concernedVariable>militaryCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -113,8 +89,6 @@
         </property>
     </achievement11>
     <achievement12>
-        <name>Do not stretch the other cheek</name>
-        <description>Have 50 Kavgas in the colony</description>
         <property>
             <concernedVariable>militaryCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -122,8 +96,6 @@
         </property>
     </achievement12>
     <achievement13>
-        <name>This room has been pacified</name>
-        <description>Have 100 Kavgas in the colony</description>
         <property>
             <concernedVariable>militaryCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -132,8 +104,6 @@
     </achievement13>
 
     <achievement14>
-        <name>Science in progress!</name>
-        <description>Have 10 Covridians in the colony</description>
         <property>
             <concernedVariable>scientistCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -141,8 +111,6 @@
         </property>
     </achievement14>
     <achievement15>
-        <name>Stars, galaxies and noise in space</name>
-        <description>Have 50 Covridians in the colony</description>
         <property>
             <concernedVariable>scientistCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -150,8 +118,6 @@
         </property>
     </achievement15>
     <achievement16>
-        <name>The question of the egg and the chicken still outstanding.</name>
-        <description>Have 100 Covridians in the colony</description>
         <property>
             <concernedVariable>scientistCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -160,8 +126,6 @@
     </achievement16>
 
     <achievement17>
-        <name>Work, still work</name>
-        <description>Have 10 Krowsers in the colony</description>
         <property>
             <concernedVariable>workerCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -169,8 +133,6 @@
         </property>
     </achievement17>
     <achievement18>
-        <name>Bridges, working, sleeping</name>
-        <description>Have 50 Krowsers in the colony</description>
         <property>
             <concernedVariable>workerCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -178,8 +140,6 @@
         </property>
     </achievement18>
     <achievement19>
-        <name>Work done! ~</name>
-        <description>Have 100 Krowsers in the colony</description>
         <property>
             <concernedVariable>workerCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -188,8 +148,6 @@
     </achievement19>
 
     <achievement20>
-        <name>Welcome to summer camp</name>
-        <description>Have 10 Senuths in the colony</description>
         <property>
             <concernedVariable>richieCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -197,8 +155,6 @@
         </property>
     </achievement20>
     <achievement21>
-        <name>Idleness is health</name>
-        <description>Have 50 Senuths in the colony</description>
         <property>
             <concernedVariable>richieCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -206,8 +162,6 @@
         </property>
     </achievement21>
     <achievement22>
-        <name>Nothing like condescension</name>
-        <description>Have 100 Senuths in the colony</description>
         <property>
             <concernedVariable>richieCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -216,8 +170,6 @@
     </achievement22>
 
     <achievement23>
-        <name>Artists misunderstood ...</name>
-        <description>Have 10 Earis in the colony</description>
         <property>
             <concernedVariable>artistCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -225,8 +177,6 @@
         </property>
     </achievement23>
     <achievement24>
-        <name>Carrier wall sculpture</name>
-        <description>Have 50 Earis in the colony</description>
         <property>
             <concernedVariable>artistCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -234,8 +184,6 @@
         </property>
     </achievement24>
     <achievement25>
-        <name>To be or not to be a colon</name>
-        <description>Have 100 Earis in the colony</description>
         <property>
             <concernedVariable>artistCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -244,8 +192,6 @@
     </achievement25>
 
     <achievement28>
-        <name>Happiness: the fight</name>
-        <description>Mood Kavga to 100</description>
         <property>
             <concernedVariable>militaryMood</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -253,8 +199,6 @@
         </property>
     </achievement28>
     <achievement29>
-        <name>Happiness: work</name>
-        <description>Mood Krowser to 100</description>
         <property>
             <concernedVariable>workerMood</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -262,8 +206,6 @@
         </property>
     </achievement29>
     <achievement30>
-        <name>Happiness: a good little spa</name>
-        <description>Mood Senuth to 100</description>
         <property>
             <concernedVariable>richieMood</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -271,8 +213,6 @@
         </property>
     </achievement30>
     <achievement31>
-        <name>Happiness: Science</name>
-        <description>Mood Covridian to 100</description>
         <property>
             <concernedVariable>scientistMood</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -280,8 +220,6 @@
         </property>
     </achievement31>
     <achievement32>
-        <name>Happiness: Create and imagine</name>
-        <description>Mood Eari to 100</description>
         <property>
             <concernedVariable>artistMood</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -290,8 +228,6 @@
     </achievement32>
 
     <achievement39>
-        <name>Neighborhood problem</name>
-        <description>Have 5 bridges in the colony</description>
         <property>
             <concernedVariable>bridgeCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -299,8 +235,6 @@
         </property>
     </achievement39>
     <achievement40>
-        <name>Bridge-t Jone's Diary</name>
-        <description>Have 10 bridges in the colony</description>
         <property>
             <concernedVariable>bridgeCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -308,8 +242,6 @@
         </property>
     </achievement40>
     <achievement41>
-        <name>Nuisance chain</name>
-        <description>Have 50 bridges in the colony</description>
         <property>
             <concernedVariable>bridgeCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -317,8 +249,6 @@
         </property>
     </achievement41>
     <achievement42>
-        <name>It's still a lot of bridges!</name>
-        <description>Have 100 bridges in the colony</description>
         <property>
             <concernedVariable>bridgeCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -327,8 +257,6 @@
     </achievement42>
 
     <achievement44>
-        <name>Burns, insect !</name>
-        <description>A block burns</description>
         <property>
             <concernedVariable>fireCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -337,8 +265,6 @@
     </achievement44>
 
     <achievement45>
-        <name>We are fed up !</name>
-        <description>Stop a riot</description>
         <property>
             <concernedVariable>stoppedRiotCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -346,8 +272,6 @@
         </property>
     </achievement45>
     <achievement46>
-        <name>Home delinquency</name>
-        <description>Stop 5 riots</description>
         <property>
             <concernedVariable>stoppedRiotCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -355,8 +279,6 @@
         </property>
     </achievement46>
     <achievement47>
-        <name>I am asking you to stop... Please...</name>
-        <description>Stop 10 riots</description>
         <property>
             <concernedVariable>stoppedRiotCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -364,8 +286,6 @@
         </property>
     </achievement47>
     <achievement48>
-        <name>I am asking you to stop... Please...</name>
-        <description>Stop 50 riots</description>
         <property>
             <concernedVariable>stoppedRiotCount</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -374,8 +294,6 @@
     </achievement48>
 
     <achievement49>
-        <name>Diving in the big bath</name>
-        <description>Reach Cycle 10</description>
         <property>
             <concernedVariable>cyclePassed</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -383,8 +301,6 @@
         </property>
     </achievement49>
     <achievement50>
-        <name>Persistent colony</name>
-        <description>Reach Cycle 20</description>
         <property>
             <concernedVariable>cyclePassed</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -392,8 +308,6 @@
         </property>
     </achievement50>
     <achievement51>
-        <name>Lego Pro!</name>
-        <description>Reach Cycle 50</description>
         <property>
             <concernedVariable>cyclePassed</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -401,8 +315,6 @@
         </property>
     </achievement51>
     <achievement52>
-        <name>Always higher always further always stronger!</name>
-        <description>Reach Cycle 100</description>
         <property>
             <concernedVariable>cyclePassed</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -410,8 +322,6 @@
         </property>
     </achievement52>
     <achievement53>
-        <name>Never gonna give you up !</name>
-        <description>Reach Cycle 150</description>
         <property>
             <concernedVariable>cyclePassed</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
@@ -419,8 +329,6 @@
         </property>
     </achievement53>
     <achievement54>
-        <name>STACKOLONY</name>
-        <description>Reach Cycle 200</description>
         <property>
             <concernedVariable>cyclePassed</concernedVariable>
             <rule>GREATER_OR_EQUAL_THAN</rule>
