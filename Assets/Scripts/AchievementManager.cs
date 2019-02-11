@@ -25,9 +25,6 @@ public class AchievementManager : MonoBehaviour
 		{	
 			if(!unlockedAchievements.Contains(i))
 			{
-				string aName = achievementList[i].SelectNodes("name")[0].InnerText;
-				string aDescription = achievementList[i].SelectNodes("description")[0].InnerText;
-
 				XmlNode property = achievementList[i].SelectNodes("property")[0];
 
 				string concernedVariable = property.SelectNodes("concernedVariable")[0].InnerText;
@@ -35,7 +32,6 @@ public class AchievementManager : MonoBehaviour
 				int activationValue = int.Parse(property.SelectNodes("activationValue")[0].InnerText);
 
 				achiever.DefineAchievement(
-					aName,
 					int.Parse(achievementList[i].Name.Replace("achievement", "")),
 					achiever.DefineProperty(concernedVariable, rule, activationValue)
 				);

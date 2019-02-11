@@ -34,15 +34,13 @@ public class Achievements
 
 	public class Achievement
 	{
-		public string name;			// The name of the achievement
 		public int id;				// The id of the achievement
 		public int propertyID;		// Propertie names used to reference in the property dictionary
 		public bool unlocked;		// If the achievement is unlocked or not
 
-		public Achievement(string _name, int ID, int _propertyID)
+		public Achievement(int ID, int _propertyID)
 		{
 			id = ID;
-			name = _name;
 			propertyID = _propertyID;
 			unlocked = false;
 		}
@@ -58,7 +56,10 @@ public class Achievements
 			if(!achievement.unlocked && properties[achievement.propertyID].IsActive())
 			{
 				achievement.unlocked = true;
-				Debug.Log("Achievement_" + achievement.id + " : " + achievement.name + ", unlocked !");
+
+				string achievementName = GameManager.instance.localization.GetLineFromCategory("achievementName", "achievement" + achievement.id);
+
+				Debug.Log("Achievement_" + achievement.id + " : " + achievementName + " unlocked !");
 				GameManager.instance.achievementManager.unlockedAchievements.Add(achievement.id); // Add the achievement ID to the player save
 				// g_SteamAchievements->SetAchievement(entry.value.name); // Trigger steam achievement	
 			}
@@ -73,9 +74,9 @@ public class Achievements
 	}
 
 	// Define a new Achievement checker (Dont if the player has already got it)
-	public void DefineAchievement(string name, int id, int property)
+	public void DefineAchievement(int id, int property)
 	{
-		achievements.Add(new Achievement(name, id, property));
+		achievements.Add(new Achievement(id, property));
 	}
 
 	// Add to the currentValue of all Properties concerned by this variable
