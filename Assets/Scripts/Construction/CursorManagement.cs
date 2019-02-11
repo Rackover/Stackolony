@@ -585,26 +585,8 @@ public class CursorManagement : MonoBehaviour
     {
         if (selectedBlock != null && isDragging)
         {
-            if (_pos.y < GameManager.instance.gridManagement.minHeight)
+            if (GameManager.instance.gridManagement.IsPlacable(_pos, true))
             {
-                CancelDrag();
-                return;
-            }
-            if (GameManager.instance.gridManagement.GetSlotType(_pos) == GridManagement.blockType.FREE)
-            {
-                // Check if the blocks under the position allows to have "something above them"
-                for (int i = _pos.y; i >= 0; i--)
-                {
-                    if (GameManager.instance.gridManagement.grid[_pos.x,i,_pos.z] != null)
-                    {
-                        Block block = GameManager.instance.gridManagement.grid[_pos.x, i, _pos.z].gameObject.GetComponent<Block>();
-                        if (!block.scheme.canBuildAbove) {
-                            CursorError.Invoke("maxHeightReached");
-                            CancelDrag();
-                            return;
-                        }
-                    }
-                }
                 //Play SFX
                 GameManager.instance.soundManager.Play("BlockDrop");
 
@@ -621,38 +603,42 @@ public class CursorManagement : MonoBehaviour
                 {
                     GameManager.instance.gridManagement.LayBlock(selectedBlock, new Vector2Int(_pos.x, _pos.z));
                 }
-            } 
+                selectedBlock.LoadFlags();
+            }
             else
             {
                 CancelDrag();
                 return;
             }
         }
-        if(selectedBlock != null)
+        if (selectedBlock != null)
         {        
             selectedBlock.CallFlags("OnBlockUpdate");
             selectedBlock.boxCollider.enabled = true;
             selectedBlock = null; 
         }
         isDragging = false;
+        draggingNewBlock = false;
     }
 
     public void CancelDrag()
     {
         if (selectedBlock != null && isDragging)
         {
-            GameManager.instance.animationManager.EndElevateTower(new Vector2Int(savedPos.x, savedPos.z), 0);
             if (draggingNewBlock == true)
             {
-                GameManager.instance.gridManagement.DestroyBlock(selectedBlock.gridCoordinates);
+                GameManager.instance.gridManagement.DestroyBlock(selectedBlock);
             }
             draggingNewBlock = false;
-            if (selectedBlock.GetComponent<Block>() != null)
+            if (selectedBlock != null)
             {
-                selectedBlock.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(selectedBlock.gridCoordinates);
-            } else
-            {
-                GameManager.instance.gridManagement.DestroyBlock(selectedBlock.gridCoordinates);
+                if (GameManager.instance.gridManagement.IsPlacable(selectedBlock.gridCoordinates, false))
+                {
+                    selectedBlock.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(selectedBlock.gridCoordinates);
+                } else
+                {
+                    GameManager.instance.gridManagement.DestroyBlock(selectedBlock);
+                }
             }
             selectedBlock.boxCollider.enabled = true;
             selectedBlock = null;

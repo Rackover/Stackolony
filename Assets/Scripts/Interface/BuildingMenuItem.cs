@@ -101,7 +101,7 @@ public class BuildingMenuItem : MonoBehaviour {
             if (Input.GetButton("Select") && concerned && !GameManager.instance.cursorManagement.isDragging) {
                 isBeingDragged = true;
                 if (draggingBuilding == null) {
-                    draggingBuilding = GameManager.instance.gridManagement.LayBlock(blockId, new Vector2Int(0, 0));
+                    draggingBuilding = GameManager.instance.gridManagement.CreateBlockFromId(blockId).GetComponent<Block>();
                 }
             }
         }

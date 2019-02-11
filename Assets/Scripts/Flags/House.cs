@@ -17,7 +17,6 @@ public class House : Flag, Flag.IFlag
     public List<NotationModifier> notationModifiers = new List<NotationModifier>();
     public bool powered;
     public float foodReceived;
-    public float distanceToGround;
     public float foodConsumption;
 
     ParticleSystem citizenIn;
@@ -33,7 +32,6 @@ public class House : Flag, Flag.IFlag
             powered = true;
         else
             powered = false;
-        GetDistanceFromGround();
     }
 
     float GetFoodConsumption()
@@ -49,11 +47,6 @@ public class House : Flag, Flag.IFlag
     override public void UpdateNuisanceImpact()
     {
         nuisanceImpact = block.nuisance * block.scheme.sensibility;
-    }
-
-    public void GetDistanceFromGround()
-    {
-        distanceToGround = GameManager.instance.gridManagement.GetDistanceFromGround(block.gridCoordinates) - 0.5f;
     }
 
     public void InitCitizensSlots()

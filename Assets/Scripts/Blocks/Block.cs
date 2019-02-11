@@ -40,6 +40,7 @@ public class Block : MonoBehaviour
     public bool isConsideredDisabled; //Used when updating spatioport
     public bool isLinkedToSpatioport;
     public bool isEnabled = false;
+    private bool flagLoaded = false;
 
     public void Awake()
     {
@@ -228,6 +229,12 @@ public class Block : MonoBehaviour
 
     public void LoadBlock()
     {
+        LoadVisuals();
+        LoadFlags();
+    }
+
+    public void LoadVisuals()
+    {
         GameManager.instance.systemManager.AllBlocks.Add(this);
         if (GetConsumption() > 0)
         {
@@ -235,26 +242,31 @@ public class Block : MonoBehaviour
         }
         visuals.NewVisual(scheme.model);
 
-        foreach (string flag in scheme.flags)
-        {
-            GameManager.instance.flagReader.ReadFlag(this, flag);
-        }
+        LoadFlags();
 
         Enable();
         UpdateName();
     }
 
+    public void LoadFlags()
+    {
+        if (flagLoaded == false)
+        {
+            flagLoaded = true;
+            foreach (string flag in scheme.flags)
+            {
+                GameManager.instance.flagReader.ReadFlag(this, flag);
+            }
+        }
+    }
+
     public void UnloadBlock()
     {
         GameManager.instance.systemManager.AllBlocks.Remove(this);
-        if (GetConsumption() > 0)
+        if (GameManager.instance.systemManager.AllBlocksRequiringPower.Contains(this))
         {
             GameManager.instance.systemManager.AllBlocksRequiringPower.Remove(this);
         }
-        visuals.Hide();
-        effects.Hide();
-
-        Disable();
     }
 
     public void UpdatePower()
