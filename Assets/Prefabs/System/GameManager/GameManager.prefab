@@ -71,6 +71,7 @@ MonoBehaviour:
   timelineController: {fileID: 0}
   eventManager: {fileID: 0}
   animationManager: {fileID: 0}
+  achievementManager: {fileID: 0}
   cursorDisplay: {fileID: 0}
   localization: {fileID: 0}
   displayerManager: {fileID: 0}
@@ -80,6 +81,8 @@ MonoBehaviour:
   overlayManager: {fileID: 0}
   DEBUG_MODE: 1
   ENABLE_LOGS: 1
+  DISABLE_EVENTS: 0
+  DISABLE_GAME_OVER: 1
 --- !u!114 &114929392459027906
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -91,3 +94,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0e19ef9b6769324386e8b793984922c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unlockedAchievements: 
