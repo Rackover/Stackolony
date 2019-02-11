@@ -17,6 +17,7 @@ public class TimelineController : MonoBehaviour {
     {
         public List<int> unlocks = new List<int>();
         public Dictionary<Population, int> settlers = new Dictionary<Population, int>();
+        public int eventId = 0;
     }
 
     List<KeyValuePair<Population, int>> nextCycleSettlersBonus = new List<KeyValuePair<Population, int>>();
@@ -29,9 +30,14 @@ public class TimelineController : MonoBehaviour {
         nextCycleSettlersBonus.Add(settlerBonus);
     }
 
-    public void UpdateCycle(int cycleNumber)
+    public void SetCycleOnly(int cycleNumber)
     {
         currentCycle = cycleNumber < cycles.Count ? cycles[cycleNumber] : null;
+    }
+
+    public void UpdateCycle(int cycleNumber)
+    {
+        SetCycleOnly(cycleNumber);
 
         if (currentCycle == null) {
 
@@ -70,6 +76,16 @@ public class TimelineController : MonoBehaviour {
 
         // Unlocks
         CheckUnlocks();
+
+        // Events
+        if (currentCycle.eventId > 0) {
+            try {
+                GameManager.instance.eventManager.TriggerEvent(currentCycle.eventId);
+            }
+            catch {
+                Logger.Error("Tried to trigger non existent event ID " + currentCycle.eventId + " on cycle " + cycleNumber);
+            }
+        }
 
         Logger.Debug("New cycle, spawning " + currentCycle.settlers.Count.ToString() + " citizens and unlocking " + currentCycle.unlocks.Count.ToString() + " buildings");
     }
@@ -178,6 +194,11 @@ public class TimelineController : MonoBehaviour {
                         lastSpikeValue = amount;
                         cycle.settlers.Add(pop, amount);
                     }
+                    break;
+
+                case "event":
+                    int eid = Convert.ToInt32(xProperty.InnerText);
+                    cycle.eventId = eid;
                     break;
             }
 

@@ -16,6 +16,7 @@ public class FoodModifier
 
 public class PopulationManager : MonoBehaviour 
 {
+    [System.Serializable]
     public class Citizen
     {
         public string name;

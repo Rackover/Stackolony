@@ -168,11 +168,13 @@ MonoBehaviour:
   selectedBlock: {fileID: 0}
   projectorHeight: 10
   myProjector: {fileID: 0}
+  myProjectorComponent: {fileID: 0}
+  dragDelay: 0.1
   posInGrid: {x: 0, y: 0, z: 0}
   posInWorld: {x: 0, y: 0, z: 0}
   isDragging: 0
   cursorOnUI: 0
-  sPosition: {x: 0, y: 0, z: 0}
+  draggingNewBlock: 0
 --- !u!114 &114366257399304460
 MonoBehaviour:
   m_ObjectHideFlags: 1

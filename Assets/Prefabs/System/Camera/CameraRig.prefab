@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 81937446151724240}
   m_Layer: 0
   m_Name: .Editor-Only-Camera
-  m_TagString: MainCamera
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -158,8 +158,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a7362d628501c749965a3aa87d54944, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraModel: {fileID: 1979716195221794, guid: f5ea0ff54e611c445abaee12fd430b20,
+  cameraModel: {fileID: 1649748199193602, guid: f5ea0ff54e611c445abaee12fd430b20,
     type: 2}
+  editorOnlyDummy: {fileID: 1034342771298840}
   camCenter: {fileID: 4303447014606416}
   camPivot: {fileID: 4047054834549798}
   mouseDriftSensibility: 0.05

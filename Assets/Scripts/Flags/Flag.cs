@@ -50,7 +50,12 @@ public class Flag : MonoBehaviour {
     //Fonction appelée avant de détruire le bloc
     virtual public void OnDestroy()
     {
-        block.activeFlags.Remove((IFlag)this);
+        try {
+            block.activeFlags.Remove((IFlag)this);
+        }
+        catch(System.Exception e) {
+            Debug.LogWarning("Failed to remove the flag " + name + " from a block (Did you destroy the spaceport ?)");
+        }
     }
 
     //Fonction appelée à chaque début de cycle
@@ -90,11 +95,6 @@ public class Flag : MonoBehaviour {
     virtual public void OnBlockDestroy()
     {
         
-    }
-
-    virtual public void Update()
-    {
-        if(!isEnabled) return;
     }
 
     virtual public void Use()

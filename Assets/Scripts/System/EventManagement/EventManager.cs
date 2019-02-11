@@ -19,6 +19,8 @@ public class EventManager : MonoBehaviour {
     Dictionary<int, GameEvent> events = new Dictionary<int, GameEvent>();
     List<EventMarker> eventsPool = new List<EventMarker>();
     float chances = 0f;
+    int nextEvent = 0;
+    bool triggerEventWhenPossible = false;
 
     public class GameEvent
     {
@@ -120,6 +122,22 @@ public class EventManager : MonoBehaviour {
         chances = 0f;
     }
 
+    private void Update()
+    {
+        if (triggerEventWhenPossible) {
+            float timeOfDay = GameManager.instance.temporality.GetCurrentCycleProgression();
+            foreach(EventMarker marker in eventsPool) {
+                if (marker.eventId == nextEvent) {
+                    if (timeOfDay  > marker.time) {
+                        TriggerEvent(nextEvent);
+                        triggerEventWhenPossible = false;
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
     public void Renew(int currentCycle)
     {
         // Game Over
@@ -152,7 +170,8 @@ public class EventManager : MonoBehaviour {
                 return;
             }
 
-            TriggerEvent(pick.eventId);
+            triggerEventWhenPossible = true;
+            nextEvent = pick.eventId;
             eventsPool = newList;
             chances = 0f;
         }
@@ -170,21 +189,39 @@ public class EventManager : MonoBehaviour {
             }
             catch (EventInterpreter.InterpreterException e) {
                 GameManager.instance.eventManager.interpreterError.Invoke(e.Message);
+                Debug.LogWarning(e);
             }
             catch (System.Exception e) {
                 GameManager.instance.eventManager.interpreterError.Invoke("Unknown interpreter error - check your script.\n" + e.Message);
+                Debug.LogWarning(e);
             }
         }
     }
 
     public void CheckSyntax(string eventScript)
     {
-        interpreter.MakeEvent(eventScript, checkError);
+        interpreter.MakeEvent(eventScript, checkError, true);
     }
     
     public void TriggerEvent(int id)
     {
-        newEvent.Invoke(events[id]);
+        StartCoroutine(WaitForEventAndTrigger(id));
+    }
+
+    public void TriggerEventImmediatly(int id)
+    {
+        if (!GameManager.instance.DISABLE_EVENTS) {
+            newEvent.Invoke(events[id]);
+        }
+    }
+
+    IEnumerator WaitForEventAndTrigger(int id)
+    {
+        while (!events.ContainsKey(id) || GameManager.instance.cinematicManager.IsInCinematic()) {
+            yield return null;
+        }
+        TriggerEventImmediatly(id);
+        yield return true;
     }
 
     public void LoadEvents()

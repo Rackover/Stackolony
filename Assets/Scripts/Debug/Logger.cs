@@ -12,6 +12,7 @@ using UnityEditor;
 public class Logger : MonoBehaviour
 {
     StringBuilder builder = new StringBuilder();
+    public type level;
     public string logFile = "stackolony.log";
     public string locale = "fr-FR";
     public int callerLength = 18;
@@ -52,6 +53,11 @@ public class Logger : MonoBehaviour
         // Get informations from stackframe
         Logger loggerInstance = FindObjectOfType<Logger>();
         if (loggerInstance == null) {
+            return;
+        }
+
+        // Wrong level
+        if (loggerInstance.level > type) {
             return;
         }
 

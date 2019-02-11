@@ -15,6 +15,9 @@ public class SystemManager : MonoBehaviour {
     public List<FireRiskGenerator> AllFireRiskGenerators = new List<FireRiskGenerator>();
 
 
+    private bool systemResetted;
+
+
     /* FONCTIONNEMENT DU SYSTEME 
      * Système recalculé à chaque déplacement de block : 
      *      - Spatioport influence
@@ -55,6 +58,16 @@ public class SystemManager : MonoBehaviour {
         AllFoodProviders.Clear();
     }
 
+    public void ResetSystem()
+    {
+        if (systemResetted == false)
+        {
+            GameManager.instance.missionCallbackManager.Reset();
+            StopAllCoroutines();
+            systemResetted = true;
+        }
+    }
+
     //Met à jour tout le système (Only on load)
     public void UpdateSystem()
     {
@@ -72,6 +85,7 @@ public class SystemManager : MonoBehaviour {
     //S'execute à chaques fois qu'un cycle passe
     public IEnumerator OnNewCycle()
     {
+        ResetSystem();
         GameManager.instance.populationManager.OnNewCycle();
         GameManager.instance.cityManager.OnNewCycle();
 
@@ -96,6 +110,7 @@ public class SystemManager : MonoBehaviour {
     //S'execute à chaques fois qu'un microcycle passe
     public IEnumerator OnNewMicrocycle()
     {
+        ResetSystem();
         GameManager.instance.populationManager.OnNewMicrocycle();
 
         // ToArray() is to prevent foreach errors by copying the AllBlocks array
@@ -117,18 +132,18 @@ public class SystemManager : MonoBehaviour {
     //S'execute à chaques fois qu'un bloc est déplacé dans la grille
     public IEnumerator OnGridUpdate()
     {
+        ResetSystem();
         foreach (Block block in AllBlocks.ToArray())
         {
             if(block != null) block.OnGridUpdate();
         }
-
-        StopAllCoroutines();
         yield return StartCoroutine(RecalculateSpatioportInfluence());
         yield return new WaitForSeconds(0.5f); //Clumsy, à changer rapidement, la propagation doit s'effectuer une fois que le spatioport a tout mis à jour
         yield return StartCoroutine(RecalculatePropagation());
         yield return StartCoroutine(RecalculateNuisance());
         yield return StartCoroutine(UpdateOverlay());
         yield return StartCoroutine(RecalculateFireRisks());
+        systemResetted = false;
     }
 
     public IEnumerator UpdateOverlay()
@@ -159,12 +174,9 @@ public class SystemManager : MonoBehaviour {
     //Si un block qui requiert du courant n'a pas croisé d'explorer, alors on l'eteint. Sinon on l'allume || Lancé automatiquement à la fin des calculs liés au power
     public void UpdateBlocksRequiringPower()
     {
-        foreach (Block block in AllBlocksRequiringPower)
+        foreach (Block block in AllBlocks)
         {
-            if (block.isConsideredUnpowered == true)
-            {
-                block.ChangePower(0);
-            }
+            block.UpdatePower();
         }
     }
 
@@ -358,8 +370,6 @@ public class SystemManager : MonoBehaviour {
 
     public IEnumerator RecalculateHabitation(float x)
     {
-        StartCoroutine(ResetHabitation());
-        yield return new WaitForEndOfFrame();
         GameManager.instance.cityManager.HouseEveryone(x);
         yield return null;
     }
@@ -429,6 +439,7 @@ public class SystemManager : MonoBehaviour {
     public IEnumerator RecalculatePropagation()
     {
         yield return StartCoroutine(ResetBlocksPower());
+        if (AllGenerators.Count <= 0) { UpdateBlocksRequiringPower(); }
         foreach (Generator generator in AllGenerators.ToArray())
         {
             if(generator != null)
@@ -471,8 +482,7 @@ public class SystemManager : MonoBehaviour {
         Logger.Debug("Resetting block power ");
         foreach (Block block in AllBlocksRequiringPower)
         {
-            block.isConsideredUnpowered = true;
-            block.ChangePower(0);
+            block.hiddenPower = 0;
         }
         yield return null;
     }
@@ -483,20 +493,6 @@ public class SystemManager : MonoBehaviour {
         foreach (Block block in AllBlocks)
         {
             block.fireRiskPercentage = 0;
-        }
-        yield return null;
-    }
-
-    IEnumerator ResetHabitation()
-    {
-        Logger.Debug("Resetting citizens habitations");
-        foreach (House house in AllHouses)
-        {
-            house.affectedCitizen.Clear();
-        }
-        foreach (PopulationManager.Citizen citizen in GameManager.instance.populationManager.citizenList)
-        {
-            citizen.habitation = null;
         }
         yield return null;
     }
