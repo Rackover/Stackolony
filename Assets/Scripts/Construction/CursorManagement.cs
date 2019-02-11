@@ -28,8 +28,10 @@ public class CursorManagement : MonoBehaviour
     public int projectorHeight = 10;
     public GameObject myProjector;
     public Projector myProjectorComponent;
-    public float dragDelay = 0.2f;
-    private float dragCD;
+    public float dragSpeed = 15f;
+    private float dragDistance;
+    public float dragTreshold = 10;
+    private Vector2 initialDragPos;
     [Space(5)]
     
     [Header("=== DEBUG ===")]
@@ -242,6 +244,9 @@ public class CursorManagement : MonoBehaviour
         if(Input.GetButtonDown("Select"))
         {
             switch (selectedMode) {
+                case cursorMode.Move:
+                    initialDragPos = Input.mousePosition;
+                    break;
                 case cursorMode.Bridge:
                     GameObject selectedObj = hit.transform.gameObject;
                     if (selectedObj != null)
@@ -263,14 +268,11 @@ public class CursorManagement : MonoBehaviour
             switch (selectedMode) 
             {
                 case cursorMode.Move:
-                    if (dragCD >= dragDelay && selectedBlock == null)
+                    dragDistance = Vector2.Distance(Input.mousePosition, initialDragPos);
+                    if (dragDistance >= dragTreshold && selectedBlock == null)
                     {
                         Block selectedBlock = hit.transform.gameObject.GetComponent<Block>();
                         StartDrag(selectedBlock);
-                    }
-                    else
-                    {
-                        dragCD += Time.deltaTime;
                     }
                     DuringDrag(posInGrid);
                     break;
@@ -285,7 +287,6 @@ public class CursorManagement : MonoBehaviour
     
         // Left Mouse up 
         if (Input.GetButtonUp("Select")) {
-            dragCD = 0;
             switch (selectedMode) {
                 case cursorMode.Move:
                     EndDrag(posInGrid);
@@ -575,8 +576,10 @@ public class CursorManagement : MonoBehaviour
                 {
                     savedPos = _pos;
                     GameManager.instance.soundManager.Play("Tick");
-                    selectedBlock.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(_pos);
                 }
+            } else
+            {
+                selectedBlock.transform.position = Vector3.Lerp(selectedBlock.transform.position, GameManager.instance.gridManagement.IndexToWorldPosition(savedPos), 10*Time.deltaTime);
             }
         }
     }
