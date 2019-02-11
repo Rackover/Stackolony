@@ -335,24 +335,17 @@ public class Block : MonoBehaviour
     {
         float elapsedTime = 0;
         Vector3 startingPos = transform.position;
-        transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(gridCoordinates);
         while (elapsedTime < time)
         {
-            foreach (Transform child in transform)
-            {
-                child.transform.position = Vector3.Lerp(
-                    startingPos,
-                    GameManager.instance.gridManagement.IndexToWorldPosition(gridCoordinates),
-                    elapsedTime / time
-                );
-            }
+            transform.position = Vector3.Lerp(
+                startingPos,
+                GameManager.instance.gridManagement.IndexToWorldPosition(gridCoordinates),
+                elapsedTime / time
+            );
             elapsedTime += Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
-        foreach (Transform child in transform)
-        {
-            child.transform.position = transform.position;
-        }
+        transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(gridCoordinates);
         // checkForCollisions = false;
         yield return null;
     }
