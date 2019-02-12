@@ -26,6 +26,16 @@ public class CursorDisplay : MonoBehaviour {
         cursorTransform.position = Input.mousePosition;
         ChangeCursor(GameManager.instance.cursorManagement.selectedMode);
         transform.SetSiblingIndex(transform.parent.childCount);
+
+        if (GameManager.instance.cursorManagement.couldDrag) {
+            SetIcon(mainCursorOverBlock);
+        }
+        else if (GameManager.instance.cursorManagement.isDragging) {
+            SetIcon(mainCursorHold);
+        }
+        else {   
+            ResetIcon();
+        }
     }
 
     public void SetIcon(Sprite icon) 

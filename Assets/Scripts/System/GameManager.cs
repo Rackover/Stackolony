@@ -39,7 +39,6 @@ public class GameManager : MonoBehaviour
 
     [Space(1)]
     [Header("INTERFACE")]
-    public CursorDisplay cursorDisplay;
     public Localization localization;
     public DisplayerManager displayerManager;
 
@@ -138,7 +137,6 @@ public class GameManager : MonoBehaviour
         if (achievementManager == null) achievementManager = FindObjectOfType<AchievementManager>();
         
         // INTERFACE
-        if (cursorDisplay == null) cursorDisplay = FindObjectOfType<CursorDisplay>();
         if (localization == null) localization = FindObjectOfType<Localization>();
         if (displayerManager == null) displayerManager = FindObjectOfType<DisplayerManager>();
 
