@@ -384,14 +384,20 @@ public class GameManager : MonoBehaviour
         // NEW GAME ONLY
         if (isNewGame) {
 
+            // First citizen arrival and cycle loading
+            timelineController.UpdateCycle(0);
+
             // CINEMATIC
             Instantiate(library.spatioportSpawnerPrefab);
+        }
+
+        // TUTORIAL RUN ONLY
+        if (cityManager.isTutorialRun) {
 
             // Lock every building
             foreach (BlockScheme scheme in library.blocks) {
                 cityManager.LockBuilding(scheme.ID);
             }
-            timelineController.UpdateCycle(0);
         }
 
         // Ingame switch
