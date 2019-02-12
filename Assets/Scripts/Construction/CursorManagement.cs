@@ -140,7 +140,7 @@ public class CursorManagement : MonoBehaviour
          // Move mode by default unless the bridge key is pressed
          if (Input.GetButton("Bridge")) 
         {
-            if (selectedMode != cursorMode.Bridge) 
+            if (selectedMode != cursorMode.Bridge && !isDragging) 
             {
                 GameManager.instance.soundManager.Play("Shift");
                 SwitchMode(cursorMode.Bridge);
