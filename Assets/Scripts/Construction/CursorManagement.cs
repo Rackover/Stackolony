@@ -565,6 +565,17 @@ public class CursorManagement : MonoBehaviour
         
     }
 
+    public void ClearListeners()
+    {
+        try {
+            foreach (System.Delegate d in CursorError.GetInvocationList()) {
+                CursorError -= (System.Action<string>)d;
+            }
+        }
+        catch {
+            // Nothing to do
+        }
+    }
 
 #region DragAndDrop
 

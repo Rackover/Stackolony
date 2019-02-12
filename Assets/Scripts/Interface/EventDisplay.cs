@@ -28,7 +28,7 @@ public class EventDisplay : MonoBehaviour {
 
     private void Start()
     {
-        GameManager.instance.eventManager.newEvent += (x) => {
+        GameManager.instance.eventManager.NewEvent += (x) => {
             gameEvent = x;
             subWindow.SetActive(true);
             InitializeButtons();

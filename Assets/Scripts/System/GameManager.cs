@@ -417,15 +417,14 @@ public class GameManager : MonoBehaviour
         temporality.SetTimeScale(2);
 
         // Clear events
-        eventManager.newEvent = null;
-        populationManager.CitizenArrival = null;
-        cursorManagement.CursorError = null;
-
+        eventManager.ClearListeners();
+        cursorManagement.ClearListeners();
+       
         // Clear system
         systemManager.ClearSystem();
 
         // Remove gameevents and citizens
-        populationManager.citizenList.Clear();
+        populationManager.Clear();
         eventManager.ResetChances();
 
         // Shut down only
