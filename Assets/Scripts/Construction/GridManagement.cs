@@ -136,7 +136,7 @@ public class GridManagement : MonoBehaviour
 
         if (coordinates.x < 0 || coordinates.y < 0 || coordinates.z < 0)
         {
-            if (displayInformation) { GameManager.instance.cursorManagement.CursorError.Invoke("cannotBuildOutOfMap"); }
+            if (displayInformation) { GameManager.instance.cursorManagement.CursorError("cannotBuildOutOfMap"); }
             return false;
         }
         Vector3Int groundPosition = GetLowestFreeSlot(new Vector2Int(coordinates.x, coordinates.z));

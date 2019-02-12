@@ -39,6 +39,11 @@ public class TimelineController : MonoBehaviour {
     {
         SetCycleOnly(cycleNumber);
 
+        if (!GameManager.instance.cityManager.isTutorialRun && cycleNumber <= 1) {
+            // We skip the first cycle when tutorial is not enabled - lack of XML timeline in this precise case makes settlers arrive too early
+            return;
+        }
+
         if (currentCycle == null) {
 
             currentCycle = new CycleInformation();

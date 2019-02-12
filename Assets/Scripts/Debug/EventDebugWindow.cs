@@ -20,12 +20,12 @@ public class EventDebugWindow : MonoBehaviour {
 
     void Start()
     {
-        GameManager.instance.eventManager.interpreterError += (x) => {
+        GameManager.instance.eventManager.InterpreterError += (x) => {
             errorWindow.SetActive(true);
             errorText.text = x;
             errorText.color = badColor;
         };
-        GameManager.instance.eventManager.checkError += (x) => {
+        GameManager.instance.eventManager.CheckError += (x) => {
             checkText.text = x;
         };
         inputZone.onValueChanged.AddListener(delegate {

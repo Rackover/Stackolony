@@ -39,7 +39,6 @@ public class GameManager : MonoBehaviour
 
     [Space(1)]
     [Header("INTERFACE")]
-    public CursorDisplay cursorDisplay;
     public Localization localization;
     public DisplayerManager displayerManager;
 
@@ -138,7 +137,6 @@ public class GameManager : MonoBehaviour
         if (achievementManager == null) achievementManager = FindObjectOfType<AchievementManager>();
         
         // INTERFACE
-        if (cursorDisplay == null) cursorDisplay = FindObjectOfType<CursorDisplay>();
         if (localization == null) localization = FindObjectOfType<Localization>();
         if (displayerManager == null) displayerManager = FindObjectOfType<DisplayerManager>();
 
@@ -384,14 +382,20 @@ public class GameManager : MonoBehaviour
         // NEW GAME ONLY
         if (isNewGame) {
 
+            // First citizen arrival and cycle loading
+            timelineController.UpdateCycle(0);
+
             // CINEMATIC
             Instantiate(library.spatioportSpawnerPrefab);
+        }
+
+        // TUTORIAL RUN ONLY
+        if (cityManager.isTutorialRun) {
 
             // Lock every building
             foreach (BlockScheme scheme in library.blocks) {
                 cityManager.LockBuilding(scheme.ID);
             }
-            timelineController.UpdateCycle(0);
         }
 
         // Ingame switch
@@ -411,15 +415,14 @@ public class GameManager : MonoBehaviour
         temporality.SetTimeScale(2);
 
         // Clear events
-        eventManager.newEvent = null;
-        populationManager.CitizenArrival = null;
-        cursorManagement.CursorError = null;
-
+        eventManager.ClearListeners();
+        cursorManagement.ClearListeners();
+       
         // Clear system
         systemManager.ClearSystem();
 
         // Remove gameevents and citizens
-        populationManager.citizenList.Clear();
+        populationManager.Clear();
         eventManager.ResetChances();
 
         // Shut down only

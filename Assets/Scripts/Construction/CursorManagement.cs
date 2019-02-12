@@ -9,7 +9,6 @@ public class CursorManagement : MonoBehaviour
 {
     public enum cursorMode { Default, Build, Delete, Bridge, Move }; //Chaque mode du curseur
 
-    public Action<string> CursorError;
 
     [Header("=== REFERENCIES ===")]
     [Header("Prefabs")]
@@ -33,7 +32,6 @@ public class CursorManagement : MonoBehaviour
     public float dragTreshold = 10;
     public float blockFallingSpeed = 1;
     public float blockRisingSpeed = 3;
-    public float handSizeCoef = 0.7f;
     private Vector2 initialDragPos;
     [Space(5)]
     
@@ -42,16 +40,19 @@ public class CursorManagement : MonoBehaviour
     public Vector3 posInWorld;
     public bool isDragging;
 
-    [HideInInspector] public bool cursorOnUI = false;
+    // Interface related events & funcs
+    public bool couldDrag;
+    public Action<string> CursorError;
+    public bool cursorOnUI = false;
+    public bool draggingNewBlock = false;
+
     float timer;
     private Vector3Int savedPos;
-
     private GameObject[] activeHighlighters; //Liste contenant plusieurs highlighters actifs
     private List<GameObject> permanentHighlighter = new List<GameObject>(); 
     private GameObject hoveredBlock;
     private GameObject stackSelector; //La petite fléche qui se met au pied de la tour qu'on selectionne
     [System.NonSerialized] public bool canSwitchTools = true;
-    public bool draggingNewBlock = false;
 
     public void InitializeGameCursor()
     {
@@ -249,18 +250,15 @@ public class CursorManagement : MonoBehaviour
 
     void UpdateMouse(RaycastHit hit)
     {
-        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Block"))
+        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Block") && hit.transform.gameObject.GetComponent<Block>().scheme.isMovable)
         {
             if (selectedBlock == null)
             {
-                GameManager.instance.cursorDisplay.SetIcon(GameManager.instance.library.handHoverIcon, handSizeCoef);
+                couldDrag = true;
             }
         } else
         {
-            if (isDragging == false && selectedBlock == null)
-            {
-                GameManager.instance.cursorDisplay.ResetIcon();
-            }
+            couldDrag = false;
         }
         // Mouse click down
         if(Input.GetButtonDown("Select"))
@@ -566,6 +564,17 @@ public class CursorManagement : MonoBehaviour
         
     }
 
+    public void ClearListeners()
+    {
+        try {
+            foreach (System.Delegate d in CursorError.GetInvocationList()) {
+                CursorError -= (System.Action<string>)d;
+            }
+        }
+        catch {
+            // Nothing to do
+        }
+    }
 
 #region DragAndDrop
 
@@ -576,7 +585,6 @@ public class CursorManagement : MonoBehaviour
             selectedBlock = _block;
             selectedBlock.StopAllCoroutines();
             savedPos = selectedBlock.gridCoordinates;
-            GameManager.instance.cursorDisplay.SetIcon(GameManager.instance.library.handHoldIcon, handSizeCoef);
             if (selectedBlock.transform.Find("Bridge") != null) {
                 GameManager.instance.gridManagement.DestroyBridge(selectedBlock.transform.Find("Bridge").gameObject);
             }
@@ -611,7 +619,6 @@ public class CursorManagement : MonoBehaviour
     {
         if (selectedBlock != null && isDragging)
         {
-            GameManager.instance.cursorDisplay.ResetIcon();
             if (GameManager.instance.gridManagement.IsPlacable(_pos, true))
             {
                 //Play SFX

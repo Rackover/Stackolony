@@ -53,8 +53,6 @@ public class PopulationManager : MonoBehaviour
 
 
     public System.Action<int, Population> CitizenArrival;
-    //public Dictionary<Population, List<MoodModifier>> moodModifiers = new Dictionary<Population, List<MoodModifier>>(); //List of every active moodmodifiers for every population
-    //private Dictionary<Population, float> averageMoods = new Dictionary<Population, float>();  // average moods between 0 and 1
     List<string> names;
 
     private void Awake()
@@ -64,14 +62,7 @@ public class PopulationManager : MonoBehaviour
 
     void Start()
     {
-        foreach(Population pop in populationTypeList) 
-        {
-            populations.Add(pop, new PopulationInformation());
-
-            populations[pop].averageMood = startingMood;
-            populations[pop].citizens = new List<Citizen>();
-            populations[pop].moodModifiers = new List<MoodModifier>();
-        }
+        Clear();
     }
 
     public void OnNewCycle()
@@ -364,5 +355,34 @@ public class PopulationManager : MonoBehaviour
         }
 
         return null;
+    }
+
+    public void Clear()
+    {
+
+        citizenList.Clear();
+        populations.Clear();
+
+        foreach (Population pop in populationTypeList) {
+            populations.Add(pop, new PopulationInformation());
+
+            populations[pop].averageMood = startingMood;
+            populations[pop].citizens = new List<Citizen>();
+            populations[pop].moodModifiers = new List<MoodModifier>();
+        }
+
+        ClearListeners();
+    }
+
+    public void ClearListeners()
+    {
+        try {
+            foreach (System.Delegate d in CitizenArrival.GetInvocationList()) {
+                CitizenArrival -= (System.Action<int, Population>)d;
+            }
+        }
+        catch {
+            // Nothing to do
+        }
     }
 }

@@ -15,7 +15,7 @@ public class CinematicManager : MonoBehaviour {
     public void GetReferences()
     {
         interfaceObj = FindObjectOfType<Interface>().gameObject;
-        cursorObj = GameManager.instance.cursorDisplay.gameObject;
+        cursorObj = FindObjectOfType<CursorDisplay>().gameObject;
         cursor = FindObjectOfType<CursorManagement>();
         shaker = GetComponent<CameraShake>();
 
