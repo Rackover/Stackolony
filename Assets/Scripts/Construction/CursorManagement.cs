@@ -87,9 +87,6 @@ public class CursorManagement : MonoBehaviour
             SwitchMode(cursorMode.Default);
             return;
         }
-        if (selectedMode == cursorMode.Default) {
-            SwitchMode(cursorMode.Move);
-        }
 
         // Raycast the ground and update the cursor if needed
         UpdateCursor();
