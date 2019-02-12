@@ -13,7 +13,7 @@ public class Library : MonoBehaviour
 
 	[Space(1)][Header("Blocks")]
 	public BlockScheme[] blocks;
-	public Color[] blockContainerColors;
+    public Color defaultContainerColor;
 
 	[Space(1)][Header("Sprites")]
 	public Sprite cursorSprite;
@@ -21,6 +21,8 @@ public class Library : MonoBehaviour
 	public Sprite buildIcon;
     public Sprite dragIcon;
     public Sprite bridgeIcon;
+    public Sprite handHoldIcon;
+    public Sprite handHoverIcon;
 
 	[Header("Particules")]
 	public GameObject citizenInParticle;
