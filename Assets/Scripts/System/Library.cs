@@ -21,6 +21,8 @@ public class Library : MonoBehaviour
 	public Sprite buildIcon;
     public Sprite dragIcon;
     public Sprite bridgeIcon;
+    public Sprite handHoldIcon;
+    public Sprite handHoverIcon;
 
 	[Header("Particules")]
 	public GameObject citizenInParticle;

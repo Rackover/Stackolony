@@ -33,6 +33,7 @@ public class CursorManagement : MonoBehaviour
     public float dragTreshold = 10;
     public float blockFallingSpeed = 1;
     public float blockRisingSpeed = 3;
+    public float handSizeCoef = 0.7f;
     private Vector2 initialDragPos;
     [Space(5)]
     
@@ -252,7 +253,7 @@ public class CursorManagement : MonoBehaviour
         {
             if (selectedBlock == null)
             {
-                GameManager.instance.cursorDisplay.SetIcon(GameManager.instance.cursorDisplay.mainCursorOverBlock);
+                GameManager.instance.cursorDisplay.SetIcon(GameManager.instance.library.handHoverIcon, handSizeCoef);
             }
         } else
         {
@@ -575,7 +576,7 @@ public class CursorManagement : MonoBehaviour
             selectedBlock = _block;
             selectedBlock.StopAllCoroutines();
             savedPos = selectedBlock.gridCoordinates;
-            GameManager.instance.cursorDisplay.SetIcon(GameManager.instance.cursorDisplay.mainCursorHold);
+            GameManager.instance.cursorDisplay.SetIcon(GameManager.instance.library.handHoldIcon, handSizeCoef);
             if (selectedBlock.transform.Find("Bridge") != null) {
                 GameManager.instance.gridManagement.DestroyBridge(selectedBlock.transform.Find("Bridge").gameObject);
             }
