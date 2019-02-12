@@ -78,18 +78,21 @@ public class CursorManagement : MonoBehaviour
 
     private void Update()
     {
+        // Detect cursor over UI
+        cursorOnUI = false;
+        if (EventSystem.current.IsPointerOverGameObject()) { cursorOnUI = true; }
+
         // Unless ingame, default mode
-        if (!GameManager.instance.IsInGame()) {
+        if (!GameManager.instance.IsInGame() || cursorOnUI) {
             SwitchMode(cursorMode.Default);
             return;
+        }
+        if (selectedMode == cursorMode.Default) {
+            SwitchMode(cursorMode.Move);
         }
 
         // Raycast the ground and update the cursor if needed
         UpdateCursor();
-
-        // Detect cursor over UI
-        cursorOnUI = false;
-        if (EventSystem.current.IsPointerOverGameObject()){cursorOnUI = true;}
     }
 
     public void SwitchMode(cursorMode mode)
@@ -136,8 +139,8 @@ public class CursorManagement : MonoBehaviour
 
     private void UpdateTool()
     {
-        // Move mode by default unless the bridge key is pressed
-        if (Input.GetButton("Bridge")) 
+         // Move mode by default unless the bridge key is pressed
+         if (Input.GetButton("Bridge")) 
         {
             if (selectedMode != cursorMode.Bridge) 
             {
