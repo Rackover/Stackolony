@@ -16,12 +16,10 @@ public class BridgeAnimator : MonoBehaviour {
     public void GetBridgeParts()
     {
         bridgeParts.Clear();
-        Debug.Log("Getting bridge parts");
         foreach (Transform t in transform)
         {
             if (t.GetComponent<BridgePart>() != null)
             {
-                Debug.Log("Adding a bridge parts");
                 bridgeParts.Add(t.GetComponent<BridgePart>());
             }
         }
@@ -31,7 +29,6 @@ public class BridgeAnimator : MonoBehaviour {
     {
         if (bridgeAnimationIndex < bridgeParts.Count)
         {
-            Debug.Log("Setting animation");
             bridgeParts[bridgeAnimationIndex].GetComponent<Animator>().SetFloat("Speed", GameManager.instance.animationManager.bridgeCreationSpeed);
             bridgeAnimationIndex++;
         }
