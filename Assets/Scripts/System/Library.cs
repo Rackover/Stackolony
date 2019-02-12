@@ -13,7 +13,7 @@ public class Library : MonoBehaviour
 
 	[Space(1)][Header("Blocks")]
 	public BlockScheme[] blocks;
-	public Color[] blockContainerColors;
+    public Color defaultContainerColor;
 
 	[Space(1)][Header("Sprites")]
 	public Sprite cursorSprite;
