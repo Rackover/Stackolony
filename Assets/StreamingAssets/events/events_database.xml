@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <eventsDatabase>
-	<event id="1" population ="richie" emotion="tired">
+	<event id="1" population ="richie" emotion="Tired">
 		<choice id="1">
 			relaxing=RANDOM_BUILDING(id:18);
 			INCREASE_ENERGY_CONSUMPTION_FOR_BUILDING(duration:3,amount:1,building:relaxing);
@@ -10,7 +10,7 @@
 		<choice id="2">
 		</choice>
 	</event>
-	<event id="2" population="artist" emotion="good">
+	<event id="2" population="artist" emotion="Good">
 		<choice id="1">
 			INCREASE_MOOD_FOR_POPULATION(population:artist,duration:2,amount:1);
 			A=RANDOM_HOUSE(population:artist);
@@ -22,7 +22,7 @@
 		DECREASE_MOOD_FOR_POPULATION(population:artist,duration:2,amount:1);
 		</choice>
 	</event>
-	<event id="3" population="military" emotion="angry">
+	<event id="3" population="military" emotion="Angry">
 		<choice id="1">
 			INCREASE_MOOD_FOR_POPULATION(population:military,duration:3,amount:2);
 			INCREASE_FOOD_CONSUMPTION_FOR_POPULATION(population:military,duration:3,amount:0.5);
@@ -30,7 +30,7 @@
 		<choice id="2">
 		</choice>
 	</event>
-	<event id="4" population="scientist" emotion="good">
+	<event id="4" population="scientist" emotion="Good">
 		<choice id="1">
 		A=RANDOM_BUILDING(id:6);
 		ADD_FLAG_MODIFIER_ON_BUILDING_FOR_DURATION(building:A,flagModifier:Generator_5, duration:5);
@@ -39,7 +39,7 @@
 		<choice id="2">
 		</choice>
 	</event>
-	<event id="5" population="worker" emotion="bad">
+	<event id="5" population="worker" emotion="Bad">
 		<choice id="1">
 			A=RANDOM_BUILDING(id:24);
 			ADD_FLAG_MODIFIER_ON_BUILDING_FOR_DURATION(building:A,flagModifier:Occupator_-3_0_0,duration:3);
@@ -50,7 +50,7 @@
 			ADD_STATE_ON_BUILDING(building:A,state:damaged);
 		</choice>
 	</event>
-	<event id="6" population="richie"  emotion="good">
+	<event id="6" population="richie"  emotion="Good">
 		<choice id="1">
 			A=RANDOM_BUILDING(id:15);
 			INCREASE_MOOD_FOR_POPULATION(population:richie,duration:3,amount:3);
@@ -61,7 +61,7 @@
 			DECREASE_MOOD_FOR_POPULATION(population:richie,duration:3,amount:3);
 		</choice>
 	</event>
-	<event id="7" population="scientist" emotion="good">
+	<event id="7" population="scientist" emotion="Good">
 		<choice id="1">
 			INCREASE_MOOD_FOR_POPULATION(population:richie,duration:3,amount:3);
 			DECREASE_MOOD_FOR_POPULATION(population:military,duration:3,amount:2);
@@ -73,7 +73,7 @@
 			DECREASE_MOOD_FOR_POPULATION(population:scientist,duration:3,amount:2);
 		</choice>
 	</event>
-	<event id="8" population="worker" emotion="bad">
+	<event id="8" population="worker" emotion="Bad">
 		<choice id="1">
 			ADD_SETTLERS_TO_NEXT_WAVE(population:worker,amount:3);
 			INCREASE_MOOD_FOR_POPULATION(population:worker,duration:2,amount:2);
@@ -81,7 +81,7 @@
 		<choice id="2">
 		</choice>
 	</event>
-	<event id="9"  population="scientist" emotion="good">
+	<event id="9"  population="scientist" emotion="Good">
 		<choice id="1">
 			[
 				40%{
@@ -96,7 +96,7 @@
 		<choice id="2">
 		</choice>
 	</event>
-	<event id="10" population="artist" emotion="jaded">
+	<event id="10" population="artist" emotion="Jaded">
 		<choice id="1">
 			A=RANDOM_BUILDING(id:24);
 			B=SCHEME(id:22);
@@ -105,7 +105,7 @@
 		<choice id="2">
 		</choice>
 	</event>
-	<event id="11" population="military" emotion="angry">
+	<event id="11" population="military" emotion="Angry">
 		<choice id="1">
 			[
 				50%{
@@ -122,7 +122,7 @@
 		<choice id="2">
 		</choice>
 	</event>
-	<event id="12" population="artist" emotion="good">
+	<event id="12" population="artist" emotion="Good">
 		<choice id="1">
 			INCREASE_MOOD_FOR_POPULATION(population:artist,duration:5,amount:2);
 			INCREASE_FOOD_CONSUMPTION_FOR_POPULATION(population:artist,duration:5,amount:1);
@@ -131,7 +131,7 @@
 			DECREASE_MOOD_FOR_POPULATION(population:artist,duration:5,amount:2);
 		</choice>
 	</event>
-	<event id="13" population="richie" emotion="tired">
+	<event id="13" population="richie" emotion="Tired">
 		<choice id="1">
 			A=RANDOM_HOUSE(id:3);
 			B=BUILDING_FROM_HOUSE(house:A);
@@ -142,7 +142,7 @@
 		<choice id="2">
 		</choice>
 	</event>
-	<event id="14" population="worker" emotion="good">
+	<event id="14" population="worker" emotion="Good">
 		<choice id="1">
 		A=RANDOM_BUILDING(id:24);
 		ADD_FLAG_MODIFIER_ON_BUILDING_FOR_DURATION(building:A,flagModifier:Occupator_5_0,duration:3);
@@ -151,7 +151,7 @@
 		<choice id="2">
 		</choice>
 	</event>
-	<event id="15" population="artist" emotion="tired">
+	<event id="15" population="artist" emotion="Tired">
 		<choice id="1">
 		A=RANDOM_HOUSE(population:artist);
 		B=BUILDING_FROM_HOUSE(house:A);
@@ -161,7 +161,7 @@
 		<choice id="2">
 		</choice>
 	</event>
-	<event id="16" population="worker" emotion="bad">
+	<event id="16" population="worker" emotion="Bad">
 		<choice id="1">
 		A=RANDOM_BUILDING(id:6);
 		ADD_FLAG_MODIFIER_ON_BUILDING_FOR_DURATION(building:A, flagModifier:Generator_2, duration:3);
@@ -177,7 +177,7 @@
 			];
 		</choice>
 	</event>
-	<event id="17" population="richie" emotion="angry">
+	<event id="17" population="richie" emotion="Angry">
 		<choice id="1">
 		A=SCHEME(id:27);
 		B=RANDOM_BUILDING(id:1);
@@ -189,7 +189,7 @@
 		DECREASE_MOOD_FOR_POPULATION(population:richie,duration:3,amount:2);
 		</choice>
 	</event>
-	<event id="18" population="artist" emotion="good">
+	<event id="18" population="artist" emotion="Good">
 		<choice id="1">
 		A=RANDOM_BUILDING(id:21);
 		INCREASE_MOOD_FOR_POPULATION(population:artist,duration:2,amount:1);
@@ -199,7 +199,7 @@
 		DECREASE_MOOD_FOR_POPULATION(population:artist,duration:3,amount:2);
 		</choice>
 	</event>
-	<event id="19" population="military" emotion="angry">
+	<event id="19" population="military" emotion="Angry">
 		<choice id="1">
 		A=RANDOM_BUILDING(id:15);
 		INCREASE_MOOD_FOR_POPULATION(population:military,duration:5,amount:3);
@@ -211,7 +211,7 @@
 		ADD_STATE_ON_BUILDING(building:C,state:onRiot);
 		</choice>
 	</event>
-	<event id="20" population="richie" emotion="tired">
+	<event id="20" population="richie" emotion="Tired">
 		<choice id="1">
 		A=RANDOM_BUILDING(id:0);
 		ADD_FLAG_MODIFIER_ON_BUILDING_FOR_DURATION(building:A,flagModifier:FoodProvider_5_0,duration:-1);
@@ -221,7 +221,7 @@
 		DECREASE_MOOD_FOR_POPULATION(population:artist,duration:3,amount:2);
 		</choice>
 	</event>
-	<event id="21" population="worker" emotion="good">
+	<event id="21" population="worker" emotion="Good">
 		<choice id="1">
 		INCREASE_MOOD_FOR_POPULATION(population:worker,duration:5,amount:2);
 		DECREASE_MOOD_FOR_POPULATION(population:richie,duration:3,amount:2);
@@ -230,7 +230,7 @@
 		<choice id="2">
 		</choice>
 	</event>
-	<event id="22" population="richie" emotion="angry">
+	<event id="22" population="richie" emotion="Angry">
 		<choice id="1">
 		A=RANDOM_HOUSE(population:richie);
 		B=BUILDING_FROM_HOUSE(house:A);
@@ -250,7 +250,7 @@
 		ADD_STATE_ON_BUILDING(building:H,state:onFire);
 		</choice>
 	</event>
-	<event id="23" population="artist" emotion="jaded">
+	<event id="23" population="artist" emotion="Jaded">
 		<choice id="1">
 		INCREASE_MOOD_FOR_POPULATION(population:artist,duration:3,amount:3);
 		INCREASE_FOOD_CONSUMPTION_FOR_POPULATION(population:artist,duration:3,amount:0.5);
@@ -258,7 +258,7 @@
 		<choice id="2">
 		</choice>
 	</event>
-	<event id="24" population="military" emotion="angry">
+	<event id="24" population="military" emotion="Angry">
 		<choice id="1">
 		DECREASE_MOOD_FOR_POPULATION(population:military,duration:3,amount:2);
 		DECREASE_FOOD_CONSUMPTION_FOR_POPULATION(population:military,duration:3,amount:-0.5);
@@ -266,7 +266,7 @@
 		<choice id="2">
 		</choice>
 	</event>
-	<event id="25" population="richie" emotion="tired">
+	<event id="25" population="richie" emotion="Tired">
 		<choice id="1">
 		INCREASE_MOOD_FOR_POPULATION(population:richie,duration:4,amount:3);
 		DECREASE_MOOD_FOR_POPULATION(population:scientist,duration:4,amount:1);
@@ -279,7 +279,7 @@
 		DECREASE_MOOD_FOR_POPULATION(population:richie,duration:4,amount:1);
 		</choice>
 	</event>
-	<event id="26" population="scientist" emotion="good">
+	<event id="26" population="scientist" emotion="Good">
 		<choice id="1">
 		A=SCHEME(id:27);
 		B=RANDOM_BUILDING(id:1);
@@ -308,51 +308,51 @@
 		ADD_STATE_ON_BUILDING(building:F,state:damaged);
 		</choice>
 	</event>
-	<event id="2000" population="military" emotion="good">
+	<event id="2000" population="artist" emotion="Good">
 		<choice id="1">
 		</choice>
 	</event>
-	<event id="2001" population="military" emotion="good">
+	<event id="2001" population="artist" emotion="Good">
 		<choice id="1">
 		</choice>
 	</event>
-	<event id="2002" population="military" emotion="good">
+	<event id="2002" population="artist" emotion="Good">
 		<choice id="1">
 		</choice>
 	</event>
-	<event id="2003" population="military" emotion="good">
+	<event id="2003" population="artist" emotion="Good">
 		<choice id="1">
 		</choice>
 	</event>
-	<event id="2004" population="military" emotion="good">
+	<event id="2004" population="artist" emotion="Good">
 		<choice id="1">
 		</choice>
 	</event>
-	<event id="2005" population="military" emotion="good">
+	<event id="2005" population="worker" emotion="Good">
 		<choice id="1">
 		</choice>
 	</event>
-	<event id="2006" population="military" emotion="good">
+	<event id="2006" population="artist" emotion="Good">
 		<choice id="1">
 		</choice>
 	</event>
-	<event id="2007" population="military" emotion="good">
+	<event id="2007" population="military" emotion="Good">
 		<choice id="1">
 		</choice>
 	</event>
-	<event id="2008" population="military" emotion="good">
+	<event id="2008" population="artist" emotion="Good">
 		<choice id="1">
 		</choice>
 	</event>
-	<event id="2009" population="military" emotion="good">
+	<event id="2009" population="worker" emotion="Good">
 		<choice id="1">
 		</choice>
 	</event>
-	<event id="2010" population="military" emotion="good">
+	<event id="2010" population="military" emotion="Good">
 		<choice id="1">
 		</choice>
 	</event>
-	<event id="1000" population="richie" emotion="tired">
+	<event id="1000" population="richie" emotion="Tired">
 		<choice id="1">
 		GAME_OVER();
 		</choice>
