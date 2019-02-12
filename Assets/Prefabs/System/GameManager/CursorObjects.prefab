@@ -80,7 +80,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1746997870437356}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.02, z: 0}
+  m_LocalPosition: {x: 87.51761, y: 9.998169, z: 82.168724}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4875281206174014}
@@ -171,7 +171,7 @@ MonoBehaviour:
   myProjectorComponent: {fileID: 0}
   dragSpeed: 15
   dragTreshold: 5
-  blockFallingSpeed: 3
+  blockFallingSpeed: 5
   blockRisingSpeed: 15
   posInGrid: {x: 0, y: 0, z: 0}
   posInWorld: {x: 0, y: 0, z: 0}

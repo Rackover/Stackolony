@@ -321,11 +321,15 @@ public class Block : MonoBehaviour
     public void MoveToMyPosition() //Deplace le bloc à sa position supposée
     {
         //Déplace aussi le pont qui lui est attaché s'il y en a un
-        if (transform.Find("Bridge") != null)
+        foreach (Transform t in transform)
         {
-            BridgeInfo bridgeInfo = transform.Find("Bridge").GetComponent<BridgeInfo>();
-            if (bridgeInfo != null)
-                GameManager.instance.gridManagement.UpdateBridgePosition(bridgeInfo, gridCoordinates.y);
+            if (t.GetComponent<BridgeInfo>() != null)
+            {
+                foreach (BridgeInfo bridge in t.GetComponents<BridgeInfo>())
+                {
+                    GameManager.instance.gridManagement.UpdateBridgePosition(bridge, gridCoordinates.y);
+                }
+            }
         }
         float time = 0;
         Vector3Int actualPos = GameManager.instance.gridManagement.WorldPositionToIndex(transform.position);

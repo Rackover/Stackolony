@@ -81,6 +81,34 @@ public class FlagReader : MonoBehaviour
         return list;
     }
 
+    public static Color GetSchemeColor(BlockScheme scheme)
+    {
+        List<Population> pops = new List<Population>();
+        foreach (string flag in scheme.flags)
+        {
+            foreach (string popGroup in flag.Split('_'))
+            {
+                foreach (string popName in popGroup.Split('-'))
+                {
+                    Population pop = GameManager.instance.populationManager.GetPopulationByCodename(popName);
+                    if (pop != null)
+                    {
+                        pops.Add(pop);
+                    }
+                }
+            }
+        }
+        switch (pops.Count)
+        {
+            case 1:
+                return pops[0].color;
+            case 2:
+                return Color.Lerp(pops[0].color, pops[1].color, 0.5f);
+            default:
+                return GameManager.instance.library.defaultContainerColor;
+        }
+    }
+
     public static CityManager.BuildingType GetCategory(BlockScheme scheme)
     {
         string[] rawFlags = GetRawFlags(scheme).ToArray();
