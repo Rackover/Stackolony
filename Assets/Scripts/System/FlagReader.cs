@@ -31,6 +31,7 @@ public class FlagReader : MonoBehaviour
             case "FiremanStation":
             case "Repairer":
             case "Spatioport":
+            case "NuisanceGenerator":
                 return true;
         }
         return false;
