@@ -40,6 +40,9 @@ public class CursorDisplay : MonoBehaviour {
     
     void DisplayUserError(string locId)
     {
+        if (notifier == null) {
+            notifier = FindObjectOfType<Notifications>();
+        }
         notifier.Notify(new Notifications.Notification(locId, Color.red));
         GameManager.instance.soundManager.Play("Error");
     }

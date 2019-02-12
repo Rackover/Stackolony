@@ -73,6 +73,8 @@ GameObject:
   - component: {fileID: 222140236762661372}
   - component: {fileID: 114344765257076482}
   - component: {fileID: 114566018434172606}
+  - component: {fileID: 114995975008818890}
+  - component: {fileID: 114677072739238026}
   m_Layer: 5
   m_Name: BTN_Resume
   m_TagString: Untagged
@@ -91,6 +93,8 @@ GameObject:
   - component: {fileID: 222389781798092282}
   - component: {fileID: 114650844832776294}
   - component: {fileID: 114355328449240296}
+  - component: {fileID: 114398401415411888}
+  - component: {fileID: 114820960417482556}
   m_Layer: 5
   m_Name: BTN_Exit
   m_TagString: Untagged
@@ -177,6 +181,8 @@ GameObject:
   - component: {fileID: 222891099061120218}
   - component: {fileID: 114154230228479632}
   - component: {fileID: 114006724973524966}
+  - component: {fileID: 114695218426951660}
+  - component: {fileID: 114296050363524736}
   m_Layer: 5
   m_Name: BTN_Options
   m_TagString: Untagged
@@ -334,6 +340,18 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114296050363524736
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1851460047894496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d763586935b0de9469fbcb08c2269665, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: ClickUI
 --- !u!114 &114344765257076482
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -446,6 +464,18 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: RESUME
+--- !u!114 &114398401415411888
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1540053661804206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aec1859cd764b7b4fbd193a2926b4066, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: DragBlock
 --- !u!114 &114558856981706172
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -585,6 +615,30 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114677072739238026
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1374962463681948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d763586935b0de9469fbcb08c2269665, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: ClickUI
+--- !u!114 &114695218426951660
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1851460047894496}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aec1859cd764b7b4fbd193a2926b4066, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: DragBlock
 --- !u!114 &114695365743802986
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -609,6 +663,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29bd689c12391744888edaad96d4b84d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114820960417482556
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1540053661804206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d763586935b0de9469fbcb08c2269665, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: ClickUI
 --- !u!114 &114966147195818168
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -642,6 +708,18 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: EXIT
+--- !u!114 &114995975008818890
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1374962463681948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aec1859cd764b7b4fbd193a2926b4066, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: DragBlock
 --- !u!222 &222140236762661372
 CanvasRenderer:
   m_ObjectHideFlags: 1
