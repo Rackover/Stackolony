@@ -1,15 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bulletins>
 	<pool minCycle="0">
-		<bulletin id="1"></bulletin>
 		<bulletin id="2"></bulletin>
-		<bulletin id="3"></bulletin>
-		<bulletin id="5"></bulletin>
-		<bulletin id="4" eventId="2"></bulletin>
+		<bulletin id="13"></bulletin>
+		<bulletin id="14"></bulletin>
+		<bulletin id="15"></bulletin>
+		<bulletin id="17"></bulletin>
+		<bulletin id="19"></bulletin>
 	</pool>
 	<pool minCycle="10">
-		<bulletin id="6" eventId="5"></bulletin>
+		<bulletin id="18"></bulletin>
+		<bulletin id="21"></bulletin>
+		<bulletin id="4"></bulletin>
+		<bulletin id="5"></bulletin>
+		<bulletin id="6"></bulletin>
 		<bulletin id="7"></bulletin>
-		<bulletin id="8" eventId="2"></bulletin>
+		<bulletin id="26"></bulletin>
+		<bulletin id="27"></bulletin>
+		<bulletin id="28"></bulletin>
+		<bulletin id="29"></bulletin>
+		<bulletin id="30"></bulletin>
+		<bulletin id="31"></bulletin>
+		<bulletin id="32"></bulletin>
+		<bulletin id="33"></bulletin>
+		<bulletin id="34"></bulletin>
+	</pool>
+	<pool minCycle="25">
+		<bulletin id="1"></bulletin>
+		<bulletin id="3"></bulletin>
+		<bulletin id="22"></bulletin>
+		<bulletin id="23"></bulletin>
+		<bulletin id="24"></bulletin>
+		<bulletin id="25"></bulletin>
+		<bulletin id="8"></bulletin>
+		<bulletin id="9"></bulletin>
+		<bulletin id="10"></bulletin>
+		<bulletin id="11"></bulletin>
+		<bulletin id="12"></bulletin>
+		<bulletin id="16"></bulletin>
+		<bulletin id="20"></bulletin>
+		<bulletin id="35"></bulletin>
+		<bulletin id="36"></bulletin>
+		<bulletin id="37"></bulletin>
+		<bulletin id="38"></bulletin>
+		<bulletin id="39"></bulletin>
+		<bulletin id="40"></bulletin>
 	</pool>
 </bulletins>
