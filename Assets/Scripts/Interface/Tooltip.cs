@@ -116,10 +116,6 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
             tooltipGO.transform.position = Input.mousePosition + new Vector3(tooltipGO.shift.x, tooltipGO.shift.y, 0);
             tooltipGO.UpdateTooltipSizeAndPosition();
         }
-
-        if (isActive && GameManager.instance.cursorManagement.cursorOnUI) {
-            OnPointerExit(new PointerEventData(FindObjectOfType<EventSystem>()));
-        }
     }
 
     public void OnPointerExit(PointerEventData pointerEventData)
