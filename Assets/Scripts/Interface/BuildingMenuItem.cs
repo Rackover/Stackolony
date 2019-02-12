@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class BuildingMenuItem : MonoBehaviour {
+public class BuildingMenuItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
 
     public int blockId;
     bool isBeingDragged = false;
@@ -78,7 +78,6 @@ public class BuildingMenuItem : MonoBehaviour {
     }
 
     void Update () {
-
         // Lock check
         Unlock();
         if (GameManager.instance.cityManager.IsLocked(blockId)) {
@@ -108,4 +107,14 @@ public class BuildingMenuItem : MonoBehaviour {
             }
         }
 	}
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        SetConcerned();
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        UnsetConcerned();
+    }
 }

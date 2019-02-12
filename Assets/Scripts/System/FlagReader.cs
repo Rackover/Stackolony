@@ -102,8 +102,8 @@ public class FlagReader : MonoBehaviour
         {
             case 1:
                 return pops[0].color;
-            //case 2:
-                //return Color.Lerp(pops[0].color, pops[1].color, 0.5f);
+            case 2:
+                return Color.Lerp(pops[0].color, pops[1].color, 0.5f);
             default:
                 return GameManager.instance.library.defaultContainerColor;
         }
