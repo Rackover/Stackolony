@@ -78,18 +78,19 @@ public class CursorManagement : MonoBehaviour
 
     private void Update()
     {
-        // Detect cursor over UI
-        cursorOnUI = false;
-        if (EventSystem.current.IsPointerOverGameObject()) { cursorOnUI = true; }
 
         // Unless ingame, default mode
-        if (!GameManager.instance.IsInGame() || cursorOnUI) {
+        if (!GameManager.instance.IsInGame()) {
             SwitchMode(cursorMode.Default);
             return;
         }
 
         // Raycast the ground and update the cursor if needed
         UpdateCursor();
+
+        // Detect cursor over UI
+        cursorOnUI = false;
+        if (EventSystem.current.IsPointerOverGameObject()) { cursorOnUI = true; }
     }
 
     public void SwitchMode(cursorMode mode)
