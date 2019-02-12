@@ -14,12 +14,9 @@ public class BridgePart : MonoBehaviour {
     public void AnimateNextBridgePart()
     {
         animator.SetFloat("Speed", 0);
-        if (transform.parent != null)
+        if (transform.parent != null && transform.parent.GetComponent<BridgeAnimator>() != null)
         {
-            if (transform.parent.GetComponent<BridgeAnimator>() != null)
-            {
-                transform.parent.GetComponent<BridgeAnimator>().IncrementAnimation();
-            }
+            transform.parent.GetComponent<BridgeAnimator>().IncrementAnimation();
         }
     }
 

@@ -10,7 +10,13 @@ public class BridgeAnimator : MonoBehaviour {
     {
         bridgeParts = new List<BridgePart>();
         GetBridgeParts();
-        Invoke("IncrementAnimation", 0.1f);
+        StartCoroutine(StartAnimation());
+    }
+
+    public IEnumerator StartAnimation()
+    {
+        yield return new WaitForEndOfFrame();
+        IncrementAnimation();
     }
 
     public void GetBridgeParts()
