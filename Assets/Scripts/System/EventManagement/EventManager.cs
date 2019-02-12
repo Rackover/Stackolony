@@ -278,12 +278,12 @@ public class EventManager : MonoBehaviour {
 
         // Ignoring pop and mood if not specified
         Population pop = null;
-        Bystander.Mood mood;
+        Bystander.Mood mood = Bystander.Mood.Good;
         try {
             pop = GameManager.instance.populationManager.GetPopulationByCodename(xEvent.Attributes["population"].Value);
             mood = (Bystander.Mood)System.Enum.Parse(typeof(Bystander.Mood), xEvent.Attributes["emotion"].Value);
         }
-        catch (System.Exception) { };
+        catch { };
         
         foreach(XmlNode xChoice in xEvent.ChildNodes) {
             Choice choice = ReadXChoice(xChoice);
@@ -293,7 +293,7 @@ public class EventManager : MonoBehaviour {
             }
         }
 
-        return new GameEvent(id, choices, pop);
+        return new GameEvent(id, choices, pop) { mood = mood };
     }
 
     Choice ReadXChoice(XmlNode xChoice)

@@ -215,6 +215,10 @@ public class GameManager : MonoBehaviour
             eventManager.TriggerEvent(1000);
         }
 
+        if (Input.GetKeyDown(KeyCode.KeypadPlus)) {
+            eventManager.TriggerEvent(15);
+        }
+
         // Pause
         if (Input.GetKeyDown(KeyCode.Escape) && IsInGame() && FindObjectsOfType<PauseWindow>().Length <= 0) {
             FindObjectOfType<Interface>().SpawnPauseWindow();
