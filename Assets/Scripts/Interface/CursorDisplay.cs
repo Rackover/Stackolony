@@ -7,7 +7,6 @@ public class CursorDisplay : MonoBehaviour {
 	public Image cursorImage;
     private Image imageComponent;
 
-    private Vector2 defaultSize;
     private RectTransform rectTransform;
 
     Notifications notifier;
@@ -18,7 +17,6 @@ public class CursorDisplay : MonoBehaviour {
         imageComponent = GetComponent<Image>();
         notifier = FindObjectOfType<Notifications>();
         rectTransform = GetComponent<RectTransform>();
-        defaultSize = rectTransform.sizeDelta;
     }
 
     private void Update()
@@ -29,27 +27,25 @@ public class CursorDisplay : MonoBehaviour {
         transform.SetSiblingIndex(transform.parent.childCount);
 
         if (GameManager.instance.cursorManagement.couldDrag) {
-            SetIcon(mainCursorOverBlock);
+            SetIcon(GameManager.instance.library.handHoldIcon);
         }
         else if (GameManager.instance.cursorManagement.isDragging) {
-            SetIcon(mainCursorHold);
+            SetIcon(GameManager.instance.library.handHoldIcon);
         }
         else {   
             ResetIcon();
         }
     }
 
-    public void SetIcon(Sprite icon, float sizeCoef) 
+    public void SetIcon(Sprite icon) 
     {
         imageComponent.sprite = icon;
-        rectTransform.sizeDelta = defaultSize * sizeCoef;
         cursorImage.gameObject.SetActive(false);
     }
 
     public void ResetIcon()
     {
         imageComponent.sprite = GameManager.instance.library.cursorSprite;
-        rectTransform.sizeDelta = defaultSize;
         cursorImage.gameObject.SetActive(true);
     }
     
