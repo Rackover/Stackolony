@@ -145,6 +145,9 @@ public class Localization : MonoBehaviour {
     
     public string GetLine(string id, params string[] values)
     {
+        if (GetLanguages().Count <= 0) {
+            return "[LOC:NO LANGUAGES LOADED]";
+        }
         try {
             string line = string.Format(locs[new KeyValuePair<string, string>(currentCategory, id)], values);
             return Interpret(line);

@@ -170,7 +170,7 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
                 foreach (string popName in parameters[i].Split('-')) {
                     if (GameManager.instance.populationManager.GetPopulationByCodename(popName) != null) {
                         if (popInfo.Length > 0) {
-                            popInfo += " " + GameManager.instance.localization.GetLineFromCategory("stats", "or") + " ";
+                            popInfo += " " + GameManager.instance.localization.GetLineFromCategory("stats", "orSeparator") + " ";
                         }
                         popInfo += GameManager.instance.localization.GetLineFromCategory("populationType", popName);
                         wasPop = true;
