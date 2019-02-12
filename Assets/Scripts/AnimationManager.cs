@@ -7,6 +7,7 @@ public class AnimationManager : MonoBehaviour {
     public float towerElevationTime = 2f;
     public float towerDelevationTime = 4f;
     public float towerElevationAmount = 2f;
+    public float bridgeCreationSpeed = 10f;
     public void ElevateTower(Vector3Int coordinates, float time = -1)
     {
         if (time < 0) { time = towerElevationTime; }
