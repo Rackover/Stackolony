@@ -159,8 +159,19 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
             string[] parameters = flag.ToArray();
 
             for (int i = 0; i < parameters.Length; i++) {
-                if (GameManager.instance.populationManager.GetPopulationByCodename(parameters[i]) != null) {
-                    parameters[i] = GameManager.instance.localization.GetLineFromCategory("populationType", parameters[i]);
+                string popInfo = "";
+                bool wasPop = false;
+                foreach (string popName in parameters[i].Split('-')) {
+                    if (GameManager.instance.populationManager.GetPopulationByCodename(popName) != null) {
+                        if (popInfo.Length > 0) {
+                            popInfo += " " + GameManager.instance.localization.GetLineFromCategory("stats", "or") + " ";
+                        }
+                        popInfo += GameManager.instance.localization.GetLineFromCategory("populationType", popName);
+                        wasPop = true;
+                    }
+                }
+                if (wasPop) {
+                    parameters[i] = popInfo;
                 }
             }
 
