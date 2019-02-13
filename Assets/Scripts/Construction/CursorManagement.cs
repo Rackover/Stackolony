@@ -97,7 +97,6 @@ public class CursorManagement : MonoBehaviour
     public void SwitchMode(cursorMode mode)
     {
         if (canSwitchTools) {
-            print("Switching mode");
             isBridging = false;
             selectedMode = mode;
             ClearFeedback();
@@ -285,7 +284,6 @@ public class CursorManagement : MonoBehaviour
         // Mouse click hold
         if (Input.GetButton("Bridge")) {
             if (!isBridging && hit.transform.gameObject.layer == LayerMask.NameToLayer("Block")) {
-                print("Starting to plan bridge");
                 StartPlanningBridge(hit.transform.gameObject);
             }
         }
@@ -295,7 +293,6 @@ public class CursorManagement : MonoBehaviour
             if (isBridging) {
                 isBridging = false;
                 TryToMakeBridge(hit.transform.gameObject);
-                print("Button up");
                 CancelPotentialBridge();
             }
         }
@@ -327,7 +324,6 @@ public class CursorManagement : MonoBehaviour
         ResetSelection();
         ClearFeedback();
         ClearPermanentHighlighter();
-        print("Canceled potential bridge");
         isBridging = false;
     }
 
