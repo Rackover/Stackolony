@@ -158,7 +158,7 @@ public class Localization : MonoBehaviour {
         }
         catch(FormatException fe)
         {
-            Logger.Error("Line : " + id + " in " + currentCategory + " category has too much parameters.");
+            Logger.Error("Line : " + id + " in " + currentCategory + " category has too much parameters : "+string.Join(",",values));
             return "[LOC:" + currentCategory + ":" + id+"] TOO MUCH PARAMS";
         }
     }
