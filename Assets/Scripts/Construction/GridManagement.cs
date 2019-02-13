@@ -487,7 +487,7 @@ public class GridManagement : MonoBehaviour
         blockA.bridge = parentBridgeGameObject;
 
         //Adding animator to the bridge
-        BridgeAnimator bridgeAnimator = parentBridgeGameObject.AddComponent<BridgeAnimator>();
+        parentBridgeGameObject.AddComponent<BridgeAnimator>();
 
         //Ajout de chaque partie du pont dans la grille grid[] et dans le component bridgeInfo
         bridgeInfo.allBridgePositions = new Vector3Int[bridgeLength];
