@@ -7,6 +7,19 @@ public class AnimationManager : MonoBehaviour {
     public float towerElevationTime = 2f;
     public float towerDelevationTime = 4f;
     public float towerElevationAmount = 2f;
+
+    public float blockDragLerpSpeed = 4f;
+
+    private void Start()
+    {
+        GameManager.instance.cursorManagement.MovingBlock += (x, y) => MoveBlockVisual(x, y);
+    }
+
+    void MoveBlockVisual(Block b, Vector3Int targetPosition)
+    {
+        b.transform.position = Vector3.Lerp(b.transform.position, GameManager.instance.gridManagement.IndexToWorldPosition(targetPosition), blockDragLerpSpeed * Time.deltaTime);
+    }
+
     public void ElevateTower(Vector3Int coordinates, float time = -1)
     {
         if (time < 0) { time = towerElevationTime; }
