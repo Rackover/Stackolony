@@ -34,7 +34,7 @@ public class CursorManagement : MonoBehaviour
     public float blockRisingSpeed = 3;
     private Vector2 initialDragPos;
     [Space(5)]
-    
+
     [Header("=== DEBUG ===")]
     public Vector3Int posInGrid; //Position de la souris sur le terrain
     public Vector3 posInWorld;
@@ -49,10 +49,11 @@ public class CursorManagement : MonoBehaviour
     float timer;
     private Vector3Int savedPos;
     private GameObject[] activeHighlighters; //Liste contenant plusieurs highlighters actifs
-    private List<GameObject> permanentHighlighter = new List<GameObject>(); 
+    private List<GameObject> permanentHighlighter = new List<GameObject>();
     private GameObject hoveredBlock;
     private GameObject stackSelector; //La petite fléche qui se met au pied de la tour qu'on selectionne
     [System.NonSerialized] public bool canSwitchTools = true;
+
 
     public void InitializeGameCursor()
     {
@@ -96,6 +97,7 @@ public class CursorManagement : MonoBehaviour
     public void SwitchMode(cursorMode mode)
     {
         if (canSwitchTools) {
+            print("Switching mode");
             isBridging = false;
             selectedMode = mode;
             ClearFeedback();
@@ -116,16 +118,16 @@ public class CursorManagement : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             UpdatePosition(hit);    // Refreshes PosInGrid and PosInTerrain 
-            UpdateTool();           // Switches tool on keypress
-            UpdateMouse(hit);       // Effects depending on the current tool
+            UpdateTool(hit);       // Effects depending on the current tool
             UpdateProjector();      // Visual update
 
-            if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Block") || hit.collider.gameObject.layer == LayerMask.NameToLayer("StoredBlock") && hoveredBlock != hit.collider.gameObject && !Input.GetMouseButton(0) || Input.GetMouseButtonUp(0))
-            {
+            if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Block")) {
                 hoveredBlock = hit.collider.gameObject;
                 UpdateFeedback(hit);
             }
-            if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Terrain")) { UpdateFeedback(hit); }
+            if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Terrain")) {
+                UpdateFeedback(hit);
+            }
         }
         else // If the mouse is pointing at nothing
         {
@@ -134,29 +136,11 @@ public class CursorManagement : MonoBehaviour
         }
         transform.position = hit.point;
     }
-
-    private void UpdateTool()
-    {
-         // Move mode by default unless the bridge key is pressed
-         if (Input.GetButton("Bridge")) 
-        {
-            if (selectedMode != cursorMode.Bridge && !isDragging) 
-            {
-                GameManager.instance.soundManager.Play("Shift");
-                SwitchMode(cursorMode.Bridge);
-            }
-        }
-        else 
-        {
-            if (selectedMode != cursorMode.Move) SwitchMode(cursorMode.Move);
-        }
-    }
-
+    
     void UpdatePosition(RaycastHit hit)
     {
         Vector3 tempCoord = hit.point;
-        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Terrain") ||
-            cursorMode.Move == selectedMode) {
+        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Terrain")) {
             //On adapte la position de la souris pour qu'elle corresponde à la taille des cellules
             tempCoord += new Vector3(0,
                 GameManager.instance.gridManagement.cellSize.y / 2
@@ -194,31 +178,25 @@ public class CursorManagement : MonoBehaviour
         // Highlighting block the cursor currently is on if we're in Bridge mode
         if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Block")) 
         {
-            if (selectedMode == cursorMode.Bridge) {
 
-                GameObject objective = hit.transform.gameObject;
-                Vector3Int position = posInGrid;
-                // If the player is bridging, we stuck the preview to the block he's dragging the bridge from 
-                if (isBridging) {
-                    objective = selectedBlock.gameObject;
-                    position = selectedBlock.gridCoordinates;
-                }
-                ClearFeedback();
-                HighlightBlock(objective);
-                Vector3Int[] linkableBlocksList = CheckBridgeableBlocks(position);
-                if (linkableBlocksList.Length > 0) {
-                    foreach (Vector3Int blockToBridge in linkableBlocksList) {
-                        if (blockToBridge.Equals(hit.transform.gameObject.GetComponent<Block>().gridCoordinates)) {
-                            HighlightBlock(hit.transform.gameObject);
-                            GenerateBridgePreview(objective.GetComponent<Block>().gridCoordinates, blockToBridge);
-                            break;
-                        }
+            GameObject objective = hit.transform.gameObject;
+            Vector3Int position = posInGrid;
+            // If the player is bridging, we stuck the preview to the block he's dragging the bridge from 
+            if (isBridging) {
+                objective = selectedBlock.gameObject;
+                position = selectedBlock.gridCoordinates;
+            }
+            ClearFeedback();
+            HighlightBlock(objective);
+            Vector3Int[] linkableBlocksList = CheckBridgeableBlocks(position);
+            if (linkableBlocksList.Length > 0) {
+                foreach (Vector3Int blockToBridge in linkableBlocksList) {
+                    if (blockToBridge.Equals(hit.transform.gameObject.GetComponent<Block>().gridCoordinates)) {
+                        HighlightBlock(hit.transform.gameObject);
+                        GenerateBridgePreview(objective.GetComponent<Block>().gridCoordinates, blockToBridge);
+                        break;
                     }
                 }
-            }
-            else
-            {
-                ClearFeedback();
             }
 
         //Si le joueur a la souris sur un block, alors on recupere le bloc le plus bas dans la tour selectionnée
@@ -249,7 +227,7 @@ public class CursorManagement : MonoBehaviour
         }
     }
 
-    void UpdateMouse(RaycastHit hit)
+    void UpdateTool(RaycastHit hit)
     {
         if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Block") && hit.transform.gameObject.GetComponent<Block>().scheme.isMovable)
         {
@@ -261,81 +239,78 @@ public class CursorManagement : MonoBehaviour
         {
             couldDrag = false;
         }
-        // Mouse click down
+       
+        
+        /////////////////////////////
+        ///
+        ///     DRAG AND DROP
+        ///
         if(Input.GetButtonDown("Select"))
         {
-            switch (selectedMode) {
-                case cursorMode.Move:
-                    initialDragPos = Input.mousePosition;
-                    break;
-                case cursorMode.Bridge:
-                    GameObject selectedObj = hit.transform.gameObject;
-                    if (selectedObj != null)
-                    {
-                        if (selectedObj.transform.parent != null)
-                        {
-                            if (selectedObj.transform.parent.GetComponent<BridgeInfo>() != null)
-                            {
-                                GameManager.instance.gridManagement.DestroyBridge(selectedObj.transform.parent.gameObject);
-                            }
-                        }
+            initialDragPos = Input.mousePosition;
+        }
+
+        if (Input.GetButton("Select")) {
+            dragDistance = Vector2.Distance(Input.mousePosition, initialDragPos);
+            if (dragDistance >= dragTreshold && selectedBlock == null) {
+                Block selectedBlock = hit.transform.gameObject.GetComponent<Block>();
+                StartDrag(selectedBlock);
+            }
+            DuringDrag(posInGrid);
+        }
+
+        if (Input.GetButtonUp("Select")) {
+            EndDrag(posInGrid);
+        }
+        ///
+        /////////////////////////////
+
+
+
+        /////////////////////////////
+        ///
+        ///     BRIDGING
+        ///
+        if (Input.GetButtonDown("Bridge")) {
+            GameObject selectedObj = hit.transform.gameObject;
+            if (selectedObj != null) {
+                if (selectedObj.transform.parent != null) {
+                    if (selectedObj.transform.parent.GetComponent<BridgeInfo>() != null) {
+                        GameManager.instance.gridManagement.DestroyBridge(selectedObj.transform.parent.gameObject);
                     }
-                    break;
+                }
             }
         }
 
         // Mouse click hold
-        if(Input.GetButton("Select")) {
-            switch (selectedMode) 
-            {
-                case cursorMode.Move:
-                    dragDistance = Vector2.Distance(Input.mousePosition, initialDragPos);
-                    if (dragDistance >= dragTreshold && selectedBlock == null)
-                    {
-                        Block selectedBlock = hit.transform.gameObject.GetComponent<Block>();
-                        StartDrag(selectedBlock);
-                    }
-                    DuringDrag(posInGrid);
-                    break;
-
-                case cursorMode.Bridge:
-                    if (!isBridging && hit.transform.gameObject.layer == LayerMask.NameToLayer("Block") ) {
-                        StartPlanningBridge(hit.transform.gameObject);
-                    }
-                    break;
-            }
-        }  
-    
-        // Left Mouse up 
-        if (Input.GetButtonUp("Select")) {
-            switch (selectedMode) {
-                case cursorMode.Move:
-                    EndDrag(posInGrid);
-                    break;
-
-                case cursorMode.Bridge:
-                    if (isBridging) {
-                        isBridging = false;
-                        TryToMakeBridge(hit.transform.gameObject);
-                        CancelPotentialBridge();
-                    }
-                    break;
+        if (Input.GetButton("Bridge")) {
+            if (!isBridging && hit.transform.gameObject.layer == LayerMask.NameToLayer("Block")) {
+                print("Starting to plan bridge");
+                StartPlanningBridge(hit.transform.gameObject);
             }
         }
 
-        // Right mouse button
-        if(Input.GetButton("RotateCamera"))
-        {
-            switch (selectedMode) {
-                case cursorMode.Move:
-                    CancelDrag();
-                    break;
+        // Left Mouse up 
+        if (Input.GetButtonUp("Bridge")) {
+            if (isBridging) {
+                isBridging = false;
+                TryToMakeBridge(hit.transform.gameObject);
+                print("Button up");
+                CancelPotentialBridge();
+            }
+        }
+        ///
+        /////////////////////////////
 
-                case cursorMode.Bridge:
-                    if (isBridging) {
-                        CancelPotentialBridge();
-                    }
-                    break;
+
+
+        /// Cancel actions
+        if (Input.GetButton("Trash")) {
+            if (isDragging) {
+                CancelDrag();
+            }
+            if (isBridging) {
+                CancelPotentialBridge();
             }
         }
     }
@@ -352,6 +327,7 @@ public class CursorManagement : MonoBehaviour
         ResetSelection();
         ClearFeedback();
         ClearPermanentHighlighter();
+        print("Canceled potential bridge");
         isBridging = false;
     }
 
