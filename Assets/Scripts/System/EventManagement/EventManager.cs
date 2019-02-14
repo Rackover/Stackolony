@@ -7,7 +7,7 @@ using System.Linq;
 
 public class EventManager : MonoBehaviour {
 
-    EventInterpreter interpreter = new EventInterpreter();
+    ScriptInterpreter interpreter = new ScriptInterpreter();
 
     public System.Action<string> InterpreterError;
     public System.Action<string> CheckError;
@@ -186,7 +186,7 @@ public class EventManager : MonoBehaviour {
             try {
                 action.Execute();
             }
-            catch (EventInterpreter.InterpreterException e) {
+            catch (ScriptInterpreter.InterpreterException e) {
                 GameManager.instance.eventManager.InterpreterError.Invoke(e.Message);
                 Debug.LogWarning(e);
             }

@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using UnityEngine;
 using System.Text;
 
-public class EventInterpreter
+public class ScriptInterpreter
 {
 
     public char lineSeparator = ';';
@@ -71,7 +71,7 @@ public class EventInterpreter
         }
     }
     
-    public EventInterpreter()
+    public ScriptInterpreter()
     {
         LoadActionFunctions();
     }
