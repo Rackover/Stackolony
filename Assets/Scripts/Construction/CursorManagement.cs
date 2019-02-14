@@ -253,7 +253,7 @@ public class CursorManagement : MonoBehaviour
     {
         if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Block") && hit.transform.gameObject.GetComponent<Block>().scheme.isMovable)
         {
-            if (selectedBlock == null)
+            if (selectedBlock == null && !cursorOnUI)
             {
                 couldDrag = true;
             }
@@ -262,7 +262,7 @@ public class CursorManagement : MonoBehaviour
             couldDrag = false;
         }
         // Mouse click down
-        if(Input.GetButtonDown("Select"))
+        if(Input.GetButtonDown("Select") && !cursorOnUI)
         {
             switch (selectedMode) {
                 case cursorMode.Move:
@@ -285,7 +285,7 @@ public class CursorManagement : MonoBehaviour
         }
 
         // Mouse click hold
-        if(Input.GetButton("Select")) {
+        if(Input.GetButton("Select") && !cursorOnUI) {
             switch (selectedMode) 
             {
                 case cursorMode.Move:
