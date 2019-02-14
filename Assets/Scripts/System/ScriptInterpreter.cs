@@ -69,19 +69,24 @@ public class ScriptInterpreter
         {
             return value;
         }
+
+        public override string ToString()
+        {
+            return ToInt().ToString();
+        }
     }
-    
+
     public ScriptInterpreter()
     {
         LoadActionFunctions();
     }
-    
+
     ////////////////////////////////////////////////
     ///
     ///     MAIN EVENT CREATION FUNCTION
     /// 
     ///
-    public EventManager.GameAction MakeEvent(string eventDeclaration, System.Action<string> errorEvent=null, bool noLogging=false)
+    public EventManager.GameAction MakeEvent(string eventDeclaration, System.Action<string> errorEvent = null, bool noLogging = false)
     {
         eventDeclaration = eventDeclaration.Replace(" ", "").Replace("\n", "").Replace("\r", "").Replace("	", "");
 
@@ -94,8 +99,8 @@ public class ScriptInterpreter
             errorEvent.Invoke(e.Message);
             return null;
         }
-        catch(System.Exception e) {
-            if (!noLogging) Debug.LogWarning("Unknown interpreter error - check your script.\n"+e.Message);
+        catch (System.Exception e) {
+            if (!noLogging) Debug.LogWarning("Unknown interpreter error - check your script.\n" + e.Message);
             errorEvent.Invoke("Unknown interpreter error - check your script.\n" + e.Message);
             return null;
         }
@@ -112,8 +117,8 @@ public class ScriptInterpreter
 
         return effects;
     }
-        
-    List<EventManager.GameEffect> InterpretBlock(string block, Dictionary<string, Object> context, char separator, bool executeImmediatly=false)
+
+    List<EventManager.GameEffect> InterpretBlock(string block, Dictionary<string, Object> context, char separator, bool executeImmediatly = false)
     {
 
         List<EventManager.GameEffect> actions = new List<EventManager.GameEffect>();
@@ -243,14 +248,74 @@ public class ScriptInterpreter
         if (!explodedStatement[2].Contains("ELSE")) {
             Throw("No ELSE statement in control structure :\n" + string.Join("\n", explodedStatement));
         }
+        
+        List<EventManager.GameEffect> blockEffects = new List<EventManager.GameEffect>();
 
+        // Chance statement
+        if (explodedStatement.Contains("%")) {
+            blockEffects = InterpretChanceStructure(explodedStatement, context);
+        }
+
+        // Comparison
+        else {
+            // Interpreting comparison
+            blockEffects = InterpretComparison(explodedStatement, context);
+        }
+
+        return blockEffects;
+    }
+
+    List<EventManager.GameEffect> InterpretComparison(string[] explodedStatement, Dictionary<string, Object> context)
+    {
+        List<EventManager.GameEffect> blockEffects = new List<EventManager.GameEffect>();
+        blockEffects.Add(
+            new EventManager.GameEffect(
+                // INSIDE EXEC
+                delegate {
+                    string[] comparisonStatement = explodedStatement[0].Split(' ');
+                    string[] datas = new string[] { comparisonStatement[0], comparisonStatement[2] };
+                    int[] unpackedDatas = new int[] { };
+
+                    // Interpreting functions
+                    for (int i = 0; i < datas.Length; i++) {
+                        if (datas[i][0] == '$' && Environment.variables.ContainsKey(datas[i].Remove(0, 1))) {
+                            unpackedDatas[i] = System.Convert.ToInt32(Environment.variables[datas[i]].Invoke());
+                        }
+                        else if (dataFunctions.ContainsKey(datas[i])) {
+                            unpackedDatas[i] = ((ObjectInteger)ExecuteDataFunctionFromString(datas[i], context)).ToInt();
+                        }
+                        else {
+                            unpackedDatas[i] = System.Convert.ToInt32(datas[i]);
+                        }
+                    }
+
+                    string oprt = comparisonStatement[1];
+
+                    string comparatedStatement = explodedStatement[1];
+                    string elseStatement = explodedStatement[3];
+                                  
+                    if (comparisons[explodedStatement[1]].Invoke(unpackedDatas[0], unpackedDatas[1])) {
+                        InterpretBlock(comparatedStatement, context, lineSeparator, true);
+                    }
+                    else {
+                        InterpretBlock(elseStatement, context, lineSeparator, true);
+                    }                    
+                },
+                ""
+            )
+        );
+        return blockEffects;
+    }
+
+    List<EventManager.GameEffect> InterpretChanceStructure(string[] explodedStatement, Dictionary<string, Object> context)
+    {
         // Chances 0-1
         float amount = 0;
         try {
             amount = System.Convert.ToSingle(explodedStatement[0].Replace("%", "")) / 100;
         }
         catch (System.Exception) {
-            Throw("Invalid probability in control structure : \n" + explodedStatement[0]);
+            Throw("Invalid probability in chance structure : \n" + explodedStatement[0]);
         }
 
         string chanceStatement = explodedStatement[1];
@@ -268,7 +333,7 @@ public class ScriptInterpreter
             )
         );
         // Chance
-        foreach(EventManager.GameEffect fx in chanceBlock) {
+        foreach (EventManager.GameEffect fx in chanceBlock) {
             blockEffects.Add(
                 new EventManager.GameEffect(delegate { }, fx.intention, fx.parameters) { ttColor = fx.ttColor }
             );
@@ -288,7 +353,7 @@ public class ScriptInterpreter
         // Else
         foreach (EventManager.GameEffect fx in elseBlock) {
             blockEffects.Add(
-                new EventManager.GameEffect(delegate { }, fx.intention, fx.parameters) { ttColor = fx.ttColor}
+                new EventManager.GameEffect(delegate { }, fx.intention, fx.parameters) { ttColor = fx.ttColor }
             );
         }
         if (elseBlock.Count <= 0) {
@@ -302,7 +367,7 @@ public class ScriptInterpreter
         blockEffects[0].SetAction(
             delegate {
                 if (Random.value < amount) {
-                    foreach(EventManager.GameEffect fx in chanceBlock) {
+                    foreach (EventManager.GameEffect fx in chanceBlock) {
                         fx.GetAction().Invoke();
                     }
                 }
@@ -317,6 +382,7 @@ public class ScriptInterpreter
         return blockEffects;
     }
 
+
     // Assigns data to a variable in the context
     void Assign(string assignationStatement, Dictionary<string, Object> context)
     {
@@ -325,7 +391,7 @@ public class ScriptInterpreter
             Throw(assignationStatement);
         }
         string varName = explodedStatement[0];
-        
+
         Object generated = ExecuteDataFunctionFromString(explodedStatement[1], context);
 
         context[varName] = generated;
@@ -339,12 +405,11 @@ public class ScriptInterpreter
         string content = explodedStatement[1];
 
         if (!dataFunctions.ContainsKey(funcName)) {
-            Throw("Unsupported data function \"" + funcName + "\". Supported data functions: \n" + string.Join("\n",  GetDataFunctions().ToArray()));
+            Throw("Unsupported data function \"" + funcName + "\". Supported data functions: \n" + string.Join("\n", GetDataFunctions().ToArray()));
         }
-        
+
         return dataFunctions[funcName].Invoke(content, context);
     }
-
 
     // Returns function name and string content
     string[] ExplodeFunction(string statement)
@@ -364,7 +429,6 @@ public class ScriptInterpreter
 
         return new string[] { functionName, content };
     }
-
 
     // Get specific string argument from argument list
     static string GetArgument(string arguments, string key)
@@ -398,14 +462,14 @@ public class ScriptInterpreter
         string[] explodedStatement = ExplodeFunction(statement);
         string funcName = explodedStatement[0];
         string arguments = explodedStatement[1];
-        
+
         if (!actionFunctions.ContainsKey(funcName)) {
-            Throw("Unsupported action function \"" + funcName.ToString() + "\". Supported action functions: \n" + string.Join("\n", GetActionFunctions().ToArray())+"");
+            Throw("Unsupported action function \"" + funcName.ToString() + "\". Supported action functions: \n" + string.Join("\n", GetActionFunctions().ToArray()) + "");
         }
 
         string[] locArguments = FormatArguments(arguments.Split(','));
 
-        return 
+        return
             new EventManager.GameEffect(
                 delegate {
                     actionFunctions[funcName](arguments, context);
@@ -415,7 +479,7 @@ public class ScriptInterpreter
             ) { ttColor = GetDataFunctionPreviewColor(funcName) }
         ;
 
-    }   
+    }
 
     Tooltip.tooltipType GetDataFunctionPreviewColor(string functionName)
     {
@@ -444,7 +508,7 @@ public class ScriptInterpreter
         foreach (string paramName in argumentsDisplayOrder) {
             correspondance[paramName] = string.Empty;
         }
-        
+
         foreach (string arg in arguments) {
             if (arg.Length <= 0) {
                 continue;
@@ -454,11 +518,11 @@ public class ScriptInterpreter
             string convertedArg = "";
 
             bool skip = false;
-            switch(paramName){
+            switch (paramName) {
                 case "population": convertedArg = loc.GetLineFromCategory("populationType", paramValue); break;
                 case "amount": convertedArg = System.Convert.ToSingle(paramValue).ToString("+0;-#"); break;
                 case "duration": convertedArg = System.Convert.ToSingle(paramValue).ToString("+0;-#"); break;
-                default:skip = true;break;
+                default: skip = true; break;
             }
 
             if (skip) continue;
@@ -493,6 +557,7 @@ public class ScriptInterpreter
         }
         return funcs;
     }
+
 
     /// <summary>
     /// ACTION FUNCTIONS
@@ -639,7 +704,7 @@ public class ScriptInterpreter
                 catch (System.Exception e) {
                     Throw("Impossible cast in " + args + "\n" + e.ToString());
                 }
-                string flag = GetArgument(args, "flag"); 
+                string flag = GetArgument(args, "flag");
                 ConsequencesManager.GenerateFlag(block, flag);
             }
         );
@@ -780,59 +845,78 @@ public class ScriptInterpreter
     /// <summary>
     /// DATA FUNCTIONS
     /// </summary>
-    Dictionary<string, System.Func<string, Dictionary<string, Object>, Object>> dataFunctions = new Dictionary<string, System.Func<string, Dictionary<string, Object>, Object>>() {
-
-       {  "RANDOM_BUILDING", (args, ctx) =>
-           {
-               int id = System.Convert.ToInt32(GetArgument(args, "id"));
-               Block block = ConsequencesManager.GetRandomBuildingOfId(id);
-               if (block == null) {
-                   Throw("Could not find any building of ID "+id.ToString());
-               }
-               return block;
-           }
-       },
-       {   "RANDOM_HOUSE", (args, ctx) =>
-           {
-               Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
-               if (pop == null){
+    Dictionary<string, System.Func<string, Dictionary<string, Object>, Object>> dataFunctions = new Dictionary<string, System.Func<string, Dictionary<string, Object>, Object>>();
+    void LoadDataFunctions()
+    {
+        dataFunctions.Clear();
+        dataFunctions.Add(
+            "RANDOM_BUILDING", (args, ctx) => {
+                int id = System.Convert.ToInt32(GetArgument(args, "id"));
+                Block block = ConsequencesManager.GetRandomBuildingOfId(id);
+                if (block == null) {
+                    Throw("Could not find any building of ID " + id.ToString());
+                }
+                return block;
+            }
+        );
+        dataFunctions.Add(
+             "CITIZEN_COUNT", (args, ctx) => {
+                 Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
+                 if (pop == null) {
+                     List<string> pops = new List<string>();
+                     foreach (Population existingPop in GameManager.instance.populationManager.populationTypeList) {
+                         pops.Add(existingPop.codeName);
+                     }
+                     Throw("Invalid population name :\n " + args + "\nPick one from the following : " + string.Join(", ", pops.ToArray()));
+                 }
+                 return new ObjectInteger(GameManager.instance.populationManager.populations[pop].citizens.Count);
+             }
+        );
+        dataFunctions.Add(
+            "RANDOM_HOUSE", (args, ctx) =>
+            {
+                Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
+                if (pop == null) {
                     List<string> pops = new List<string>();
-                    foreach(Population existingPop in GameManager.instance.populationManager.populationTypeList) {
+                    foreach (Population existingPop in GameManager.instance.populationManager.populationTypeList) {
                         pops.Add(existingPop.codeName);
                     }
-                    Throw("Invalid population name :\n " + args+"\nPick one from the following : "+string.Join(", ", pops.ToArray()));
+                    Throw("Invalid population name :\n " + args + "\nPick one from the following : " + string.Join(", ", pops.ToArray()));
                 }
-               House house = ConsequencesManager.GetRandomHouseOf(pop);
-               if (house == null) {
-                   Throw("Could not find house belonging to pop "+pop.codeName);
-               }
-               return house;
-           }
-       },
-       {   "RANDOM_POSITION", (args, ctx) =>
-           {
-               Vector2Int coords2D = GameManager.instance.gridManagement.GetRandomCoordinates();
-               Vector3Int coords = new Vector3Int(coords2D.x, GameManager.instance.gridManagement.minHeight, coords2D.y);
+                House house = ConsequencesManager.GetRandomHouseOf(pop);
+                if (house == null) {
+                    Throw("Could not find house belonging to pop " + pop.codeName);
+                }
+                return house;
+            }
+        );
+        dataFunctions.Add(
+            "RANDOM_POSITION", (args, ctx) =>
+            {
+                Vector2Int coords2D = GameManager.instance.gridManagement.GetRandomCoordinates();
+                Vector3Int coords = new Vector3Int(coords2D.x, GameManager.instance.gridManagement.minHeight, coords2D.y);
 
-               return new ObjectPosition(){
-                   x = coords.x,
-                   y = coords.y,
-                   z = coords.z
+                return new ObjectPosition() {
+                    x = coords.x,
+                    y = coords.y,
+                    z = coords.z
                 };
-           }
-       },
-       {   "SCHEME", (args, ctx) =>
-           {
-               int id = System.Convert.ToInt32(GetArgument(args, "id"));
-               BlockScheme scheme = GameManager.instance.library.GetBlockByID(id);
-               if (scheme == null) {
-                   Throw("Invalid scheme id :"+id.ToString());
-               }
-               return scheme;
-           }
-       },
-       {   "BUILDING_FROM_HOUSE", (args, ctx) =>
-           {
+            }
+        );
+        dataFunctions.Add(
+            "SCHEME", (args, ctx) =>
+            {
+                int id = System.Convert.ToInt32(GetArgument(args, "id"));
+                BlockScheme scheme = GameManager.instance.library.GetBlockByID(id);
+                if (scheme == null) {
+                    Throw("Invalid scheme id :" + id.ToString());
+                }
+                return scheme;
+            }
+        );
+        dataFunctions.Add(
+            "BUILDING_FROM_HOUSE", (args, ctx) =>
+            {
                 House house = null;
                 try {
                     house = (House)ctx[GetArgument(args, "house")];
@@ -841,11 +925,12 @@ public class ScriptInterpreter
                     Throw("Impossible cast in " + args + "\n" + e.ToString());
                 }
 
-               return house.block;
-           }
-       },
-       {   "POSITION_FROM_BUILDING", (args, ctx) =>
-           {
+                return house.block;
+            }
+        );
+        dataFunctions.Add(
+            "POSITION_FROM_BUILDING", (args, ctx) =>
+            {
                 Block block = null;
                 try {
                     block = (Block)ctx[GetArgument(args, "building")];
@@ -854,15 +939,16 @@ public class ScriptInterpreter
                     Throw("Impossible cast in " + args + "\n" + e.ToString());
                 }
 
-               return new ObjectPosition(){
-                   x = block.gridCoordinates.x,
-                   y = block.gridCoordinates.y,
-                   z = block.gridCoordinates.z
+                return new ObjectPosition() {
+                    x = block.gridCoordinates.x,
+                    y = block.gridCoordinates.y,
+                    z = block.gridCoordinates.z
                 };
-           }
-       },
-       {   "SCHEME_FROM_BUILDING", (args, ctx) =>
-           {
+            }
+        );
+        dataFunctions.Add(
+            "SCHEME_FROM_BUILDING", (args, ctx) =>
+            {
                 Block block = null;
                 try {
                     block = (Block)ctx[GetArgument(args, "building")];
@@ -871,8 +957,39 @@ public class ScriptInterpreter
                     Throw("Impossible cast in " + args + "\n" + e.ToString());
                 }
 
-               return block.scheme;
-           }
-       }
+                return block.scheme;
+            }
+        );
+    }
+
+    /// <summary>
+    /// COMPARISONS
+    /// </summary>
+    Dictionary<string, System.Func<int, int, bool>> comparisons = new Dictionary<string, System.Func<int, int, bool>>() {
+        {
+            "GREATER_THAN", (n1, n2)=>{
+                return n1 > n2;
+            }
+        },
+        {
+            "LESS_THAN", (n1, n2)=>{
+                return n1 < n2;
+            }
+        },
+        {
+            "GREATER_OR_EQUAL_THAN", (n1, n2)=>{
+                return n1 >= n2;
+            }
+        },
+        {
+            "LESS_OR_EQUAL_THAN", (n1, n2)=>{
+                return n1 <= n2;
+            }
+        },
+        {
+            "EQUAL", (n1, n2)=>{
+                return n1 == n2;
+            }
+        }
     };
 }
