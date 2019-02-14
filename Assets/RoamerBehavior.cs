@@ -8,47 +8,55 @@ public class RoamerBehavior : MonoBehaviour
 	[HideInInspector] public Bystander visual;
 	[HideInInspector] public bool available;
 
-	public List<Vector3> path = new List<Vector3>();
-	int cPoint;
+	public float moveSpeed;
+	public Vector3 destination;
+	public GameObject cBridge;
+	Vector3 bridgePosition;
 
 	void Update()
-	{
-		if(cPoint < path.Count)
-		{
+	{	
+		if(!available) UpdateMovement();
+	}
 
+	void UpdateMovement()
+	{
+		if(cBridge == null || bridgePosition != cBridge.transform.position)
+		{
+			End();
+		}
+
+		transform.position = Vector3.MoveTowards(transform.position, destination, Time.deltaTime * moveSpeed);
+		if(Vector3.Distance(transform.position, destination) < 0.5f)
+		{		
+			End();
 		}
 	}
 
-	public void NewPath(List<Vector3> newPath)
+	void End()
 	{
-		path = newPath;
-		cPoint = 0;
-		transform.position = path[0];
+		visual.gameObject.SetActive(false);
+		available = true;
 	}
 
-	void MoveToNext()
-	{
-		cPoint++;
-
-		if(cPoint < path.Count)
-		{
-			Debug.Log("Next");
-		}
-		else
-		{
-			Debug.Log("Arrived");
-		}
-	}
-
-	public void LoadVisual()
+	public void Initialise(int id, Vector3 from, Vector3 to, GameObject bridge)
 	{
 		if(visual != null) Destroy(visual.gameObject);
-
 		visual = Instantiate(
-			manager.bystanderPrefabs[Random.Range(0, manager.bystanderPrefabs.Length)],
+			manager.bystanderPrefabs[id],
 			transform.position,
 			Quaternion.identity,
 			transform
 		).GetComponent<Bystander>();
+
+		moveSpeed = Random.Range(0.5f, 1.5f);
+		available = false;
+		visual.gameObject.SetActive(true);
+		transform.position = from;
+		destination = to;
+		visual.transform.LookAt(destination);
+		visual.animator.Play("Running");
+
+		cBridge = bridge;
+		bridgePosition = cBridge.transform.position;
 	}
 }

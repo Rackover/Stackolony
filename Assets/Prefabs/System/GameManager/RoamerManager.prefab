@@ -9,50 +9,52 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1455774167354584}
+  m_RootGameObject: {fileID: 1978585900813030}
   m_IsPrefabAsset: 1
---- !u!1 &1455774167354584
+--- !u!1 &1978585900813030
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4013284467854420}
-  - component: {fileID: 114355155962147290}
+  - component: {fileID: 4513255977181890}
+  - component: {fileID: 114025319317755162}
   m_Layer: 0
-  m_Name: Roamer
+  m_Name: RoamerManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4013284467854420
+--- !u!4 &4513255977181890
 Transform:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1455774167354584}
+  m_GameObject: {fileID: 1978585900813030}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -0.42321134, y: 0.46501166, z: -0.73945737}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114355155962147290
+--- !u!114 &114025319317755162
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1455774167354584}
+  m_GameObject: {fileID: 1978585900813030}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ab6747925a9d244d9da2015a3a30782, type: 3}
+  m_Script: {fileID: 11500000, guid: 6ce7c952f1d241b47b73594f03cfa69d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  manager: {fileID: 0}
-  visual: {fileID: 0}
-  available: 0
-  moveSpeed: 1
-  destination: {x: 0, y: 0, z: 0}
+  roamer: {fileID: 1455774167354584, guid: d27d93b52a87a004381e9d19df05cf4d, type: 2}
+  bystanderPrefabs:
+  - {fileID: 1735061709073256, guid: 9ebcaafb27a39eb4ea2c5a7fccaeea16, type: 2}
+  - {fileID: 1244934836101268, guid: 3dcef8a6f654731439fce8afd7185a9f, type: 2}
+  - {fileID: 1497278845058520, guid: 2cc5f27c841585146a8eb235f7ae7121, type: 2}
+  - {fileID: 1381536671536874, guid: c948fc1a1da5f6844a09ee6893c049d9, type: 2}
+  - {fileID: 1219423901529748, guid: 442127ac3e41cb34a90b59b455e90ce6, type: 2}

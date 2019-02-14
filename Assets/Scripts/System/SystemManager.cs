@@ -14,7 +14,6 @@ public class SystemManager : MonoBehaviour {
     public List<NuisanceGenerator> AllNuisanceGenerators = new List<NuisanceGenerator>();
     public List<FireRiskGenerator> AllFireRiskGenerators = new List<FireRiskGenerator>();
 
-
     private bool systemResetted;
 
 
@@ -112,6 +111,7 @@ public class SystemManager : MonoBehaviour {
     {
         ResetSystem();
         GameManager.instance.populationManager.OnNewMicrocycle();
+        GameManager.instance.roamerManager.OnNewMicrocycle();
 
         // ToArray() is to prevent foreach errors by copying the AllBlocks array
         foreach (Block block in AllBlocks.ToArray())
