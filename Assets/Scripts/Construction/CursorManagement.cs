@@ -78,6 +78,7 @@ public class CursorManagement : MonoBehaviour
 
     private void Update()
     {
+
         // Unless ingame, default mode
         if (!GameManager.instance.IsInGame()) {
             SwitchMode(cursorMode.Default);
@@ -89,7 +90,7 @@ public class CursorManagement : MonoBehaviour
 
         // Detect cursor over UI
         cursorOnUI = false;
-        if (EventSystem.current.IsPointerOverGameObject()){cursorOnUI = true;}
+        if (EventSystem.current.IsPointerOverGameObject()) { cursorOnUI = true; }
     }
 
     public void SwitchMode(cursorMode mode)
@@ -136,10 +137,10 @@ public class CursorManagement : MonoBehaviour
 
     private void UpdateTool()
     {
-        // Move mode by default unless the bridge key is pressed
-        if (Input.GetButton("Bridge")) 
+         // Move mode by default unless the bridge key is pressed
+         if (Input.GetButton("Bridge")) 
         {
-            if (selectedMode != cursorMode.Bridge) 
+            if (selectedMode != cursorMode.Bridge && !isDragging) 
             {
                 GameManager.instance.soundManager.Play("Shift");
                 SwitchMode(cursorMode.Bridge);

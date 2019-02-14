@@ -36,6 +36,7 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
     public enum tooltipType { Neutral, Positive, Negative};
     public static readonly State[] negativeStates = { State.OnFire, State.OnRiot, State.Damaged, State.Unpowered };
     public bool isFirstLineBold = true;
+    public bool disableIfCursorOnUI = false;
     public List<Color> colors = new List<Color> { Color.black, Color.Lerp(Color.green, Color.black, 0.5f), Color.Lerp(Color.red, Color.black, 0.5f) };
 
     TooltipGO tooltipGO; //Correspond à un script lié au gameObject de tooltip
@@ -71,11 +72,13 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
     
     void OnMouseEnter()
     {
+        if (disableIfCursorOnUI && GameManager.instance.cursorManagement.cursorOnUI) return;
         OnPointerEnter(new PointerEventData(FindObjectOfType<EventSystem>()));
     }
 
     void OnMouseExit()
     {
+        if (disableIfCursorOnUI && GameManager.instance.cursorManagement.cursorOnUI) return;
         OnPointerExit(new PointerEventData(FindObjectOfType<EventSystem>()));
     }
 
@@ -117,6 +120,9 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
 
     public void OnPointerExit(PointerEventData pointerEventData)
     {
+        if (tooltipGO == null) {
+            tooltipGO = FindObjectOfType<TooltipGO>();
+        }
         tooltipGO.Disable();
         isActive = false;
     }
