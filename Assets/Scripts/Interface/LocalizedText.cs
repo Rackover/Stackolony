@@ -7,6 +7,7 @@ public class LocalizedText : MonoBehaviour {
 
     public string id;
     public string category;
+    public bool isAllCaps = false;
     [HideInInspector] public Localization.Lang lang;
 
     Localization localizer;
@@ -22,7 +23,10 @@ public class LocalizedText : MonoBehaviour {
             localizationScript = localizer;
         }
         localizationScript.SetCategory(category);
-        GetComponent<Text>().text = GameManager.instance.localization.GetLine(id);
+        string txt = GameManager.instance.localization.GetLine(id);
+            
+        GetComponent<Text>().text = isAllCaps ? txt.ToUpper() : txt;
+
         lang = newLang;
     }
 }
