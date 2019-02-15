@@ -88,20 +88,19 @@ public class ScriptInterpreter
     ///
     public EventManager.GameAction MakeEvent(string eventDeclaration, System.Action<string> errorEvent = null, bool noLogging = false)
     {
-        eventDeclaration = eventDeclaration.Replace(" ", "").Replace("\n", "").Replace("\r", "").Replace("	", "");
 
         List<EventManager.GameEffect> actions = new List<EventManager.GameEffect>();
         try {
             actions = MakeGameEffects(eventDeclaration);
         }
         catch (InterpreterException e) {
-            if (!noLogging) Debug.LogWarning("Interpration failed :\n" + e.Message);
+            if (!noLogging) Debug.LogWarning("Interpration failed :\n" + e.ToString());
             errorEvent.Invoke(e.Message);
             return null;
         }
         catch (System.Exception e) {
-            if (!noLogging) Debug.LogWarning("Unknown interpreter error - check your script.\n" + e.Message);
-            errorEvent.Invoke("Unknown interpreter error - check your script.\n" + e.Message);
+            if (!noLogging) Debug.LogWarning("Unknown interpreter error - check your script.\n" + e.ToString());
+            errorEvent.Invoke("Unknown interpreter error - check your script.\n" + e.ToString());
             return null;
         }
         return new EventManager.GameAction(actions);
@@ -110,10 +109,15 @@ public class ScriptInterpreter
     /// 
     ////////////////////////////////////////////////
 
+    static string SanitizeCode(string code)
+    {
+        return code.Replace(" ", "").Replace("\n", "").Replace("\r", "").Replace("	", "");
+    }
+
     List<EventManager.GameEffect> MakeGameEffects(string eventScript)
     {
         Dictionary<string, Object> context = new Dictionary<string, Object>();
-        List<EventManager.GameEffect> effects = InterpretBlock(eventScript, context, lineSeparator);
+        List<EventManager.GameEffect> effects = InterpretBlock(SanitizeCode(eventScript), context, lineSeparator);
 
         return effects;
     }
@@ -145,10 +149,12 @@ public class ScriptInterpreter
                 continue;
             }
 
+            // Not in control structure
             if (character == separator) {
                 // Skipping zero length lines
                 if (lineBuilder.Length > 0) {
-                    lines.Add(lineBuilder.ToString());
+                    string statement = lineBuilder.ToString();
+                    lines.Add(statement);
                 }
                 lineBuilder = new StringBuilder();
                 continue;
@@ -248,11 +254,11 @@ public class ScriptInterpreter
         if (!explodedStatement[2].Contains("ELSE")) {
             Throw("No ELSE statement in control structure :\n" + string.Join("\n", explodedStatement));
         }
-        
+
         List<EventManager.GameEffect> blockEffects = new List<EventManager.GameEffect>();
 
         // Chance statement
-        if (explodedStatement.Contains("%")) {
+        if (explodedStatement[0].Contains("%")) {
             blockEffects = InterpretChanceStructure(explodedStatement, context);
         }
 
@@ -272,9 +278,20 @@ public class ScriptInterpreter
             new EventManager.GameEffect(
                 // INSIDE EXEC
                 delegate {
-                    string[] comparisonStatement = explodedStatement[0].Split(' ');
-                    string[] datas = new string[] { comparisonStatement[0], comparisonStatement[2] };
-                    int[] unpackedDatas = new int[] { };
+                    string oprtr = string.Empty;
+                    foreach(string possibleOperator in comparisons.Keys) {
+                        if (explodedStatement[0].Contains(possibleOperator)) {
+                            oprtr = possibleOperator;
+                            break;
+                        }
+                    }
+                    if (oprtr.Length <= 0) {
+                        Throw("Unknown operator :\n" + explodedStatement[0]);
+                    }
+                    
+                    string[] datas = explodedStatement[0].Split(new string[] { oprtr }, System.StringSplitOptions.RemoveEmptyEntries);
+
+                    int[] unpackedDatas = new int[2];
 
                     // Interpreting functions
                     for (int i = 0; i < datas.Length; i++) {
@@ -289,12 +306,10 @@ public class ScriptInterpreter
                         }
                     }
 
-                    string oprt = comparisonStatement[1];
-
                     string comparatedStatement = explodedStatement[1];
                     string elseStatement = explodedStatement[3];
                                   
-                    if (comparisons[explodedStatement[1]].Invoke(unpackedDatas[0], unpackedDatas[1])) {
+                    if (comparisons[oprtr].Invoke(unpackedDatas[0], unpackedDatas[1])) {
                         InterpretBlock(comparatedStatement, context, lineSeparator, true);
                     }
                     else {
@@ -838,6 +853,17 @@ public class ScriptInterpreter
             "DECLARE_EVENT", (args, context) => {
                 int eventId = System.Convert.ToInt32(GetArgument(args, "id"));
                 context["_EVENT_ID"] = new ObjectInteger(eventId);
+            }
+        );
+        actionFunctions.Add(
+            "DECLARE_ACHIEVEMENT", (args, context) => {
+                int eventId = System.Convert.ToInt32(GetArgument(args, "id"));
+                context["_ACHIEVEMENT_ID"] = new ObjectInteger(eventId);
+            }
+        );
+        actionFunctions.Add(
+            "ECHO", (args, context) => {
+                Debug.Log("[SCRIPT ECHO] "+args);
             }
         );
     }

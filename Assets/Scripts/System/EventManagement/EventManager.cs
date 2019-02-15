@@ -187,12 +187,10 @@ public class EventManager : MonoBehaviour {
                 action.Execute();
             }
             catch (ScriptInterpreter.InterpreterException e) {
-                GameManager.instance.eventManager.InterpreterError.Invoke(e.Message);
-                Debug.LogWarning(e);
+                GameManager.instance.eventManager.InterpreterError.Invoke(e.ToString());
             }
             catch (System.Exception e) {
-                GameManager.instance.eventManager.InterpreterError.Invoke("Unknown interpreter error - check your script.\n" + e.Message);
-                Debug.LogWarning(e);
+                GameManager.instance.eventManager.InterpreterError.Invoke("Unknown interpreter error - check your script.\n" + e.ToString());
             }
         }
     }
