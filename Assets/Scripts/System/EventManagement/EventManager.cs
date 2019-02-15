@@ -213,6 +213,10 @@ public class EventManager : MonoBehaviour {
 
     public void TriggerEventImmediatly(int id)
     {
+        if (GameManager.instance.cursorManagement.isDragging)
+        {
+            GameManager.instance.cursorManagement.CancelDrag();
+        }
         if (!GameManager.instance.DISABLE_EVENTS) {
             NewEvent.Invoke(events[id]);
         }

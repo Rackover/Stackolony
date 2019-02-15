@@ -50,6 +50,7 @@ public class BuildingMenusDisplay : MonoBehaviour {
                 GameObject item = Instantiate(itemExample, content.transform).transform.GetChild(0).gameObject;
                 item.name = block.ID.ToString();
                 item.GetComponent<BuildingMenuItem>().blockId = block.ID;
+                item.GetComponent<BuildingMenuItem>().parentScrollRect = mO.GetComponentInChildren<ScrollRect>();
 
                 Tooltip tt = item.GetComponent<Tooltip>();
                 StartCoroutine(AddTooltipsWhenPossible(tt, block));

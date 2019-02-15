@@ -13,6 +13,7 @@ public class BuildingMenuItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
     Block draggingBuilding;
     GameObject blockPrefab;
     GameObject padlock;
+    public ScrollRect parentScrollRect;
 
     RawImage ri;
     Displayer display;
@@ -85,9 +86,16 @@ public class BuildingMenuItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
         }
 
         // Drag
-		if (isBeingDragged && !isLocked) {
+		if (isBeingDragged && !isLocked && !GameManager.instance.cursorManagement.cursorOnUI) {
+            if (draggingBuilding == null)
+            {
+                draggingBuilding = GameManager.instance.gridManagement.CreateBlockFromId(blockId).GetComponent<Block>();
+                draggingBuilding.Pack();
+                draggingBuilding.transform.position = GameManager.instance.cursorManagement.posInWorld;
+            }
             GameManager.instance.cursorManagement.selectedBlock = draggingBuilding;
             GameManager.instance.cursorManagement.draggingNewBlock = true;
+            GameManager.instance.cursorManagement.linkedScrollRect = parentScrollRect;
             GameManager.instance.cursorManagement.StartDrag(draggingBuilding);
 
             isBeingDragged = false;
@@ -99,11 +107,10 @@ public class BuildingMenuItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
             if (Input.GetButton("Select") && concerned && !GameManager.instance.cursorManagement.isDragging) {
                 isBeingDragged = true;
-                if (draggingBuilding == null) {
-                    draggingBuilding = GameManager.instance.gridManagement.CreateBlockFromId(blockId).GetComponent<Block>();
-                    draggingBuilding.Pack();
-                    draggingBuilding.transform.position = GameManager.instance.cursorManagement.posInWorld;
-                }
+            }
+            if (Input.GetButtonUp("Select"))
+            {
+                isBeingDragged = false;
             }
         }
 	}

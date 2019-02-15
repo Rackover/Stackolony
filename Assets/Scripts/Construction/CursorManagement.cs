@@ -30,9 +30,8 @@ public class CursorManagement : MonoBehaviour
     public float dragTreshold = 10; // Amount of pixels the player must move his mouse of to start dragging
     public float blockFallingSpeed = 1;
     public float blockRisingSpeed = 3;
-
-    Vector2 initialDragPos;
-    float dragDistance;
+    private Vector2 initialDragPos;
+    [HideInInspector] public ScrollRect linkedScrollRect;
     [Space(5)]
 
     [Header("=== DEBUG ===")]
@@ -516,10 +515,30 @@ public class CursorManagement : MonoBehaviour
             if (destinationCandidate.gridCoordinates != selectedBlock.gridCoordinates) {
                 if (destinationCandidate.gridCoordinates.y == selectedBlock.gridCoordinates.y) {
                     if (destinationCandidate.gridCoordinates.x == selectedBlock.gridCoordinates.x || destinationCandidate.gridCoordinates.z == selectedBlock.gridCoordinates.z) {
-                        //Les conditions sont remplies et on peut tracer le pont
-                        //Call de la fonction pour tracer un pont
-                        GameManager.instance.gridManagement.CreateBridge(selectedBlock, destinationCandidate);
-                        ClearPermanentHighlighter();
+                        bool bridgeAlreadyFound = false;
+                        foreach (GameObject bridge in destinationCandidate.bridges)
+                        {
+                            if (bridge.GetComponent<BridgeInfo>().destination == selectedBlock.gridCoordinates)
+                            {
+                                bridgeAlreadyFound = true;
+                            }
+                        }
+                        foreach (GameObject bridge in selectedBlock.bridges)
+                        {
+                            if (bridge.GetComponent<BridgeInfo>().destination == destinationCandidate.gridCoordinates)
+                            {
+                                bridgeAlreadyFound = true;
+                            }
+                        }
+                        if (!bridgeAlreadyFound)
+                        {
+                            //Les conditions sont remplies et on peut tracer le pont
+                            //Call de la fonction pour tracer un pont
+                            GameManager.instance.gridManagement.CreateBridge(selectedBlock, destinationCandidate);
+                            ClearPermanentHighlighter();
+                        } else {
+                            CursorError.Invoke("bridgeAlreadyFound");
+                        }
                     }
                     else {
                         CursorError.Invoke("misalignedBlocks");
@@ -554,8 +573,14 @@ public class CursorManagement : MonoBehaviour
 
     public void StartDrag(Block _block)
     {
+        if (linkedScrollRect != null)
+        {
+            linkedScrollRect.enabled = false;
+        }
+
         if (_block != null && _block.scheme.isMovable == true)
         {
+            canSwitchTools = false;
             selectedBlock = _block;
             selectedBlock.StopAllCoroutines();
             savedPos = selectedBlock.gridCoordinates;
@@ -587,8 +612,14 @@ public class CursorManagement : MonoBehaviour
 
     public void EndDrag(Vector3Int _pos)
     {
+        if (linkedScrollRect != null)
+        {
+            linkedScrollRect.enabled = true;
+        }
+
         if (selectedBlock != null && isDragging)
         {
+            canSwitchTools = true;
             if (GameManager.instance.gridManagement.IsPlacable(_pos, true))
             {
                 //Play SFX

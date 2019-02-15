@@ -17,7 +17,7 @@ public class Block : MonoBehaviour
 	public BlockVisual visuals;
     public BlockEffect effects;
     public BlockOverlayColor overlayVisuals;
-    public GameObject bridge;
+    public List<GameObject> bridges;
 
     [HideInInspector]   public Vector3Int gridCoordinates = new Vector3Int(0, 0, 0);
     [HideInInspector]   public int positionInTower; //0 = tout en bas

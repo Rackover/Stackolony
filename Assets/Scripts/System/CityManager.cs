@@ -330,12 +330,14 @@ public class CityManager : MonoBehaviour {
         bool powered = false;
         bool foodLeft = false;
         bool jobLeft = false;
+        bool damaged = false;
 
         foreach (Population profile in house.acceptedPop)
         {
             if (profile == populationType)
             {
                 profileFound = true;
+                break;
             }
         }
 
@@ -366,7 +368,17 @@ public class CityManager : MonoBehaviour {
                 if (pop == populationType)
                 {
                     jobLeft = true;
+                    break;
                 }
+            }
+        }
+
+        foreach (KeyValuePair<State,StateBehavior> state in house.block.states)
+        {
+            if(state.Key == State.Damaged)
+            {
+                damaged = true;
+                break;
             }
         }
 
@@ -385,6 +397,10 @@ public class CityManager : MonoBehaviour {
         if (!jobLeft)
         {
             notation += moodValues.noOccupations;
+        }
+        if (damaged)
+        {
+            notation += moodValues.damaged;
         }
 
         if (notation >= 0)
