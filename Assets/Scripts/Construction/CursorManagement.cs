@@ -33,6 +33,7 @@ public class CursorManagement : MonoBehaviour
     public float blockFallingSpeed = 1;
     public float blockRisingSpeed = 3;
     private Vector2 initialDragPos;
+    [HideInInspector] public ScrollRect linkedScrollRect;
     [Space(5)]
     
     [Header("=== DEBUG ===")]
@@ -601,6 +602,11 @@ public class CursorManagement : MonoBehaviour
 
     public void StartDrag(Block _block)
     {
+        if (linkedScrollRect != null)
+        {
+            linkedScrollRect.enabled = false;
+        }
+
         if (_block != null && _block.scheme.isMovable == true)
         {
             selectedBlock = _block;
@@ -638,6 +644,11 @@ public class CursorManagement : MonoBehaviour
 
     public void EndDrag(Vector3Int _pos)
     {
+        if (linkedScrollRect != null)
+        {
+            linkedScrollRect.enabled = true;
+        }
+
         if (selectedBlock != null && isDragging)
         {
             if (GameManager.instance.gridManagement.IsPlacable(_pos, true))

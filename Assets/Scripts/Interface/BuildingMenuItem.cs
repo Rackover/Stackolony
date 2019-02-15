@@ -13,6 +13,7 @@ public class BuildingMenuItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
     Block draggingBuilding;
     GameObject blockPrefab;
     GameObject padlock;
+    public ScrollRect parentScrollRect;
 
     RawImage ri;
     Displayer display;
@@ -88,6 +89,7 @@ public class BuildingMenuItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
 		if (isBeingDragged && !isLocked) {
             GameManager.instance.cursorManagement.selectedBlock = draggingBuilding;
             GameManager.instance.cursorManagement.draggingNewBlock = true;
+            GameManager.instance.cursorManagement.linkedScrollRect = parentScrollRect;
             GameManager.instance.cursorManagement.StartDrag(draggingBuilding);
 
             isBeingDragged = false;

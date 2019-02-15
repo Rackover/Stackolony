@@ -554,8 +554,8 @@ public class GridManagement : MonoBehaviour
         bridgesList.Add(parentBridgeGameObject);
         bridgesGrid[
             blockA.gridCoordinates.x,
-            blockA.gridCoordinates.x,
-            blockA.gridCoordinates.x
+            blockA.gridCoordinates.y,
+            blockA.gridCoordinates.z
         ] = blockB.gridCoordinates;
 
         GameManager.instance.achievementManager.achiever.AddToValue("bridgeCount");
