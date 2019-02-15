@@ -250,8 +250,7 @@ public class CursorManagement : MonoBehaviour
         }
 
         if (Input.GetButton("Select")) {
-            dragDistance = Vector2.Distance(Input.mousePosition, initialDragPos);
-            if (dragDistance >= dragTreshold && selectedBlock == null) {
+            if (selectedBlock == null) {
                 Block selectedBlock = hit.transform.gameObject.GetComponent<Block>();
                 StartDrag(selectedBlock);
             }
