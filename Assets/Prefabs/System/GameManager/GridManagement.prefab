@@ -53,7 +53,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 0}
   cellSize: {x: 1.5, y: 1, z: 1.5}
-  maxHeight: 200
+  maxHeight: 40
   minHeight: 10
   bridgePrefab: {fileID: 1071392935831226, guid: 557d8b2a812caf045aeee79ce3a2149e,
     type: 2}
@@ -65,3 +65,4 @@ MonoBehaviour:
   spatioportSpawnPoint: {x: 60, y: 50}
   myTerrain: {fileID: 0}
   gridSize: {x: 0, y: 0, z: 0}
+  buildablePositions: []
