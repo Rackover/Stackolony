@@ -1977,7 +1977,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: e287c7d8a1db45f4a99e393633e93175, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 03a5f0784f3c3164da2972a3c7afda67, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -3470,7 +3470,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114571689687669616}
   m_HandleRect: {fileID: 224951944361754420}
   m_Direction: 2
-  m_Value: 0.99999774
+  m_Value: 0.99999887
   m_Size: 0.925
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -4013,7 +4013,8 @@ MonoBehaviour:
   cursorImage: {fileID: 114886207514940616}
   optionsWindow: {fileID: 1825056842067424, guid: b3f27fb5ad5d3194c8a179a769807f12,
     type: 2}
-  creditsWindow: {fileID: 0}
+  creditsWindow: {fileID: 1337702335305806, guid: 0368f9cc638499042a567986b0b37129,
+    type: 2}
   pauseWindow: {fileID: 1110876297404572, guid: f2dc3bcc9619af04eb3c8a4e07e3c69e,
     type: 2}
 --- !u!114 &114426735945561504
