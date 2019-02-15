@@ -543,10 +543,30 @@ public class CursorManagement : MonoBehaviour
             if (destinationCandidate.gridCoordinates != selectedBlock.gridCoordinates) {
                 if (destinationCandidate.gridCoordinates.y == selectedBlock.gridCoordinates.y) {
                     if (destinationCandidate.gridCoordinates.x == selectedBlock.gridCoordinates.x || destinationCandidate.gridCoordinates.z == selectedBlock.gridCoordinates.z) {
-                        //Les conditions sont remplies et on peut tracer le pont
-                        //Call de la fonction pour tracer un pont
-                        GameManager.instance.gridManagement.CreateBridge(selectedBlock, destinationCandidate);
-                        ClearPermanentHighlighter();
+                        bool bridgeAlreadyFound = false;
+                        foreach (GameObject bridge in destinationCandidate.bridges)
+                        {
+                            if (bridge.GetComponent<BridgeInfo>().destination == selectedBlock.gridCoordinates)
+                            {
+                                bridgeAlreadyFound = true;
+                            }
+                        }
+                        foreach (GameObject bridge in selectedBlock.bridges)
+                        {
+                            if (bridge.GetComponent<BridgeInfo>().destination == destinationCandidate.gridCoordinates)
+                            {
+                                bridgeAlreadyFound = true;
+                            }
+                        }
+                        if (!bridgeAlreadyFound)
+                        {
+                            //Les conditions sont remplies et on peut tracer le pont
+                            //Call de la fonction pour tracer un pont
+                            GameManager.instance.gridManagement.CreateBridge(selectedBlock, destinationCandidate);
+                            ClearPermanentHighlighter();
+                        } else {
+                            CursorError.Invoke("bridgeAlreadyFound");
+                        }
                     }
                     else {
                         CursorError.Invoke("misalignedBlocks");

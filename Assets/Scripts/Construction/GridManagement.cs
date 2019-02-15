@@ -484,7 +484,7 @@ public class GridManagement : MonoBehaviour
         BridgeInfo bridgeInfo = parentBridgeGameObject.AddComponent<BridgeInfo>();
         bridgeInfo.origin = blockA.gridCoordinates;
         bridgeInfo.destination = blockB.gridCoordinates;
-        blockA.bridge = parentBridgeGameObject;
+        blockA.bridges.Add(parentBridgeGameObject);
 
         //Ajout de chaque partie du pont dans la grille grid[] et dans le component bridgeInfo
         bridgeInfo.allBridgePositions = new Vector3Int[bridgeLength];
@@ -564,6 +564,9 @@ public class GridManagement : MonoBehaviour
     /// <param name="bridgeObject"></param>
     public void DestroyBridge(GameObject bridgeObject)
     {
+        //Removes the bridge from the list of bridges of his parent
+        bridgeObject.transform.parent.GetComponent<Block>().bridges.Remove(bridgeObject);
+
         int subParts = bridgeObject.transform.childCount;
 
         for (int i = 0; i < subParts; i++) {
