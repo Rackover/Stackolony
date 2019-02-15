@@ -337,6 +337,7 @@ public class CityManager : MonoBehaviour {
             if (profile == populationType)
             {
                 profileFound = true;
+                break;
             }
         }
 
@@ -367,6 +368,7 @@ public class CityManager : MonoBehaviour {
                 if (pop == populationType)
                 {
                     jobLeft = true;
+                    break;
                 }
             }
         }
@@ -376,6 +378,7 @@ public class CityManager : MonoBehaviour {
             if(state.Key == State.Damaged)
             {
                 damaged = true;
+                break;
             }
         }
 
