@@ -609,6 +609,7 @@ public class CursorManagement : MonoBehaviour
 
         if (_block != null && _block.scheme.isMovable == true)
         {
+            canSwitchTools = false;
             selectedBlock = _block;
             selectedBlock.StopAllCoroutines();
             savedPos = selectedBlock.gridCoordinates;
@@ -651,6 +652,7 @@ public class CursorManagement : MonoBehaviour
 
         if (selectedBlock != null && isDragging)
         {
+            canSwitchTools = true;
             if (GameManager.instance.gridManagement.IsPlacable(_pos, true))
             {
                 //Play SFX
