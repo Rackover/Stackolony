@@ -7,8 +7,8 @@ public class AnimationManager : MonoBehaviour {
     public float towerElevationTime = 2f;
     public float towerDelevationTime = 4f;
     public float towerElevationAmount = 2f;
-
     public float blockDragLerpSpeed = 4f;
+    public float bridgeCreationSpeed = 10f;
 
     private void Start()
     {
