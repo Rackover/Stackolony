@@ -86,7 +86,7 @@ public class BuildingMenuItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
         }
 
         // Drag
-		if (isBeingDragged && !isLocked && !GameManager.instance.cursorManagement.cursorOnUI) {
+        if (isBeingDragged && !isLocked && !GameManager.instance.cursorManagement.cursorOnUI) {
             if (draggingBuilding == null)
             {
                 draggingBuilding = GameManager.instance.gridManagement.CreateBlockFromId(blockId).GetComponent<Block>();
@@ -100,16 +100,14 @@ public class BuildingMenuItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
             isBeingDragged = false;
             draggingBuilding = null;
-            ri.enabled = false;
         }
         else if (!isLocked){
-            ri.enabled = true;
-
             if (Input.GetButton("Select") && concerned && !GameManager.instance.cursorManagement.isDragging) {
                 isBeingDragged = true;
+                ri.color = new Color(ri.color.r, ri.color.g, ri.color.b, 0f);
             }
-            if (Input.GetButtonUp("Select"))
-            {
+            if (Input.GetButtonUp("Select")) {
+                ri.color = new Color(ri.color.r, ri.color.g, ri.color.b, 1f);
                 isBeingDragged = false;
             }
         }
