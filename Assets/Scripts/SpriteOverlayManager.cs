@@ -6,15 +6,15 @@ using UnityEngine.UI;
 
 public class SpriteOverlayManager : MonoBehaviour 
 {
-	public RectTransform canvas;
 	
 	[Header("Settings")]
-	public float minSize = 10f;
+	public RectTransform canvas;
 	public float maxSize = 100f;
+	List<int> signIds = new List<int>();
+
 	[Header("Debug")]
 	public Transform[] targets;
 	public Sprite[] sprites;
-	List<int> signIds = new List<int>();
 
 	public class Sign
 	{
@@ -90,6 +90,7 @@ public class SpriteOverlayManager : MonoBehaviour
 		Sign sign = new Sign();
 		sign.self = go.AddComponent<RectTransform>();
 		sign.image = go.AddComponent<Image>();
+		sign.image.raycastTarget = false;
 		sign.id = signs.Count;
 		sign.self.name = "Sign_" + sign.id;
 		signs.Add(sign);
