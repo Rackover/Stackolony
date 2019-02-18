@@ -6,36 +6,75 @@ using System.IO;
 
 public class AchievementManager : MonoBehaviour 
 {
-	public Achievements achiever = new Achievements();
+    public System.Action<int> AchievementUnlocked;
+	public Achievements achiever;
 	public List<int> unlockedAchievements; // TO SAVE
+    public Stats stats = new Stats();
+
+    public class Stats
+    {
+        public int stoppedRiots = 0;
+        public int stoppedFires = 0;
+    }
 
 	void Start()
 	{
-		LoadProperties();
-	}
+        achiever = new Achievements(AchievementUnlocked);
+        LoadProperties();
+    }
 
-	void LoadProperties()
+    // Should only be used from the interpreter
+    public void UnlockAchievement(int id)
+    {
+        achiever.UnlockAchievement(id);
+    }
+
+    void LoadProperties()
 	{
 		XmlDocument achievementsData = new XmlDocument();
-		achievementsData.Load(Application.dataPath + "/StreamingAssets/Achievements.xml");
+		achievementsData.Load(Paths.GetAchievementsFile());
 
 		XmlNodeList achievementList = achievementsData.SelectNodes("achievements")[0].ChildNodes;
 
-		for(int i = 0; i < achievementList.Count; i++)
-		{	
-			if(!unlockedAchievements.Contains(i))
-			{
-				XmlNode property = achievementList[i].SelectNodes("property")[0];
+        foreach (XmlNode xAchievement in achievementList) {
 
-				string concernedVariable = property.SelectNodes("concernedVariable")[0].InnerText;
-				string rule = property.SelectNodes("rule")[0].InnerText;
-				int activationValue = int.Parse(property.SelectNodes("activationValue")[0].InnerText);
+            if (xAchievement.Name != "achievement") {
+                // Garbage node, skipping
+                continue;
+            }
 
-				achiever.DefineAchievement(
-					int.Parse(achievementList[i].Name.Replace("achievement", "")),
-					achiever.DefineProperty(concernedVariable, rule, activationValue)
-				);
-			}
-		}
+            int id;
+            try {
+                id = System.Convert.ToInt32(xAchievement.Attributes["id"].Value);
+            }
+            catch (System.Exception e){
+                Logger.Error("Could not load id-less event [" + xAchievement.Attributes["id"].Value + "]" + xAchievement.InnerText+"\n"+e.ToString());
+                continue;
+            }
+
+            string script;
+            try {
+                script = xAchievement["script"].InnerText;
+            }
+            catch {
+                Logger.Error("Could not load script-less event " + id);
+                continue;
+            }
+
+            achiever.DefineAchievement(id, script);
+        }
 	}
+
+
+    public void ClearListeners()
+    {
+        try {
+            foreach (System.Delegate d in AchievementUnlocked.GetInvocationList()) {
+                AchievementUnlocked -= (System.Action<int>)d;
+            }
+        }
+        catch {
+            // Nothing to do
+        }
+    }
 }

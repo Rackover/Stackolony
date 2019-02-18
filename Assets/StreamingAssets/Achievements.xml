@@ -1,340 +1,257 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <achievements>
+	<!-- Different steps of total population count -->
+    <achievement id="0">
+		<script>
+			$TOTAL_CITIZEN_COUNT GREATER_THAN 10
+		</script>
+	</achievement>
+    <achievement id="1">
+		<script>
+			$TOTAL_CITIZEN_COUNT GREATER_THAN 30
+		</script>
+	</achievement>
+    <achievement id="2">
+		<script>
+			$TOTAL_CITIZEN_COUNT GREATER_THAN 50
+		</script>
+	</achievement>
+    <achievement id="3">
+		<script>
+			$TOTAL_CITIZEN_COUNT GREATER_THAN 100
+		</script>
+	</achievement>
+    <achievement id="4">
+		<script>
+			$TOTAL_CITIZEN_COUNT GREATER_THAN 200
+		</script>
+	</achievement>
+    <achievement id="5">
+		<script>
+			$TOTAL_CITIZEN_COUNT GREATER_THAN 500
+		</script>
+	</achievement>
+    <achievement id="6">
+		<script>
+			$TOTAL_CITIZEN_COUNT GREATER_THAN 500
+		</script>
+	</achievement>
+	
+	<!-- Fires extinguished -->
+    <achievement id="7">
+		<script>
+			$STOPPED_FIRES_COUNT GREATER_THAN 1
+		</script>
+	</achievement>
+    <achievement id="8">
+		<script>
+			$STOPPED_FIRES_COUNT GREATER_THAN 5
+		</script>
+	</achievement>
+    <achievement id="9">
+		<script>
+			$STOPPED_FIRES_COUNT GREATER_THAN 10
+		</script>
+	</achievement>
+    <achievement id="10">
+		<script>
+			$STOPPED_FIRES_COUNT GREATER_THAN 50
+		</script>
+	</achievement>
+	
+	<!-- Military count -->
+    <achievement id="11">
+		<script>
+			CITIZEN_COUNT(population:military) GREATER_THAN 10
+		</script>
+	</achievement>
+    <achievement id="12">
+		<script>
+			CITIZEN_COUNT(population:military) GREATER_THAN 50
+		</script>
+	</achievement>
+    <achievement id="13">
+		<script>
+			CITIZEN_COUNT(population:military) GREATER_THAN 100
+		</script>
+	</achievement>
+	
+	<!-- Scientist count -->
+    <achievement id="14">
+		<script>
+			CITIZEN_COUNT(population:scientist) GREATER_THAN 10
+		</script>
+	</achievement>
+    <achievement id="15">
+		<script>
+			CITIZEN_COUNT(population:scientist) GREATER_THAN 50
+		</script>
+	</achievement>
+    <achievement id="16">
+		<script>
+			CITIZEN_COUNT(population:scientist) GREATER_THAN 100
+		</script>
+	</achievement>
+	
+	<!-- Workers count -->
+    <achievement id="17">
+		<script>
+			CITIZEN_COUNT(population:worker) GREATER_THAN 10
+		</script>
+	</achievement>
+    <achievement id="18">
+		<script>
+			CITIZEN_COUNT(population:worker) GREATER_THAN 50
+		</script>
+	</achievement>
+    <achievement id="19">
+		<script>
+			CITIZEN_COUNT(population:worker) GREATER_THAN 100
+		</script>
+	</achievement>
+	
+	<!-- Richie count -->
+    <achievement id="20">
+		<script>
+			CITIZEN_COUNT(population:richie) GREATER_THAN 10
+		</script>
+	</achievement>
+    <achievement id="21">
+		<script>
+			CITIZEN_COUNT(population:richie) GREATER_THAN 50
+		</script>
+	</achievement>
+    <achievement id="22">
+		<script>
+			CITIZEN_COUNT(population:richie) GREATER_THAN 100
+		</script>
+	</achievement>
+	
+	<!-- Artist count -->
+    <achievement id="23">
+		<script>
+			CITIZEN_COUNT(population:artist) GREATER_THAN 10
+		</script>
+	</achievement>
+    <achievement id="24">
+		<script>
+			CITIZEN_COUNT(population:artist) GREATER_THAN 50
+		</script>
+	</achievement>
+    <achievement id="25">
+		<script>
+			CITIZEN_COUNT(population:artist) GREATER_THAN 100
+		</script>
+	</achievement>
+	
+	<!-- Mood 100% for each population -->
+    <achievement id="28">
+		<script>
+			MOOD(population:military) GREATER_OR_EQUAL_THAN 100
+		</script>
+	</achievement>
+    <achievement id="29">
+		<script>
+			MOOD(population:worker) GREATER_OR_EQUAL_THAN 100
+		</script>
+	</achievement>
+    <achievement id="30">
+		<script>
+			MOOD(population:richie) GREATER_OR_EQUAL_THAN 100
+		</script>
+	</achievement>
+    <achievement id="31">
+		<script>
+			MOOD(population:scientist) GREATER_OR_EQUAL_THAN 100
+		</script>
+	</achievement>
+    <achievement id="32">
+		<script>
+			MOOD(population:artist) GREATER_OR_EQUAL_THAN 100
+		</script>
+	</achievement>
+	
+	<!-- Bridge thresholds -->
+    <achievement id="39">
+		<script>
+			$BRIDGE_COUNT GREATER_OR_EQUAL_THAN 0
+		</script>
+	</achievement>
+    <achievement id="40">
+		<script>
+			$BRIDGE_COUNT GREATER_OR_EQUAL_THAN 10
+		</script>
+	</achievement>
+    <achievement id="41">
+		<script>
+			$BRIDGE_COUNT GREATER_OR_EQUAL_THAN 50
+		</script>
+	</achievement>
+    <achievement id="42">
+		<script>
+			$BRIDGE_COUNT GREATER_OR_EQUAL_THAN 100
+		</script>
+	</achievement>
+	
+	<!-- First fire -->
+    <achievement id="44">
+		<script>
+			$FIRES_COUNT GREATER_OR_EQUAL_THAN 1
+		</script>
+	</achievement>
 
-    <achievement0>
-        <property>
-            <concernedVariable>settlerCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>10</activationValue>
-        </property>
-    </achievement0>
-    <achievement1>
-        <property>
-            <concernedVariable>settlerCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>30</activationValue>
-        </property>
-    </achievement1>
-    <achievement2>
-        <property>
-            <concernedVariable>settlerCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>50</activationValue>
-        </property>
-    </achievement2>
-    <achievement3>
-        <property>
-            <concernedVariable>settlerCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>100</activationValue>
-        </property>
-    </achievement3>
-    <achievement4>
-        <property>
-            <concernedVariable>settlerCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>200</activationValue>
-        </property>
-    </achievement4>
-    <achievement5>
-        <property>
-            <concernedVariable>settlerCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>500</activationValue>
-        </property>
-    </achievement5>
-    <achievement6>
-        <property>
-            <concernedVariable>settlerCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>1000</activationValue>
-        </property>
-    </achievement6>
-
-    <achievement7>
-        <property>
-            <concernedVariable>extinguishedFireCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>1</activationValue>
-        </property>
-    </achievement7>
-    <achievement8>
-        <property>
-            <concernedVariable>extinguishedFireCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>5</activationValue>
-        </property>
-    </achievement8>
-    <achievement9>
-        <property>
-            <concernedVariable>extinguishedFireCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>10</activationValue>
-        </property>
-    </achievement9>
-    <achievement10>
-        <property>
-            <concernedVariable>extinguishedFireCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>50</activationValue>
-        </property>
-    </achievement10>
-
-    <achievement11>
-        <property>
-            <concernedVariable>militaryCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>10</activationValue>
-        </property>
-    </achievement11>
-    <achievement12>
-        <property>
-            <concernedVariable>militaryCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>50</activationValue>
-        </property>
-    </achievement12>
-    <achievement13>
-        <property>
-            <concernedVariable>militaryCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>100</activationValue>
-        </property>
-    </achievement13>
-
-    <achievement14>
-        <property>
-            <concernedVariable>scientistCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>10</activationValue>
-        </property>
-    </achievement14>
-    <achievement15>
-        <property>
-            <concernedVariable>scientistCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>50</activationValue>
-        </property>
-    </achievement15>
-    <achievement16>
-        <property>
-            <concernedVariable>scientistCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>100</activationValue>
-        </property>
-    </achievement16>
-
-    <achievement17>
-        <property>
-            <concernedVariable>workerCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>10</activationValue>
-        </property>
-    </achievement17>
-    <achievement18>
-        <property>
-            <concernedVariable>workerCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>50</activationValue>
-        </property>
-    </achievement18>
-    <achievement19>
-        <property>
-            <concernedVariable>workerCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>100</activationValue>
-        </property>
-    </achievement19>
-
-    <achievement20>
-        <property>
-            <concernedVariable>richieCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>10</activationValue>
-        </property>
-    </achievement20>
-    <achievement21>
-        <property>
-            <concernedVariable>richieCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>50</activationValue>
-        </property>
-    </achievement21>
-    <achievement22>
-        <property>
-            <concernedVariable>richieCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>100</activationValue>
-        </property>
-    </achievement22>
-
-    <achievement23>
-        <property>
-            <concernedVariable>artistCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>10</activationValue>
-        </property>
-    </achievement23>
-    <achievement24>
-        <property>
-            <concernedVariable>artistCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>50</activationValue>
-        </property>
-    </achievement24>
-    <achievement25>
-        <property>
-            <concernedVariable>artistCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>100</activationValue>
-        </property>
-    </achievement25>
-
-    <achievement28>
-        <property>
-            <concernedVariable>militaryMood</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>100</activationValue>
-        </property>
-    </achievement28>
-    <achievement29>
-        <property>
-            <concernedVariable>workerMood</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>100</activationValue>
-        </property>
-    </achievement29>
-    <achievement30>
-        <property>
-            <concernedVariable>richieMood</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>100</activationValue>
-        </property>
-    </achievement30>
-    <achievement31>
-        <property>
-            <concernedVariable>scientistMood</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>100</activationValue>
-        </property>
-    </achievement31>
-    <achievement32>
-        <property>
-            <concernedVariable>artistMood</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>100</activationValue>
-        </property>
-    </achievement32>
-
-    <achievement39>
-        <property>
-            <concernedVariable>bridgeCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>5</activationValue>
-        </property>
-    </achievement39>
-    <achievement40>
-        <property>
-            <concernedVariable>bridgeCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>10</activationValue>
-        </property>
-    </achievement40>
-    <achievement41>
-        <property>
-            <concernedVariable>bridgeCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>50</activationValue>
-        </property>
-    </achievement41>
-    <achievement42>
-        <property>
-            <concernedVariable>bridgeCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>100</activationValue>
-        </property>
-    </achievement42>
-
-    <achievement44>
-        <property>
-            <concernedVariable>fireCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>1</activationValue>
-        </property>
-    </achievement44>
-
-    <achievement45>
-        <property>
-            <concernedVariable>stoppedRiotCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>1</activationValue>
-        </property>
-    </achievement45>
-    <achievement46>
-        <property>
-            <concernedVariable>stoppedRiotCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>5</activationValue>
-        </property>
-    </achievement46>
-    <achievement47>
-        <property>
-            <concernedVariable>stoppedRiotCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>10</activationValue>
-        </property>
-    </achievement47>
-    <achievement48>
-        <property>
-            <concernedVariable>stoppedRiotCount</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>50</activationValue>
-        </property>
-    </achievement48>
-
-    <achievement49>
-        <property>
-            <concernedVariable>cyclePassed</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>10</activationValue>
-        </property>
-    </achievement49>
-    <achievement50>
-        <property>
-            <concernedVariable>cyclePassed</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>20</activationValue>
-        </property>
-    </achievement50>
-    <achievement51>
-        <property>
-            <concernedVariable>cyclePassed</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>50</activationValue>
-        </property>
-    </achievement51>
-    <achievement52>
-        <property>
-            <concernedVariable>cyclePassed</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>100</activationValue>
-        </property>
-    </achievement52>
-    <achievement53>
-        <property>
-            <concernedVariable>cyclePassed</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>150</activationValue>
-        </property>
-    </achievement53>
-    <achievement54>
-        <property>
-            <concernedVariable>cyclePassed</concernedVariable>
-            <rule>GREATER_OR_EQUAL_THAN</rule>
-            <activationValue>200</activationValue>
-        </property>
-    </achievement54>
-
+	<!-- Riot stats -->
+    <achievement id="45">
+		<script>
+			$STOPPED_RIOTS_COUNT GREATER_OR_EQUAL_THAN 1
+		</script>
+	</achievement>
+    <achievement id="46">
+		<script>
+			$STOPPED_RIOTS_COUNT GREATER_OR_EQUAL_THAN 5
+		</script>
+	</achievement>
+    <achievement id="47">
+		<script>
+			$STOPPED_RIOTS_COUNT GREATER_OR_EQUAL_THAN 10
+		</script>
+	</achievement>
+    <achievement id="48">
+		<script>
+			$STOPPED_RIOTS_COUNT GREATER_OR_EQUAL_THAN 50
+		</script>
+	</achievement>
+	
+	<!-- Cycles played -->
+    <achievement id="49">
+		<script>
+			$CURRENT_CYCLE GREATER_OR_EQUAL_THAN 10
+		</script>
+	</achievement>
+    <achievement id="50">
+		<script>
+			$CURRENT_CYCLE GREATER_OR_EQUAL_THAN 20
+		</script>
+	</achievement>
+    <achievement id="51">
+		<script>
+			$CURRENT_CYCLE GREATER_OR_EQUAL_THAN 50
+		</script>
+	</achievement>
+    <achievement id="52">
+		<script>
+			$CURRENT_CYCLE GREATER_OR_EQUAL_THAN 100
+		</script>
+	</achievement>
+    <achievement id="53">
+		<script>
+			$CURRENT_CYCLE GREATER_OR_EQUAL_THAN 150
+		</script>
+	</achievement>
+    <achievement id="54">
+		<script>
+			$CURRENT_CYCLE GREATER_OR_EQUAL_THAN 200
+		</script>
+	</achievement>
 </achievements>
-

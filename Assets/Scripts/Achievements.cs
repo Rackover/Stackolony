@@ -4,7 +4,16 @@ using UnityEngine;
 
 public class Achievements
 {
-	public class Property
+    public Achievements(System.Action<int> evnt)
+    {
+        AchievementUnlocked = evnt;
+    }
+
+    System.Action<int> AchievementUnlocked;
+    ScriptInterpreter scriptInterpreter = new ScriptInterpreter();
+    List<Achievement> achievements = new List<Achievement>();
+
+    public class Property
 	{
 		public string concernedVariable;	// The property name
 		public int currentValue;			// The current counter value
@@ -17,85 +26,80 @@ public class Achievements
 			rule = _rule;
 			activationValue = _activationValue;
 		}
-
-		public bool IsActive()
-		{
-			switch(rule)
-			{
-				case "GREATER_THAN": return currentValue > activationValue;
-				case "GREATER_OR_EQUAL_THAN": return currentValue >= activationValue;
-				case "LESS_THAN": return currentValue < activationValue;
-				case "LESS_OR_EQUAL_THAN": return currentValue <= activationValue;
-				case "EQUAL": return currentValue == activationValue;
-				default: return false;
-			}
-		}
 	}
 
 	public class Achievement
 	{
 		public int id;				// The id of the achievement
-		public int propertyID;		// Propertie names used to reference in the property dictionary
 		public bool unlocked;		// If the achievement is unlocked or not
 
-		public Achievement(int ID, int _propertyID)
+        string script = string.Empty;
+        ScriptInterpreter interpreter;
+
+
+        public Achievement(int _id, string _condition, ScriptInterpreter _interpreter)
 		{
-			id = ID;
-			propertyID = _propertyID;
-			unlocked = false;
-		}
+			id = _id;
+            unlocked = false;
+            interpreter = _interpreter;
+
+            script = "[" + _condition + "{UNLOCK_ACHIEVEMENT(id:" + id + ");}ELSE{}];";
+        }
+        
+        // Returns true if this precise check triggered an unlock
+        public bool Check()
+        {
+            if (unlocked) {
+                return false;
+            }
+            
+            ScriptInterpreter.Execute(
+                interpreter.MakeGameEffects(script)
+            );
+
+            // Logging
+            if (unlocked) {
+                string achievementName = GameManager.instance.localization.GetLineFromCategory("achievementName", "achievement" + id);
+                Logger.Info("Achievement_" + id + " : " + achievementName + " unlocked !");
+
+                GameManager.instance.achievementManager.unlockedAchievements.Add(id); // Add the achievement ID to the player save
+                // g_SteamAchievements->SetAchievement(entry.value.name); // Trigger steam achievement	
+
+                return true;
+            }
+
+            return false;
+        }
 	}
+    		
+    public IEnumerator CheckAllAchievements()
+    {
+        foreach(Achievement achievement in achievements) {
+            if (achievement.unlocked) continue;
+            if (achievement.Check()) AchievementUnlocked.Invoke(achievement.id);
+            yield return null;
+        }
+        yield return true;
+    }
 
-	public List<Property> properties = new List<Property>();
-	public List<Achievement> achievements = new List<Achievement>();
-
-	public void Check()
+	// Define a new Achievement
+	public void DefineAchievement(int id, string conditionScript)
 	{
-		foreach(Achievement achievement in achievements)
-		{
-			if(!achievement.unlocked && properties[achievement.propertyID].IsActive())
-			{
-				achievement.unlocked = true;
-
-				string achievementName = GameManager.instance.localization.GetLineFromCategory("achievementName", "achievement" + achievement.id);
-
-				Logger.Debug("Achievement_" + achievement.id + " : " + achievementName + " unlocked !");
-				GameManager.instance.achievementManager.unlockedAchievements.Add(achievement.id); // Add the achievement ID to the player save
-				// g_SteamAchievements->SetAchievement(entry.value.name); // Trigger steam achievement	
-			}
-		}
+		achievements.Add(new Achievement(id, conditionScript, scriptInterpreter));
 	}
 
-	// Define a new Property and returned its ID to the achievement
-	public int DefineProperty(string variableName, string rule, int activationValue)
-	{
-		properties.Add(new Property(variableName, rule, activationValue));
-		return properties.Count - 1;
-	}
+    public void ClearAchievements()
+    {
+        achievements.Clear();
+    }
 
-	// Define a new Achievement checker (Dont if the player has already got it)
-	public void DefineAchievement(int id, int property)
-	{
-		achievements.Add(new Achievement(id, property));
-	}
-
-	// Add to the currentValue of all Properties concerned by this variable
-	public void AddToValue(string variable, int value = 1)
-	{
-		foreach(Property p in properties)
-		{
-			if(p.concernedVariable == variable) p.currentValue += value;
-		}
-		Check();
-	}
-
-	// Set the currentValue of all Properties concerned by this variable
-	public void SetValue(string variable, int value)
-	{
-		foreach(Property p in properties)
-		{
-			if(p.concernedVariable == variable) p.currentValue = value;
-		}
-		Check();
-	}
+    public void UnlockAchievement(int id)
+    {
+        foreach(Achievement achievement in achievements) {
+            if (achievement.id == id) {
+                achievement.unlocked = true;
+                return;
+            }
+        }
+    }
 }

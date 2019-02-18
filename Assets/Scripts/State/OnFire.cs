@@ -44,9 +44,8 @@ public class OnFire : StateBehavior
         {
             Spread();
         }
-        else 
-        {
-            GameManager.instance.achievementManager.achiever.AddToValue("extinguishedFireCount");
+        else {
+            GameManager.instance.achievementManager.stats.stoppedFires++;
             block.Enable();
             Remove();
         }

@@ -79,6 +79,7 @@ public class ScriptInterpreter
     public ScriptInterpreter()
     {
         LoadActionFunctions();
+        LoadDataFunctions();
     }
 
     ////////////////////////////////////////////////
@@ -114,7 +115,14 @@ public class ScriptInterpreter
         return code.Replace(" ", "").Replace("\n", "").Replace("\r", "").Replace("	", "");
     }
 
-    List<EventManager.GameEffect> MakeGameEffects(string eventScript)
+    public static void Execute(List<EventManager.GameEffect> fxs)
+    {
+        foreach (EventManager.GameEffect effect in fxs) {
+            effect.GetAction().Invoke();
+        }
+    }
+
+    public List<EventManager.GameEffect> MakeGameEffects(string eventScript)
     {
         Dictionary<string, Object> context = new Dictionary<string, Object>();
         List<EventManager.GameEffect> effects = InterpretBlock(SanitizeCode(eventScript), context, lineSeparator);
@@ -278,34 +286,8 @@ public class ScriptInterpreter
             new EventManager.GameEffect(
                 // INSIDE EXEC
                 delegate {
-                    string oprtr = string.Empty;
-                    foreach(string possibleOperator in comparisons.Keys) {
-                        if (explodedStatement[0].Contains(possibleOperator)) {
-                            oprtr = possibleOperator;
-                            break;
-                        }
-                    }
-                    if (oprtr.Length <= 0) {
-                        Throw("Unknown operator :\n" + explodedStatement[0]);
-                    }
-                    
-                    string[] datas = explodedStatement[0].Split(new string[] { oprtr }, System.StringSplitOptions.RemoveEmptyEntries);
-
-                    int[] unpackedDatas = new int[2];
-
-                    // Interpreting functions
-                    for (int i = 0; i < datas.Length; i++) {
-                        if (datas[i][0] == '$' && Environment.variables.ContainsKey(datas[i].Remove(0, 1))) {
-                            unpackedDatas[i] = System.Convert.ToInt32(Environment.variables[datas[i]].Invoke());
-                        }
-                        else if (dataFunctions.ContainsKey(datas[i])) {
-                            unpackedDatas[i] = ((ObjectInteger)ExecuteDataFunctionFromString(datas[i], context)).ToInt();
-                        }
-                        else {
-                            unpackedDatas[i] = System.Convert.ToInt32(datas[i]);
-                        }
-                    }
-
+                    string oprtr = GetOperator(explodedStatement[0]);
+                    int[] unpackedDatas = UnpackDatas(explodedStatement[0], oprtr, context);
                     string comparatedStatement = explodedStatement[1];
                     string elseStatement = explodedStatement[3];
                                   
@@ -320,6 +302,47 @@ public class ScriptInterpreter
             )
         );
         return blockEffects;
+    }
+
+    string GetOperator(string comparison)
+    {
+        string oprtr = string.Empty;
+        foreach (string possibleOperator in comparisons.Keys) {
+            if (comparison.Contains(possibleOperator.ToUpper())) {
+                oprtr = possibleOperator;
+                break;
+            }
+        }
+        if (oprtr.Length <= 0) {
+            Throw("Unknown operator :\n" + comparison);
+        }
+        return oprtr;
+    }
+
+    static string GetFunctionName(string functionCall)
+    {
+        return functionCall.Split('(')[0];
+    }
+
+    int[] UnpackDatas(string datas, string oprtr, Dictionary<string, Object> context)
+    {
+        string[] explodedDatas = datas.Split(new string[] { oprtr }, System.StringSplitOptions.RemoveEmptyEntries);
+        int[] unpackedDatas = new int[2];
+
+        // Interpreting functions
+        for (int i = 0; i < explodedDatas.Length; i++) {
+            if (explodedDatas[i][0] == '$') {
+                unpackedDatas[i] = System.Convert.ToInt32(Environment.GetVariable(explodedDatas[i].Remove(0, 1)));
+            }
+            else if (dataFunctions.ContainsKey(GetFunctionName(explodedDatas[i]))) {
+                unpackedDatas[i] = ((ObjectInteger)ExecuteDataFunctionFromString(explodedDatas[i], context)).ToInt();
+            }
+            else {
+                unpackedDatas[i] = System.Convert.ToInt32(explodedDatas[i]);
+            }
+        }
+
+        return unpackedDatas;
     }
 
     List<EventManager.GameEffect> InterpretChanceStructure(string[] explodedStatement, Dictionary<string, Object> context)
@@ -866,6 +889,12 @@ public class ScriptInterpreter
                 Debug.Log("[SCRIPT ECHO] "+args);
             }
         );
+        actionFunctions.Add(
+            "UNLOCK_ACHIEVEMENT", (args, context) => {
+                int achievementId = System.Convert.ToInt32(GetArgument(args, "id"));
+                GameManager.instance.achievementManager.achiever.UnlockAchievement(achievementId);
+            }
+        );
     }
 
     /// <summary>
@@ -884,6 +913,26 @@ public class ScriptInterpreter
                 }
                 return block;
             }
+        );
+        dataFunctions.Add(
+            "BUILDING_COUNT", (args, ctx) => {
+                int id = System.Convert.ToInt32(GetArgument(args, "id"));
+                int count = GameManager.instance.systemManager.AllBlocks.FindAll(o => o.scheme.ID == id).Count;
+                return new ObjectInteger(count);
+            }
+        );
+        dataFunctions.Add(
+             "MOOD", (args, ctx) => {
+                 Population pop = GameManager.instance.populationManager.GetPopulationByCodename(GetArgument(args, "population"));
+                 if (pop == null) {
+                     List<string> pops = new List<string>();
+                     foreach (Population existingPop in GameManager.instance.populationManager.populationTypeList) {
+                         pops.Add(existingPop.codeName);
+                     }
+                     Throw("Invalid population name :\n " + args + "\nPick one from the following : " + string.Join(", ", pops.ToArray()));
+                 }
+                 return new ObjectInteger(Mathf.RoundToInt(GameManager.instance.populationManager.GetAverageMood(pop)));
+             }
         );
         dataFunctions.Add(
              "CITIZEN_COUNT", (args, ctx) => {

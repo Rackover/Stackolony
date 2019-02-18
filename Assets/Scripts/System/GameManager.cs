@@ -421,7 +421,8 @@ public class GameManager : MonoBehaviour
         // Clear events
         eventManager.ClearListeners();
         cursorManagement.ClearListeners();
-       
+        achievementManager.ClearListeners();
+
         // Clear system
         systemManager.ClearSystem();
 

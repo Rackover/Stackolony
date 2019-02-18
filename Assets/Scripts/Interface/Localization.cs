@@ -59,12 +59,7 @@ public class Localization : MonoBehaviour {
     private void Start()
     {
         LoadLocalizationFiles(Paths.GetLocFolder());
-
-        // Setting up name interpreter
-        interpretations["$PLAYERNAME"] = delegate { return GameManager.instance.player.playerName; };
-        interpretations["$CITYNAME"] = delegate { return GameManager.instance.cityManager.cityName; };
-        interpretations["$CURRENT_CYCLE"] = delegate { return GameManager.instance.temporality.cycleNumber.ToString(); };
-
+        
         // Init
         LoadLocalization(0);
         Logger.Info("Loaded localization file succesfully");
