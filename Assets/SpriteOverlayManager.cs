@@ -1,4 +1,4 @@
-﻿
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,7 +21,7 @@ public class SpriteOverlayManager : MonoBehaviour
 		public int id;
 		public Image image;
 		public RectTransform self;
-		public bool available;
+		public bool available = true;
 	}
 	
 	List<Sign> signs = new List<Sign>();
@@ -40,6 +40,12 @@ public class SpriteOverlayManager : MonoBehaviour
 		{
 			UpdateSign(signIds[i], targets[i].position);
 		}
+	}
+
+	public void HideSign(int id)
+	{
+		signs[id].image.sprite = null;
+		signs[id].available = true;
 	}
 
 	public void UpdateSign(int id, Vector3 pos)
@@ -70,6 +76,7 @@ public class SpriteOverlayManager : MonoBehaviour
 		float size = GetSize(pos);
 		sign.self.sizeDelta = new Vector2(size, size);
 
+		sign.available = false;
 		return sign.id;
 	}
 

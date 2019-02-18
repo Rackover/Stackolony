@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33489511281468400}
   - component: {fileID: 23379089259391320}
   m_Layer: 0
-  m_Name: Gyro_Fireman
+  m_Name: Gyro_Police
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -118,7 +118,7 @@ MeshRenderer:
   m_RenderingLayerMask: 4294967295
   m_Materials:
   - {fileID: 2100000, guid: 55cafd0541692c348a86a5722b4b7179, type: 2}
-  - {fileID: 2100000, guid: 33013152beb60554daefd0714b7d241a, type: 2}
+  - {fileID: 2100000, guid: ef1a43284bed3864aa915b45212bba07, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
