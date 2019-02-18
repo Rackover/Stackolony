@@ -33,6 +33,7 @@ public class SystemManager : MonoBehaviour {
      *      - House information
      *      - Job distribution
      *      - Mood
+     *      - Achievements
     */
 
     
@@ -127,6 +128,7 @@ public class SystemManager : MonoBehaviour {
         yield return StartCoroutine(UpdateHousesInformations());
         yield return StartCoroutine(RecalculateJobs());
         yield return StartCoroutine(OnGridUpdate());
+        yield return StartCoroutine(GameManager.instance.achievementManager.achiever.CheckAllAchievements());
     }
 
     //S'execute à chaques fois qu'un bloc est déplacé dans la grille
