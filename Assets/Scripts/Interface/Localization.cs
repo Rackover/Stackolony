@@ -11,8 +11,7 @@ public class Localization : MonoBehaviour {
     Lang currentLang;
     string currentCategory;
     Dictionary<KeyValuePair<string, string>, string> locs = new Dictionary<KeyValuePair<string, string>, string>();
-    Dictionary<string, InterpretedName> interpretations = new Dictionary<string, InterpretedName>();
-
+    string[] varNames;
 
     public class Lang {
 
@@ -59,7 +58,8 @@ public class Localization : MonoBehaviour {
     private void Start()
     {
         LoadLocalizationFiles(Paths.GetLocFolder());
-        
+        varNames = Environment.GetVarNames();
+
         // Init
         LoadLocalization(0);
         Logger.Info("Loaded localization file succesfully");
@@ -159,8 +159,8 @@ public class Localization : MonoBehaviour {
 
     string Interpret(string line)
     {
-        foreach(KeyValuePair<string, InterpretedName> interpretation in interpretations) {
-            line = line.Replace(interpretation.Key, interpretation.Value());
+        foreach(string word in varNames) {
+            line = line.Replace("$"+ word, Environment.GetVariable(word));
         }
         return line;
     }

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 public class Environment
 {
@@ -59,5 +60,10 @@ public class Environment
             Logger.Error(msg);
             return "";
         }
+    }
+
+    public static string[] GetVarNames()
+    {
+        return variables.Keys.ToArray();
     }
 }
