@@ -142,7 +142,7 @@ public class MoodDisplay : MonoBehaviour {
 
 
         changeMood(currentMood);
-        moodString = loc.GetLineFromCategory("stats", currentMood.ToString().ToLower());
+        moodString = loc.GetLineFromCategory("mood", currentMood.ToString().ToLower());
     }
 
     void UpdateTexts()
