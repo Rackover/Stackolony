@@ -27,9 +27,13 @@ public class BuildingMenusDisplay : MonoBehaviour {
         float factor = canvas.scaleFactor;
         float offset = 0;
         foreach (KeyValuePair<CityManager.BuildingType, List<BlockScheme>> menu in categories) {
+            // Create game object
             GameObject mO = Instantiate(menuExample, transform);
+
+            // Assignate type icon
             mO.GetComponentInChildren<Button>().gameObject.GetComponentsInChildren<Image>()[1].sprite = GameManager.instance.library.buildingsIcons[(int)menu.Key];
 
+            // Menu rectangle and xample transform
             RectTransform mRt = mO.GetComponent<RectTransform>();
             RectTransform xRt = menuExample.GetComponent<RectTransform>();
             mRt.position = new Vector3(
@@ -38,23 +42,26 @@ public class BuildingMenusDisplay : MonoBehaviour {
                 xRt.position.z
             );
 
+            // Add localized line to build tooltip
             mO.GetComponent<BuildingMenuDisplay>().button.GetComponent<Tooltip>().AddLocalizedLine(
                 new Localization.Line("hud", "build"+menu.Key.ToString())    
             );
 
+            // Destroying examples from the fitter
             GameObject content = mO.GetComponentInChildren<ContentSizeFitter>().gameObject;
-
             for (int i = 0; i < content.transform.childCount; i++) {
                 Destroy(content.transform.GetChild(i).gameObject);
             }
 
-            foreach (BlockScheme block in menu.Value) {
+            // Creating each building menu item
+            foreach (BlockScheme scheme in menu.Value) {
+
                 GameObject item = Instantiate(itemExample, content.transform).transform.GetChild(0).gameObject;
-                item.name = block.ID.ToString();
-                item.GetComponent<BuildingMenuItem>().blockId = block.ID;
+                item.name = scheme.ID.ToString();
+                item.GetComponent<BuildingMenuItem>().blockId = scheme.ID;
 
                 Tooltip tt = item.GetComponent<Tooltip>();
-                List<Tooltip.TooltipLocalizationEntry> entries = Tooltip.GetBuildingTooltip(block);
+                List<Tooltip.TooltipLocalizationEntry> entries = Tooltip.GetBuildingTooltip(scheme);
                 foreach (Tooltip.TooltipLocalizationEntry entry in entries) {
                     tt.AddLocalizedLine(entry);
                 }
