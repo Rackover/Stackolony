@@ -153,9 +153,9 @@ public class PopulationManager : MonoBehaviour
         // Loading names from file
         List<string> newNames;
         try {
-            newNames = new List<string>(File.ReadAllLines(Paths.GetNamesFile()));
+            newNames = new List<string>(File.ReadAllLines(Paths.GetNamesFile())) ;
         }
-        catch (FileNotFoundException e) {
+        catch (FileNotFoundException) {
             Logger.Error("Could not find name file - this should not happen. Defaulting to 'Citizen' name.");
             return;
         }

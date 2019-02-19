@@ -81,8 +81,8 @@ public class BuildingMenusDisplay : MonoBehaviour {
     IEnumerator AddTooltipsWhenPossible(Tooltip tt, BlockScheme scheme)
     {
         yield return new WaitUntil(delegate { return GameManager.instance.localization.GetLanguages().Count > 0; });
-        List<Tooltip.TooltipLocalizationEntry> entries = Tooltip.GetBuildingTooltip(scheme);
-        foreach (Tooltip.TooltipLocalizationEntry entry in entries) {
+        List<Tooltip.Entry> entries = Tooltip.GetBuildingTooltip(scheme);
+        foreach (Tooltip.Entry entry in entries) {
             tt.AddLocalizedLine(entry);
         }
         yield return true;

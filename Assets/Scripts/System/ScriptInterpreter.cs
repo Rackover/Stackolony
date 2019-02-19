@@ -9,11 +9,6 @@ public class ScriptInterpreter
 {
 
     public char lineSeparator = ';';
-    List<string> argumentsDisplayOrder = new List<string> {
-        "population",
-        "duration",
-        "amount"
-    };
     public List<char> skippers = new List<char>() { '_' };
 
     public class InterpreterException : System.Exception
@@ -30,6 +25,67 @@ public class ScriptInterpreter
         public InterpreterException(string message, System.Exception inner)
             : base(message, inner)
         {
+        }
+    }
+
+    public class FormattedComparison
+    {
+        public IFormattedComparisonElement lefthandData;
+        public IFormattedComparisonElement righthandData;
+        public string oprtr;
+    }
+
+    public interface IFormattedComparisonElement
+    {
+        string Get();
+        string GetLocalization(Localization localizer);
+    }
+
+    public class FormattedDataFunction : IFormattedComparisonElement
+    {
+        public string functionName;
+        public string[] parameters = new string[] {};
+
+        public string Get()
+        {
+            return functionName;
+        }
+
+        public string GetLocalization(Localization loc)
+        {
+            return loc.GetLineFromCategory("scriptAction", functionName,
+                FormatArguments(parameters, loc)
+            );
+        }
+    }
+
+    public class FormattedEnvironmentVar : IFormattedComparisonElement
+    {
+        public string varName;
+
+        public string Get()
+        {
+            return varName;
+        }
+
+        public string GetLocalization(Localization loc)
+        {
+            return loc.GetLineFromCategory("scriptAction", varName);
+        }
+    }
+
+    public class FormattedInt : IFormattedComparisonElement
+    {
+        public int value;
+
+        public string Get()
+        {
+            return value.ToString();
+        }
+
+        public string GetLocalization(Localization loc)
+        {
+            return Get();
         }
     }
 
@@ -281,6 +337,7 @@ public class ScriptInterpreter
 
     public bool InterpretComparison(string script)
     {
+        script = SanitizeCode(script);
         Dictionary<string, Object> context = new Dictionary<string, Object>();
         string oprtr = GetOperator(script);
         int[] unpackedDatas = UnpackDatas(script, oprtr, context);
@@ -288,19 +345,34 @@ public class ScriptInterpreter
         return comparisons[oprtr].Invoke(unpackedDatas[0], unpackedDatas[1]);
     }
 
-    public string[] FormatComparison(string script)
+    public FormattedComparison FormatComparison(string script)
     {
+        script = SanitizeCode(script);
         Dictionary<string, Object> context = new Dictionary<string, Object>();
         string oprtr = GetOperator(script);
         string[] explodedDatas = script.Split(new string[] { oprtr }, System.StringSplitOptions.RemoveEmptyEntries);
-        string[] unpackedDatas = new string[2];
+        IFormattedComparisonElement[] unpackedDatas = new IFormattedComparisonElement[2];
 
         // Interpreting functions
         for (int i = 0; i < explodedDatas.Length; i++) {
-            unpackedDatas[i] = GetFunctionName(explodedDatas[i]).Replace("$", "");
+            //Env
+            if(explodedDatas[i][0] == '$') {
+                unpackedDatas[i] = new FormattedEnvironmentVar { varName = explodedDatas[i].Replace("$", "") };
+            }
+            // Function
+            else if (dataFunctions.ContainsKey(GetFunctionName(explodedDatas[i]))){
+                unpackedDatas[i] = new FormattedDataFunction {
+                    functionName = GetFunctionName(explodedDatas[i]),
+                    parameters = ExplodeFunction(explodedDatas[i])[1].Split(',')
+                };
+            }
+            // Number
+            else{
+                unpackedDatas[i] = new FormattedInt { value = System.Convert.ToInt32(explodedDatas[i]) };
+            }
         }
 
-        return new string[3] { unpackedDatas[0], oprtr, unpackedDatas[1] };
+        return new FormattedComparison(){lefthandData=unpackedDatas[0], oprtr=oprtr, righthandData=unpackedDatas[1]};
 
     }
 
@@ -544,28 +616,40 @@ public class ScriptInterpreter
 
     }
 
-    Tooltip.tooltipType GetDataFunctionPreviewColor(string functionName)
+    Tooltip.informationType GetDataFunctionPreviewColor(string functionName)
     {
         switch (functionName) {
             default:
-                return Tooltip.tooltipType.Neutral;
+                return Tooltip.informationType.Neutral;
 
             case "INCREASE_ENERGY_CONSUMPTION_FOR_BUILDING":
             case "INCREASE_FOOD_CONSUMPTION_FOR_POPULATION":
             case "DECREASE_MOOD_FOR_POPULATION":
             case "DESTROY_BUILDING":
-                return Tooltip.tooltipType.Negative;
+                return Tooltip.informationType.Negative;
 
             case "INCREASE_MOOD_FOR_POPULATION":
             case "DECREASE_FOOD_CONSUMPTION_FOR_POPULATION":
             case "INCREASE_HOUSE_NOTATION":
-                return Tooltip.tooltipType.Positive;
+                return Tooltip.informationType.Positive;
         }
     }
 
-    string[] FormatArguments(string[] arguments)
+    public string[] FormatArguments(string[] arguments)
     {
-        Localization loc = GameManager.instance.localization;
+        return FormatArguments(arguments, GameManager.instance.localization);
+    }
+
+    public static string[] FormatArguments(string[] arguments, Localization loc)
+    {
+
+        List<string> argumentsDisplayOrder = new List<string> {
+            "population",
+            "duration",
+            "amount",
+            "scheme_id"
+        };
+        
         Dictionary<string, string> correspondance = new Dictionary<string, string>();
 
         foreach (string paramName in argumentsDisplayOrder) {
@@ -585,6 +669,7 @@ public class ScriptInterpreter
                 case "population": convertedArg = loc.GetLineFromCategory("populationType", paramValue); break;
                 case "amount": convertedArg = System.Convert.ToSingle(paramValue).ToString("+0;-#"); break;
                 case "duration": convertedArg = System.Convert.ToSingle(paramValue).ToString("+0;-#"); break;
+                case "scheme_id": convertedArg = loc.GetLineFromCategory("blockName", "block"+paramValue); break;
                 default: skip = true; break;
             }
 
@@ -941,7 +1026,7 @@ public class ScriptInterpreter
         );
         dataFunctions.Add(
             "BUILDING_COUNT", (args, ctx) => {
-                int id = System.Convert.ToInt32(GetArgument(args, "id"));
+                int id = System.Convert.ToInt32(GetArgument(args, "scheme_id"));
                 int count = GameManager.instance.systemManager.AllBlocks.FindAll(o => o.scheme.ID == id).Count;
                 return new ObjectInteger(count);
             }

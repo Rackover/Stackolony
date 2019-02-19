@@ -40,7 +40,7 @@ public class Localization : MonoBehaviour {
         public string[] values { get; }
 
 
-        public Line(Tooltip.TooltipLocalizationEntry tt, params string[] vs)
+        public Line(Tooltip.Entry tt, params string[] vs)
         {
             category = tt.category;
             id = tt.id;
@@ -80,7 +80,7 @@ public class Localization : MonoBehaviour {
         try {
             lang = languages[index];
         }
-        catch (KeyNotFoundException e) {
+        catch (KeyNotFoundException) {
             Logger.Throw("Could not find localization #" + index + " in the languages list. Aborting.");
             return;
         }
@@ -147,11 +147,11 @@ public class Localization : MonoBehaviour {
             string line = string.Format(locs[new KeyValuePair<string, string>(currentCategory, id)], values);
             return Interpret(line);
         }
-        catch(KeyNotFoundException e) {
+        catch(KeyNotFoundException) {
             Logger.Error("Could not load line "+ currentCategory+":"+ id);
             return "[LOC:" + currentCategory + ":" + id+"]";
         }
-        catch(FormatException fe)
+        catch(FormatException)
         {
             Logger.Error("Line : " + id + " in " + currentCategory + " category has too much parameters : "+string.Join(",",values));
             return "[LOC:" + currentCategory + ":" + id+"] TOO MUCH PARAMS";

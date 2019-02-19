@@ -103,7 +103,7 @@ public class EventDisplay : MonoBehaviour {
                     continue;
                 }
                 tt.AddLocalizedLine(
-                    new Tooltip.TooltipLocalizationEntry(
+                    new Tooltip.Entry(
                         action.intention, 
                         "scriptAction",
                         action.ttColor, 

@@ -53,8 +53,8 @@ public class Block : MonoBehaviour
         // Tooltip generation
         Tooltip tt = GetComponent<Tooltip>();
         tt.ClearLines();
-        List<Tooltip.TooltipLocalizationEntry> entries = Tooltip.GetBuildingTooltip(this);
-        foreach (Tooltip.TooltipLocalizationEntry entry in entries) {
+        List<Tooltip.Entry> entries = Tooltip.GetBuildingTooltip(this);
+        foreach (Tooltip.Entry entry in entries) {
             tt.AddLocalizedLine(entry);
         }
     }

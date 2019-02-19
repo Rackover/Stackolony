@@ -49,7 +49,7 @@ public class EventManager : MonoBehaviour {
 
     public class GameEffect
     {
-        public Tooltip.tooltipType ttColor = Tooltip.tooltipType.Neutral;
+        public Tooltip.informationType ttColor = Tooltip.informationType.Neutral;
         public string intention = "";
         public string[] parameters = new string[] { };
         System.Action action;

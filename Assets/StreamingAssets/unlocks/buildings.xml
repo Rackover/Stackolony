@@ -3,5 +3,7 @@
 	<building id="1">
 		<condition>$TOTAL_CITIZEN_COUNT GREATER_THAN 30</condition>
 		<condition>$STOPPED_FIRES_COUNT GREATER_THAN 25</condition>
+		<condition>CITIZEN_COUNT(population:richie) GREATER_THAN 25</condition>
+		<condition>BUILDING_COUNT(scheme_id:15) GREATER_THAN 25</condition>
 	</building>
 </unlocks>

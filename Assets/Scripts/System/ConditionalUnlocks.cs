@@ -38,10 +38,10 @@ public class ConditionalUnlocks {
         return true;
     }
 
-    public List<string[]> GetFormattedUnlockConditions(int buildingId)
+    public List<ScriptInterpreter.FormattedComparison> GetFormattedUnlockConditions(int buildingId)
     {
         Unlock buildingUnlock = GetUnlock(buildingId);
-        List<string[]> conditions = new List<string[]>();
+        List<ScriptInterpreter.FormattedComparison> conditions = new List<ScriptInterpreter.FormattedComparison>();
 
         // No specific unlock conditions
         if (buildingUnlock == null) {
