@@ -196,7 +196,7 @@ public class ScriptInterpreter
     }
 
     // Checks syntax is correct on statement
-    bool CheckSyntax(string statement)
+    public static bool CheckSyntax(string statement)
     {
         return
             CheckDelimiterCount(statement, '(', ')') &&
@@ -206,7 +206,7 @@ public class ScriptInterpreter
     }
 
     // Checks there is as much ) than there is (
-    bool CheckDelimiterCount(string statement, char blockOpener, char blockCloser)
+    static bool CheckDelimiterCount(string statement, char blockOpener, char blockCloser)
     {
         return statement.Count(f => f == blockOpener) == statement.Count(f => f == blockCloser);
     }
@@ -277,6 +277,31 @@ public class ScriptInterpreter
         }
 
         return blockEffects;
+    }
+
+    public bool InterpretComparison(string script)
+    {
+        Dictionary<string, Object> context = new Dictionary<string, Object>();
+        string oprtr = GetOperator(script);
+        int[] unpackedDatas = UnpackDatas(script, oprtr, context);
+
+        return comparisons[oprtr].Invoke(unpackedDatas[0], unpackedDatas[1]);
+    }
+
+    public string[] FormatComparison(string script)
+    {
+        Dictionary<string, Object> context = new Dictionary<string, Object>();
+        string oprtr = GetOperator(script);
+        string[] explodedDatas = script.Split(new string[] { oprtr }, System.StringSplitOptions.RemoveEmptyEntries);
+        string[] unpackedDatas = new string[2];
+
+        // Interpreting functions
+        for (int i = 0; i < explodedDatas.Length; i++) {
+            unpackedDatas[i] = GetFunctionName(explodedDatas[i]).Replace("$", "");
+        }
+
+        return new string[3] { unpackedDatas[0], oprtr, unpackedDatas[1] };
+
     }
 
     List<EventManager.GameEffect> InterpretComparison(string[] explodedStatement, Dictionary<string, Object> context)

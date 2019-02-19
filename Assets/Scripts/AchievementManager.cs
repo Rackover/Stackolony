@@ -54,7 +54,7 @@ public class AchievementManager : MonoBehaviour
 
             string script;
             try {
-                script = xAchievement["script"].InnerText;
+                script = xAchievement["condition"].InnerText;
             }
             catch {
                 Logger.Error("Could not load script-less event " + id);

@@ -9,7 +9,8 @@ public class Achievements
         AchievementUnlocked = evnt;
     }
 
-    System.Action<int> AchievementUnlocked;
+    public System.Action<int> AchievementUnlocked;
+
     ScriptInterpreter scriptInterpreter = new ScriptInterpreter();
     List<Achievement> achievements = new List<Achievement>();
 
@@ -76,7 +77,11 @@ public class Achievements
     {
         foreach(Achievement achievement in achievements) {
             if (achievement.unlocked) continue;
-            if (achievement.Check()) AchievementUnlocked.Invoke(achievement.id);
+            if (achievement.Check()) {
+                if (AchievementUnlocked != null) {
+                    AchievementUnlocked.Invoke(achievement.id);
+                }
+            }
             yield return null;
         }
         yield return true;

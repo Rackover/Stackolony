@@ -3,255 +3,255 @@
 <achievements>
 	<!-- Different steps of total population count -->
     <achievement id="0">
-		<script>
+		<condition>
 			$TOTAL_CITIZEN_COUNT GREATER_THAN 10
-		</script>
+		</condition>
 	</achievement>
     <achievement id="1">
-		<script>
+		<condition>
 			$TOTAL_CITIZEN_COUNT GREATER_THAN 30
-		</script>
+		</condition>
 	</achievement>
     <achievement id="2">
-		<script>
+		<condition>
 			$TOTAL_CITIZEN_COUNT GREATER_THAN 50
-		</script>
+		</condition>
 	</achievement>
     <achievement id="3">
-		<script>
+		<condition>
 			$TOTAL_CITIZEN_COUNT GREATER_THAN 100
-		</script>
+		</condition>
 	</achievement>
     <achievement id="4">
-		<script>
+		<condition>
 			$TOTAL_CITIZEN_COUNT GREATER_THAN 200
-		</script>
+		</condition>
 	</achievement>
     <achievement id="5">
-		<script>
+		<condition>
 			$TOTAL_CITIZEN_COUNT GREATER_THAN 500
-		</script>
+		</condition>
 	</achievement>
     <achievement id="6">
-		<script>
+		<condition>
 			$TOTAL_CITIZEN_COUNT GREATER_THAN 500
-		</script>
+		</condition>
 	</achievement>
 	
 	<!-- Fires extinguished -->
     <achievement id="7">
-		<script>
+		<condition>
 			$STOPPED_FIRES_COUNT GREATER_THAN 1
-		</script>
+		</condition>
 	</achievement>
     <achievement id="8">
-		<script>
+		<condition>
 			$STOPPED_FIRES_COUNT GREATER_THAN 5
-		</script>
+		</condition>
 	</achievement>
     <achievement id="9">
-		<script>
+		<condition>
 			$STOPPED_FIRES_COUNT GREATER_THAN 10
-		</script>
+		</condition>
 	</achievement>
     <achievement id="10">
-		<script>
+		<condition>
 			$STOPPED_FIRES_COUNT GREATER_THAN 50
-		</script>
+		</condition>
 	</achievement>
 	
 	<!-- Military count -->
     <achievement id="11">
-		<script>
+		<condition>
 			CITIZEN_COUNT(population:military) GREATER_THAN 10
-		</script>
+		</condition>
 	</achievement>
     <achievement id="12">
-		<script>
+		<condition>
 			CITIZEN_COUNT(population:military) GREATER_THAN 50
-		</script>
+		</condition>
 	</achievement>
     <achievement id="13">
-		<script>
+		<condition>
 			CITIZEN_COUNT(population:military) GREATER_THAN 100
-		</script>
+		</condition>
 	</achievement>
 	
 	<!-- Scientist count -->
     <achievement id="14">
-		<script>
+		<condition>
 			CITIZEN_COUNT(population:scientist) GREATER_THAN 10
-		</script>
+		</condition>
 	</achievement>
     <achievement id="15">
-		<script>
+		<condition>
 			CITIZEN_COUNT(population:scientist) GREATER_THAN 50
-		</script>
+		</condition>
 	</achievement>
     <achievement id="16">
-		<script>
+		<condition>
 			CITIZEN_COUNT(population:scientist) GREATER_THAN 100
-		</script>
+		</condition>
 	</achievement>
 	
 	<!-- Workers count -->
     <achievement id="17">
-		<script>
+		<condition>
 			CITIZEN_COUNT(population:worker) GREATER_THAN 10
-		</script>
+		</condition>
 	</achievement>
     <achievement id="18">
-		<script>
+		<condition>
 			CITIZEN_COUNT(population:worker) GREATER_THAN 50
-		</script>
+		</condition>
 	</achievement>
     <achievement id="19">
-		<script>
+		<condition>
 			CITIZEN_COUNT(population:worker) GREATER_THAN 100
-		</script>
+		</condition>
 	</achievement>
 	
 	<!-- Richie count -->
     <achievement id="20">
-		<script>
+		<condition>
 			CITIZEN_COUNT(population:richie) GREATER_THAN 10
-		</script>
+		</condition>
 	</achievement>
     <achievement id="21">
-		<script>
+		<condition>
 			CITIZEN_COUNT(population:richie) GREATER_THAN 50
-		</script>
+		</condition>
 	</achievement>
     <achievement id="22">
-		<script>
+		<condition>
 			CITIZEN_COUNT(population:richie) GREATER_THAN 100
-		</script>
+		</condition>
 	</achievement>
 	
 	<!-- Artist count -->
     <achievement id="23">
-		<script>
+		<condition>
 			CITIZEN_COUNT(population:artist) GREATER_THAN 10
-		</script>
+		</condition>
 	</achievement>
     <achievement id="24">
-		<script>
+		<condition>
 			CITIZEN_COUNT(population:artist) GREATER_THAN 50
-		</script>
+		</condition>
 	</achievement>
     <achievement id="25">
-		<script>
+		<condition>
 			CITIZEN_COUNT(population:artist) GREATER_THAN 100
-		</script>
+		</condition>
 	</achievement>
 	
 	<!-- Mood 100% for each population -->
     <achievement id="28">
-		<script>
+		<condition>
 			MOOD(population:military) GREATER_OR_EQUAL_THAN 100
-		</script>
+		</condition>
 	</achievement>
     <achievement id="29">
-		<script>
+		<condition>
 			MOOD(population:worker) GREATER_OR_EQUAL_THAN 100
-		</script>
+		</condition>
 	</achievement>
     <achievement id="30">
-		<script>
+		<condition>
 			MOOD(population:richie) GREATER_OR_EQUAL_THAN 100
-		</script>
+		</condition>
 	</achievement>
     <achievement id="31">
-		<script>
+		<condition>
 			MOOD(population:scientist) GREATER_OR_EQUAL_THAN 100
-		</script>
+		</condition>
 	</achievement>
     <achievement id="32">
-		<script>
+		<condition>
 			MOOD(population:artist) GREATER_OR_EQUAL_THAN 100
-		</script>
+		</condition>
 	</achievement>
 	
 	<!-- Bridge thresholds -->
     <achievement id="39">
-		<script>
+		<condition>
 			$BRIDGE_COUNT GREATER_OR_EQUAL_THAN 0
-		</script>
+		</condition>
 	</achievement>
     <achievement id="40">
-		<script>
+		<condition>
 			$BRIDGE_COUNT GREATER_OR_EQUAL_THAN 10
-		</script>
+		</condition>
 	</achievement>
     <achievement id="41">
-		<script>
+		<condition>
 			$BRIDGE_COUNT GREATER_OR_EQUAL_THAN 50
-		</script>
+		</condition>
 	</achievement>
     <achievement id="42">
-		<script>
+		<condition>
 			$BRIDGE_COUNT GREATER_OR_EQUAL_THAN 100
-		</script>
+		</condition>
 	</achievement>
 	
 	<!-- First fire -->
     <achievement id="44">
-		<script>
+		<condition>
 			$FIRES_COUNT GREATER_OR_EQUAL_THAN 1
-		</script>
+		</condition>
 	</achievement>
 
 	<!-- Riot stats -->
     <achievement id="45">
-		<script>
+		<condition>
 			$STOPPED_RIOTS_COUNT GREATER_OR_EQUAL_THAN 1
-		</script>
+		</condition>
 	</achievement>
     <achievement id="46">
-		<script>
+		<condition>
 			$STOPPED_RIOTS_COUNT GREATER_OR_EQUAL_THAN 5
-		</script>
+		</condition>
 	</achievement>
     <achievement id="47">
-		<script>
+		<condition>
 			$STOPPED_RIOTS_COUNT GREATER_OR_EQUAL_THAN 10
-		</script>
+		</condition>
 	</achievement>
     <achievement id="48">
-		<script>
+		<condition>
 			$STOPPED_RIOTS_COUNT GREATER_OR_EQUAL_THAN 50
-		</script>
+		</condition>
 	</achievement>
 	
 	<!-- Cycles played -->
     <achievement id="49">
-		<script>
+		<condition>
 			$CURRENT_CYCLE GREATER_OR_EQUAL_THAN 10
-		</script>
+		</condition>
 	</achievement>
     <achievement id="50">
-		<script>
+		<condition>
 			$CURRENT_CYCLE GREATER_OR_EQUAL_THAN 20
-		</script>
+		</condition>
 	</achievement>
     <achievement id="51">
-		<script>
+		<condition>
 			$CURRENT_CYCLE GREATER_OR_EQUAL_THAN 50
-		</script>
+		</condition>
 	</achievement>
     <achievement id="52">
-		<script>
+		<condition>
 			$CURRENT_CYCLE GREATER_OR_EQUAL_THAN 100
-		</script>
+		</condition>
 	</achievement>
     <achievement id="53">
-		<script>
+		<condition>
 			$CURRENT_CYCLE GREATER_OR_EQUAL_THAN 150
-		</script>
+		</condition>
 	</achievement>
     <achievement id="54">
-		<script>
+		<condition>
 			$CURRENT_CYCLE GREATER_OR_EQUAL_THAN 200
-		</script>
+		</condition>
 	</achievement>
 </achievements>

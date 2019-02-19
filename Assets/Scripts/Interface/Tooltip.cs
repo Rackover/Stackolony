@@ -170,7 +170,7 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
                 foreach (string popName in parameters[i].Split('-')) {
                     if (GameManager.instance.populationManager.GetPopulationByCodename(popName) != null) {
                         if (popInfo.Length > 0) {
-                            popInfo += " " + GameManager.instance.localization.GetLineFromCategory("stats", "or") + " ";
+                            popInfo += " " + GameManager.instance.localization.GetLineFromCategory("stats", "orSeparator") + " ";
                         }
                         popInfo += GameManager.instance.localization.GetLineFromCategory("populationType", popName);
                         wasPop = true;
@@ -184,6 +184,33 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
             entries.Add( new TooltipLocalizationEntry(
                 name.ToLower(), "flagParameter", FlagReader.IsPositive(name) ? tooltipType.Positive : tooltipType.Negative, parameters
             ));
+        }
+
+        // Conditional unlocking
+        ConditionalUnlocks unlocker = GameManager.instance.cityManager.conditionalUnlocker;
+        if (!unlocker.CanBeUnlocked(scheme.ID)) {
+
+            entries.Add(new TooltipLocalizationEntry(
+                "toUnlockThisBuildingYouMust", "conditionalUnlock", tooltipType.Neutral
+            ));
+
+            // Condition (= <= >= < >)
+            foreach (string[] condition in unlocker.GetFormattedUnlockConditions(scheme.ID)) {
+                // If Int, no need to tranlate it
+                bool isInt = true;
+                try {
+                    Convert.ToInt32(condition);
+                }
+                catch {
+                    isInt = false;
+                }
+
+                entries.Add(new TooltipLocalizationEntry(
+                    condition[1], "conditionalUnlock", tooltipType.Negative, 
+                        isInt ? condition[0] : GameManager.instance.localization.GetLineFromCategory("scriptAction", condition[0]),
+                        isInt ? condition[2] : GameManager.instance.localization.GetLineFromCategory("scriptAction", condition[2])
+                ));
+            }
         }
 
         return entries;

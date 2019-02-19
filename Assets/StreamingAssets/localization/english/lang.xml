@@ -13,238 +13,265 @@
     <resume>Resume</resume>
   </menu>
   <options>
-    <borderSensivity>Border scrolling speed</borderSensivity>
+    <borderSensitivity>Border scrolling speed</borderSensitivity>
     <rotationSensitivity>Camera rotation speed</rotationSensitivity>
     <grabSensitivity>Camera movement speed</grabSensitivity>
     <enableDrifting>Enable border scrolling</enableDrifting>
     <musicVolume>Music volume</musicVolume>
     <voiceVolume>Voice volume</voiceVolume>
-    <sfxVolume>SFX volume</sfxVolume>
+    <sfxVolume>Sound effect volume</sfxVolume>
     <animatedCitizens>Animated citizens</animatedCitizens>
+    <lang>Language</lang>
     <bgsVolume>Background sound volume</bgsVolume>
   </options>
   <hud>
     <delivery>Delivery</delivery>
+    <holdDrag>Hold the left click to drag and change the priority</holdDrag>
+    <priority>The order of each population determines their priority</priority>
+    <pause>Pause the simulation</pause>
+    <play>Resume</play>
+    <playFaster>Fast-forward</playFaster>
+    <bulletin>Newspaper</bulletin>
+    <menu>Menu</menu>
+    <temporality>Cycle {0} of year {1}</temporality>
+    <buildHabitation>Build habitations</buildHabitation>
+    <buildOccupators>Build workplaces</buildOccupators>
+    <buildServices>Build services</buildServices>
+    <overlayMenu>Overlays</overlayMenu>
+    <buildMenu>{0} buildings</buildMenu>
   </hud>
   <blockName>
     <block0>Spatioport</block0>
-    <block1>PoorHouse</block1>
-    <block2>AverageHouse</block2>
-    <block3>LuxuriousHouse</block3>
-    <block4>WindTurbine</block4>
-    <block5>SolarPanel</block5>
-    <block6>PowerPlant</block6>
-    <block7>FiremanStation</block7>
-    <block8>PoliceStation</block8>
-    <block9>ArcadeBlock</block9>
+    <block1>Little house</block1>
+    <block2>Medium house</block2>
+    <block3>Big house</block3>
+    <block4>Wind power plant </block4>
+    <block5>Solar power plant</block5>
+    <block6>Power plant</block6>
+    <block7>Fire station </block7>
+    <block8>Police station</block8>
+    <block9>Amusement arcade</block9>
     <block10>Hospital</block10>
-    <block11>FoodCenter</block11>
-    <block12>BotanicalGreenHouse</block12>
-    <block13>Laboratory</block13>
-    <block14>Observatory</block14>
-    <block15>Barrack</block15>
+    <block11>Mess</block11>
+    <block12>Green house</block12>
+    <block13>Observatory</block13>
+    <block14>Laboratory</block14>
+    <block15>Barracks</block15>
     <block16>Bastion</block16>
-    <block17>Captureshelter</block17>
-    <block18>RelaxingLounge</block18>
+    <block17>Capture shelter</block17>
+    <block18>Lounge</block18>
     <block19>Casino</block19>
-    <block20>Theatre</block20>
+    <block20>Theater</block20>
     <block21>Workshop</block21>
-    <block22>ArtGallery</block22>
-    <block23>ArchitectureSchool</block23>
-    <block24>Manufactory</block24>
-    <block25>Factory</block25>
+    <block22>Museum</block22>
+    <block23>Architecture university </block23>
+    <block24>Factory</block24>
+    <block25>Plant</block25>
     <block26>Armory</block26>
+    <block27>Trash</block27>
+    <block28>Mine</block28>
+    <block29>Nest</block29>
+    <block30>Repair craft</block30>
   </blockName>
   <blockDescription>
-    <block0>Center of the city, all block should be connected to it</block0>
+    <block0>Center of the city, all block must be connected to it</block0>
     <block1>A simple house</block1>
     <block2>A modest House</block2>
     <block3>A luxurious house</block3>
-    <block4>Produce some power by night</block4>
-    <block5>Produce some power by day</block5>
-    <block6>Produce some power for colons</block6>
-    <block7>This building ensure the order by stopping fires</block7>
-    <block8>This building ensure the order by stopping riots</block8>
-    <block9>The best distraction in town</block9>
-    <block10>Ensure good health to the colons</block10>
-    <block11>Brings food to some colons</block11>
-    <block12>Nature is essential for everyone</block12>
-    <block13>Laboratory</block13>
-    <block14>Seeking for science in the stars</block14>
-    <block15>Troop Headquarter</block15>
-    <block16>A heavy Military base</block16>
-    <block17>Study the alien lifeforms</block17>
-    <block18>Peace of mind needs some calm</block18>
-    <block19>A place to enjoy being rich from birth</block19>
-    <block20>Stories everyday</block20>
+    <block4>Harness the green energy of the wind during the night</block4>
+    <block5>Harness the green energy of the sun during the day</block5>
+    <block6>Generates massive amounts of power. It requires some Covridians to work</block6>
+    <block7>The fire station sends out fire robots to the location of fire</block7>
+    <block8>Police station responds to riot in progress, if they can stop them! </block8>
+    <block9>Insert coin to play</block9>
+    <block10>Sick people needs a good place</block10>
+    <block11>Yummy ! </block11>
+    <block12>Plants from a galaxy far far away...</block12>
+    <block13>To infinity, and beyond !</block13>
+    <block14>We cook up new schemes in this laboratory. Like a new'n'tasty food...</block14>
+    <block15>If you survive recruit training, you will be a weapon. You will be a minister of death praying for war</block15>
+    <block16>Bastion ! </block16>
+    <block17>Where does this giant come from? Surely a guinea pig</block17>
+    <block18>"Feel good, and rich"</block18>
+    <block19>The fun never stops</block19>
+    <block20>I hold the world but as the world, Gratiano, a stage, where every man must play a part</block20>
     <block21>Art comes from here</block21>
-    <block22>Earis favorite place to go</block22>
-    <block23>Designing the blocks of the futur</block23>
+    <block22>Earis' favorite place</block22>
+    <block23>A very expensive school</block23>
     <block24>The secret of the S.U Industry</block24>
-    <block25>They produce something, but what?</block25>
-    <block26>The S.U Army forges</block26>
+    <block25>They're making something, but what?</block25>
+    <block26>The S.U Army weapon testing bench</block26>
+    <block27>Yuck ! </block27>
+    <block28>Maybe the next klondike ! </block28>
+    <block29>Rawr ! </block29>
+    <block30>Make your buildings look new</block30>
   </blockDescription>
   <bulletinTitle>
     <bulletin1>Royal children</bulletin1>
-    <bulletin2>Commemoration sales</bulletin2>
-    <bulletin3>The 43th colony elected a new president</bulletin3>
-    <bulletin4>The comet Teklo3 cross the Union Stellar area</bulletin4>
-    <bulletin5>Bankrupt of the 29th colony</bulletin5>
-    <bulletin6>The 7th colony desapeared</bulletin6>
-    <bulletin7>The spatiopole is welcoming a new satellite</bulletin7>
+    <bulletin3>Colony 43 just elected a new president</bulletin3>
+    <bulletin4>The comet Teklo3 crosses the Union Stellar area</bulletin4>
+    <bulletin5>Collapse of Colony 29</bulletin5>
+    <bulletin6>Vanishing of Colony 7</bulletin6>
+    <bulletin7>New satellite</bulletin7>
     <bulletin8>12 Angry Kavgas</bulletin8>
     <bulletin9>Birth of a new colony</bulletin9>
-    <bulletin10>A famous colonial SpaceShip destroyed</bulletin10>
-    <bulletin11>Lockout of the Fabric IV</bulletin11>
-    <bulletin12>Enu'aj Teligg and strike</bulletin12>
-    <bulletin13>The mayor of colony 3 takes his retirement</bulletin13>
+    <bulletin10>A colonial SpaceShip destroyed</bulletin10>
+    <bulletin11>Strike of the Fabric IV</bulletin11>
+    <bulletin12>Abortion of Project Stello</bulletin12>
+    <bulletin13>The mayor of colony 3 retires</bulletin13>
     <bulletin14>The Tchekek tribes are taunting</bulletin14>
     <bulletin15>New war technologies</bulletin15>
     <bulletin16>WARNING: Black Hole</bulletin16>
     <bulletin17>Discovery of an unknown lifeform</bulletin17>
-    <bulletin18>Changing the landscape</bulletin18>
+    <bulletin18>Change of landscape</bulletin18>
     <bulletin19>Earythm Orchestra tour</bulletin19>
     <bulletin20>News about the investigation on the original system</bulletin20>
     <bulletin21>Escape of the public enemy N°2</bulletin21>
     <bulletin22>MORE COASTER UNIONS</bulletin22>
-    <bulletin23>A cheese that drives crazy</bulletin23>
+    <bulletin23>A cheese that drives you mad</bulletin23>
     <bulletin24>DON'T PANIC</bulletin24>
-    <bulletin25>Opening of the old times museum</bulletin25>
+    <bulletin25>Opening of a new museum</bulletin25>
     <bulletin26>The spaceport of colony 2 collapses</bulletin26>
     <bulletin27>The Empire Strikes Back</bulletin27>
     <bulletin28>The Empress is dead</bulletin28>
     <bulletin29>Start of galactic games</bulletin29>
     <bulletin30>The 3rd force</bulletin30>
-    <bulletin31>Ba'Kal to the front</bulletin31>
+    <bulletin31>Ba'Kal on the front page</bulletin31>
     <bulletin32>Ba'Kal, a new experience</bulletin32>
-    <bulletin33>Fire in the colony 3</bulletin33>
+    <bulletin33>Fire at Colony 3</bulletin33>
     <bulletin34>A mafia network discovered</bulletin34>
     <bulletin35>Borgal, the strongest Krowser in the universe</bulletin35>
     <bulletin36>Spice of Trebreh</bulletin36>
     <bulletin37>US food</bulletin37>
     <bulletin38>Senuth Technology</bulletin38>
     <bulletin39>Space creatures</bulletin39>
-    <bulletin40>Expedition, let's go for the original stellar system</bulletin40>
+    <bulletin40>Expedition, let's go to the original stellar system</bulletin40>
   </bulletinTitle>
   <bulletinSubtitle>
     <bulletin1>More Krowsers soon</bulletin1>
-    <bulletin2>Color Block</bulletin2>
     <bulletin3>First Senuth president</bulletin3>
     <bulletin4>Interplanetary traffic jam</bulletin4>
     <bulletin5>Evacuating the population</bulletin5>
-    <bulletin6>A guilty group of Krowsers caught</bulletin6>
+    <bulletin6>A guilty group of Krowsers</bulletin6>
     <bulletin7>Artificial satellites are getting bigger</bulletin7>
-    <bulletin8>A misunderstanding leaded to the drama</bulletin8>
-    <bulletin9>The US is getting bigger</bulletin9>
+    <bulletin8>A huge misunderstanding that leads to drama</bulletin8>
+    <bulletin9>The US is growing</bulletin9>
     <bulletin10>An asteroid destroyed the transporter</bulletin10>
-    <bulletin11>A big strike</bulletin11>
-    <bulletin12>The covridians disappointed by the decision</bulletin12>
-    <bulletin13>The veteran take some rest with his people</bulletin13>
-    <bulletin14>The Spacepole replies</bulletin14>
-    <bulletin15>The enthousiastic Kavgas scare</bulletin15>
-    <bulletin16>The traffic blocked</bulletin16>
+    <bulletin11>A big strike from Senuth in a nearby colony</bulletin11>
+    <bulletin12>The covridians disappointment</bulletin12>
+    <bulletin13>The veteran takes some rest</bulletin13>
+    <bulletin14>2019-02-19T00:00:00j'ai un sérieux doute a comment traduire une "spatiopole"-Inès JEROME CHOUQIThe Spacepole replies</bulletin14>
+    <bulletin15>Enthusiasm of Kavgas</bulletin15>
+    <bulletin16>Blocked traffic</bulletin16>
     <bulletin17>The Vusna Planet is already populated</bulletin17>
-    <bulletin18>An Eari touch in the air</bulletin18>
-    <bulletin19>Concerts in all the Stellar Union</bulletin19>
-    <bulletin20>A clue that glads all the Stellar Union</bulletin20>
-    <bulletin21>Panic in the third colony</bulletin21>
-    <bulletin22>Certainly the richest Senuth in the Stellar Union.</bulletin22>
-    <bulletin23>A colony hallucinating</bulletin23>
-    <bulletin24>A UFO with a message</bulletin24>
-    <bulletin25>The memory of the original system preserved</bulletin25>
-    <bulletin26>The tower, too big fell under her own weight</bulletin26>
+    <bulletin18>The Eari touch</bulletin18>
+    <bulletin19>Stellar Union tour</bulletin19>
+    <bulletin20>A clue for the best</bulletin20>
+    <bulletin21>Panic in Colony 3</bulletin21>
+    <bulletin22>The richest Senuth</bulletin22>
+    <bulletin23>Hallucinating</bulletin23>
+    <bulletin24>A new UFO</bulletin24>
+    <bulletin25>Memory's duty</bulletin25>
+    <bulletin26>The tower, too big fell under its own weight</bulletin26>
     <bulletin27>Conflict with Tchekek empire</bulletin27>
     <bulletin28>A tragic death</bulletin28>
-    <bulletin29>Two new events announced</bulletin29>
+    <bulletin29>Announcement of two new events</bulletin29>
     <bulletin30>The universal alliance balances the war</bulletin30>
-    <bulletin31>The mistake that was not necessary</bulletin31>
-    <bulletin32>Do not learn from mistakes</bulletin32>
+    <bulletin31>The mistake was not necessary</bulletin31>
+    <bulletin32>They do not learn from mistakes</bulletin32>
     <bulletin33>The fire would be of criminal origin</bulletin33>
     <bulletin34>Export of illegal products from the planet Zurgub</bulletin34>
-    <bulletin35>A mountain of muscle</bulletin35>
+    <bulletin35>A mountain of muscles</bulletin35>
     <bulletin36>Transformation into food</bulletin36>
     <bulletin37>New methods of planting vegetables</bulletin37>
-    <bulletin38>New information about Senuthia</bulletin38>
+    <bulletin38>New informations about Senuthia</bulletin38>
     <bulletin39>Creatures from Planet-Kavga</bulletin39>
     <bulletin40>A team is preparing</bulletin40>
   </bulletinSubtitle>
   <bulletinText>
-    <bulletin1>2019-02-09T00:00:00Corriger tous les bulletins en anglais-Loan PREVONDThe queen of Krowsers has just given birth to a thousand larvae. Some of the inhabitants Krowsers in the spacepole will soon be dislodged.</bulletin1>
-    <bulletin2>Tomorrow, the entire Ho'gonu star system celebrates the 13th commemoration away from their native system! The construction company "Interblok" offers pink buildings to neighbors.</bulletin2>
-    <bulletin3>The colony "Ijhin Ksalfa" has just elected its third president, Brust Bracoct. The Senuth community all over the empire is looking forward to seeing one of their more in high positions.</bulletin3>
-    <bulletin4>Comet Teklo3 will cross the empire territory from the Versona system to Istafel, resulting in a significant traffic slowdown.</bulletin4>
-    <bulletin5>The colony of Isapoth filed for bankruptcy and is added to the list of those who put the key under the door. The inhabitants will of course be evacuated and housed in nearby settlements.</bulletin5>
-    <bulletin6>A band of young Krowsers is entered in the largest photonic power plant on the planet Sriplis, causing the explosion of the colony.</bulletin6>
+    <bulletin1>2019-02-19T00:00:00Corriger tous les bulletins en anglais-Loan PREVONDThe queen of Krowsers has given birth to a thousand larvae. Some of the inhabitants Krowsers in the spacepole will soon be dislodged.</bulletin1>
+    <bulletin3>The colony "Ijhin Ksalfa" just elected its third president, Brust Bracoct. The Senuth community all over the empire is looking forward to see more of them in high positions.</bulletin3>
+    <bulletin4>Comet Teklo3 will cross the empire territory from the Versona system to Istafel. Traffic slowdown.</bulletin4>
+    <bulletin5>The colony of Isapoth filed for bankruptcy, so it is added to list to those which closed down. The inhabitants will be evacuated and sent to nearby colons.</bulletin5>
+    <bulletin6>A band of young Krowsers entered in the largest photonic power plant on the planet Sriplis, causing the explosion of the colony.</bulletin6>
     <bulletin7>The spacepole celebrates its 3rd satellite, this new artificial star would be able to accommodate 5 billion inhabitants.</bulletin7>
-    <bulletin8>Last night, a Covridian presented a discovery in front of Kavgas, who misunderstood his words.Testimony of Davis, the covridian: "They thought I was lowering their intellect.I still say that the Kavgas have less patience than all other races, it is a reality that science has demonstrated. "</bulletin8>
-    <bulletin9>The US (Union Stellar) has just installed a spaceport in a planet they have just named Orro Rotrin, a new victory!</bulletin9>
+    <bulletin8>Last night, a Covridian presented a discovery in front of Kavgas, who misunderstood his words. Debriefing of Davis, the Covridian: "They thought that I was lowering their intellect.I still say that the Kavgas have less patience than all other people,  science demonstrated it. "</bulletin8>
+    <bulletin9>The US (Union Stellar) has just installed a spaceport in a planet that they have just named Orro Rotrin, a new victory!</bulletin9>
     <bulletin10>The famous T27 carrier, containing more than 1 billion settlers and more than 20 million buildings, was hit by space debris, the shock may hit the neighboring planets.</bulletin10>
-    <bulletin11>In the Enu'aj Teligg colony of the Ho'gonu star system, Senuths strike. No change in the colony.</bulletin11>
-    <bulletin12>The Stello project, which was claimed to be revolutionary, was aborted. The decision was made at the top of the spacepole. The risks of failure were far too big.</bulletin12>
-    <bulletin13>The ambassador and founder of Colony 3 rests on the planet he has served for a century. Here are the last words of the ambassador: "Stack blocks, manage stupid people, it's over for me, Good bye!" A poignant testimony.</bulletin13>
-    <bulletin14>The Tchekek Empire claims a stellar system that is part of the US territory. The authorities react by populating the system.</bulletin14>
-    <bulletin15>A collaborative project between covridians and Kavgas gives birth to a revolutionary military technology. The Kavga Army is eager to try this new weapon. The rest of the population is more afraid of the consequences than other things.</bulletin15>
-    <bulletin16>The death of a star has given birth to a black hole. More than 20 ships have been absorbed by the hole, and the traffic within the territory of the US reaches the red level, and is therefore blocked.</bulletin16>
-    <bulletin17>The first installations on the planet Vusna revealed the existence of a non-listed living species. The specimen does not look like anything known. He constantly repeats "phone home", the research is ongoing.</bulletin17>
-    <bulletin18>The Eari community has undertaken, on the occasion of this day of art, to redecorate the spacepole in the image of new trends. Testimony of a Kavga: "It's ugly." To meditate.</bulletin18>
-    <bulletin19>The orchestra "Earythm" will make a great tour throughout the Union Stellar crossing all the settlements, before playing the grand finale in the high neighborhoods of the spacepole. Testimony of a Senuth not having seen the concert but wishing to say a word: "I can do better, and all by myself. Blowing in a pipe and waving his arms, it's within the reach of anyone."</bulletin19>
-    <bulletin20>Recent research on the extinction of the original system shows that the star did not go out naturally. An investigation is launched to solve this mystery which concerns all the population of the US.</bulletin20>
-    <bulletin21>Public enemy number 2, Vortex, has again escaped from the Union's most secure prison, with its natural gift for creating portals to a safe place. This is the 87th time this month. Testimony of a prison guard Kavga: "At this level it's not an evasion, it's a national sport..."</bulletin21>
-    <bulletin22>Biilkal, the Senuth at the head of the most popular entertainment company in the U.S opens its famous CoasterUnion parks on some colony. This will delight the entire population.</bulletin22>
-    <bulletin23>After taming a native animal species of the Zurgub planet, a group of cheese makers covridians sold more than a hundred cheese, which made the colony hallucinate for several weeks</bulletin23>
-    <bulletin24>A UFO approached the territory of the Union with a puppet and the inscription "DONT PANIC" on it. It seems that the object is a vehicle coming from an under-evolved planet named "Earth", very far from our systems.</bulletin24>
-    <bulletin25>A museum has just opened in Sector 2 of the Spatiopole. There is exposed all the preserved works of the original system. What preserve the culture of our forgotten ancestors.</bulletin25>
-    <bulletin26>The old spaceport of one of the first settlements has just collapsed under its own weight. The first guilty in this case is the ambassador of the colony 2. In charge of the urban placement, he apparently built a tower of 57 buildings. Testimony of the ambassador: "I wanted to see if there was a limit!" His limit is now the walls of his prison.</bulletin26>
-    <bulletin27>The planet Dortus Laan is recently the source of a conflict between the Tchekek empire and US. After the U.S put a spaceport there. The empire reacts by installing one of its bases on the other pole of the planet, making of this crisis of territory a race towards the colonialization.</bulletin27>
-    <bulletin28>The high lady of the Tchekek empire died last night. This news does not only sadden the empire, the entire population of the Union is affected. Indeed, the lady facilitated relations between the two camps. The peace of the universe is weakened with his death.</bulletin28>
-    <bulletin29>The Tchekek empire is organizing the 11th meeting of the great galactic games. For the first time, Avarez's system joins the competition, adding to the competition, two sports from their cultures: Basketball in zero gravity and surfing on grass.</bulletin29>
+    <bulletin11>In the Enu'aj Teligg colony of the Ho'gonu star system, Senuths are on strike. No change in the colony.</bulletin11>
+    <bulletin12>The Stello project, which claimed to be revolutionary, was aborted.The decision comes from the top of the spacepole.The risks of failure were too big.</bulletin12>
+    <bulletin13>The ambassador and founder of the third Colony rests on the planet he served for a century. Here are the last words of the ambassador: "Stack blocks, manage stupid people, it's over for me, Goodbye!" A poignant testimony.</bulletin13>
+    <bulletin14>The Tchekek Empire claims a stellar system from the US territory. The authorities react by populating the system.</bulletin14>
+    <bulletin15>A collaborative project between Covridians and Kavgas gives rise to a revolutionary military technology. The Kavga Army is eager to try this new weapon. The population is more afraid of the consequences than anything else.</bulletin15>
+    <bulletin16>The death of a star has given rise to a black hole. More than 20 ships have been absorbed by this hole, and the traffic within the territory of the US reaches the red level.</bulletin16>
+    <bulletin17>The first observations on the planet Vusna revealed the existence of a non-listed living species. The specimen does not look like anything already known. He constantly repeats "call home", the research is ongoing.</bulletin17>
+    <bulletin18>On the occasion of this day of art, the Eari community initiates to redecorate the spacepole in the image of new trends. Testimony of a Kavga: "It's ugly." To pounder.</bulletin18>
+    <bulletin19>The orchestra "Earythm" will make a great tour throughout the Stellar Union across all settlements, before playing the grand finale in the high neighborhoods of the spacepole. A Senuth says about the Tour : "I can do better, and all by myself. Blowing in a pipe and waving his arms, it's within the reach of anyone."</bulletin19>
+    <bulletin20>Recent research about the extinction of the original system shows that the star did not go out naturally. An investigation launch to solve this mystery which concerns all the population of the US.</bulletin20>
+    <bulletin21>Public enemy number 2, Vortex has once again escaped from the Union's most secure prison, with its natural gift for creating portals to a safe place. This is the 87th time this month. A prison guard Kavga says: "At this level it's not an evasion, it's a national sport..."</bulletin21>
+    <bulletin22>Biilkal, a Senuth at the head of the most popular entertainment company in the SU opens its famous Coaster Union parks. This will delight the entire population.</bulletin22>
+    <bulletin23>After taming a native animal species of the Zurgub planet, a group of cheese makers Covridians sold more than one thousand cheeses. People from Colony 5 were hallucinating for several weeks.</bulletin23>
+    <bulletin24>A UFO approached the territory of the Union with a puppet and the inscription "DON'T PANIC" on it. The object seems to be a vehicle coming from an under-evolved planet named "Earth", very far from our systems.</bulletin24>
+    <bulletin25>A museum just opened in Sector 2 of the Spatiopole. We can see all preserved works of the original system. Just the thing to preserve the culture of our forgotten ancestors.</bulletin25>
+    <bulletin26>The old spaceport of one of the first settlement has collapsed under its own weight. The first guilty in this case is the ambassador of Colony 2, in charge of the urban placement. He apparently built a tower of 57 buildings. He said : "I wanted to see if there was a limit!" His limit is now the walls of prison.</bulletin26>
+    <bulletin27>The planet Dortus Laan is recently the source of a conflict between the Tchekek empire and SU. Su has put a spaceport there. The empire reacts by installing one of its bases on the other side of the planet, making of this crisis of territory a race towards the colonialization.</bulletin27>
+    <bulletin28>The high lady of the Tchekek empire died last night. This piece of news does not only sadden the empire, the entire population of the Union is touched. Indeed, the lady facilitated relations between the two camps. The peace of the universe is weakened by her death.</bulletin28>
+    <bulletin29>The Tchekek empire is organizing the 11th meeting of the great galactic games. For the first time, Avarez's system joins the competition, they added two sports from their cultures: Basketball in zero gravity and surfing on grass.</bulletin29>
     <bulletin30>Several people of red galaxies are joining together and forming the Universal Alliance. A power that stabilizes tensions between the US and the Chekek empire.</bulletin30>
     <bulletin31>Colony 118 struck again by placing their generators on top of each other. The overload resulted in a fire that the fire department could not handle in time.</bulletin31>
     <bulletin32>Colony 118, still on the front page of the US newsletter. The ambassador has over-prioritized a particular race for housing. Riots broke out.</bulletin32>
-    <bulletin33>A fire spread in colony 3, destroying several buildings. A suspicious Kavga has been arrested. Testimony: "It's not me, I was killing a few things with a flamethrower when it happened!" Words that do not help.</bulletin33>
-    <bulletin34>A large network was dismantled by US detectives. Indeed, a band of Eari recovered animals and illicit products to resell them to other colonies. The investigation is continuing.</bulletin34>
+    <bulletin33>A fire spread in colony 3, destroying several buildings. A suspicious Kavga has been arrested. He says: "It's not me, I was killing a few things with a flamethrower when it happened!" Words that do not help.</bulletin33>
+    <bulletin34>A large network was dismantled by SU detectives. Indeed, a band of Eari reclaimed animals and illicit products to resell them to other colonies. The investigation is continuing.</bulletin34>
     <bulletin35>Borgal, the famous Krowser bodybuilder, moves from colony to colony to help the inhabitants. He can lift buildings with one hand and can terraform a planet with his fists. Appreciable.</bulletin35>
-    <bulletin36>The colony of Trebeh has just discovered a spice, which in contact with electricity, becomes an eatable and delicious porridge. Experiments are under way to solve the problem of food in the colonies.</bulletin36>
+    <bulletin36>The colony of Trebeh discovered a spice, which in contact with electricity, becomes an eatable and delicious porridge. Experiments are on the way to solve the problem of food in the colonies.</bulletin36>
     <bulletin37>Covridians have found the methods of growing plants, dating from their home planet "Zuvriia". Delicious vegetables soon in the colonies?</bulletin37>
     <bulletin38>Senuthia, the home planet of the Senuths, contained incredible technology, allowing the Senuths to do nothing themselves. An expedition is preparing to go get this technology, in our native system now without star.</bulletin38>
-    <bulletin39>Evil creatures have just come out of the original star system. The ancient planet Kavga, ingeniously called "Planet-Kavga" by these inhabitants, seems to be the point of departure. Testimony of a Kavga: "Well what do you think? That we come from a cute and welcoming planet?"</bulletin39>
-    <bulletin40>Explorers want to return to the original star system, where we all come from. They want to go back to our respective planets to understand why our star suddenly went out. More than 350,000 batteries are planned to power the team's lamps.</bulletin40>
+    <bulletin39>Evil creatures have just come out of the original star system. The ancient planet Kavga, ingeniously called "Planet-Kavga" by these inhabitants, seems to be the point of departure. a Kavga says: "Well what do you think? That we come from a cute and welcoming planet?"</bulletin39>
+    <bulletin40>Explorers want to come back to the original star system, where we all come from, to our respective planets to understand why our star suddenly went out. More than 350,000 batteries are planned to power the team's lamps.</bulletin40>
   </bulletinText>
-  <flagName>
-    <generator>Power generator</generator>
-    <house>Habitation</house>
-    <occupator>Occupation</occupator>
-    <nuisance>Nuisance</nuisance>
-    <fireman>Fire extinguisher</fireman>
-    <workingHours>Working hours</workingHours>
-    <police>Police</police>
-    <flagNeeder>Dependencies</flagNeeder>
-  </flagName>
   <flagParameter>
     <generator>Generates {0} power</generator>
     <house>Houses {0} {3}s</house>
     <occupator>Employs {0} {2}s at a range of {1}</occupator>
-    <nuisance>Generate {0} nuisance at a range of {1}</nuisance>
-    <fireman>Puts out fires at a range of {0}</fireman>
-    <workingHours>The building has opening hours</workingHours>
-    <police>Prevents riots at a range of {0}</police>
-    <flagNeeder>The building need something to work</flagNeeder>
+    <nuisancegenerator>Generate {0} nuisance at a range of {1}</nuisancegenerator>
+    <firemanstation>Puts out fires at a range of {0}</firemanstation>
+    <workinghours>The building may not stay open at all times</workinghours>
+    <policestation>Prevents riots at a range of {0}</policestation>
+    <flagneeder>Needs another kind of building to work</flagneeder>
+    <repairer>Repairs damaged bulidings in a range of {0}</repairer>
+    <extractor>Needs a mine nearby to function</extractor>
+    <barrack>Needs a nest nearby to function</barrack>
+    <foodprovider>Provides food to all buildings in a range of {0}</foodprovider>
+    <spatioport>All buildings must be linked to the spatioport</spatioport>
   </flagParameter>
   <state>
-    <onFire>Burning</onFire>
-    <powered>Powered</powered>
-    <onRiot>Rioting</onRiot>
-    <damaged>Damaged</damaged>
-    <burnt>Burnt</burnt>
+    <OnFire>Burning</OnFire>
+    <Powered>Powered</Powered>
+    <OnRiot>Rioting</OnRiot>
+    <Damaged>Damaged</Damaged>
+    <Unpowered>Unpowered</Unpowered>
   </state>
   <notification>
     <misalignedBlocks>The blocks are not aligned</misalignedBlocks>
-    <differentHeightBlocks>The blocks are at different heights</differentHeightBlocks>
+    <bridgeAlreadyFound>There is already a bridge</bridgeAlreadyFound>
+    <differentHeightBlocks>The blocks have different heights</differentHeightBlocks>
     <selfBridging>You can't bridge a block to itself</selfBridging>
     <cannotUseTool>You cannot use this tool here</cannotUseTool>
     <maxHeightReached>Maximum height reached</maxHeightReached>
+    <cannotBuildOverBridge>You can't build over a bridge</cannotBuildOverBridge>
+    <cannotBuildHere>You can't build here</cannotBuildHere>
+    <cannotBuildOnWater>You can't build on water</cannotBuildOnWater>
+    <cannotBuildOutOfMap>You can't build out of the map</cannotBuildOutOfMap>
     <newPeople>{0} new {1}s joined the colony</newPeople>
   </notification>
+  <conditionalUnlock>
+    <toUnlockThisBuildingYouMust>The following conditions are not met:</toUnlockThisBuildingYouMust>
+    <GREATER_THAN>{0} &gt; {1}</GREATER_THAN>
+    <LESS_THAN>{0} &lt; {1}</LESS_THAN>
+    <GREATER_OR_EQUAL_THAN>{0} &gt;= {1}</GREATER_OR_EQUAL_THAN>
+    <LESS_OR_EQUAL_THAN>{0} &lt;= {1}</LESS_OR_EQUAL_THAN>
+    <EQUAL>{0} = {1}</EQUAL>
+  </conditionalUnlock>
   <populationType>
     <worker>Krowser</worker>
     <richie>Senuth</richie>
@@ -254,40 +281,48 @@
   </populationType>
   <stats>
     <percentage>{0}%</percentage>
-    <moodValue>{0} are {1}</moodValue>
+    <moodValue>{0}s are {1}</moodValue>
     <gauge>{0}/{1}</gauge>
+    <homeless>{0} {1}s are looking for a home</homeless>
+    <inhabitants>Your colony welcomes {0} {1}s</inhabitants>
+    <value>{0}</value>
     <completion>{0} out of {1}</completion>
-    <bad>unhappy</bad>
-    <good>happy</good>
+    <orSeparator>or</orSeparator>
+    <andSeparator>and</andSeparator>
   </stats>
+  <mood>
+    <angry>Angry</angry>
+    <bad>Unhappy</bad>
+    <good>Happy</good>
+  </mood>
   <eventTitle>
     <event1>Dire need</event1>
     <event2>Boring house</event2>
-    <event3>Need to cross the iron</event3>
-    <event4>2.21 gigowatt !!</event4>
+    <event3>Crossing swords!</event3>
+    <event4>1.21 Gigawatts !!</event4>
     <event5>Dirty dust</event5>
-    <event6>A blessing in disguise</event6>
+    <event6>Sometimes, it's good to laugh</event6>
     <event7>Wired Revolution</event7>
     <event8>Family is a very sacred thing</event8>
-    <event9>Probability favorable</event9>
-    <event10>Bedding and Coating</event10>
+    <event9>Favorable probability</event9>
+    <event10>Bedding and coating</event10>
     <event11>Happy eradication</event11>
     <event12>Carving and starving</event12>
-    <event13>Consumer aid</event13>
+    <event13>Help in consumption</event13>
     <event14>Labor Day</event14>
     <event15>You've got the beat</event15>
     <event16>Scheduled maintenance</event16>
-    <event17>So size really does matter</event17>
+    <event17>Size matters</event17>
     <event18>The work of a lifetime</event18>
     <event19>Home training</event19>
-    <event20>The Spice Melange</event20>
+    <event20>Spicy mix</event20>
     <event21>The gimli effect</event21>
     <event22>The fertile plains</event22>
     <event23>Creative potential</event23>
     <event24>Weight Loss</event24>
     <event25>Available brain time</event25>
-    <event26>Fount of knowledge</event26>
-    <event2000>Tutorial 1 : New start</event2000>
+    <event26>A shower of knowledge</event26>
+    <event2000>Tutorial 1 : New beginning</event2000>
     <event2001>Tutorial 2 : Bridge</event2001>
     <event2002>Tutorial 3 : Krowsers</event2002>
     <event2003>Tutorial 4 : Electricity</event2003>
@@ -297,48 +332,48 @@
     <event2007>Tutorial 8 : Services</event2007>
     <event2008>Tutorial 9 : Repairer</event2008>
     <event2009>Tutorial 10 : Senuths</event2009>
-    <event2010>Tutorial 11 : Stand on its own feet</event2010>
+    <event2010>Tutorial 11 : Here we go !</event2010>
     <event1000>Revolution! Revolution!</event1000>
   </eventTitle>
   <eventDescription>
-    <event1>Can we have a cotton candy machine installed in the Relaxing lounge or that one small request is asking too much? It will obviously be specially made for us and not for other breeds because they do not need it. Our well-being must be your priority.</event1>
-    <event2>Good morning... I live in a very nice place, but the look of $CITYNAME doesn't fit my personality at all. With your agreement, I would like to carve and paint all around my home to prove my artistic value to all!</event2>
-    <event3>Greetings ! My men and I need a lot of spinach to get even better! I noticed in some of my men a decline in health because of a poor diet and it isn't tolerable! I come to see you to have an extra supply of food for his men! End Call!</event3>
-    <event4>I just had a brilliant, brilliant idea!! I can tinker a little something with a crystal that I ... borrowed from the mine I explored! Let me hack the plant for a while, and after that, it will be even more powerful!</event4>
-    <event5>Hel ... Hello, I come to see you because the factory is starting to get very dirty and I ... I would like to clean it. But there are always too many people inside! Can you please shut down part of the factory so that I can clean it up ... everywhere? Many people are starting to cough because of the dust.</event5>
-    <event6>Between naps, I had a wonderful idea, that my friends immediately applauded. I would like to organize a contest of "Trash throwing" on barrack. I find the concept very interesting and it will make an extra occupation to these Kavga brutes.</event6>
-    <event7>We created,a friend and me, an ingenious system of wired communication! We use two pots connected to a wire. But this communication system is short-range. We must scream in the handset ... Although it may embarrass the other inhabitants of $CITYNAME, science has no time to lose!</event7>
-    <event8>I ... I've been separated from my family since I left to join this colony and I have the opportunity to bring them here thanks to ... Thanks to an acquaintance. Can they come in the next batch of settlers?</event8>
-    <event9>The crystals found in a mine are great! I would like to study them, with a research method that uses sulfur, nitroglycerin, potassium nitrate and stones! They are harmless stones, do not worry! Can I ?</event9>
-    <event10>We find factory really not pretty in this beautiful colony that you built ... With your consent, we can undertake a special renovation ... Of course it won't be a real factory anymore, but the building will be more pleasing to the eye.</event10>
-    <event11>Greetings ! I discovered in house traces of small woodlice! Many people tell me that they are harmless but I don't believe it! I can go and pacify this area if you allow me! End of communication.</event11>
-    <event12>The period of the banquet of art has arrived! We celebrate nature, water and the natural energy that flows from it. We will need extra food because food is life.</event12>
-    <event13>Hello. To help those poor people who are working hard at the factory, I decided to make a gesture. So that they don't think they're working for nothing, I can turn on all the lights in my house. Yes, I am a great person. This might make them feel more important</event13>
-    <event14>Labor Day has begun, a feast that dates back to our old planet! During this holiday, we work more and faster! The faster our tools overheat, the more we laugh ... May we ... Can we ... start this celebration now?</event14>
-    <event15>On this sweet day, with my group, we composed a piece of very pure music, which advocates open-mindedness, good nature and thoughtfulness. We composed this song to be played at 125 Db, so that our neighbors could hear this magnificent quartet. Can we start?</event15>
-    <event16>We've been investigating a hazardous issue on the power accumulators for the past week and we believe we found the source of the problem was coming from. With your agreement, boss, we would like to proceed with replacing the faulty part.</event16>
-    <event17>We are a lot of Senuths to think that this colony is too simple, not attractive enough to see, not to mention the smells ... But that's not the question! We would like to see in this colony a real tower, aesthetic, powerful and impacting!</event17>
-    <event18>With four friends, we are creating one of the most beautiful sculptures ever invented! We are almost there but we need peace and space ... Can you book workshop to mark the story?</event18>
-    <event19>Greeting ! A slightly stamped scientist came to see us to show us a new type of "revolutionary" weapon, which uses crystals in my opinion. If we manage to handle them, we will be able to atta... Defend the colony of its critters even more effectively! But ... It will be necessary to manage to handle them ... Authorization granted?</event19>
-    <event20>Please stop your activities to listen to us. Well. We contacted friends from another colony and discovered spices that turn into delicious food when in contact with energy. We can ask our friends to send us large barrels of spices, to convert the electricity of the spaceport into food. We like good food.</event20>
-    <event21>Sorry to disturb you, we are many to say that looking for new mines would be interesting for the colony, because our mines will not be eternal ... Can you handle it?</event21>
-    <event22>Well, we just come to see you to say we want two new casinos. We do not have enough, we love opulence. You are, apparently, an intelligent person ... Apparently ... We should not have to tell you. And if that is not done ..</event22>
-    <event23>We have heard that the "Walterberg" colony makes candies that make them more creative and that allow them to see different colors. The only drawback is that these sweets make you want to eat even more ... Still, we are interested, can we have some?</event23>
-    <event24>Greeting ! We are going to start a period of weight loss, we are going to be on the teeth, but we will not use them! The food is outlawed! You agree ? End of communication!</event24>
-    <event25>We think that one television per room in all high houses would be the least. We like shows where 100 Kavgas have to fight until there is only one left. So please provide us these televisions. For each home.</event25>
-    <event26>Hello haha ​​!! We want to test a new mode of communication based on laser! So, it's a little dangerous, but hey! These are only small "Nucleoexplonapalmocute" type lasers! With your agreement, we can test this laser to the sky, to communicate with the transport vessels of buildings ... Otherwise we will do it in the city! No worries do not worry!</event26>
-    <event2000>Hello, spaceport here. We will receive our first settlers tomorrow. These are covridians, a breed that particularly appreciates science. So they need a house and a laboratory, so they can work here. You will find these buildings at the bottom left of your management screen, you can place them by clicking and depositing directly on the field. You can place a high house under the spaceport to connect it. Then place a laboratory underneath him too.</event2000>
-    <event2001>Hello, spaceport here. To connect the buildings to each other, other than the ones on top of each other, you can connect them with bridges. Hold the [SHIFT] key to bridge two buildings at the same height. Buildings connected by bridges are considered adjacent, regardless of the distance between them.</event2001>
-    <event2002>Hello, spaceport here. We will soon receive Krowsers. It is a race loving to work in galleries. They would need a factory to work in the mine. In addition, they do not necessarily appreciate luxury housing, an average home will be perfect for them. Place the factory so that it is adjacent to the mine and the average home not far from it. For these buildings to work, they need energy. They must be connected to your city.</event2002>
-    <event2003>Hel ... Hello ... We apologize, but for us to work, we would need access to the mine from the factory. The factory must be connected to the mine by a bridge. In addition ... Our buildings need a lot of electricity and the spaceport does not provide enough ... Can you put a plant to generate more? Thank you ... And sorry for the inconvenience!</event2003>
-    <event2004>Hello, spaceport here. Buildings need electricity to operate. As for the settlers, they need food. We can provide some electricity and some food from the spaceport, but not enough for the next comers. The kavga are a warrior race that will not like not having enough food. Please order a food distributor and a fire station so that they can exercise their ... Work. They will be able to live in average homes.</event2004>
-    <event2005>Good morning! We need access to the nests of critters that populate this planet. This is probably a source of danger, we will take care of it! The nests of critters regenerate little by little and the more we are on these nests, the more the nest will lose creatures! Yaah !! Hum ... End of communication.</event2005>
-    <event2006>Hello, spaceport here. Earis are on their way to our colony. It is a peaceful breed, for whom art takes precedence over everything, they generally like working at height, it allows them to better see the landscape. In addition, they appreciate the accommodations without any comfort. Please order a low dwelling and a workshop.</event2006>
-    <event2007>Hmm ... Hello ... The Earis have arrived and are very happy to be here ... They ... are having a party and I'm afraid it's going to get out of hand ... Can you ... Could you put a police building and a fire brigade? In case ... Thank you ... I do not want my family living in a dilapidated place ... And then you will not have to deal with them, these buildings handle the problems that are within their range. Th...Thank you.</event2007>
-    <event2008>Greetings! The Earis have put everything upside down! Fortunately you have placed buildings to block their enthusiasm. Otherwise, we would have solved that ourselves. We should now fix their nonsense with a repair building in range. End of transmission.</event2008>
-    <event2009>Hello, spaceport here. Senuths are about to arrive. It is a race formerly very developed and very rich. You must order a high dwelling and ... A lounge. These people do not really like work, being used to idleness.</event2009>
-    <event2010>Here we go, try to survive as long as possible !</event2010>
-    <event1000>$PLAYERNAME, I'm afraid you may have upset the settlers. Much. So much that I fear you won't find anyone to follow your words anymore. The population is tired and angry. It's time for you to leave $CITYNAME - we hope the Space Union will send another governor soon. I wish you the best of luck in your next enterprise - may it end up better for you!</event1000>
+    <event1>Can we have a cotton candy machine in the lounge or is it asking too much? It will obviously be specially made for us and not for other breeds because they don't need it. Our well-being must be your priority.A better lounge for Senuths.</event1>
+    <event2>Well hello... I live in a very nice place, but the look of $CITY_NAME doesn't fit my personality at all.With your agreement, I would like to carve and paint all around my home to prove my artistic value to all!Better houses for an Eari.</event2>
+    <event3>Greetings !My men and I need a lot of spinach to even get  better! I noticed in some of my men a decline in health because of a poor diet, it isn't tolerable!I came to see you to have an extra supply of food for those men! Over and out!More food for Kavgas ! </event3>
+    <event4>I just had a brilliant, brilliant idea!! I can do a little something with a crystal that I ... borrowed from the mine I explored!Let me tinker with a Factory for some time, and after that, it will be even more powerful!A Krowser's idea.</event4>
+    <event5>Hel ... Hello, I come to see you because a factory is starting to get very dirty and I ... I would like to clean it. But there are always too many people inside!Can you please shut down a part of the factory so that I can clean it up ... almost everywhere?Many people are starting to cough because of the dust.Clean the factory ?</event5>
+    <event6>Between naps, I had a wonderful idea, that my friends immediately applauded.I would like to organize a contest of "Trash throwing" on barracks.I find the concept very interesting and it will make an extra occupation to these Kavgas brutes.A new game for Kavgas !</event6>
+    <event7>A friend and me created an ingenious system of wired communication!We use two pots connected to one wire. But this communication system is a short-range one. We must scream in the handset ... Even if it may embarrass the other inhabitants of $CITY_NAME, science has no time to lose!Help the two Covridians to finish their invention.</event7>
+    <event8>I ... I've been separated from my family since my departure to join this colony and I have the opportunity to bring them here thanks to ... Thanks to an acquaintance. Can they come in the next batch of settlers?Welcome the family of the lonely inhabitant?</event8>
+    <event9>The crystals found in a mine are astounding!I would like to study them, with a research method that uses sulfur, nitroglycerin, potassium nitrate and stones! Stones are harmless, do not worry!Can I ?Let the Covridian study the stones?</event9>
+    <event10>We find that this factory is not really pretty in this beautiful colony that you built ... With your consent, we can undertake a special renovation ... Of course, it won't be a real factory anymore, but the building will be more easy on the eye.Better buildings for Earis.</event10>
+    <event11>Greetings !I discovered traces of small woodlice in one house !Many people tell me that they are harmless but I don't believe it! I can go and pacify this area if you allow me to!Over and out.Let the Kavga pacify the area ?</event11>
+    <event12>The period of the art banquet has arrived!We celebrate nature, water and the natural energy that flows from it.We will need extra food because food represents life. In fact, fat is life.More food for Earis.</event12>
+    <event13>Hello.In order to help those poor people who are working hard at the factory, I decided to make a move.So that they don't think they work for nothing, I can turn on all the lights in my house . Yes, I am a great person. They might feel more important..Offer the light of hope.</event13>
+    <event14>Labor Day has begun, a feast that dates back to our old planet! During this day, we work more and faster! The faster our tools overheat, the more we laugh ... May we ... Can we ... start this celebration now?Start this celebration ? </event14>
+    <event15>On this clement day, my group and I composed a piece of very pure music, which advocates open-mindedness, good-heartedness and thoughtfulness. This song is to be played at 125 Db, so that our neighbors could hear this magnificent quartet. Can we start?Let's Sing !</event15>
+    <event16>We've been investigating a hazardous issue on the power accumulators during the past week and we believe that we found the source of the problem. With your agreement, boss, we would like to proceed to replace the faulty piece.Replace the faulty piece ? </event16>
+    <event17>We are a lot of Senuths to think that this colony is too simple, not easy enough on the eye, not to mention the smells ... But that's not the question! We would like to see in this colony a real, aesthetic, powerful and impacting tower!A new tower for Senuths ? </event17>
+    <event18>Three friends and I are creating one of the most beautiful sculptures that have ever been invented! We are almost there but we need peace and space ...Can you book the workshop so we can go down in history?Let the workshop to this budding artists ?</event18>
+    <event19>Greetings !A slightly insane scientist came to see us with a new type of "revolutionary" weapon, I think it uses crystals. If we manage to handle them, we will be able to atta... Defend the colony from those creatures even more effectively! But ... It will be necessary to manage to handle them ... Authorization granted?Authorize the scientist to present his weapon model?</event19>
+    <event20>Please stop what you are doing and listen to us. Well.We contacted friends from another colony and discovered spices that turn into delicious food when put in contact with energy. We can ask our friends to send us large barrels of spices, to convert the electricity of the spaceport into food. We like good food.Authorize barrels of spices to create new food ? </event20>
+    <event21>Sorry to disturb you, we are many to say that looking for new mines would be interesting for the colony, because our mines will not be eternal ... Can you handle it?Looking for new mines ? </event21>
+    <event22>Well, we are just here to say that we want two new casinos.We need more, we love wealth.Apparently, you are a smart person ... Apparently ... We should not be the ones telling you this.And if that is not done ..Build the two new Casinos for Senuths?</event22>
+    <event23>We have heard that the colony 118 makes candies that make them more creative and that allow them to see different colors.The only drawback is that these sweets make you want to eat more of them ... Anyway, we are interested, can we have some?Authorize the import of candies?</event23>
+    <event24>Greetings !We are going to start a period of weight loss, we are going to be on high alert, but we will not use them!The food is excluded! Do you agree ?Over and out!No food for Kavgas.</event24>
+    <event25>We think that one television per room in all high houses would be the least one can do. We like programs in which 100 Kavgas have to fight until there is only one left. So please provide us these televisions. For each home.Give a TV to inhabitants ? </event25>
+    <event26>Hello haha ​​!!We want to test a new mode of communication based on laser! So, it's a little dangerous, but hey! These are only small "Nucleoexplonapalmocute" type lasers! With your agreement, we can test this laser towards the sky, to communicate with the vessels that transports buildings ...Otherwise we will do it in the city! No worries, I tell you not to worry!Authorize the new communication system ? </event26>
+    <event2000>Hello, spaceport here.You will receive your first settlers tomorrow. These are Covridians, a breed that particularly appreciates science.So they need a house and a laboratory to be able to work here.You will find these buildings at the bottom left of your management screen, you can place them by clicking or drag'n'drop them directly on the field. You can place a big house under or on the spaceport to connect it. As well place a laboratory underneath it.Drag'n'drop the high house from the "Houses" tab and a laboratory from the tab to the spaceport.</event2000>
+    <event2001>Hello, spaceport here.To connect the buildings amongst themselves, instead of piling them up, you can connect them with bridges. Hold the RIGHT- CLICK and slide the mouse to create a bridge between two buildings at the same height.Buildings connected by bridges are considered as adjacent, regardless of the distance between them.Hold the RIGHT- CLICK and slide the mouse to create a bridge between two buildings at the same height.</event2001>
+    <event2002>Hello, spaceport here.We will soon receive Krowsers. It is a race that loves to work in mines.They would need a factory to work in the mine. In addition, they do not necessarily appreciate luxury housing, an medium house will be perfect for them. Place the factory so that it is adjacent to the mine and the medium house not far from it. For these buildings to work, they need energy. They must be connected to your city.All buildings needs energy to work.</event2002>
+    <event2003>Hel ... Hello ... We apologize, but to be able to work, we would need access to the mine from the factory. The factory must be connected to the mine by a bridge. In addition ... Our buildings need a lot of electricity and the spaceport does not provide enough ... Can you put a power plant to generate more energy? Thank you ... And sorry for the inconvenience!Every building has a range that diffuse its effects by the height of towers and bridges.</event2003>
+    <event2004>Hello, spaceport here.Buildings need electricity to operate.As for the settlers, they need food.We can provide some electricity and some food from the spaceport, but not enough for the next comers.The Kavgas are a warrior race that will not like having not enough food.Please order a mess and a fire station so that they can exercise their ... Work. They will be able to live in average homes.Settlers need food that can be distributed with messes.</event2004>
+    <event2005>Good morning!We need access to the nests of creatures that populate this planet.This is probably a source of danger, we will take care of it! The nests of creatures regenerate little by little and the more we are on these nests, the more the nest will lose creatures!Yaah !! Hum ... Over and out.Nests are ocupations for Kavgas placed at fixed locations on the map such as mines.</event2005>
+    <event2006>Hello, spaceport here.Earis are on their way to our colony. It is a peaceful breed, for whom art takes precedence over everything. They appreciate the accommodations without any comfort. Please order a small house and a workshop.</event2006>
+    <event2007>Hmm ... Hello ... The Earis have arrived and are very happy to be here ...They ... are having a party and I'm afraid it's going to get out of hand ... Can you ... Could you put a police and fire station?Just in case ... Thank you ... I do not want my family living in a dilapidated place ... And then you will not have to deal with them, these buildings handle the problems that are within their range. Th...Thank you.Security buildings are essential to the proper functioning of the city.</event2007>
+    <event2008>Greetings!The Earis have put everything upside down! Fortunately you have placed buildings to block their enthusiasm.Otherwise, we would have solved that ourselves. We should now fix their nonsense with a repair craft in range. Over and out.Repair craft is essential to ensure the stability of buildings.</event2008>
+    <event2009>Hello, spaceport here.Senuths are almost there. Formerly, this race was very developed and very rich. You must order a big house and ... A lounge. These people do not really like work, being used to idleness.The buildings have a significant color according to the people they influence.</event2009>
+    <event2010>Try to build the most beautiful, largest and most impressive city possible!</event2010>
+    <event1000>$PLAYER_NAME, I'm afraid you may have upset the settlers. A lot that I fear you won't find anyone to follow your words anymore. The population is tired and angry. It's time for you to leave $CITY_NAME- we hope the Space Union will send another governor soon. I wish you the best of luck in your next firm - may it end up better for you!You lose ! </event1000>
   </eventDescription>
   <newColony>
     <cityNameTooShort>City name is too short</cityNameTooShort>
@@ -356,6 +391,7 @@
   <generalUI>
     <cancel>Cancel</cancel>
     <ok>OK</ok>
+    <save>Save</save>
     <confirm>Confirm</confirm>
   </generalUI>
   <overlay>
@@ -364,6 +400,7 @@
     <foodConsumption>Food Consumption</foodConsumption>
     <power>Power</power>
     <fireRisk>Fire Risk</fireRisk>
+    <type>Building type</type>
     <default>No Overlay</default>
   </overlay>
   <scriptAction>
@@ -386,73 +423,81 @@
     <REMOVE_FLAG_FROM_BUILDING_FOR_DURATION>A building will lose a function during {1} cycles!</REMOVE_FLAG_FROM_BUILDING_FOR_DURATION>
     <GAME_OVER>You better run fast</GAME_OVER>
     <TRIGGER_EVENT>Another event occurs</TRIGGER_EVENT>
+    <DECLARE_EVENT>
+    </DECLARE_EVENT>
     <none>Nothing happens</none>
     <chance>{0}% chances of</chance>
+    <TOTAL_CITIZEN_COUNT>Population</TOTAL_CITIZEN_COUNT>
+    <STOPPED_RIOTS_COUNT>Pacified riots</STOPPED_RIOTS_COUNT>
+    <CURRENT_CYCLE>Elapsed cycles</CURRENT_CYCLE>
+    <STOPPED_FIRES_COUNT>Extinguished fires</STOPPED_FIRES_COUNT>
+    <FIRES_COUNT>Simultaneous fires</FIRES_COUNT>
+    <BRIDGE_COUNT>Bridges</BRIDGE_COUNT>
   </scriptAction>
   <choice>
     <event1000_1>Run!</event1000_1>
     <event1_1>Let's try...</event1_1>
     <event1_2>No!</event1_2>
-    <event2_1>If you want!</event2_1>
-    <event2_2>Don't touch!</event2_2>
-    <event3_1>Yeah eat more!</event3_1>
-    <event3_2>The food is important.</event3_2>
-    <event4_1>Do that, Doc' !</event4_1>
-    <event4_2>No thanks.</event4_2>
-    <event5_1>Your health is important.</event5_1>
+    <event2_1>If you want !</event2_1>
+    <event2_2>Don't touch !</event2_2>
+    <event3_1>Yeah eat more !</event3_1>
+    <event3_2>The food is important</event3_2>
+    <event4_1>Do this, Doc' !</event4_1>
+    <event4_2>No thanks</event4_2>
+    <event5_1>Your health is important</event5_1>
     <event5_2>It's only sand...</event5_2>
-    <event6_1>It can be funny!</event6_1>
+    <event6_1>It can be funny !</event6_1>
     <event6_2>Out of my sight!</event6_2>
-    <event7_1>Why not.</event7_1>
-    <event7_2>It's not necessary.</event7_2>
-    <event8_1>Of course yes!</event8_1>
-    <event8_2>No, sorry.</event8_2>
-    <event9_1>Be careful to you!</event9_1>
-    <event9_2>Euh...No?</event9_2>
-    <event10_1>Ok.</event10_1>
+    <event7_1>Why not</event7_1>
+    <event7_2>It's not necessary</event7_2>
+    <event8_1>Of course, yes !</event8_1>
+    <event8_2>No, sorry</event8_2>
+    <event9_1>Be careful !</event9_1>
+    <event9_2>Uh...No?</event9_2>
+    <event10_1>Ok</event10_1>
     <event10_2>Don't touch!</event10_2>
-    <event11_1>Kill those bugs!</event11_1>
+    <event11_1>Kill those bugs !</event11_1>
     <event11_2>Drop this flamethrower...</event11_2>
     <event12_1>Of course.</event12_1>
-    <event12_2>I hate Art.</event12_2>
-    <event13_1>Hum...Ok...</event13_1>
-    <event13_2>Get out.</event13_2>
-    <event14_1>Happy...Festival.</event14_1>
-    <event14_2>Don't work too hard.</event14_2>
-    <event15_1>Rock and Roll!</event15_1>
-    <event15_2>Play Air Guitar.</event15_2>
-    <event16_1>Yes you can.</event16_1>
-    <event16_2>Don't touch anything!</event16_2>
-    <event17_1>The sky is not a limit!</event17_1>
+    <event12_2>I hate Art</event12_2>
+    <event13_1>Uh...Ok...</event13_1>
+    <event13_2>Get out</event13_2>
+    <event14_1>Happy...Festival</event14_1>
+    <event14_2>Don't work too hard</event14_2>
+    <event15_1>Rock'n'Roll!</event15_1>
+    <event15_2>Play Air Guitar</event15_2>
+    <event16_1>Yes, you can</event16_1>
+    <event16_2>Don't touch anything !</event16_2>
+    <event17_1>The sky have no limit!</event17_1>
     <event17_2>Are you stupid?</event17_2>
-    <event18_1>Go work in calm.</event18_1>
-    <event18_2>No, i'm sorry.</event18_2>
-    <event19_1>I love weapons, yes!</event19_1>
-    <event19_2>We don't need this!</event19_2>
-    <event20_1>Yes it can be helpful!</event20_1>
+    <event18_1>Get back to work</event18_1>
+    <event18_2>No, i'm sorry</event18_2>
+    <event19_1>I love weapons, yes !</event19_1>
+    <event19_2>We don't need this ! </event19_2>
+    <event20_1>Yes it can be helpful !</event20_1>
     <event20_2>You talkin' to me?</event20_2>
-    <event21_1>I'll see what I can do.</event21_1>
-    <event21_2>I can't, sorry!</event21_2>
-    <event22_1>Place your bets!</event22_1>
-    <event22_2>Or what, Sir Annoying?</event22_2>
+    <event21_1>I'll see what I can do</event21_1>
+    <event21_2>I can't, sorry !</event21_2>
+    <event22_1>Place your bets !</event22_1>
+    <event22_2>Or what, Sir Annoying ?</event22_2>
     <event23_1>Let's cook!</event23_1>
-    <event23_2>It's bad!</event23_2>
-    <event24_1>I like muscles.</event24_1>
-    <event24_2>No don't do that.</event24_2>
-    <event25_1>Go watch Battle Royal.</event25_1>
+    <event23_2>It's bad !</event23_2>
+    <event24_1>I like muscles</event24_1>
+    <event24_2>No, don't do that</event24_2>
+    <event25_1>Go watch Battle Royal</event25_1>
     <event25_2>No, no and no!</event25_2>
     <event26_1>Lasers? Mmh ok...</event26_1>
     <event26_2>No, please!</event26_2>
-    <event2000_1>Understood.</event2000_1>
+    <event2000_1>Understood</event2000_1>
     <event2001_1>Ok</event2001_1>
     <event2002_1>Understood!</event2002_1>
-    <event2003_1>Sure.</event2003_1>
+    <event2003_1>Sure</event2003_1>
     <event2004_1>Ok</event2004_1>
-    <event2005_1>Sure.</event2005_1>
-    <event2006_1>Ok!</event2006_1>
+    <event2005_1>Sure</event2005_1>
+    <event2006_1>Ok !</event2006_1>
     <event2007_1>Understood</event2007_1>
     <event2008_1>Ok</event2008_1>
-    <event2009_1>O...Ok!</event2009_1>
+    <event2009_1>O...Ok !</event2009_1>
     <event2010_1>Thanks for everything!</event2010_1>
   </choice>
   <populationTypeDelegate>
@@ -462,131 +507,4 @@
     <scientist>Dr {0}</scientist>
     <worker>{0}son</worker>
   </populationTypeDelegate>
-
-<achievementName>
-    <achievement0>Get comfortable</achievement0>
-    <achievement1>Good little colony</achievement1>
-    <achievement2>Increase in housing</achievement2>
-    <achievement3>It's starting to do a lot!</achievement3>
-    <achievement4>Colony ... Rather a city yes!</achievement4>
-    <achievement5>Megalopolis confirmed</achievement5>
-    <achievement6>Thousand mouths to feed</achievement6>
-
-    <achievement7>There is no smoke ...</achievement7>
-    <achievement8>Volunteer firefighter</achievement8>
-    <achievement9>Through the fire and flame</achievement9>
-    <achievement10>We did well to put firefighters here!</achievement10>
-
-    <achievement11>Welcome to fight C... Colony</achievement11>
-    <achievement12>Do not stretch the other cheek</achievement12>
-    <achievement13>This room has been pacified</achievement13>
-
-    <achievement14>Science in progress!</achievement14>
-    <achievement15>Stars, galaxies and noise in space</achievement15>
-    <achievement16>The question of the egg and the chicken still outstanding.</achievement16>
-
-    <achievement17>Work, still work</achievement17>
-    <achievement18>Bridges, working, sleeping</achievement18>
-    <achievement19>Work done! ~</achievement19>
-
-    <achievement20>Welcome to summer camp</achievement20>
-    <achievement21>Idleness is health</achievement21>
-    <achievement22>Nothing like condescension</achievement22>
-
-    <achievement23>Artists misunderstood ...</achievement23>
-    <achievement24>Carrier wall sculpture</achievement24>
-    <achievement25>To be or not to be a colon</achievement25>
-
-    <achievement26>Incredible view</achievement26>
-    <achievement27>Little oxygen here</achievement27>
-
-    <achievement28>Happiness: the fight</achievement28>
-    <achievement29>Happiness: work</achievement29>
-    <achievement30>Happiness: a good little spa</achievement30>
-    <achievement31>Happiness: Science</achievement31>
-    <achievement32>Happiness: create and imagine</achievement32>
-
-    <achievement39>Neighborhood problem</achievement39>
-    <achievement40>Bridge-t Jone's Diary</achievement40>
-    <achievement41>Nuisance chain</achievement41>
-    <achievement42>It's still a lot of bridges!</achievement42>
-
-    <achievement44>Burns, insect !</achievement44>
-
-    <achievement45>We are fed up !</achievement45>
-    <achievement46>Home delinquency</achievement46>
-    <achievement47>I am asking you to stop... Please...</achievement47>
-    <achievement48>Take a Krowser to hit a Covridian</achievement48>
-
-    <achievement49>Diving in the big bath</achievement49>
-    <achievement50>Persistent colony</achievement50>
-    <achievement51>Lego Pro!</achievement51>
-    <achievement52>Always higher always further always stronger!</achievement52>
-    <achievement53>Never gonna give you up !</achievement53>
-    <achievement54>STACKOLONY</achievement54>
-  </achievementName>
-
-  <achievementDescription>
-    <achievement0>Reach 10 settlers</achievement0>
-    <achievement1>Reach 30 settlers</achievement1>
-    <achievement2>Reach 50 settlers</achievement2>
-    <achievement3>Reach 100 settlers</achievement3>
-    <achievement4>Reach 200 settlers</achievement4>
-    <achievement5>Reach 500 settlers</achievement5>
-    <achievement6>Reach 1000 settlers</achievement6>
-
-    <achievement7>Extinguish a fire</achievement7>
-    <achievement8>Extinguish 5 fires</achievement8>
-    <achievement9>Extinguish 10 fires</achievement9>
-    <achievement10>Extinguish 50 fires</achievement10>
-
-    <achievement11>Have 10 Kavgas in the colony</achievement11>
-    <achievement12>Have 50 Kavgas in the colony</achievement12>
-    <achievement13>Have 100 Kavgas in the colony</achievement13>
-
-    <achievement14>Have 10 Covridians in the colony</achievement14>
-    <achievement15>Have 50 Covridians in the colony</achievement15>
-    <achievement16>Have 100 Covridians in the colony</achievement16>
-
-    <achievement17>Have 10 Krowsers in the colony</achievement17>
-    <achievement18>Have 50 Krowsers in the colony</achievement18>
-    <achievement19>Have 100 Krowsers in the colony</achievement19>
-
-    <achievement20>Have 10 Senuths in the colony</achievement20>
-    <achievement21>Have 50 Senuths in the colony</achievement21>
-    <achievement22>Have 100 Senuths in the colony</achievement22>
-
-    <achievement23>Have 10 Earis in the colony</achievement23>
-    <achievement24>Have 50 Earis in the colony</achievement24>
-    <achievement25>Have 100 Earis in the colony</achievement25>
-
-    <achievement26>Do a 10 block tour</achievement26>
-    <achievement27>Do a 20 block tour</achievement27>
-
-    <achievement28>Mood Kavga to 100</achievement28>
-    <achievement29>Mood Krowser to 100</achievement29>
-    <achievement30>Mood senuth to 100</achievement30>
-    <achievement31>Mood Covridian to 100</achievement31>
-    <achievement32>Mood Eari to 100</achievement32>
-
-    <achievement39>Have 5 bridges in the colony</achievement39>
-    <achievement40>Have 10 bridges in the colony</achievement40>
-    <achievement41>Have 50 bridges in the colony</achievement41>
-    <achievement42>Have 100 bridges in the colony</achievement42>
-
-    <achievement44>A block burns</achievement44>
-
-    <achievement45>Stop a rampage</achievement45>
-    <achievement46>Stop 5 rampages</achievement46>
-    <achievement47>Stop 10 rampages</achievement47>
-    <achievement48>Stop 50 rampages</achievement48>
-
-    <achievement49>Reach Cycle 10</achievement49>
-    <achievement50>Reach Cycle 20</achievement50>
-    <achievement51>Reach Cycle 50</achievement51>
-    <achievement52>Reach Cycle 100</achievement52>
-    <achievement53>Reach Cycle 150</achievement53>
-    <achievement54>Reach Cycle 200</achievement54>
-  </achievementDescription>
-
 </lines>
