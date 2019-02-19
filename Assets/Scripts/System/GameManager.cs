@@ -299,11 +299,7 @@ public class GameManager : MonoBehaviour
             ));
         }
 
-
-        if (Input.GetKeyDown(KeyCode.F)) {
-            animationManager.ElevateTower(cursorManagement.posInGrid);
-        }
-
+        
         if (Input.GetKeyDown(KeyCode.G)) {
             animationManager.EndElevateTower(new Vector2Int(cursorManagement.posInGrid.x, cursorManagement.posInGrid.z));
         }
@@ -383,6 +379,15 @@ public class GameManager : MonoBehaviour
 
         cityManager.GenerateEnvironmentBlocks();
 
+        // TUTORIAL RUN ONLY
+        if (cityManager.isTutorialRun) {
+
+            // Lock every building
+            foreach (BlockScheme scheme in library.blocks) {
+                cityManager.LockBuilding(scheme.ID);
+            }
+        }
+
         // NEW GAME ONLY
         if (isNewGame) {
 
@@ -391,15 +396,6 @@ public class GameManager : MonoBehaviour
 
             // CINEMATIC
             Instantiate(library.spatioportSpawnerPrefab);
-        }
-
-        // TUTORIAL RUN ONLY
-        if (cityManager.isTutorialRun) {
-
-            // Lock every building
-            foreach (BlockScheme scheme in library.blocks) {
-                cityManager.LockBuilding(scheme.ID);
-            }
         }
 
         // Ingame switch

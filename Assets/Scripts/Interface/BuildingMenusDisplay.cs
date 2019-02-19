@@ -43,9 +43,7 @@ public class BuildingMenusDisplay : MonoBehaviour {
             );
 
             // Add localized line to build tooltip
-            mO.GetComponent<BuildingMenuDisplay>().button.GetComponent<Tooltip>().AddLocalizedLine(
-                new Localization.Line("hud", "build"+menu.Key.ToString())    
-            );
+            StartCoroutine(AddBuildMenuTooltips(mO, menu.Key.ToString()));
 
             // Destroying examples from the fitter
             GameObject content = mO.GetComponentInChildren<ContentSizeFitter>().gameObject;
@@ -59,18 +57,35 @@ public class BuildingMenusDisplay : MonoBehaviour {
                 GameObject item = Instantiate(itemExample, content.transform).transform.GetChild(0).gameObject;
                 item.name = scheme.ID.ToString();
                 item.GetComponent<BuildingMenuItem>().blockId = scheme.ID;
+                item.GetComponent<BuildingMenuItem>().parentScrollRect = mO.GetComponentInChildren<ScrollRect>();
 
                 Tooltip tt = item.GetComponent<Tooltip>();
-                List<Tooltip.TooltipLocalizationEntry> entries = Tooltip.GetBuildingTooltip(scheme);
-                foreach (Tooltip.TooltipLocalizationEntry entry in entries) {
-                    tt.AddLocalizedLine(entry);
-                }
+                StartCoroutine(AddTooltipsWhenPossible(tt, scheme));
             }
 
             mO.transform.GetChild(0).gameObject.SetActive(false);
 
             offset += xOffset;
         }
+    }
+
+    IEnumerator AddBuildMenuTooltips(GameObject mO, string buildingType)
+    {
+        yield return new WaitUntil(delegate{ return GameManager.instance.localization.GetLanguages().Count > 0; });
+        mO.GetComponent<BuildingMenuDisplay>().button.GetComponent<Tooltip>().AddLocalizedLine(
+            new Localization.Line("hud", "build" + buildingType)
+        );
+        yield return true;
+    }
+
+    IEnumerator AddTooltipsWhenPossible(Tooltip tt, BlockScheme scheme)
+    {
+        yield return new WaitUntil(delegate { return GameManager.instance.localization.GetLanguages().Count > 0; });
+        List<Tooltip.TooltipLocalizationEntry> entries = Tooltip.GetBuildingTooltip(scheme);
+        foreach (Tooltip.TooltipLocalizationEntry entry in entries) {
+            tt.AddLocalizedLine(entry);
+        }
+        yield return true;
     }
 
     private void FillCategories()

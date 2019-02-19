@@ -140,6 +140,9 @@ public class Localization : MonoBehaviour {
     
     public string GetLine(string id, params string[] values)
     {
+        if (GetLanguages().Count <= 0) {
+            return "[LOC:NO LANGUAGES LOADED]";
+        }
         try {
             string line = string.Format(locs[new KeyValuePair<string, string>(currentCategory, id)], values);
             return Interpret(line);
@@ -150,7 +153,7 @@ public class Localization : MonoBehaviour {
         }
         catch(FormatException fe)
         {
-            Logger.Error("Line : " + id + " in " + currentCategory + " category has too much parameters.");
+            Logger.Error("Line : " + id + " in " + currentCategory + " category has too much parameters : "+string.Join(",",values));
             return "[LOC:" + currentCategory + ":" + id+"] TOO MUCH PARAMS";
         }
     }
