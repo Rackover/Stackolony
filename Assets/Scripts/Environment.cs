@@ -55,7 +55,7 @@ public class Environment
             return variables[varName].Invoke();
         }
         catch(KeyNotFoundException e) {
-            string msg = "Accessed unknown environment variable " + varName + ":\n" + e.ToString();
+            string msg = "Accessed unknown environment variable [" + varName + "]:\n" + e.ToString();
             Debug.LogError(msg);
             Logger.Error(msg);
             return "";
