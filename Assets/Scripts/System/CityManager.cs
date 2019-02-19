@@ -121,7 +121,7 @@ public class CityManager : MonoBehaviour {
 
     public bool IsLocked(int id)
     {
-        return lockedBuildings.Contains(id);
+        return lockedBuildings.Contains(id) || !conditionalUnlocker.CanBeUnlocked(id);
     }
 
     //Finds a house for every citizens (Soon it'll take a priority order into account)
