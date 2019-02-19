@@ -4,6 +4,7 @@ using System;
 using System.Xml;
 using System.IO;
 using UnityEngine;
+using System.Text.RegularExpressions;
 
 public class Localization : MonoBehaviour {
 
@@ -145,6 +146,15 @@ public class Localization : MonoBehaviour {
         }
         try {
             string line = string.Format(locs[new KeyValuePair<string, string>(currentCategory, id)], values);
+
+            // Workaround to eliminate whitespaces before ! and ? in english
+            if (currentLang.name == "english") {
+                line = Regex.Replace(line, "( ?)", "?");
+                line = Regex.Replace(line, "( :)", ":");
+                line = Regex.Replace(line, "( !)", "!");
+            }
+            // end of
+
             return Interpret(line);
         }
         catch(KeyNotFoundException) {
