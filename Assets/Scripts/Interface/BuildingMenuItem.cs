@@ -7,21 +7,28 @@ using UnityEngine.EventSystems;
 public class BuildingMenuItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
 
     public int blockId;
+    public ScrollRect parentScrollRect;
+
+
+    // STATES
     bool isBeingDragged = false;
     bool concerned = false;
     bool isLocked = false;
+    bool lastState;
+
+    // REFERENCES
     Block draggingBuilding;
     GameObject blockPrefab;
     GameObject padlock;
-    public ScrollRect parentScrollRect;
-
     RawImage ri;
+    Image background;
     Displayer display;
     Texture preview;
     
     private void Start()
     {
         blockPrefab = GameManager.instance.library.GetBlockByID(blockId).model;
+        background = transform.parent.GetComponent<Image>();
         ri = GetComponent<RawImage>();
         display = CreateDisplay();
         padlock = transform.GetChild(0).gameObject;
@@ -42,11 +49,14 @@ public class BuildingMenuItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
     public void Lock()
     {
         padlock.SetActive(true);
+        background.color = Color.black;
         isLocked = true;
     }
 
     public void Unlock()
     {
+        background.color = Color.white;
+        transform.parent.SetSiblingIndex(0);
         padlock.SetActive(false);
         isLocked = false;
     }
@@ -78,11 +88,20 @@ public class BuildingMenuItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
         ri.texture = saved;
     }
 
-    void Update () {
+    void Update () 
+    {
         // Lock check
-        Unlock();
-        if (GameManager.instance.cityManager.IsLocked(blockId)) {
-            Lock();
+        bool currentState = GameManager.instance.cityManager.IsLocked(blockId); 
+        if (lastState != currentState)
+        {
+            lastState = currentState;
+            if(lastState) Lock();
+            else Unlock();
+        }
+        else
+        {
+            if(lastState) Lock();
+            else Unlock();  
         }
 
         // Drag
