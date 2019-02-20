@@ -10,10 +10,6 @@ using UnityEngine;
 /// Deux missions ne peuvent donc jamais avoir lieu en même temps.
 /// Une fois qu'une mission est terminée, elle lance une fonction callback. Si cette fonction callback est liée à des coroutines, alors elle s'effectue, et seulement après
 /// la mission sera marquée comme terminée.
-/// 
-/// PROBLEMES ACTUELS :
-/// Lors de la chute d'un generateur, il generere 2 fois du courant
-/// 
 /// </summary>
 
 
@@ -283,8 +279,8 @@ public class MissionManager : MonoBehaviour {
 
         //verifie que la position se trouve dans la grille
         if (position.x < 0 || position.x > GameManager.instance.gridManagement.grid.GetLength(0)-1) { return null; }
-        if (position.y < 0 || position.x > GameManager.instance.gridManagement.grid.GetLength(1) - 1) { return null; }
-        if (position.z < 0 || position.x > GameManager.instance.gridManagement.grid.GetLength(2) - 1) { return null; }
+        if (position.y < 0 || position.y > GameManager.instance.gridManagement.grid.GetLength(1) - 1) { return null; }
+        if (position.z < 0 || position.z > GameManager.instance.gridManagement.grid.GetLength(2) - 1) { return null; }
 
         //Verifie que la position n'a jamais été explorée auparavant
         if (!myMission.exploredPositions.Contains(position))
@@ -321,6 +317,7 @@ public class MissionManager : MonoBehaviour {
                     {
                         output = GameManager.instance.gridManagement.grid[bridgeDestinationPosition.x, bridgeDestinationPosition.y, bridgeDestinationPosition.z].GetComponent<Block>();
                         myMission.exploredPositions.Add(bridgeDestinationPosition);
+                        return output;
                     }
                 }
                 //Sinon, récupère simplement le bloc trouvé
@@ -329,37 +326,30 @@ public class MissionManager : MonoBehaviour {
                     if (onlyBridges == false)
                     {
                         output = blockFound.GetComponent<Block>();
+                        return output;
                     } else
                     {
+                        Block initialBlock = GameManager.instance.gridManagement.grid[initialPos.x, initialPos.y, initialPos.z].GetComponent<Block>();
                         Block foundBlockLink = blockFound.GetComponent<Block>();
                         if (foundBlockLink != null)
                         {
-                            if (foundBlockLink.bridge != null && foundBlockLink.bridge.GetComponent<BridgeInfo>().destination == initialPos) 
-                            {
-                                output = blockFound.GetComponent<Block>();
-                                myMission.exploredPositions.Add(output.gridCoordinates);
-                                foreach (Vector3Int pos in foundBlockLink.bridge.GetComponent<BridgeInfo>().allBridgePositions)
+                            foreach (GameObject bridge in foundBlockLink.bridges) {
+                                BridgeInfo bridgeInfo = bridge.GetComponent<BridgeInfo>();
+                                if (bridgeInfo != null && bridgeInfo.destination == initialPos)
                                 {
-                                    myMission.exploredPositions.Add(pos);
+                                    output = foundBlockLink;
+                                    myMission.exploredPositions.Add(output.gridCoordinates);
+                                    return output;
                                 }
-                            } else
+                            }
+                            foreach (GameObject bridge in initialBlock.bridges)
                             {
-                                GameObject initialBlock = GameManager.instance.gridManagement.grid[initialPos.x, initialPos.y, initialPos.z];
-                                if (initialBlock != null)
+                                BridgeInfo bridgeInfo = bridge.GetComponent<BridgeInfo>();
+                                if (bridgeInfo != null && bridgeInfo.destination == foundBlockLink.gridCoordinates)
                                 {
-                                    Block initialBlockLink = initialBlock.GetComponent<Block>();
-                                    if (initialBlock.GetComponent<Block>() != null)
-                                    {
-                                        if (initialBlockLink.bridge != null)
-                                        {
-                                            Vector3Int foundBlockPosition = initialBlockLink.bridge.GetComponent<BridgeInfo>().destination;
-                                            output = GameManager.instance.gridManagement.grid[foundBlockPosition.x, foundBlockPosition.y, foundBlockPosition.z].GetComponent<Block>();
-                                            foreach (Vector3Int pos in initialBlockLink.bridge.GetComponent<BridgeInfo>().allBridgePositions)
-                                            {
-                                                myMission.exploredPositions.Add(pos);
-                                            }
-                                        }
-                                    }
+                                    output = foundBlockLink;
+                                    myMission.exploredPositions.Add(output.gridCoordinates);
+                                    return output;
                                 }
                             }
                         }
