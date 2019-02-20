@@ -94,6 +94,8 @@ public class CityManager : MonoBehaviour {
 	public void SpawnNest()
 	{
 		GameManager.instance.gridManagement.LayBlock(29, GameManager.instance.gridManagement.GetRandomCoordinates());
+
+        
 	}
 
 	public void OnNewCycle()

@@ -323,6 +323,7 @@ public class GridManagement : MonoBehaviour
         if (destinationCoordinates.y >= 0)
         {
             MoveBlock(block.gameObject, destinationCoordinates);
+            buildablePositions.Remove(coordinates);
             UpdateGridSystems();
         } else
         {
