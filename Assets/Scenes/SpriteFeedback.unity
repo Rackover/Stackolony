@@ -565,11 +565,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e8e9fb9eb537754597191535f4bb3c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvas: {fileID: 0}
-  minSize: 10
-  maxSize: 100
-  targets: []
-  sprites: []
+  canvas: {fileID: 24862620}
+  maxSize: 400
+  targets:
+  - {fileID: 810221748}
+  - {fileID: 681940516}
+  - {fileID: 67358516}
+  - {fileID: 2052203583}
+  sprites:
+  - {fileID: 21300000, guid: bc4df925f3c0072468c5108a1345a16c, type: 3}
+  - {fileID: 21300000, guid: 60992bdac74bd5b458caee9ff16b9b83, type: 3}
+  - {fileID: 21300000, guid: 668af1749bf92534cb32f95904406711, type: 3}
+  - {fileID: 21300000, guid: 03a5f0784f3c3164da2972a3c7afda67, type: 3}
 --- !u!4 &1879591464
 Transform:
   m_ObjectHideFlags: 0
