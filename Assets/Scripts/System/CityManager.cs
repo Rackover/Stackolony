@@ -82,27 +82,43 @@ public class CityManager : MonoBehaviour {
     
 	public void GenerateEnvironmentBlocks()
 	{
-		for( int i = 0; i < minesAtStart; i++){SpawnMine();}
-		for( int i = 0; i < nestsAtStart; i++){SpawnNest();}
+		for( int i = 0; i < minesAtStart; i++){SpawnEnvironmentBlock(28);}
+		for( int i = 0; i < nestsAtStart; i++){SpawnEnvironmentBlock(29);}
 	}
 
-	public void SpawnMine()
+	public void SpawnEnvironmentBlock(int which)
 	{
-		GameManager.instance.gridManagement.LayBlock(28, GameManager.instance.gridManagement.GetRandomCoordinates());
-	}
+        Vector2Int pos = Vector2Int.zero; 
+        for(int i = 0; i < 3; i++)
+        {
+            pos = GameManager.instance.gridManagement.GetRandomCoordinates();
 
-	public void SpawnNest()
-	{
-		GameManager.instance.gridManagement.LayBlock(29, GameManager.instance.gridManagement.GetRandomCoordinates());
+            if(GameManager.instance.gridManagement.IsPositionFree(pos))
+            {
+		        GameManager.instance.gridManagement.LayBlock(which, pos);
+                return;
+            }
+        }
 
-        
+        for(int i = 0; i < GameManager.instance.gridManagement.maxHeight; i++)
+        {
+            if(GameManager.instance.gridManagement.grid[pos.x, i, pos.y] != null)
+            {
+                Block block = GameManager.instance.gridManagement.grid[pos.x, i, pos.y].GetComponent<Block>();
+                if(block != null)
+                {
+                    GameManager.instance.gridManagement.DestroyBlock(block);
+                }
+            }
+        }
+        GameManager.instance.gridManagement.LayBlock(which, pos);
 	}
 
 	public void OnNewCycle()
 	{
         if(Random.Range(0f, 1f) < nestSpawnChance)
 		{
-			SpawnNest();
+			SpawnEnvironmentBlock(29);
 		}
 	}
 

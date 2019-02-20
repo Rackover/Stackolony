@@ -18,7 +18,7 @@ public class Mine : Flag, Flag.IFlag
 
         if(health/sHealth < 0.05f && !soonDestroyed)
         {
-            GameManager.instance.cityManager.SpawnMine();
+            GameManager.instance.cityManager.SpawnEnvironmentBlock(28);
             soonDestroyed = true;
         }
 
