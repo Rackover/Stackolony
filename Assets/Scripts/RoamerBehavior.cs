@@ -38,7 +38,7 @@ public class RoamerBehavior : MonoBehaviour
 		available = true;
 	}
 
-	public void Initialise(int id, Vector3 from, Vector3 to, GameObject bridge)
+	public void Initialize(int id, Vector3 from, Vector3 to, GameObject bridge)
 	{
 		if(visual != null) Destroy(visual.gameObject);
 		visual = Instantiate(

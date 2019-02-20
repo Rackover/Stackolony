@@ -64,11 +64,11 @@ public class RoamerManager : MonoBehaviour
 		// From start to end or from end to start ? and initialyze the Roamer
 		if(Random.Range(0, 2) == 0)
 		{
-			roamer.Initialise(which, from - hShift, to - hShift, bridge.gameObject);
+			roamer.Initialize(which, from - hShift, to - hShift, bridge.gameObject);
 		}
 		else
 		{
-			roamer.Initialise(which, to - hShift, from - hShift, bridge.gameObject);
+			roamer.Initialize(which, to - hShift, from - hShift, bridge.gameObject);
 		}
 	}
 
