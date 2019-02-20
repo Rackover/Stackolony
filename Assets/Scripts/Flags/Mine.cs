@@ -17,12 +17,15 @@ public class Mine : Flag, Flag.IFlag
 
     public void Caged()
     {
-        cageVisual = Instantiate(GameManager.instance.library.cagePrefab, transform.position, Quaternion.identity, transform);
+        if(cageVisual == null)
+            cageVisual = Instantiate(GameManager.instance.library.cagePrefab, transform.position, Quaternion.identity, transform);
+        else 
+            cageVisual.SetActive(true);
     }
 
     public void Uncaged()
     {
-        if(cageVisual != null) Destroy(cageVisual);
+        if(cageVisual != null) cageVisual.SetActive(false);
     }
 
     public override void OnNewMicrocycle()

@@ -6,11 +6,14 @@ public class Barrack : Occupator {
 
 	[Header("Holding")]
 	public Nest nest;
+	Nest pNest;
 
 	public override void OnGridUpdate()
 	{
 		base.OnGridUpdate();
+		pNest = nest;
 		nest = null;
+
         MissionManager.Mission newMission = GameManager.instance.missionManager.PrepareNewMission();
         newMission.position = block.gridCoordinates;
         newMission.callBack = "";
@@ -25,14 +28,13 @@ public class Barrack : Occupator {
 			if(n != null)
 			{
 				nest = n;
+				nest.Caged();
 				break;
 			}
 		}
 
-		if(nest == null)
-		{
-			isEnabled = false;
-		}
+		if(pNest != null && pNest != nest) pNest.Uncaged();
+		if(nest == null) isEnabled = false;
 	}
 
     public override void OnNewMicrocycle()
