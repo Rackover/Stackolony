@@ -30,51 +30,55 @@ public class BuildingMenusDisplay : MonoBehaviour {
             GameObject mO = Instantiate(menuExample, transform);
             mO.GetComponentInChildren<Button>().gameObject.GetComponentsInChildren<Image>()[1].sprite = GameManager.instance.library.buildingsIcons[(int)menu.Key];
 
-            mO.GetComponent<RectTransform>().position = new Vector3(
-                menuExample.GetComponent<RectTransform>().position.x + offset*factor,
-                menuExample.GetComponent<RectTransform>().position.y,
-                menuExample.GetComponent<RectTransform>().position.z
+            RectTransform mRt = mO.GetComponent<RectTransform>();
+            RectTransform xRt = menuExample.GetComponent<RectTransform>();
+            mRt.position = new Vector3(
+                xRt.position.x + offset*factor,
+                xRt.position.y,
+                xRt.position.z
             );
+
+            StartCoroutine(AddBuildMenuTooltips(mO, menu.Key.ToString()));
 
             GameObject content = mO.GetComponentInChildren<ContentSizeFitter>().gameObject;
 
             for (int i = 0; i < content.transform.childCount; i++) {
                 Destroy(content.transform.GetChild(i).gameObject);
-            } 
+            }
 
-            foreach(BlockScheme block in menu.Value) {
+            foreach (BlockScheme block in menu.Value) {
                 GameObject item = Instantiate(itemExample, content.transform).transform.GetChild(0).gameObject;
                 item.name = block.ID.ToString();
                 item.GetComponent<BuildingMenuItem>().blockId = block.ID;
+                item.GetComponent<BuildingMenuItem>().parentScrollRect = mO.GetComponentInChildren<ScrollRect>();
 
                 Tooltip tt = item.GetComponent<Tooltip>();
-                tt.AddLocalizedLine(new Localization.Line("blockName", "block" + block.ID.ToString()));
-                tt.AddLocalizedLine(new Localization.Line("blockDescription", "block" + block.ID.ToString()));
-
-                // Flag reading to get the block bonuses and maluses
-                foreach (List<string> flag in FlagReader.GetFlags(block)) {
-                    string name = flag[0];
-                    flag.Remove(name);
-                    string[] parameters = flag.ToArray();
-
-                    for(int i = 0; i < parameters.Length; i++)
-                    {
-                        if(GameManager.instance.populationManager.GetPopulationByCodename(parameters[i]) != null)
-                        {   
-                            parameters[i] = GameManager.instance.localization.GetLineFromCategory("populationType", parameters[i]);
-                        }
-                    }
-
-                    tt.AddLocalizedLine(new Tooltip.TooltipLocalizationEntry(
-                        name.ToLower(), "flagParameter", FlagReader.IsPositive(name) ? Tooltip.tooltipType.Positive : Tooltip.tooltipType.Negative, parameters
-                    ));
-                }
+                StartCoroutine(AddTooltipsWhenPossible(tt, block));
             }
 
             mO.transform.GetChild(0).gameObject.SetActive(false);
 
             offset += xOffset;
         }
+    }
+
+    IEnumerator AddBuildMenuTooltips(GameObject mO, string buildingType)
+    {
+        yield return new WaitUntil(delegate{ return GameManager.instance.localization.GetLanguages().Count > 0; });
+        mO.GetComponent<BuildingMenuDisplay>().button.GetComponent<Tooltip>().AddLocalizedLine(
+            new Localization.Line("hud", "build" + buildingType)
+        );
+        yield return true;
+    }
+
+    IEnumerator AddTooltipsWhenPossible(Tooltip tt, BlockScheme scheme)
+    {
+        yield return new WaitUntil(delegate { return GameManager.instance.localization.GetLanguages().Count > 0; });
+        List<Tooltip.TooltipLocalizationEntry> entries = Tooltip.GetBuildingTooltip(scheme);
+        foreach (Tooltip.TooltipLocalizationEntry entry in entries) {
+            tt.AddLocalizedLine(entry);
+        }
+        yield return true;
     }
 
     private void FillCategories()

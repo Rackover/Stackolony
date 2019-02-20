@@ -45,7 +45,7 @@ public class CityManager : MonoBehaviour {
 
     public enum BuildingType { Habitation = 0, Services = 1, Occupators = 2 };
     public string cityName = "Valenciennes";
-    public State[] accidentStates = { State.OnFire, State.OnRiot, State.Damaged };
+    public readonly State[] accidentStates = { State.OnFire, State.OnRiot, State.Damaged };
     public Dictionary<Population, Dictionary<House, float>> topHabitations = new Dictionary<Population, Dictionary<House, float>>(); // List of the best habitations (sorted from best to worst)
     public bool isTutorialRun = true;
 
@@ -330,12 +330,14 @@ public class CityManager : MonoBehaviour {
         bool powered = false;
         bool foodLeft = false;
         bool jobLeft = false;
+        bool damaged = false;
 
         foreach (Population profile in house.acceptedPop)
         {
             if (profile == populationType)
             {
                 profileFound = true;
+                break;
             }
         }
 
@@ -366,7 +368,17 @@ public class CityManager : MonoBehaviour {
                 if (pop == populationType)
                 {
                     jobLeft = true;
+                    break;
                 }
+            }
+        }
+
+        foreach (KeyValuePair<State,StateBehavior> state in house.block.states)
+        {
+            if(state.Key == State.Damaged)
+            {
+                damaged = true;
+                break;
             }
         }
 
@@ -385,6 +397,10 @@ public class CityManager : MonoBehaviour {
         if (!jobLeft)
         {
             notation += moodValues.noOccupations;
+        }
+        if (damaged)
+        {
+            notation += moodValues.damaged;
         }
 
         if (notation >= 0)
@@ -406,7 +422,7 @@ public class CityManager : MonoBehaviour {
         {
             int rand = Random.Range(0, GameManager.instance.systemManager.AllBlocks.Count);
             int blockMet = 0;
-            while( GameManager.instance.systemManager.AllBlocks[rand].states.ContainsKey( accident ))
+            while( GameManager.instance.systemManager.AllBlocks[rand].states.ContainsKey( accident ) || GameManager.instance.systemManager.AllBlocks[rand].scheme.riotProof )
             {
                 if(blockMet++ > GameManager.instance.systemManager.AllBlocks.Count) 
                 {

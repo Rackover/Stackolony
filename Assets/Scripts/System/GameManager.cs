@@ -35,10 +35,10 @@ public class GameManager : MonoBehaviour
     public TimelineController timelineController;
     public EventManager eventManager;
     public AnimationManager animationManager;
+    public AchievementManager achievementManager;
 
     [Space(1)]
     [Header("INTERFACE")]
-    public CursorDisplay cursorDisplay;
     public Localization localization;
     public DisplayerManager displayerManager;
 
@@ -53,6 +53,7 @@ public class GameManager : MonoBehaviour
     public bool DEBUG_MODE = false;
     public bool ENABLE_LOGS = true;
     public bool DISABLE_EVENTS = false;
+    public bool DISABLE_GAME_OVER = false;
 
     public static GameManager instance;
 
@@ -133,9 +134,9 @@ public class GameManager : MonoBehaviour
         if (player == null) player = FindObjectOfType<Player>();
         if (eventManager == null) eventManager = FindObjectOfType<EventManager>();
         if (animationManager == null) animationManager = FindObjectOfType<AnimationManager>();
+        if (achievementManager == null) achievementManager = FindObjectOfType<AchievementManager>();
         
         // INTERFACE
-        if (cursorDisplay == null) cursorDisplay = FindObjectOfType<CursorDisplay>();
         if (localization == null) localization = FindObjectOfType<Localization>();
         if (displayerManager == null) displayerManager = FindObjectOfType<DisplayerManager>();
 
@@ -212,6 +213,10 @@ public class GameManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Delete)) {
             eventManager.TriggerEvent(1000);
+        }
+
+        if (Input.GetKeyDown(KeyCode.KeypadPlus)) {
+            eventManager.TriggerEvent(15);
         }
 
         // Pause
@@ -294,11 +299,7 @@ public class GameManager : MonoBehaviour
             ));
         }
 
-
-        if (Input.GetKeyDown(KeyCode.F)) {
-            animationManager.ElevateTower(cursorManagement.posInGrid);
-        }
-
+        
         if (Input.GetKeyDown(KeyCode.G)) {
             animationManager.EndElevateTower(new Vector2Int(cursorManagement.posInGrid.x, cursorManagement.posInGrid.z));
         }
@@ -316,6 +317,10 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.B)) 
         {
             temporality.AddMicroCycle();
+        }
+
+        if (Input.GetKeyDown(KeyCode.W)) {
+            populationManager.GenerateMoodModifier(populationManager.populationTypeList[0], 100, 10, 1000);
         }
     }
 
@@ -374,17 +379,23 @@ public class GameManager : MonoBehaviour
 
         cityManager.GenerateEnvironmentBlocks();
 
-        // NEW GAME ONLY
-        if (isNewGame) {
-
-            // CINEMATIC
-            Instantiate(library.spatioportSpawnerPrefab);
+        // TUTORIAL RUN ONLY
+        if (cityManager.isTutorialRun) {
 
             // Lock every building
             foreach (BlockScheme scheme in library.blocks) {
                 cityManager.LockBuilding(scheme.ID);
             }
+        }
+
+        // NEW GAME ONLY
+        if (isNewGame) {
+
+            // First citizen arrival and cycle loading
             timelineController.UpdateCycle(0);
+
+            // CINEMATIC
+            Instantiate(library.spatioportSpawnerPrefab);
         }
 
         // Ingame switch
@@ -404,15 +415,14 @@ public class GameManager : MonoBehaviour
         temporality.SetTimeScale(2);
 
         // Clear events
-        eventManager.newEvent = null;
-        populationManager.CitizenArrival = null;
-        cursorManagement.CursorError = null;
-
+        eventManager.ClearListeners();
+        cursorManagement.ClearListeners();
+       
         // Clear system
         systemManager.ClearSystem();
 
         // Remove gameevents and citizens
-        populationManager.citizenList.Clear();
+        populationManager.Clear();
         eventManager.ResetChances();
 
         // Shut down only

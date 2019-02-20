@@ -101,6 +101,8 @@ public class Notifications : MonoBehaviour {
         notification.gameObject = nO;
         notification.images = nO.GetComponentsInChildren<Image>();
 
+        GameManager.instance.soundManager.Play("Notification");
+
         notifications.Add(notification);
     }
 

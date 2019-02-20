@@ -9,7 +9,6 @@ public class CursorManagement : MonoBehaviour
 {
     public enum cursorMode { Default, Build, Delete, Bridge, Move }; //Chaque mode du curseur
 
-    public Action<string> CursorError;
 
     [Header("=== REFERENCIES ===")]
     [Header("Prefabs")]
@@ -28,25 +27,33 @@ public class CursorManagement : MonoBehaviour
     public int projectorHeight = 10;
     public GameObject myProjector;
     public Projector myProjectorComponent;
-    public float dragDelay = 0.2f;
-    private float dragCD;
+    public float dragTreshold = 10; // Amount of pixels the player must move his mouse of to start dragging
+    public float blockFallingSpeed = 1;
+    public float blockRisingSpeed = 3;
+    private Vector2 initialDragPos;
+    [HideInInspector] public ScrollRect linkedScrollRect;
     [Space(5)]
-    
+
     [Header("=== DEBUG ===")]
     public Vector3Int posInGrid; //Position de la souris sur le terrain
     public Vector3 posInWorld;
     public bool isDragging;
 
-    [HideInInspector] public bool cursorOnUI = false;
-    float timer;
-    private Vector3Int savedPos;
-
-    private GameObject[] activeHighlighters; //Liste contenant plusieurs highlighters actifs
-    private List<GameObject> permanentHighlighter = new List<GameObject>(); 
-    private GameObject hoveredBlock;
-    private GameObject stackSelector; //La petite fléche qui se met au pied de la tour qu'on selectionne
-    [System.NonSerialized] public bool canSwitchTools = true;
+    // Interface related events & funcs
+    public bool couldDrag;
+    public Action<string> CursorError;
+    public Action<Block, Vector3Int> MovingBlock;
+    public bool cursorOnUI = false;
     public bool draggingNewBlock = false;
+
+    float timer;
+    Vector3Int savedPos;
+    GameObject[] activeHighlighters; //Liste contenant plusieurs highlighters actifs
+    List<GameObject> permanentHighlighter = new List<GameObject>();
+    GameObject hoveredBlock;
+    GameObject stackSelector; //La petite fléche qui se met au pied de la tour qu'on selectionne
+    [System.NonSerialized] public bool canSwitchTools = true;
+
 
     public void InitializeGameCursor()
     {
@@ -72,6 +79,7 @@ public class CursorManagement : MonoBehaviour
 
     private void Update()
     {
+
         // Unless ingame, default mode
         if (!GameManager.instance.IsInGame()) {
             SwitchMode(cursorMode.Default);
@@ -83,7 +91,7 @@ public class CursorManagement : MonoBehaviour
 
         // Detect cursor over UI
         cursorOnUI = false;
-        if (EventSystem.current.IsPointerOverGameObject()){cursorOnUI = true;}
+        if (EventSystem.current.IsPointerOverGameObject()) { cursorOnUI = true; }
     }
 
     public void SwitchMode(cursorMode mode)
@@ -109,16 +117,16 @@ public class CursorManagement : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             UpdatePosition(hit);    // Refreshes PosInGrid and PosInTerrain 
-            UpdateTool();           // Switches tool on keypress
-            UpdateMouse(hit);       // Effects depending on the current tool
+            UpdateTool(hit);       // Effects depending on the current tool
             UpdateProjector();      // Visual update
 
-            if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Block") || hit.collider.gameObject.layer == LayerMask.NameToLayer("StoredBlock") && hoveredBlock != hit.collider.gameObject && !Input.GetMouseButton(0) || Input.GetMouseButtonUp(0))
-            {
+            if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Block")) {
                 hoveredBlock = hit.collider.gameObject;
                 UpdateFeedback(hit);
             }
-            if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Terrain")) { UpdateFeedback(hit); }
+            if(hit.collider.gameObject.layer == LayerMask.NameToLayer("Terrain")) {
+                UpdateFeedback(hit);
+            }
         }
         else // If the mouse is pointing at nothing
         {
@@ -127,23 +135,11 @@ public class CursorManagement : MonoBehaviour
         }
         transform.position = hit.point;
     }
-
-    private void UpdateTool()
-    {
-        // Move mode by default unless the bridge key is pressed
-        if (Input.GetButton("Bridge")) {
-            if (selectedMode != cursorMode.Bridge) SwitchMode(cursorMode.Bridge);
-        }
-        else {
-            if (selectedMode != cursorMode.Move) SwitchMode(cursorMode.Move);
-        }
-    }
-
+    
     void UpdatePosition(RaycastHit hit)
     {
         Vector3 tempCoord = hit.point;
-        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Terrain") ||
-            cursorMode.Move == selectedMode) {
+        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Terrain")) {
             //On adapte la position de la souris pour qu'elle corresponde à la taille des cellules
             tempCoord += new Vector3(0,
                 GameManager.instance.gridManagement.cellSize.y / 2
@@ -181,31 +177,25 @@ public class CursorManagement : MonoBehaviour
         // Highlighting block the cursor currently is on if we're in Bridge mode
         if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Block")) 
         {
-            if (selectedMode == cursorMode.Bridge) {
 
-                GameObject objective = hit.transform.gameObject;
-                Vector3Int position = posInGrid;
-                // If the player is bridging, we stuck the preview to the block he's dragging the bridge from 
-                if (isBridging) {
-                    objective = selectedBlock.gameObject;
-                    position = selectedBlock.gridCoordinates;
-                }
-                ClearFeedback();
-                HighlightBlock(objective);
-                Vector3Int[] linkableBlocksList = CheckBridgeableBlocks(position);
-                if (linkableBlocksList.Length > 0) {
-                    foreach (Vector3Int blockToBridge in linkableBlocksList) {
-                        if (blockToBridge.Equals(hit.transform.gameObject.GetComponent<Block>().gridCoordinates)) {
-                            HighlightBlock(hit.transform.gameObject);
-                            GenerateBridgePreview(objective.GetComponent<Block>().gridCoordinates, blockToBridge);
-                            break;
-                        }
+            GameObject objective = hit.transform.gameObject;
+            Vector3Int position = posInGrid;
+            // If the player is bridging, we stuck the preview to the block he's dragging the bridge from 
+            if (isBridging) {
+                objective = selectedBlock.gameObject;
+                position = selectedBlock.gridCoordinates;
+            }
+            ClearFeedback();
+            HighlightBlock(objective);
+            Vector3Int[] linkableBlocksList = CheckBridgeableBlocks(position);
+            if (linkableBlocksList.Length > 0) {
+                foreach (Vector3Int blockToBridge in linkableBlocksList) {
+                    if (blockToBridge.Equals(hit.transform.gameObject.GetComponent<Block>().gridCoordinates)) {
+                        HighlightBlock(hit.transform.gameObject);
+                        GenerateBridgePreview(objective.GetComponent<Block>().gridCoordinates, blockToBridge);
+                        break;
                     }
                 }
-            }
-            else
-            {
-                ClearFeedback();
             }
 
         //Si le joueur a la souris sur un block, alors on recupere le bloc le plus bas dans la tour selectionnée
@@ -236,84 +226,87 @@ public class CursorManagement : MonoBehaviour
         }
     }
 
-    void UpdateMouse(RaycastHit hit)
+    void UpdateTool(RaycastHit hit)
     {
-        // Mouse click down
+        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Block") && hit.transform.gameObject.GetComponent<Block>().scheme.isMovable)
+        {
+            if (selectedBlock == null)
+            {
+                couldDrag = true;
+            }
+        } else
+        {
+            couldDrag = false;
+        }
+       
+        
+        /////////////////////////////
+        ///
+        ///     DRAG AND DROP
+        ///
         if(Input.GetButtonDown("Select"))
         {
-            switch (selectedMode) {
-                case cursorMode.Bridge:
-                    GameObject selectedObj = hit.transform.gameObject;
-                    if (selectedObj != null)
-                    {
-                        if (selectedObj.transform.parent != null)
-                        {
-                            if (selectedObj.transform.parent.GetComponent<BridgeInfo>() != null)
-                            {
-                                GameManager.instance.gridManagement.DestroyBridge(selectedObj.transform.parent.gameObject);
-                            }
-                        }
-                    }
-                    break;
-            }
+            initialDragPos = Input.mousePosition;
         }
+
+        if (Input.GetButton("Select")) {
+            if (selectedBlock == null) {
+                Block selectedBlock = hit.transform.gameObject.GetComponent<Block>();
+                StartDrag(selectedBlock);
+            }
+            DuringDrag(posInGrid);
+        }
+
+        if (Input.GetButtonUp("Select")) {
+            EndDrag(posInGrid);
+        }
+        ///
+        /////////////////////////////
+
+
+
+        /////////////////////////////
+        ///
+        ///     BRIDGING
+        ///
 
         // Mouse click hold
-        if(Input.GetButton("Select")) {
-            switch (selectedMode) 
-            {
-                case cursorMode.Move:
-                    if (dragCD >= dragDelay && selectedBlock == null)
-                    {
-                        Block selectedBlock = hit.transform.gameObject.GetComponent<Block>();
-                        StartDrag(selectedBlock);
+        if (Input.GetButton("Bridge")) {
+            if (!isBridging) {
+                GameObject selectedObj = hit.transform.gameObject;
+                if (selectedObj != null) {
+                    if (selectedObj.transform.parent != null) {
+                        if (selectedObj.transform.parent.GetComponent<BridgeInfo>() != null) {
+                            GameManager.instance.gridManagement.DestroyBridge(selectedObj.transform.parent.gameObject);
+                        }
                     }
-                    else
-                    {
-                        dragCD += Time.deltaTime;
-                    }
-                    DuringDrag(posInGrid);
-                    break;
-
-                case cursorMode.Bridge:
-                    if (!isBridging && hit.transform.gameObject.layer == LayerMask.NameToLayer("Block") ) {
-                        StartPlanningBridge(hit.transform.gameObject);
-                    }
-                    break;
-            }
-        }  
-    
-        // Left Mouse up 
-        if (Input.GetButtonUp("Select")) {
-            dragCD = 0;
-            switch (selectedMode) {
-                case cursorMode.Move:
-                    EndDrag(posInGrid);
-                    break;
-
-                case cursorMode.Bridge:
-                    if (isBridging) {
-                        isBridging = false;
-                        TryToMakeBridge(hit.transform.gameObject);
-                        CancelPotentialBridge();
-                    }
-                    break;
+                }
+                if (selectedObj.layer == LayerMask.NameToLayer("Block")) {
+                    StartPlanningBridge(hit.transform.gameObject);
+                }
             }
         }
 
-        // Right mouse button
-        if(Input.GetButton("RotateCamera"))
-        {
-            switch (selectedMode) {
-                case cursorMode.Move:
-                    CancelDrag();
-                    break;
+        // Left Mouse up 
+        if (Input.GetButtonUp("Bridge")) {
+            if (isBridging) {
+                isBridging = false;
+                TryToMakeBridge(hit.transform.gameObject);
+                CancelPotentialBridge();
+            }
+        }
+        ///
+        /////////////////////////////
 
-                case cursorMode.Bridge:
-                    if (isBridging) {
-                        CancelPotentialBridge();
-                    }
-                    break;
+
+
+        /// Cancel actions
+        if (Input.GetButton("Trash")) {
+            if (isDragging) {
+                CancelDrag();
+            }
+            if (isBridging) {
+                CancelPotentialBridge();
             }
         }
     }
@@ -521,10 +514,30 @@ public class CursorManagement : MonoBehaviour
             if (destinationCandidate.gridCoordinates != selectedBlock.gridCoordinates) {
                 if (destinationCandidate.gridCoordinates.y == selectedBlock.gridCoordinates.y) {
                     if (destinationCandidate.gridCoordinates.x == selectedBlock.gridCoordinates.x || destinationCandidate.gridCoordinates.z == selectedBlock.gridCoordinates.z) {
-                        //Les conditions sont remplies et on peut tracer le pont
-                        //Call de la fonction pour tracer un pont
-                        GameManager.instance.gridManagement.CreateBridge(selectedBlock, destinationCandidate);
-                        ClearPermanentHighlighter();
+                        bool bridgeAlreadyFound = false;
+                        foreach (GameObject bridge in destinationCandidate.bridges)
+                        {
+                            if (bridge.GetComponent<BridgeInfo>().destination == selectedBlock.gridCoordinates)
+                            {
+                                bridgeAlreadyFound = true;
+                            }
+                        }
+                        foreach (GameObject bridge in selectedBlock.bridges)
+                        {
+                            if (bridge.GetComponent<BridgeInfo>().destination == destinationCandidate.gridCoordinates)
+                            {
+                                bridgeAlreadyFound = true;
+                            }
+                        }
+                        if (!bridgeAlreadyFound)
+                        {
+                            //Les conditions sont remplies et on peut tracer le pont
+                            //Call de la fonction pour tracer un pont
+                            GameManager.instance.gridManagement.CreateBridge(selectedBlock, destinationCandidate);
+                            ClearPermanentHighlighter();
+                        } else {
+                            CursorError.Invoke("bridgeAlreadyFound");
+                        }
                     }
                     else {
                         CursorError.Invoke("misalignedBlocks");
@@ -543,13 +556,30 @@ public class CursorManagement : MonoBehaviour
         
     }
 
+    public void ClearListeners()
+    {
+        try {
+            foreach (System.Delegate d in CursorError.GetInvocationList()) {
+                CursorError -= (System.Action<string>)d;
+            }
+        }
+        catch {
+            // Nothing to do
+        }
+    }
 
 #region DragAndDrop
 
     public void StartDrag(Block _block)
     {
+        if (linkedScrollRect != null)
+        {
+            linkedScrollRect.enabled = false;
+        }
+
         if (_block != null && _block.scheme.isMovable == true)
         {
+            canSwitchTools = false;
             selectedBlock = _block;
             selectedBlock.StopAllCoroutines();
             savedPos = selectedBlock.gridCoordinates;
@@ -571,40 +601,26 @@ public class CursorManagement : MonoBehaviour
                     isDragging = true;
                     selectedBlock.GetComponent<Collider>().enabled = false;
                 }
-                else
-                {
-                    savedPos = _pos;
-                    GameManager.instance.soundManager.Play("Tick");
-                    selectedBlock.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(_pos);
-                }
+                savedPos = _pos;
+                GameManager.instance.soundManager.Play("Tick");
             }
+            // The player is dragging
+            MovingBlock.Invoke(selectedBlock, savedPos);
         }
     }
 
     public void EndDrag(Vector3Int _pos)
     {
+        if (linkedScrollRect != null)
+        {
+            linkedScrollRect.enabled = true;
+        }
+
         if (selectedBlock != null && isDragging)
         {
-            if (_pos.y < GameManager.instance.gridManagement.minHeight)
+            canSwitchTools = true;
+            if (GameManager.instance.gridManagement.IsPlacable(_pos, true))
             {
-                CancelDrag();
-                return;
-            }
-            if (GameManager.instance.gridManagement.GetSlotType(_pos) == GridManagement.blockType.FREE)
-            {
-                // Check if the blocks under the position allows to have "something above them"
-                for (int i = _pos.y; i >= 0; i--)
-                {
-                    if (GameManager.instance.gridManagement.grid[_pos.x,i,_pos.z] != null)
-                    {
-                        Block block = GameManager.instance.gridManagement.grid[_pos.x, i, _pos.z].gameObject.GetComponent<Block>();
-                        if (!block.scheme.canBuildAbove) {
-                            CursorError.Invoke("maxHeightReached");
-                            CancelDrag();
-                            return;
-                        }
-                    }
-                }
                 //Play SFX
                 GameManager.instance.soundManager.Play("BlockDrop");
 
@@ -621,38 +637,42 @@ public class CursorManagement : MonoBehaviour
                 {
                     GameManager.instance.gridManagement.LayBlock(selectedBlock, new Vector2Int(_pos.x, _pos.z));
                 }
-            } 
+                selectedBlock.LoadFlags();
+            }
             else
             {
                 CancelDrag();
                 return;
             }
         }
-        if(selectedBlock != null)
+        if (selectedBlock != null)
         {        
             selectedBlock.CallFlags("OnBlockUpdate");
             selectedBlock.boxCollider.enabled = true;
             selectedBlock = null; 
         }
         isDragging = false;
+        draggingNewBlock = false;
     }
 
     public void CancelDrag()
     {
         if (selectedBlock != null && isDragging)
         {
-            GameManager.instance.animationManager.EndElevateTower(new Vector2Int(savedPos.x, savedPos.z), 0);
             if (draggingNewBlock == true)
             {
-                GameManager.instance.gridManagement.DestroyBlock(selectedBlock.gridCoordinates);
+                GameManager.instance.gridManagement.DestroyBlock(selectedBlock);
             }
             draggingNewBlock = false;
-            if (selectedBlock.GetComponent<Block>() != null)
+            if (selectedBlock != null)
             {
-                selectedBlock.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(selectedBlock.gridCoordinates);
-            } else
-            {
-                GameManager.instance.gridManagement.DestroyBlock(selectedBlock.gridCoordinates);
+                if (GameManager.instance.gridManagement.IsPlacable(selectedBlock.gridCoordinates, false))
+                {
+                    selectedBlock.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(selectedBlock.gridCoordinates);
+                } else
+                {
+                    GameManager.instance.gridManagement.DestroyBlock(selectedBlock);
+                }
             }
             selectedBlock.boxCollider.enabled = true;
             selectedBlock = null;

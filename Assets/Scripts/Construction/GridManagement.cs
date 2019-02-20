@@ -42,7 +42,7 @@ public class GridManagement : MonoBehaviour
         //Initialisation des variables statiques
         gridSize.x = Mathf.RoundToInt(myTerrain.terrainData.size.x / cellSize.x);
         gridSize.z = Mathf.RoundToInt(myTerrain.terrainData.size.z / cellSize.z);
-        gridSize.y = maxHeight;
+        gridSize.y = maxHeight+1;
         GenerateGrid();
         GenerateBuildablePositions();
     }
@@ -107,6 +107,7 @@ public class GridManagement : MonoBehaviour
             GameObject target = grid[coordinates.x, coordinates.y, coordinates.z];
             SystemManager systemManager = GameManager.instance.systemManager;
             systemManager.RemoveBuilding(target);
+            target.GetComponent<Block>().UnloadBlock();
             GameManager.instance.soundManager.Play("DestroyBlock");
             Destroy(target);
         }
@@ -114,18 +115,80 @@ public class GridManagement : MonoBehaviour
         UpdateGridSystems();
     }
 
-    public float GetDistanceFromGround(Vector3Int coordinates)
+    public void DestroyBlock(Block block)
     {
-        float distanceFromGround = grid[coordinates.x, coordinates.y, coordinates.z].transform.position.y - myTerrain.SampleHeight(grid[coordinates.x, coordinates.y, coordinates.z].transform.position);
-        return distanceFromGround;
+        grid[block.gridCoordinates.x, block.gridCoordinates.y, block.gridCoordinates.z] = null;
+        block.CallFlags("OnBlockDestroy");
+
+        // Removes object from list and destroys the gameObject
+        GameObject target = grid[block.gridCoordinates.x, block.gridCoordinates.y, block.gridCoordinates.z];
+        SystemManager systemManager = GameManager.instance.systemManager;
+        systemManager.RemoveBuilding(target);
+        block.UnloadBlock();
+        GameManager.instance.soundManager.Play("DestroyBlock");
+        Destroy(block.gameObject);
+        UpdateBlocks(block.gridCoordinates);
+        UpdateGridSystems();
     }
+
+    //Return true if a block is placable here, false if it isn't
+    public bool IsPlacable(Vector3Int coordinates, bool shouldDisplayInformation) {
+
+        if (coordinates.x < 0 || coordinates.y < 0 || coordinates.z < 0)
+        {
+            if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError("cannotBuildOutOfMap"); }
+            return false;
+        }
+        if (coordinates.y > maxHeight)
+        {
+            if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError("maxHeightReached"); }
+            return false;
+        }
+        Vector3Int groundPosition = GetLowestFreeSlot(new Vector2Int(coordinates.x, coordinates.z));
+        if (groundPosition.y < minHeight)
+        {
+            if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError.Invoke("cannotBuildOnWater"); }
+            return false;
+        }
+        if (groundPosition.y >= maxHeight)
+        {
+            if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError("maxHeightReached"); }
+            return false;
+        }
+        if (GetSlotType(groundPosition) != GridManagement.blockType.FREE)
+        {
+            if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError.Invoke("cannotBuildHere"); }
+            return false;
+        }
+        GameObject gameObjectUnderPos = grid[groundPosition.x, groundPosition.y - 1, groundPosition.z];
+        if (gameObjectUnderPos != null)
+        {
+            if (gameObjectUnderPos.GetComponent<BridgeInfo>() != null)
+            {
+                if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError.Invoke("cannotBuildOverBridge"); }
+                return false;
+            }
+            Block blockUnderPos = gameObjectUnderPos.GetComponent<Block>();
+            if (blockUnderPos != null)
+            {
+                if (!blockUnderPos.scheme.canBuildAbove)
+                {
+                    if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError.Invoke("You can't build above that block"); }
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 
     //Fait baisser d'un bloc tout les blocs au dessus de la coordonnée actuelle
     public void UpdateBlocks(Vector3Int coordinates)
     {
+        if (coordinates.x < 0 || coordinates.y < 0 || coordinates.z < 0) { return; }
         if (grid[coordinates.x, coordinates.y, coordinates.z] != null)
         {
-            for (int i = coordinates.y + 1; i < maxHeight; i++) //Fait descendre d'une case les blocs
+            for (int i = coordinates.y + 1; i <= maxHeight; i++) //Fait descendre d'une case les blocs
             {
                 if (grid[coordinates.x, i, coordinates.z] == null)
                 {
@@ -153,7 +216,7 @@ public class GridManagement : MonoBehaviour
     {
         if (grid[coordinates.x, coordinates.y, coordinates.z] != null)
         {
-            for (int i = maxHeight-1; i >= coordinates.y; i--)
+            for (int i = maxHeight; i >= coordinates.y; i--)
             {
                 if (grid[coordinates.x, i, coordinates.z] != null)
                 {
@@ -207,10 +270,11 @@ public class GridManagement : MonoBehaviour
         return output;
     }
 
-    //Update a block so he touch the ground or the first block encountered (Like if gravity was applied to it)
-    public void LayBlock(Block block, Vector2Int coordinates)
+
+    //Returns the lowest block on the terrain
+    public Vector3Int GetLowestFreeSlot(Vector2Int coordinates)
     {
-        //Position en Y des coordonnées au sol données
+        // Position en Y des coordonnées au sol données
         float worldY =
             myTerrain.SampleHeight(
                 IndexToWorldPosition(
@@ -218,21 +282,25 @@ public class GridManagement : MonoBehaviour
                 )
             );
         // Index de Y
-        int y = WorldPositionToIndex(new Vector3(coordinates.x, worldY + cellSize.y/2, coordinates.y)).y;
+        int y = WorldPositionToIndex(new Vector3(coordinates.x, worldY + cellSize.y / 2, coordinates.y)).y;
 
         // Candidate coordinates
         Vector3Int coordinates3 = new Vector3Int(coordinates.x, y, coordinates.y);
 
-        if (GetSlotType(coordinates3) != GridManagement.blockType.FREE)
+        while (GetSlotType(coordinates3) != GridManagement.blockType.FREE)
         {
-            return;
+            coordinates3.y++;
+            if (coordinates3.y > GameManager.instance.gridManagement.gridSize.y)
+            {
+                return new Vector3Int(-1,-1,-1);
+            }
         }
 
 
         if (grid[coordinates3.x, coordinates3.y, coordinates3.z] != null)
         {
             // The slot is occupied - let's see if we can lay our block ontop
-            for (int i = coordinates3.y; i < gridSize.y - 1; i++)
+            for (int i = coordinates3.y; i <= maxHeight; i++)
             {
                 if (GetSlotType(new Vector3Int(coordinates3.x, i, coordinates3.z)) != GridManagement.blockType.FREE)
                 {
@@ -245,8 +313,21 @@ public class GridManagement : MonoBehaviour
                 }
             }
         }
-        MoveBlock(block.gameObject, coordinates3);
-        UpdateGridSystems();
+        return coordinates3;
+    }
+
+    //Update a block so he touch the ground or the first block encountered (Like if gravity was applied to it)
+    public void LayBlock(Block block, Vector2Int coordinates)
+    {
+        Vector3Int destinationCoordinates = GetLowestFreeSlot(coordinates);
+        if (destinationCoordinates.y >= 0)
+        {
+            MoveBlock(block.gameObject, destinationCoordinates);
+            UpdateGridSystems();
+        } else
+        {
+            Logger.Warn("Error while trying to place block " + block.name + " at position " + coordinates);
+        }
     }
 
     /// <summary>
@@ -279,9 +360,13 @@ public class GridManagement : MonoBehaviour
         GameObject newBlockGO = Instantiate(GameManager.instance.library.blockPrefab);
         Block newBlock = newBlockGO.GetComponent<Block>();
         newBlock.scheme = scheme;
-        newBlock.LoadBlock();
-
+        LoadBlock(newBlock);
         return newBlockGO;
+    }
+
+    public void LoadBlock(Block block)
+    {
+        block.LoadBlock();
     }
 
     public blockType GetSlotType(Vector3Int coordinates)
@@ -409,7 +494,10 @@ public class GridManagement : MonoBehaviour
         BridgeInfo bridgeInfo = parentBridgeGameObject.AddComponent<BridgeInfo>();
         bridgeInfo.origin = blockA.gridCoordinates;
         bridgeInfo.destination = blockB.gridCoordinates;
-        blockA.bridge = parentBridgeGameObject;
+        blockA.bridges.Add(parentBridgeGameObject);
+
+        //Adding animator to the bridge
+        parentBridgeGameObject.AddComponent<BridgeAnimator>();
 
         //Ajout de chaque partie du pont dans la grille grid[] et dans le component bridgeInfo
         bridgeInfo.allBridgePositions = new Vector3Int[bridgeLength];
@@ -469,10 +557,11 @@ public class GridManagement : MonoBehaviour
         bridgesList.Add(parentBridgeGameObject);
         bridgesGrid[
             blockA.gridCoordinates.x,
-            blockA.gridCoordinates.x,
-            blockA.gridCoordinates.x
+            blockA.gridCoordinates.y,
+            blockA.gridCoordinates.z
         ] = blockB.gridCoordinates;
 
+        GameManager.instance.achievementManager.achiever.AddToValue("bridgeCount");
         //Joue le son
         GameManager.instance.soundManager.Play("CreateBridge");
 
@@ -488,6 +577,9 @@ public class GridManagement : MonoBehaviour
     /// <param name="bridgeObject"></param>
     public void DestroyBridge(GameObject bridgeObject)
     {
+        //Removes the bridge from the list of bridges of his parent
+        bridgeObject.transform.parent.GetComponent<Block>().bridges.Remove(bridgeObject);
+
         int subParts = bridgeObject.transform.childCount;
 
         for (int i = 0; i < subParts; i++) {
@@ -508,6 +600,9 @@ public class GridManagement : MonoBehaviour
         }
         GameManager.instance.soundManager.Play("DestroyBlock");
         Destroy(bridgeObject);
+
+        GameManager.instance.achievementManager.achiever.AddToValue("bridgeCount", -1);
+
         //Update the system
         UpdateGridSystems();
     }

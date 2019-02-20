@@ -9,6 +9,7 @@ public class PauseWindow : MonoBehaviour {
     public void Start()
     {
         GameManager.instance.Pause();
+        FindObjectOfType<TooltipGO>().Disable();
     }
 
     public void Resume()

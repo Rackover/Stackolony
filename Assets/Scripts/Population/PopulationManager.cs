@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MoodModifier
 {
+    public int eventId;
     public float amount;
     public int cyclesRemaining;
 }
@@ -52,8 +53,6 @@ public class PopulationManager : MonoBehaviour
 
 
     public System.Action<int, Population> CitizenArrival;
-    //public Dictionary<Population, List<MoodModifier>> moodModifiers = new Dictionary<Population, List<MoodModifier>>(); //List of every active moodmodifiers for every population
-    //private Dictionary<Population, float> averageMoods = new Dictionary<Population, float>();  // average moods between 0 and 1
     List<string> names;
 
     private void Awake()
@@ -63,14 +62,7 @@ public class PopulationManager : MonoBehaviour
 
     void Start()
     {
-        foreach(Population pop in populationTypeList) 
-        {
-            populations.Add(pop, new PopulationInformation());
-
-            populations[pop].averageMood = startingMood;
-            populations[pop].citizens = new List<Citizen>();
-            populations[pop].moodModifiers = new List<MoodModifier>();
-        }
+        Clear();
     }
 
     public void OnNewCycle()
@@ -121,7 +113,7 @@ public class PopulationManager : MonoBehaviour
 			}
 			else
 			{
-				GameManager.instance.systemManager.AllBlocks[Random.Range(0, GameManager.instance.systemManager.AllBlocks.Count)].AddState(State.OnRiot);
+				GameManager.instance.cityManager.TriggerAccident(State.OnRiot);
 			}
 		}
 	}
@@ -220,11 +212,12 @@ public class PopulationManager : MonoBehaviour
     }
 
     //Generates a moodmodifier for a given population
-    public void GenerateMoodModifier(Population popType, float amount, int cyclesRemaining)
+    public void GenerateMoodModifier(Population popType, float amount, int cyclesRemaining, int eventId=0)
     {
         MoodModifier newMoodModifier = new MoodModifier();
         newMoodModifier.amount = amount;
         newMoodModifier.cyclesRemaining = cyclesRemaining;
+        newMoodModifier.eventId = eventId;
         populations[popType].moodModifiers.Add(newMoodModifier);
     }
 
@@ -255,6 +248,8 @@ public class PopulationManager : MonoBehaviour
 
         float newValue = populations[type].averageMood;
         Logger.Debug("Population " + type.codeName + " mood has been changed from " + oldValue + " to " + newValue);
+
+        GameManager.instance.achievementManager.achiever.SetValue(type.codeName + "Mood", (int)populations[type].averageMood);
     }
 
     public float GetAverageMood(Population type)
@@ -311,6 +306,10 @@ public class PopulationManager : MonoBehaviour
         newCitizen.type = type;
         citizenList.Add(newCitizen);
         populations[type].citizens.Add(newCitizen);
+
+        GameManager.instance.achievementManager.achiever.AddToValue("settlerCount");
+        GameManager.instance.achievementManager.achiever.AddToValue(type.codeName + "Count");
+
         return newCitizen;
     }
 
@@ -321,6 +320,9 @@ public class PopulationManager : MonoBehaviour
         for (int i = 0; i < amount; i++) {
             citizens.Add(AddCitizen(type));
         }
+        
+        GameManager.instance.soundManager.Play("NewSettler");
+
         Logger.Debug("Spawned " + amount + " citizens of type " + type.codeName + " to the citizen list");
         CitizenArrival.Invoke(citizens.Count, type);
         return citizens;
@@ -353,5 +355,34 @@ public class PopulationManager : MonoBehaviour
         }
 
         return null;
+    }
+
+    public void Clear()
+    {
+
+        citizenList.Clear();
+        populations.Clear();
+
+        foreach (Population pop in populationTypeList) {
+            populations.Add(pop, new PopulationInformation());
+
+            populations[pop].averageMood = startingMood;
+            populations[pop].citizens = new List<Citizen>();
+            populations[pop].moodModifiers = new List<MoodModifier>();
+        }
+
+        ClearListeners();
+    }
+
+    public void ClearListeners()
+    {
+        try {
+            foreach (System.Delegate d in CitizenArrival.GetInvocationList()) {
+                CitizenArrival -= (System.Action<int, Population>)d;
+            }
+        }
+        catch {
+            // Nothing to do
+        }
     }
 }

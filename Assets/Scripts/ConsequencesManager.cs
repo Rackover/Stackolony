@@ -6,9 +6,9 @@ public class ConsequencesManager : MonoBehaviour {
 
     //DONE
     //Add a moodModifier to a type of population
-    static public void GenerateMoodModifier(Population pop, float amount, int durationInCycle)
+    static public void GenerateMoodModifier(Population pop, float amount, int durationInCycle, int eventId)
     {
-        GameManager.instance.populationManager.GenerateMoodModifier(pop, amount, durationInCycle);
+        GameManager.instance.populationManager.GenerateMoodModifier(pop, amount, durationInCycle, eventId);
     }
 
     //Change the consumption of a population type, affecting the houses they're in

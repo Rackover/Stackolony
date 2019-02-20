@@ -13,6 +13,7 @@ public class OnRiot : StateBehavior
 
         block.effects.Activate(GameManager.instance.library.onRiotParticle);
         block.visuals.animator.SetBool("OnRiot", true);
+        GameManager.instance.soundManager.Play("RiotStart");
         block.Disable();
     }
 
@@ -51,6 +52,7 @@ public class OnRiot : StateBehavior
 
     void FinishRepress()
     {
+        GameManager.instance.achievementManager.achiever.AddToValue("stoppedRiotCount");
         if(block != null) block.effects.Desactivate(GameManager.instance.library.repressParticle);
         Remove();
     }
@@ -64,6 +66,7 @@ public class OnRiot : StateBehavior
 
     public override void Remove()
     {
+        GameManager.instance.soundManager.Play("RiotEnd");
         block.effects.Desactivate(GameManager.instance.library.onRiotParticle);
         block.visuals.animator.SetBool("OnRiot", false);
         block.Enable();

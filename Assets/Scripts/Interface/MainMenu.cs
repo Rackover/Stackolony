@@ -15,6 +15,8 @@ public class MainMenu : MonoBehaviour {
         if (GameManager.instance.saveManager.SaveExists()) {
             loadButton.interactable = true;
         }
+
+        GameManager.instance.soundManager.Play("MusicMenu");
     }
 
     public void SpawnNewColonyMenu()

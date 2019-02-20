@@ -106,6 +106,8 @@ GameObject:
   - component: {fileID: 222476338745139018}
   - component: {fileID: 114935813249399900}
   - component: {fileID: 114200477506367772}
+  - component: {fileID: 114582748938715420}
+  - component: {fileID: 114883652519580774}
   m_Layer: 5
   m_Name: BTN_Cancel
   m_TagString: Untagged
@@ -347,6 +349,8 @@ GameObject:
   - component: {fileID: 222641228312104904}
   - component: {fileID: 114620566990587816}
   - component: {fileID: 114198283376777942}
+  - component: {fileID: 114563806107394452}
+  - component: {fileID: 114581444787227718}
   m_Layer: 5
   m_Name: BTN_Start
   m_TagString: Untagged
@@ -1306,6 +1310,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 1
   m_VerticalFit: 0
+--- !u!114 &114563806107394452
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1515934508272628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d763586935b0de9469fbcb08c2269665, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: ClickUI
 --- !u!114 &114581215786878694
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1341,6 +1357,30 @@ MonoBehaviour:
   m_Text: 'CANCEL
 
 '
+--- !u!114 &114581444787227718
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1515934508272628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aec1859cd764b7b4fbd193a2926b4066, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: DragBlock
+--- !u!114 &114582748938715420
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1164455561696364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d763586935b0de9469fbcb08c2269665, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: ClickUI
 --- !u!114 &114598022356074044
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1649,6 +1689,18 @@ MonoBehaviour:
   m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
+--- !u!114 &114883652519580774
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1164455561696364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aec1859cd764b7b4fbd193a2926b4066, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sound: DragBlock
 --- !u!114 &114886910096286928
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2440,8 +2492,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 918.45905, y: 0}
-  m_SizeDelta: {x: 1796.9181, y: 0}
+  m_AnchoredPosition: {x: 648.0921, y: 0}
+  m_SizeDelta: {x: 1256.1842, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224925567109894308
 RectTransform:
@@ -2498,8 +2550,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 918.45905, y: 0}
-  m_SizeDelta: {x: 1796.9181, y: 0}
+  m_AnchoredPosition: {x: 648.0921, y: 0}
+  m_SizeDelta: {x: 1256.1842, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224994405763251084
 RectTransform:

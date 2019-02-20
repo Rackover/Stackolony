@@ -17,7 +17,9 @@ public class MoodDisplay : MonoBehaviour {
     public Animator animator;
     public RectTransform rect;
     public AspectRatioFitter fitter;
-    public Tooltip tooltip;
+    public Tooltip faceTooltip;
+    public Tooltip homelessTooltip;
+    public Tooltip inhabitantsTooltip;
 
     public Color notificationColor = Color.blue;
     public Color from = Color.green;
@@ -112,6 +114,7 @@ public class MoodDisplay : MonoBehaviour {
         }
 
         // Emotion based on humor
+        Bystander.Mood oldMood = currentMood;
         if (moodValue <= angryThreshold) {
             currentMood = Bystander.Mood.Angry;
         }
@@ -124,9 +127,22 @@ public class MoodDisplay : MonoBehaviour {
             currentMood = Bystander.Mood.Bad;
         }
 
-        changeMood(currentMood);
-        moodString = loc.GetLineFromCategory("mood", currentMood.ToString().ToLower());
+        // SOUNDS
+        if(oldMood != currentMood)
+        {
+            if(currentMood == Bystander.Mood.Good)
+            {
+                GameManager.instance.soundManager.Play("MoodUp");
+            }
+            else if(currentMood == Bystander.Mood.Angry)
+            {
+                GameManager.instance.soundManager.Play("MoodDown");
+            }
+        }
 
+
+        changeMood(currentMood);
+        moodString = loc.GetLineFromCategory("stats", currentMood.ToString().ToLower());
     }
 
     void UpdateTexts()
@@ -142,17 +158,72 @@ public class MoodDisplay : MonoBehaviour {
         else {
             homeless.color = homelessColor;
         }
+        UpdateTooltips();
+    }
 
+    void UpdateTooltips()
+    {
         string popName = loc.GetLineFromCategory("populationType", population.codeName);
 
-        tooltip.ClearLines();
-        tooltip.AddLocalizedLine(new Localization.Line("populationType", population.codeName));
-        tooltip.AddLocalizedLine(
+        faceTooltip.ClearLines();
+        faceTooltip.AddLocalizedLine(new Localization.Line("populationType", population.codeName));
+        faceTooltip.AddLocalizedLine(
             new Localization.Line(
                 "stats",
                 "moodValue",
-                popName+"s",
+                popName,
                 moodString.ToUpper()
+            )
+        );
+        faceTooltip.AddLocalizedLine(new Localization.Line("hud", "priority"));
+        faceTooltip.AddLocalizedLine(new Localization.Line("hud", "holdDrag"));
+
+        foreach (MoodModifier moodMod in popMan.populations[population].moodModifiers) {
+
+            if (moodMod.eventId <= 0) {
+                continue;
+            }
+
+            Tooltip.tooltipType type = Tooltip.tooltipType.Positive;
+            if (moodMod.amount < 0) {
+                type = Tooltip.tooltipType.Negative;
+            }
+
+            faceTooltip.AddLocalizedLine(
+                new Tooltip.TooltipLocalizationEntry(
+                    "event" + moodMod.eventId,
+                    "eventTitle",
+                    type
+                )
+            );
+
+            faceTooltip.AddLocalizedLine(
+                new Tooltip.TooltipLocalizationEntry(
+                    "value",
+                    "stats",
+                    type,
+                    moodMod.amount.ToString("+0;-#")
+                )
+            );
+        }
+
+        homelessTooltip.ClearLines();
+        homelessTooltip.AddLocalizedLine(
+            new Localization.Line(
+                "stats",
+                "homeless",
+                popMan.GetHomelessCount(population).ToString(),
+                popName
+            )
+        );
+
+        inhabitantsTooltip.ClearLines();
+        inhabitantsTooltip.AddLocalizedLine(
+            new Localization.Line(
+                "stats",
+                "inhabitants",
+                popMan.GetHomelessCount(population).ToString(),
+                popName
             )
         );
     }

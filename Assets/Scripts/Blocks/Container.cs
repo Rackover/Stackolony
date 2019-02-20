@@ -29,7 +29,7 @@ public class Container : MonoBehaviour
     {
         // BOX
         containerMat = Instantiate(meshRenderers[0].material);
-        containerMat.color = GameManager.instance.library.blockContainerColors[linkedBlock.scheme.ID];
+        containerMat.color = FlagReader.GetSchemeColor(linkedBlock.scheme);
         foreach(MeshRenderer mr in meshRenderers)
         { 
             mr.material = containerMat;

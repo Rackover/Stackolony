@@ -17,7 +17,7 @@ public class Block : MonoBehaviour
 	public BlockVisual visuals;
     public BlockEffect effects;
     public BlockOverlayColor overlayVisuals;
-    public GameObject bridge;
+    public List<GameObject> bridges;
 
     [HideInInspector]   public Vector3Int gridCoordinates = new Vector3Int(0, 0, 0);
     [HideInInspector]   public int positionInTower; //0 = tout en bas
@@ -40,11 +40,23 @@ public class Block : MonoBehaviour
     public bool isConsideredDisabled; //Used when updating spatioport
     public bool isLinkedToSpatioport;
     public bool isEnabled = false;
+    private bool flagLoaded = false;
 
     public void Awake()
     {
         isConsideredUnpowered = false;
         if(boxCollider == null) boxCollider = GetComponent<BoxCollider>();
+    }
+
+    public void UpdateTooltip()
+    {
+        // Tooltip generation
+        Tooltip tt = GetComponent<Tooltip>();
+        tt.ClearLines();
+        List<Tooltip.TooltipLocalizationEntry> entries = Tooltip.GetBuildingTooltip(this);
+        foreach (Tooltip.TooltipLocalizationEntry entry in entries) {
+            tt.AddLocalizedLine(entry);
+        }
     }
 
     public void Pack()
@@ -228,6 +240,12 @@ public class Block : MonoBehaviour
 
     public void LoadBlock()
     {
+        LoadVisuals();
+        LoadFlags();
+    }
+
+    public void LoadVisuals()
+    {
         GameManager.instance.systemManager.AllBlocks.Add(this);
         if (GetConsumption() > 0)
         {
@@ -235,26 +253,31 @@ public class Block : MonoBehaviour
         }
         visuals.NewVisual(scheme.model);
 
-        foreach (string flag in scheme.flags)
-        {
-            GameManager.instance.flagReader.ReadFlag(this, flag);
-        }
+        LoadFlags();
 
         Enable();
         UpdateName();
     }
 
+    public void LoadFlags()
+    {
+        if (flagLoaded == false)
+        {
+            flagLoaded = true;
+            foreach (string flag in scheme.flags)
+            {
+                GameManager.instance.flagReader.ReadFlag(this, flag);
+            }
+        }
+    }
+
     public void UnloadBlock()
     {
         GameManager.instance.systemManager.AllBlocks.Remove(this);
-        if (GetConsumption() > 0)
+        if (GameManager.instance.systemManager.AllBlocksRequiringPower.Contains(this))
         {
             GameManager.instance.systemManager.AllBlocksRequiringPower.Remove(this);
         }
-        visuals.Hide();
-        effects.Hide();
-
-        Disable();
     }
 
     public void UpdatePower()
@@ -298,13 +321,29 @@ public class Block : MonoBehaviour
     public void MoveToMyPosition() //Deplace le bloc à sa position supposée
     {
         //Déplace aussi le pont qui lui est attaché s'il y en a un
-        if (transform.Find("Bridge") != null)
+        foreach (Transform t in transform)
         {
-            BridgeInfo bridgeInfo = transform.Find("Bridge").GetComponent<BridgeInfo>();
-            if (bridgeInfo != null)
-                GameManager.instance.gridManagement.UpdateBridgePosition(bridgeInfo, gridCoordinates.y);
+            if (t.GetComponent<BridgeInfo>() != null)
+            {
+                foreach (BridgeInfo bridge in t.GetComponents<BridgeInfo>())
+                {
+                    GameManager.instance.gridManagement.UpdateBridgePosition(bridge, gridCoordinates.y);
+                }
+            }
         }
-        StartCoroutine(MoveToPosition());
+        float time = 0;
+        Vector3Int actualPos = GameManager.instance.gridManagement.WorldPositionToIndex(transform.position);
+        if (actualPos.x == gridCoordinates.x && actualPos.z == gridCoordinates.z)
+        {
+            if (actualPos.y > gridCoordinates.y)
+            {
+                time = 1/GameManager.instance.cursorManagement.blockFallingSpeed;
+            } else
+            {
+                time = 1/GameManager.instance.cursorManagement.blockRisingSpeed;
+            }
+        }
+        StartCoroutine(MoveToPosition(time));
     }
 
     private IEnumerator MoveToPosition(float time = 0) //Coroutine pour déplacer le cube vers sa position
@@ -322,7 +361,7 @@ public class Block : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(gridCoordinates);
-       // checkForCollisions = false;
+        // checkForCollisions = false;
         yield return null;
     }
 

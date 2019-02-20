@@ -17,13 +17,14 @@ public class SoundManager : MonoBehaviour
 
 	void Start()
 	{
-		musicPlayer.Play(GameManager.instance.library.mainMusic);
+		musicPlayer.Play(FindClipByName("Music"));
+        Play("Ambiance", 1f);
 	}
 
 	void Update()
     {
-		ChangeVolume(GameManager.instance.player.options.GetFloat(Options.Option.voiceVolume));
-		musicPlayer.ChangeVolume(GameManager.instance.player.options.GetFloat(Options.Option.voiceVolume));
+		ChangeVolume(GameManager.instance.player.options.GetFloat(Options.Option.sfxVolume));
+		musicPlayer.ChangeVolume(GameManager.instance.player.options.GetFloat(Options.Option.musicVolume));
 		voicePlayer.ChangeVolume(GameManager.instance.player.options.GetFloat(Options.Option.voiceVolume));
     }
 

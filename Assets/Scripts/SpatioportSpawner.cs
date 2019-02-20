@@ -134,4 +134,20 @@ public class SpatioportSpawner : MonoBehaviour {
         cameraDummy.transform.localPosition = originalPos;
         yield return true;
     }
+
+    
+    public void SoundArrival()
+    {
+        GameManager.instance.soundManager.Play("ShipArrival");
+    }
+
+    public void SoundSteam()
+    {
+        GameManager.instance.soundManager.Play("ShipSteam");
+    }
+
+    public void SoundExplosion()
+    {
+        GameManager.instance.soundManager.Play("ShipExplosion");
+    }
 }

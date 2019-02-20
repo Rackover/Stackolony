@@ -5,13 +5,18 @@ public class CursorDisplay : MonoBehaviour {
 
 	public RectTransform cursorTransform;
 	public Image cursorImage;
+    private Image imageComponent;
+
+    private RectTransform rectTransform;
 
     Notifications notifier;
 
     private void Start()
     {
         GameManager.instance.cursorManagement.CursorError +=  (x) => DisplayUserError(x);
+        imageComponent = GetComponent<Image>();
         notifier = FindObjectOfType<Notifications>();
+        rectTransform = GetComponent<RectTransform>();
     }
 
     private void Update()
@@ -20,10 +25,35 @@ public class CursorDisplay : MonoBehaviour {
         cursorTransform.position = Input.mousePosition;
         ChangeCursor(GameManager.instance.cursorManagement.selectedMode);
         transform.SetSiblingIndex(transform.parent.childCount);
+
+        if (GameManager.instance.cursorManagement.couldDrag) {
+            SetIcon(GameManager.instance.library.handHoldIcon);
+        }
+        else if (GameManager.instance.cursorManagement.isDragging) {
+            SetIcon(GameManager.instance.library.handHoldIcon);
+        }
+        else {   
+            ResetIcon();
+        }
+    }
+
+    public void SetIcon(Sprite icon) 
+    {
+        imageComponent.sprite = icon;
+        cursorImage.gameObject.SetActive(false);
+    }
+
+    public void ResetIcon()
+    {
+        imageComponent.sprite = GameManager.instance.library.cursorSprite;
+        cursorImage.gameObject.SetActive(true);
     }
     
     void DisplayUserError(string locId)
     {
+        if (notifier == null) {
+            notifier = FindObjectOfType<Notifications>();
+        }
         notifier.Notify(new Notifications.Notification(locId, Color.red));
         GameManager.instance.soundManager.Play("Error");
     }

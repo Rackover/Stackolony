@@ -69,6 +69,8 @@ MonoBehaviour:
   bulletinsManager: {fileID: 0}
   timelineController: {fileID: 0}
   eventManager: {fileID: 0}
+  animationManager: {fileID: 0}
+  achievementManager: {fileID: 0}
   cursorDisplay: {fileID: 0}
   localization: {fileID: 0}
   displayerManager: {fileID: 0}
@@ -78,3 +80,5 @@ MonoBehaviour:
   overlayManager: {fileID: 0}
   DEBUG_MODE: 1
   ENABLE_LOGS: 1
+  DISABLE_EVENTS: 0
+  DISABLE_GAME_OVER: 0

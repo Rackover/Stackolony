@@ -31,6 +31,7 @@ public class FlagReader : MonoBehaviour
             case "FiremanStation":
             case "Repairer":
             case "Spatioport":
+            case "NuisanceGenerator":
                 return true;
         }
         return false;
@@ -81,17 +82,47 @@ public class FlagReader : MonoBehaviour
         return list;
     }
 
+    public static Color GetSchemeColor(BlockScheme scheme)
+    {
+        List<Population> pops = new List<Population>();
+        foreach (string flag in scheme.flags)
+        {
+            foreach (string popGroup in flag.Split('_'))
+            {
+                foreach (string popName in popGroup.Split('-'))
+                {
+                    Population pop = GameManager.instance.populationManager.GetPopulationByCodename(popName);
+                    if (pop != null)
+                    {
+                        pops.Add(pop);
+                    }
+                }
+            }
+        }
+        switch (pops.Count)
+        {
+            case 1:
+                return pops[0].color;
+            case 2:
+                return Color.Lerp(pops[0].color, pops[1].color, 0.5f);
+            default:
+                return GameManager.instance.library.defaultContainerColor;
+        }
+    }
+
     public static CityManager.BuildingType GetCategory(BlockScheme scheme)
     {
         string[] rawFlags = GetRawFlags(scheme).ToArray();
 
         // Habitation
-        if (rawFlags.Contains("House")) {
+        if (rawFlags.Contains("House")) 
+        {
             return CityManager.BuildingType.Habitation;
         }
 
         // Occupators
-        if (rawFlags.Contains("Occupator")) {
+        if (rawFlags.Contains("Occupator") || rawFlags.Contains("Extractor") || rawFlags.Contains("Barrack")) 
+        {
             return CityManager.BuildingType.Occupators;
         }
 

@@ -9,10 +9,10 @@ public class EventManager : MonoBehaviour {
 
     EventInterpreter interpreter = new EventInterpreter();
 
-    public System.Action<string> interpreterError;
-    public System.Action<string> checkError;
+    public System.Action<string> InterpreterError;
+    public System.Action<string> CheckError;
 
-    public System.Action<GameEvent> newEvent;
+    public System.Action<GameEvent> NewEvent;
     public float chanceIncreasePerCycle = 0.33f;
     public float gameOverThreshold = 0.25f;
 
@@ -21,6 +21,7 @@ public class EventManager : MonoBehaviour {
     float chances = 0f;
     int nextEvent = 0;
     bool triggerEventWhenPossible = false;
+    float triggerTime = 0f;
 
     public class GameEvent
     {
@@ -41,7 +42,7 @@ public class EventManager : MonoBehaviour {
             if (choice > choices.Count) {
                 return;
             }
-
+            
             choices[choice].Execute();
         }
     }
@@ -126,14 +127,10 @@ public class EventManager : MonoBehaviour {
     {
         if (triggerEventWhenPossible) {
             float timeOfDay = GameManager.instance.temporality.GetCurrentCycleProgression();
-            foreach(EventMarker marker in eventsPool) {
-                if (marker.eventId == nextEvent) {
-                    if (timeOfDay  > marker.time) {
-                        TriggerEvent(nextEvent);
-                        triggerEventWhenPossible = false;
-                        return;
-                    }
-                }
+            if (timeOfDay  > triggerTime) {
+                TriggerEvent(nextEvent);
+                triggerEventWhenPossible = false;
+                return;
             }
         }
     }
@@ -152,7 +149,8 @@ public class EventManager : MonoBehaviour {
         }
 
         // Random event per day
-        if (Random.value < chances) {
+        float random = Random.value;
+        if (random < chances) {
             EventMarker pick = null;
             List<EventMarker> newList = new List<EventMarker>();
             foreach (EventMarker candidate in eventsPool) {
@@ -169,8 +167,9 @@ public class EventManager : MonoBehaviour {
                 LoadEventsPool();
                 return;
             }
-
+            
             triggerEventWhenPossible = true;
+            triggerTime = pick.time;
             nextEvent = pick.eventId;
             eventsPool = newList;
             chances = 0f;
@@ -182,17 +181,17 @@ public class EventManager : MonoBehaviour {
 
     public void ReadAndExecute(string eventScript)
     {
-        GameAction action = interpreter.MakeEvent(eventScript, GameManager.instance.eventManager.interpreterError);
+        GameAction action = interpreter.MakeEvent(eventScript, GameManager.instance.eventManager.InterpreterError);
         if (action != null) {
             try {
                 action.Execute();
             }
             catch (EventInterpreter.InterpreterException e) {
-                GameManager.instance.eventManager.interpreterError.Invoke(e.Message);
+                GameManager.instance.eventManager.InterpreterError.Invoke(e.Message);
                 Debug.LogWarning(e);
             }
             catch (System.Exception e) {
-                GameManager.instance.eventManager.interpreterError.Invoke("Unknown interpreter error - check your script.\n" + e.Message);
+                GameManager.instance.eventManager.InterpreterError.Invoke("Unknown interpreter error - check your script.\n" + e.Message);
                 Debug.LogWarning(e);
             }
         }
@@ -200,24 +199,32 @@ public class EventManager : MonoBehaviour {
 
     public void CheckSyntax(string eventScript)
     {
-        interpreter.MakeEvent(eventScript, checkError, true);
+        interpreter.MakeEvent(eventScript, CheckError, true);
     }
     
     public void TriggerEvent(int id)
     {
+        // ID 1000 is Game Over event
+        if (id == 1000 && GameManager.instance.DISABLE_GAME_OVER) {
+            return;
+        }
         StartCoroutine(WaitForEventAndTrigger(id));
     }
 
     public void TriggerEventImmediatly(int id)
     {
+        if (GameManager.instance.cursorManagement.isDragging)
+        {
+            GameManager.instance.cursorManagement.CancelDrag();
+        }
         if (!GameManager.instance.DISABLE_EVENTS) {
-            newEvent.Invoke(events[id]);
+            NewEvent.Invoke(events[id]);
         }
     }
 
     IEnumerator WaitForEventAndTrigger(int id)
     {
-        while (!events.ContainsKey(id) || GameManager.instance.cinematicManager.IsInCinematic()) {
+        while (NewEvent == null || !events.ContainsKey(id) || GameManager.instance.cinematicManager.IsInCinematic()) {
             yield return null;
         }
         TriggerEventImmediatly(id);
@@ -275,21 +282,22 @@ public class EventManager : MonoBehaviour {
 
         // Ignoring pop and mood if not specified
         Population pop = null;
-        Bystander.Mood mood;
+        Bystander.Mood mood = Bystander.Mood.Good;
         try {
             pop = GameManager.instance.populationManager.GetPopulationByCodename(xEvent.Attributes["population"].Value);
             mood = (Bystander.Mood)System.Enum.Parse(typeof(Bystander.Mood), xEvent.Attributes["emotion"].Value);
         }
-        catch (System.Exception) { };
+        catch { };
         
         foreach(XmlNode xChoice in xEvent.ChildNodes) {
             Choice choice = ReadXChoice(xChoice);
             if (choice != null) {
-                choices.Add(choice.id, interpreter.MakeEvent(choice.script));
+                // Making even and injecting the event id in it
+                choices.Add(choice.id, interpreter.MakeEvent("DECLARE_EVENT(id:"+id.ToString()+");"+choice.script));
             }
         }
 
-        return new GameEvent(id, choices, pop);
+        return new GameEvent(id, choices, pop) { mood = mood };
     }
 
     Choice ReadXChoice(XmlNode xChoice)
@@ -348,5 +356,17 @@ public class EventManager : MonoBehaviour {
 
         // Loading first cycle of Events
         Renew(0);
+    }
+
+    public void ClearListeners()
+    {
+        try {
+            foreach (System.Delegate d in NewEvent.GetInvocationList()) {
+                NewEvent -= (System.Action<EventManager.GameEvent>)d;
+            }
+        }
+        catch {
+            // Nothing to do
+        }
     }
 }
