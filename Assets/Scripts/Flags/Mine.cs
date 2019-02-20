@@ -24,6 +24,9 @@ public class Mine : Flag, Flag.IFlag
 
         if(health <= 0)
         {
+            Vector2Int pos = new Vector2Int(block.gridCoordinates.x, block.gridCoordinates.z);
+            GameManager.instance.gridManagement.buildablePositions.Add(pos);
+
             block.Destroy();
         }
     }
