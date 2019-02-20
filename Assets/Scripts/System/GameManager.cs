@@ -376,7 +376,7 @@ public class GameManager : MonoBehaviour
         cinematicManager.GetReferences();
         timelineController.LoadCycles();
         DifferStart(delegate { eventManager.LoadEvents(); });
-
+        achievementManager.stats.gamesPlayed++;
         cityManager.GenerateEnvironmentBlocks();
 
         // TUTORIAL RUN ONLY

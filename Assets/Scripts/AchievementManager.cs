@@ -11,10 +11,14 @@ public class AchievementManager : MonoBehaviour
 	public List<int> unlockedAchievements; // TO SAVE
     public Stats stats = new Stats();
 
+    [System.Serializable]
     public class Stats
     {
         public int stoppedRiots = 0;
         public int stoppedFires = 0;
+        public int maxTowerHeight = 0;
+        public int gamesPlayed = 0;
+        public int maxBridgeLength = 0;
     }
 
 	void Start()

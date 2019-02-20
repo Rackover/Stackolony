@@ -136,7 +136,27 @@ public class Block : MonoBehaviour
         {
             state.Value.OnGridUpdate();
         }
-    }     
+
+        UpdatePositionInTower();
+    }
+
+    // Updates the "positionInTower" variable, used for stats
+    public void UpdatePositionInTower()
+    {
+        for (int i = gridCoordinates.y; i > 0; i--) {
+            GameObject underBuilding = GameManager.instance.gridManagement.grid[gridCoordinates.x, gridCoordinates.y, gridCoordinates.z];
+            if (underBuilding == null) {
+                positionInTower = i;
+                break;
+            }
+        }
+
+        // Update stats
+        AchievementManager.Stats stats = GameManager.instance.achievementManager.stats;
+        if (positionInTower > stats.maxTowerHeight) {
+            stats.maxTowerHeight = positionInTower;
+        }
+    }
 
     public void EnableFlags() // Enable all flags of this block
     {

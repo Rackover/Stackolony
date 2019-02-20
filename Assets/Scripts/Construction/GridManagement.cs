@@ -513,9 +513,6 @@ public class GridManagement : MonoBehaviour
             bridgeInfo.allBridgePositions[i-1] = _posToCheck;
         }
 
-
-
-
         //Création de chaque parties du pont
         GameObject firstBridgePart = null;
 
@@ -563,6 +560,11 @@ public class GridManagement : MonoBehaviour
 
         //Joue le son
         GameManager.instance.soundManager.Play("CreateBridge");
+
+        // Update stats
+        if (gameManager.achievementManager.stats.maxBridgeLength < bridgeLength) {
+            gameManager.achievementManager.stats.maxBridgeLength = bridgeLength;
+        }
 
         //Update the system
         UpdateGridSystems();

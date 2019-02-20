@@ -46,6 +46,32 @@ public class Environment
             "BRIDGE_COUNT", () => {
                 return GameManager.instance.gridManagement.bridgesList.Count.ToString();
             }
+        },
+        {
+            "HIGHEST_TOWER_HEIGHT", () => {
+                return GameManager.instance.achievementManager.stats.maxTowerHeight.ToString();
+            }
+        },
+        {
+            "LONGEST_BRIDGE_LENGTH", () => {
+                return GameManager.instance.achievementManager.stats.maxBridgeLength.ToString();
+            }
+        },
+        {
+            "GAME_COUNT", () => {
+                return GameManager.instance.achievementManager.stats.gamesPlayed.ToString();
+            }
+        },
+        {
+            "ZERO_MOOD_POPULATION_COUNT", () => {
+                int count = 0;
+                foreach(Population pop in GameManager.instance.populationManager.populationTypeList){
+                    if (GameManager.instance.populationManager.GetAverageMood(pop) <= 0f) {
+                        count ++;
+                    }
+                }
+                return count.ToString();
+            }
         }
     };
 
