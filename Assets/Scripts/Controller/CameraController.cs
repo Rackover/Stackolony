@@ -21,6 +21,7 @@ public class CameraController : MonoBehaviour {
     public Vector2 driftBorder = new Vector2(25f, 25f);
     public float cameraCatchUpSpeed = 5f;       // Speed at which the camera will catch up to its supposed location. Increasing this value decreases the camera lag
     public float baseHeight;
+    public float maxDistance = 100f;
 
     [Header("Rotating")]
     public float rotateSensibility = 1f;
@@ -43,12 +44,12 @@ public class CameraController : MonoBehaviour {
     Transform cameraTransformObjective;  // The camera will try to have the same transform as this
     Vector3 mouseDelta;
     Vector3 lastMousePosition;
+    Vector3 mapCenter;
     bool isFrozen = false;
 
     void Awake()
     {
         startPosition = transform.position;
-
         // Spawning camera
         cameraInstance = Instantiate(cameraModel);
         camTransform = cameraInstance.transform;
@@ -68,6 +69,19 @@ public class CameraController : MonoBehaviour {
         dummy.transform.SetPositionAndRotation(camTransform.position, camTransform.rotation);
         dummy.transform.rotation = camTransform.rotation;
         cameraTransformObjective = dummy.transform;
+    }
+
+    void Start()
+    {
+        mapCenter = GameManager.instance.gridManagement.IndexToWorldPosition(
+            new Vector3Int(
+                GameManager.instance.gridManagement.grid.GetLength(0)/2,
+                0,
+                GameManager.instance.gridManagement.grid.GetLength(2)/2
+            )
+        );
+
+        startPosition = mapCenter;
     }
 
     void Update()
@@ -99,6 +113,25 @@ public class CameraController : MonoBehaviour {
                 Drift();
             }
             Zoom();
+        }
+
+        // CLAMP CAMERA
+        if(transform.position.x > mapCenter.x + maxDistance)
+        {
+            transform.position = new Vector3(mapCenter.x + maxDistance, transform.position.y, transform.position.z);
+        }
+        else if(transform.position.x < mapCenter.x - maxDistance)
+        {
+            transform.position = new Vector3(mapCenter.x - maxDistance, transform.position.y, transform.position.z);
+        }
+
+        if(transform.position.z > mapCenter.z + maxDistance)
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y, mapCenter.z + maxDistance);
+        }
+        else if(transform.position.z < mapCenter.z - maxDistance)
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y, mapCenter.z - maxDistance);
         }
 
         CatchUpCameraObjective();
