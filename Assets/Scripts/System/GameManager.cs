@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
     public EventManager eventManager;
     public AnimationManager animationManager;
     public AchievementManager achievementManager;
+    public RoamerManager roamerManager;
 
     [Space(1)]
     [Header("INTERFACE")]
@@ -135,6 +136,7 @@ public class GameManager : MonoBehaviour
         if (eventManager == null) eventManager = FindObjectOfType<EventManager>();
         if (animationManager == null) animationManager = FindObjectOfType<AnimationManager>();
         if (achievementManager == null) achievementManager = FindObjectOfType<AchievementManager>();
+        if (roamerManager == null) roamerManager = FindObjectOfType<RoamerManager>();
         
         // INTERFACE
         if (localization == null) localization = FindObjectOfType<Localization>();
@@ -299,7 +301,11 @@ public class GameManager : MonoBehaviour
             ));
         }
 
-        
+
+        if (Input.GetKeyDown(KeyCode.F)) {
+            animationManager.ElevateTower(cursorManagement.posInGrid);
+        }
+
         if (Input.GetKeyDown(KeyCode.G)) {
             animationManager.EndElevateTower(new Vector2Int(cursorManagement.posInGrid.x, cursorManagement.posInGrid.z));
         }
@@ -380,6 +386,7 @@ public class GameManager : MonoBehaviour
         cityManager.GenerateEnvironmentBlocks();
 
         // TUTORIAL RUN ONLY
+
         if (cityManager.isTutorialRun) {
 
             // Lock every building
@@ -389,15 +396,23 @@ public class GameManager : MonoBehaviour
         }
 
         // NEW GAME ONLY
-        if (isNewGame) {
-
+        if (isNewGame) 
+        {
             // First citizen arrival and cycle loading
             timelineController.UpdateCycle(0);
-
             // CINEMATIC
             Instantiate(library.spatioportSpawnerPrefab);
         }
 
+        // TUTORIAL RUN ONLY
+        if (cityManager.isTutorialRun) 
+        {
+            // Lock every building
+            foreach (BlockScheme scheme in library.blocks)
+            {
+                cityManager.LockBuilding(scheme.ID);
+            }
+        }
         // Ingame switch
         inGame = true;
     }
