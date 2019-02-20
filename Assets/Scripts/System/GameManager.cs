@@ -382,10 +382,11 @@ public class GameManager : MonoBehaviour
         cinematicManager.GetReferences();
         timelineController.LoadCycles();
         DifferStart(delegate { eventManager.LoadEvents(); });
-
+        achievementManager.stats.gamesPlayed++;
         cityManager.GenerateEnvironmentBlocks();
 
         // TUTORIAL RUN ONLY
+
         if (cityManager.isTutorialRun) {
 
             // Lock every building
@@ -431,7 +432,8 @@ public class GameManager : MonoBehaviour
         // Clear events
         eventManager.ClearListeners();
         cursorManagement.ClearListeners();
-       
+        achievementManager.ClearListeners();
+
         // Clear system
         systemManager.ClearSystem();
 
