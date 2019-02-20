@@ -6,11 +6,23 @@ public class Mine : Flag, Flag.IFlag
     public float health;
     float sHealth;
 
+    GameObject cageVisual;
+
     bool soonDestroyed = false;
 
     public override void Awake()
     {
         sHealth = health;
+    }
+
+    public void Caged()
+    {
+        cageVisual = Instantiate(GameManager.instance.library.cagePrefab, transform.position, Quaternion.identity, transform);
+    }
+
+    public void Uncaged()
+    {
+        if(cageVisual != null) Destroy(cageVisual);
     }
 
     public override void OnNewMicrocycle()

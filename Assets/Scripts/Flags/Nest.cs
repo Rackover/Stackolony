@@ -5,6 +5,18 @@ public class Nest : Flag, Flag.IFlag
     [Header("Nest")]
     public float health = 100f;
 
+    GameObject cageVisual;
+    
+    public void Caged()
+    {
+        cageVisual = Instantiate(GameManager.instance.library.cagePrefab, block.transform.position, Quaternion.identity, transform);
+    }
+
+    public void Uncaged()
+    {
+        Destroy(cageVisual);
+    }
+
     public override void OnNewMicrocycle()
     {
         if(health <= 0)
