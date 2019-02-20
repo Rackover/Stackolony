@@ -149,9 +149,9 @@ public class Localization : MonoBehaviour {
 
             // Workaround to eliminate whitespaces before ! and ? in english
             if (currentLang.name == "english") {
-                line = Regex.Replace(line, "( ?)", "?");
-                line = Regex.Replace(line, "( :)", ":");
-                line = Regex.Replace(line, "( !)", "!");
+                line = Regex.Replace(line, @"( \?)", "?");
+                line = Regex.Replace(line, @"( \:)", ":");
+                line = Regex.Replace(line, @"( \!)", "!");
             }
             // end of
 
