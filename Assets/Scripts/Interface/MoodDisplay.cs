@@ -47,7 +47,7 @@ public class MoodDisplay : MonoBehaviour {
     PopulationManager popMan;
     Localization loc;
     string moodString;
-    Bystander.Mood currentMood;
+    Bystander.Mood currentMood = Bystander.Mood.Good;
 
     private void Start()
     {
