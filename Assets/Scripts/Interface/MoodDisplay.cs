@@ -142,7 +142,7 @@ public class MoodDisplay : MonoBehaviour {
 
 
         changeMood(currentMood);
-        moodString = loc.GetLineFromCategory("stats", currentMood.ToString().ToLower());
+        moodString = loc.GetLineFromCategory("mood", currentMood.ToString().ToLower());
     }
 
     void UpdateTexts()
@@ -184,13 +184,13 @@ public class MoodDisplay : MonoBehaviour {
                 continue;
             }
 
-            Tooltip.tooltipType type = Tooltip.tooltipType.Positive;
+            Tooltip.informationType type = Tooltip.informationType.Positive;
             if (moodMod.amount < 0) {
-                type = Tooltip.tooltipType.Negative;
+                type = Tooltip.informationType.Negative;
             }
 
             faceTooltip.AddLocalizedLine(
-                new Tooltip.TooltipLocalizationEntry(
+                new Tooltip.Entry(
                     "event" + moodMod.eventId,
                     "eventTitle",
                     type
@@ -198,7 +198,7 @@ public class MoodDisplay : MonoBehaviour {
             );
 
             faceTooltip.AddLocalizedLine(
-                new Tooltip.TooltipLocalizationEntry(
+                new Tooltip.Entry(
                     "value",
                     "stats",
                     type,

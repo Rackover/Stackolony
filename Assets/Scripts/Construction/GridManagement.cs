@@ -30,7 +30,6 @@ public class GridManagement : MonoBehaviour
     private GameObject gridGameObject; //GameObject contenant la grille
 
     public List<Vector2Int> buildablePositions = new List<Vector2Int>(); // List des positions disponible pour poser des block par rapport au terrain
-
     
     public enum blockType{ FREE = 0, BRIDGE = 1}
 
@@ -64,6 +63,15 @@ public class GridManagement : MonoBehaviour
     public Vector2Int GetRandomCoordinates()
     {
         return buildablePositions[Mathf.FloorToInt(buildablePositions.Count*UnityEngine.Random.value)];
+    }
+
+    public bool IsPositionFree(Vector2Int pos)
+    {
+        for(int i = 0; i < maxHeight; i++)
+        {
+            if(grid[pos.x, i, pos.y] != null) return false;
+        }
+        return true;
     }
 
     private void GenerateGrid() //Fonction pour générer la grille sur le terrain
@@ -323,6 +331,7 @@ public class GridManagement : MonoBehaviour
         if (destinationCoordinates.y >= 0)
         {
             MoveBlock(block.gameObject, destinationCoordinates);
+            buildablePositions.Remove(coordinates);
             UpdateGridSystems();
         } else
         {
@@ -513,9 +522,6 @@ public class GridManagement : MonoBehaviour
             bridgeInfo.allBridgePositions[i-1] = _posToCheck;
         }
 
-
-
-
         //Création de chaque parties du pont
         GameObject firstBridgePart = null;
 
@@ -561,9 +567,13 @@ public class GridManagement : MonoBehaviour
             blockA.gridCoordinates.z
         ] = blockB.gridCoordinates;
 
-        GameManager.instance.achievementManager.achiever.AddToValue("bridgeCount");
         //Joue le son
         GameManager.instance.soundManager.Play("CreateBridge");
+
+        // Update stats
+        if (gameManager.achievementManager.stats.maxBridgeLength < bridgeLength) {
+            gameManager.achievementManager.stats.maxBridgeLength = bridgeLength;
+        }
 
         //Update the system
         UpdateGridSystems();
@@ -600,9 +610,7 @@ public class GridManagement : MonoBehaviour
         }
         GameManager.instance.soundManager.Play("DestroyBlock");
         Destroy(bridgeObject);
-
-        GameManager.instance.achievementManager.achiever.AddToValue("bridgeCount", -1);
-
+        
         //Update the system
         UpdateGridSystems();
     }

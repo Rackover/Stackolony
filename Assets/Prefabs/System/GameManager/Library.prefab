@@ -59,6 +59,7 @@ MonoBehaviour:
     type: 2}
   disabledBlockPrefab: {fileID: 0}
   ruinPrefab: {fileID: 1593024420063624, guid: 6a64cf12c7012c84d9130d421d38118b, type: 2}
+  cagePrefab: {fileID: 1488497006074618, guid: 166be7428b4952242a63e7526e0655ed, type: 2}
   blocks:
   - {fileID: 11400000, guid: cd3d5acbb581a1c4595dc50637ba4ded, type: 2}
   - {fileID: 11400000, guid: 8aabc4225c69b11438c65f02c0a7fd8b, type: 2}
@@ -85,11 +86,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cc93ff67cd767e64593334ccb71e6451, type: 2}
   - {fileID: 11400000, guid: 088aad5b74a1f6348b4c4bb7418abb9b, type: 2}
   - {fileID: 11400000, guid: a36f06158ab512d458821b91c1e3a931, type: 2}
+  - {fileID: 11400000, guid: 77ba335a7e95ecb4ebdea73a6efedf30, type: 2}
   - {fileID: 11400000, guid: 640f2e3b32a821a4bb8abb06ed37d049, type: 2}
+  - {fileID: 11400000, guid: ff3d635df60775d43b9c1f5187d748ef, type: 2}
   - {fileID: 11400000, guid: 0369852271f78a944b3e28e4b8387b41, type: 2}
   - {fileID: 11400000, guid: a651fab9d9cd15f4aa7bd7242739f618, type: 2}
   - {fileID: 11400000, guid: ca135a6eefee91b4e8397e886111c4f0, type: 2}
-  - {fileID: 11400000, guid: ff3d635df60775d43b9c1f5187d748ef, type: 2}
   defaultContainerColor: {r: 0.8301887, g: 0.8301887, b: 0.8301887, a: 1}
   cursorSprite: {fileID: 21300000, guid: b631a20d61d7b5b4d9b8897145cac4e0, type: 3}
   destroyIcon: {fileID: 21300000, guid: 66734752feff9834b85b7ffdc4cc56c9, type: 3}
