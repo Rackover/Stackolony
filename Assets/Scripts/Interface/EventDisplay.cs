@@ -139,6 +139,7 @@ public class EventDisplay : MonoBehaviour {
                 FindObjectOfType<TooltipGO>().Disable();
                 GameManager.instance.UnPause();
                 GetComponent<Image>().enabled = false;
+                StopAllCoroutines();
             });
 
             instantiatedButtons.Add(button);

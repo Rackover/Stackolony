@@ -319,7 +319,14 @@ public class PopulationManager : MonoBehaviour
         GameManager.instance.soundManager.Play("NewSettler");
 
         Logger.Debug("Spawned " + amount + " citizens of type " + type.codeName + " to the citizen list");
-        CitizenArrival.Invoke(citizens.Count, type);
+
+        try {
+            CitizenArrival.Invoke(citizens.Count, type);
+        }
+        catch {
+            // Nothing to do, no listeners
+        }
+        
         return citizens;
     }
 
