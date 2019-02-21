@@ -101,7 +101,7 @@ public class BlockReader : EditorWindow
 
 	void SaveBlock(string[] dataLine)
 	{
-		if(dataLine.Length == 9)
+		if(dataLine.Length == 12)
 		{
 			BlockScheme block = ScriptableObject.CreateInstance<BlockScheme>();
 
@@ -118,6 +118,9 @@ public class BlockReader : EditorWindow
 			block.isDestroyable = bool.Parse(dataLine[6]);
 			block.isBuyable = bool.Parse(dataLine[7]);
 			block.canBuildAbove = bool.Parse(dataLine[8]);
+			block.relyOnSpatioport = bool.Parse(dataLine[9]);
+			block.fireProof = bool.Parse(dataLine[10]);
+			block.riotProof = bool.Parse(dataLine[11]);
 
 			AssetDatabase.CreateAsset(block, Paths.GetBlockFolder(folderName) + "/Block_" + dataLine[0] + ".asset");
 			AssetDatabase.SaveAssets();
@@ -125,7 +128,7 @@ public class BlockReader : EditorWindow
 		}
 		else
 		{
-			Debug.LogWarning("Your file is not properly setup, there is only " + dataLine.Length + " elements in each lines. Where there should be 9." );
+			Debug.LogWarning("Your file is not properly setup, there is only " + dataLine.Length + " elements in each lines. Where there should be 12");
 		}
 	}
 }
