@@ -202,6 +202,6 @@ public class ConsequencesManager : MonoBehaviour {
 
     static void SpawnMine(int amount)
     {
-        for(int i = 0; i < amount; i++) GameManager.instance.cityManager.SpawnMine();
+        for(int i = 0; i < amount; i++) GameManager.instance.cityManager.SpawnEnvironmentBlock(28);
     }
 }

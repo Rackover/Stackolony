@@ -17,9 +17,12 @@ MonoBehaviour:
   canBuildAbove: 1
   relyOnSpatioport: 1
   fireProof: 0
+  riotProof: 0
   model: {fileID: 1642458865581364, guid: faab0a1f33ad3344997b276747159fd1, type: 2}
   ID: 6
   consumption: 0
   sensibility: 1
   flags:
-  - Generator_5
+  - Generator_15
+  - NuisanceGenerator_3_5
+  - FireRiskGenerator_5

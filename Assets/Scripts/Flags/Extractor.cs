@@ -4,11 +4,14 @@ public class Extractor : Occupator
 {
 	[Header("Extraction")]
 	public Mine mine;
+	Mine oldMine;
 
 	public override void OnGridUpdate()
 	{
 		base.OnGridUpdate();
+		oldMine = mine;
 		mine = null;
+
         MissionManager.Mission newMission = GameManager.instance.missionManager.PrepareNewMission();
         newMission.position = block.gridCoordinates;
         newMission.callBack = "";
@@ -22,14 +25,13 @@ public class Extractor : Occupator
 			if(m != null)
 			{
 				mine = m;
+				mine.Cage();
 				break;
 			}
 		}
 
-		if(mine == null)
-		{
-			isEnabled = false;
-		}
+		if(oldMine != null && oldMine != mine) oldMine.Uncage();
+		if(mine == null) isEnabled = false;
 	}
 
     public override void OnNewMicrocycle()

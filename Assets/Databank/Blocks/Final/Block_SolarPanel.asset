@@ -17,10 +17,11 @@ MonoBehaviour:
   canBuildAbove: 1
   relyOnSpatioport: 1
   fireProof: 0
+  riotProof: 0
   model: {fileID: 1279266976626444, guid: 67bd21afca4922249bf3c1965c42608a, type: 2}
   ID: 5
   consumption: 0
   sensibility: 1
   flags:
-  - Generator_15
+  - Generator_10
   - WorkingHours_0_50
