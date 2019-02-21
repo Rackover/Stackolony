@@ -21,6 +21,7 @@ public class Temporality : MonoBehaviour {
     void Start()
     {
         GetMicroDuration();
+        SetTimeScale(1);
     }
 
     void GetMicroDuration()
@@ -75,13 +76,6 @@ public class Temporality : MonoBehaviour {
 
     public void SetTimeScale(int newTimeScaleCoef)
     {
-        if (newTimeScaleCoef > timeScale)
-        {
-            GameManager.instance.soundManager.Play("IncreaseSpeed");
-        } else if (newTimeScaleCoef < timeScale)
-        {
-            GameManager.instance.soundManager.Play("DecreaseSpeed");
-        }
         timeScale = newTimeScaleCoef;
     }
 

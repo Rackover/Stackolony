@@ -52,10 +52,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cityName: Valenciennes
-  accidentStates: 010000000200000003000000
   isTutorialRun: 1
-  minesAtStart: 3
-  nestsAtStart: 4
+  minesAtStart: 4
+  nestsAtStart: 3
   nestSpawnChance: 0.1
   moodValues:
     goodNotationTreshold: -5
@@ -67,3 +66,5 @@ MonoBehaviour:
     damaged: -2
     everythingFine: 3
     noHouse: -20
+  mine: {fileID: 11400000, guid: 77656a532bb8e9c4686fa0a18848db10, type: 2}
+  nest: {fileID: 11400000, guid: 0a28974a39514c1419738066aa8c3b2d, type: 2}

@@ -859,7 +859,6 @@ GameObject:
   - component: {fileID: 222368427388649986}
   - component: {fileID: 114438694201374534}
   - component: {fileID: 114691941871520584}
-  - component: {fileID: 114680967798009448}
   m_Layer: 5
   m_Name: Speed x2
   m_TagString: Untagged
@@ -1105,7 +1104,6 @@ GameObject:
   - component: {fileID: 222722248892232504}
   - component: {fileID: 114626172827977468}
   - component: {fileID: 114028093378458366}
-  - component: {fileID: 114513962098409806}
   m_Layer: 5
   m_Name: Speed x1
   m_TagString: Untagged
@@ -1365,7 +1363,6 @@ GameObject:
   - component: {fileID: 222852452319469674}
   - component: {fileID: 114139028472873944}
   - component: {fileID: 114934047306509096}
-  - component: {fileID: 114708053533138642}
   m_Layer: 5
   m_Name: Speed x0
   m_TagString: Untagged
@@ -3470,8 +3467,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 114571689687669616}
   m_HandleRect: {fileID: 224951944361754420}
   m_Direction: 2
-  m_Value: 0.99999887
-  m_Size: 0.925
+  m_Value: 0.9999972
+  m_Size: 0.9250001
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4459,18 +4456,6 @@ MonoBehaviour:
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
   m_ChildControlHeight: 1
---- !u!114 &114513962098409806
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1582339800497810}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aec1859cd764b7b4fbd193a2926b4066, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sound: Tick
 --- !u!114 &114528742904454162
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5224,18 +5209,6 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
---- !u!114 &114680967798009448
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1461871906055102}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aec1859cd764b7b4fbd193a2926b4066, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sound: Tick
 --- !u!114 &114682803505717854
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -5379,18 +5352,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71b0274e39982054d89e0ff321ebe1fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114708053533138642
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1777488590272718}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aec1859cd764b7b4fbd193a2926b4066, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sound: Tick
 --- !u!114 &114708173215140670
 MonoBehaviour:
   m_ObjectHideFlags: 1
