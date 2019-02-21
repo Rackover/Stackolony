@@ -12,10 +12,13 @@ public class Bystander : MonoBehaviour {
     
     Texture2D face;
 
+    public Animator animator;
+
     private void Awake()
     {
         UpdateColor();
         SetEmotion(Mood.Good);
+        animator = GetComponentInChildren<Animator>();
     }
 
     void UpdateColor()

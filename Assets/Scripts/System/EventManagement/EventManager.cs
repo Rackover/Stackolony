@@ -7,7 +7,7 @@ using System.Linq;
 
 public class EventManager : MonoBehaviour {
 
-    EventInterpreter interpreter = new EventInterpreter();
+    ScriptInterpreter interpreter = new ScriptInterpreter();
 
     public System.Action<string> InterpreterError;
     public System.Action<string> CheckError;
@@ -49,7 +49,7 @@ public class EventManager : MonoBehaviour {
 
     public class GameEffect
     {
-        public Tooltip.tooltipType ttColor = Tooltip.tooltipType.Neutral;
+        public Tooltip.informationType ttColor = Tooltip.informationType.Neutral;
         public string intention = "";
         public string[] parameters = new string[] { };
         System.Action action;
@@ -186,13 +186,11 @@ public class EventManager : MonoBehaviour {
             try {
                 action.Execute();
             }
-            catch (EventInterpreter.InterpreterException e) {
-                GameManager.instance.eventManager.InterpreterError.Invoke(e.Message);
-                Debug.LogWarning(e);
+            catch (ScriptInterpreter.InterpreterException e) {
+                GameManager.instance.eventManager.InterpreterError.Invoke(e.ToString());
             }
             catch (System.Exception e) {
-                GameManager.instance.eventManager.InterpreterError.Invoke("Unknown interpreter error - check your script.\n" + e.Message);
-                Debug.LogWarning(e);
+                GameManager.instance.eventManager.InterpreterError.Invoke("Unknown interpreter error - check your script.\n" + e.ToString());
             }
         }
     }

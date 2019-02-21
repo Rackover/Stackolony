@@ -48,6 +48,7 @@ public class CityManager : MonoBehaviour {
     public readonly State[] accidentStates = { State.OnFire, State.OnRiot, State.Damaged };
     public Dictionary<Population, Dictionary<House, float>> topHabitations = new Dictionary<Population, Dictionary<House, float>>(); // List of the best habitations (sorted from best to worst)
     public bool isTutorialRun = true;
+    public ConditionalUnlocks conditionalUnlocker = new ConditionalUnlocks();
 
     List<int> lockedBuildings = new List<int >();
 
@@ -75,6 +76,9 @@ public class CityManager : MonoBehaviour {
 
     private void Start()
     {
+        // Load building unlocks
+        conditionalUnlocker.LoadConditionalUnlocks();
+
         foreach (Population pop in GameManager.instance.populationManager.populationTypeList) {
             topHabitations[pop] = new Dictionary<House, float>();
         }
@@ -135,7 +139,7 @@ public class CityManager : MonoBehaviour {
 
     public bool IsLocked(int id)
     {
-        return lockedBuildings.Contains(id);
+        return lockedBuildings.Contains(id) || !conditionalUnlocker.CanBeUnlocked(id);
     }
 
     //Finds a house for every citizens (Soon it'll take a priority order into account)
