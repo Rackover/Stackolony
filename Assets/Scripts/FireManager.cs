@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FireManager : MonoBehaviour 
 {
-	static int currentFire = 0;
+	public static int currentFire = 0;
 
 	public static void Ignite(Block block)
 	{

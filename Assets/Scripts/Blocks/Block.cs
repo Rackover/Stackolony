@@ -53,8 +53,8 @@ public class Block : MonoBehaviour
         // Tooltip generation
         Tooltip tt = GetComponent<Tooltip>();
         tt.ClearLines();
-        List<Tooltip.TooltipLocalizationEntry> entries = Tooltip.GetBuildingTooltip(this);
-        foreach (Tooltip.TooltipLocalizationEntry entry in entries) {
+        List<Tooltip.Entry> entries = Tooltip.GetBuildingTooltip(this);
+        foreach (Tooltip.Entry entry in entries) {
             tt.AddLocalizedLine(entry);
         }
     }
@@ -136,7 +136,27 @@ public class Block : MonoBehaviour
         {
             state.Value.OnGridUpdate();
         }
-    }     
+
+        UpdatePositionInTower();
+    }
+
+    // Updates the "positionInTower" variable, used for stats
+    public void UpdatePositionInTower()
+    {
+        for (int i = gridCoordinates.y; i > 0; i--) {
+            GameObject underBuilding = GameManager.instance.gridManagement.grid[gridCoordinates.x, gridCoordinates.y, gridCoordinates.z];
+            if (underBuilding == null) {
+                positionInTower = i;
+                break;
+            }
+        }
+
+        // Update stats
+        AchievementManager.Stats stats = GameManager.instance.achievementManager.stats;
+        if (positionInTower > stats.maxTowerHeight) {
+            stats.maxTowerHeight = positionInTower;
+        }
+    }
 
     public void EnableFlags() // Enable all flags of this block
     {

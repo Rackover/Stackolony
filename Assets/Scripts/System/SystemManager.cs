@@ -14,7 +14,6 @@ public class SystemManager : MonoBehaviour {
     public List<NuisanceGenerator> AllNuisanceGenerators = new List<NuisanceGenerator>();
     public List<FireRiskGenerator> AllFireRiskGenerators = new List<FireRiskGenerator>();
 
-
     private bool systemResetted;
 
 
@@ -33,6 +32,7 @@ public class SystemManager : MonoBehaviour {
      *      - House information
      *      - Job distribution
      *      - Mood
+     *      - Achievements
     */
 
     
@@ -112,6 +112,7 @@ public class SystemManager : MonoBehaviour {
     {
         ResetSystem();
         GameManager.instance.populationManager.OnNewMicrocycle();
+        GameManager.instance.roamerManager.OnNewMicrocycle();
 
         // ToArray() is to prevent foreach errors by copying the AllBlocks array
         foreach (Block block in AllBlocks.ToArray())
@@ -127,6 +128,7 @@ public class SystemManager : MonoBehaviour {
         yield return StartCoroutine(UpdateHousesInformations());
         yield return StartCoroutine(RecalculateJobs());
         yield return StartCoroutine(OnGridUpdate());
+        yield return StartCoroutine(GameManager.instance.achievementManager.achiever.CheckAllAchievements());
     }
 
     //S'execute à chaques fois qu'un bloc est déplacé dans la grille

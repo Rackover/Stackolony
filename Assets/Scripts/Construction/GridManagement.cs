@@ -513,9 +513,6 @@ public class GridManagement : MonoBehaviour
             bridgeInfo.allBridgePositions[i-1] = _posToCheck;
         }
 
-
-
-
         //Création de chaque parties du pont
         GameObject firstBridgePart = null;
 
@@ -561,9 +558,13 @@ public class GridManagement : MonoBehaviour
             blockA.gridCoordinates.z
         ] = blockB.gridCoordinates;
 
-        GameManager.instance.achievementManager.achiever.AddToValue("bridgeCount");
         //Joue le son
         GameManager.instance.soundManager.Play("CreateBridge");
+
+        // Update stats
+        if (gameManager.achievementManager.stats.maxBridgeLength < bridgeLength) {
+            gameManager.achievementManager.stats.maxBridgeLength = bridgeLength;
+        }
 
         //Update the system
         UpdateGridSystems();
@@ -600,9 +601,7 @@ public class GridManagement : MonoBehaviour
         }
         GameManager.instance.soundManager.Play("DestroyBlock");
         Destroy(bridgeObject);
-
-        GameManager.instance.achievementManager.achiever.AddToValue("bridgeCount", -1);
-
+        
         //Update the system
         UpdateGridSystems();
     }
