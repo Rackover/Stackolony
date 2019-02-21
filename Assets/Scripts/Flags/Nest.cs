@@ -7,15 +7,15 @@ public class Nest : Flag, Flag.IFlag
 
     GameObject cageVisual;
     
-    public void Caged()
+    public void Cage()
     {
         if(cageVisual == null)
-            cageVisual = Instantiate(GameManager.instance.library.cagePrefab, transform.position, Quaternion.identity, transform);
+            cageVisual = Instantiate(GameManager.instance.library.cagePrefab, transform);
         else 
             cageVisual.SetActive(true);
     }
 
-    public void Uncaged()
+    public void Uncage()
     {
         if(cageVisual != null) cageVisual.SetActive(false);
     }

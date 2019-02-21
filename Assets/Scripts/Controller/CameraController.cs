@@ -112,8 +112,11 @@ public class CameraController : MonoBehaviour {
             Rotation();
         }
         Drift();
-        Zoom();
 
+        if(!GameManager.instance.cursorManagement.cursorOnUI)
+        {
+            Zoom();
+        }
         // CLAMP CAMERA
         if(transform.position.x > mapCenter.x + maxDistance)
         {

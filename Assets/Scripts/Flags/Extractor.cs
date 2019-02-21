@@ -4,12 +4,12 @@ public class Extractor : Occupator
 {
 	[Header("Extraction")]
 	public Mine mine;
-	Mine pMine;
+	Mine oldMine;
 
 	public override void OnGridUpdate()
 	{
 		base.OnGridUpdate();
-		pMine = mine;
+		oldMine = mine;
 		mine = null;
 
         MissionManager.Mission newMission = GameManager.instance.missionManager.PrepareNewMission();
@@ -25,12 +25,12 @@ public class Extractor : Occupator
 			if(m != null)
 			{
 				mine = m;
-				mine.Caged();
+				mine.Cage();
 				break;
 			}
 		}
 
-		if(pMine != null && pMine != mine) pMine.Uncaged();
+		if(oldMine != null && oldMine != mine) oldMine.Uncage();
 		if(mine == null) isEnabled = false;
 	}
 

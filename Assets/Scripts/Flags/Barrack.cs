@@ -6,12 +6,12 @@ public class Barrack : Occupator {
 
 	[Header("Holding")]
 	public Nest nest;
-	Nest pNest;
+	Nest oldNest;
 
 	public override void OnGridUpdate()
 	{
 		base.OnGridUpdate();
-		pNest = nest;
+		oldNest = nest;
 		nest = null;
 
         MissionManager.Mission newMission = GameManager.instance.missionManager.PrepareNewMission();
@@ -28,12 +28,12 @@ public class Barrack : Occupator {
 			if(n != null)
 			{
 				nest = n;
-				nest.Caged();
+				nest.Cage();
 				break;
 			}
 		}
 
-		if(pNest != null && pNest != nest) pNest.Uncaged();
+		if(oldNest != null && oldNest != nest) oldNest.Uncage();
 		if(nest == null) isEnabled = false;
 	}
 

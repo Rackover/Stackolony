@@ -73,6 +73,9 @@ public class CityManager : MonoBehaviour {
 
     public MoodValues moodValues;
 
+    public BlockScheme mine;
+    public BlockScheme nest;
+
 
     private void Start()
     {
@@ -86,8 +89,8 @@ public class CityManager : MonoBehaviour {
     
 	public void GenerateEnvironmentBlocks()
 	{
-		for( int i = 0; i < minesAtStart; i++){SpawnEnvironmentBlock(28);}
-		for( int i = 0; i < nestsAtStart; i++){SpawnEnvironmentBlock(29);}
+		for( int i = 0; i < minesAtStart; i++){SpawnEnvironmentBlock(mine.ID);}
+		for( int i = 0; i < nestsAtStart; i++){SpawnEnvironmentBlock(nest.ID);}
 	}
 
 	public void SpawnEnvironmentBlock(int which)
@@ -122,7 +125,7 @@ public class CityManager : MonoBehaviour {
 	{
         if(Random.Range(0f, 1f) < nestSpawnChance)
 		{
-			SpawnEnvironmentBlock(29);
+			SpawnEnvironmentBlock(nest.ID);
 		}
 	}
 
