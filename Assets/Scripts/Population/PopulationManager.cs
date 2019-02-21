@@ -26,10 +26,54 @@ public class PopulationManager : MonoBehaviour
         public bool jobless = true;
     }
 
+    public class MoodEvolution
+    {
+        Dictionary<CityManager.MoodAffect, float> evolutions = new Dictionary<CityManager.MoodAffect, float>();
+
+        public MoodEvolution()
+        {
+            Clear();
+        }
+
+        public void Clear()
+        {
+            evolutions = new CityManager.MoodValues().values;
+            foreach (CityManager.MoodAffect valueType in new CityManager.MoodValues().values.Keys) {
+                evolutions[valueType] = 0f;
+            }
+        }
+
+        public void Add(CityManager.MoodAffect type, float value)
+        {
+            evolutions[type] += value;
+        }
+
+        public float Get(CityManager.MoodAffect type)
+        {
+            return evolutions[type];
+        }
+
+        public float ToFloat()
+        {
+            float value = 0f;
+            foreach (CityManager.MoodAffect valueType in evolutions.Keys) {
+                value += evolutions[valueType];
+            }
+            return value;
+        }
+
+        public Dictionary<CityManager.MoodAffect, float>.KeyCollection GetKeys()
+        {
+            return evolutions.Keys;
+        }
+    }
+
     public class PopulationInformation
     {
         public float averageMood; // average moods between 0 and 1
         public float riotRisk;
+        public MoodEvolution lastMoodChange = new MoodEvolution();
+
         public List<Citizen> citizens = new List<Citizen>(); //Assign every citizen to it's population
         public List<MoodModifier> moodModifiers = new List<MoodModifier>(); //List of every active moodmodifiers for every population
         public List<FoodModifier> foodModifiers = new List<FoodModifier>(); //List of every food modifier affecting every population
@@ -237,7 +281,14 @@ public class PopulationManager : MonoBehaviour
         }
     }
 
-    public void ChangePopulationMood(Population type, float amount)
+    public void ChangePopulationMood(Population type, MoodEvolution evolution)
+    {
+        foreach (CityManager.MoodAffect affect in evolution.GetKeys()) {
+            ChangePopulationMood(type, evolution.Get(affect), affect);
+        }
+    }
+
+    public void ChangePopulationMood(Population type, float amount, CityManager.MoodAffect reason=CityManager.MoodAffect.none)
     {
         float oldValue = populations[type].averageMood;
         populations[type].averageMood += amount/populations[type].citizens.Count;
@@ -247,6 +298,11 @@ public class PopulationManager : MonoBehaviour
         if(populations[type].averageMood > maxMood) populations[type].averageMood = 100f;
 
         float newValue = populations[type].averageMood;
+
+        if (reason != CityManager.MoodAffect.none) {
+            populations[type].lastMoodChange.Add(reason, oldValue - newValue);
+        }
+
         Logger.Debug("Population " + type.codeName + " mood has been changed from " + oldValue + " to " + newValue);
     }
 

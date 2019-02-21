@@ -194,20 +194,18 @@ public class OverlayManager : MonoBehaviour
             {
                 House house = block.GetComponent<House>();
                 Color chosenColor = defaultColor;
-                if (house != null)
-                {
+                if (house != null) {
                     house.UpdateHouseInformations();
                     float averageNotation = 0;
                     PopulationManager popManager = GameManager.instance.populationManager;
                     CityManager cityManager = GameManager.instance.cityManager;
-                    for (int i = 0; i < popManager.populationTypeList.Length; i++)
-                    {
-                        averageNotation += cityManager.GetHouseNotation(house, popManager.populationTypeList[i]);
+                    for (int i = 0; i < popManager.populationTypeList.Length; i++) {
+                        averageNotation += cityManager.GetHouseNotation(house, popManager.populationTypeList[i]).ToFloat();
                     }
 
                     averageNotation = averageNotation / popManager.populationTypeList.Length;
-                    averageNotation -= cityManager.moodValues.noOccupations;
-                    averageNotation -= cityManager.moodValues.wrongPopulationType;
+                    averageNotation -= cityManager.moodValues.values[CityManager.MoodAffect.noOccupations];
+                    averageNotation -= cityManager.moodValues.values[CityManager.MoodAffect.wrongPopulationType];
 
                     if (averageNotation < cityManager.moodValues.badNotationTreshold)
                     {
