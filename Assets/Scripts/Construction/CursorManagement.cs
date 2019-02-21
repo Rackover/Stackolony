@@ -234,12 +234,12 @@ public class CursorManagement : MonoBehaviour
             {
                 couldDrag = true;
             }
-        } else
+        } 
+        else
         {
             couldDrag = false;
         }
        
-        
         /////////////////////////////
         ///
         ///     DRAG AND DROP

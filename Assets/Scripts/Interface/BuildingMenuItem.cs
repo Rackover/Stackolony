@@ -81,18 +81,18 @@ public class BuildingMenuItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
     void Update () {
         // Lock check
         Unlock();
-        if (GameManager.instance.cityManager.IsLocked(blockId)) {
-            Lock();
-        }
+        if(GameManager.instance.cityManager.IsLocked(blockId)){ Lock(); }
 
         // Drag
-        if (isBeingDragged && !isLocked && !GameManager.instance.cursorManagement.cursorOnUI) {
+        if (isBeingDragged && !isLocked && !GameManager.instance.cursorManagement.cursorOnUI)
+        {
             if (draggingBuilding == null)
             {
                 draggingBuilding = GameManager.instance.gridManagement.CreateBlockFromId(blockId).GetComponent<Block>();
                 draggingBuilding.Pack();
                 draggingBuilding.transform.position = GameManager.instance.cursorManagement.posInWorld;
             }
+
             GameManager.instance.cursorManagement.selectedBlock = draggingBuilding;
             GameManager.instance.cursorManagement.draggingNewBlock = true;
             GameManager.instance.cursorManagement.linkedScrollRect = parentScrollRect;
@@ -101,12 +101,19 @@ public class BuildingMenuItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
             isBeingDragged = false;
             draggingBuilding = null;
         }
-        else if (!isLocked){
-            if (Input.GetButton("Select") && concerned && !GameManager.instance.cursorManagement.isDragging) {
-                isBeingDragged = true;
-                ri.color = new Color(ri.color.r, ri.color.g, ri.color.b, 0f);
+        else if (!isLocked)
+        {
+            if (Input.GetButton("Select"))
+            {
+                if(concerned && !GameManager.instance.cursorManagement.isDragging)
+                {
+                    isBeingDragged = true;
+                    ri.color = new Color(ri.color.r, ri.color.g, ri.color.b, 0f);
+                }
             }
-            if (Input.GetButtonUp("Select")) {
+
+            if (Input.GetButtonUp("Select"))
+            {
                 ri.color = new Color(ri.color.r, ri.color.g, ri.color.b, 1f);
                 isBeingDragged = false;
             }
