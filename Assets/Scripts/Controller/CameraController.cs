@@ -96,10 +96,8 @@ public class CameraController : MonoBehaviour {
 
         UpdateCameraCenterHeight();
 
-        if(!GameManager.instance.cursorManagement.cursorOnUI)
-        {
-
-        }
+        // Was intended but dosn't add anything
+        //if(!GameManager.instance.cursorManagement.cursorOnUI)
 
         cameraTransformObjective.LookAt(camCenter.position);
 
@@ -113,7 +111,6 @@ public class CameraController : MonoBehaviour {
             //driftEnabled = false;
             Rotation();
         }
-
         Drift();
         Zoom();
 
