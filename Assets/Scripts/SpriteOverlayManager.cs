@@ -6,15 +6,10 @@ using UnityEngine.UI;
 
 public class SpriteOverlayManager : MonoBehaviour 
 {
-	
 	[Header("Settings")]
-	public RectTransform canvas;
 	public float maxSize = 100f;
+	public Sprite unpoweredSprite;
 	List<int> signIds = new List<int>();
-
-	[Header("Debug")]
-	public Transform[] targets;
-	public Sprite[] sprites;
 
 	public class Sign
 	{
@@ -26,24 +21,18 @@ public class SpriteOverlayManager : MonoBehaviour
 	
 	List<Sign> signs = new List<Sign>();
 
-	void Start()
-	{
-		for(int i = 0; i < targets.Length; i++)
-		{
-			signIds.Add(NewSignOverlay(sprites[i], targets[i].position));
-		}
-	}
-
 	void Update()
-	{
-		for(int i = 0; i < signIds.Count; i++)
+	{	
+		foreach(Sign s in signs){ KillSign(s.id); }
+		foreach(Block b in GameManager.instance.systemManager.AllBlocks)
 		{
-			UpdateSign(signIds[i], targets[i].position);
+			if(b.states.ContainsKey(State.Unpowered)) NewSignOverlay(unpoweredSprite, b.gameObject.transform.position);
 		}
 	}
 
-	public void HideSign(int id)
+	public void KillSign(int id)
 	{
+		signs[id].image.enabled = false;
 		signs[id].image.sprite = null;
 		signs[id].available = true;
 	}
@@ -70,6 +59,7 @@ public class SpriteOverlayManager : MonoBehaviour
 	{
 		Sign sign = GetSign();
 
+		sign.image.enabled = true;
 		sign.image.sprite = img;
 		sign.self.position = Camera.main.WorldToScreenPoint(pos);
 
@@ -85,7 +75,7 @@ public class SpriteOverlayManager : MonoBehaviour
 		foreach(Sign s in signs){ if(s.available) return s; }
 
 		GameObject go = new GameObject();
-		go.transform.SetParent(canvas.transform);
+		go.transform.SetParent(transform);
 
 		Sign sign = new Sign();
 		sign.self = go.AddComponent<RectTransform>();
