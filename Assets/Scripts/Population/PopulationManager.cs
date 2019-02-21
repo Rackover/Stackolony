@@ -153,9 +153,9 @@ public class PopulationManager : MonoBehaviour
         // Loading names from file
         List<string> newNames;
         try {
-            newNames = new List<string>(File.ReadAllLines(Paths.GetNamesFile()));
+            newNames = new List<string>(File.ReadAllLines(Paths.GetNamesFile())) ;
         }
-        catch (FileNotFoundException e) {
+        catch (FileNotFoundException) {
             Logger.Error("Could not find name file - this should not happen. Defaulting to 'Citizen' name.");
             return;
         }
@@ -248,8 +248,6 @@ public class PopulationManager : MonoBehaviour
 
         float newValue = populations[type].averageMood;
         Logger.Debug("Population " + type.codeName + " mood has been changed from " + oldValue + " to " + newValue);
-
-        GameManager.instance.achievementManager.achiever.SetValue(type.codeName + "Mood", (int)populations[type].averageMood);
     }
 
     public float GetAverageMood(Population type)
@@ -306,10 +304,7 @@ public class PopulationManager : MonoBehaviour
         newCitizen.type = type;
         citizenList.Add(newCitizen);
         populations[type].citizens.Add(newCitizen);
-
-        GameManager.instance.achievementManager.achiever.AddToValue("settlerCount");
-        GameManager.instance.achievementManager.achiever.AddToValue(type.codeName + "Count");
-
+        
         return newCitizen;
     }
 

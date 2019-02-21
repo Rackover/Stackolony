@@ -228,7 +228,7 @@ public class CursorManagement : MonoBehaviour
 
     void UpdateTool(RaycastHit hit)
     {
-        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Block") && hit.transform.gameObject.GetComponent<Block>().scheme.isMovable)
+        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Block") && hit.transform.gameObject.GetComponent<Block>().scheme.isMovable && !cursorOnUI)
         {
             if (selectedBlock == null)
             {
@@ -249,15 +249,18 @@ public class CursorManagement : MonoBehaviour
             initialDragPos = Input.mousePosition;
         }
 
-        if (Input.GetButton("Select")) {
-            if (selectedBlock == null) {
+        if (Input.GetButton("Select"))
+        {
+            if (selectedBlock == null && !cursorOnUI)
+            {
                 Block selectedBlock = hit.transform.gameObject.GetComponent<Block>();
                 StartDrag(selectedBlock);
             }
             DuringDrag(posInGrid);
         }
 
-        if (Input.GetButtonUp("Select")) {
+        if (Input.GetButtonUp("Select"))
+        {
             EndDrag(posInGrid);
         }
         ///

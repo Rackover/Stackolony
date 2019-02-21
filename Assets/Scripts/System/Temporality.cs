@@ -21,6 +21,7 @@ public class Temporality : MonoBehaviour {
     void Start()
     {
         GetMicroDuration();
+        SetTimeScale(1);
     }
 
     void GetMicroDuration()
@@ -75,13 +76,6 @@ public class Temporality : MonoBehaviour {
 
     public void SetTimeScale(int newTimeScaleCoef)
     {
-        if (newTimeScaleCoef > timeScale)
-        {
-            GameManager.instance.soundManager.Play("IncreaseSpeed");
-        } else if (newTimeScaleCoef < timeScale)
-        {
-            GameManager.instance.soundManager.Play("DecreaseSpeed");
-        }
         timeScale = newTimeScaleCoef;
     }
 
@@ -102,8 +96,6 @@ public class Temporality : MonoBehaviour {
         cycleNumber++;
         GameManager.instance.timelineController.UpdateCycle(cycleNumber);
         GameManager.instance.eventManager.Renew(cycleNumber);
-
-        GameManager.instance.achievementManager.achiever.AddToValue("cyclePassed");
     }
 
     public void AddMicroCycle()

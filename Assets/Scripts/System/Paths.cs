@@ -97,6 +97,27 @@ public class Paths {
         return path + "/" + file;
     }
 
+    static public string GetAchievementsFile()
+    {
+        string path = Application.streamingAssetsPath;
+        string file = "achievements" + ".xml";
+        return path + "/" + file;
+    }
+
+    static public string GetUnlocksFolder()
+    {
+        string path = Application.streamingAssetsPath + "/unlocks";
+        CreateDirectoryIfNotExists(path);
+        return path;
+    }
+
+    static public string GetUnlocksFile()
+    {
+        string path = GetUnlocksFolder();
+        string file = "buildings" + ".xml";
+        return path + "/" + file;
+    }
+    
     static void CreateDirectoryIfNotExists(string path)
     {
         if (!Directory.Exists(path)) {

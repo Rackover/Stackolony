@@ -10,6 +10,7 @@ public class Library : MonoBehaviour
     public GameObject spatioportSpawnerPrefab;
     public GameObject disabledBlockPrefab;
 	public GameObject ruinPrefab;
+	public GameObject cagePrefab;
 
 	[Space(1)][Header("Blocks")]
 	public BlockScheme[] blocks;
