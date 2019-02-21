@@ -55,6 +55,7 @@ GameObject:
   - component: {fileID: 4663925043442566}
   - component: {fileID: 198383312029848394}
   - component: {fileID: 199310036743026930}
+  - component: {fileID: 114759381306498012}
   m_Layer: 14
   m_Name: PS_Confettis
   m_TagString: Untagged
@@ -134,6 +135,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!114 &114759381306498012
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1814836820427222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3eed245b05e222b4ea196a09eb09886a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!198 &198312494325678188
 ParticleSystem:
   m_ObjectHideFlags: 1

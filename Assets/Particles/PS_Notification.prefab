@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4560164320634856}
   - component: {fileID: 198452634425401458}
   - component: {fileID: 199709521393694552}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: PS_Notification
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -38,7 +38,7 @@ GameObject:
   - component: {fileID: 4041750761763770}
   - component: {fileID: 198294262955158876}
   - component: {fileID: 199218405245286784}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: PS_Notification_Sub
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -65,8 +65,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1589128647253732}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 590.5184, y: 503.818, z: -18.432365}
-  m_LocalScale: {x: 1.3653604, y: 1.3653604, z: 1.3653604}
+  m_LocalPosition: {x: 456, y: 459, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4041750761763770}
   m_Father: {fileID: 0}
@@ -4800,7 +4800,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 0
       minColor: {r: 1, g: 1, b: 1, a: 1}
-      maxColor: {r: 1, g: 0.77169657, b: 0.3443396, a: 1}
+      maxColor: {r: 1, g: 0.6526946, b: 0, a: 1}
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}

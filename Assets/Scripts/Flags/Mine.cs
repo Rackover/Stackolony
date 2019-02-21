@@ -42,6 +42,8 @@ public class Mine : Flag, Flag.IFlag
             Vector2Int pos = new Vector2Int(block.gridCoordinates.x, block.gridCoordinates.z);
             GameManager.instance.gridManagement.buildablePositions.Add(pos);
 
+            Instantiate(GameManager.instance.library.mineExplosionParticle, transform);
+
             block.Destroy();
         }
     }
