@@ -17,31 +17,7 @@ public class Interface : MonoBehaviour {
     public GameObject optionsWindow;
     public GameObject creditsWindow;
     public GameObject pauseWindow;
-
-    public void ChangeCursor(string mode)	
-	{
-		cursorImage.enabled = true;
-		switch (mode) 
-		{
-			case "Default":
-				cursorImage.sprite = null;
-				cursorImage.enabled = false;
-				break;
-
-			case "Build":
-				cursorImage.sprite = GameManager.instance.library.buildIcon;
-				break;
-
-			case "Delete":
-				cursorImage.sprite = GameManager.instance.library.destroyIcon;
-				break;
-
-			case "Bridge":
-				cursorImage.sprite = GameManager.instance.library.bridgeIcon;
-				break;
-		}
-	}
-
+    
     public void SpawnOptionsWindow()
     {
         Instantiate(optionsWindow, this.transform);

@@ -7,9 +7,6 @@ using System;
 
 public class CursorManagement : MonoBehaviour
 {
-    public enum cursorMode { Default, Build, Delete, Bridge, Move }; //Chaque mode du curseur
-
-
     [Header("=== REFERENCIES ===")]
     [Header("Prefabs")]
     public GameObject projectorPrefab;
@@ -20,7 +17,6 @@ public class CursorManagement : MonoBehaviour
 
     [Space(5)]
     [Header("=== SYSTEM ===")]
-    public cursorMode selectedMode = cursorMode.Default; //Mode actuel du curseur
     public List<GameObject> activeBridgePreviews = new List<GameObject>(); //Liste contenant les preview de pont
     public bool isBridging = false;
     public Block selectedBlock; //Le block selectionné par le joueur
@@ -79,12 +75,11 @@ public class CursorManagement : MonoBehaviour
 
     private void Update()
     {
-
-        // Unless ingame, default mode
         if (!GameManager.instance.IsInGame()) {
-            SwitchMode(cursorMode.Default);
             return;
         }
+
+        Logger.Debug("Laboratory locked : "+GameManager.instance.cityManager.IsLocked(14));
 
         // Raycast the ground and update the cursor if needed
         UpdateCursor();
@@ -92,20 +87,6 @@ public class CursorManagement : MonoBehaviour
         // Detect cursor over UI
         cursorOnUI = false;
         if (EventSystem.current.IsPointerOverGameObject()) { cursorOnUI = true; }
-    }
-
-    public void SwitchMode(cursorMode mode)
-    {
-        if (canSwitchTools) {
-            isBridging = false;
-            selectedMode = mode;
-            ClearFeedback();
-            ClearPermanentHighlighter();
-            selectedBlock = null;
-        }
-        else {
-            CursorError.Invoke("cannotUseTool");
-        }
     }
 
     //Place le curseur correctement sur la grille et sur le terrain
@@ -559,8 +540,8 @@ public class CursorManagement : MonoBehaviour
     public void ClearListeners()
     {
         try {
-            foreach (System.Delegate d in CursorError.GetInvocationList()) {
-                CursorError -= (System.Action<string>)d;
+            foreach (Delegate d in CursorError.GetInvocationList()) {
+                CursorError -= (Action<string>)d;
             }
         }
         catch {

@@ -110,13 +110,17 @@ public class CityManager : MonoBehaviour {
 
     public void LockBuilding(int id)
     {
-        UnlockBuilding(id);
+        lockedBuildings.RemoveAll(i => i == id);
+        lockedBuildings.Sort();
         lockedBuildings.Add(id);
+        Logger.Debug("Locked building " + id + " : current locked buildings are " + string.Join(",", lockedBuildings.Select(x => x.ToString()).ToArray()));
     }
 
     public void UnlockBuilding(int id)
     {
         lockedBuildings.RemoveAll(i => i==id);
+        lockedBuildings.Sort();
+        Logger.Debug("Unlocking building " + id+" : current locked buildings are "+string.Join(",", lockedBuildings.Select(x => x.ToString()).ToArray()));
     }
 
     public bool IsLocked(int id)

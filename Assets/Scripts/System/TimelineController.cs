@@ -163,6 +163,7 @@ public class TimelineController : MonoBehaviour {
 
                         // Garbage ID
                         if (!GameManager.instance.library.BlockExists(id)) {
+                            Logger.Error("Skipped unlock building:" + id + " because it doesn't exists");
                             continue;
                         }
                         cycle.unlocks.Add(id);
