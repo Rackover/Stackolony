@@ -257,7 +257,10 @@
   </flagParameter>
   <state>
     <OnFire><![CDATA[Burning]]></OnFire>
+    <Powered><![CDATA[]]></Powered>
     <OnRiot><![CDATA[Rioting]]></OnRiot>
+    <Damaged><![CDATA[]]></Damaged>
+    <Unpowered><![CDATA[]]></Unpowered>
   </state>
   <notification>
     <misalignedBlocks><![CDATA[The blocks are not aligned]]></misalignedBlocks>

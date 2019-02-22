@@ -181,7 +181,7 @@ public class GridManagement : MonoBehaviour
             {
                 if (!blockUnderPos.scheme.canBuildAbove)
                 {
-                    if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError.Invoke("You can't build above that block"); }
+                    if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError.Invoke("cannotBuildAboveThis"); }
                     return false;
                 }
             }
