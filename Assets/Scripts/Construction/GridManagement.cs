@@ -58,6 +58,8 @@ public class GridManagement : MonoBehaviour
                 }
             }
         }
+
+        buildablePositions.Remove(spatioportSpawnPoint);
     }
 
     public Vector2Int GetRandomCoordinates()
