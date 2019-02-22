@@ -17,9 +17,9 @@ public class SoundManager : MonoBehaviour
 
 	void Start()
 	{
-		musicPlayer.Play(FindClipByName("Music"));
+        musicPlayer.Play(FindClipByName("MusicGame"));
         Play("Ambiance", 1f);
-	}
+    }
 
 	void Update()
     {
@@ -45,6 +45,11 @@ public class SoundManager : MonoBehaviour
     {
         source.clip = FindClipByName(soundName);
         source.PlayOneShot(FindClipByName(soundName), volume);
+    }
+
+    public void PlayClip(AudioClip clip, float volume = 1f)
+    {
+        source.PlayOneShot(clip, volume);
     }
 
     //Renvoit un clip en fonction de son nom

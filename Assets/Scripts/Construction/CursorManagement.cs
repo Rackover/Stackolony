@@ -559,16 +559,25 @@ public class CursorManagement : MonoBehaviour
             linkedScrollRect.enabled = false;
         }
 
-        if (_block != null && _block.scheme.isMovable == true)
+        if (_block != null && _block.scheme.isMovable == true && !_block.states.ContainsKey(State.OnFire))
         {
             canSwitchTools = false;
             selectedBlock = _block;
             selectedBlock.StopAllCoroutines();
             savedPos = selectedBlock.gridCoordinates;
-            if (selectedBlock.transform.Find("Bridge") != null) {
+            if (selectedBlock.transform.Find("Bridge") != null)
+            {
                 GameManager.instance.gridManagement.DestroyBridge(selectedBlock.transform.Find("Bridge").gameObject);
             }
-            GameManager.instance.soundManager.Play("BlockDrag");
+            
+            if(_block.scheme.sound != null)
+            {
+                GameManager.instance.soundManager.PlayClip(_block.scheme.sound, 0.4f);
+            }
+            else
+            {
+                GameManager.instance.soundManager.Play("BlockDrag");
+            }
         }
     }
 

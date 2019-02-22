@@ -8,7 +8,8 @@ public class RoamerBehavior : MonoBehaviour
 	[HideInInspector] public Bystander visual;
 	[HideInInspector] public bool available;
 
-	public float moveSpeed;
+	public float baseSpeed;
+	public float currentSpeed;
 	public Vector3 destination;
 	public GameObject cBridge;
 	Vector3 bridgePosition;
@@ -25,7 +26,7 @@ public class RoamerBehavior : MonoBehaviour
 			End();
 		}
 
-		transform.position = Vector3.MoveTowards(transform.position, destination, Time.deltaTime * moveSpeed);
+		transform.position = Vector3.MoveTowards(transform.position, destination, Time.deltaTime * currentSpeed);
 		if(Vector3.Distance(transform.position, destination) < 0.5f)
 		{		
 			End();
@@ -48,7 +49,9 @@ public class RoamerBehavior : MonoBehaviour
 			transform
 		).GetComponent<Bystander>();
 
-		moveSpeed = Random.Range(0.5f, 1.5f);
+		baseSpeed = Random.Range(0.5f, 1.5f);
+		currentSpeed = baseSpeed;
+
 		available = false;
 		visual.gameObject.SetActive(true);
 		transform.position = from;

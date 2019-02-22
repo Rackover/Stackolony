@@ -92,7 +92,11 @@ public class House : Flag, Flag.IFlag
     public override void Enable()
     {
         base.Enable();
-        GameManager.instance.systemManager.AllHouses.Add(this);
+
+        if(!GameManager.instance.systemManager.AllHouses.Contains(this)) // Crappy bugfix
+        {
+            GameManager.instance.systemManager.AllHouses.Add(this);
+        }   
     }
 
     public override void Disable()

@@ -21,6 +21,8 @@ public class Mine : Flag, Flag.IFlag
             cageVisual = Instantiate(GameManager.instance.library.cagePrefab, transform);
         else 
             cageVisual.SetActive(true);
+
+        GameManager.instance.soundManager.Play("MineExploited");
     }
 
     public void Uncage()
@@ -43,6 +45,7 @@ public class Mine : Flag, Flag.IFlag
             GameManager.instance.gridManagement.buildablePositions.Add(pos);
 
             Instantiate(GameManager.instance.library.mineExplosionParticle, transform);
+            GameManager.instance.soundManager.Play("MineDestroyed");
 
             block.Destroy();
         }

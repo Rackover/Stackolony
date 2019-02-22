@@ -43,6 +43,8 @@ public class Damaged : StateBehavior
 
             if(repairVisual == null) repairVisual = Instantiate(GameManager.instance.library.repairParticle, transform);
             else repairVisual.SetActive(true);
+
+            GameManager.instance.soundManager.Play("RenovationStart");
         }
     }
 
@@ -57,6 +59,7 @@ public class Damaged : StateBehavior
 
     public override void Remove()
     {
+        GameManager.instance.soundManager.Play("RenovationEnd");
         Instantiate(GameManager.instance.library.confettiParticle, transform);
         block.visuals.NewVisual(block.scheme.model);
         block.effects.Desactivate(GameManager.instance.library.whiteSmokeParticle);

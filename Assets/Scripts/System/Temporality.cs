@@ -77,6 +77,7 @@ public class Temporality : MonoBehaviour {
     public void SetTimeScale(int newTimeScaleCoef)
     {
         timeScale = newTimeScaleCoef;
+        GameManager.instance.roamerManager.ChangeTimeScale(newTimeScaleCoef);
     }
 
     public void SetDate(int cycles)

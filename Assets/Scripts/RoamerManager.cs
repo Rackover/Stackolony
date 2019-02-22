@@ -20,6 +20,8 @@ public class RoamerManager : MonoBehaviour
 	List<int> popInCity = new List<int>();
 	int totalPopulation;
 
+	int simulationTimeScale;
+
 	void Start()
 	{
 		roamerHolder = new GameObject().transform;
@@ -41,7 +43,8 @@ public class RoamerManager : MonoBehaviour
 		{
 			if(GameManager.instance.gridManagement.bridgesList.Count > 0
 			&& popInCity.Count > 0
-			&& totalPopulation > 0)
+			&& totalPopulation > 0
+			&& simulationTimeScale > 0)
 			{
 				NewRoamer(popInCity[Random.Range(0, popInCity.Count)]);
 			}
@@ -49,12 +52,31 @@ public class RoamerManager : MonoBehaviour
 		}
 	}
 
+	public void ChangeTimeScale(int scale)
+	{
+		simulationTimeScale = scale;
+
+		foreach(RoamerBehavior rb in roamers)
+		{
+			rb.currentSpeed = rb.baseSpeed * simulationTimeScale;
+			rb.visual.animator.SetFloat("Speed", simulationTimeScale);
+		}
+	}
+
 	public void NewRoamer(int which)
 	{
 		// Get the reference to a random bridge
 		Vector3 hShift = new Vector3(0f, 0.25f, 0f);
+
 		BridgeInfo bridge = GameManager.instance.gridManagement.bridgesList[Random.Range(0, GameManager.instance.gridManagement.bridgesList.Count)].GetComponent<BridgeInfo>();
 
+		// If the bridge is on a disabled block, cancel the Roamer spawn
+		Block linkedBlock = GameManager.instance.gridManagement.grid[bridge.origin.x, bridge.origin.y, bridge.origin.z].GetComponent<Block>();
+		if(linkedBlock != null && !linkedBlock.isEnabled)
+		{
+			return;
+		}
+		
 		// Pull a new available roamer from the list
 		RoamerBehavior roamer = GetRoamer();
 
@@ -70,6 +92,9 @@ public class RoamerManager : MonoBehaviour
 		{
 			roamer.Initialize(which, to - hShift, from - hShift, bridge.gameObject);
 		}
+
+		roamer.currentSpeed = roamer.baseSpeed * simulationTimeScale;
+		roamer.visual.animator.SetFloat("Speed", simulationTimeScale);
 	}
 
 	void RefreshPopulationInCity()

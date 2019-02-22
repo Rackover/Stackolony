@@ -41,8 +41,12 @@ public class EventDisplay : MonoBehaviour {
 
     private void Update()
     {
-        if (dragging) {
-            transform.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y) + shift;
+        if (dragging) 
+        {
+            transform.position = new Vector2(
+                Mathf.Clamp(Input.mousePosition.x, 0, Screen.width),
+                Mathf.Clamp(Input.mousePosition.y, 0, Screen.height)
+                ) + shift;
         }
     }
 
