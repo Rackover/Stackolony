@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class SpriteOverlayManager : MonoBehaviour 
 {
 	[Header("Settings")]
-	public float maxSize = 100f;
+	float maxSize = 500f;
 	public Sprite unpoweredSprite;
 	List<int> signIds = new List<int>();
 
