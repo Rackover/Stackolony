@@ -47,6 +47,11 @@ public class SoundManager : MonoBehaviour
         source.PlayOneShot(FindClipByName(soundName), volume);
     }
 
+    public void PlayClip(AudioClip clip, float volume = 1f)
+    {
+        source.PlayOneShot(clip, volume);
+    }
+
     //Renvoit un clip en fonction de son nom
     public AudioClip FindClipByName(string name)
     {

@@ -586,10 +586,19 @@ public class CursorManagement : MonoBehaviour
             selectedBlock = _block;
             selectedBlock.StopAllCoroutines();
             savedPos = selectedBlock.gridCoordinates;
-            if (selectedBlock.transform.Find("Bridge") != null) {
+            if (selectedBlock.transform.Find("Bridge") != null)
+            {
                 GameManager.instance.gridManagement.DestroyBridge(selectedBlock.transform.Find("Bridge").gameObject);
             }
-            GameManager.instance.soundManager.Play("BlockDrag");
+            
+            if(_block.scheme.sound != null)
+            {
+                GameManager.instance.soundManager.PlayClip(_block.scheme.sound);
+            }
+            else
+            {
+                GameManager.instance.soundManager.Play("BlockDrag");
+            }
         }
     }
 
