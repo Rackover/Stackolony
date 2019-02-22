@@ -48,7 +48,6 @@ public class CursorManagement : MonoBehaviour
     List<GameObject> permanentHighlighter = new List<GameObject>();
     GameObject hoveredBlock;
     GameObject stackSelector; //La petite fléche qui se met au pied de la tour qu'on selectionne
-    [System.NonSerialized] public bool canSwitchTools = true;
 
 
     public void InitializeGameCursor()
@@ -254,7 +253,7 @@ public class CursorManagement : MonoBehaviour
 
         // Mouse click hold
         if (Input.GetButton("Bridge")) {
-            if (!isBridging) {
+            if (!isBridging && !isDragging) {
                 GameObject selectedObj = hit.transform.gameObject;
                 if (selectedObj != null) {
                     if (selectedObj.transform.parent != null) {
@@ -566,7 +565,6 @@ public class CursorManagement : MonoBehaviour
 
         if (_block != null && _block.scheme.isMovable == true && !_block.states.ContainsKey(State.OnFire))
         {
-            canSwitchTools = false;
             selectedBlock = _block;
             selectedBlock.StopAllCoroutines();
             savedPos = selectedBlock.gridCoordinates;
@@ -619,7 +617,6 @@ public class CursorManagement : MonoBehaviour
                 CancelDrag();
                 return;
             }
-            canSwitchTools = true;
             if (GameManager.instance.gridManagement.IsPlaceable(_pos, true, selectedBlock.scheme))
             {
                 //Play SFX
