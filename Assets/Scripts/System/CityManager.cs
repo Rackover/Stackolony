@@ -44,7 +44,7 @@ public class FireRiskModifier
 public class CityManager : MonoBehaviour {
 
     public enum BuildingType { Habitation = 0, Services = 1, Occupators = 2 };
-    public enum MoodAffect { none, wrongPopulationType, noFood, noOccupations, noPower, damaged, everythingFine, noHouse, nuisance, habitationBuff };
+    public enum MoodAffect { none, everythingFine, wrongPopulationType, noFood, noOccupations, noPower, damaged, noHouse, nuisance, habitationBuff };
     public string cityName = "Valenciennes";
     public readonly State[] accidentStates = { State.OnFire, State.OnRiot, State.Damaged };
     public Dictionary<Population, Dictionary<House, PopulationManager.MoodEvolution>> topHabitations = new Dictionary<Population, Dictionary<House, PopulationManager.MoodEvolution>>(); // List of the best habitations (sorted from best to worst)
@@ -256,6 +256,7 @@ public class CityManager : MonoBehaviour {
     //Finds a house for every citizens from a defined population
     public void HousePopulation(Population pop, float x)
     {
+        GameManager.instance.populationManager.populations[pop].lastMoodChange = new PopulationManager.MoodEvolution();
         foreach (PopulationManager.Citizen citizen in GameManager.instance.populationManager.populations[pop].citizens)
         {
             if (topHabitations[pop].Count > 0)

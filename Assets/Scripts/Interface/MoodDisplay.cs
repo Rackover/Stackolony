@@ -175,11 +175,32 @@ public class MoodDisplay : MonoBehaviour {
                 moodString.ToUpper()
             )
         );
-        faceTooltip.AddLocalizedLine(new Localization.Line("hud", "priority"));
-        faceTooltip.AddLocalizedLine(new Localization.Line("hud", "holdDrag"));
 
+
+        // Last mood affects
+        faceTooltip.AddLocalizedLine(new Tooltip.Entry(Tooltip.entryType.LineBreak));
+        faceTooltip.AddLocalizedLine(new Tooltip.Entry("moodEvolution", "moodAffect", Tooltip.informationType.Neutral) { formatters = new string[] { "b" } });
+
+        List<CityManager.MoodAffect> toSkip = new List<CityManager.MoodAffect>() {
+            CityManager.MoodAffect.none,
+            CityManager.MoodAffect.habitationBuff
+        };
+        foreach (CityManager.MoodAffect affect in popMan.populations[population].lastMoodChange.GetKeys()) {
+
+            if (toSkip.Contains(affect)) {
+                continue;
+            }
+
+            float value = -Mathf.Round(popMan.populations[population].lastMoodChange.Get(affect));
+            faceTooltip.AddLocalizedLine(
+                new Tooltip.Entry(affect.ToString(), "moodAffect", value >= 0f ? (value > 0f ? Tooltip.informationType.Positive : Tooltip.informationType.Neutral) : Tooltip.informationType.Negative, value.ToString("+0;-#"))
+            );
+        }
+
+
+        // Mood modifiers
+        faceTooltip.AddLocalizedLine(new Tooltip.Entry(Tooltip.entryType.LineBreak));
         foreach (MoodModifier moodMod in popMan.populations[population].moodModifiers) {
-
             if (moodMod.eventId <= 0) {
                 continue;
             }
@@ -207,6 +228,10 @@ public class MoodDisplay : MonoBehaviour {
             );
         }
 
+        faceTooltip.AddLocalizedLine(new Localization.Line("hud", "priority"));
+        faceTooltip.AddLocalizedLine(new Localization.Line("hud", "holdDrag"));
+
+        // Numbers on the left of the tab
         homelessTooltip.ClearLines();
         homelessTooltip.AddLocalizedLine(
             new Localization.Line(

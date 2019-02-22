@@ -116,7 +116,7 @@ public class PopulationManager : MonoBehaviour
 
     public void OnNewMicrocycle()
     {
-		foreach (KeyValuePair<Population, PopulationManager.PopulationInformation> p in populations)
+		foreach (KeyValuePair<Population, PopulationInformation> p in populations)
 		{
 			if(p.Value.averageMood <= angryCap)
 			{
