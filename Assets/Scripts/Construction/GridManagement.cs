@@ -584,9 +584,6 @@ public class GridManagement : MonoBehaviour
             blockA.gridCoordinates.z
         ] = blockB.gridCoordinates;
 
-        //Joue le son
-        GameManager.instance.soundManager.Play("CreateBridge");
-
         // Update stats
         if (gameManager.achievementManager.stats.maxBridgeLength < bridgeLength) {
             gameManager.achievementManager.stats.maxBridgeLength = bridgeLength;
