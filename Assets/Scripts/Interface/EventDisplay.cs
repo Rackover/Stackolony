@@ -40,8 +40,20 @@ public class EventDisplay : MonoBehaviour {
 
     private void Update()
     {
-        if (dragging) {
-            transform.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y) + shift;
+        if (dragging) 
+        {
+            // Initializing position
+            float xPos = Input.mousePosition.x;
+            float yPos = Input.mousePosition.y;
+
+            // Clamping window position
+            if(xPos > Screen.width) xPos = Screen.width;
+            else if(xPos < 0) xPos = 0;
+            if(yPos > Screen.height) yPos = Screen.height;
+            else if(yPos < 0) yPos = 0;
+
+            // Applying position
+            transform.position = new Vector2(xPos, yPos) + shift;
         }
     }
 
