@@ -10,7 +10,8 @@ public class Generator : Flag, Flag.IFlag
     public override void Enable()
     {
         base.Enable();
-        GameManager.instance.systemManager.AllGenerators.Add(this);
+        if(!GameManager.instance.systemManager.AllGenerators.Contains(this))
+            GameManager.instance.systemManager.AllGenerators.Add(this);
     }
 
     public override void Disable()

@@ -21,7 +21,8 @@ public class NuisanceGenerator : Flag, Flag.IFlag {
     public override void Enable()
     {
         base.Enable();
-        GameManager.instance.systemManager.AllNuisanceGenerators.Add(this);
+        if(!GameManager.instance.systemManager.AllNuisanceGenerators.Contains(this))
+            GameManager.instance.systemManager.AllNuisanceGenerators.Add(this);
     }
 
     public override void Disable()
