@@ -12,8 +12,8 @@ public class Powered : StateBehavior
 		}
 		else
 		{
-			block.effects.Desactivate(GameManager.instance.library.unpoweredParticle);
-            block.Enable();
+			//block.effects.Desactivate(GameManager.instance.library.unpoweredParticle);
+      block.Enable();
 		}
     }
 
@@ -25,8 +25,8 @@ public class Powered : StateBehavior
 		}
 		else
 		{
-			block.effects.Activate(GameManager.instance.library.unpoweredParticle);
-            block.Disable();
+			//block.effects.Activate(GameManager.instance.library.unpoweredParticle);
+      block.Disable();
 		}
 		
 		base.Remove();
