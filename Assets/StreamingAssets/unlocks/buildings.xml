@@ -1,9 +1,48 @@
 <?xml version="1.0"?>
 <unlocks>
-	<building id="1">
-		<condition>$TOTAL_CITIZEN_COUNT GREATER_THAN 30</condition>
-		<condition>$STOPPED_FIRES_COUNT GREATER_THAN 25</condition>
-		<condition>CITIZEN_COUNT(population:richie) GREATER_THAN 25</condition>
-		<condition>BUILDING_COUNT(scheme_id:15) GREATER_THAN 25</condition>
+	<building id="10">
+		<condition>$TOTAL_CITIZEN_COUNT GREATER_OR_EQUAL_THAN 10</condition>
+		<condition>$STOPPED_FIRES_COUNT GREATER_OR_EQUAL_THAN 3</condition>
+		<condition>$STOPPED_RIOTS_COUNT GREATER_OR_EQUAL_THAN 3</condition>
 	</building>
+	<building id="9">
+		<condition>$TOTAL_CITIZEN_COUNT GREATER_OR_EQUAL_THAN 10</condition>
+		<condition>$CURRENT_CYCLE GREATER_OR_EQUAL_THAN 20</condition>
+	</building>
+	<building id="6">
+		<condition>$TOTAL_CITIZEN_COUNT GREATER_OR_EQUAL_THAN 15</condition>
+	</building>
+	<building id="13">
+		<condition>CITIZEN_COUNT(population:scientist) GREATER_OR_EQUAL_THAN 20</condition>
+	</building>
+	<building id="12">
+		<condition>CITIZEN_COUNT(population:scientist) GREATER_OR_EQUAL_THAN 40</condition>
+	</building>
+	<building id="16">
+		<condition>CITIZEN_COUNT(population:military) GREATER_OR_EQUAL_THAN 20</condition>
+	</building>
+	<building id="17">
+		<condition>CITIZEN_COUNT(population:military) GREATER_OR_EQUAL_THAN 40</condition>
+	</building>
+	<building id="19">
+		<condition>CITIZEN_COUNT(population:richie) GREATER_OR_EQUAL_THAN 20</condition>
+	</building>
+	<building id="20">
+		<condition>CITIZEN_COUNT(population:richie) GREATER_OR_EQUAL_THAN 30</condition>
+	</building>
+	<building id="22">
+		<condition>CITIZEN_COUNT(population:artist) GREATER_OR_EQUAL_THAN 20</condition>
+	</building>
+	<building id="23">
+		<condition>CITIZEN_COUNT(population:artist) GREATER_OR_EQUAL_THAN 40</condition>
+	</building>
+	<building id="25">
+		<condition>CITIZEN_COUNT(population:worker) GREATER_OR_EQUAL_THAN 30</condition>
+	</building>
+	<building id="26">
+		<condition>CITIZEN_COUNT(population:worker) GREATER_OR_EQUAL_THAN 50</condition>
+	</building>
+	
+	
+	
 </unlocks>

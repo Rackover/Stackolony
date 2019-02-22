@@ -44,31 +44,39 @@ public class FireRiskModifier
 public class CityManager : MonoBehaviour {
 
     public enum BuildingType { Habitation = 0, Services = 1, Occupators = 2 };
+    public enum MoodAffect { none, everythingFine, wrongPopulationType, noFood, noOccupations, noPower, damaged, noHouse, nuisance, habitationBuff };
     public string cityName = "Valenciennes";
     public readonly State[] accidentStates = { State.OnFire, State.OnRiot, State.Damaged };
-    public Dictionary<Population, Dictionary<House, float>> topHabitations = new Dictionary<Population, Dictionary<House, float>>(); // List of the best habitations (sorted from best to worst)
+    public Dictionary<Population, List<KeyValuePair<House, PopulationManager.MoodEvolution>>> topHabitations = new Dictionary<Population, List<KeyValuePair<House, PopulationManager.MoodEvolution>>>(); // List of the best habitations (sorted from best to worst)
     public bool isTutorialRun = true;
     public ConditionalUnlocks conditionalUnlocker = new ConditionalUnlocks();
 
-    List<int> lockedBuildings = new List<int >();
+    List<int> lockedBuildings = new List<int>();
 
     [Header("Mines and Nests")]
-	public int minesAtStart = 3;
-	public int nestsAtStart = 4;
-	public float nestSpawnChance = 0.1f;
-    
+    public int minesAtStart = 3;
+    public int nestsAtStart = 4;
+    public float nestSpawnChance = 0.1f;
+
     [System.Serializable]
     public class MoodValues
     {
         public int goodNotationTreshold = 0; //Above this note, house is considered "Good"
         public int badNotationTreshold = -5; //Under this note, house is considered "Bad"
-        public int wrongPopulationType = -2;
-        public int noFood = -3;
-        public int noOccupations = -2;
-        public int noPower = -2;
-        public int damaged = -2; //NOT TAKEN IN ACCOUNT YETTTTTTTTTTTTTTTTTTT
-        public int everythingFine = +3;
-        public int noHouse = -20;
+        public Dictionary<MoodAffect, float> values = new Dictionary<MoodAffect, float>() {
+            {MoodAffect.wrongPopulationType , -2 },
+            {MoodAffect.noFood , -3 },
+            {MoodAffect.noOccupations , -2},
+            {MoodAffect.noPower , -2},
+            {MoodAffect.damaged , -2},
+            {MoodAffect.everythingFine , +3},
+            {MoodAffect.noHouse, -20},
+
+            // Special, should stay 0
+            {MoodAffect.none, 0 },
+            {MoodAffect.nuisance, 0 },
+            {MoodAffect.habitationBuff, 0 }
+        };
     }
 
     public MoodValues moodValues;
@@ -83,7 +91,7 @@ public class CityManager : MonoBehaviour {
         conditionalUnlocker.LoadConditionalUnlocks();
 
         foreach (Population pop in GameManager.instance.populationManager.populationTypeList) {
-            topHabitations[pop] = new Dictionary<House, float>();
+            topHabitations[pop] = new List<KeyValuePair<House, PopulationManager.MoodEvolution>>();
         }
     }
     
@@ -131,13 +139,17 @@ public class CityManager : MonoBehaviour {
 
     public void LockBuilding(int id)
     {
-        UnlockBuilding(id);
+        lockedBuildings.RemoveAll(i => i == id);
+        lockedBuildings.Sort();
         lockedBuildings.Add(id);
+        Logger.Debug("Locked building " + id + " : current locked buildings are " + string.Join(",", lockedBuildings.Select(x => x.ToString()).ToArray()));
     }
 
     public void UnlockBuilding(int id)
     {
         lockedBuildings.RemoveAll(i => i==id);
+        lockedBuildings.Sort();
+        Logger.Debug("Unlocking building " + id+" : current locked buildings are "+string.Join(",", lockedBuildings.Select(x => x.ToString()).ToArray()));
     }
 
     public bool IsLocked(int id)
@@ -244,22 +256,23 @@ public class CityManager : MonoBehaviour {
     //Finds a house for every citizens from a defined population
     public void HousePopulation(Population pop, float x)
     {
+        Logger.Debug("Reset mood change for " + pop.codeName);
+        GameManager.instance.populationManager.populations[pop].lastMoodChange = new PopulationManager.MoodEvolution();
         foreach (PopulationManager.Citizen citizen in GameManager.instance.populationManager.populations[pop].citizens)
         {
             if (topHabitations[pop].Count > 0)
             {
-                House foundHouse = topHabitations[pop].First().Key;
+                House foundHouse = topHabitations[pop][0].Key;
                 foundHouse.FillWithCitizen(citizen);
-                Logger.Debug("Citizen " + citizen.name + " of type " + citizen.type.codeName + " has been housed at the house " + foundHouse);
                 //Applique le changement d'humeur au type de population
-                GameManager.instance.populationManager.ChangePopulationMood(pop, topHabitations[pop].First().Value * x);
+                GameManager.instance.populationManager.ChangePopulationMood(pop, topHabitations[pop].First().Value);
 
                 //Si la maison est désormais remplie, on la retire de la liste des habitations pour chaque population
                 if (foundHouse.affectedCitizen.Count >= foundHouse.slotAmount)
                 {
                     foreach (Population popType in GameManager.instance.populationManager.populationTypeList)
                     {
-                        topHabitations[popType].Remove(foundHouse);
+                        topHabitations[popType].RemoveAll(o=> o.Key == foundHouse);
                     }
                 }
             } else
@@ -267,7 +280,7 @@ public class CityManager : MonoBehaviour {
                 Logger.Debug("Citizen " + citizen.name + " of type " + citizen.type.codeName + " could not find a house");
                 citizen.habitation = null;
                 //Si le citoyen n'a pas pu se loger, il applique le malus d'humeur à son type de population
-                GameManager.instance.populationManager.ChangePopulationMood(pop, moodValues.noHouse * x);
+                GameManager.instance.populationManager.ChangePopulationMood(pop, moodValues.values[MoodAffect.noHouse] * x, MoodAffect.noHouse);
             }
         }
     }
@@ -279,20 +292,25 @@ public class CityManager : MonoBehaviour {
         foreach (Population pop in GameManager.instance.populationManager.populationTypeList)
         {
             //Creates a dictionary assigning each house to it's attraction note
-            Dictionary<House, float> habitationNote = new Dictionary<House, float>(); // Attribute a note to every habitation
+            Dictionary<House, PopulationManager.MoodEvolution> habitationNote = new Dictionary<House, PopulationManager.MoodEvolution>(); // Attribute a note to every habitation
             foreach (House house in systemManager.AllHouses)
             {
-                float houseAttraction = GetHouseNotation(house, pop);
-                if (houseAttraction > GameManager.instance.populationManager.moodModifierIfNoHabitation)
-                habitationNote[house] = houseAttraction;
+                PopulationManager.MoodEvolution houseAttraction = GetHouseNotation(house, pop);
+                if (houseAttraction.Get(MoodAffect.noHouse) == 0f) {
+                    // House is inhabitable
+                    habitationNote[house] = houseAttraction;
+                }
             }
 
             //Convert the dictionary to a sorted list
-            Dictionary<House, float> sortedHabitations = new Dictionary<House, float>();
-            foreach (KeyValuePair<House, float> notedHabitation in habitationNote.OrderByDescending(key => key.Value))
+            List<KeyValuePair<House, PopulationManager.MoodEvolution>> sortedHabitations = new List<KeyValuePair<House, PopulationManager.MoodEvolution>>();            
+            foreach (KeyValuePair<House, PopulationManager.MoodEvolution> notedHabitation in habitationNote)
             {
-                sortedHabitations[notedHabitation.Key] = notedHabitation.Value;
+                sortedHabitations.Add(new KeyValuePair<House, PopulationManager.MoodEvolution>(notedHabitation.Key, notedHabitation.Value));
             }
+            // Sorting
+            sortedHabitations.Sort((x, y) => -Mathf.FloorToInt(-y.Value.ToFloat()));
+            
             topHabitations[pop] = sortedHabitations;
         }
     }
@@ -333,21 +351,21 @@ public class CityManager : MonoBehaviour {
 
 
     //Return an int, the bigger it is, the more attractive is the house
-    public float GetHouseNotation(House house, Population populationType)
+    public PopulationManager.MoodEvolution GetHouseNotation(House house, Population populationType)
     {
         house.UpdateHouseInformations();
-        float notation = 0;
+        PopulationManager.MoodEvolution notation = new PopulationManager.MoodEvolution();
 
         //If house isn't connected to spatioport, it sucks
-        if (!house.block.isLinkedToSpatioport)
-        {
-            return GameManager.instance.populationManager.moodModifierIfNoHabitation;
+        if (!house.block.isLinkedToSpatioport){
+            notation.Add(MoodAffect.noHouse, GameManager.instance.populationManager.moodModifierIfNoHabitation);
+            return notation;
         }
 
         //If house is already full, it also sucks
-        if (house.affectedCitizen.Count >= house.slotAmount)
-        {
-            return GameManager.instance.populationManager.moodModifierIfNoHabitation;
+        if (house.affectedCitizen.Count >= house.slotAmount) {
+            notation.Add(MoodAffect.noHouse, GameManager.instance.populationManager.moodModifierIfNoHabitation);
+            return notation;
         }
 
 
@@ -372,6 +390,7 @@ public class CityManager : MonoBehaviour {
         }
 
         float foodStock = 0;
+        Logger.Debug("For house " + house.GetInstanceID() + " there are " + house.foodProvidersInRange.Count + " food providers in range");
         foreach (FoodProvider distributor in house.foodProvidersInRange)
         {
             foodStock += distributor.foodLeft;
@@ -409,33 +428,34 @@ public class CityManager : MonoBehaviour {
 
         if(!profileFound)
         {
-            notation += moodValues.wrongPopulationType;
+            notation.Add(MoodAffect.wrongPopulationType, moodValues.values[MoodAffect.wrongPopulationType]);
         }
         if (!powered)
         {
-            notation += moodValues.noPower;
+            notation.Add(MoodAffect.noPower, moodValues.values[MoodAffect.noPower]);
         }
         if (!foodLeft)
         {
-            notation += moodValues.noFood;
+            notation.Add(MoodAffect.noFood, moodValues.values[MoodAffect.noFood]);
         }
         if (!jobLeft)
         {
-            notation += moodValues.noOccupations;
+            notation.Add(MoodAffect.noOccupations, moodValues.values[MoodAffect.noOccupations]);
         }
         if (damaged)
         {
-            notation += moodValues.damaged;
+            notation.Add(MoodAffect.damaged, moodValues.values[MoodAffect.damaged]);
         }
 
-        if (notation >= 0)
-            notation += moodValues.everythingFine;
+        if (notation.ToFloat() >= 0)
+            notation.Add(MoodAffect.everythingFine, moodValues.values[MoodAffect.everythingFine]);
 
-        notation -= house.nuisanceImpact;
+        notation.Add(MoodAffect.nuisance, -house.nuisanceImpact);
         foreach (NotationModifier notationModifier in house.notationModifiers)
         {
-            notation += notationModifier.amount;
+            notation.Add(MoodAffect.habitationBuff , notationModifier.amount);
         }
+       
         return notation;
     }
     

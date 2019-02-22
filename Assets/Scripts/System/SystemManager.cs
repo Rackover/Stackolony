@@ -361,7 +361,7 @@ public class SystemManager : MonoBehaviour {
 
     public IEnumerator RecalculateFireRisks()
     {
-        StartCoroutine(ResetFireRisks());
+        yield return StartCoroutine(ResetFireRisks());
         yield return new WaitForEndOfFrame();
         foreach (FireRiskGenerator fg in AllFireRiskGenerators)
         {
@@ -378,7 +378,7 @@ public class SystemManager : MonoBehaviour {
 
     public IEnumerator RecalculateJobs()
     {
-        StartCoroutine(ResetJobs());
+        yield return StartCoroutine(ResetJobs());
         yield return new WaitForEndOfFrame();
         foreach (House house in AllHouses)
         {
@@ -412,7 +412,7 @@ public class SystemManager : MonoBehaviour {
 
     public IEnumerator RecalculateOccupators()
     {
-        StartCoroutine(ResetOccupators());
+        yield return StartCoroutine(ResetOccupators());
         foreach (Occupator occupator in AllOccupators.ToArray())
         {
             if(occupator != null)
@@ -426,7 +426,7 @@ public class SystemManager : MonoBehaviour {
 
     public IEnumerator RecalculateFoodConsumption()
     {
-        StartCoroutine(ResetFoodConsumption());
+        yield return StartCoroutine(ResetFoodConsumption());
         foreach (FoodProvider foodProvider in AllFoodProviders.ToArray())
         {
             if(foodProvider != null)

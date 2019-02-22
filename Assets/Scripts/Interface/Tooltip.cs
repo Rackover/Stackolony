@@ -177,10 +177,11 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
 
         entries.Add(new Entry("block" + scheme.ID.ToString(), "blockName", informationType.Neutral));
         entries.Add(new Entry("block" + scheme.ID.ToString(), "blockDescription", informationType.Neutral));
+        entries.Add(new Entry(entryType.LineBreak));
 
         // Porting previous block tooltip entries to this list
         if (_entries != null) {
-            foreach(Entry tte in _entries) {
+            foreach (Entry tte in _entries) {
                 entries.Add(tte);
             }
             entries.Add(new Entry(entryType.LineBreak));

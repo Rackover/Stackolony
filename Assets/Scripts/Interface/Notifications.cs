@@ -8,6 +8,7 @@ public class Notifications : MonoBehaviour {
     List<Notification> notifications = new List<Notification>();
     Canvas canvas;
 
+    public Color achievementsColor = Color.cyan;
     public float textBrightness = 1.2f;
     public float stripBrightness = 1.1f;
     public float tabDarkness = 0.2f;
@@ -18,8 +19,7 @@ public class Notifications : MonoBehaviour {
     public class Notification
     {
         public Color mainColor;
-        public string[] values;
-        public string locId;
+        public Localization.Line locLine;
         public float duration = 5f;
         public bool isEternal = false;
         public GameObject gameObject;
@@ -30,14 +30,27 @@ public class Notifications : MonoBehaviour {
         public Notification(string localizationId, Color color, params string[] additionalValues)
         {
             mainColor = color;
-            values = additionalValues;
-            locId = localizationId;
+            locLine = new Localization.Line("notification", localizationId, additionalValues);
+        }
+
+        public Notification(Localization.Line loc, Color color)
+        {
+            mainColor = color;
+            locLine = loc;
         }
     }
 
     private void Start()
     {        
         canvas = GetComponentInParent<Canvas>();
+        GameManager.instance.achievementManager.AchievementUnlocked += (id) => {
+            Notify(
+                new Notification(
+                    new Localization.Line("notification", "achievementUnlocked", GameManager.instance.localization.GetLineFromCategory("achievementName", "achievement"+id)),
+                    achievementsColor
+                )
+            );
+        };
     }
 
     private void Update()
@@ -84,11 +97,10 @@ public class Notifications : MonoBehaviour {
         nO.GetComponentsInChildren<Image>()[1].color = GetStripColor(notification.mainColor);
 
         Localization loc = GameManager.instance.localization;
-        loc.SetCategory("notification");
 
         Text text = nO.GetComponentInChildren<Text>();
         text.color = GetTextColor(notification.mainColor);
-        text.text = loc.GetLine(notification.locId.ToString(), notification.values);
+        text.text = loc.GetLine(notification.locLine);
         notification.text = text;
 
         nO.transform.position = new Vector3(

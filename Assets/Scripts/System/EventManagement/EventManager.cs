@@ -200,13 +200,13 @@ public class EventManager : MonoBehaviour {
         interpreter.MakeEvent(eventScript, CheckError, true);
     }
     
-    public void TriggerEvent(int id)
+    public void TriggerEvent(int id, bool forceHappening = false)
     {
         // ID 1000 is Game Over event
         if (id == 1000 && GameManager.instance.DISABLE_GAME_OVER) {
             return;
         }
-        StartCoroutine(WaitForEventAndTrigger(id));
+        StartCoroutine(WaitForEventAndTrigger(id, forceHappening));
     }
 
     public void TriggerEventImmediatly(int id)
@@ -220,13 +220,20 @@ public class EventManager : MonoBehaviour {
         }
     }
 
-    IEnumerator WaitForEventAndTrigger(int id)
+    IEnumerator WaitForEventAndTrigger(int id, bool forceHappening = false)
     {
         while (NewEvent == null || !events.ContainsKey(id) || GameManager.instance.cinematicManager.IsInCinematic()) {
             yield return null;
         }
-        TriggerEventImmediatly(id);
-        yield return true;
+
+        if (!forceHappening && GameManager.instance.populationManager.populations[events[id].instigator].citizens.Count <= 0) {
+            // No one to instigate the event
+            yield return false;
+        }
+        else {
+            TriggerEventImmediatly(id);
+            yield return true;
+        }
     }
 
     public void LoadEvents()
