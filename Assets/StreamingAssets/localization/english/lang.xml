@@ -257,10 +257,10 @@
   </flagParameter>
   <state>
     <OnFire><![CDATA[Burning]]></OnFire>
-    <Powered><![CDATA[]]></Powered>
+    <Powered><![CDATA[Power OK]]></Powered>
     <OnRiot><![CDATA[Rioting]]></OnRiot>
-    <Damaged><![CDATA[]]></Damaged>
-    <Unpowered><![CDATA[]]></Unpowered>
+    <Damaged><![CDATA[Broken]]></Damaged>
+    <Unpowered><![CDATA[No power]]></Unpowered>
   </state>
   <notification>
     <misalignedBlocks><![CDATA[The blocks are not aligned]]></misalignedBlocks>
@@ -273,6 +273,9 @@
     <cannotBuildHere><![CDATA[You can't build here]]></cannotBuildHere>
     <cannotBuildOnWater><![CDATA[You can't build on water]]></cannotBuildOnWater>
     <cannotBuildOutOfMap><![CDATA[You can't build out of the map]]></cannotBuildOutOfMap>
+    <cannotPlaceThisBlockHere><![CDATA[You can't place this block here]]></cannotPlaceThisBlockHere>
+    <cannotBuildAboveThis><![CDATA[You can't build above this building]]></cannotBuildAboveThis>
+    <achievementUnlocked><![CDATA[Achievement "{0}" unlocked!]]></achievementUnlocked>
     <newPeople><![CDATA[{0} new {1}s joined the colony]]></newPeople>
   </notification>
   <conditionalUnlock>
@@ -626,4 +629,10 @@ Over and out.
     <scientist><![CDATA[Dr {0}]]></scientist>
     <worker><![CDATA[{0}son]]></worker>
   </populationTypeDelegate>
+  <achievementName>
+    <achievement1><![CDATA[]]></achievement1>
+  </achievementName>
+  <achievementDescription>
+    <achievement1><![CDATA[]]></achievement1>
+  </achievementDescription>
 </lines>
