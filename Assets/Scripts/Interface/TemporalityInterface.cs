@@ -14,6 +14,8 @@ public class TemporalityInterface : MonoBehaviour {
     public Button playFasterButton;
     public Button playFastestButton;
 
+    int currentSpeed;
+
     public void UpdateCycleText(int minutes, int hours, int currentCycle, int currentYear)
     {
 
@@ -23,9 +25,18 @@ public class TemporalityInterface : MonoBehaviour {
         tt.AddLocalizedLine(new Localization.Line("hud", "temporality", currentCycle.ToString(), currentYear.ToString()));
     }
 
-    private void Start()
+    void PlayTimeSound(int speed)
     {
-        PlayTime();
+        if(speed < currentSpeed)
+        {
+            GameManager.instance.soundManager.Play("DecreaseSpeed");
+        }
+        else if(speed > currentSpeed)
+        {
+            GameManager.instance.soundManager.Play("IncreaseSpeed");
+        }
+
+        currentSpeed = speed;
     }
 
     public void EnableButtonsExcept(Button button)
@@ -43,6 +54,8 @@ public class TemporalityInterface : MonoBehaviour {
         Temporality temporality = GameManager.instance.temporality;
         temporality.SetTimeScale(0);
         EnableButtonsExcept(pauseButton);
+
+        PlayTimeSound(0);
     }
 
     public void PlayTime()
@@ -50,6 +63,8 @@ public class TemporalityInterface : MonoBehaviour {
         Temporality temporality = GameManager.instance.temporality;
         temporality.SetTimeScale(1);
         EnableButtonsExcept(playButton);
+
+        PlayTimeSound(1);
     }
 
     public void PlayTimeFaster()
@@ -57,6 +72,8 @@ public class TemporalityInterface : MonoBehaviour {
         Temporality temporality = GameManager.instance.temporality;
         temporality.SetTimeScale(2);
         EnableButtonsExcept(playFasterButton);
+
+        PlayTimeSound(2);
     }
 
     public void PlayTimeFastest()

@@ -9,7 +9,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 14a825372d1dc3a4fa39444b146f0e78, type: 3}
-  m_Name: Block_ArtGallery
+  m_Name: Block_RepairCraft
   m_EditorClassIdentifier: 
   isMovable: 1
   isDestroyable: 1
@@ -18,9 +18,9 @@ MonoBehaviour:
   relyOnSpatioport: 1
   fireProof: 0
   riotProof: 0
-  model: {fileID: 1056909601169900, guid: 512b85fc551a4e045bb5e05f1fcce1ee, type: 2}
-  ID: 22
-  consumption: 6
+  model: {fileID: 1765251310470536, guid: 86506b9edd2859140b7fe675282b47f7, type: 2}
+  ID: 30
+  consumption: 0
   sensibility: 1
   flags:
-  - Occupator_6_2_artist
+  - Repairer_6
