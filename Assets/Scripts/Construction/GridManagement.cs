@@ -179,7 +179,7 @@ public class GridManagement : MonoBehaviour
             Block blockUnderPos = gameObjectUnderPos.GetComponent<Block>();
             if (blockUnderPos != null)
             {
-                if (!blockUnderPos.scheme.canBuildAbove)
+                if (!blockUnderPos.scheme.canBuildAbove && coordinates.y > groundPosition.y - 1)
                 {
                     if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError.Invoke("cannotBuildAboveThis"); }
                     return false;
@@ -189,6 +189,11 @@ public class GridManagement : MonoBehaviour
         GameObject gameObjectOnPos = grid[coordinates.x, coordinates.y, coordinates.z];
         if (gameObjectOnPos != null)
         {
+            if (gameObjectOnPos.GetComponent<BridgeInfo>() != null)
+            {
+                if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError.Invoke("cannotBuildOverBridge"); }
+                return false;
+            }
             Block blockOnPos = gameObjectOnPos.GetComponent<Block>();
             if (blockOnPos != null && !scheme.canBuildAbove)
             {
