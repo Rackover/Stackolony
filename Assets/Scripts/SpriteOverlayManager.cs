@@ -26,7 +26,7 @@ public class SpriteOverlayManager : MonoBehaviour
 		foreach(Sign s in signs){ KillSign(s.id); }
 		foreach(Block b in GameManager.instance.systemManager.AllBlocks)
 		{
-			if(b.states.ContainsKey(State.Unpowered)) NewSignOverlay(unpoweredSprite, b.gameObject.transform.position);
+			if(b.states.ContainsKey(State.Unpowered) && b.isEnabled) NewSignOverlay(unpoweredSprite, b.gameObject.transform.position);
 		}
 	}
 
