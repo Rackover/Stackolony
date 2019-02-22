@@ -42,18 +42,7 @@ public class EventDisplay : MonoBehaviour {
     {
         if (dragging) 
         {
-            // Initializing position
-            float xPos = Input.mousePosition.x;
-            float yPos = Input.mousePosition.y;
-
-            // Clamping window position
-            if(xPos > Screen.width) xPos = Screen.width;
-            else if(xPos < 0) xPos = 0;
-            if(yPos > Screen.height) yPos = Screen.height;
-            else if(yPos < 0) yPos = 0;
-
-            // Applying position
-            transform.position = new Vector2(xPos, yPos) + shift;
+            transform.position = new Vector2(Mathf.Clamp(Input.mousePosition.x, 0, Screen.width), Mathf.Clamp(Input.mousePosition.y, 0, Screen.height)) + shift;
         }
     }
 

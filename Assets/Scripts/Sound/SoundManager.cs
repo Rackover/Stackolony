@@ -17,9 +17,9 @@ public class SoundManager : MonoBehaviour
 
 	void Start()
 	{
-		musicPlayer.Play(FindClipByName("MusicGame"));
+        musicPlayer.Play(FindClipByName("MusicGame"));
         Play("Ambiance", 1f);
-	}
+    }
 
 	void Update()
     {

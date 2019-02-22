@@ -18,7 +18,9 @@ public class FoodProvider: Flag, Flag.IFlag
     {
         base.Enable();
         if(!GameManager.instance.systemManager.AllFoodProviders.Contains(this))
+        {
             GameManager.instance.systemManager.AllFoodProviders.Add(this);
+        }
     }
 
     public override void Disable()

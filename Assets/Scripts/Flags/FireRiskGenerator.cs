@@ -10,7 +10,9 @@ public class FireRiskGenerator : Flag, Flag.IFlag {
     {
         base.Enable();
         if(!GameManager.instance.systemManager.AllFireRiskGenerators.Contains(this))
+        {
             GameManager.instance.systemManager.AllFireRiskGenerators.Add(this);
+        }
     }
 
     public override void Disable()

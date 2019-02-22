@@ -22,7 +22,9 @@ public class NuisanceGenerator : Flag, Flag.IFlag {
     {
         base.Enable();
         if(!GameManager.instance.systemManager.AllNuisanceGenerators.Contains(this))
+        {
             GameManager.instance.systemManager.AllNuisanceGenerators.Add(this);
+        }
     }
 
     public override void Disable()

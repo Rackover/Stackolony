@@ -32,7 +32,9 @@ public class Occupator : Flag, Flag.IFlag
     {
         base.Enable();
         if(!GameManager.instance.systemManager.AllOccupators.Contains(this))
+        {
             GameManager.instance.systemManager.AllOccupators.Add(this);
+        }
     }
 
     public override void Disable()

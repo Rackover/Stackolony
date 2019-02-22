@@ -72,7 +72,11 @@ public class RoamerManager : MonoBehaviour
 
 		// If the bridge is on a disabled block, cancel the Roamer spawn
 		Block linkedBlock = GameManager.instance.gridManagement.grid[bridge.origin.x, bridge.origin.y, bridge.origin.z].GetComponent<Block>();
-		if(linkedBlock != null && !linkedBlock.isEnabled) return;
+		if(linkedBlock != null && !linkedBlock.isEnabled)
+		{
+			return;
+		}
+		
 		// Pull a new available roamer from the list
 		RoamerBehavior roamer = GetRoamer();
 
