@@ -580,7 +580,7 @@ public class CursorManagement : MonoBehaviour
             linkedScrollRect.enabled = false;
         }
 
-        if (_block != null && _block.scheme.isMovable == true)
+        if (_block != null && _block.scheme.isMovable == true && !_block.states.ContainsKey(State.OnFire))
         {
             canSwitchTools = false;
             selectedBlock = _block;
