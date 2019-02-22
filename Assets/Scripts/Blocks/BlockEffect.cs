@@ -6,13 +6,14 @@ public class BlockEffect : MonoBehaviour
 {
 	public GameObject holder;
 
-	public class Particle
+	public class Effect
 	{
+		public GameObject gameObject;
 		public ParticleSystem system;
 		public bool active = false;
 	}
 
-	Dictionary <int, Particle> effects = new Dictionary <int, Particle>();
+	Dictionary <int, Effect> effects = new Dictionary <int, Effect>();
 
  
 	public void Hide()
@@ -24,42 +25,46 @@ public class BlockEffect : MonoBehaviour
 	{
 		holder.SetActive(true);
 
-		foreach(KeyValuePair<int, Particle> e in effects)
+		foreach(KeyValuePair<int, Effect> e in effects)
 		{
-			if(e.Value.active)
+			if(e.Value.active && e.Value.system != null)
 			{
 				e.Value.system.Play();
 			}
 		}
 	}
 
-	public void Activate(GameObject particle)
+	public void Activate(GameObject obj)
 	{
-		int index = particle.GetHashCode();
+		int index = obj.GetHashCode();
 
 		if(effects.ContainsKey(index))
 		{
-			effects[index].system.Play();
+			if(effects[index].system != null) effects[index].system.Play();
+			else effects[index].gameObject.SetActive(true);
+
 			effects[index].active = true;
 		}
 		else
 		{
-			Particle p = new Particle();
-			p.system = Instantiate(particle, transform.position, Quaternion.identity, holder.transform).GetComponent<ParticleSystem>();
-			effects.Add(index, p);
+			Effect e = new Effect();
+			e.gameObject = Instantiate(obj, holder.transform.position, Quaternion.identity, holder.transform);
+			e.system = e.gameObject.GetComponent<ParticleSystem>();
+			if(e.system != null) e.system.Play();
+			e.active = true;
 
-			effects[index].system.Play();
-			effects[index].active = true;
+			effects.Add(index, e);
+
 		}
 	}
 
-	public void Desactivate(GameObject particle)
+	public void Desactivate(GameObject obj)
 	{
-		int index = particle.GetHashCode();
-
+		int index = obj.GetHashCode();
 		if(effects.ContainsKey(index))
 		{
-			effects[index].system.Stop();
+			if(effects[index].system != null) effects[index].system.Stop();
+			else effects[index].gameObject.SetActive(false);
 			effects[index].active = false;
 		}
 	}

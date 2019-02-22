@@ -44,7 +44,8 @@ public class OnFire : StateBehavior
         {
             Spread();
         }
-        else {
+        else
+        {
             GameManager.instance.achievementManager.stats.stoppedFires++;
             block.Enable();
             Remove();
