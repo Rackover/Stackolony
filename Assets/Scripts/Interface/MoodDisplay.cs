@@ -149,10 +149,11 @@ public class MoodDisplay : MonoBehaviour {
     {
         int inhabitants = popMan.populations[population].citizens.Count;
         int homelessAmount = popMan.GetHomelessCount(population);
+        int housedAmount = popMan.populations[population].citizens.Count - popMan.GetHomelessCount(population);
         amount.text = inhabitants.ToString();
-        homeless.text = homelessAmount.ToString();
+        homeless.text = housedAmount.ToString();
 
-        if (homelessAmount <= 0) {
+        if (housedAmount > 0) {
             homeless.color = noHomelessColor;
         }
         else {
@@ -247,7 +248,7 @@ public class MoodDisplay : MonoBehaviour {
             new Localization.Line(
                 "stats",
                 "inhabitants",
-                popMan.GetHomelessCount(population).ToString(),
+                popMan.populations[population].citizens.Count.ToString(),
                 popName
             )
         );
