@@ -118,7 +118,7 @@ public class CursorManagement : MonoBehaviour
     void UpdatePosition(RaycastHit hit)
     {
         Vector3 tempCoord = hit.point;
-        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Terrain")) {
+        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Terrain") || hit.transform.gameObject.layer == LayerMask.NameToLayer("Block")) {
             //On adapte la position de la souris pour qu'elle corresponde à la taille des cellules
             tempCoord += new Vector3(0,
                 GameManager.instance.gridManagement.cellSize.y / 2
@@ -600,8 +600,13 @@ public class CursorManagement : MonoBehaviour
 
         if (selectedBlock != null && isDragging)
         {
+            if (cursorOnUI)
+            {
+                CancelDrag();
+                return;
+            }
             canSwitchTools = true;
-            if (GameManager.instance.gridManagement.IsPlacable(_pos, true))
+            if (GameManager.instance.gridManagement.IsPlaceable(_pos, true, selectedBlock.scheme))
             {
                 //Play SFX
                 GameManager.instance.soundManager.Play("BlockDrop");
@@ -644,17 +649,11 @@ public class CursorManagement : MonoBehaviour
             if (draggingNewBlock == true)
             {
                 GameManager.instance.gridManagement.DestroyBlock(selectedBlock);
+                draggingNewBlock = false;
             }
-            draggingNewBlock = false;
-            if (selectedBlock != null)
+            else if (selectedBlock != null)
             {
-                if (GameManager.instance.gridManagement.IsPlacable(selectedBlock.gridCoordinates, false))
-                {
-                    selectedBlock.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(selectedBlock.gridCoordinates);
-                } else
-                {
-                    GameManager.instance.gridManagement.DestroyBlock(selectedBlock);
-                }
+                selectedBlock.transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(selectedBlock.gridCoordinates);
             }
             selectedBlock.boxCollider.enabled = true;
             selectedBlock = null;

@@ -140,8 +140,8 @@ public class GridManagement : MonoBehaviour
     }
 
     //Return true if a block is placable here, false if it isn't
-    public bool IsPlacable(Vector3Int coordinates, bool shouldDisplayInformation) {
-
+    public bool IsPlaceable(Vector3Int coordinates, bool shouldDisplayInformation, BlockScheme scheme) {
+        
         if (coordinates.x < 0 || coordinates.y < 0 || coordinates.z < 0)
         {
             if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError("cannotBuildOutOfMap"); }
@@ -179,11 +179,26 @@ public class GridManagement : MonoBehaviour
             Block blockUnderPos = gameObjectUnderPos.GetComponent<Block>();
             if (blockUnderPos != null)
             {
-                if (!blockUnderPos.scheme.canBuildAbove)
+                if (!blockUnderPos.scheme.canBuildAbove && coordinates.y > groundPosition.y - 1)
                 {
                     if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError.Invoke("cannotBuildAboveThis"); }
                     return false;
                 }
+            }
+        }
+        GameObject gameObjectOnPos = grid[coordinates.x, coordinates.y, coordinates.z];
+        if (gameObjectOnPos != null)
+        {
+            if (gameObjectOnPos.GetComponent<BridgeInfo>() != null)
+            {
+                if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError.Invoke("cannotBuildOverBridge"); }
+                return false;
+            }
+            Block blockOnPos = gameObjectOnPos.GetComponent<Block>();
+            if (blockOnPos != null && !scheme.canBuildAbove)
+            {
+                if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError.Invoke("cannotPlaceThisBlockHere"); }
+                return false;
             }
         }
         return true;
