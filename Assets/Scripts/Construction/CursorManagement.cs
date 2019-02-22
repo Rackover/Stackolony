@@ -78,9 +78,7 @@ public class CursorManagement : MonoBehaviour
         if (!GameManager.instance.IsInGame()) {
             return;
         }
-
-        Logger.Debug("Laboratory locked : "+GameManager.instance.cityManager.IsLocked(14));
-
+        
         // Raycast the ground and update the cursor if needed
         UpdateCursor();
 

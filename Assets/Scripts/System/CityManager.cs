@@ -47,7 +47,7 @@ public class CityManager : MonoBehaviour {
     public enum MoodAffect { none, everythingFine, wrongPopulationType, noFood, noOccupations, noPower, damaged, noHouse, nuisance, habitationBuff };
     public string cityName = "Valenciennes";
     public readonly State[] accidentStates = { State.OnFire, State.OnRiot, State.Damaged };
-    public Dictionary<Population, Dictionary<House, PopulationManager.MoodEvolution>> topHabitations = new Dictionary<Population, Dictionary<House, PopulationManager.MoodEvolution>>(); // List of the best habitations (sorted from best to worst)
+    public Dictionary<Population, List<KeyValuePair<House, PopulationManager.MoodEvolution>>> topHabitations = new Dictionary<Population, List<KeyValuePair<House, PopulationManager.MoodEvolution>>>(); // List of the best habitations (sorted from best to worst)
     public bool isTutorialRun = true;
     public ConditionalUnlocks conditionalUnlocker = new ConditionalUnlocks();
 
@@ -91,7 +91,7 @@ public class CityManager : MonoBehaviour {
         conditionalUnlocker.LoadConditionalUnlocks();
 
         foreach (Population pop in GameManager.instance.populationManager.populationTypeList) {
-            topHabitations[pop] = new Dictionary<House, PopulationManager.MoodEvolution>();
+            topHabitations[pop] = new List<KeyValuePair<House, PopulationManager.MoodEvolution>>();
         }
     }
     
@@ -256,14 +256,14 @@ public class CityManager : MonoBehaviour {
     //Finds a house for every citizens from a defined population
     public void HousePopulation(Population pop, float x)
     {
+        Logger.Debug("Reset mood change for " + pop.codeName);
         GameManager.instance.populationManager.populations[pop].lastMoodChange = new PopulationManager.MoodEvolution();
         foreach (PopulationManager.Citizen citizen in GameManager.instance.populationManager.populations[pop].citizens)
         {
             if (topHabitations[pop].Count > 0)
             {
-                House foundHouse = topHabitations[pop].First().Key;
+                House foundHouse = topHabitations[pop][0].Key;
                 foundHouse.FillWithCitizen(citizen);
-                Logger.Debug("Citizen " + citizen.name + " of type " + citizen.type.codeName + " has been housed at the house " + foundHouse);
                 //Applique le changement d'humeur au type de population
                 GameManager.instance.populationManager.ChangePopulationMood(pop, topHabitations[pop].First().Value);
 
@@ -272,7 +272,7 @@ public class CityManager : MonoBehaviour {
                 {
                     foreach (Population popType in GameManager.instance.populationManager.populationTypeList)
                     {
-                        topHabitations[popType].Remove(foundHouse);
+                        topHabitations[popType].RemoveAll(o=> o.Key == foundHouse);
                     }
                 }
             } else
@@ -296,17 +296,21 @@ public class CityManager : MonoBehaviour {
             foreach (House house in systemManager.AllHouses)
             {
                 PopulationManager.MoodEvolution houseAttraction = GetHouseNotation(house, pop);
-                if (houseAttraction.Get(MoodAffect.noHouse) != 0f) {
+                if (houseAttraction.Get(MoodAffect.noHouse) == 0f) {
+                    // House is inhabitable
                     habitationNote[house] = houseAttraction;
                 }
             }
 
             //Convert the dictionary to a sorted list
-            Dictionary<House, PopulationManager.MoodEvolution> sortedHabitations = new Dictionary<House, PopulationManager.MoodEvolution>();
-            foreach (KeyValuePair<House, PopulationManager.MoodEvolution> notedHabitation in habitationNote.OrderByDescending(key => key.Value.ToFloat()))
+            List<KeyValuePair<House, PopulationManager.MoodEvolution>> sortedHabitations = new List<KeyValuePair<House, PopulationManager.MoodEvolution>>();            
+            foreach (KeyValuePair<House, PopulationManager.MoodEvolution> notedHabitation in habitationNote)
             {
-                sortedHabitations[notedHabitation.Key] = notedHabitation.Value;
+                sortedHabitations.Add(new KeyValuePair<House, PopulationManager.MoodEvolution>(notedHabitation.Key, notedHabitation.Value));
             }
+            // Sorting
+            sortedHabitations.Sort((x, y) => -Mathf.FloorToInt(-y.Value.ToFloat()));
+            
             topHabitations[pop] = sortedHabitations;
         }
     }
@@ -386,6 +390,7 @@ public class CityManager : MonoBehaviour {
         }
 
         float foodStock = 0;
+        Logger.Debug("For house " + house.GetInstanceID() + " there are " + house.foodProvidersInRange.Count + " food providers in range");
         foreach (FoodProvider distributor in house.foodProvidersInRange)
         {
             foodStock += distributor.foodLeft;
@@ -427,29 +432,30 @@ public class CityManager : MonoBehaviour {
         }
         if (!powered)
         {
-            notation.Add(MoodAffect.wrongPopulationType, moodValues.values[MoodAffect.noPower]);
+            notation.Add(MoodAffect.noPower, moodValues.values[MoodAffect.noPower]);
         }
         if (!foodLeft)
         {
-            notation.Add(MoodAffect.wrongPopulationType, moodValues.values[MoodAffect.noFood]);
+            notation.Add(MoodAffect.noFood, moodValues.values[MoodAffect.noFood]);
         }
         if (!jobLeft)
         {
-            notation.Add(MoodAffect.wrongPopulationType, moodValues.values[MoodAffect.noOccupations]);
+            notation.Add(MoodAffect.noOccupations, moodValues.values[MoodAffect.noOccupations]);
         }
         if (damaged)
         {
-            notation.Add(MoodAffect.wrongPopulationType, moodValues.values[MoodAffect.damaged]);
+            notation.Add(MoodAffect.damaged, moodValues.values[MoodAffect.damaged]);
         }
 
         if (notation.ToFloat() >= 0)
-            notation.Add(MoodAffect.wrongPopulationType, moodValues.values[MoodAffect.everythingFine]);
+            notation.Add(MoodAffect.everythingFine, moodValues.values[MoodAffect.everythingFine]);
 
-        notation.Add(MoodAffect.nuisance, house.nuisanceImpact);
+        notation.Add(MoodAffect.nuisance, -house.nuisanceImpact);
         foreach (NotationModifier notationModifier in house.notationModifiers)
         {
             notation.Add(MoodAffect.habitationBuff , notationModifier.amount);
         }
+       
         return notation;
     }
     
