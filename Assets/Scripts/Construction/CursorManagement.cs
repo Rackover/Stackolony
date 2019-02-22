@@ -313,6 +313,11 @@ public class CursorManagement : MonoBehaviour
         selectedBlock = null;
     }
 
+    public void ResetHighlighter()
+    {
+        highlighter.transform.parent = this.transform;
+    }
+
     void HighlightBlock(GameObject block = null)
     {
         if (highlighter && block != null) {
