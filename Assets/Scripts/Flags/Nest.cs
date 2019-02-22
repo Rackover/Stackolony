@@ -18,6 +18,8 @@ public class Nest : Flag, Flag.IFlag
         {
             cageVisual.SetActive(true);
         }
+
+        GameManager.instance.soundManager.Play("NestAttacked");
     }
 
     public void Uncage()
