@@ -627,7 +627,7 @@ public class CursorManagement : MonoBehaviour
                 return;
             }
             canSwitchTools = true;
-            if (GameManager.instance.gridManagement.IsPlacable(_pos, true, selectedBlock.scheme))
+            if (GameManager.instance.gridManagement.IsPlaceable(_pos, true, selectedBlock.scheme))
             {
                 //Play SFX
                 GameManager.instance.soundManager.Play("BlockDrop");

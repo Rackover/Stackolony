@@ -140,7 +140,7 @@ public class GridManagement : MonoBehaviour
     }
 
     //Return true if a block is placable here, false if it isn't
-    public bool IsPlacable(Vector3Int coordinates, bool shouldDisplayInformation, BlockScheme scheme) {
+    public bool IsPlaceable(Vector3Int coordinates, bool shouldDisplayInformation, BlockScheme scheme) {
         
         if (coordinates.x < 0 || coordinates.y < 0 || coordinates.z < 0)
         {
