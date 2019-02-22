@@ -593,7 +593,7 @@ public class CursorManagement : MonoBehaviour
             
             if(_block.scheme.sound != null)
             {
-                GameManager.instance.soundManager.PlayClip(_block.scheme.sound);
+                GameManager.instance.soundManager.PlayClip(_block.scheme.sound, 0.4f);
             }
             else
             {
