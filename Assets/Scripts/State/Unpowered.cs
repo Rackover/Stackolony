@@ -13,8 +13,8 @@ public class Unpowered : StateBehavior
 		}
 		else
 		{
-			block.effects.Activate(GameManager.instance.library.unpoweredParticle);
-			block.DisableFlags();
+			//block.effects.Activate(GameManager.instance.library.unpoweredParticle);
+            block.DisableFlags();
 		}
     }
 
@@ -26,10 +26,10 @@ public class Unpowered : StateBehavior
 		}
 		else
 		{
-			block.effects.Desactivate(GameManager.instance.library.unpoweredParticle);
+			//block.effects.Desactivate(GameManager.instance.library.unpoweredParticle);
 			block.EnableFlags();
 		}
 
-        base.Remove();
+      base.Remove();
     }
 }

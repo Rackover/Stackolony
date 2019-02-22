@@ -32,7 +32,12 @@ public class Library : MonoBehaviour
 	public GameObject extinguishParticle;
 	public GameObject repressParticle;
 	public GameObject repairParticle;
-	
+	public GameObject nestAttackedParticle;
+	public GameObject whiteSmokeParticle;
+	public GameObject mineExplosionParticle;
+	public GameObject confettiParticle;
+	public GameObject blockDropParticle;
+
 	[Header("Building")]
     public List<Sprite> buildingsIcons = new List<Sprite>();
 
