@@ -19,6 +19,8 @@ public class BlockScheme : ScriptableObject
 
 	[Tooltip("Prefab of the visuals of the block")]
 	public GameObject model;
+	[Tooltip("Sound linked to this block")]
+	public AudioClip sound;
 	[Tooltip("The index of the block")]
     public int ID;
 

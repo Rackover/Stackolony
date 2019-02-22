@@ -122,3 +122,18 @@ MonoBehaviour:
   - name: PauseSpeed
     clips:
     - {fileID: 8300000, guid: d8dd8f22a2d4d6042bc11c7706258b38, type: 3}
+  - name: RenovationStart
+    clips:
+    - {fileID: 8300000, guid: a7bf774eedeb2a840a3068d644e9aa1a, type: 3}
+  - name: RenovationEnd
+    clips:
+    - {fileID: 8300000, guid: 8819c77db56a8a14d97b95ad9277e5eb, type: 3}
+  - name: NestAttacked
+    clips:
+    - {fileID: 8300000, guid: 4dfecf40265408449bcffc8a3fe07ec7, type: 3}
+  - name: MineExploited
+    clips:
+    - {fileID: 8300000, guid: f909e63ddb88fd845a0b52c0a0860045, type: 3}
+  - name: MineDestroyed
+    clips:
+    - {fileID: 8300000, guid: e14442a3306a00947afb21a778d8b118, type: 3}
