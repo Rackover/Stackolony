@@ -622,7 +622,7 @@ public class CursorManagement : MonoBehaviour
         if (selectedBlock != null && isDragging)
         {
             canSwitchTools = true;
-            if (GameManager.instance.gridManagement.IsPlacable(_pos, true))
+            if (GameManager.instance.gridManagement.IsPlacable(_pos, true, selectedBlock.scheme))
             {
                 //Play SFX
                 GameManager.instance.soundManager.Play("BlockDrop");

@@ -140,8 +140,8 @@ public class GridManagement : MonoBehaviour
     }
 
     //Return true if a block is placable here, false if it isn't
-    public bool IsPlacable(Vector3Int coordinates, bool shouldDisplayInformation) {
-
+    public bool IsPlacable(Vector3Int coordinates, bool shouldDisplayInformation, BlockScheme scheme) {
+        
         if (coordinates.x < 0 || coordinates.y < 0 || coordinates.z < 0)
         {
             if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError("cannotBuildOutOfMap"); }
@@ -181,9 +181,19 @@ public class GridManagement : MonoBehaviour
             {
                 if (!blockUnderPos.scheme.canBuildAbove)
                 {
-                    if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError.Invoke("You can't build above that block"); }
+                    if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError.Invoke("cannotBuildAboveThis"); }
                     return false;
                 }
+            }
+        }
+        GameObject gameObjectOnPos = grid[coordinates.x, coordinates.y, coordinates.z];
+        if (gameObjectOnPos != null)
+        {
+            Block blockOnPos = gameObjectOnPos.GetComponent<Block>();
+            if (blockOnPos != null && !scheme.canBuildAbove)
+            {
+                if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError.Invoke("cannotPlaceThisBlockHere"); }
+                return false;
             }
         }
         return true;
