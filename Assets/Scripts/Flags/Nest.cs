@@ -10,14 +10,23 @@ public class Nest : Flag, Flag.IFlag
     public void Cage()
     {
         if(cageVisual == null)
+        {
             cageVisual = Instantiate(GameManager.instance.library.cagePrefab, transform);
-        else 
+            block.effects.Activate(GameManager.instance.library.nestAttackedParticle);
+        }
+        else
+        {
             cageVisual.SetActive(true);
+        }
     }
 
     public void Uncage()
     {
-        if(cageVisual != null) cageVisual.SetActive(false);
+        if(cageVisual != null)
+        {
+            cageVisual.SetActive(false);
+            block.effects.Activate(GameManager.instance.library.nestAttackedParticle);
+        }
     }
 
     public override void OnNewMicrocycle()
