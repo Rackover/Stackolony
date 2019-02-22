@@ -621,6 +621,11 @@ public class CursorManagement : MonoBehaviour
 
         if (selectedBlock != null && isDragging)
         {
+            if (cursorOnUI)
+            {
+                CancelDrag();
+                return;
+            }
             canSwitchTools = true;
             if (GameManager.instance.gridManagement.IsPlacable(_pos, true, selectedBlock.scheme))
             {
