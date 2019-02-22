@@ -28,4 +28,11 @@ public class BridgePart : MonoBehaviour {
     {
         ps.Stop();
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Decor")
+        {
+            Destroy(other.gameObject);
+        }
+    }
 }
