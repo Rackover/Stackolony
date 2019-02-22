@@ -404,15 +404,6 @@ public class GameManager : MonoBehaviour
             Instantiate(library.spatioportSpawnerPrefab);
         }
 
-        // TUTORIAL RUN ONLY
-        if (cityManager.isTutorialRun) 
-        {
-            // Lock every building
-            foreach (BlockScheme scheme in library.blocks)
-            {
-                cityManager.LockBuilding(scheme.ID);
-            }
-        }
         // Ingame switch
         inGame = true;
     }

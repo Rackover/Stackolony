@@ -163,7 +163,7 @@ public class GridManagement : MonoBehaviour
             if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError("maxHeightReached"); }
             return false;
         }
-        if (GetSlotType(groundPosition) != GridManagement.blockType.FREE)
+        if (GetSlotType(groundPosition) != blockType.FREE)
         {
             if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError.Invoke("cannotBuildHere"); }
             return false;
@@ -181,7 +181,7 @@ public class GridManagement : MonoBehaviour
             {
                 if (!blockUnderPos.scheme.canBuildAbove)
                 {
-                    if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError.Invoke("You can't build above that block"); }
+                    if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError.Invoke("cannotBuildAboveThis"); }
                     return false;
                 }
             }

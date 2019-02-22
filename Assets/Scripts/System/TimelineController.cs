@@ -85,7 +85,7 @@ public class TimelineController : MonoBehaviour {
         // Events
         if (currentCycle.eventId > 0) {
             try {
-                GameManager.instance.eventManager.TriggerEvent(currentCycle.eventId);
+                GameManager.instance.eventManager.TriggerEvent(currentCycle.eventId, true);
             }
             catch {
                 Logger.Error("Tried to trigger non existent event ID " + currentCycle.eventId + " on cycle " + cycleNumber);
@@ -163,6 +163,7 @@ public class TimelineController : MonoBehaviour {
 
                         // Garbage ID
                         if (!GameManager.instance.library.BlockExists(id)) {
+                            Logger.Error("Skipped unlock building:" + id + " because it doesn't exists");
                             continue;
                         }
                         cycle.unlocks.Add(id);

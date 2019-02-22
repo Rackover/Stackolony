@@ -78,8 +78,6 @@ public class House : Flag, Flag.IFlag
     public override void Awake()
     {
         base.Awake();
-        GameManager.instance.systemManager.AllHouses.Add(this);
-
         houseLight = block.effects.gameObject.AddComponent<Light>();
         houseLight.range = 1f;
         houseLight.intensity = 0f;

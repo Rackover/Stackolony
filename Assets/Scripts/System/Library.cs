@@ -17,13 +17,10 @@ public class Library : MonoBehaviour
     public Color defaultContainerColor;
 
 	[Space(1)][Header("Sprites")]
-	public Sprite cursorSprite;
-	public Sprite destroyIcon;
-	public Sprite buildIcon;
+	public Sprite cursorIcon;
     public Sprite dragIcon;
+    public Sprite couldDragIcon;
     public Sprite bridgeIcon;
-    public Sprite handHoldIcon;
-    public Sprite handHoverIcon;
 
 	[Header("Particules")]
 	public GameObject citizenInParticle;
