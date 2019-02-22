@@ -41,6 +41,8 @@ public class Block : MonoBehaviour
     public bool isLinkedToSpatioport;
     public bool isEnabled = false;
     private bool flagLoaded = false;
+    [HideInInspector]
+    public bool packed = false;
 
     public void Awake()
     {
@@ -61,6 +63,8 @@ public class Block : MonoBehaviour
 
     public void Pack()
     {
+        if (packed) { return; }
+        packed = true;
         Disable();
         //Affiche un feedback pour signaler que le bloc est inactif
         if(container.closed == false)
@@ -73,6 +77,8 @@ public class Block : MonoBehaviour
 
     public void UnPack()
     {
+        if (!packed) { return; }
+        packed = false;
         Enable();
         //Affiche un feedback pour signaler que le bloc est inactif
         if (container.closed == true)

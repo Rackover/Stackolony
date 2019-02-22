@@ -314,7 +314,10 @@ public class CursorManagement : MonoBehaviour
 
     public void ResetHighlighter()
     {
-        highlighter.transform.parent = this.transform.parent;
+        if (highlighter != null)
+        {
+            highlighter.transform.parent = this.transform.parent;
+        }
     }
 
     void HighlightBlock(GameObject block = null)
