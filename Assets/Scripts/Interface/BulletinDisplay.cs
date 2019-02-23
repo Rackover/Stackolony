@@ -6,12 +6,14 @@ using UnityEngine.UI;
 public class BulletinDisplay : MonoBehaviour {
 
     public bool hasUnread = false;
-    public GameObject notification;
     public GameObject bulletinWindow;
-
     public Text title;
     public Text subTitle;
     public Text text;
+
+    public Image buttonBackground;
+    public Color unreadColor;
+    public Color readColor;
 
     public float buttonDisableTimespan = 1f;
 
@@ -24,6 +26,7 @@ public class BulletinDisplay : MonoBehaviour {
     {
         animator = bulletinWindow.GetComponent<Animator>();
         button = GetComponent<Button>();
+        StartCoroutine(RefreshBulletin());
     }
 
     public IEnumerator RefreshBulletin()
@@ -57,7 +60,15 @@ public class BulletinDisplay : MonoBehaviour {
     public void SetUnread(bool unread)
     {
         hasUnread = unread;
-        notification.SetActive(unread);
+
+        if(unread)
+        {
+            buttonBackground.color = unreadColor;
+        }
+        else
+        {
+            buttonBackground.color = readColor;
+        }
     }
 
     IEnumerator AnimateFor(float seconds)
