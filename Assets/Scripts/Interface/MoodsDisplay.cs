@@ -9,22 +9,34 @@ public class MoodsDisplay : MonoBehaviour {
 
     GameManager gameManager;
     List<MoodDisplay> moods = new List<MoodDisplay>();
+    List<GameObject> displayers = new List<GameObject>();
 
 	void Start () {
         gameManager = GameManager.instance;
         Population[] populations = gameManager.populationManager.populationTypeList;
         Canvas canvas = GetComponentInParent<Canvas>();
         float factor = canvas.scaleFactor;
-        
-        foreach(Population race in populations) {
+
+        InitializeMoods(populations);
+    }
+
+    public void InitializeMoods(Population[] populations)
+    {
+        example.SetActive(true);
+        moods.Clear();
+        foreach(GameObject displayer in displayers) {
+            Destroy(displayer);
+        }
+        displayers.Clear();
+
+        foreach (Population race in populations) {
             GameObject raceO = Instantiate(example.gameObject, transform);
             MoodDisplay md = raceO.GetComponent<MoodDisplay>();
             md.InitializeForPopulation(race);
-
+            displayers.Add(raceO);
             moods.Add(md);
         }
-
-        Destroy(example);
+        example.SetActive(false);
     }
 
     void UpdateMoodGauges()

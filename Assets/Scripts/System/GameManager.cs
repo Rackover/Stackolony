@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -289,10 +290,12 @@ public class GameManager : MonoBehaviour
                         gridManagement.bridgesList,
                         player.name,
                         cityManager.cityName,
+                        cityManager.isTutorialRun,
                         temporality.cycleNumber,
                         temporality.GetCurrentCycleProgression(),
                         populationManager.populations,
-                        cityManager.GetLockedBuildings()
+                        cityManager.GetLockedBuildings(),
+                        populationManager.populationTypeList.ToList()
                     )
                 );
             StartCoroutine(saveManager.WriteSaveData(

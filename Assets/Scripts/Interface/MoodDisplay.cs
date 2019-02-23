@@ -290,9 +290,9 @@ public class MoodDisplay : MonoBehaviour {
             else if (Input.mousePosition.y - dragMargin > rect.position.y) {
                 ChangeChildOrder(-1);
             }
-        }
 
-        popMan.ChangePopulationPriority(population, transform.GetSiblingIndex());
+            popMan.ChangePopulationPriority(population, transform.GetSiblingIndex());
+        }
     }
 
     void ChangeChildOrder(int by)

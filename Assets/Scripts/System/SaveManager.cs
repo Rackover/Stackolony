@@ -63,6 +63,7 @@ public class SaveManager : MonoBehaviour {
         writer.WriteString(saveData.playerName);
         writer.WriteFloat(saveData.timeOfDay);
         writer.WriteUInt16(saveData.cyclesPassed);
+        writer.WriteBool(saveData.isTutorialRun);
 
         // Step 2 - Main grid
         Logger.Debug("Saving main game grid..");
@@ -90,7 +91,7 @@ public class SaveManager : MonoBehaviour {
         }
 
         // Step 4 - Populations
-        Logger.Debug("Saving " + saveData.popSaveData.Count + " populations...");
+        Logger.Debug("Saving " + saveData.popSaveData.Count + " population informations...");
         writer.WriteUInt8(saveData.popSaveData.Count);
         foreach(PopulationSaveData popSD in saveData.popSaveData) {
             writer.WriteUInt8(popSD.popId);
@@ -112,6 +113,7 @@ public class SaveManager : MonoBehaviour {
             writer.WriteUInt16(popSD.citizens.Count);
             foreach (CitizenSaveData cit in popSD.citizens) {
                 writer.WriteString(cit.name);
+                yield return null;
             }
         }
 
@@ -122,6 +124,15 @@ public class SaveManager : MonoBehaviour {
             writer.WriteUInt8(buildingId);
             yield return null;
         }
+
+        // Step 6 - Population type list
+        Logger.Debug("Saving " + saveData.populationTypeIds.Count + " population types");
+        writer.WriteUInt8(saveData.populationTypeIds.Count);
+        foreach(int popId in saveData.populationTypeIds) {
+            writer.WriteUInt8(popId);
+            yield return null;
+        }
+
 
         // Last step - Close handler;
         writer.Close();
@@ -162,6 +173,7 @@ public class SaveManager : MonoBehaviour {
         diskSaveData.playerName = reader.ReadString();
         diskSaveData.timeOfDay = reader.ReadFloat();
         diskSaveData.cyclesPassed = reader.ReadUInt16();
+        diskSaveData.isTutorialRun = reader.ReadBool();
 
         // Step 2 - Main grid
         Logger.Debug("Reading grid...");
@@ -223,6 +235,7 @@ public class SaveManager : MonoBehaviour {
             List<CitizenSaveData> cits = new List<CitizenSaveData>();
             for (int j = 0; j < citizenCount; j++) {
                 cits.Add(new CitizenSaveData() { name = reader.ReadString() });
+                yield return null;
             }
 
             diskSaveData.popSaveData.Add(new PopulationSaveData() {
@@ -242,6 +255,13 @@ public class SaveManager : MonoBehaviour {
         for (int i = 0; i < locksCount; i++) {
             diskSaveData.lockedBuildings.Add(reader.ReadUInt8());
             yield return null;
+        }
+
+        // Step 6 - Population type list
+        int typesCount = reader.ReadUInt8();
+        Logger.Debug("Reading " + typesCount + " population types...");
+        for (int i = 0; i < typesCount; i++) {
+            diskSaveData.populationTypeIds.Add(reader.ReadUInt8());
         }
 
         // Last step - Close handler;
@@ -269,6 +289,7 @@ public class SaveManager : MonoBehaviour {
             // Loading misc
             GameManager.instance.player.playerName = saveData.playerName;
             GameManager.instance.cityManager.cityName = saveData.cityName;
+            GameManager.instance.cityManager.isTutorialRun = saveData.isTutorialRun ;
             GameManager.instance.temporality.SetDate(saveData.cyclesPassed);
             GameManager.instance.temporality.SetTimeOfDay(saveData.timeOfDay);
 
@@ -323,6 +344,22 @@ public class SaveManager : MonoBehaviour {
                 city.LockBuilding(id);
             }
 
+            // Loading population order
+            int prio = 0;
+            foreach(int popId in saveData.populationTypeIds) {
+                Population pop = popMan.GetPopulationByID(popId);
+                if (pop == null) {
+                    Logger.Error("Error while loading population types from savegame : [" + popId + "] is not a valid POP id");
+                }
+                popMan.ChangePopulationPriority(pop, prio);
+                prio++;
+            }
+            MoodsDisplay display = FindObjectOfType<MoodsDisplay>();
+            if (display != null) {
+                // Refresh interface
+                display.InitializeMoods(popMan.populationTypeList);
+            }
+
             // End of loading
             if (callback != null) {
                 callback.Invoke();
@@ -348,30 +385,36 @@ public class SaveManager : MonoBehaviour {
         public List<GameObject> bridgesList;
         public string playerName;
         public string cityName;
+        public bool isTutorialRun;
         public int cycleNumber;
         public float cycleProgression;
         public Dictionary<Population, PopulationManager.PopulationInformation> populations;
         public List<int> lockedBuildings;
+        public List<Population> populationTypeList;
 
         public GameData(
             GameObject[,,] _grid,
             List<GameObject> _bridgesList,
             string _playerName,
             string _cityName,
+            bool _isTutorialRun,
             int _cycleNumber,
             float _cycleProgression,
             Dictionary<Population, PopulationManager.PopulationInformation> _populations,
-            List<int> _lockedBuildings
+            List<int> _lockedBuildings,
+            List<Population> _populationTypeList
         )
         {
             grid = _grid;
             bridgesList = _bridgesList;
             playerName = _playerName;
             cityName = _cityName;
+            isTutorialRun = _isTutorialRun;
             cycleNumber = _cycleNumber;
             cycleProgression = _cycleProgression;
             populations = _populations;
             lockedBuildings = _lockedBuildings;
+            populationTypeList = _populationTypeList;
         }
     }
 
@@ -382,12 +425,14 @@ public class SaveManager : MonoBehaviour {
         public List<KeyValuePair<Vector3Int,Vector3Int>> bridges;
         public List<PopulationSaveData> popSaveData;
         public List<int> lockedBuildings;
+        public List<int> populationTypeIds = new List<int>();
 
         public float timeOfDay;
         public int cyclesPassed;
 
         public string playerName;
         public string cityName;
+        public bool isTutorialRun;
 
         // Empty saveData
         public SaveData() { }
@@ -404,15 +449,17 @@ public class SaveManager : MonoBehaviour {
 
             // Population informations
             popSaveData = ConvertPopulationInformations(gameData.populations);
+            populationTypeIds = ConvertPopulationTypeList(gameData.populationTypeList);
 
             // Unlocks
             lockedBuildings = gameData.lockedBuildings;
-
+            
             // Other data
             playerName = gameData.playerName;
             cityName = gameData.cityName;
             cyclesPassed = gameData.cycleNumber;
             timeOfDay = gameData.cycleProgression;
+            isTutorialRun = gameData.isTutorialRun;
         }
 
         // Reading savedata from files
@@ -447,6 +494,15 @@ public class SaveManager : MonoBehaviour {
                 datas.Add(data);
             }
             return datas;
+        }
+
+        List<int> ConvertPopulationTypeList(List<Population> populationTypeList)
+        {
+            List<int> typeIds = new List<int>();
+            foreach(Population pop in populationTypeList) {
+                typeIds.Add(pop.ID);
+            }
+            return typeIds;
         }
 
         Dictionary<Vector3Int, BlockSaveData> ConvertBlocksGrid(GameObject[,,] _grid, Vector3Int gridSize)
