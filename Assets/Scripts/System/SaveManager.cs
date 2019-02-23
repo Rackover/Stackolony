@@ -57,6 +57,7 @@ public class SaveManager : MonoBehaviour {
         Logger.Info("Saving...");
 
         // Step 1 - Miscellaneous data
+        Logger.Debug("Saving misc data...");
         writer.WriteUInt8(saveVersion);
         writer.WriteString(saveData.cityName);
         writer.WriteString(saveData.playerName);
@@ -64,6 +65,7 @@ public class SaveManager : MonoBehaviour {
         writer.WriteUInt16(saveData.cyclesPassed);
 
         // Step 2 - Main grid
+        Logger.Debug("Saving main game grid..");
         writer.WriteVector3UInt8(saveData.gridSize);
         writer.WriteUInt16(saveData.blockGrid.Count);
         foreach (KeyValuePair<Vector3Int, BlockSaveData> data in saveData.blockGrid) {
@@ -79,6 +81,7 @@ public class SaveManager : MonoBehaviour {
         }
 
         // Step 3 - Bridges
+        Logger.Debug("Saving "+ saveData.bridges.Count+ " bridges...");
         writer.WriteUInt8(saveData.bridges.Count);
         foreach (KeyValuePair<Vector3Int, Vector3Int> bridge in saveData.bridges) {
             writer.WriteVector3UInt8(bridge.Key);
@@ -87,7 +90,30 @@ public class SaveManager : MonoBehaviour {
         }
 
         // Step 4 - Populations
+        Logger.Debug("Saving " + saveData.popSaveData.Count + " populations...");
+        writer.WriteUInt8(saveData.popSaveData.Count);
+        foreach(PopulationSaveData popSD in saveData.popSaveData) {
+            writer.WriteUInt8(popSD.popId);
+            writer.WriteFloat(popSD.riotRisk);
+            writer.WriteFloat(popSD.averageMood);
+            writer.WriteUInt8(popSD.moodModifiers.Count);
+            foreach (MoodModifier moodMod in popSD.moodModifiers) {
+                writer.WriteFloat(moodMod.amount);
+                writer.WriteUInt8(moodMod.cyclesRemaining);
+                writer.WriteUInt16(moodMod.eventId);
+            }
 
+            writer.WriteUInt8(popSD.foodModifiers.Count);
+            foreach (FoodModifier foodMod in popSD.foodModifiers) {
+                writer.WriteFloat(foodMod.amount);
+                writer.WriteUInt8(foodMod.cyclesRemaining);
+            }
+
+            writer.WriteUInt16(popSD.citizens.Count);
+            foreach (CitizenSaveData cit in popSD.citizens) {
+                writer.WriteString(cit.name);
+            }
+        }
 
         // Last step - Close handler;
         writer.Close();
@@ -149,13 +175,58 @@ public class SaveManager : MonoBehaviour {
         }
 
         // Step 3 - Bridges
-        Logger.Debug("Reading bridges...");
         int bridgesCount = reader.ReadUInt8();
+        Logger.Debug("Reading "+ bridgesCount + " bridges...");
         diskSaveData.bridges = new List<KeyValuePair<Vector3Int, Vector3Int>>();
         for (int i = 0; i < bridgesCount; i++) {
             diskSaveData.bridges.Add(new KeyValuePair<Vector3Int, Vector3Int>(reader.ReadVector3UInt8(), reader.ReadVector3UInt8()));
             yield return null;
         }
+
+        // Step 4 - Population
+        int popCount = reader.ReadUInt8();
+        Logger.Debug("Reading "+ popCount + " populations...");
+        diskSaveData.popSaveData = new List<PopulationSaveData> ();
+        for (int i = 0; i < popCount; i++) {
+            int popId = reader.ReadUInt8();
+            float riotRisk = reader.ReadFloat();
+            float mood = reader.ReadFloat();
+            int moodModCount = reader.ReadUInt8();
+            
+            List<MoodModifier> mods = new List<MoodModifier>();
+            for (int j = 0; j < moodModCount; j++) {
+                mods.Add(new MoodModifier() {
+                    amount = reader.ReadFloat(),
+                    cyclesRemaining = reader.ReadUInt8(),
+                    eventId = reader.ReadUInt16(),
+                });
+            }
+
+            int foodModCount = reader.ReadUInt8();
+            List<FoodModifier> foods = new List<FoodModifier>();
+            for (int j = 0; j < foodModCount; j++) {
+                foods.Add(new FoodModifier() {
+                    amount = reader.ReadFloat(),
+                    cyclesRemaining = reader.ReadUInt8(),
+                });
+            }
+
+            int citizenCount = reader.ReadUInt16();
+            List<CitizenSaveData> cits = new List<CitizenSaveData>();
+            for (int j = 0; j < citizenCount; j++) {
+                cits.Add(new CitizenSaveData() { name = reader.ReadString() });
+            }
+
+            diskSaveData.popSaveData.Add(new PopulationSaveData() {
+                popId = popId,
+                riotRisk = riotRisk,
+                averageMood = mood,
+                moodModifiers = mods,
+                foodModifiers = foods,
+                citizens = cits
+            });
+        }
+
 
         // Last step - Close handler;
         Logger.Debug("Closing handler...");
@@ -205,7 +276,6 @@ public class SaveManager : MonoBehaviour {
             }
 
             // Loading population
-            /*
             PopulationManager popMan = GameManager.instance.populationManager;
             popMan.populations.Clear();
             foreach (PopulationSaveData data in saveData.popSaveData) {
@@ -213,8 +283,22 @@ public class SaveManager : MonoBehaviour {
                 if (pop == null) {
                     Logger.Error("Error while loading population from savegame : [" + data.popId + "] is not a valid POP id");
                 }
-                //popMan.populations[]
-            }*/
+                List<PopulationManager.Citizen> citizens = new List<PopulationManager.Citizen>();
+                foreach(CitizenSaveData cSD in data.citizens) {
+                    citizens.Add(new PopulationManager.Citizen() {
+                        name = name,
+                        type = pop
+                    });
+                }
+
+                popMan.populations[pop] = new PopulationManager.PopulationInformation() {
+                    moodModifiers = data.moodModifiers,
+                    foodModifiers = data.foodModifiers,
+                    riotRisk = data.riotRisk,
+                    averageMood = data.averageMood,
+                    citizens=citizens
+                };
+            }
 
             // End of loading
             if (callback != null) {
@@ -223,7 +307,7 @@ public class SaveManager : MonoBehaviour {
         }
 
         catch(Exception e) {
-            Logger.Error("Could not load the savegame : " + e.Message+". Going back to the main menu instead.");
+            Logger.Error("Could not load the savegame : \n" + e.ToString()+"\n Going back to the main menu instead.");
             DestroySave();
             GameManager.instance.ExitToMenu();
         }
@@ -401,6 +485,8 @@ public class SaveManager : MonoBehaviour {
 
         public PopulationSaveData(Population pop, PopulationManager.PopulationInformation information)
         {
+            citizens = new List<CitizenSaveData>();
+
             popId = pop.ID;
             riotRisk = information.riotRisk;
             averageMood = information.averageMood;
@@ -410,6 +496,8 @@ public class SaveManager : MonoBehaviour {
             moodModifiers = information.moodModifiers;
             foodModifiers = information.foodModifiers;
         }
+
+        public PopulationSaveData() { }
     }
 
     class Reader
