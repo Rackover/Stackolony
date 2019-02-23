@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.IO;
+using System.Xml.Serialization;
 
 public class SaveManager : MonoBehaviour {
 
-    int saveVersion = 3;
+    int saveVersion = 4;
 
     public SaveData loadedData;
 
@@ -42,7 +43,7 @@ public class SaveManager : MonoBehaviour {
     ///     This is the one you call publicly
     ///
 
-    public IEnumerator WriteSaveData(SaveData saveData)
+    public IEnumerator WriteSaveData(SaveData saveData, Action callback)
     {
         double timeStart = Time.time;
         yield return null;
@@ -85,9 +86,16 @@ public class SaveManager : MonoBehaviour {
             yield return null;
         }
 
+        // Step 4 - Populations
+
+
         // Last step - Close handler;
         writer.Close();
         Logger.Info("Done in "+(Time.time-timeStart).ToString("n2")+" seconds");
+
+        if (callback != null) {
+            callback.Invoke();
+        }
         yield return true;
     }
     
@@ -166,11 +174,17 @@ public class SaveManager : MonoBehaviour {
     ///     Main function to load savegame
     ///     This is the one you call publicly
     ///
-    public void LoadSaveData(SaveData saveData)
+    public void LoadSaveData(SaveData saveData, Action callback=null)
     {
         Logger.Debug("Loading save data");
 
         try {
+            // Loading misc
+            GameManager.instance.player.playerName = saveData.playerName;
+            GameManager.instance.cityManager.cityName = saveData.cityName;
+            GameManager.instance.temporality.SetDate(saveData.cyclesPassed);
+            GameManager.instance.temporality.SetTimeOfDay(saveData.timeOfDay);
+
             GridManagement gridMan = GameManager.instance.gridManagement;
 
             // Loading grid
@@ -189,11 +203,23 @@ public class SaveManager : MonoBehaviour {
                 Block destination = gridMan.grid[bridge.Value.x, bridge.Value.y, bridge.Value.z].GetComponent<Block>();
                 if (gridMan.CreateBridge(origin, destination) == null) { Logger.Warn("Could not replicate bridge from " + origin + ":(" + bridge.Key + ") to " + destination + ":(" + bridge.Value + ")"); };
             }
-            
-            GameManager.instance.player.playerName = saveData.playerName;
-            GameManager.instance.cityManager.cityName = saveData.cityName;
-            GameManager.instance.temporality.SetDate(saveData.cyclesPassed);
-            GameManager.instance.temporality.SetTimeOfDay(saveData.timeOfDay);
+
+            // Loading population
+            /*
+            PopulationManager popMan = GameManager.instance.populationManager;
+            popMan.populations.Clear();
+            foreach (PopulationSaveData data in saveData.popSaveData) {
+                Population pop = popMan.GetPopulationByID(data.popId);
+                if (pop == null) {
+                    Logger.Error("Error while loading population from savegame : [" + data.popId + "] is not a valid POP id");
+                }
+                //popMan.populations[]
+            }*/
+
+            // End of loading
+            if (callback != null) {
+                callback.Invoke();
+            }
         }
 
         catch(Exception e) {
@@ -217,6 +243,7 @@ public class SaveManager : MonoBehaviour {
         public string cityName;
         public int cycleNumber;
         public float cycleProgression;
+        public Dictionary<Population, PopulationManager.PopulationInformation> populations;
 
         public GameData(
             GameObject[,,] _grid,
@@ -224,7 +251,8 @@ public class SaveManager : MonoBehaviour {
             string _playerName,
             string _cityName,
             int _cycleNumber,
-            float _cycleProgression
+            float _cycleProgression,
+            Dictionary<Population, PopulationManager.PopulationInformation> _populations
         )
         {
             grid = _grid;
@@ -233,6 +261,7 @@ public class SaveManager : MonoBehaviour {
             cityName = _cityName;
             cycleNumber = _cycleNumber;
             cycleProgression = _cycleProgression;
+            populations = _populations;
         }
     }
 
@@ -241,6 +270,7 @@ public class SaveManager : MonoBehaviour {
         public Vector3Int gridSize;
         public Dictionary<Vector3Int, BlockSaveData> blockGrid;
         public List<KeyValuePair<Vector3Int,Vector3Int>> bridges;
+        public List<PopulationSaveData> popSaveData;
 
         public float timeOfDay;
         public int cyclesPassed;
@@ -260,7 +290,10 @@ public class SaveManager : MonoBehaviour {
 
             // Storing bridges
             bridges = ConvertBridges(gameData.bridgesList);
-            
+
+            // Population informations
+            popSaveData = ConvertPopulationInformations(gameData.populations);
+
             // Other data
             playerName = gameData.playerName;
             cityName = gameData.cityName;
@@ -276,18 +309,30 @@ public class SaveManager : MonoBehaviour {
             float _timeOfDay,
             int _cyclesPassed,
             string _playerName,
-            string _cityName
+            string _cityName,
+            List<PopulationSaveData> _popSaveData
         )
         {
-            _gridSize = gridSize;
-            _blockGrid = blockGrid;
-            _bridges = bridges;
-            _timeOfDay = timeOfDay;
-            _cyclesPassed = cyclesPassed;
-            _playerName = playerName;
-            _cityName = cityName;
+            gridSize = _gridSize;
+            blockGrid = _blockGrid;
+            bridges = _bridges;
+            timeOfDay = _timeOfDay;
+            cyclesPassed = _cyclesPassed;
+            playerName = _playerName;
+            cityName = _cityName;
+            popSaveData = _popSaveData;
         }
         
+        List<PopulationSaveData> ConvertPopulationInformations(Dictionary<Population, PopulationManager.PopulationInformation> populations)
+        {
+            List<PopulationSaveData> datas = new List<PopulationSaveData>();
+            foreach(Population pop in populations.Keys) {
+                PopulationSaveData data = new PopulationSaveData(pop, populations[pop]);
+                datas.Add(data);
+            }
+            return datas;
+        }
+
         Dictionary<Vector3Int, BlockSaveData> ConvertBlocksGrid(GameObject[,,] _grid, Vector3Int gridSize)
         {
             Dictionary<Vector3Int, BlockSaveData> blockGrid = new Dictionary<Vector3Int, BlockSaveData>();
@@ -337,6 +382,33 @@ public class SaveManager : MonoBehaviour {
         {
             id = 0;
             states = new List<int>();
+        }
+    }
+
+    public class CitizenSaveData
+    {
+        public string name;
+    }
+
+    public class PopulationSaveData
+    {
+        public List<CitizenSaveData> citizens;
+        public int popId;
+        public float riotRisk;
+        public float averageMood;
+        public List<MoodModifier> moodModifiers;
+        public List<FoodModifier> foodModifiers;
+
+        public PopulationSaveData(Population pop, PopulationManager.PopulationInformation information)
+        {
+            popId = pop.ID;
+            riotRisk = information.riotRisk;
+            averageMood = information.averageMood;
+            foreach(var cit in information.citizens) {
+                citizens.Add(new CitizenSaveData() { name = cit.name });
+            }
+            moodModifiers = information.moodModifiers;
+            foodModifiers = information.foodModifiers;
         }
     }
 
