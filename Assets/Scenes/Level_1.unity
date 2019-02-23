@@ -113,6 +113,48 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &56195710
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4320883887219790, guid: 058b5ab120afe6048b4289730cb3e5c9, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0.93617994
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320883887219790, guid: 058b5ab120afe6048b4289730cb3e5c9, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0.099929996
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320883887219790, guid: 058b5ab120afe6048b4289730cb3e5c9, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0.75658995
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320883887219790, guid: 058b5ab120afe6048b4289730cb3e5c9, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320883887219790, guid: 058b5ab120afe6048b4289730cb3e5c9, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320883887219790, guid: 058b5ab120afe6048b4289730cb3e5c9, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320883887219790, guid: 058b5ab120afe6048b4289730cb3e5c9, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4320883887219790, guid: 058b5ab120afe6048b4289730cb3e5c9, type: 2}
+      propertyPath: m_RootOrder
+      value: 8
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 058b5ab120afe6048b4289730cb3e5c9, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1 &83595988
 GameObject:
   m_ObjectHideFlags: 0
@@ -288,7 +330,8 @@ Prefab:
       propertyPath: m_TagString
       value: Decor
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_IsPrefabAsset: 0
 --- !u!1 &238343763 stripped
@@ -306,7 +349,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
@@ -481,7 +524,8 @@ Prefab:
       propertyPath: m_TagString
       value: Decor
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_IsPrefabAsset: 0
 --- !u!1 &317019628 stripped
@@ -499,7 +543,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
@@ -604,7 +648,8 @@ Prefab:
       propertyPath: m_TagString
       value: Decor
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_IsPrefabAsset: 0
 --- !u!1 &375363075 stripped
@@ -622,7 +667,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
@@ -727,7 +772,8 @@ Prefab:
       propertyPath: m_TagString
       value: Decor
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_IsPrefabAsset: 0
 --- !u!1 &462418188 stripped
@@ -745,7 +791,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
@@ -850,7 +896,8 @@ Prefab:
       propertyPath: m_TagString
       value: Decor
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_IsPrefabAsset: 0
 --- !u!1 &506482609 stripped
@@ -868,7 +915,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
@@ -973,7 +1020,8 @@ Prefab:
       propertyPath: m_TagString
       value: Decor
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_IsPrefabAsset: 0
 --- !u!1 &785738398 stripped
@@ -991,7 +1039,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
@@ -1096,7 +1144,8 @@ Prefab:
       propertyPath: m_TagString
       value: Decor
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_IsPrefabAsset: 0
 --- !u!1 &871309990 stripped
@@ -1114,7 +1163,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
@@ -1136,6 +1185,48 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 400000, guid: be13936011c9474479492cc2a49e53b0,
     type: 3}
   m_PrefabInternal: {fileID: 871309989}
+--- !u!1001 &890334873
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4024179324343364, guid: 566814b1eb74baa449f9fef747a83fd1, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4024179324343364, guid: 566814b1eb74baa449f9fef747a83fd1, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4024179324343364, guid: 566814b1eb74baa449f9fef747a83fd1, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4024179324343364, guid: 566814b1eb74baa449f9fef747a83fd1, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4024179324343364, guid: 566814b1eb74baa449f9fef747a83fd1, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4024179324343364, guid: 566814b1eb74baa449f9fef747a83fd1, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4024179324343364, guid: 566814b1eb74baa449f9fef747a83fd1, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4024179324343364, guid: 566814b1eb74baa449f9fef747a83fd1, type: 2}
+      propertyPath: m_RootOrder
+      value: 9
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 566814b1eb74baa449f9fef747a83fd1, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1001 &909229682
 Prefab:
   m_ObjectHideFlags: 0
@@ -1273,7 +1364,8 @@ Prefab:
       propertyPath: m_TagString
       value: Decor
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_IsPrefabAsset: 0
 --- !u!1 &921380808 stripped
@@ -1291,7 +1383,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
@@ -1396,7 +1488,8 @@ Prefab:
       propertyPath: m_TagString
       value: Decor
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_IsPrefabAsset: 0
 --- !u!1 &939175159 stripped
@@ -1414,7 +1507,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
@@ -1519,7 +1612,8 @@ Prefab:
       propertyPath: m_TagString
       value: Decor
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_IsPrefabAsset: 0
 --- !u!1 &989454436 stripped
@@ -1537,7 +1631,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
@@ -1647,7 +1741,8 @@ Prefab:
       propertyPath: m_TagString
       value: Decor
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_IsPrefabAsset: 0
 --- !u!1 &1133733339 stripped
@@ -1665,7 +1760,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
@@ -1770,7 +1865,8 @@ Prefab:
       propertyPath: m_TagString
       value: Decor
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_IsPrefabAsset: 0
 --- !u!1 &1180707059 stripped
@@ -1788,7 +1884,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
@@ -2305,7 +2401,7 @@ Prefab:
     - target: {fileID: 224470981121806966, guid: f9a0d7668fd606d469ae9be6dc086c74,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000030517578
+      value: -0.000015258789
       objectReference: {fileID: 0}
     - target: {fileID: 224527383778805756, guid: f9a0d7668fd606d469ae9be6dc086c74,
         type: 2}
@@ -2463,7 +2559,8 @@ Prefab:
       propertyPath: m_TagString
       value: Decor
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_IsPrefabAsset: 0
 --- !u!1 &1271753516 stripped
@@ -2481,7 +2578,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
@@ -2586,7 +2683,8 @@ Prefab:
       propertyPath: m_TagString
       value: Decor
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_IsPrefabAsset: 0
 --- !u!1 &1363090308 stripped
@@ -2604,7 +2702,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
@@ -2751,7 +2849,8 @@ Prefab:
       propertyPath: m_TagString
       value: Decor
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_IsPrefabAsset: 0
 --- !u!1 &1394148524 stripped
@@ -2769,7 +2868,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
@@ -3046,7 +3145,8 @@ Prefab:
       propertyPath: m_TagString
       value: Decor
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_IsPrefabAsset: 0
 --- !u!1 &1807591610 stripped
@@ -3262,7 +3362,8 @@ Prefab:
       propertyPath: m_TagString
       value: Decor
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_IsPrefabAsset: 0
 --- !u!1 &1889191518 stripped
@@ -3280,7 +3381,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
@@ -3385,7 +3486,8 @@ Prefab:
       propertyPath: m_TagString
       value: Decor
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_IsPrefabAsset: 0
 --- !u!1 &1958029475 stripped
@@ -3403,7 +3505,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
@@ -3500,7 +3602,8 @@ Prefab:
       propertyPath: m_TagString
       value: Decor
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9500000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: be13936011c9474479492cc2a49e53b0, type: 3}
   m_IsPrefabAsset: 0
 --- !u!1 &2069969487 stripped
@@ -3518,7 +3621,7 @@ Rigidbody:
   m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 0
