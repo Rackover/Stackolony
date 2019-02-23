@@ -24,7 +24,7 @@ public class GridManagement : MonoBehaviour
     public Vector3[,,] bridgesGrid;
     public GameObject[,,] grid;
 
-    public Vector2Int spatioportSpawnPoint;
+    [HideInInspector] public Vector3Int spawnPoint;
     public Terrain myTerrain; //Terrain sur lequel la grille doit être generée
     public Vector3Int gridSize; //Nombre de cases sur le terrain
     private GameObject gridGameObject; //GameObject contenant la grille
@@ -38,12 +38,29 @@ public class GridManagement : MonoBehaviour
     {
         gameManager = FindObjectOfType<GameManager>();
         myTerrain = FindObjectOfType<Terrain>();
+
+
         //Initialisation des variables statiques
         gridSize.x = Mathf.RoundToInt(myTerrain.terrainData.size.x / cellSize.x);
         gridSize.z = Mathf.RoundToInt(myTerrain.terrainData.size.z / cellSize.z);
         gridSize.y = maxHeight+1;
         GenerateGrid();
         GenerateBuildablePositions();
+
+
+        // Find or Set the Spawn of the Spatioport
+        Spawn spawn = FindObjectOfType<Spawn>();
+        if(spawn == null)
+        {
+            Vector2Int randPos = GetRandomCoordinates();
+            spawnPoint = new Vector3Int(randPos.x, 0, randPos.y);
+        }
+        else
+        {
+            spawnPoint = WorldPositionToIndex(FindObjectOfType<Spawn>().transform.position);
+        }
+
+        buildablePositions.Remove(new Vector2Int(spawnPoint.x, spawnPoint.z));
     }
 
     private void GenerateBuildablePositions()
@@ -58,8 +75,6 @@ public class GridManagement : MonoBehaviour
                 }
             }
         }
-
-        buildablePositions.Remove(spatioportSpawnPoint);
     }
 
     public Vector2Int GetRandomCoordinates()
