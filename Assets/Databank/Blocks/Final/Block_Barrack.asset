@@ -13,13 +13,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isMovable: 1
   isDestroyable: 1
-  isBuyable: 0
+  isBuyable: 1
   canBuildAbove: 1
   relyOnSpatioport: 1
   fireProof: 0
+  riotProof: 0
   model: {fileID: 1285360795877188, guid: a2688c13a00836a489c8b36acda68fdb, type: 2}
+  sound: {fileID: 8300000, guid: 8f6cfcfd3311f114ebcfe72ed6f26721, type: 3}
   ID: 15
   consumption: 1
   sensibility: 1
   flags:
-  - Barrack_4_1_military
+  - Barrack_4_2_military

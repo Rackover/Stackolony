@@ -17,9 +17,11 @@ MonoBehaviour:
   canBuildAbove: 1
   relyOnSpatioport: 1
   fireProof: 0
-  model: {fileID: 1935445011134210, guid: bea5c4ece5167df49a25642c0242fe7b, type: 2}
+  riotProof: 0
+  model: {fileID: 1386600918583026, guid: adddcaab90fc2374bbb45bcabea77a7a, type: 2}
+  sound: {fileID: 8300000, guid: 532b90538a459ae43b279d3719600973, type: 3}
   ID: 2
   consumption: 1
   sensibility: 1
   flags:
-  - House_5_1_1_scientist-military-worker
+  - House_5_1_scientist-military-worker

@@ -651,7 +651,7 @@ public class FlagReader : MonoBehaviour
 
 	string[] SplitParametorInArray(string parameter)
 	{
-		return parameter.Split(new char[]{','}, System.StringSplitOptions.RemoveEmptyEntries);
+		return parameter.Split(new char[]{'-'}, System.StringSplitOptions.RemoveEmptyEntries);
 	}
 
 	string IsProfileArrayIsValid(string[] array)

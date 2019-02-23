@@ -17,9 +17,12 @@ MonoBehaviour:
   canBuildAbove: 1
   relyOnSpatioport: 1
   fireProof: 0
+  riotProof: 0
   model: {fileID: 1407221856296756, guid: 5366664e0e7ea0c4899de73537d9ba40, type: 2}
+  sound: {fileID: 8300000, guid: 1de5c5e023835944687329f691680463, type: 3}
   ID: 4
   consumption: 0
   sensibility: 1
   flags:
-  - Generator_10
+  - Generator_7
+  - NuisanceGenerator_2_3

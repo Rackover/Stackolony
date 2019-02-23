@@ -17,9 +17,12 @@ MonoBehaviour:
   canBuildAbove: 1
   relyOnSpatioport: 1
   fireProof: 0
+  riotProof: 0
   model: {fileID: 1856596942748508, guid: 4bf505e0faf46704794523b8f53daab6, type: 2}
+  sound: {fileID: 8300000, guid: dc0b49c70c8434148b5a198019aa6ae5, type: 3}
   ID: 9
   consumption: 2
   sensibility: 1
   flags:
-  - ArcadeBlock_5
+  - Occupator_4_3_worker-artist-military
+  - WorkingHours_0_50

@@ -30,7 +30,6 @@ public class GridManagement : MonoBehaviour
     private GameObject gridGameObject; //GameObject contenant la grille
 
     public List<Vector2Int> buildablePositions = new List<Vector2Int>(); // List des positions disponible pour poser des block par rapport au terrain
-
     
     public enum blockType{ FREE = 0, BRIDGE = 1}
 
@@ -59,11 +58,22 @@ public class GridManagement : MonoBehaviour
                 }
             }
         }
+
+        buildablePositions.Remove(spatioportSpawnPoint);
     }
 
     public Vector2Int GetRandomCoordinates()
     {
         return buildablePositions[Mathf.FloorToInt(buildablePositions.Count*UnityEngine.Random.value)];
+    }
+
+    public bool IsPositionFree(Vector2Int pos)
+    {
+        for(int i = 0; i < maxHeight; i++)
+        {
+            if(grid[pos.x, i, pos.y] != null) return false;
+        }
+        return true;
     }
 
     private void GenerateGrid() //Fonction pour générer la grille sur le terrain
@@ -132,8 +142,8 @@ public class GridManagement : MonoBehaviour
     }
 
     //Return true if a block is placable here, false if it isn't
-    public bool IsPlacable(Vector3Int coordinates, bool shouldDisplayInformation) {
-
+    public bool IsPlaceable(Vector3Int coordinates, bool shouldDisplayInformation, BlockScheme scheme) {
+        
         if (coordinates.x < 0 || coordinates.y < 0 || coordinates.z < 0)
         {
             if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError("cannotBuildOutOfMap"); }
@@ -155,7 +165,7 @@ public class GridManagement : MonoBehaviour
             if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError("maxHeightReached"); }
             return false;
         }
-        if (GetSlotType(groundPosition) != GridManagement.blockType.FREE)
+        if (GetSlotType(groundPosition) != blockType.FREE)
         {
             if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError.Invoke("cannotBuildHere"); }
             return false;
@@ -171,11 +181,26 @@ public class GridManagement : MonoBehaviour
             Block blockUnderPos = gameObjectUnderPos.GetComponent<Block>();
             if (blockUnderPos != null)
             {
-                if (!blockUnderPos.scheme.canBuildAbove)
+                if (!blockUnderPos.scheme.canBuildAbove && coordinates.y > groundPosition.y - 1)
                 {
-                    if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError.Invoke("You can't build above that block"); }
+                    if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError.Invoke("cannotBuildAboveThis"); }
                     return false;
                 }
+            }
+        }
+        GameObject gameObjectOnPos = grid[coordinates.x, coordinates.y, coordinates.z];
+        if (gameObjectOnPos != null)
+        {
+            if (gameObjectOnPos.GetComponent<BridgeInfo>() != null)
+            {
+                if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError.Invoke("cannotBuildOverBridge"); }
+                return false;
+            }
+            Block blockOnPos = gameObjectOnPos.GetComponent<Block>();
+            if (blockOnPos != null && !scheme.canBuildAbove)
+            {
+                if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError.Invoke("cannotPlaceThisBlockHere"); }
+                return false;
             }
         }
         return true;
@@ -323,6 +348,7 @@ public class GridManagement : MonoBehaviour
         if (destinationCoordinates.y >= 0)
         {
             MoveBlock(block.gameObject, destinationCoordinates);
+            buildablePositions.Remove(coordinates);
             UpdateGridSystems();
         } else
         {

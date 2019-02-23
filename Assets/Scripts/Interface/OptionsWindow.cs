@@ -122,4 +122,11 @@ public class OptionsWindow : MonoBehaviour {
         Destroy(parentGameObject);
     }
 
+    public void Update()
+    {
+        if(Input.GetButtonDown("Pause"))
+        {
+            SaveAndExit();
+        }
+    }
 }

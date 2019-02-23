@@ -59,6 +59,7 @@ MonoBehaviour:
     type: 2}
   disabledBlockPrefab: {fileID: 0}
   ruinPrefab: {fileID: 1593024420063624, guid: 6a64cf12c7012c84d9130d421d38118b, type: 2}
+  cagePrefab: {fileID: 1488497006074618, guid: 166be7428b4952242a63e7526e0655ed, type: 2}
   blocks:
   - {fileID: 11400000, guid: cd3d5acbb581a1c4595dc50637ba4ded, type: 2}
   - {fileID: 11400000, guid: 8aabc4225c69b11438c65f02c0a7fd8b, type: 2}
@@ -85,19 +86,17 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cc93ff67cd767e64593334ccb71e6451, type: 2}
   - {fileID: 11400000, guid: 088aad5b74a1f6348b4c4bb7418abb9b, type: 2}
   - {fileID: 11400000, guid: a36f06158ab512d458821b91c1e3a931, type: 2}
+  - {fileID: 11400000, guid: 77ba335a7e95ecb4ebdea73a6efedf30, type: 2}
   - {fileID: 11400000, guid: 640f2e3b32a821a4bb8abb06ed37d049, type: 2}
+  - {fileID: 11400000, guid: ff3d635df60775d43b9c1f5187d748ef, type: 2}
   - {fileID: 11400000, guid: 0369852271f78a944b3e28e4b8387b41, type: 2}
   - {fileID: 11400000, guid: a651fab9d9cd15f4aa7bd7242739f618, type: 2}
   - {fileID: 11400000, guid: ca135a6eefee91b4e8397e886111c4f0, type: 2}
-  - {fileID: 11400000, guid: ff3d635df60775d43b9c1f5187d748ef, type: 2}
   defaultContainerColor: {r: 0.8301887, g: 0.8301887, b: 0.8301887, a: 1}
-  cursorSprite: {fileID: 21300000, guid: b631a20d61d7b5b4d9b8897145cac4e0, type: 3}
-  destroyIcon: {fileID: 21300000, guid: 66734752feff9834b85b7ffdc4cc56c9, type: 3}
-  buildIcon: {fileID: 21300000, guid: c36d5e82e42199b4893b3154edd54325, type: 3}
-  dragIcon: {fileID: 21300000, guid: beacc04761958224e8d1da228151e4a7, type: 3}
+  cursorIcon: {fileID: 21300000, guid: b631a20d61d7b5b4d9b8897145cac4e0, type: 3}
+  dragIcon: {fileID: 21300000, guid: 448f72d4fe8174c4da8db2e2d70f4bab, type: 3}
+  couldDragIcon: {fileID: 21300000, guid: b631a20d61d7b5b4d9b8897145cac4e0, type: 3}
   bridgeIcon: {fileID: 21300000, guid: 5a5b51b82a93c814ab6082318d750ab0, type: 3}
-  handHoldIcon: {fileID: 21300000, guid: dd96174ad0b1dab4290186ec596bc8e7, type: 3}
-  handHoverIcon: {fileID: 21300000, guid: 72e05618d08539e469917b51c0df442e, type: 3}
   citizenInParticle: {fileID: 1285035770339370, guid: f0ff82113bf4f1546a6f3be882a39c72,
     type: 2}
   citizenOutParticle: {fileID: 1952097086203690, guid: 18e01baa419fcec40b1a62e40fddbe38,
@@ -110,15 +109,25 @@ MonoBehaviour:
     type: 2}
   damagedParticle: {fileID: 1943145316284874, guid: 8f2db58443c89a346aef2a5762562d14,
     type: 2}
-  extinguishParticle: {fileID: 1057743280367826, guid: 29c6d81a269108c4c8167ca45e2aefbe,
+  extinguishParticle: {fileID: 1434923638521470, guid: 5e55993c980272c44beeb4dc50e97585,
     type: 2}
-  repressParticle: {fileID: 1619047670876896, guid: cc0614e432cd36e4bb64944c483d56f2,
+  repressParticle: {fileID: 1713308741047704, guid: e625134b2ff0ad1418abb35786a4f08d,
     type: 2}
-  repairParticle: {fileID: 1265812207320648, guid: 17785de2569fed64aad26ce8e15bb5f0,
+  repairParticle: {fileID: 1879543478626156, guid: 6a915663b22dba84799db1764c7f8fa5,
+    type: 2}
+  nestAttackedParticle: {fileID: 1227483221977048, guid: f51daf873b6a9584bbf870a6bf3802b1,
+    type: 2}
+  whiteSmokeParticle: {fileID: 1612026629803946, guid: 81e6dfea43307f542bb88e5f6ecdff49,
+    type: 2}
+  mineExplosionParticle: {fileID: 1438920845312742, guid: 39677e9a60a18ba449b4d7b891d95b02,
+    type: 2}
+  confettiParticle: {fileID: 1814836820427222, guid: b7cb19c36f34394479d9c992d995b5ca,
+    type: 2}
+  blockDropParticle: {fileID: 1090035309744944, guid: 001c6a79d98a8c841a29cfd30b5d5cc4,
     type: 2}
   buildingsIcons:
   - {fileID: 21300000, guid: 15e2ba685d2ee3143a34ccaebc18bd58, type: 3}
   - {fileID: 21300000, guid: 5adad3d7d23730644a3815e5653b5256, type: 3}
-  - {fileID: 21300000, guid: 414500052b0d4c04e826f3ecadd2d66c, type: 3}
+  - {fileID: 21300000, guid: 1839d3ee5c50a394985e43fdf6b64245, type: 3}
   soundBank: {fileID: 11400000, guid: 764899dc09e5a5841b21cf448bc2fd96, type: 2}
   mainMusic: {fileID: 8300000, guid: 59d725638fc69e74fadca7c5b3140659, type: 3}

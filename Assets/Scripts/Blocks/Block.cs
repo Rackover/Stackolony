@@ -382,6 +382,8 @@ public class Block : MonoBehaviour
         }
         transform.position = GameManager.instance.gridManagement.IndexToWorldPosition(gridCoordinates);
         // checkForCollisions = false;
+        Instantiate(GameManager.instance.library.blockDropParticle, transform.position - new Vector3(0f, 0.5f, 0f), Quaternion.identity);
+
         yield return null;
     }
 

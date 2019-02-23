@@ -10,19 +10,17 @@ public class Library : MonoBehaviour
     public GameObject spatioportSpawnerPrefab;
     public GameObject disabledBlockPrefab;
 	public GameObject ruinPrefab;
+	public GameObject cagePrefab;
 
 	[Space(1)][Header("Blocks")]
 	public BlockScheme[] blocks;
     public Color defaultContainerColor;
 
 	[Space(1)][Header("Sprites")]
-	public Sprite cursorSprite;
-	public Sprite destroyIcon;
-	public Sprite buildIcon;
+	public Sprite cursorIcon;
     public Sprite dragIcon;
+    public Sprite couldDragIcon;
     public Sprite bridgeIcon;
-    public Sprite handHoldIcon;
-    public Sprite handHoverIcon;
 
 	[Header("Particules")]
 	public GameObject citizenInParticle;
@@ -34,13 +32,17 @@ public class Library : MonoBehaviour
 	public GameObject extinguishParticle;
 	public GameObject repressParticle;
 	public GameObject repairParticle;
-	
+	public GameObject nestAttackedParticle;
+	public GameObject whiteSmokeParticle;
+	public GameObject mineExplosionParticle;
+	public GameObject confettiParticle;
+	public GameObject blockDropParticle;
+
 	[Header("Building")]
     public List<Sprite> buildingsIcons = new List<Sprite>();
 
 	[Header("Sounds")]
 	public Sounds soundBank;
-	public AudioClip mainMusic;
 
 	public BlockScheme GetBlockByID(int id)
 	{	

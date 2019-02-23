@@ -3,18 +3,16 @@ using UnityEngine.UI;
 
 public class CursorDisplay : MonoBehaviour {
 
-	public RectTransform cursorTransform;
-	public Image cursorImage;
-    private Image imageComponent;
+    public Transform canvas;
 
-    private RectTransform rectTransform;
-
+    Image image;
+    RectTransform rectTransform;
     Notifications notifier;
 
     private void Start()
     {
         GameManager.instance.cursorManagement.CursorError +=  (x) => DisplayUserError(x);
-        imageComponent = GetComponent<Image>();
+        image = GetComponent<Image>();
         notifier = FindObjectOfType<Notifications>();
         rectTransform = GetComponent<RectTransform>();
     }
@@ -22,33 +20,13 @@ public class CursorDisplay : MonoBehaviour {
     private void Update()
     {
         Cursor.visible = false;
-        cursorTransform.position = Input.mousePosition;
-        ChangeCursor(GameManager.instance.cursorManagement.selectedMode);
-        transform.SetSiblingIndex(transform.parent.childCount);
+        rectTransform.position = Input.mousePosition;
 
-        if (GameManager.instance.cursorManagement.couldDrag) {
-            SetIcon(GameManager.instance.library.handHoldIcon);
-        }
-        else if (GameManager.instance.cursorManagement.isDragging) {
-            SetIcon(GameManager.instance.library.handHoldIcon);
-        }
-        else {   
-            ResetIcon();
-        }
-    }
-
-    public void SetIcon(Sprite icon) 
-    {
-        imageComponent.sprite = icon;
-        cursorImage.gameObject.SetActive(false);
-    }
-
-    public void ResetIcon()
-    {
-        imageComponent.sprite = GameManager.instance.library.cursorSprite;
-        cursorImage.gameObject.SetActive(true);
+        UpdateCursor(GameManager.instance.cursorManagement);
+        canvas.SetAsLastSibling();
     }
     
+
     void DisplayUserError(string locId)
     {
         if (notifier == null) {
@@ -58,30 +36,32 @@ public class CursorDisplay : MonoBehaviour {
         GameManager.instance.soundManager.Play("Error");
     }
 
-    public void ChangeCursor(CursorManagement.cursorMode mode)	
+    public void UpdateCursor(CursorManagement cursorMan)	
 	{
-		cursorImage.enabled = true;
-		switch (mode) 
-		{
-            default:
-				cursorImage.sprite = null;
-				cursorImage.enabled = false;
-				break;
+        transform.SetAsLastSibling();
+        Library lib = GameManager.instance.library;
 
-			case CursorManagement.cursorMode.Move:
-                cursorImage.enabled = true;
-                cursorImage.sprite = GameManager.instance.library.dragIcon;
-				break;
+        // Default cursor
+        image.sprite = lib.cursorIcon;
 
-            case CursorManagement.cursorMode.Bridge:
-                cursorImage.enabled = true;
-                cursorImage.sprite = GameManager.instance.library.bridgeIcon;
-                break;
+        // State machine to determine cursor appareance
+        if (!GameManager.instance.IsInGame()) {
+            image.sprite = lib.cursorIcon;
+            return;
+        }
 
-            case CursorManagement.cursorMode.Delete:
-                cursorImage.enabled = true;
-                cursorImage.sprite = GameManager.instance.library.destroyIcon;
-				break;
-		}
+        // Bridge
+        if (cursorMan.isBridging) {
+            image.sprite = lib.bridgeIcon;
+        }
+        
+        // Drag
+        if (cursorMan.couldDrag) {
+            image.sprite = lib.couldDragIcon;
+        }
+        if (cursorMan.isDragging) {
+            image.sprite = lib.dragIcon;
+        }
+        
 	}
 }

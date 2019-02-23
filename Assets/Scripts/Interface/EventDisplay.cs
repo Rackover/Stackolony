@@ -16,6 +16,7 @@ public class EventDisplay : MonoBehaviour {
 
     public Color goodColor = Color.green;
     public Color badColor = Color.red;
+    public float typewriterRate = 0.3f;
 
     public Text advisorName;
     public Text title;
@@ -40,8 +41,12 @@ public class EventDisplay : MonoBehaviour {
 
     private void Update()
     {
-        if (dragging) {
-            transform.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y) + shift;
+        if (dragging) 
+        {
+            transform.position = new Vector2(
+                Mathf.Clamp(Input.mousePosition.x, 0, Screen.width),
+                Mathf.Clamp(Input.mousePosition.y, 0, Screen.height)
+                ) + shift;
         }
     }
 
@@ -73,7 +78,10 @@ public class EventDisplay : MonoBehaviour {
         advisorName.text = loc.GetLine(pop.codeName, name);
 
         title.text = loc.GetLineFromCategory("eventTitle", "event" + gameEvent.id);
-        description.text = loc.GetLineFromCategory("eventDescription", "event" + gameEvent.id);
+
+
+        description.text = "";
+        StartTypewriting(description, loc.GetLineFromCategory("eventDescription", "event" + gameEvent.id));
     }
 
     public void InitializeButtons()
@@ -135,6 +143,7 @@ public class EventDisplay : MonoBehaviour {
                 FindObjectOfType<TooltipGO>().Disable();
                 GameManager.instance.UnPause();
                 GetComponent<Image>().enabled = false;
+                StopAllCoroutines();
             });
 
             instantiatedButtons.Add(button);
@@ -148,7 +157,92 @@ public class EventDisplay : MonoBehaviour {
         gameEvent = _gameEvent;
     }
 
+    public void StartTypewriting(Text target, string content)
+    {
+        StartCoroutine(Typewrite(target, content, 0, typewriterRate));
+    }
 
+    IEnumerator Typewrite(Text target, string content, int index, float delayBeforeNextChar, List<string> activeTags=null)
+    {
+        if (activeTags == null) {
+            activeTags = new List<string>();
+        }
+
+        // Play sound
+        GameManager.instance.soundManager.voicePlayer.ContinuePlaying(gameEvent.instigator);
+
+        // Typewrite
+        string txt = content.Substring(0, index);
+        if (content[index] == '<') {
+            if (content[index+1] == '/'){
+                // Closing tag
+                string tag = content[index].ToString();
+                for (int i = index+1; i < content.Length; i++) {
+                    tag += content[i];
+                    if (content[i] == '>') {
+                        index = i+1;
+                        break;
+                    }
+                }
+                txt = content.Substring(0, index);
+                string realTag = tag.Replace("</", "").Replace(">", "");
+                activeTags.RemoveAll(o => o == realTag);
+            }
+            else{
+                // Opening tag
+                string tag = content[index].ToString();
+                for (int i = index + 1; i < content.Length; i++) {
+                    tag += content[i];
+                    if (content[i] == '>') {
+                        index = i+1;
+                        break;
+                    }
+                }
+                txt = content.Substring(0, index);
+                string realTag = tag.Replace("<", "").Replace(">", "");
+                activeTags.Add(realTag);
+            }
+        }
+
+        // Adding closing tags
+        foreach(string tag in activeTags) {
+            txt += "</"+tag.Split('=')[0]+">";
+        }
+
+        // Displaying text
+        target.text = txt;
+
+        // Advance
+        if (index+1 < content.Length) {
+            float delay = delayBeforeNextChar;
+
+            // Special characters pause
+            if (index > 0) {
+                switch (content[index - 1]) {
+                    case ' ': delay = 0f; break;
+                    case '!':
+                    case '?':
+                    case '.':
+                    case ':':
+                        GameManager.instance.soundManager.voicePlayer.Stop();
+                        delay = 1f;
+                        break;
+                }
+                if (content[index - 1] == ' ') {
+                    delay = 0f;
+                }
+            }
+
+            if (delay > 0f) {
+                yield return new WaitForSeconds(delay);
+            }
+            yield return Typewrite(target, content, index+1, delayBeforeNextChar, activeTags);
+        }
+        else {
+            GameManager.instance.soundManager.voicePlayer.Stop();
+            yield return true;
+        }
+    }
 
 
     /// <summary>

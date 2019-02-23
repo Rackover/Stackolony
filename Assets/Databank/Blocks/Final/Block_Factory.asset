@@ -17,9 +17,12 @@ MonoBehaviour:
   canBuildAbove: 1
   relyOnSpatioport: 1
   fireProof: 0
-  model: {fileID: 1476065765371016, guid: 6ea6e591c1e456f408f09364adcd1390, type: 2}
+  riotProof: 0
+  model: {fileID: 1041038750687156, guid: 4dec37d786e910b43925f40c2519cb9a, type: 2}
+  sound: {fileID: 8300000, guid: 2de5fac940af45c44bf1d3fece9af37a, type: 3}
   ID: 25
   consumption: 12
   sensibility: 1
   flags:
-  - Extractor_25_2_worker
+  - Extractor_25_3_worker
+  - NuisanceGenerator_3_3
