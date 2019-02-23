@@ -395,9 +395,10 @@ public class Block : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.tag == "Decor")
+        Prop prop = other.GetComponent<Prop>();
+        if (prop != null)
         {
-            Destroy(other.gameObject);
+            prop.OnCollision();
         }
     }
 
