@@ -130,7 +130,7 @@ public class SaveManager : MonoBehaviour {
     //////////////////////////////
     
 
-    public IEnumerator ReadSaveData(string cityName, System.Action callback = null)
+    public IEnumerator ReadSaveData(string cityName, Action callback = null)
     {
         double timeStart = Time.time;
         yield return null;

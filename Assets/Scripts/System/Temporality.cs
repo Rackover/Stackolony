@@ -29,7 +29,6 @@ public class Temporality : MonoBehaviour {
     void GetMicroDuration()
     {
         microDuration = (float)cycleDuration / (float)nbMicroCyclePerCycle;
-        Debug.Log(microDuration);
     }
 
     public float GetMicroCoef()
@@ -105,7 +104,6 @@ public class Temporality : MonoBehaviour {
     public void AddMicroCycle()
     {
         if (!GameManager.instance.IsInGame()) { return; };
-        Debug.Log("New microcycle");
         microCounter++;
         StartCoroutine(GameManager.instance.systemManager.OnNewMicrocycle());
     }
