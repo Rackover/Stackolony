@@ -295,7 +295,10 @@ public class GameManager : MonoBehaviour
                         temporality.GetCurrentCycleProgression(),
                         populationManager.populations,
                         cityManager.GetLockedBuildings(),
-                        populationManager.populationTypeList.ToList()
+                        populationManager.populationTypeList.ToList(),
+                        bulletinsManager.GetBulletins(),
+                        bulletinsManager.GetBulletin(),
+                        eventManager.eventsPool
                     )
                 );
             StartCoroutine(saveManager.WriteSaveData(
@@ -308,8 +311,9 @@ public class GameManager : MonoBehaviour
                 }
             ));
         }
+        
 
-        // Saves the game
+        // Loads the game
         if (Input.GetKeyDown(KeyCode.L)) {
             saveManager.StartCoroutine(
                 saveManager.ReadSaveData(

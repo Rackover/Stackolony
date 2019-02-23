@@ -126,13 +126,34 @@ public class SaveManager : MonoBehaviour {
         }
 
         // Step 6 - Population type list
-        Logger.Debug("Saving " + saveData.populationTypeIds.Count + " population types");
+        Logger.Debug("Saving " + saveData.populationTypeIds.Count + " population types...");
         writer.WriteUInt8(saveData.populationTypeIds.Count);
         foreach(int popId in saveData.populationTypeIds) {
             writer.WriteUInt8(popId);
             yield return null;
         }
 
+        // Step 7 - Bulletin pool
+        Logger.Debug("Saving the bulletin pool and current bulletin...");
+        writer.WriteUInt16(saveData.bulletinList.Count);
+        foreach(BulletinsManager.Bulletin bulletin in saveData.bulletinList) {
+            writer.WriteUInt8(bulletin.eventId);
+            writer.WriteUInt16(bulletin.id);
+            writer.WriteUInt16(bulletin.minCycle);
+        }
+            // Current bulletin
+        writer.WriteUInt8(saveData.currentBulletin.eventId);
+        writer.WriteUInt16(saveData.currentBulletin.id);
+        writer.WriteUInt16(saveData.currentBulletin.minCycle);
+
+        // Step 8 - Event pool
+        Logger.Debug("Saving the event pool...");
+        writer.WriteUInt16(saveData.eventsPool.Count);
+        foreach (EventManager.EventMarker marker in saveData.eventsPool) {
+            writer.WriteUInt8(marker.eventId);
+            writer.WriteUInt16(marker.minCycle);
+            writer.WriteFloat(marker.time);
+        }
 
         // Last step - Close handler;
         writer.Close();
@@ -264,6 +285,32 @@ public class SaveManager : MonoBehaviour {
             diskSaveData.populationTypeIds.Add(reader.ReadUInt8());
         }
 
+        // Step 7 - Bulletin pool
+        Logger.Debug("Reading the bulletin pool and current bulletin...");
+        int bulletinCount = reader.ReadUInt16();
+        for (int i = 0; i < bulletinCount; i++) {
+            int eventId = reader.ReadUInt8();
+            diskSaveData.bulletinList.Add(
+                new BulletinsManager.Bulletin(reader.ReadUInt16(), reader.ReadUInt16()) { eventId = eventId }
+            );
+        }
+        int currentBulletinEId = reader.ReadUInt8();
+        diskSaveData.currentBulletin = new BulletinsManager.Bulletin(
+            reader.ReadUInt16(),
+            reader.ReadUInt16()
+        ) { eventId = currentBulletinEId };
+        
+        // Step 8 - Event pool
+        Logger.Debug("Reading the event pool...");
+        int eventPoolCount = reader.ReadUInt16();
+        for (int i = 0; i < eventPoolCount; i++) {
+            diskSaveData.eventsPool.Add(new EventManager.EventMarker() {
+                eventId = reader.ReadUInt8(),
+                minCycle = reader.ReadUInt16(),
+                time = reader.ReadFloat()
+            });
+        }
+
         // Last step - Close handler;
         Logger.Debug("Closing handler...");
         reader.Close();
@@ -360,6 +407,15 @@ public class SaveManager : MonoBehaviour {
                 display.InitializeMoods(popMan.populationTypeList);
             }
 
+            // Bulletins pool
+            BulletinsManager bullMan = GameManager.instance.bulletinsManager;
+            bullMan.SetBulletinPool(saveData.bulletinList);
+            bullMan.SetBulletin(saveData.currentBulletin);
+
+            // Events pool
+            EventManager eventMan = GameManager.instance.eventManager;
+            eventMan.eventsPool = saveData.eventsPool;
+
             // End of loading
             if (callback != null) {
                 callback.Invoke();
@@ -391,6 +447,9 @@ public class SaveManager : MonoBehaviour {
         public Dictionary<Population, PopulationManager.PopulationInformation> populations;
         public List<int> lockedBuildings;
         public List<Population> populationTypeList;
+        public List<BulletinsManager.Bulletin> bulletinList;
+        public BulletinsManager.Bulletin currentBulletin;
+        public List<EventManager.EventMarker> eventsPool;
 
         public GameData(
             GameObject[,,] _grid,
@@ -402,7 +461,10 @@ public class SaveManager : MonoBehaviour {
             float _cycleProgression,
             Dictionary<Population, PopulationManager.PopulationInformation> _populations,
             List<int> _lockedBuildings,
-            List<Population> _populationTypeList
+            List<Population> _populationTypeList,
+            List<BulletinsManager.Bulletin> _bulletinList,
+            BulletinsManager.Bulletin _currentBulletin,
+            List<EventManager.EventMarker> _eventsPool
         )
         {
             grid = _grid;
@@ -415,6 +477,9 @@ public class SaveManager : MonoBehaviour {
             populations = _populations;
             lockedBuildings = _lockedBuildings;
             populationTypeList = _populationTypeList;
+            bulletinList = _bulletinList;
+            currentBulletin = _currentBulletin;
+            eventsPool = _eventsPool;
         }
     }
 
@@ -426,6 +491,9 @@ public class SaveManager : MonoBehaviour {
         public List<PopulationSaveData> popSaveData;
         public List<int> lockedBuildings;
         public List<int> populationTypeIds = new List<int>();
+        public List<BulletinsManager.Bulletin> bulletinList = new List<BulletinsManager.Bulletin>();
+        public BulletinsManager.Bulletin currentBulletin;
+        public List<EventManager.EventMarker> eventsPool = new List<EventManager.EventMarker>();
 
         public float timeOfDay;
         public int cyclesPassed;
@@ -453,7 +521,14 @@ public class SaveManager : MonoBehaviour {
 
             // Unlocks
             lockedBuildings = gameData.lockedBuildings;
-            
+
+            // Bulletins pool
+            bulletinList = gameData.bulletinList;
+            currentBulletin = gameData.currentBulletin;
+
+            // Events pool
+            eventsPool = gameData.eventsPool;
+
             // Other data
             playerName = gameData.playerName;
             cityName = gameData.cityName;
