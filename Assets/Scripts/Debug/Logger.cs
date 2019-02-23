@@ -5,6 +5,7 @@ using System.IO;
 using System.Globalization;
 using System.Diagnostics;
 using UnityEngine;
+using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -14,6 +15,7 @@ public class Logger : MonoBehaviour
     StringBuilder builder = new StringBuilder();
     public type level;
     public string logFile = "stackolony.log";
+    public List<string> filters = new List<string>();
     public string locale = "fr-FR";
     public int callerLength = 18;
     public int methodLength = 12;
@@ -68,6 +70,21 @@ public class Logger : MonoBehaviour
             StackFrame sf = new StackFrame(2, true);
             string file = sf.GetFileName().Replace(Application.dataPath.Replace("/", "\\") + "\\Scripts\\", "");
             string method = sf.GetMethod().Name;
+            
+            // Keyword filters
+            if (loggerInstance.filters.Count > 0) {
+                bool exit = true;
+                foreach (string filter in loggerInstance.filters) {
+                    if (file.ToLower().Contains(filter.ToLower())) {
+                        exit = false;
+                    }
+                }
+                if (exit) {
+                    return;
+                }
+            }
+
+            // Formatting
             try {
                 caller =
                     file.Substring(0, Mathf.Min(file.Length, loggerInstance.callerLength)).PadRight(loggerInstance.callerLength)
