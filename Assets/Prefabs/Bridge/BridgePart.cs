@@ -28,4 +28,12 @@ public class BridgePart : MonoBehaviour {
     {
         ps.Stop();
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        Prop prop = other.GetComponent<Prop>();
+        if (prop != null)
+        {
+            prop.OnCollision();
+        }
+    }
 }

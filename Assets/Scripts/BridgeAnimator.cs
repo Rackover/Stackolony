@@ -35,6 +35,9 @@ public class BridgeAnimator : MonoBehaviour {
     {
         if (bridgeAnimationIndex < bridgeParts.Count)
         {
+            //Joue le son
+            GameManager.instance.soundManager.Play("CreateBridge");
+
             bridgeParts[bridgeAnimationIndex].GetComponent<Animator>().SetFloat("Speed", GameManager.instance.animationManager.bridgeCreationSpeed);
             bridgeAnimationIndex++;
         }
