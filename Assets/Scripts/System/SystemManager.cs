@@ -128,6 +128,11 @@ public class SystemManager : MonoBehaviour {
         yield return StartCoroutine(UpdateHousesInformations());
         yield return StartCoroutine(RecalculateJobs());
         yield return StartCoroutine(OnGridUpdate());
+        yield return StartCoroutine(RecalculateSpatioportInfluence());
+        yield return StartCoroutine(RecalculatePropagation());
+        yield return StartCoroutine(RecalculateNuisance());
+        yield return StartCoroutine(UpdateOverlay());
+        yield return StartCoroutine(RecalculateFireRisks());
         yield return StartCoroutine(GameManager.instance.achievementManager.achiever.CheckAllAchievements());
     }
 
@@ -139,13 +144,8 @@ public class SystemManager : MonoBehaviour {
         {
             if(block != null) block.OnGridUpdate();
         }
-        yield return StartCoroutine(RecalculateSpatioportInfluence());
-        yield return new WaitForSeconds(0.5f); //Clumsy, à changer rapidement, la propagation doit s'effectuer une fois que le spatioport a tout mis à jour
-        yield return StartCoroutine(RecalculatePropagation());
-        yield return StartCoroutine(RecalculateNuisance());
-        yield return StartCoroutine(UpdateOverlay());
-        yield return StartCoroutine(RecalculateFireRisks());
         systemResetted = false;
+        yield return null;
     }
 
     public IEnumerator UpdateOverlay()
@@ -455,7 +455,7 @@ public class SystemManager : MonoBehaviour {
 
     public IEnumerator RecalculateSpatioportInfluence()
     {
-        StartCoroutine(ResetSpatioportInfluence());
+        yield return StartCoroutine(ResetSpatioportInfluence());
         foreach (Spatioport spatioport in AllSpatioports.ToArray())
         {
             if(spatioport != null)
@@ -469,7 +469,7 @@ public class SystemManager : MonoBehaviour {
 
     public IEnumerator RecalculateNuisance()
     {
-        StartCoroutine(ResetNuisance());
+        yield return StartCoroutine(ResetNuisance());
         foreach (NuisanceGenerator nuisanceGenerator in AllNuisanceGenerators)
         {
             nuisanceGenerator.GenerateNuisance();

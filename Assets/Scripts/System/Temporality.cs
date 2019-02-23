@@ -13,20 +13,23 @@ public class Temporality : MonoBehaviour {
     public int timeScale; //Coefficient de vitesse d'écoulement du temps
     public int nbMicroCyclePerCycle = 3; //Combien de micro cycles s'écoulent le temps d'un cycle
     private float microDuration;
+    private int microCounter;
 
-    float cycleProgression; //Combien de secondes se sont ecoulées dans le cycle actuel
+    public float cycleProgression; //Combien de secondes se sont ecoulées dans le cycle actuel
     int savedTimeScale; //Variable utilisée pour redéfinir la vitesse du jeu quand le joueur annule la pause
     int lastYear = 1;
 
     void Start()
     {
         GetMicroDuration();
+        microCounter = 1;
         SetTimeScale(1);
     }
 
     void GetMicroDuration()
     {
-        microDuration = cycleDuration / nbMicroCyclePerCycle;
+        microDuration = (float)cycleDuration / (float)nbMicroCyclePerCycle;
+        Debug.Log(microDuration);
     }
 
     public float GetMicroCoef()
@@ -50,10 +53,9 @@ public class Temporality : MonoBehaviour {
     void Update() {
         if (cycleProgression < cycleDuration)
         {
-            if (cycleProgression >= microDuration)
+            if (cycleProgression >= microDuration*microCounter)
             {
                 AddMicroCycle();
-                microDuration+= microDuration;
             }
             cycleProgression+= timeScale*Time.deltaTime;
         }
@@ -95,6 +97,7 @@ public class Temporality : MonoBehaviour {
         if (!GameManager.instance.IsInGame()) { return; };
         StartCoroutine(GameManager.instance.systemManager.OnNewCycle());
         cycleNumber++;
+        microCounter = 1;
         GameManager.instance.timelineController.UpdateCycle(cycleNumber);
         GameManager.instance.eventManager.Renew(cycleNumber);
     }
@@ -102,6 +105,8 @@ public class Temporality : MonoBehaviour {
     public void AddMicroCycle()
     {
         if (!GameManager.instance.IsInGame()) { return; };
+        Debug.Log("New microcycle");
+        microCounter++;
         StartCoroutine(GameManager.instance.systemManager.OnNewMicrocycle());
     }
 
