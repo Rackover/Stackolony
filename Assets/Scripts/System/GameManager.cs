@@ -291,7 +291,8 @@ public class GameManager : MonoBehaviour
                         cityManager.cityName,
                         temporality.cycleNumber,
                         temporality.GetCurrentCycleProgression(),
-                        populationManager.populations
+                        populationManager.populations,
+                        cityManager.GetLockedBuildings()
                     )
                 );
             StartCoroutine(saveManager.WriteSaveData(

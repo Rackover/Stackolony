@@ -115,6 +115,14 @@ public class SaveManager : MonoBehaviour {
             }
         }
 
+        // Step 5 - Locks
+        Logger.Debug("Saving " + saveData.lockedBuildings.Count + " locks...");
+        writer.WriteUInt8(saveData.lockedBuildings.Count);
+        foreach (int buildingId in saveData.lockedBuildings) {
+            writer.WriteUInt8(buildingId);
+            yield return null;
+        }
+
         // Last step - Close handler;
         writer.Close();
         Logger.Info("Done in "+(Time.time-timeStart).ToString("n2")+" seconds");
@@ -227,6 +235,14 @@ public class SaveManager : MonoBehaviour {
             });
         }
 
+        // Step 5 - Locks
+        int locksCount = reader.ReadUInt8();
+        Logger.Debug("Reading " + locksCount + " locks...");
+        diskSaveData.lockedBuildings = new List<int>();
+        for (int i = 0; i < locksCount; i++) {
+            diskSaveData.lockedBuildings.Add(reader.ReadUInt8());
+            yield return null;
+        }
 
         // Last step - Close handler;
         Logger.Debug("Closing handler...");
@@ -300,6 +316,13 @@ public class SaveManager : MonoBehaviour {
                 };
             }
 
+            // Loading unlocks
+            CityManager city = GameManager.instance.cityManager;
+            city.ClearLocks();
+            foreach(int id in saveData.lockedBuildings) {
+                city.LockBuilding(id);
+            }
+
             // End of loading
             if (callback != null) {
                 callback.Invoke();
@@ -328,6 +351,7 @@ public class SaveManager : MonoBehaviour {
         public int cycleNumber;
         public float cycleProgression;
         public Dictionary<Population, PopulationManager.PopulationInformation> populations;
+        public List<int> lockedBuildings;
 
         public GameData(
             GameObject[,,] _grid,
@@ -336,7 +360,8 @@ public class SaveManager : MonoBehaviour {
             string _cityName,
             int _cycleNumber,
             float _cycleProgression,
-            Dictionary<Population, PopulationManager.PopulationInformation> _populations
+            Dictionary<Population, PopulationManager.PopulationInformation> _populations,
+            List<int> _lockedBuildings
         )
         {
             grid = _grid;
@@ -346,6 +371,7 @@ public class SaveManager : MonoBehaviour {
             cycleNumber = _cycleNumber;
             cycleProgression = _cycleProgression;
             populations = _populations;
+            lockedBuildings = _lockedBuildings;
         }
     }
 
@@ -355,6 +381,7 @@ public class SaveManager : MonoBehaviour {
         public Dictionary<Vector3Int, BlockSaveData> blockGrid;
         public List<KeyValuePair<Vector3Int,Vector3Int>> bridges;
         public List<PopulationSaveData> popSaveData;
+        public List<int> lockedBuildings;
 
         public float timeOfDay;
         public int cyclesPassed;
@@ -378,6 +405,9 @@ public class SaveManager : MonoBehaviour {
             // Population informations
             popSaveData = ConvertPopulationInformations(gameData.populations);
 
+            // Unlocks
+            lockedBuildings = gameData.lockedBuildings;
+
             // Other data
             playerName = gameData.playerName;
             cityName = gameData.cityName;
@@ -394,7 +424,8 @@ public class SaveManager : MonoBehaviour {
             int _cyclesPassed,
             string _playerName,
             string _cityName,
-            List<PopulationSaveData> _popSaveData
+            List<PopulationSaveData> _popSaveData,
+            List<int> _lockedBuildings
         )
         {
             gridSize = _gridSize;
@@ -405,6 +436,7 @@ public class SaveManager : MonoBehaviour {
             playerName = _playerName;
             cityName = _cityName;
             popSaveData = _popSaveData;
+            lockedBuildings = _lockedBuildings;
         }
         
         List<PopulationSaveData> ConvertPopulationInformations(Dictionary<Population, PopulationManager.PopulationInformation> populations)
