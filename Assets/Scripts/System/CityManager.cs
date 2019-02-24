@@ -124,6 +124,14 @@ public class CityManager : MonoBehaviour {
                 {
                     GameManager.instance.gridManagement.DestroyBlock(block);
                 }
+                else
+                {
+                    BridgeInfo bridge = GameManager.instance.gridManagement.grid[pos.x, i, pos.y].GetComponent<BridgeInfo>();
+                    if(bridge != null)
+                    {
+                        GameManager.instance.gridManagement.DestroyBridge(bridge.gameObject);
+                    }
+                }
             }
         }
         GameManager.instance.gridManagement.LayBlock(which, pos);
