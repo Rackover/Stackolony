@@ -370,7 +370,7 @@ public class SaveManager : MonoBehaviour {
                 List<PopulationManager.Citizen> citizens = new List<PopulationManager.Citizen>();
                 foreach(CitizenSaveData cSD in data.citizens) {
                     citizens.Add(new PopulationManager.Citizen() {
-                        name = name,
+                        name = cSD.name,
                         type = pop
                     });
                 }
