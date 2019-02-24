@@ -21,7 +21,7 @@ public class Temporality : MonoBehaviour {
     void Start()
     {
         GetMicroDuration();
-        SetTimeScale(1);
+        //SetTimeScale(1);
     }
 
     void GetMicroDuration()
