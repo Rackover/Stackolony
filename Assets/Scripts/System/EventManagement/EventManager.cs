@@ -22,6 +22,7 @@ public class EventManager : MonoBehaviour {
     int nextEvent = 0;
     bool triggerEventWhenPossible = false;
     float triggerTime = 0f;
+    int noEventsBefore = 255;
 
     public class GameEvent
     {
@@ -145,7 +146,13 @@ public class EventManager : MonoBehaviour {
         average /= GameManager.instance.populationManager.populationTypeList.Length;
 
         if (average < gameOverThreshold) {
-            TriggerEvent(1000);
+            TriggerEvent(1000, true);
+        }
+
+        // No events yet
+        if (currentCycle < noEventsBefore) {
+            Logger.Debug("Skipping event renewal for cycle " + currentCycle + " : no events before cycle " + noEventsBefore);
+            return;
         }
 
         // Random event per day
@@ -206,6 +213,7 @@ public class EventManager : MonoBehaviour {
         if (id == 1000 && GameManager.instance.DISABLE_GAME_OVER) {
             return;
         }
+
         StartCoroutine(WaitForEventAndTrigger(id, forceHappening));
     }
 
@@ -350,6 +358,10 @@ public class EventManager : MonoBehaviour {
                     minCycle = System.Convert.ToInt32(pool.Attributes["minCycle"].Value)
                 };
 
+                if (marker.minCycle < noEventsBefore) {
+                    noEventsBefore = marker.minCycle;
+                }
+
                 eventsPool.Add(marker);
             }
         }
@@ -360,7 +372,12 @@ public class EventManager : MonoBehaviour {
         eventsPool = eventsPool.OrderBy((a => rng.Next())).ToList();
 
         // Loading first cycle of Events
-        Renew(0);
+        if (eventsPool.Count != 0) {
+            Renew(0);
+        }
+        else {
+            Logger.Warn("Loaded zero event into the pool (?) - Please check the XML eventPool");
+        }
     }
 
     public void ClearListeners()

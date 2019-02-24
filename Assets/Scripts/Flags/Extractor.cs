@@ -25,7 +25,10 @@ public class Extractor : Occupator
 			if(m != null)
 			{
 				mine = m;
-				mine.Cage();
+				if(mine != oldMine)
+				{
+					mine.Cage();
+				} 
 				break;
 			}
 		}

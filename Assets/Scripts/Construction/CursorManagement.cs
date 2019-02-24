@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,6 +26,7 @@ public class CursorManagement : MonoBehaviour
     public float blockFallingSpeed = 1;
     public float blockRisingSpeed = 3;
     private Vector2 initialDragPos;
+    List<Block> highlightedBlocks = new List<Block>();
     [HideInInspector] public ScrollRect linkedScrollRect;
     [Space(5)]
 
@@ -33,7 +34,6 @@ public class CursorManagement : MonoBehaviour
     public Vector3Int posInGrid; //Position de la souris sur le terrain
     public Vector3 posInWorld;
     public bool isDragging;
-    List<Block> highlightedBlocks = new List<Block>();
 
     // Interface related events & funcs
     public bool couldDrag;
@@ -46,6 +46,7 @@ public class CursorManagement : MonoBehaviour
     Vector3Int savedPos;
     GameObject hoveredBlock;
     GameObject stackSelector; //La petite fléche qui se met au pied de la tour qu'on selectionne
+
 
     public void InitializeGameCursor()
     {
@@ -159,8 +160,9 @@ public class CursorManagement : MonoBehaviour
             }
         }
         // Highlighting block the cursor currently is on if we're in Bridge mode
-        else if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Block")) 
+        else if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Block"))
         {
+
             GameObject objective = hit.transform.gameObject;
             Vector3Int position = posInGrid;
             // If the player is bridging, we stuck the preview to the block he's dragging the bridge from 
@@ -316,14 +318,12 @@ public class CursorManagement : MonoBehaviour
 
     void HighlightBlock(GameObject block = null)
     {
-        Block foundBlock = block.GetComponent<Block>();
         if (foundBlock != null)
         {
-          //  foundBlock.overlayVisuals.Activate(highlightColor);
-            highlightedBlocks.Add(foundBlock);
+          highlightedBlocks.Add(foundBlock);
         }
     }
-
+    
     void ResetHighlightedBlocks()
     {
         foreach (Block block in highlightedBlocks)
@@ -331,7 +331,6 @@ public class CursorManagement : MonoBehaviour
             block.overlayVisuals.Deactivate();
         }
     }
-
     void DestroyBridgePreview()
     {
         foreach (GameObject bridgePreviewer in activeBridgePreviews)
@@ -434,7 +433,7 @@ public class CursorManagement : MonoBehaviour
         return coordinatesFound.ToArray();
     }
 
-
+  
     /// <summary>
     /// If the user had a blocklink in selectedBlock, will try to create a bridge between the previous selection and the current selection
     /// Else, will select the block as a candidate for bridging
@@ -535,7 +534,7 @@ public class CursorManagement : MonoBehaviour
 
     public void DuringDrag(Vector3Int _pos)
     {
-        if (selectedBlock != null)
+        if (selectedBlock != null && selectedBlock.scheme.isMovable && !selectedBlock.states.ContainsKey(State.OnFire))
         {
             if (_pos != savedPos)
             {
@@ -622,5 +621,3 @@ public class CursorManagement : MonoBehaviour
     }
     #endregion
 }
-
-
