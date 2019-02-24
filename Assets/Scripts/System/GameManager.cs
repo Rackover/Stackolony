@@ -332,8 +332,6 @@ public class GameManager : MonoBehaviour
     {
         if (IsInGame())
         {
-            oldTimescale = temporality.timeScale;
-            //temporality.SetTimeScale(0);
             temporalityInterface.PauseTime();
             isPaused = true;
         }
@@ -343,7 +341,6 @@ public class GameManager : MonoBehaviour
     {
         if (IsInGame())
         {
-            //temporality.SetTimeScale(Mathf.FloorToInt(1));
             temporalityInterface.PlayTime();
             isPaused = false;
         }
