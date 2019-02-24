@@ -34,8 +34,8 @@ public class SpatioportSpawner : MonoBehaviour {
         camController = FindObjectOfType<CameraController>();
         cameraShake = cineMan.gameObject.GetComponent<CameraShake>();
 
-        endPosition = Camera.main.transform.position;
-        endRotation = Camera.main.transform.rotation;
+        endPosition = camController.gameDummy.transform.position;
+        endRotation = camController.gameDummy.transform.rotation;
 
         camController.FreezeCameraPosition();
         camController.SetCameraPositionAndRotation(cameraDummy.transform.position, cameraDummy.transform.rotation);

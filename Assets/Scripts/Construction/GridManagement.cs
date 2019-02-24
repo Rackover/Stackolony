@@ -57,7 +57,17 @@ public class GridManagement : MonoBehaviour
         }
         else
         {
-            spawnPoint = WorldPositionToIndex(FindObjectOfType<Spawn>().transform.position);
+            GameObject spawnObject = spawn.gameObject;
+            spawnPoint = WorldPositionToIndex(spawnObject.transform.position);
+            Destroy(spawnObject);
+        }
+
+        // Init camera to spawn for cinematic purposes
+        CameraController camera = FindObjectOfType<CameraController>();
+        if (camera != null) {
+            Vector3 spawnPosition = IndexToWorldPosition(spawnPoint);
+            camera.transform.position = new Vector3(spawnPosition.x, camera.transform.position.y, spawnPosition.z);
+            //camera.SetCameraPositionAndRotation(camera.editorOnlyDummy.transform.position, camera.editorOnlyDummy.transform.rotation);
         }
 
         buildablePositions.Remove(new Vector2Int(spawnPoint.x, spawnPoint.z));
