@@ -284,32 +284,7 @@ public class GameManager : MonoBehaviour
         
         // Saves the game
         if (Input.GetKeyDown(KeyCode.M)) {
-            SaveManager.SaveData sd = new SaveManager.SaveData(
-                    new SaveManager.GameData(
-                        gridManagement.grid,
-                        gridManagement.bridgesList,
-                        player.name,
-                        cityManager.cityName,
-                        cityManager.isTutorialRun,
-                        temporality.cycleNumber,
-                        temporality.GetCurrentCycleProgression(),
-                        populationManager.populations,
-                        cityManager.GetLockedBuildings(),
-                        populationManager.populationTypeList.ToList(),
-                        bulletinsManager.GetBulletins(),
-                        bulletinsManager.GetBulletin(),
-                        eventManager.eventsPool
-                    )
-                );
-            StartCoroutine(saveManager.WriteSaveData(
-                sd,
-                delegate {
-                    FindObjectOfType<Notifications>().Notify(
-                        new Notifications.Notification("FINISHED SAVING", Color.green)
-                    );
-                    Logger.Debug("SAVE DATA : " + sd.ToString());
-                }
-            ));
+            Save();
         }
         
 
@@ -490,8 +465,11 @@ public class GameManager : MonoBehaviour
                         saveManager.ReadSaveData(
                             cityManager.cityName,
                             delegate {
-                                saveManager.LoadSaveData(saveManager.loadedData);
-                                isLoading = false;
+                                saveManager.LoadSaveData(saveManager.loadedData,
+                                    delegate {
+                                        isLoading = false;
+                                    }
+                                );
                             }
                         )
                     );
@@ -500,6 +478,35 @@ public class GameManager : MonoBehaviour
             )
         );
 
+    }
+
+    public void Save(System.Action callback=null)
+    {
+        SaveManager.SaveData sd = new SaveManager.SaveData(
+                new SaveManager.GameData(
+                    gridManagement.grid,
+                    gridManagement.bridgesList,
+                    player.name,
+                    cityManager.cityName,
+                    cityManager.isTutorialRun,
+                    temporality.cycleNumber,
+                    temporality.GetCurrentCycleProgression(),
+                    populationManager.populations,
+                    cityManager.GetLockedBuildings(),
+                    populationManager.populationTypeList.ToList(),
+                    bulletinsManager.GetBulletins(),
+                    bulletinsManager.GetBulletin(),
+                    eventManager.eventsPool
+                )
+            );
+        StartCoroutine(saveManager.WriteSaveData(
+            sd,
+            delegate {
+                if (callback != null) {
+                    callback.Invoke();
+                }
+            }
+        ));
     }
 
     public void ExitToMenu()
