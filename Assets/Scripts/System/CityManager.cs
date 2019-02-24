@@ -136,7 +136,7 @@ public class CityManager : MonoBehaviour {
         }
         GameManager.instance.gridManagement.LayBlock(which, pos);
 	}
-
+    
 	public void OnNewCycle()
 	{
         if(Random.Range(0f, 1f) < nestSpawnChance)
@@ -144,6 +144,16 @@ public class CityManager : MonoBehaviour {
 			SpawnEnvironmentBlock(nest.ID);
 		}
 	}
+
+    public List<int> GetLockedBuildings()
+    {
+        return lockedBuildings.ToArray().ToList();
+    }
+
+    public void ClearLocks()
+    {
+        lockedBuildings.Clear();
+    }
 
     public void LockBuilding(int id)
     {

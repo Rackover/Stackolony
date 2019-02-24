@@ -101,7 +101,8 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
         {
             tooltipGO = FindObjectOfType<TooltipGO>();
         }
-        tooltipGO.transform.position = pointerEventData.position + tooltipGO.shift;
+
+        tooltipGO.transform.position = pointerEventData.position;
 
         string txt = "";
         for (int i = 0; i < locs.Count; i++) {
@@ -132,7 +133,6 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
             txt += newStr;
         }
 
-        tooltipGO.Enable();
         tooltipGO.SetText(txt);
         isActive = true;
     }
@@ -141,8 +141,8 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
     {
         if (isActive)
         {
-            tooltipGO.transform.position = Input.mousePosition + new Vector3(tooltipGO.shift.x, tooltipGO.shift.y, 0);
-            tooltipGO.UpdateTooltipSizeAndPosition();
+            tooltipGO.Enable();
+            tooltipGO.UpdateToolTip(Input.mousePosition);
         }
     }
 

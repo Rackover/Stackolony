@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -242,10 +243,6 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.U)) {
             populationManager.SpawnCitizens(populationManager.populationTypeList[Mathf.FloorToInt(populationManager.populationTypeList.Length*Random.value)], 5);
         }
-        // Spawns 20 cit
-        if (Input.GetKeyDown(KeyCode.L)) {
-            populationManager.SpawnCitizens(populationManager.populationTypeList[0], 20);
-        }
 
         // Affect a block under the mouse
         if(Input.GetButtonDown("Select")) // LEFT MOUSE CLICK
@@ -287,18 +284,24 @@ public class GameManager : MonoBehaviour
         
         // Saves the game
         if (Input.GetKeyDown(KeyCode.M)) {
-            StartCoroutine(saveManager.WriteSaveData(
-                new SaveManager.SaveData(
-                    new SaveManager.GameData(
-                        gridManagement.grid,
-                        gridManagement.bridgesList,
-                        player.name,
-                        cityManager.cityName,
-                        temporality.cycleNumber,
-                        temporality.GetCurrentCycleProgression()
-                    )
+            Save();
+        }
+        
+
+        // Loads the game
+        if (Input.GetKeyDown(KeyCode.L)) {
+            saveManager.StartCoroutine(
+                saveManager.ReadSaveData(
+                    cityManager.cityName,
+                    delegate {
+                        saveManager.LoadSaveData(saveManager.loadedData, delegate {
+                            FindObjectOfType<Notifications>().Notify(
+                                new Notifications.Notification("FINISHED LOADING", Color.green)
+                            );
+                        });
+                    }
                 )
-            ));
+            );
         }
 
         if (Input.GetKeyDown(KeyCode.G)) {
@@ -466,8 +469,11 @@ public class GameManager : MonoBehaviour
                         saveManager.ReadSaveData(
                             cityManager.cityName,
                             delegate {
-                                saveManager.LoadSaveData(saveManager.loadedData);
-                                isLoading = false;
+                                saveManager.LoadSaveData(saveManager.loadedData,
+                                    delegate {
+                                        isLoading = false;
+                                    }
+                                );
                             }
                         )
                     );
@@ -476,6 +482,35 @@ public class GameManager : MonoBehaviour
             )
         );
 
+    }
+
+    public void Save(System.Action callback=null)
+    {
+        SaveManager.SaveData sd = new SaveManager.SaveData(
+                new SaveManager.GameData(
+                    gridManagement.grid,
+                    gridManagement.bridgesList,
+                    player.name,
+                    cityManager.cityName,
+                    cityManager.isTutorialRun,
+                    temporality.cycleNumber,
+                    temporality.GetCurrentCycleProgression(),
+                    populationManager.populations,
+                    cityManager.GetLockedBuildings(),
+                    populationManager.populationTypeList.ToList(),
+                    bulletinsManager.GetBulletins(),
+                    bulletinsManager.GetBulletin(),
+                    eventManager.eventsPool
+                )
+            );
+        StartCoroutine(saveManager.WriteSaveData(
+            sd,
+            delegate {
+                if (callback != null) {
+                    callback.Invoke();
+                }
+            }
+        ));
     }
 
     public void ExitToMenu()

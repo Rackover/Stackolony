@@ -263,14 +263,14 @@ public class OverlayManager : MonoBehaviour
 
     void InitOverlays()
     {
+        overlays[OverlayType.Default] = new Default();
+
         overlays[OverlayType.Type] = new Type();
         overlays[OverlayType.FireRisks] = new FireRisks();
         overlays[OverlayType.Power] = new Power();
         overlays[OverlayType.Food] = new Food();
         overlays[OverlayType.Habitation] = new Habitation();
         overlays[OverlayType.Density] = new Density();
-        overlays[OverlayType.Default] = new Default();
-
         LoadOverlaysDatas();
     }
 

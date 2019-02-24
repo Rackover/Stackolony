@@ -6,12 +6,14 @@ using UnityEngine.UI;
 public class BulletinDisplay : MonoBehaviour {
 
     public bool hasUnread = false;
-    public GameObject notification;
     public GameObject bulletinWindow;
-
     public Text title;
     public Text subTitle;
     public Text text;
+
+    public Image buttonBackground;
+    public Color unreadColor;
+    public Color readColor;
 
     public float buttonDisableTimespan = 1f;
 
@@ -24,6 +26,7 @@ public class BulletinDisplay : MonoBehaviour {
     {
         animator = bulletinWindow.GetComponent<Animator>();
         button = GetComponent<Button>();
+        StartCoroutine(RefreshBulletin());
     }
 
     public IEnumerator RefreshBulletin()
@@ -32,8 +35,13 @@ public class BulletinDisplay : MonoBehaviour {
             currentBulletin == null ||
             GameManager.instance.bulletinsManager.GetBulletin().id != currentBulletin.id
         ) {
-            currentBulletin = GameManager.instance.bulletinsManager.GetBulletin();
             Localization loc = GameManager.instance.localization;
+
+            while (loc.GetLanguages().Count <= 0) {
+                yield return null;
+            }
+            
+            currentBulletin = GameManager.instance.bulletinsManager.GetBulletin();
 
             title.text = loc.GetLineFromCategory("bulletinTitle", "bulletin" + currentBulletin.id.ToString()).ToUpper();
             subTitle.text = loc.GetLineFromCategory("bulletinSubtitle", "bulletin" + currentBulletin.id.ToString());
@@ -57,7 +65,12 @@ public class BulletinDisplay : MonoBehaviour {
     public void SetUnread(bool unread)
     {
         hasUnread = unread;
-        notification.SetActive(unread);
+        buttonBackground.color = readColor;
+        
+        if(unread)
+        {
+            buttonBackground.color = unreadColor;
+        }
     }
 
     IEnumerator AnimateFor(float seconds)

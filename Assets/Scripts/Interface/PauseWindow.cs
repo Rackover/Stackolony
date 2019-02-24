@@ -23,6 +23,11 @@ public class PauseWindow : MonoBehaviour {
         FindObjectOfType<Interface>().SpawnOptionsWindow();
     }
 
+    public void Save()
+    {
+        FindObjectOfType<Interface>().SpawnSaveWindow();
+    }
+
     public void ExitToMenu()
     {
         GameManager.instance.ExitToMenu();

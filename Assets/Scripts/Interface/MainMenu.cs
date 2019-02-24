@@ -33,6 +33,13 @@ public class MainMenu : MonoBehaviour {
         GameManager.instance.NewGame();
     }
 
+    public void StartSavedGame()
+    {
+        HideMenu();
+        DisplayLoading();
+        GameManager.instance.Load();
+    }
+
     void DisplayLoading()
     {
         Instantiate(loadingObject);

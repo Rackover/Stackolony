@@ -193,9 +193,11 @@ public class MoodDisplay : MonoBehaviour {
             }
 
             float value = -Mathf.Round(popMan.populations[population].lastMoodChange.Get(affect));
-            faceTooltip.AddLocalizedLine(
-                new Tooltip.Entry(affect.ToString(), "moodAffect", value >= 0f ? (value > 0f ? Tooltip.informationType.Positive : Tooltip.informationType.Neutral) : Tooltip.informationType.Negative, value.ToString("+0;-#"))
-            );
+            if (value != 0f) {
+                faceTooltip.AddLocalizedLine(
+                    new Tooltip.Entry(affect.ToString(), "moodAffect", value > 0f ? Tooltip.informationType.Positive : Tooltip.informationType.Negative, value.ToString("+0;-#"))
+                );
+            }
         }
 
 
@@ -290,9 +292,9 @@ public class MoodDisplay : MonoBehaviour {
             else if (Input.mousePosition.y - dragMargin > rect.position.y) {
                 ChangeChildOrder(-1);
             }
-        }
 
-        popMan.ChangePopulationPriority(population, transform.GetSiblingIndex());
+            popMan.ChangePopulationPriority(population, transform.GetSiblingIndex());
+        }
     }
 
     void ChangeChildOrder(int by)
