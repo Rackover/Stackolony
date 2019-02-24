@@ -146,7 +146,7 @@ public class BuildingMenuItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
                 }
                 else
                 {
-                    isBeingMoved = true;
+                    isBeingMoved = false;
                     clicked = false;
                     ri.color = new Color(ri.color.r, ri.color.g, ri.color.b, 1f);
                 }
