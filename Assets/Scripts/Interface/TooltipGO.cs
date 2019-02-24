@@ -83,9 +83,9 @@ public class TooltipGO : MonoBehaviour {
         Vector2Int shiftDirection = new Vector2Int(1, 1);
 
         //UPDATE POSITION
-        if (self.position.x >= canvas.sizeDelta.x/2)
+        if (self.position.x >= Screen.width/2)
         {
-            if (self.position.y >= canvas.sizeDelta.y/2)
+            if (self.position.y >= Screen.height/2)
             {
                 SetAlignment(horizontalAlignment.RIGHT, verticalAlignment.TOP);
                 shiftDirection.x = -1;
@@ -100,7 +100,7 @@ public class TooltipGO : MonoBehaviour {
         }
         else
         {
-            if (self.position.y >= canvas.sizeDelta.y/2)
+            if (self.position.y >= Screen.height/2)
             {
                 SetAlignment(horizontalAlignment.LEFT, verticalAlignment.TOP);
                 shiftDirection.x = 1;
