@@ -121,7 +121,7 @@ public class BuildingMenuItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
             draggingBuilding = null;
         }
         else if (!isLocked){
-            if (Input.GetButton("Select") && concerned && !GameManager.instance.cursorManagement.isDragging && !isBeingDragged) {
+            if (Input.GetButtonDown("Select") && concerned && !GameManager.instance.cursorManagement.isDragging && !isBeingDragged) {
                 isBeingDragged = true;
                 ri.color = new Color(ri.color.r, ri.color.g, ri.color.b, 0f);
             }
