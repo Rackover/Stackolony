@@ -30,6 +30,15 @@ public class SpriteOverlayManager : MonoBehaviour
 		}
 	}
 
+	public void End()
+	{
+		foreach(Sign s in signs)
+		{
+			Destroy(s.image.gameObject);
+		}
+		signs.Clear();
+	}
+
 	public void KillSign(int id)
 	{
 		signs[id].image.enabled = false;

@@ -38,6 +38,12 @@ public class RoamerManager : MonoBehaviour
 
 	void Update()
 	{
+		if(!GameManager.instance.IsInGame())
+		{
+			End();
+			return;
+		}
+
 		timer += Time.deltaTime;
 		if(timer > spawnRate)
 		{
@@ -61,6 +67,15 @@ public class RoamerManager : MonoBehaviour
 			rb.currentSpeed = rb.baseSpeed * simulationTimeScale;
 			rb.visual.animator.SetFloat("Speed", simulationTimeScale);
 		}
+	}
+
+	public void End()
+	{
+		foreach(RoamerBehavior rb in roamers)
+		{
+			Destroy(rb.gameObject);
+		}
+		roamers.Clear();
 	}
 
 	public void NewRoamer(int which)
