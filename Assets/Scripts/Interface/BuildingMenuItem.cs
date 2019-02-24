@@ -107,7 +107,7 @@ public class BuildingMenuItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
         }
 
         // DRAG
-        if (clicked || isBeingDragged && !isLocked && !GameManager.instance.cursorManagement.cursorOnUI)
+        if ((clicked || isBeingDragged) && !isLocked && !GameManager.instance.cursorManagement.cursorOnUI)
         {
 
             if (draggingBuilding == null)
