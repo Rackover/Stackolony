@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f712d07e9274a0741974426a00f1931d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cityName: Valenciennes
+  cityName: Valenciennales
   isTutorialRun: 1
   minesAtStart: 4
   nestsAtStart: 3
@@ -59,12 +59,5 @@ MonoBehaviour:
   moodValues:
     goodNotationTreshold: -5
     badNotationTreshold: -10
-    wrongPopulationType: -2
-    noFood: -3
-    noOccupations: -2
-    noPower: -2
-    damaged: -2
-    everythingFine: 3
-    noHouse: -20
   mine: {fileID: 11400000, guid: 77656a532bb8e9c4686fa0a18848db10, type: 2}
   nest: {fileID: 11400000, guid: 0a28974a39514c1419738066aa8c3b2d, type: 2}

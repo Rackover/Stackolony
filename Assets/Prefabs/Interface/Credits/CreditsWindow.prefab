@@ -150,13 +150,13 @@ EdgeCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_EdgeRadius: 7.02
+  m_EdgeRadius: 10.89
   m_Points:
-  - {x: -690, y: 322.5}
-  - {x: 690, y: 322.5}
-  - {x: 690, y: -322.5}
-  - {x: -690, y: -322.5}
-  - {x: -690, y: 322.5}
+  - {x: -900, y: 322.5}
+  - {x: 900, y: 322.5}
+  - {x: 900, y: -322.5}
+  - {x: -900, y: -322.5}
+  - {x: -900, y: 322.5}
 --- !u!114 &114143449141117724
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -482,22 +482,22 @@ MonoBehaviour:
   staff:
   - name: "In\xE8s CHOUQI"
     function: 
-    logo: {fileID: 21300000, guid: 55bbce6cf4606f04487e4477507634eb, type: 3}
+    logo: {fileID: 21300000, guid: a608a9d3dd4d5d54ba48baa2cfc4e83d, type: 3}
   - name: Jules DUVETTE
     function: 
-    logo: {fileID: 21300000, guid: 35ca5d07ead80da43818a247ee45e9ca, type: 3}
+    logo: {fileID: 21300000, guid: 1facbcd4a8b67b041af9fa83da23a253, type: 3}
   - name: Louis PERDU
     function: 
-    logo: {fileID: 21300000, guid: 08edade08b7a094439740ba75f638607, type: 3}
+    logo: {fileID: 21300000, guid: 878374c9587bd8041a4c991ed341ad24, type: 3}
   - name: Nabil KHALDI
     function: 
-    logo: {fileID: 21300000, guid: 1839d3ee5c50a394985e43fdf6b64245, type: 3}
+    logo: {fileID: 21300000, guid: fc183f268de0deb4e9233cb8ae065556, type: 3}
   - name: Loan PREVOND
     function: 
-    logo: {fileID: 21300000, guid: 668af1749bf92534cb32f95904406711, type: 3}
+    logo: {fileID: 21300000, guid: fbd27289af7755a40ab6c76e759fa39d, type: 3}
   - name: Rackover
     function: 
-    logo: {fileID: 21300000, guid: 03a5f0784f3c3164da2972a3c7afda67, type: 3}
+    logo: {fileID: 21300000, guid: ad1dfb0035df2de41b0d7e4f25448ac8, type: 3}
   container: {fileID: 1423097598634006}
   creditStaffPrefab: {fileID: 1125620129581838, guid: 2c158075623e21c49b5640b6bec6d4b2,
     type: 2}
