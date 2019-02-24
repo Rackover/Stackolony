@@ -512,6 +512,8 @@ public class GameManager : MonoBehaviour
 
     public void ExitToMenu()
     {
+        roamerManager.End();
+        FindObjectOfType<SpriteOverlayManager>().End();
         SceneManager.LoadScene(menuSceneName);
     }
 

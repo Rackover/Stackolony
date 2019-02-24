@@ -63,6 +63,15 @@ public class RoamerManager : MonoBehaviour
 		}
 	}
 
+	public void End()
+	{
+		foreach(RoamerBehavior rb in roamers)
+		{
+			Destroy(rb.gameObject);
+		}
+		roamers.Clear();
+	}
+
 	public void NewRoamer(int which)
 	{
 		// Get the reference to a random bridge
