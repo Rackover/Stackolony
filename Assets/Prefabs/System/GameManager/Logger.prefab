@@ -51,8 +51,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4cc054d340ef134bb957113e7345acc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  level: 1
+  level: 0
   logFile: stackolony.log
+  filters: []
   locale: fr-FR
   callerLength: 24
   methodLength: 18

@@ -22,6 +22,7 @@ public class EventManager : MonoBehaviour {
     int nextEvent = 0;
     bool triggerEventWhenPossible = false;
     float triggerTime = 0f;
+    int noEventsBefore = 255;
 
     public class GameEvent
     {
@@ -146,6 +147,12 @@ public class EventManager : MonoBehaviour {
 
         if (average < gameOverThreshold) {
             TriggerEvent(1000, true);
+        }
+
+        // No events yet
+        if (currentCycle < noEventsBefore) {
+            Logger.Debug("Skipping event renewal for cycle " + currentCycle + " : no events before cycle " + noEventsBefore);
+            return;
         }
 
         // Random event per day
@@ -350,6 +357,10 @@ public class EventManager : MonoBehaviour {
                     time = System.Convert.ToSingle(xEventMarker.Attributes["time"].Value),
                     minCycle = System.Convert.ToInt32(pool.Attributes["minCycle"].Value)
                 };
+
+                if (marker.minCycle < noEventsBefore) {
+                    noEventsBefore = marker.minCycle;
+                }
 
                 eventsPool.Add(marker);
             }
