@@ -6,13 +6,14 @@ using TMPro;
 
 public class TooltipGO : MonoBehaviour {
 
-    public enum alignmentOptionsHorizontal { RIGHT, LEFT};
-    public enum alignmentOptionsVertical { TOP, BOTTOM };
+    public enum horizontalAlignment { RIGHT, LEFT};
+    public enum verticalAlignment { TOP, BOTTOM };
 
     [Header("=== REFERENCES ===")]
     public TextMeshProUGUI myText;
-    public RectTransform myRectTransform;
-    public RectTransform myCanvasTransform;
+    public RectTransform self;
+    public RectTransform canvas;
+    public Image background;
 
     [Header("Value")]
     public string text;
@@ -31,6 +32,11 @@ public class TooltipGO : MonoBehaviour {
 
     public TooltipIcon[] tooltipIcons;
 
+    void Start()
+    {
+        background = GetComponent<Image>();
+    }
+
     public IEnumerator RefreshBuildingTooltips()
     {
         foreach (Block block in GameManager.instance.systemManager.AllBlocks) {
@@ -43,13 +49,13 @@ public class TooltipGO : MonoBehaviour {
     public void Disable()
     {
         myText.enabled = false;
-        GetComponent<Image>().enabled = false;
+        background.enabled = false;
     }
 
     public void Enable()
     {
         myText.enabled = true;
-        GetComponent<Image>().enabled = true;
+        background.enabled = true;
     }
 
     public void SetText(string textToSet)
@@ -68,73 +74,83 @@ public class TooltipGO : MonoBehaviour {
     public void SetText()
     {
         myText.text = text;
-        UpdateTooltipSizeAndPosition();
     }
 
-    public void UpdatePosition()
+    public void UpdateToolTip(Vector2 pos)
     {
         // Default alignment
-        SetAlignment(alignmentOptionsHorizontal.LEFT, alignmentOptionsVertical.TOP);
+        SetAlignment(horizontalAlignment.LEFT, verticalAlignment.TOP);
+        Vector2Int shiftDirection = new Vector2Int(1, 1);
 
         //UPDATE POSITION
-        if (myRectTransform.localPosition.x > 0) {
-            if (myRectTransform.localPosition.y - myRectTransform.sizeDelta.y < -(myCanvasTransform.sizeDelta.y / 2)) {
-                //Le texte est trop bas et passe sous l'écran, il faut le monter
-                SetAlignment(alignmentOptionsHorizontal.RIGHT, alignmentOptionsVertical.BOTTOM);
+        if (self.position.x >= canvas.sizeDelta.x/2)
+        {
+            if (self.position.y >= canvas.sizeDelta.y/2)
+            {
+                SetAlignment(horizontalAlignment.RIGHT, verticalAlignment.TOP);
+                shiftDirection.x = -1;
+                shiftDirection.y = -1;
             }
-            else {
-                SetAlignment(alignmentOptionsHorizontal.RIGHT, alignmentOptionsVertical.TOP);
+            else
+            {
+                SetAlignment(horizontalAlignment.RIGHT, verticalAlignment.BOTTOM);
+                shiftDirection.x = -1;
+                shiftDirection.y = 1;
             }
         }
-        else {
-            if (myRectTransform.localPosition.y - myRectTransform.sizeDelta.y < -(myCanvasTransform.sizeDelta.y / 2)) {
-                //Le texte est trop bas et passe sous l'écran, il faut le monter
-                SetAlignment(alignmentOptionsHorizontal.LEFT, alignmentOptionsVertical.BOTTOM);
+        else
+        {
+            if (self.position.y >= canvas.sizeDelta.y/2)
+            {
+                SetAlignment(horizontalAlignment.LEFT, verticalAlignment.TOP);
+                shiftDirection.x = 1;
+                shiftDirection.y = -1;
             }
-        }
-    }
-
-    //Recupere le texte et transforme l'infobulle pour qu'elle soit visible
-    public void UpdateTooltipSizeAndPosition()
-    {
-        UpdatePosition();
+            else
+            {
+                SetAlignment(horizontalAlignment.LEFT, verticalAlignment.BOTTOM);
+                shiftDirection.x = 1;
+                shiftDirection.y = 1;
+            }
+        }      
+        transform.position = new Vector2(pos.x + (shift.x * shiftDirection.x), pos.y + (shift.y * shiftDirection.y));
     }
 
 
     //Aligne le texte sur la droite ou la gauche (Change ses points de pivots et l'alignement du texte)
-    public void SetAlignment(alignmentOptionsHorizontal alignmentX,alignmentOptionsVertical alignmentY = alignmentOptionsVertical.TOP)
+    public void SetAlignment(horizontalAlignment alignmentX,verticalAlignment alignmentY = verticalAlignment.TOP)
     {
         RectTransform parentT = myText.GetComponentInParent<RectTransform>();
 
         switch (alignmentX)
         {
-            case alignmentOptionsHorizontal.RIGHT:
-                if (alignmentY == alignmentOptionsVertical.TOP)
+            case horizontalAlignment.RIGHT:
+                if (alignmentY == verticalAlignment.TOP)
                 {
                    // myText.alignment = (TextAlignmentOptions) TextAnchor.UpperRight;
                     parentT.anchorMin = new Vector2(0.5f, 1);
                     parentT.anchorMax = new Vector2(0.5f, 1);
                     parentT.pivot = new Vector2(0.5f, 1);
-                    myRectTransform.pivot = new Vector2(1, 1);
+                    self.pivot = new Vector2(1, 1);
                 } else
                 {
                   //  myText.alignment = (TextAlignmentOptions)TextAnchor.LowerRight;
                     parentT.anchorMin = new Vector2(0.5f, 0);
                     parentT.anchorMax = new Vector2(0.5f, 0);
                     parentT.pivot = new Vector2(0.5f, 0);
-                    myRectTransform.pivot = new Vector2(1, 0);
+                    self.pivot = new Vector2(1, 0);
                 }
                 break;
 
-            case alignmentOptionsHorizontal.LEFT:
-                myRectTransform.pivot = new Vector2(0, 0);
-                if (alignmentY == alignmentOptionsVertical.TOP)
+            case horizontalAlignment.LEFT:
+                self.pivot = new Vector2(0, 0);
+                if (alignmentY == verticalAlignment.TOP)
                 {
                     //myText.alignment = (TextAlignmentOptions)TextAnchor.UpperLeft;
                     parentT.anchorMin = new Vector2(0.5f, 1);
                     parentT.anchorMax = new Vector2(0.5f, 1);
                     parentT.pivot = new Vector2(0.5f, 1);
-                    myRectTransform.pivot = new Vector2(0, 1);
+                    self.pivot = new Vector2(0, 1);
                 }
                 else
                 {
@@ -142,7 +158,7 @@ public class TooltipGO : MonoBehaviour {
                     parentT.anchorMin = new Vector2(0.5f, 0);
                     parentT.anchorMax = new Vector2(0.5f, 0);
                     parentT.pivot = new Vector2(0.5f, 0);
-                    myRectTransform.pivot = new Vector2(0, 0);
+                    self.pivot = new Vector2(0, 0);
                 }
                 break;
         }
