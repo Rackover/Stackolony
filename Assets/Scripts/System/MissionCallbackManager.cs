@@ -50,6 +50,7 @@ public class MissionCallbackManager : MonoBehaviour
             }
         }
         foodProvider.foodLeft = foodLeft;
+        GameManager.instance.systemManager.foodUpdated = true;
         GameManager.instance.missionManager.EndMission(myMission);
         yield return null;
     }
@@ -67,7 +68,7 @@ public class MissionCallbackManager : MonoBehaviour
                 house.occupatorsInRange.Add(linkedOccupator);
             }
         }
-
+        GameManager.instance.systemManager.occupatorsUpdated = true;
         GameManager.instance.missionManager.EndMission(myMission);
         yield return null;
     }
