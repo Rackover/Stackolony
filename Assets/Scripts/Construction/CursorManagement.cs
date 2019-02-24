@@ -11,12 +11,11 @@ public class CursorManagement : MonoBehaviour
     [Header("Prefabs")]
     public GameObject projectorPrefab;
     public GameObject stackSelectorPrefab;  //Prefab de la petite fléche qui se met au pied de la tour qu'on selectionne
-    public GameObject highlighter; // Curseur permettant de surligner / mettre en valeur des blocks (exemple : lors du traçage de pont ou de la délétion)
-    public GameObject bridgeHighlighter;
     public GameObject bridgePreview;
 
     [Space(5)]
     [Header("=== SYSTEM ===")]
+    public Color highlightColor;
     public List<GameObject> activeBridgePreviews = new List<GameObject>(); //Liste contenant les preview de pont
     public bool isBridging = false;
     public Block selectedBlock; //Le block selectionné par le joueur
@@ -34,6 +33,7 @@ public class CursorManagement : MonoBehaviour
     public Vector3Int posInGrid; //Position de la souris sur le terrain
     public Vector3 posInWorld;
     public bool isDragging;
+    List<Block> highlightedBlocks = new List<Block>();
 
     // Interface related events & funcs
     public bool couldDrag;
@@ -44,11 +44,8 @@ public class CursorManagement : MonoBehaviour
 
     float timer;
     Vector3Int savedPos;
-    GameObject[] activeHighlighters; //Liste contenant plusieurs highlighters actifs
-    List<GameObject> permanentHighlighter = new List<GameObject>();
     GameObject hoveredBlock;
     GameObject stackSelector; //La petite fléche qui se met au pied de la tour qu'on selectionne
-
 
     public void InitializeGameCursor()
     {
@@ -144,18 +141,26 @@ public class CursorManagement : MonoBehaviour
 
     void ClearFeedback()
     {
-        HighlightBlock();
-        HighlightMultipleBlocks();
         if (activeBridgePreviews.Count > 0)
             DestroyBridgePreview();
+        ResetHighlightedBlocks();
     }
 
     void UpdateFeedback(RaycastHit hit)
     {
-        // Highlighting block the cursor currently is on if we're in Bridge mode
-        if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Block")) 
+        if (isDragging)
         {
-
+            if (selectedBlock != null)
+            {
+                HighlightBlock(selectedBlock.gameObject);
+            } else
+            {
+                ClearFeedback();
+            }
+        }
+        // Highlighting block the cursor currently is on if we're in Bridge mode
+        else if (hit.transform.gameObject.layer == LayerMask.NameToLayer("Block")) 
+        {
             GameObject objective = hit.transform.gameObject;
             Vector3Int position = posInGrid;
             // If the player is bridging, we stuck the preview to the block he's dragging the bridge from 
@@ -163,7 +168,6 @@ public class CursorManagement : MonoBehaviour
                 objective = selectedBlock.gameObject;
                 position = selectedBlock.gridCoordinates;
             }
-            ClearFeedback();
             HighlightBlock(objective);
             Vector3Int[] linkableBlocksList = CheckBridgeableBlocks(position);
             if (linkableBlocksList.Length > 0) {
@@ -295,7 +299,6 @@ public class CursorManagement : MonoBehaviour
     void StartPlanningBridge(GameObject startingObject)
     {
         selectedBlock = startingObject.GetComponent<Block>();
-        GeneratePermanentHighlighter(selectedBlock.gridCoordinates);
         isBridging = true;
     }
 
@@ -303,7 +306,6 @@ public class CursorManagement : MonoBehaviour
     {
         ResetSelection();
         ClearFeedback();
-        ClearPermanentHighlighter();
         isBridging = false;
     }
 
@@ -312,24 +314,24 @@ public class CursorManagement : MonoBehaviour
         selectedBlock = null;
     }
 
-    public void ResetHighlighter()
-    {
-        highlighter.transform.parent = this.transform.parent;
-        bridgeHighlighter.transform.parent = this.transform.parent;
-    }
-
     void HighlightBlock(GameObject block = null)
     {
-        if (highlighter && block != null) {
-            highlighter.SetActive(true);
-            Vector3 bounds = block.GetComponent<BoxCollider>().bounds.size;
-            highlighter.transform.position = block.transform.position;
-            highlighter.transform.SetParent(block.transform);
-        }
-        else if (highlighter){
-            highlighter.SetActive(false);
+        Block foundBlock = block.GetComponent<Block>();
+        if (foundBlock != null)
+        {
+          //  foundBlock.overlayVisuals.Activate(highlightColor);
+            highlightedBlocks.Add(foundBlock);
         }
     }
+
+    void ResetHighlightedBlocks()
+    {
+        foreach (Block block in highlightedBlocks)
+        {
+            block.overlayVisuals.Deactivate();
+        }
+    }
+
     void DestroyBridgePreview()
     {
         foreach (GameObject bridgePreviewer in activeBridgePreviews)
@@ -432,58 +434,6 @@ public class CursorManagement : MonoBehaviour
         return coordinatesFound.ToArray();
     }
 
-    void GeneratePermanentHighlighter(Vector3Int coordinate)
-    {
-        GameObject newHighlighter = Instantiate(bridgeHighlighter, highlighter.transform.parent);
-        newHighlighter.transform.position = GameManager.instance.gridManagement.grid[coordinate.x, coordinate.y, coordinate.z].transform.position;
-        newHighlighter.GetComponent<Highlighter>().SetGreenHighlighter();
-        newHighlighter.SetActive(true);
-        permanentHighlighter.Add(newHighlighter);
-    }
-
-    void ClearPermanentHighlighter()
-    {
-        foreach (GameObject go in permanentHighlighter)
-        {
-            Destroy(go);
-        }
-    }
-    
-    void HighlightMultipleBlocks(Vector3Int[] blocksCoordinates = null) //Instantie un highlighter pour plusieurs blocks, si aucun argument n'est spécifié alors il clean tout
-    {
-        // Clean les highlighters
-        if (activeHighlighters != null && activeHighlighters.Length > 0)
-        {
-            foreach (GameObject activeHighlighter in activeHighlighters)
-            {
-                Destroy(activeHighlighter);
-            }
-            activeHighlighters = new GameObject[0]; //Clean de l'array contenant les highlighters
-        }
-
-        if (blocksCoordinates != null)
-        {
-            //Genere les nouveaux highlighters
-            activeHighlighters = new GameObject[blocksCoordinates.Length];
-            int i = 0;
-            foreach (Vector3Int coordinate in blocksCoordinates)
-            {
-                if (GameManager.instance.gridManagement.grid[coordinate.x, coordinate.y, coordinate.z] != null)
-                {
-                    GameObject newHighlighter = Instantiate(bridgeHighlighter, highlighter.transform.parent);
-                    newHighlighter.transform.parent = GameManager.instance.gridManagement.grid[coordinate.x, coordinate.y, coordinate.z].transform;
-                    newHighlighter.transform.localPosition = Vector3.zero;
-                    newHighlighter.SetActive(true);
-                    activeHighlighters[i] = newHighlighter; 
-                    i++;
-                }
-                else
-                {
-                    Debug.LogWarning("Coordinate is out of grid, can't draw the highlighter");
-                }
-            }
-        }
-    }
 
     /// <summary>
     /// If the user had a blocklink in selectedBlock, will try to create a bridge between the previous selection and the current selection
@@ -521,7 +471,6 @@ public class CursorManagement : MonoBehaviour
                             //Les conditions sont remplies et on peut tracer le pont
                             //Call de la fonction pour tracer un pont
                             GameManager.instance.gridManagement.CreateBridge(selectedBlock, destinationCandidate);
-                            ClearPermanentHighlighter();
                         } else {
                             CursorError.Invoke("bridgeAlreadyFound");
                         }
@@ -538,7 +487,6 @@ public class CursorManagement : MonoBehaviour
                 CursorError.Invoke("selfBridging");
             }
             ResetSelection();
-            ClearPermanentHighlighter();
         }
         
     }
