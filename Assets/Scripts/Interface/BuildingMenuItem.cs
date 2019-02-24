@@ -15,6 +15,7 @@ public class BuildingMenuItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
     bool concerned = false;
     bool isLocked = false;
     bool clicked = false;
+    bool isBeingMoved = false;
     bool lastState;
 
     // REFERENCES
@@ -108,6 +109,7 @@ public class BuildingMenuItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
         // DRAG
         if (clicked || isBeingDragged && !isLocked && !GameManager.instance.cursorManagement.cursorOnUI)
         {
+
             if (draggingBuilding == null)
             {
                 draggingBuilding = GameManager.instance.gridManagement.CreateBlockFromId(blockId).GetComponent<Block>();
@@ -126,10 +128,13 @@ public class BuildingMenuItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
         }
         else if (!isLocked)
         {
-            if (Input.GetButtonDown("Select") && concerned && !GameManager.instance.cursorManagement.isDragging && !isBeingDragged)
+            if (Input.GetButtonDown("Select") && !GameManager.instance.cursorManagement.isDragging && !isBeingDragged)
             {
-                isBeingDragged = true;
-                ri.color = new Color(ri.color.r, ri.color.g, ri.color.b, 0f);
+                if(concerned)
+                {
+                    isBeingDragged = true;
+                    ri.color = new Color(ri.color.r, ri.color.g, ri.color.b, 0f);
+                }
             }
             else if (Input.GetButtonUp("Select"))
             {
@@ -137,14 +142,20 @@ public class BuildingMenuItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
                 {
                     isBeingDragged = false;
                     clicked = true;
+                    isBeingMoved = true;
                 }
                 else
                 {
+                    isBeingMoved = true;
                     clicked = false;
                     ri.color = new Color(ri.color.r, ri.color.g, ri.color.b, 1f);
                 }
-                
             }
+        }
+
+        if(isBeingMoved)
+        {
+            GameManager.instance.cursorManagement.DuringDrag(GameManager.instance.cursorManagement.posInGrid);
         }
 	}
 
