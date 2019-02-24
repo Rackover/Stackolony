@@ -161,7 +161,7 @@ public class Options
         options[Option.grabSensitivity] = new SliderOption(0.1f, 0.8f, 2f);
         options[Option.musicVolume] = new SliderOption(0f, 1f, 1f);
         options[Option.sfxVolume] = new SliderOption(0f, 0.2f, 1f);
-        options[Option.voiceVolume] = new SliderOption(0f, 0.2f, 1f);
+        options[Option.voiceVolume] = new SliderOption(0f, 4f, 10f);
 
         // Localization is a bit tricky to load
         SelectOption<Localization.Lang> langOption = new SelectOption<Localization.Lang>(GameManager.instance.localization.GetLanguages().ToArray());
