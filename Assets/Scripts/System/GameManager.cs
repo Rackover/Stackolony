@@ -420,7 +420,6 @@ public class GameManager : MonoBehaviour
         temporality.SetTimeScale(2);
 
         roamerManager.End();
-        FindObjectOfType<SpriteOverlayManager>().End();
 
         // Clear events
         eventManager.ClearListeners();
@@ -515,6 +514,7 @@ public class GameManager : MonoBehaviour
 
     public void ExitToMenu()
     {
+        EndGame();
         SceneManager.LoadScene(menuSceneName);
     }
 

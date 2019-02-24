@@ -314,6 +314,7 @@ public class CursorManagement : MonoBehaviour
 
     public void ResetHighlighter()
     {
+        bridgeHighlighter.transform.parent = this.transform.parent;
         if (highlighter != null)
         {
             highlighter.transform.parent = this.transform.parent;

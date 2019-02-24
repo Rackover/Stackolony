@@ -82,8 +82,9 @@ public class RoamerManager : MonoBehaviour
 	{
 		// Get the reference to a random bridge
 		Vector3 hShift = new Vector3(0f, 0.25f, 0f);
-
-		BridgeInfo bridge = GameManager.instance.gridManagement.bridgesList[Random.Range(0, GameManager.instance.gridManagement.bridgesList.Count)].GetComponent<BridgeInfo>();
+        BridgeInfo bridge = GameManager.instance.gridManagement.bridgesList[
+            Random.Range(0, GameManager.instance.gridManagement.bridgesList.Count-1)
+        ].GetComponent<BridgeInfo>();
 
 		// If the bridge is on a disabled block, cancel the Roamer spawn
 		Block linkedBlock = GameManager.instance.gridManagement.grid[bridge.origin.x, bridge.origin.y, bridge.origin.z].GetComponent<Block>();
