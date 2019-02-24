@@ -38,6 +38,12 @@ public class RoamerManager : MonoBehaviour
 
 	void Update()
 	{
+		if(!GameManager.instance.IsInGame())
+		{
+			End();
+			return;
+		}
+
 		timer += Time.deltaTime;
 		if(timer > spawnRate)
 		{

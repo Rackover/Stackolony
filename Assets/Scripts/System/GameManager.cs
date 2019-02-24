@@ -419,6 +419,9 @@ public class GameManager : MonoBehaviour
         temporality.SetTimeOfDay(20);
         temporality.SetTimeScale(2);
 
+        roamerManager.End();
+        FindObjectOfType<SpriteOverlayManager>().End();
+
         // Clear events
         eventManager.ClearListeners();
         cursorManagement.ClearListeners();
@@ -512,8 +515,6 @@ public class GameManager : MonoBehaviour
 
     public void ExitToMenu()
     {
-        roamerManager.End();
-        FindObjectOfType<SpriteOverlayManager>().End();
         SceneManager.LoadScene(menuSceneName);
     }
 
