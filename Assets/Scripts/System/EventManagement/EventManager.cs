@@ -146,7 +146,7 @@ public class EventManager : MonoBehaviour {
         average /= GameManager.instance.populationManager.populationTypeList.Length;
 
         if (average < gameOverThreshold) {
-            TriggerEvent(1000);
+            TriggerEvent(1000, true);
         }
 
         // No events yet
@@ -213,6 +213,7 @@ public class EventManager : MonoBehaviour {
         if (id == 1000 && GameManager.instance.DISABLE_GAME_OVER) {
             return;
         }
+
         StartCoroutine(WaitForEventAndTrigger(id, forceHappening));
     }
 

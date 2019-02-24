@@ -215,7 +215,7 @@ public class GameManager : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.Delete)) {
-            eventManager.TriggerEvent(1000);
+            eventManager.TriggerEvent(1000, true);
         }
 
         if (Input.GetKeyDown(KeyCode.KeypadPlus)) {
