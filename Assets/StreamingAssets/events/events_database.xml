@@ -43,7 +43,7 @@
 		<choice id="1">
 			INCREASE_MOOD_FOR_POPULATION(population:worker,duration:3,amount:2);
 			A=RANDOM_BUILDING(id:24);
-			ADD_FLAG_MODIFIER_ON_BUILDING_FOR_DURATION(building:A,flagModifier:Occupator_-3_0_0,duration:3);
+			ADD_FLAG_MODIFIER_ON_BUILDING_FOR_DURATION(building:A,flagModifier:Occupator_0_-1_0,duration:3);
 		</choice>
 		<choice id="2">
 			DECREASE_MOOD_FOR_POPULATION(population:worker,duration:3,amount:3);
@@ -145,7 +145,7 @@
 	<event id="14" population="worker" emotion="Good">
 		<choice id="1">
 		A=RANDOM_BUILDING(id:24);
-		ADD_FLAG_MODIFIER_ON_BUILDING_FOR_DURATION(building:A,flagModifier:Occupator_5_0,duration:3);
+		ADD_FLAG_MODIFIER_ON_BUILDING_FOR_DURATION(building:A,flagModifier:Occupator_0_2,duration:3);
 		ADD_FLAG_MODIFIER_ON_BUILDING_FOR_DURATION(building:A,flagModifier:NuisanceGenerator_2_2,duration:3);
 		</choice>
 		<choice id="2">
@@ -193,7 +193,7 @@
 		<choice id="1">
 		INCREASE_MOOD_FOR_POPULATION(population:artist,duration:2,amount:1);
 		A=RANDOM_BUILDING(id:21);
-		ADD_FLAG_MODIFIER_ON_BUILDING_FOR_DURATION(building:A,flagModifier:Occupator_3_0,duration:2);
+		ADD_FLAG_MODIFIER_ON_BUILDING_FOR_DURATION(building:A,flagModifier:Occupator_0_-1,duration:2);
 		</choice>
 		<choice id="2">
 		DECREASE_MOOD_FOR_POPULATION(population:artist,duration:3,amount:2);
@@ -203,7 +203,7 @@
 		<choice id="1">
 		INCREASE_MOOD_FOR_POPULATION(population:military,duration:5,amount:3);
 		A=RANDOM_BUILDING(id:15);
-		ADD_FLAG_MODIFIER_ON_BUILDING_FOR_DURATION(building:A,flagModifier:Occupator_3_0,duration:5);
+		ADD_FLAG_MODIFIER_ON_BUILDING_FOR_DURATION(building:A,flagModifier:Occupator_0_2,duration:5);
 		</choice>
 		<choice id="2">
 		B=RANDOM_HOUSE(population:military);

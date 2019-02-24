@@ -206,9 +206,14 @@ public class GridManagement : MonoBehaviour
             Block blockUnderPos = gameObjectUnderPos.GetComponent<Block>();
             if (blockUnderPos != null)
             {
-                if (!blockUnderPos.scheme.canBuildAbove && coordinates.y > groundPosition.y - 1)
+                if (!blockUnderPos.scheme.canBuildAbove && (coordinates.y != groundPosition.y-1))
                 {
                     if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError.Invoke("cannotBuildAboveThis"); }
+                    return false;
+                }
+                if (!blockUnderPos.scheme.isMovable && coordinates.y == groundPosition.y-1)
+                {
+                    if (shouldDisplayInformation) { GameManager.instance.cursorManagement.CursorError.Invoke("cannotBuildHere"); }
                     return false;
                 }
             }
