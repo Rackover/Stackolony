@@ -587,7 +587,7 @@ public class CursorManagement : MonoBehaviour
 
     public void DuringDrag(Vector3Int _pos)
     {
-        if (selectedBlock != null)
+        if (selectedBlock != null && selectedBlock.scheme.isMovable && !selectedBlock.states.ContainsKey(State.OnFire))
         {
             if (_pos != savedPos)
             {
