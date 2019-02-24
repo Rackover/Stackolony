@@ -132,14 +132,15 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
             txt += newStr;
         }
 
+        tooltipGO.Enable();
         tooltipGO.SetText(txt);
         isActive = true;
     }
 
     public void Update()
     {
-        if (isActive) {
-            tooltipGO.Enable();
+        if (isActive)
+        {
             tooltipGO.transform.position = Input.mousePosition + new Vector3(tooltipGO.shift.x, tooltipGO.shift.y, 0);
             tooltipGO.UpdateTooltipSizeAndPosition();
         }

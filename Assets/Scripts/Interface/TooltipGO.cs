@@ -42,12 +42,14 @@ public class TooltipGO : MonoBehaviour {
 
     public void Disable()
     {
+        Debug.Log("Disable Tooltip");
         myText.enabled = false;
         GetComponent<Image>().enabled = false;
     }
 
     public void Enable()
     {
+        Debug.Log("Enable Tooltip");
         myText.enabled = true;
         GetComponent<Image>().enabled = true;
     }
