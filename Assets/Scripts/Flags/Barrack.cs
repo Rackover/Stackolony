@@ -28,7 +28,10 @@ public class Barrack : Occupator {
 			if(n != null)
 			{
 				nest = n;
-				if(nest != oldNest) nest.Cage();
+				if(nest != oldNest)
+				{
+					nest.Cage();
+				} 
 				break;
 			}
 		}

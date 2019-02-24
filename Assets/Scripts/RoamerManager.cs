@@ -86,10 +86,16 @@ public class RoamerManager : MonoBehaviour
 		GameObject bridgeObject = GameManager.instance.gridManagement.bridgesList[
             Random.Range(0, GameManager.instance.gridManagement.bridgesList.Count-1)
         ];
-		if(bridgeObject == null) return;
+		if(bridgeObject == null)
+		{
+			return;
+		}
 
         BridgeInfo bridge = bridgeObject.GetComponent<BridgeInfo>();
-		if(bridge == null) return;
+		if(bridge == null) 
+		{
+			return;
+		}
 
 		// If the bridge is on a disabled block, cancel the Roamer spawn
 		Block linkedBlock = GameManager.instance.gridManagement.grid[bridge.origin.x, bridge.origin.y, bridge.origin.z].GetComponent<Block>();
