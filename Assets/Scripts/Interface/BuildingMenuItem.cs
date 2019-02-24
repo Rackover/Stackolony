@@ -14,6 +14,7 @@ public class BuildingMenuItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
     bool isBeingDragged = false;
     bool concerned = false;
     bool isLocked = false;
+    bool clicked = false;
     bool lastState;
 
     // REFERENCES
@@ -90,7 +91,7 @@ public class BuildingMenuItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
     void Update () 
     {
-        // Lock check
+        // LOCK CHECK
         bool currentState = GameManager.instance.cityManager.IsLocked(blockId); 
         if (lastState != currentState)
         {
@@ -104,30 +105,45 @@ public class BuildingMenuItem : MonoBehaviour, IPointerEnterHandler, IPointerExi
             else Unlock();  
         }
 
-        // Drag
-        if (isBeingDragged && !isLocked && !GameManager.instance.cursorManagement.cursorOnUI) {
+        // DRAG
+        if (clicked || isBeingDragged && !isLocked && !GameManager.instance.cursorManagement.cursorOnUI)
+        {
             if (draggingBuilding == null)
             {
                 draggingBuilding = GameManager.instance.gridManagement.CreateBlockFromId(blockId).GetComponent<Block>();
                 draggingBuilding.Pack();
                 draggingBuilding.transform.position = GameManager.instance.cursorManagement.posInWorld;
             }
+
             GameManager.instance.cursorManagement.selectedBlock = draggingBuilding;
             GameManager.instance.cursorManagement.draggingNewBlock = true;
             GameManager.instance.cursorManagement.linkedScrollRect = parentScrollRect;
             GameManager.instance.cursorManagement.StartDrag(draggingBuilding);
 
             isBeingDragged = false;
+            clicked = false;
             draggingBuilding = null;
         }
-        else if (!isLocked){
-            if (Input.GetButtonDown("Select") && concerned && !GameManager.instance.cursorManagement.isDragging && !isBeingDragged) {
+        else if (!isLocked)
+        {
+            if (Input.GetButtonDown("Select") && concerned && !GameManager.instance.cursorManagement.isDragging && !isBeingDragged)
+            {
                 isBeingDragged = true;
                 ri.color = new Color(ri.color.r, ri.color.g, ri.color.b, 0f);
             }
-            if (Input.GetButtonUp("Select")) {
-                ri.color = new Color(ri.color.r, ri.color.g, ri.color.b, 1f);
-                isBeingDragged = false;
+            else if (Input.GetButtonUp("Select"))
+            {
+                if(concerned)
+                {
+                    isBeingDragged = false;
+                    clicked = true;
+                }
+                else
+                {
+                    clicked = false;
+                    ri.color = new Color(ri.color.r, ri.color.g, ri.color.b, 1f);
+                }
+                
             }
         }
 	}
