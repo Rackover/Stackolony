@@ -140,7 +140,13 @@ public class EventDisplay : MonoBehaviour {
                 if (GameManager.instance.player.options.GetBool(Options.Option.animatedCitizens)) {
                     displayer.Unstage();
                 }
-                FindObjectOfType<TooltipGO>().Disable();
+                try {
+                    FindObjectOfType<TooltipGO>().Disable();
+                }
+                catch {
+                    // Sometimes the tooltip destroys too early
+                    // This is okay
+                }
                 GameManager.instance.UnPause();
                 GetComponent<Image>().enabled = false;
                 StopAllCoroutines();

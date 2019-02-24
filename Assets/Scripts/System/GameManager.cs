@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
     public AnimationManager animationManager;
     public AchievementManager achievementManager;
     public RoamerManager roamerManager;
+    public EnvironmentalFX environmentalFX;
 
     [Space(1)]
     [Header("INTERFACE")]
@@ -138,7 +139,9 @@ public class GameManager : MonoBehaviour
         if (animationManager == null) animationManager = FindObjectOfType<AnimationManager>();
         if (achievementManager == null) achievementManager = FindObjectOfType<AchievementManager>();
         if (roamerManager == null) roamerManager = FindObjectOfType<RoamerManager>();
+        if (environmentalFX == null) environmentalFX = FindObjectOfType<EnvironmentalFX>();
         
+
         // INTERFACE
         if (localization == null) localization = FindObjectOfType<Localization>();
         if (displayerManager == null) displayerManager = FindObjectOfType<DisplayerManager>();
