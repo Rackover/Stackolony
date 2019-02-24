@@ -15,6 +15,8 @@ public class SystemManager : MonoBehaviour {
     public List<FireRiskGenerator> AllFireRiskGenerators = new List<FireRiskGenerator>();
 
     private bool systemResetted;
+    public bool occupatorsUpdated;
+    public bool foodUpdated;
 
 
     /* FONCTIONNEMENT DU SYSTEME 
@@ -119,17 +121,27 @@ public class SystemManager : MonoBehaviour {
         {
             if(block != null) block.OnNewMicroycle();
         }
-
+        yield return StartCoroutine(RecalculateSpatioportInfluence());
+        yield return StartCoroutine(RecalculatePropagation());
         yield return StartCoroutine(UpdateHousesInformations());
+
+        foodUpdated = false;
         yield return StartCoroutine(RecalculateFoodConsumption());
+        while (!foodUpdated)
+        {
+            yield return null;
+        }
+        occupatorsUpdated = false;
         yield return StartCoroutine(RecalculateOccupators());
+        while (!occupatorsUpdated)
+        {
+            yield return null;
+        }
         yield return StartCoroutine(UpdateHousesInformations());
         yield return StartCoroutine(RecalculateHabitation(GameManager.instance.temporality.GetMicroCoef()));
         yield return StartCoroutine(UpdateHousesInformations());
         yield return StartCoroutine(RecalculateJobs());
         yield return StartCoroutine(OnGridUpdate());
-        yield return StartCoroutine(RecalculateSpatioportInfluence());
-        yield return StartCoroutine(RecalculatePropagation());
         yield return StartCoroutine(RecalculateNuisance());
         yield return StartCoroutine(UpdateOverlay());
         yield return StartCoroutine(RecalculateFireRisks());
@@ -414,6 +426,10 @@ public class SystemManager : MonoBehaviour {
     public IEnumerator RecalculateOccupators()
     {
         yield return StartCoroutine(ResetOccupators());
+        if (AllOccupators.Count <= 0)
+        {
+            occupatorsUpdated = true;
+        }
         foreach (Occupator occupator in AllOccupators.ToArray())
         {
             if(occupator != null)
@@ -428,6 +444,10 @@ public class SystemManager : MonoBehaviour {
     public IEnumerator RecalculateFoodConsumption()
     {
         yield return StartCoroutine(ResetFoodConsumption());
+        if (AllFoodProviders.Count <= 0)
+        {
+            foodUpdated = true;
+        }
         foreach (FoodProvider foodProvider in AllFoodProviders.ToArray())
         {
             if(foodProvider != null)

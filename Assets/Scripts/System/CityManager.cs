@@ -327,8 +327,7 @@ public class CityManager : MonoBehaviour {
                 sortedHabitations.Add(new KeyValuePair<House, PopulationManager.MoodEvolution>(notedHabitation.Key, notedHabitation.Value));
             }
             // Sorting
-            sortedHabitations.Sort((x, y) => -Mathf.FloorToInt(-y.Value.ToFloat()));
-            
+            sortedHabitations = sortedHabitations.OrderBy(x => -x.Value.ToFloat()).ToList();
             topHabitations[pop] = sortedHabitations;
         }
     }
@@ -366,7 +365,6 @@ public class CityManager : MonoBehaviour {
         }
         return null;
     }
-
 
     //Return an int, the bigger it is, the more attractive is the house
     public PopulationManager.MoodEvolution GetHouseNotation(House house, Population populationType)
@@ -422,7 +420,6 @@ public class CityManager : MonoBehaviour {
         }
 
 
-
         foreach (Occupator occupator in house.occupatorsInRange)
         {
             foreach (Population pop in occupator.acceptedPopulation)
@@ -473,7 +470,6 @@ public class CityManager : MonoBehaviour {
         {
             notation.Add(MoodAffect.habitationBuff , notationModifier.amount);
         }
-       
         return notation;
     }
     
