@@ -319,7 +319,6 @@ public class CursorManagement : MonoBehaviour
         Block foundBlock = block.GetComponent<Block>();
         if (foundBlock != null)
         {
-          //  foundBlock.overlayVisuals.Activate(highlightColor);
             highlightedBlocks.Add(foundBlock);
         }
     }

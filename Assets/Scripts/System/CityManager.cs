@@ -327,7 +327,6 @@ public class CityManager : MonoBehaviour {
                 sortedHabitations.Add(new KeyValuePair<House, PopulationManager.MoodEvolution>(notedHabitation.Key, notedHabitation.Value));
             }
             // Sorting
-            //sortedHabitations.Sort((x, y) => -Mathf.FloorToInt(-y.Value.ToFloat()));
             sortedHabitations = sortedHabitations.OrderBy(x => -x.Value.ToFloat()).ToList();
             topHabitations[pop] = sortedHabitations;
         }
@@ -365,20 +364,6 @@ public class CityManager : MonoBehaviour {
             return result;
         }
         return null;
-    }
-
-    void DisplayBestHouses(Population pop)
-    {
-        foreach(KeyValuePair<Population, List<KeyValuePair<House, PopulationManager.MoodEvolution>>> value in topHabitations)
-        {
-            if (value.Key == GameManager.instance.populationManager.GetPopulationByCodename("scientist"))
-            {
-                foreach (KeyValuePair<House, PopulationManager.MoodEvolution> key in value.Value)
-                {
-                    Debug.Log("House " + key.Key.name + " has a value of " + key.Value.ToFloat());
-                }
-            }
-        }
     }
 
     //Return an int, the bigger it is, the more attractive is the house
