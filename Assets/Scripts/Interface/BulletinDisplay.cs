@@ -60,14 +60,11 @@ public class BulletinDisplay : MonoBehaviour {
     public void SetUnread(bool unread)
     {
         hasUnread = unread;
-
+        buttonBackground.color = readColor;
+        
         if(unread)
         {
             buttonBackground.color = unreadColor;
-        }
-        else
-        {
-            buttonBackground.color = readColor;
         }
     }
 

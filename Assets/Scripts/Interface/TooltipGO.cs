@@ -80,8 +80,7 @@ public class TooltipGO : MonoBehaviour {
     {
         // Default alignment
         SetAlignment(horizontalAlignment.LEFT, verticalAlignment.TOP);
-        int xDir = 1;
-        int yDir = 1;
+        Vector2Int shiftDirection = new Vector2Int(1, 1);
 
         //UPDATE POSITION
         if (self.position.x >= canvas.sizeDelta.x/2)
@@ -89,14 +88,14 @@ public class TooltipGO : MonoBehaviour {
             if (self.position.y >= canvas.sizeDelta.y/2)
             {
                 SetAlignment(horizontalAlignment.RIGHT, verticalAlignment.TOP);
-                xDir = -1;
-                yDir = -1;
+                shiftDirection.x = -1;
+                shiftDirection.y = -1;
             }
             else
             {
                 SetAlignment(horizontalAlignment.RIGHT, verticalAlignment.BOTTOM);
-                xDir = -1;
-                yDir = 1;
+                shiftDirection.x = -1;
+                shiftDirection.y = 1;
             }
         }
         else
@@ -104,17 +103,17 @@ public class TooltipGO : MonoBehaviour {
             if (self.position.y >= canvas.sizeDelta.y/2)
             {
                 SetAlignment(horizontalAlignment.LEFT, verticalAlignment.TOP);
-                xDir = 1;
-                yDir = -1;
+                shiftDirection.x = 1;
+                shiftDirection.y = -1;
             }
             else
             {
                 SetAlignment(horizontalAlignment.LEFT, verticalAlignment.BOTTOM);
-                xDir = 1;
-                yDir = 1;
+                shiftDirection.x = 1;
+                shiftDirection.y = 1;
             }
         }      
-        transform.position = new Vector2(pos.x + (shift.x * xDir), pos.y + (shift.y * yDir));
+        transform.position = new Vector2(pos.x + (shift.x * shiftDirection.x), pos.y + (shift.y * shiftDirection.y));
     }
 
 

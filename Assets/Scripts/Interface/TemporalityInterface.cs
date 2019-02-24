@@ -7,12 +7,10 @@ public class TemporalityInterface : MonoBehaviour {
     [Header("=== REFERENCES ===")]
     [Space(1)]
     public Text timeText;
-    //public GameObject dayNightDisplay;
     public GameObject timescaleButtonHolder;
     public Button pauseButton;
     public Button playButton;
     public Button playFasterButton;
-    //public Button playFastestButton;
 
     int currentSpeed;
 
@@ -75,21 +73,6 @@ public class TemporalityInterface : MonoBehaviour {
         PlayTimeSound(2);
     }
 
-/*
-    public void PlayTimeFastest()
-    {
-        Temporality temporality = GameManager.instance.temporality;
-        temporality.SetTimeScale(4);
-        EnableButtonsExcept(playFastestButton);
-    }
-
-
-    //Met à jour l'afficheur jour/nuit 
-    public void UpdateDayNightDisplay(float cycleProgressionInPercent)
-    {
-        dayNightDisplay.GetComponent<RectTransform>().rotation = Quaternion.Euler(new Vector3(0, 0, (90 - (cycleProgressionInPercent * 3.6f))%360));
-    }
-*/
     // Makes sure the temporality interface looks normal by disabling
     // one button (the one of the current temporality) : play, pause or playfaster
     void DisableOneButton()
