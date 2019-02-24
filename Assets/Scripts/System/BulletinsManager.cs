@@ -101,4 +101,19 @@ public class BulletinsManager : MonoBehaviour {
     {
         return currentBulletin;
     }
+
+    public List<Bulletin> GetBulletins()
+    {
+        return bulletinList.ToArray().ToList();
+    }
+
+    public void SetBulletin(Bulletin bulletin)
+    {
+        currentBulletin = bulletin;
+    }
+
+    public void SetBulletinPool(List<Bulletin> bulletins)
+    {
+        bulletinList = bulletins;
+    }
 }
