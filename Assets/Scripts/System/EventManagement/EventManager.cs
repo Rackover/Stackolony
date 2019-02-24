@@ -15,9 +15,9 @@ public class EventManager : MonoBehaviour {
     public System.Action<GameEvent> NewEvent;
     public float chanceIncreasePerCycle = 0.33f;
     public float gameOverThreshold = 0.25f;
+    public List<EventMarker> eventsPool = new List<EventMarker>();
 
     Dictionary<int, GameEvent> events = new Dictionary<int, GameEvent>();
-    List<EventMarker> eventsPool = new List<EventMarker>();
     float chances = 0f;
     int nextEvent = 0;
     bool triggerEventWhenPossible = false;
@@ -111,7 +111,7 @@ public class EventManager : MonoBehaviour {
         }
     }
 
-    class EventMarker
+    public class EventMarker
     {
         public int minCycle;
         public int eventId;

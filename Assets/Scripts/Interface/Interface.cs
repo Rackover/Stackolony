@@ -17,7 +17,8 @@ public class Interface : MonoBehaviour {
     public GameObject optionsWindow;
     public GameObject creditsWindow;
     public GameObject pauseWindow;
-    
+    public GameObject saveWindow;
+
     public void SpawnOptionsWindow()
     {
         Instantiate(optionsWindow, this.transform);
@@ -31,5 +32,10 @@ public class Interface : MonoBehaviour {
     public void SpawnPauseWindow()
     {
         Instantiate(pauseWindow, this.transform);
+    }
+
+    public void SpawnSaveWindow()
+    {
+        GameObject saveWin = Instantiate(saveWindow, this.transform);
     }
 }

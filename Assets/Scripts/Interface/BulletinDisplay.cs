@@ -35,8 +35,13 @@ public class BulletinDisplay : MonoBehaviour {
             currentBulletin == null ||
             GameManager.instance.bulletinsManager.GetBulletin().id != currentBulletin.id
         ) {
-            currentBulletin = GameManager.instance.bulletinsManager.GetBulletin();
             Localization loc = GameManager.instance.localization;
+
+            while (loc.GetLanguages().Count <= 0) {
+                yield return null;
+            }
+            
+            currentBulletin = GameManager.instance.bulletinsManager.GetBulletin();
 
             title.text = loc.GetLineFromCategory("bulletinTitle", "bulletin" + currentBulletin.id.ToString()).ToUpper();
             subTitle.text = loc.GetLineFromCategory("bulletinSubtitle", "bulletin" + currentBulletin.id.ToString());

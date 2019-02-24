@@ -128,6 +128,11 @@ public class SystemManager : MonoBehaviour {
         yield return StartCoroutine(UpdateHousesInformations());
         yield return StartCoroutine(RecalculateJobs());
         yield return StartCoroutine(OnGridUpdate());
+        yield return StartCoroutine(RecalculateSpatioportInfluence());
+        yield return StartCoroutine(RecalculatePropagation());
+        yield return StartCoroutine(RecalculateNuisance());
+        yield return StartCoroutine(UpdateOverlay());
+        yield return StartCoroutine(RecalculateFireRisks());
         yield return StartCoroutine(GameManager.instance.achievementManager.achiever.CheckAllAchievements());
     }
 
@@ -139,13 +144,9 @@ public class SystemManager : MonoBehaviour {
         {
             if(block != null) block.OnGridUpdate();
         }
-        yield return StartCoroutine(RecalculateSpatioportInfluence());
-        yield return new WaitForSeconds(0.5f); //Clumsy, à changer rapidement, la propagation doit s'effectuer une fois que le spatioport a tout mis à jour
-        yield return StartCoroutine(RecalculatePropagation());
-        yield return StartCoroutine(RecalculateNuisance());
-        yield return StartCoroutine(UpdateOverlay());
-        yield return StartCoroutine(RecalculateFireRisks());
+		
         systemResetted = false;
+        yield return null;
     }
 
     public IEnumerator UpdateOverlay()
@@ -352,7 +353,7 @@ public class SystemManager : MonoBehaviour {
 
     public IEnumerator CalculateHouseInformation()
     {
-        foreach (House house in AllHouses)
+        foreach (House house in AllHouses.ToArray())
         {
             house.UpdateHouseInformations();
         }
@@ -363,7 +364,7 @@ public class SystemManager : MonoBehaviour {
     {
         yield return StartCoroutine(ResetFireRisks());
         yield return new WaitForEndOfFrame();
-        foreach (FireRiskGenerator fg in AllFireRiskGenerators)
+        foreach (FireRiskGenerator fg in AllFireRiskGenerators.ToArray())
         {
             fg.Invoke("GenerateFireRisks", 0f);
         }
@@ -455,7 +456,7 @@ public class SystemManager : MonoBehaviour {
 
     public IEnumerator RecalculateSpatioportInfluence()
     {
-        StartCoroutine(ResetSpatioportInfluence());
+        yield return StartCoroutine(ResetSpatioportInfluence());
         foreach (Spatioport spatioport in AllSpatioports.ToArray())
         {
             if(spatioport != null)
@@ -469,8 +470,9 @@ public class SystemManager : MonoBehaviour {
 
     public IEnumerator RecalculateNuisance()
     {
-        StartCoroutine(ResetNuisance());
+        yield return StartCoroutine(ResetNuisance());
         foreach (NuisanceGenerator nuisanceGenerator in AllNuisanceGenerators)
+
         {
             nuisanceGenerator.GenerateNuisance();
             yield return new WaitForEndOfFrame();
@@ -482,7 +484,7 @@ public class SystemManager : MonoBehaviour {
     IEnumerator ResetBlocksPower()
     {
         Logger.Debug("Resetting block power ");
-        foreach (Block block in AllBlocksRequiringPower)
+        foreach (Block block in AllBlocksRequiringPower.ToArray())
         {
             block.hiddenPower = 0;
         }
@@ -492,7 +494,7 @@ public class SystemManager : MonoBehaviour {
     IEnumerator ResetFireRisks()
     {
         Logger.Debug("Resetting fire risks");
-        foreach (Block block in AllBlocks)
+        foreach (Block block in AllBlocks.ToArray())
         {
             block.fireRiskPercentage = 0;
         }
@@ -502,7 +504,7 @@ public class SystemManager : MonoBehaviour {
     IEnumerator ResetJobs()
     {
         Logger.Debug("Resetting jobs");
-        foreach (Occupator occupator in AllOccupators)
+        foreach (Occupator occupator in AllOccupators.ToArray())
         {
             occupator.affectedCitizen.Clear();
         }
@@ -516,7 +518,7 @@ public class SystemManager : MonoBehaviour {
 
     IEnumerator ResetOccupators()
     {
-        foreach (House house in AllHouses)
+        foreach (House house in AllHouses.ToArray())
         {
             house.occupatorsInRange.Clear();
         }
@@ -526,7 +528,7 @@ public class SystemManager : MonoBehaviour {
     IEnumerator ResetFoodConsumption()
     {
         Logger.Debug("Resetting food consumption");
-        foreach (House house in AllHouses)
+        foreach (House house in AllHouses.ToArray())
         {
             house.foodReceived = 0;
             house.foodProvidersInRange.Clear();
@@ -537,7 +539,7 @@ public class SystemManager : MonoBehaviour {
     IEnumerator ResetSpatioportInfluence()
     {
         Logger.Debug("Resetting spatioport influence");
-        foreach (Block block in AllBlocks)
+        foreach (Block block in AllBlocks.ToArray())
         {
             block.isLinkedToSpatioport = false;
             block.isConsideredDisabled = true;
@@ -548,7 +550,7 @@ public class SystemManager : MonoBehaviour {
     IEnumerator ResetNuisance()
     {
         Logger.Debug("Resetting nuisance");
-        foreach (Block block in AllBlocks)
+        foreach (Block block in AllBlocks.ToArray())
         {
             block.nuisance = 0;
         }
