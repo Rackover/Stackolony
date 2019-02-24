@@ -61,6 +61,10 @@ public class Notifications : MonoBehaviour {
             return;
         }
 
+        if (canvas == null) {
+            canvas = GetComponentInParent<Canvas>();
+        }
+
         // Notifications to keep will be put in a new list
         List<Notification> newList = new List<Notification>();
 

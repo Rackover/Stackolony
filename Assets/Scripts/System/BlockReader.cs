@@ -122,7 +122,18 @@ public class BlockReader : EditorWindow
 			block.fireProof = bool.Parse(dataLine[10]);
 			block.riotProof = bool.Parse(dataLine[11]);
 
-			AssetDatabase.CreateAsset(block, Paths.GetBlockFolder(folderName) + "/Block_" + dataLine[0] + ".asset");
+            string finalName = "Block_" + dataLine[0] + ".asset";
+
+            // Link preservation
+            UnityEngine.Object previousBlock = AssetDatabase.LoadAssetAtPath(Paths.GetBlockFolder(folderName) + "/" + finalName, typeof(BlockScheme));
+            if (previousBlock != null) {
+                BlockScheme previousScheme = (BlockScheme)previousBlock;
+                block.model = previousScheme.model;
+                block.sound = previousScheme.sound;
+            }
+            
+
+            AssetDatabase.CreateAsset(block, Paths.GetBlockFolder(folderName) + "/" + finalName);
 			AssetDatabase.SaveAssets();
 			AssetDatabase.Refresh();
 		}

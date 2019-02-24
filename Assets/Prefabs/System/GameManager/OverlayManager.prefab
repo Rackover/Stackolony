@@ -51,9 +51,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccef35c953a459d49bda34fd0b9db13f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultColor: {r: 0.735849, g: 0.735849, b: 0.735849, a: 0.39215687}
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
   overlayDatas:
-  - sprite: {fileID: 21300000, guid: e287c7d8a1db45f4a99e393633e93175, type: 3}
+  - sprite: {fileID: 21300000, guid: a74b2698011121743bc0a3cdb51e3a05, type: 3}
     color:
       serializedVersion: 2
       key0: {r: 1, g: 0, b: 0, a: 0.19607843}
@@ -264,5 +264,5 @@ MonoBehaviour:
       m_NumColorKeys: 3
       m_NumAlphaKeys: 2
   activeOverlay: 0
-  OverlaySelectedColor: {r: 1, g: 1, b: 1, a: 1}
-  OverlayUnselectedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+  OverlaySelectedColor: {r: 0.1764706, g: 0.1764706, b: 0.1764706, a: 1}
+  OverlayUnselectedColor: {r: 0.1764706, g: 0.1764706, b: 0.1764706, a: 0.5882353}

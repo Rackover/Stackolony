@@ -38,6 +38,12 @@ public class RoamerManager : MonoBehaviour
 
 	void Update()
 	{
+		if(!GameManager.instance.IsInGame())
+		{
+			End();
+			return;
+		}
+
 		timer += Time.deltaTime;
 		if(timer > spawnRate)
 		{
@@ -63,12 +69,22 @@ public class RoamerManager : MonoBehaviour
 		}
 	}
 
+	public void End()
+	{
+		foreach(RoamerBehavior rb in roamers)
+		{
+			Destroy(rb.gameObject);
+		}
+		roamers.Clear();
+	}
+
 	public void NewRoamer(int which)
 	{
 		// Get the reference to a random bridge
 		Vector3 hShift = new Vector3(0f, 0.25f, 0f);
-
-		BridgeInfo bridge = GameManager.instance.gridManagement.bridgesList[Random.Range(0, GameManager.instance.gridManagement.bridgesList.Count)].GetComponent<BridgeInfo>();
+        BridgeInfo bridge = GameManager.instance.gridManagement.bridgesList[
+            Random.Range(0, GameManager.instance.gridManagement.bridgesList.Count-1)
+        ].GetComponent<BridgeInfo>();
 
 		// If the bridge is on a disabled block, cancel the Roamer spawn
 		Block linkedBlock = GameManager.instance.gridManagement.grid[bridge.origin.x, bridge.origin.y, bridge.origin.z].GetComponent<Block>();

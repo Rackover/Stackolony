@@ -14,11 +14,12 @@ MonoBehaviour:
   isMovable: 1
   isDestroyable: 0
   isBuyable: 0
-  canBuildAbove: 0
+  canBuildAbove: 1
   relyOnSpatioport: 1
   fireProof: 1
   riotProof: 1
   model: {fileID: 1843137411438910, guid: e4b51f29bd59f0e4192417e735c59a31, type: 2}
+  sound: {fileID: 0}
   ID: 0
   consumption: 0
   sensibility: 0

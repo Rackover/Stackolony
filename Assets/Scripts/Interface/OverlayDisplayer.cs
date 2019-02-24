@@ -16,6 +16,7 @@ public class OverlayDisplayer : MonoBehaviour {
     private void Start()
     {
         Initialize();
+        Select(0);
     }
 
     public void Initialize()
@@ -41,7 +42,7 @@ public class OverlayDisplayer : MonoBehaviour {
                 new Localization.Line("overlay", over.codeName)
             );
 
-            buttons.Add(overlayButton.GetComponentsInChildren<Image>());
+            buttons.Add(overlayButton.GetComponents<Image>());
 
             overlayButton.transform.GetChild(0).gameObject.GetComponent<Image>().sprite = over.sprite;
 
@@ -80,6 +81,10 @@ public class OverlayDisplayer : MonoBehaviour {
     public void Fold()
     {
         animator.Play("Fold");
+
+        overMan.SelectOverlay(OverlayType.Default);
+        Select(0);
+
         isFolded = true;
     }
 
@@ -92,5 +97,4 @@ public class OverlayDisplayer : MonoBehaviour {
             Fold();
         }
     }
-
 }

@@ -330,17 +330,18 @@ public class GameManager : MonoBehaviour
 
     public void Pause()
     {
-        if (IsInGame()) {
-            oldTimescale = temporality.timeScale;
-            temporality.SetTimeScale(0);
+        if (IsInGame())
+        {
+            temporalityInterface.PauseTime();
             isPaused = true;
         }
     }
     
     public void UnPause()
     {
-        if (IsInGame()) {
-            temporality.SetTimeScale(Mathf.FloorToInt(oldTimescale));
+        if (IsInGame())
+        {
+            temporalityInterface.PlayTime();
             isPaused = false;
         }
     }
@@ -417,6 +418,8 @@ public class GameManager : MonoBehaviour
         cursorManagement.KillGameCursor();
         temporality.SetTimeOfDay(20);
         temporality.SetTimeScale(2);
+
+        roamerManager.End();
 
         // Clear events
         eventManager.ClearListeners();
@@ -511,6 +514,7 @@ public class GameManager : MonoBehaviour
 
     public void ExitToMenu()
     {
+        EndGame();
         SceneManager.LoadScene(menuSceneName);
     }
 
