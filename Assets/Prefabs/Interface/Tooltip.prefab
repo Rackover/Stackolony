@@ -120,8 +120,8 @@ MonoBehaviour:
   m_outlineColor:
     serializedVersion: 2
     rgba: 4278190080
-  m_fontSize: 12
-  m_fontSizeBase: 12
+  m_fontSize: 14
+  m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -169,7 +169,7 @@ MonoBehaviour:
     lineCount: 1
     pageCount: 1
     materialCount: 1
-  m_havePropertiesChanged: 0
+  m_havePropertiesChanged: 1
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
@@ -199,10 +199,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myText: {fileID: 114112993870186780}
-  myRectTransform: {fileID: 224759318694919334}
-  myCanvasTransform: {fileID: 224759318694919334}
+  self: {fileID: 0}
+  canvas: {fileID: 0}
+  background: {fileID: 0}
   text: Default text
   maxLength: 10
+  shift: {x: 0, y: 0}
   tooltipIcons: []
 --- !u!222 &222020047469274536
 CanvasRenderer:
