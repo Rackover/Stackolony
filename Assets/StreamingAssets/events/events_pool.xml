@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <events>
-	<pool minCycle="0">
+	<pool minCycle="10">
 		<event time="30">2</event>
 		<event time="40">6</event>
 		<event time="20">7</event>
@@ -11,7 +11,7 @@
 		<event time="25">26</event>
 		
 	</pool>
-	<pool minCycle="15">
+	<pool minCycle="25">
 		<event time="40">1</event>
 		<event time="30">3</event>
 		<event time="15">5</event>
@@ -24,7 +24,7 @@
 		<event time="25">22</event>
 		<event time="30">25</event>
 	</pool>
-	<pool minCycle="30">
+	<pool minCycle="40">
 		<event time="40">4</event>
 		<event time="45">12</event>
 		<event time="50">19</event>

@@ -72,7 +72,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4585608947273694}
   - component: {fileID: 20722758007433312}
-  - component: {fileID: 114796242473385964}
   - component: {fileID: 114654999294338236}
   m_Layer: 0
   m_Name: CameraStandardProcess
@@ -144,7 +143,7 @@ Camera:
   m_GameObject: {fileID: 1649748199193602}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 4
   m_BackGroundColor: {r: 0.10693307, g: 0.16309094, b: 0.254717, a: 0}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
@@ -184,7 +183,7 @@ Camera:
   m_GameObject: {fileID: 1979716195221794}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 3
+  m_ClearFlags: 4
   m_BackGroundColor: {r: 1, g: 0, b: 0.89338493, a: 1}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
@@ -368,17 +367,6 @@ MonoBehaviour:
   blendDistance: 0
   weight: 1
   priority: 0
---- !u!114 &114796242473385964
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1979716195221794}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89f038ee7dc677e43b7d9b59e9fc53cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114853268940141986
 MonoBehaviour:
   m_ObjectHideFlags: 1

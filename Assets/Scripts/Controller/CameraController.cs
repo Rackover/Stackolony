@@ -8,6 +8,7 @@ public class CameraController : MonoBehaviour {
     [Header("Camera")] [Space(1)]
     public GameObject cameraModel;
     public GameObject editorOnlyDummy;
+    public GameObject gameDummy;
     GameObject cameraInstance;
     [Header("Transforms")] [Space(1)]
     public Transform camCenter;                 // Center of the camera (Used for Lookat + movement)
@@ -65,11 +66,11 @@ public class CameraController : MonoBehaviour {
 
         // creating two dummies for the camera lerping
         // Camera dummy (zoom)
-        GameObject dummy = new GameObject(".Dummy-Camera-DoNotEditDirectly");
-        dummy.transform.parent = camPivot;
-        dummy.transform.SetPositionAndRotation(camTransform.position, camTransform.rotation);
-        dummy.transform.rotation = camTransform.rotation;
-        cameraTransformObjective = dummy.transform;
+        gameDummy = new GameObject(".Dummy-Camera-DoNotEditDirectly");
+        gameDummy.transform.parent = camPivot;
+        gameDummy.transform.SetPositionAndRotation(camTransform.position, camTransform.rotation);
+        gameDummy.transform.rotation = camTransform.rotation;
+        cameraTransformObjective = gameDummy.transform;
     }
 
     void Start()
