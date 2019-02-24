@@ -12,11 +12,12 @@ public class MainMenu : MonoBehaviour {
 
     private void Start()
     {
-        if (GameManager.instance.saveManager.SaveExists()) {
+        if (GameManager.instance.saveManager.SaveExists())
+        {
             loadButton.interactable = true;
         }
 
-        GameManager.instance.soundManager.Play("MusicMenu");
+        GameManager.instance.soundManager.musicPlayer.Play(GameManager.instance.soundManager.FindClipByName("MusicMenu"));
     }
 
     public void SpawnNewColonyMenu()

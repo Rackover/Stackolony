@@ -72,7 +72,7 @@ public class GameManager : MonoBehaviour
         
         SceneManager.sceneLoaded += delegate { FindAllReferences(); };
         SceneManager.sceneLoaded += delegate {
-            if (menuSceneName != SceneManager.GetActiveScene().name) {
+            if (menuSceneName != SceneManager.GetActiveScene().name){
                 StartGame();
             }
             else {
@@ -406,6 +406,7 @@ public class GameManager : MonoBehaviour
             Instantiate(library.spatioportSpawnerPrefab);
         }
 
+        GameManager.instance.soundManager.musicPlayer.Play(GameManager.instance.soundManager.FindClipByName("MusicGame"));
         // Ingame switch
         inGame = true;
     }
