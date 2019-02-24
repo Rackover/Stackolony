@@ -360,7 +360,12 @@ public class EventManager : MonoBehaviour {
         eventsPool = eventsPool.OrderBy((a => rng.Next())).ToList();
 
         // Loading first cycle of Events
-        Renew(0);
+        if (eventsPool.Count != 0) {
+            Renew(0);
+        }
+        else {
+            Logger.Warn("Loaded zero event into the pool (?) - Please check the XML eventPool");
+        }
     }
 
     public void ClearListeners()
