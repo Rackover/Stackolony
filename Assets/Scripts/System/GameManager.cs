@@ -235,6 +235,12 @@ public class GameManager : MonoBehaviour
             FindObjectOfType<CameraController>().ResetPosition();
         }
 
+        // Hide tooltip
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            FindObjectOfType<TooltipGO>().Disable();
+        }
+
         // Unlock all
         if (Input.GetKeyDown(KeyCode.T)) {
             foreach(BlockScheme s in library.blocks) {
