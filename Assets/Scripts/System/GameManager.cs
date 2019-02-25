@@ -238,7 +238,11 @@ public class GameManager : MonoBehaviour
         // Hide tooltip
         if (Input.GetKeyDown(KeyCode.H))
         {
-            FindObjectOfType<TooltipGO>().Disable();
+            try
+            {
+                FindObjectOfType<TooltipGO>().Disable();
+            }
+            catch{}
         }
 
         // Unlock all
