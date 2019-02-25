@@ -367,6 +367,11 @@ public class GameManager : MonoBehaviour
     // Interface functions
     void StartGame()
     {
+        // Pre-initialization event clearing
+        eventManager.ClearListeners();
+        cursorManagement.ClearListeners();
+        achievementManager.ClearListeners();
+
         // Initialize and shut down
         GameInterfaces gi = FindObjectOfType<GameInterfaces>();
         if (gi != null) {
