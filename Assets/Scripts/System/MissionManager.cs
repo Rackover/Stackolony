@@ -203,15 +203,8 @@ public class MissionManager : MonoBehaviour {
         myMission.explorerCount = myMission.activeExplorers;
         if (myMission.activeExplorers == 0)
         {
-            if (myMission.blocksFound.Count > 0)
-            {
-                GameManager.instance.missionCallbackManager.mission = myMission;
-                if(callback != "") GameManager.instance.missionCallbackManager.StartCoroutine(callback);
-            }
-            else
-            {
-                EndMission(myMission);
-            }
+            GameManager.instance.missionCallbackManager.mission = myMission;
+            if(callback != "") GameManager.instance.missionCallbackManager.StartCoroutine(callback);
         }
         yield return null;
     }
